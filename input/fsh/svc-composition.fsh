@@ -14,13 +14,10 @@ A SVC Composition be accessible from a SVC Registry as located via the WHO SMART
 * subject 1..1
 * subject only Reference(SVC_Patient)
 * status 1..1
-* identifier 1..
-* identifier ^slicing.rules = #open
-* identifier ^slicing.ordered = true
-* identifier contains Identifier_UUID 1..1
-* identifier[Identifier_UUID].system 1..1
-* identifier[Identifier_UUID].value 1..1
-* identifier[Identifier_UUID].system = "urn:uuid"
+* identifier 1..1 MS
+* identifier.system 1..1
+* identifier.value 1..1 MS
+* identifier.system = "urn:uuid"
 * section 1..
 * section ^slicing.discriminator.type = #value
 * section ^slicing.discriminator.path = "code.coding.code"
@@ -35,7 +32,7 @@ A SVC Composition be accessible from a SVC Registry as located via the WHO SMART
 * section[Section_Vaccinations].entry ^slicing.discriminator.path = ""
 * section[Section_Vaccinations].entry ^slicing.rules = #open
 * section[Section_Vaccinations].entry ^slicing.ordered = true
-* section[Section_Vaccinations].entry contains Section_Vaccinations_Entry 1..1 MS
+* section[Section_Vaccinations].entry contains Section_Vaccinations_Entry 1.. MS
 * section[Section_Vaccinations].entry[Section_Vaccinations_Entry] only Reference(SVC_Immunization)
 * type.coding.system =  "urn:EXAMPLE-who.int:smart-vaccine-certificate" 
 * type.coding.code =  #RC1
