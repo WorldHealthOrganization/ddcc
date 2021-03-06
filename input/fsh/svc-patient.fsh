@@ -1,5 +1,6 @@
 Profile:        SVC_Patient
-Parent: 	Patient
+//Parent: 	Patient
+Parent: 	Patient-uv-ips //this forces gender.  not good.
 Id:		svc-patient
 Title:		"SVC Patient"
 Description:	"""
