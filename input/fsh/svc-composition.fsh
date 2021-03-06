@@ -33,12 +33,12 @@ A SVC Composition be accessible from a SVC Registry as located via the WHO SMART
 * section[Section_Vaccinations].entry 1..
 * section[Section_Vaccinations].entry ^slicing.discriminator.type = #type
 * section[Section_Vaccinations].entry ^slicing.discriminator.path = "resource"
-* section[Section_Vaccinations].entry ^slicing.rules = #open
+* section[Section_Vaccinations].entry ^slicing.rules = #closed
 * section[Section_Vaccinations].entry ^slicing.ordered = true
-* section[Section_Vaccinations].entry contains Section_Vaccinations_Entry 1..* MS
+* section[Section_Vaccinations].entry contains Section_Vaccinations_Entry 1..1 MS
 * section[Section_Vaccinations].entry[Section_Vaccinations_Entry].resource only Reference(SVC_Immunization)
 * section[Section_Vaccinations].entry MS
-* type.coding.system =  "urn:EXAMPLE-who.int:smart-vaccine-certificate" #RC1
+* type.coding.system =  "urn:EXAMPLE-who.int:smart-vaccine-certificate" 
 * type.coding.code =  #RC1
 * ^abstract = true
 

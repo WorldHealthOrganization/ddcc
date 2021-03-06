@@ -1,6 +1,7 @@
 Alias: $ICD11 = https://icd.who.int/browse11
 
-ValueSet:      who-svc-vaccines
+ValueSet:      WHO_SVC_Vaccines
+Id:	       who-svc-vaccines
 Title:	       "WHO Vaccine List"
 Description:   "WHO Vaccine List"
 * ^status = #draft
@@ -72,7 +73,8 @@ Description:   "WHO Vaccine List"
 * include $ICD11#XM5KN5	"Vaccine bacterial with viral-rickettsial component"
 
 
-ValueSet:      who-svc-vaccines
+ValueSet:      WHO_SVC_Vaccines_COVID_19
+Id:	       who-svc-vaccines-covid-19
 Title:	       "WHO Vaccine List (COVID-19)"
 Description:   "WHO Vaccine List (COVID-19)"
 * ^status = #draft

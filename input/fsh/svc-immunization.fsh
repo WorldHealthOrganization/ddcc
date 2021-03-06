@@ -62,13 +62,13 @@ An updated SVC Immunization is derived from an existing SVC Immunization accordi
 * occurrence[x] only dateTime
 * performer 1.. MS
 * performer.actor only Reference(SVC_Practitioner)
-* protocolApplied contains ProtocolApplied_Authority 1..1 
+* protocolApplied 1.. MS
 * protocolApplied ^slicing.discriminator.type = #type
 * protocolApplied ^slicing.discriminator.path = "authority"
 * protocolApplied ^slicing.rules = #closed
 * protocolApplied ^slicing.ordered = true
 * protocolApplied contains ProtocolApplied_Authority 1.. MS
 * protocolApplied[ProtocolApplied_Authority].authority  only Reference(SVC_Organization)
-* protocolApplied[ProtocolApplied_Authority].targetDisease binding who-svc-vaccines
+* protocolApplied[ProtocolApplied_Authority].targetDisease from WHO_SVC_Vaccines (required)
 * ^abstract = false
 
