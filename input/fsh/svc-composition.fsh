@@ -22,16 +22,23 @@ A SVC Composition be accessible from a SVC Registry as located via the WHO SMART
 * identifier[Identifier_UUID].value 1..1
 * identifier[Identifier_UUID].system = "urn:uuid"
 * section 1..
-* section ^slicing.discriminator.type = #pattern
-* section ^slicing.discriminator.path = "code"
+* section ^slicing.discriminator.type = #value
+* section ^slicing.discriminator.path = "code.coding.code"
 * section ^slicing.rules = #closed
 * section ^slicing.ordered = true
 * section contains Section_Vaccinations 1..1
+* section[Section_Vaccinations].code.coding.system  = $LOINC
+* section[Section_Vaccinations].code.coding.code  = #11369-6
+* section[Section_Vaccinations].code MS
 * section[Section_Vaccinations].entry 1..
-* section[Section_Vaccinations].entry contains 1..1
-* section[Section_Vaccinations].entry[x].resource only Reference(SVC_Immunization)
-* section[Section_Vaccinations].code.coding[0] = LOINC#11369-6
-* type.coding =  "<<TODO>>who-smart-vaccine-certificate-RC1”
+* section[Section_Vaccinations].entry ^slicing.discriminator.type = #type
+* section[Section_Vaccinations].entry ^slicing.discriminator.path = "resource"
+* section[Section_Vaccinations].entry ^slicing.rules = #open
+* section[Section_Vaccinations].entry ^slicing.ordered = true
+* section[Section_Vaccinations].entry contains Section_Vaccinations_Entry 1..* MS
+* section[Section_Vaccinations].entry[Section_Vaccinations_Entry].resource only Reference(SVC_Immunization)
+* section[Section_Vaccinations].entry MS
+* type.coding =  "EXAMPLE-who-smart-vaccine-certificate-RC1"
 * ^abstract = true
 
 

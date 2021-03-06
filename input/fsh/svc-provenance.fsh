@@ -7,16 +7,25 @@ Used to assert the provenance of a Public Health Auhority (PHA) over either a Pa
 
 """
 * reason = #PUBHLTH
-* policy = "<<TODO>> create URI urn:example:who:smart:vaccine-certificate:RC1”
+* policy = "urn:EXAMPLE-who-:smart:vaccine-certificate:RC1"
 * target 1..1
 * entity 1..
-* entity contains 1..1
-* entity[0].what only Reference(SVC_Composition)
-* agent[0].who 1..1
-* agent contains 1..1
-* agent[0].who only Reference(SVC_Organization)
-* agent.onBehalfOf 1..1 
-* agent.onBehalfOf only Reference(SVC_Patient)
+* entity ^slicing.discriminator.type = #type
+* entity ^slicing.discriminator.path = "what"
+* entity ^slicing.rules = #closed
+* entity ^slicing.ordered = true
+* entity contains Provenance_Entity 1..1
+* entity[Provenance_Entity].what only Reference(SVC_Composition)
+* agent 1..
+* agent ^slicing.discriminator.type = #type
+* agent ^slicing.discriminator.path = "who"
+* agent ^slicing.rules = #closed
+* agent ^slicing.ordered = true
+* agent contains Provenance_Agent 1..1
+* agent[Provenance_Agent].who 1..1
+* agent[Provenance_Agent].who only Reference(SVC_Organization)
+* agent[Provenance_Agent].onBehalfOf 1..1 
+* agent[Provenance_Agent].onBehalfOf only Reference(SVC_Patient)
 * ^abstract = true
 
 
@@ -36,9 +45,9 @@ When a new Paper SVC is printed, the following rules apply:
  * set the entity.role.what to reference the generated SVC Composition resource
 
 """
-* entity contains 1..1
-* entity[0].role = #derived
-* entity[0].what only Reference(SVC_Composition_New)
+* entity contains Provenance_Paper_Entity 1..1
+* entity[Provenance_Paper_Entity].role = #derived
+* entity[Provenance_Paper_Entity].what only Reference(SVC_Composition_New)
 * agent.onBehalfOf only Reference(SVC_Patient_New)
 * ^abstract = false
 
@@ -80,9 +89,9 @@ The Provencance of a New Dgivial SVC should:
  * set the role to derived
  * set the agent.behalfOf to refence a New SVC Patient
 """
-* entity contains 1..1
-* entity[0].role = #derived
-* entity[0].what only Reference(SVC_Composition_New)
+* entity contains Provenance_Digital_New_Entity 1..1
+* entity[Provenance_Digital_New_Entity].role = #derived
+* entity[Provenance_Digital_New_Entity].what only Reference(SVC_Composition_New)
 * agent.onBehalfOf only Reference(SVC_Patient_New)
 * target only Reference(SVC_Composition_New)
 * ^abstract = false
@@ -103,12 +112,15 @@ The Provenance of an Updated Digital SVC should:
  * set entity role.what to reference the Updated SVC Composition associated to Paper SVC
 
 """
-* entity contains 1..1
-* entity[0].role =  #derived
-* entity[0].what only Reference(SVC_Composition-Updated)
-* agent.onBehalfOf only Reference(SVC_Patient-Updated)
+* entity ^slicing.discriminator.type = #type
+* entity ^slicing.discriminator.path = "what"
+* entity ^slicing.rules = #closed
+* entity ^slicing.ordered = true
+* entity contains Provenance_Digital_Updated_Entity 1..1
+* entity[Provenance_Digital_Updated_Entity].role =  #derived
+* entity[Provenance_Digital_Updated_Entity].what only Reference(SVC_Composition_Updated)
+* agent.onBehalfOf only Reference(SVC_Patient_Updated)
 * ^abstract = false
-
 
 
 
@@ -133,8 +145,12 @@ The PHA may:
  * print a QR-code to place on the back page of the external Paper SVC which encodes the Provenance of an Ingested Digital SVC.
  * issue and print a new Paper SVC containing an Updated SVC Bundle 
 """
-* entity contains 1..1
-* entity[0].role = #quotation
-* entity[0].what only Reference(SVC_Composition_Ingested)
+* entity ^slicing.discriminator.type = #type
+* entity ^slicing.discriminator.path = "what"
+* entity ^slicing.rules = #closed
+* entity ^slicing.ordered = true
+* entity contains Provenance_Digital_Ingested_Entity 1..1
+* entity[Provenance_Digital_Ingested_Entity].role = #quotation
+* entity[Provenance_Digital_Ingested_Entity].what only Reference(SVC_Composition_Ingested)
 * agent.onBehalfOf only Reference(SVC_Patient_Ingested)
 * ^abstract = false

@@ -6,10 +6,14 @@ Description:	"""
 Correponds to the demographic information on the front page of the Paper SVC. This profile is not intended to be instantiated directly, rather a New SVC Patient or an Updated SVC Patient should be used.
 """
 * identifier 1..
-* identifier contains 1..1
-* identifier[0].system 1..1
-* identifier[0].value 1..1
-* identifier[0].system = "urn:uuid"
+* identifier ^slicing.discriminator.type = #value
+* identifier ^slicing.discriminator.path = "system"
+* identifier ^slicing.rules = #closed
+* identifier ^slicing.ordered = true
+* identifier contains Identifier_URN 1..1
+* identifier[Identifier_URN].system 1..1
+* identifier[Identifier_URN].value 1..1
+* identifier[Identifier_URN].system = "urn:uuid"
 * ^abstract = true
 
 
@@ -33,9 +37,13 @@ Description:	"""
 Correponds to the demographic information on the front page of a Paper SVC which is reissued by a PHA.  Written demographic content from the Paper SVC should be used to populate the Updated SVC Patient.
 """
 * name 1..
-* name contains 1..1
-* name[0].use = #official
-* name[0].text 1..
+* name ^slicing.discriminator.type = #value
+* name ^slicing.discriminator.path = "use"
+* name ^slicing.rules = #closed
+* name ^slicing.ordered = true
+* name contains Name_Official 1..1
+* name[Name_Official].use = #official
+* name[Name_Official].text 1..
 * birthDate 1..1
 * ^abstract = false
 
@@ -52,8 +60,12 @@ The following rules apply to an Ingested SVC Patient:
 
 """
 * name 1..
-* name contains 1..1
-* name[0].use = #official
-* name[0].text 1..
+* name ^slicing.discriminator.type = #value
+* name ^slicing.discriminator.path = "use"
+* name ^slicing.rules = #closed
+* name ^slicing.ordered = true
+* name contains Name_Official_Ingested 1..1
+* name[Name_Official_Ingested].use = #official
+* name[Name_Official_Ingested].text 1..
 * birthDate 1..1
 * ^abstract = false
