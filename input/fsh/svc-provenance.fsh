@@ -2,7 +2,7 @@
 Profile:        SVC_Provenance
 Parent:         Provenance 
 Id:             svc-provenance
-Title:          "Provenance of SVC by PHA"
+Title:          "Provenance of SVC"
 Description:    """ 
 Used to assert the provenance of a Public Health Auhority (PHA) over either a Paper or a Digital Smart Vaccination Card (SVC). This profile is not intended to be instantiated directly, rather a  Provenance of an New Digital SVC Provenance of an Updated Digital SVC or a Provenance of an Ingested Digital SVC or a Updarted SVC Composition should be used.
 
