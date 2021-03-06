@@ -38,7 +38,8 @@ A SVC Composition be accessible from a SVC Registry as located via the WHO SMART
 * section[Section_Vaccinations].entry contains Section_Vaccinations_Entry 1..* MS
 * section[Section_Vaccinations].entry[Section_Vaccinations_Entry].resource only Reference(SVC_Immunization)
 * section[Section_Vaccinations].entry MS
-* type.coding =  "EXAMPLE-who-smart-vaccine-certificate-RC1"
+* type.coding.system =  "urn:EXAMPLE-who.int:smart-vaccine-certificate" #RC1
+* type.coding.code =  #RC1
 * ^abstract = true
 
 
@@ -57,7 +58,7 @@ When a new Paper SVC is issued, the following rules apply to a New SVC Compositi
   * for each row of the Paper SVC, an New SVC Immunization should be generated and an entry should be created to reference this
 
 """
-* status  = preliminary
+* status  = #preliminary
 * subject only Reference(SVC_Patient_New)
 * ^abstract = false
 

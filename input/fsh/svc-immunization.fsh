@@ -28,7 +28,7 @@ A New SVC Immunization contains the content to be encoded in a QR-code on a row 
 When a new Paper SVC is issued, the following rules apply to a New SVC Immnuization::
   * the patient reference is set to the New Patient Resource that was generated
 """
-* status = #notdone
+* status = #not-done
 * patient only Reference(SVC_Patient_New)
 * ^abstract = false
 
