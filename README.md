@@ -1,18 +1,17 @@
-Case Reporiting IG
+WHO Smart Vaccination Card (SVC) - Release Candidate 1 (RC1) IG
 ---
-This is the OpenHIE Case Reporting Implementation Guide.
+This is the WHO Smart Vaccination Card (SVC) IF
 <br> </br>
 ###
 ### Publication
 This ImplementationGuide is published in the following locations:
 
-Continuous Build: __https://openhie.github.io/case-reporting/__  
+Continuous Build: __https://who-int.github.io/svc-rc1/__  
 Canonical / permanent URL: 
 <br> </br>
 
 ### Issues
 Issues and change requests are managed here:  
 
-Issues:  __https://github.com/openhie/case-reporting/issues__  
-Kanban board:  __https://github.com/openhie/case-reporting/projects/10612176__  
+Issues:  __https://github.com/who-int/svc-rc1/issues__  
 
