@@ -1,5 +1,5 @@
 Profile:        SVC_Immunization
-Parent:         ImmunizationUvIPS
+Parent:         ImmunizationUvIps
 Id:             svc-immunization
 Title:          "SVC Immunization"
 Description:    """ 
@@ -7,13 +7,18 @@ An SVC Immunization contains the content to be encoded in a QR-code on a row in 
 
 """
 * identifier 1..
-* identifier[0].system 1..1
-* identifier[0].value 1..1
-* identifier[0].system = "urn:uuid"
+* identifier ^slicing.discriminator.type = #value
+* identifier ^slicing.discriminator.path = "system"
+* identifier ^slicing.rules = #closed
+* identifier ^slicing.ordered = true
+* identifier contains Identifier_URN 1..1
+* identifier[Identifier_URN].system 1..1
+* identifier[Identifier_URN].value 1..1
+* identifier[Identifier_URN].system = "urn:uuid"
 * vaccineCode.coding 1..1
-* vaccineCode.coding.system 1..1
-* vaccineCode.coding.system = "<<TODO>> URI WHO Vaccine Product Catalog"
-* vaccineCode.coding.code 1..1
+* vaccineCode.coding.system 1..1 MS
+* vaccineCode.coding.code 1..1 MS
+* vaccineCode.coding.system = "urn:EXAMPLE-who-:smart:vaccine-certificate:RC1:coding"
 * vaccineCode.coding.code = "<<TODO>>Bind to Vaccine Product Catalog Valueset"
 * ^abstract = true
 
