@@ -1,3 +1,4 @@
+
 Profile:        SVC_Provenance
 Parent:         Provenance 
 Id:             svc-provenance
@@ -14,14 +15,14 @@ Used to assert the provenance of a Public Health Auhority (PHA) over either a Pa
 * entity ^slicing.discriminator.path = "what"
 * entity ^slicing.rules = #closed
 * entity ^slicing.ordered = true
-* entity contains Provenance_Entity 1..1
+* entity contains Provenance_Entity 1.. MS
 * entity[Provenance_Entity].what only Reference(SVC_Composition)
 * agent 1..
 * agent ^slicing.discriminator.type = #type
 * agent ^slicing.discriminator.path = "who"
 * agent ^slicing.rules = #closed
 * agent ^slicing.ordered = true
-* agent contains Provenance_Agent 1..1
+* agent contains Provenance_Agent 1.. MS
 * agent[Provenance_Agent].who 1..1
 * agent[Provenance_Agent].who only Reference(SVC_Organization)
 * agent[Provenance_Agent].onBehalfOf 1..1 
