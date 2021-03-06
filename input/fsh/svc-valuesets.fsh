@@ -74,7 +74,7 @@ Description:   "WHO Vaccine List"
 
 ValueSet:      who-svc-vaccines
 Title:	       "WHO Vaccine List (COVID-19)"
-Description:   "WHO Vaccine List (COVID-19"
+Description:   "WHO Vaccine List (COVID-19)"
 * ^status = #draft
 * include $ICD11#XM1NL1 "COVID-19 vaccine, inactivated virus"
 * include $ICD11#XM5DF6 "COVID-19 vaccine, live attenuated virus"
