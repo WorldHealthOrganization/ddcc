@@ -1,4 +1,4 @@
-Profile:        SVC-Bundle
+Profile:        SVC_Bundle
 Parent:         Bundle
 Id:             svc-bundle
 Title:          "SVC Bundle"
@@ -6,17 +6,24 @@ Description:    """
 An SVC Bundle contains the content to be encoded in QR-code on the front page of a Paper SVC.
 
 """
-* type = document
+* type = #document
 * entry 3..3
-* entry[0].type = #Patient
-* entry[0].type only Reference(SVC-Patient)
-* entry[1].type only Reference(SVC-Composition)
-* entry[2].type only Reference(SVC-Provenance)
+* entry ^slicing.discriminator.type = #type
+* entry ^slicing.discriminator.path = "resource"
+* entry ^slicing.rules = #closed
+* entry ^slicing.ordered = true
+* entry contains
+  SVC_Patient_Entry 1..1 and
+  SVC_Composition_Entry 1..1 and
+  SVC_Provenance_Entry 1..1
+* entry[SVC_Patient_Entry].resource only SVC_Patient
+* entry[SVC_Composition_Entry].resource only SVC_Composition
+* entry[SVC_Provenance_Entry].resource only SVC_Provenance
+* ^abstract = true
 
 
-
-Profile:        SVC-Bundle-New
-Parent:         SVC-Bundle
+Profile:        SVC_Bundle_New
+Parent:         SVC_Bundle
 Id:             svc-bundle-new
 Title:          "New SVC Bundle"
 Description:    """ 
@@ -26,15 +33,14 @@ An new SVC Bundle is derived from an existing SVC Bundle according to the follow
  * preserve the content in the existing SVC Bundle
  * amend this by transferring the non-digital demographic content  from the Paper SVC into the SVC Patient resource 
 """
-* type = document
-* entry 3..3
-* entry[0].type = #Patient
-* entry[0].type only Reference(SVC-Patient-Updated)
-* entry[1].type only Reference(SVC-Composition-Updated)
-* entry[2].type only Rerefence(SVC-Provenance-Digital-Updated)
+* type = #document
+* entry[SVC_Patient_Entry].resource only SVC_Patient_Updated
+* entry[SVC_Composition_Entry].resource only SVC_Composition_Updated
+* entry[SVC_Provenance_Entry].resource only SVC_Provenance_Digital_Updated
+* ^abstract = false
 
-Profile:        SVC-Bundle-Updated
-Parent:         SVC-Bundle
+Profile:        SVC_Bundle_Updated
+Parent:         SVC_Bundle
 Id:             svc-bundle-updated
 Title:          "Updated SVC Bundle"
 Description:    """ 
@@ -42,17 +48,15 @@ An Updated SVC Bundle is generated PHA when the PHA transfers content from a Pap
  * generate an Updated SVC Patient 
  * generate an Updated SVC Compostion
 """
-* type = document
-* entry 3..3
-* entry[0].type = #Patient
-* entry[0].type only Reference(SVC-Patient-Updated)
-* entry[1].type only Reference(SVC-Composition-Updated)
-* entry[2].type only Rerefence(SVC-Provenance-Digital-Updated)
+* type = #document
+* entry[SVC_Patient_Entry].resource only SVC_Patient_Updated
+* entry[SVC_Composition_Entry].resource only SVC_Composition_Updated
+* entry[SVC_Provenance_Entry].resource only SVC_Provenance_Digital_Updated
+* ^abstract = false
 
 
-
-Profile:        SVC-Bundle-Ingested
-Parent:         SVC-Bundle
+Profile:        SVC_Bundle_Ingested
+Parent:         SVC_Bundle
 Id:             svc-bundle-ingested
 Title:          "Ingested SVC Bundle"
 Description:    """ 
@@ -60,9 +64,8 @@ An Ingested SVC Bundle is generated PHA when the PHA transfers content from a Pa
  * generate an Updated SVC Patient 
  * generate an Ingested SVC Compostion
 """
-* type = document
-* entry 3..3
-* entry[0].type = #Patient
-* entry[0].type only Reference(SVC-Patient-Ingested)
-* entry[1].type only Reference(SVC-Composition-Ingested)
-* entry[2].type only Rerefence(SVC-Provenance-Digital-Ingested)
+* type = #document
+* entry[SVC_Patient_Entry].resource only SVC_Patient_Ingested
+* entry[SVC_Composition_Entry].resource only SVC_Composition_Ingested
+* entry[SVC_Provenance_Entry].resource only SVC_Provenance_Digital_Ingested
+* ^abstract = false

@@ -1,4 +1,6 @@
-Profile:        SVC-Composition
+Alias: $LOINC = http://loinc.org
+
+Profile:        SVC_Composition
 Parent:         Composition
 Id:             svc-pha-composition
 Title:          "SVC Composition"
@@ -7,26 +9,40 @@ Container for the health content contained on a Paper SVC.  This profile is not 
 
 A SVC Composition be accessible from a SVC Registry as located via the WHO SMART Directory for the PHA referenced in the author.
 """
-* identifier 1..
-* identifier[0].system 1..1
-* identifier[0].value 1..1
-* identifier[0].system = "urn:uuid"
-* author only Reference(SVC-Organization)
-* subject 1..1 only Reference(SVC-Patient)
+* title = "International Certificate of Vaccination or Prophylaxis"
+* author only Reference(SVC_Organization)
+* subject 1..1
+* subject only Reference(SVC_Patient)
 * status 1..1
+* identifier 1..
+* identifier ^slicing.rules = #closed
+* identifier ^slicing.ordered = true
+* identifier contains Identifier_UUID 1..1
+* identifier[Identifier_UUID].system 1..1
+* identifier[Identifier_UUID].value 1..1
+* identifier[Identifier_UUID].system = "urn:uuid"
 * section 1..
-* section[0].coding 1..1
-* section[0].coding[0].system = "http://loinc.org"
-* section[0].coding[0].code = "11369-6"
-* section[0].entry[x] only Reference(Immunization)
-* title = “International Certificate of Vaccination or Prophylaxis“
-* type.coding.system =  "http://loinc.org"
-* type.coding.code = "<<TODO>> Create code for SVC"
+* section ^slicing.discriminator.type = #pattern
+* section ^slicing.discriminator.path = "code"
+* section ^slicing.rules = #closed
+* section ^slicing.ordered = true
+* section contains Section_Vaccinations 1..1
+* section[Section_Vaccinations].entry 1..
+* section[Section_Vaccinations].entry[x].resource only Reference(SVC_Immunization)
+* section[Section_Vaccinations].code 1..1
+* section[Section_Vaccinations].code ^slicing.discriminator.type = #pattern
+* section[Section_Vaccinations].code ^slicing.discriminator.type = "system"
+* section[Section_Vaccinations].code ^slicing.rules = #closed
+* section[Section_Vaccinations].code ^slicing.ordered = true
+* section[Section_Vaccinations].code contains Section_Vaccinations_Section_Coding 1..1
+* section[Section_Vaccinations].code.coding[Section_Vaccinations_Section_Coding] = LOINC#11369-6
+* type.coding =  LOINC#XXXX
+* ^abstract = true
 
 
 
-Profile:        SVC-Composition-New
-Parent:         SVC-Composition
+Profile:        SVC_Composition_New
+Parent:         SVC_Composition
 Id:             svc-pha-composition-new
 Title:          "New SVC Composition"
 Description:    """ 
@@ -40,11 +56,11 @@ When a new Paper SVC is issued, the following rules apply to a New SVC Compositi
 
 """
 * status  = preliminary
-* subject 1..1 only Reference(SVC-Patient-New)
+* subject only Reference(SVC_Patient_New)
+* ^abstract = false
 
-
-Profile:        SVC-Composition-Updated
-Parent:         SVC-Composition
+Profile:        SVC_Composition_Updated
+Parent:         SVC_Composition
 Id:             svc-pha-composition-updated
 Title:          "Updated SVC Composition"
 Description:    """ 
@@ -62,11 +78,11 @@ An Update SVC Composition may:
 
 """
 * status = #final
-* subject 1..1 only Reference(SVC-Patient-Updated)
+* subject only Reference(SVC_Patient_Updated)
+* ^abstract = false
 
-
-Profile:        SVC-Composition-Ingested
-Parent:         SVC-Composition
+Profile:        SVC_Composition_Ingested
+Parent:         SVC_Composition
 Id:             svc-pha-composition-ingested
 Title:          "Ingested SVC Composition"
 Description:    """ 
@@ -85,4 +101,5 @@ An Ingested SVC Composition may be:
 
 """
 * status = #final
-* subject 1..1 only Reference(SVC-Patient-Ingested)
+* subject only Reference(SVC_Patient-Ingested)
+* ^abstract = false

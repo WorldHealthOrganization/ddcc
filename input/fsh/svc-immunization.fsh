@@ -1,4 +1,4 @@
-Profile:        SVC-Immunization
+Profile:        SVC_Immunization
 Parent:         ImmunizationUvIPS
 Id:             svc-immunization
 Title:          "SVC Immunization"
@@ -12,13 +12,14 @@ An SVC Immunization contains the content to be encoded in a QR-code on a row in 
 * identifier[0].system = "urn:uuid"
 * vaccineCode.coding 1..1
 * vaccineCode.coding.system 1..1
-* vaccineCode.coding.system = "<<TODO>> URI WHO Vaccine Product Catalog""
+* vaccineCode.coding.system = "<<TODO>> URI WHO Vaccine Product Catalog"
 * vaccineCode.coding.code 1..1
-* vaccineCode.coding.code = "<<TODO>>Bind to Vaccine Product Catalog Valueset""
+* vaccineCode.coding.code = "<<TODO>>Bind to Vaccine Product Catalog Valueset"
+* ^abstract = true
 
 
-Profile:        SVC-Immunization-New
-Parent:         SVC-Immunization
+Profile:        SVC_Immunization_New
+Parent:         SVC_Immunization
 Id:             svc-immunization-new
 Title:          "New SVC Immunization"
 Description:    """ 
@@ -28,11 +29,11 @@ When a new Paper SVC is issued, the following rules apply to a New SVC Immnuizat
   * the patient reference is set to the New Patient Resource that was generated
 """
 * status = #notdone
-* patient only Reference(SVC-Patient-New)
+* patient only Reference(SVC_Patient_New)
+* ^abstract = false
 
-
-Profile:        SVC-Immunization-Updated
-Parent:         SVC-Immunization
+Profile:        SVC_Immunization_Updated
+Parent:         SVC_Immunization
 Id:             svc-immunization-updated
 Title:          "Updated SVC Immunization"
 Description:    """ 
@@ -46,13 +47,13 @@ An updated SVC Immunization is derived from an existing SVC Immunization accordi
 """
 * expirationDate 1..1
 * lotNumber 1..1
-* patient only Reference(SVC-Patient-Updated)
+* patient only Reference(SVC_Patient_Updated)
 * occurrenceDateTime only DateTime
 * performer 1..
-* performer.actor only Reference(SVC-Practitioner)
+* performer.actor only Reference(SVC_Practitioner)
 * protocalApplied 1..
 * protocalApplied[0].targetDisease = "<<TODO>> Bind to ICD-11 ValueSet"
 * protocalApplied[0].authority 1..1
-* protocalApplied[0].authority only Reference(SVC-Organization)
-
+* protocalApplied[0].authority only Reference(SVC_Organization)
+* ^abstract = false
 

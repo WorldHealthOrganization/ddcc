@@ -1,4 +1,4 @@
-Profile:        SVC-Patient
+Profile:        SVC_Patient
 Parent: 	Patient
 Id:		svc-patient
 Title:		"SVC Patient"
@@ -9,11 +9,11 @@ Correponds to the demographic information on the front page of the Paper SVC. Th
 * identifier[0].system 1..1
 * identifier[0].value 1..1
 * identifier[0].system = "urn:uuid"
+* ^abstract = true
 
 
-
-Profile:        SVC-Patient-New
-Parent: 	SVC-Patient
+Profile:        SVC_Patient_New
+Parent: 	SVC_Patient
 Id:		svc-patient-new
 Title:		"New SVC Patient"
 Description:	"""
@@ -22,10 +22,10 @@ Correponds to the demographic information on the front page of a new Paper SVC.
 When a new Paper SVC is issued, the following rules apply:
   * a Person.identifier entry is generated with system set to 'urn:uuid' and value set to a v4 UUID.
 """
+* ^abstract = false
 
-
-Profile:        SVC-Patient-Updated
-Parent: 	SVC-Patient
+Profile:        SVC_Patient_Updated
+Parent: 	SVC_Patient
 Id:		svc-patient-updated
 Title:		"Updated SVC Patient"
 Description:	"""
@@ -35,10 +35,10 @@ Correponds to the demographic information on the front page of a Paper SVC which
 * name[0].use = #official
 * name[0].text 1..
 * birthDate 1..1
+* ^abstract = false
 
-
-Profile:        SVC-Patient-Ingested
-Parent: 	SVC-Patient
+Profile:        SVC_Patient_Ingested
+Parent: 	SVC_Patient
 Id:		svc-patient-ingested
 Title:		"Ingested SVC Patient"
 Description:	"""
@@ -53,3 +53,4 @@ The following rules apply to an Ingested SVC Patient:
 * name[0].use = #official
 * name[0].text 1..
 * birthDate 1..1
+* ^abstract = false

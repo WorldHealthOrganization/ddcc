@@ -1,4 +1,4 @@
-Profile:        SVC-Organization
+Profile:        SVC_Organization
 Parent:         Organization
 Id:             svc-pha-organization
 Title:          "SVC Organization"
