@@ -15,7 +15,7 @@ A SVC Composition be accessible from a SVC Registry as located via the WHO SMART
 * subject only Reference(SVC_Patient)
 * status 1..1
 * identifier 1..
-* identifier ^slicing.rules = #closed
+* identifier ^slicing.rules = #open
 * identifier ^slicing.ordered = true
 * identifier contains Identifier_UUID 1..1
 * identifier[Identifier_UUID].system 1..1
@@ -24,7 +24,7 @@ A SVC Composition be accessible from a SVC Registry as located via the WHO SMART
 * section 1..
 * section ^slicing.discriminator.type = #value
 * section ^slicing.discriminator.path = "code.coding.code"
-* section ^slicing.rules = #closed
+* section ^slicing.rules = #open
 * section ^slicing.ordered = true
 * section contains Section_Vaccinations 1..1
 * section[Section_Vaccinations].code.coding.system  = $LOINC
@@ -33,7 +33,7 @@ A SVC Composition be accessible from a SVC Registry as located via the WHO SMART
 * section[Section_Vaccinations].entry 1..
 * section[Section_Vaccinations].entry ^slicing.discriminator.type = #type
 * section[Section_Vaccinations].entry ^slicing.discriminator.path = ""
-* section[Section_Vaccinations].entry ^slicing.rules = #closed
+* section[Section_Vaccinations].entry ^slicing.rules = #open
 * section[Section_Vaccinations].entry ^slicing.ordered = true
 * section[Section_Vaccinations].entry contains Section_Vaccinations_Entry 1..1 MS
 * section[Section_Vaccinations].entry[Section_Vaccinations_Entry] only Reference(SVC_Immunization)

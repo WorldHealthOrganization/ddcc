@@ -13,14 +13,14 @@ Used to assert the provenance of a Public Health Auhority (PHA) over either a Pa
 * entity 1..
 * entity ^slicing.discriminator.type = #type
 * entity ^slicing.discriminator.path = "what"
-* entity ^slicing.rules = #closed
+* entity ^slicing.rules = #open
 * entity ^slicing.ordered = true
 * entity contains Provenance_Entity 1.. MS
 * entity[Provenance_Entity].what only Reference(SVC_Composition)
 * agent 1..
 * agent ^slicing.discriminator.type = #type
 * agent ^slicing.discriminator.path = "who"
-* agent ^slicing.rules = #closed
+* agent ^slicing.rules = #open
 * agent ^slicing.ordered = true
 * agent contains Provenance_Agent 1.. MS
 * agent[Provenance_Agent].who 1..1
@@ -115,7 +115,7 @@ The Provenance of an Updated Digital SVC should:
 """
 * entity ^slicing.discriminator.type = #type
 * entity ^slicing.discriminator.path = "what"
-* entity ^slicing.rules = #closed
+* entity ^slicing.rules = #open
 * entity ^slicing.ordered = true
 * entity contains Provenance_Digital_Updated_Entity 1..1
 * entity[Provenance_Digital_Updated_Entity].role =  #derived
@@ -148,7 +148,7 @@ The PHA may:
 """
 * entity ^slicing.discriminator.type = #type
 * entity ^slicing.discriminator.path = "what"
-* entity ^slicing.rules = #closed
+* entity ^slicing.rules = #open
 * entity ^slicing.ordered = true
 * entity contains Provenance_Digital_Ingested_Entity 1..1
 * entity[Provenance_Digital_Ingested_Entity].role = #quotation

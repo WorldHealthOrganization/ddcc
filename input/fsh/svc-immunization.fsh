@@ -9,7 +9,7 @@ An SVC Immunization contains the content to be encoded in a QR-code on a row in 
 * identifier 1..
 * identifier ^slicing.discriminator.type = #value
 * identifier ^slicing.discriminator.path = "system"
-* identifier ^slicing.rules = #closed
+* identifier ^slicing.rules = #open
 * identifier ^slicing.ordered = true
 * identifier contains Identifier_URN 1..1
 * identifier[Identifier_URN].system 1..1
@@ -65,7 +65,7 @@ An updated SVC Immunization is derived from an existing SVC Immunization accordi
 * protocolApplied 1.. MS
 * protocolApplied ^slicing.discriminator.type = #type
 * protocolApplied ^slicing.discriminator.path = "authority"
-* protocolApplied ^slicing.rules = #closed
+* protocolApplied ^slicing.rules = #open
 * protocolApplied ^slicing.ordered = true
 * protocolApplied contains ProtocolApplied_Authority 1.. MS
 * protocolApplied[ProtocolApplied_Authority].authority  only Reference(SVC_Organization)

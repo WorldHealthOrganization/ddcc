@@ -12,7 +12,7 @@ A SVC_Patient should:
 * identifier 1..
 * identifier ^slicing.discriminator.type = #value
 * identifier ^slicing.discriminator.path = "system"
-* identifier ^slicing.rules = #closed
+* identifier ^slicing.rules = #open
 * identifier ^slicing.ordered = true
 * identifier contains Identifier_URN 1..
 * identifier[Identifier_URN].system 1..
@@ -46,7 +46,7 @@ Correponds to the demographic information on the front page of a Paper SVC which
 * name 1..
 * name ^slicing.discriminator.type = #value
 * name ^slicing.discriminator.path = "use"
-* name ^slicing.rules = #closed
+* name ^slicing.rules = #open
 * name ^slicing.ordered = true
 * name contains Name_Official 1..1 MS
 * name[Name_Official].use = #official
@@ -69,7 +69,7 @@ The following rules apply to an Ingested SVC Patient:
 * name 1..
 * name ^slicing.discriminator.type = #value
 * name ^slicing.discriminator.path = "use"
-* name ^slicing.rules = #closed
+* name ^slicing.rules = #open
 * name ^slicing.ordered = true
 * name contains Name_Official_Ingested 1..1 MS
 * name[Name_Official_Ingested].use = #official

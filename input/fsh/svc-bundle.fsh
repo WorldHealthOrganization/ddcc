@@ -10,7 +10,7 @@ An SVC Bundle contains the content to be encoded in QR-code on the front page of
 * entry 3..3
 * entry ^slicing.discriminator.type = #type
 * entry ^slicing.discriminator.path = "resource"
-* entry ^slicing.rules = #closed
+* entry ^slicing.rules = #open
 * entry ^slicing.ordered = true
 * entry contains
   SVC_Patient_Entry 1..1 and
