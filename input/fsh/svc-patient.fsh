@@ -6,6 +6,7 @@ Description:	"""
 Correponds to the demographic information on the front page of the Paper SVC. This profile is not intended to be instantiated directly, rather a New SVC Patient or an Updated SVC Patient should be used.
 """
 * identifier 1..
+* identifier contains 1..1
 * identifier[0].system 1..1
 * identifier[0].value 1..1
 * identifier[0].system = "urn:uuid"
@@ -32,6 +33,7 @@ Description:	"""
 Correponds to the demographic information on the front page of a Paper SVC which is reissued by a PHA.  Written demographic content from the Paper SVC should be used to populate the Updated SVC Patient.
 """
 * name 1..
+* name contains 1..1
 * name[0].use = #official
 * name[0].text 1..
 * birthDate 1..1
@@ -50,6 +52,7 @@ The following rules apply to an Ingested SVC Patient:
 
 """
 * name 1..
+* name contains 1..1
 * name[0].use = #official
 * name[0].text 1..
 * birthDate 1..1

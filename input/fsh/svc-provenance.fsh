@@ -6,12 +6,14 @@ Description:    """
 Used to assert the provenance of a Public Health Auhority (PHA) over either a Paper or a Digital Smart Vaccination Card (SVC). This profile is not intended to be instantiated directly, rather a  Provenance of an New Digital SVC Provenance of an Updated Digital SVC or a Provenance of an Ingested Digital SVC or a Updarted SVC Composition should be used.
 
 """
-* reason = PUBHLTH
+* reason = #PUBHLTH
 * policy = "<<TODO>> create URI urn:example:who:smart:vaccine-certificate:RC1”
 * target 1..1
 * entity 1..
+* entity contains 1..1
 * entity[0].what only Reference(SVC_Composition)
 * agent[0].who 1..1
+* agent contains 1..1
 * agent[0].who only Reference(SVC_Organization)
 * agent.onBehalfOf 1..1 
 * agent.onBehalfOf only Reference(SVC_Patient)
@@ -34,6 +36,7 @@ When a new Paper SVC is printed, the following rules apply:
  * set the entity.role.what to reference the generated SVC Composition resource
 
 """
+* entity contains 1..1
 * entity[0].role = #derived
 * entity[0].what only Reference(SVC_Composition_New)
 * agent.onBehalfOf only Reference(SVC_Patient_New)
@@ -77,6 +80,7 @@ The Provencance of a New Dgivial SVC should:
  * set the role to derived
  * set the agent.behalfOf to refence a New SVC Patient
 """
+* entity contains 1..1
 * entity[0].role = #derived
 * entity[0].what only Reference(SVC_Composition_New)
 * agent.onBehalfOf only Reference(SVC_Patient_New)
@@ -99,6 +103,7 @@ The Provenance of an Updated Digital SVC should:
  * set entity role.what to reference the Updated SVC Composition associated to Paper SVC
 
 """
+* entity contains 1..1
 * entity[0].role =  #derived
 * entity[0].what only Reference(SVC_Composition-Updated)
 * agent.onBehalfOf only Reference(SVC_Patient-Updated)
@@ -128,6 +133,7 @@ The PHA may:
  * print a QR-code to place on the back page of the external Paper SVC which encodes the Provenance of an Ingested Digital SVC.
  * issue and print a new Paper SVC containing an Updated SVC Bundle 
 """
+* entity contains 1..1
 * entity[0].role = #quotation
 * entity[0].what only Reference(SVC_Composition_Ingested)
 * agent.onBehalfOf only Reference(SVC_Patient_Ingested)

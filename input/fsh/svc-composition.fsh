@@ -28,15 +28,10 @@ A SVC Composition be accessible from a SVC Registry as located via the WHO SMART
 * section ^slicing.ordered = true
 * section contains Section_Vaccinations 1..1
 * section[Section_Vaccinations].entry 1..
+* section[Section_Vaccinations].entry contains 1..1
 * section[Section_Vaccinations].entry[x].resource only Reference(SVC_Immunization)
-* section[Section_Vaccinations].code 1..1
-* section[Section_Vaccinations].code ^slicing.discriminator.type = #pattern
-* section[Section_Vaccinations].code ^slicing.discriminator.type = "system"
-* section[Section_Vaccinations].code ^slicing.rules = #closed
-* section[Section_Vaccinations].code ^slicing.ordered = true
-* section[Section_Vaccinations].code contains Section_Vaccinations_Section_Coding 1..1
-* section[Section_Vaccinations].code.coding[Section_Vaccinations_Section_Coding] = LOINC#11369-6
-* type.coding =  LOINC#XXXX
+* section[Section_Vaccinations].code.coding[0] = LOINC#11369-6
+* type.coding =  "<<TODO>>who-smart-vaccine-certificate-RC1”
 * ^abstract = true
 
 
@@ -101,5 +96,5 @@ An Ingested SVC Composition may be:
 
 """
 * status = #final
-* subject only Reference(SVC_Patient-Ingested)
+* subject only Reference(SVC_Patient_Ingested)
 * ^abstract = false
