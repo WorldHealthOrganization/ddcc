@@ -3,17 +3,23 @@ Parent: 	Patient
 Id:		svc-patient
 Title:		"SVC Patient"
 Description:	"""
-Correponds to the demographic information on the front page of the Paper SVC. This profile is not intended to be instantiated directly, rather a New SVC Patient or an Updated SVC Patient should be used.
+Correponds to the demographic information on the front page of the Paper SVC. This profile is not intended to be instantiated directly, rather a New SVC Patient or an Updated SVC Patient should be used.  
+A SVC_Patient should:
+* set the assigner of an identifier to reference the Organization resource associated to the PHA via the WHO Smart Directory
+
 """
 * identifier 1..
 * identifier ^slicing.discriminator.type = #value
 * identifier ^slicing.discriminator.path = "system"
 * identifier ^slicing.rules = #closed
 * identifier ^slicing.ordered = true
-* identifier contains Identifier_URN 1..1
-* identifier[Identifier_URN].system 1..1
-* identifier[Identifier_URN].value 1..1
+* identifier contains Identifier_URN 1..
+* identifier[Identifier_URN].system 1..
+* identifier[Identifier_URN].value 1..
 * identifier[Identifier_URN].system = "urn:uuid"
+* identifier[Identifier_URN].assigner 1.. MS
+
+
 * ^abstract = true
 
 
@@ -41,7 +47,7 @@ Correponds to the demographic information on the front page of a Paper SVC which
 * name ^slicing.discriminator.path = "use"
 * name ^slicing.rules = #closed
 * name ^slicing.ordered = true
-* name contains Name_Official 1..1
+* name contains Name_Official 1..1 MS
 * name[Name_Official].use = #official
 * name[Name_Official].text 1..
 * birthDate 1..1
@@ -64,7 +70,7 @@ The following rules apply to an Ingested SVC Patient:
 * name ^slicing.discriminator.path = "use"
 * name ^slicing.rules = #closed
 * name ^slicing.ordered = true
-* name contains Name_Official_Ingested 1..1
+* name contains Name_Official_Ingested 1..1 MS
 * name[Name_Official_Ingested].use = #official
 * name[Name_Official_Ingested].text 1..
 * birthDate 1..1

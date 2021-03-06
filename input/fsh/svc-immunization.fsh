@@ -19,7 +19,7 @@ An SVC Immunization contains the content to be encoded in a QR-code on a row in 
 * vaccineCode.coding.system 1..1 MS
 * vaccineCode.coding.code 1..1 MS
 * vaccineCode.coding.system = "urn:EXAMPLE-who-:smart:vaccine-certificate:RC1:coding"
-* vaccineCode.coding.code = "<<TODO>>Bind to Vaccine Product Catalog Valueset"
+* vaccineCode.coding.code from who-svc-vaccines (required)
 * ^abstract = true
 
 
@@ -37,6 +37,12 @@ When a new Paper SVC is issued, the following rules apply to a New SVC Immnuizat
 * patient only Reference(SVC_Patient_New)
 * ^abstract = false
 
+
+
+
+
+
+
 Profile:        SVC_Immunization_Updated
 Parent:         SVC_Immunization
 Id:             svc-immunization-updated
@@ -50,15 +56,19 @@ An updated SVC Immunization is derived from an existing SVC Immunization accordi
  * optionally update the patient to reference an appropriate SVC Patient as determined by the PHA after Patient deduplication
 
 """
-* expirationDate 1..1
-* lotNumber 1..1
+* expirationDate MS
+* lotNumber MS
 * patient only Reference(SVC_Patient_Updated)
-* occurrenceDateTime only DateTime
-* performer 1..
+* occurrence[x] only dateTime
+* performer 1.. MS
 * performer.actor only Reference(SVC_Practitioner)
-* protocalApplied 1..
-* protocalApplied[0].targetDisease = "<<TODO>> Bind to ICD-11 ValueSet"
-* protocalApplied[0].authority 1..1
-* protocalApplied[0].authority only Reference(SVC_Organization)
+* protocolApplied contains ProtocolApplied_Authority 1..1 
+* protocolApplied ^slicing.discriminator.type = #type
+* protocolApplied ^slicing.discriminator.path = "authority"
+* protocolApplied ^slicing.rules = #closed
+* protocolApplied ^slicing.ordered = true
+* protocolApplied contains ProtocolApplied_Authority 1.. MS
+* protocolApplied[ProtocolApplied_Authority].authority  only Reference(SVC_Organization)
+* protocolApplied[ProtocolApplied_Authority].targetDisease binding who-svc-vaccines
 * ^abstract = false
 
