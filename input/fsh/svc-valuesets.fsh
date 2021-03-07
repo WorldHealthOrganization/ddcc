@@ -3,7 +3,11 @@ Alias: $ICD11 = https://icd.who.int/browse11
 ValueSet:      WHO_SVC_Vaccines
 Id:	       who-svc-vaccines
 Title:	       "WHO Vaccine List"
-Description:   "WHO Vaccine List from [ICD 11](https://icd.who.int/browse11)"
+Description:   """
+The WHO Vaccine List from [ICD 11](https://icd.who.int/browse11) is used by:
+ *  the [SVC Immunization](StructureDefinition-svc-immunization.html) 
+ 
+""" 
 * ^status = #draft
 * include $ICD11#XM29K4	"Cholera vaccines"
 * include $ICD11#XM11V3	"Haemophilus influenzae B vaccines"
@@ -76,7 +80,9 @@ Description:   "WHO Vaccine List from [ICD 11](https://icd.who.int/browse11)"
 ValueSet:      WHO_SVC_Vaccines_COVID_19
 Id:	       who-svc-vaccines-covid-19
 Title:	       "WHO Vaccine List (COVID-19)"
-Description:   "WHO Vaccine List (COVID-19) from [ICD 11](https://icd.who.int/browse11)""
+Description:   """
+WHO Vaccine List (COVID-19) from [ICD 11](https://icd.who.int/browse11)
+"""
 * ^status = #draft
 * include $ICD11#XM1NL1 "COVID-19 vaccine, inactivated virus"
 * include $ICD11#XM5DF6 "COVID-19 vaccine, live attenuated virus"
