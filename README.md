@@ -14,4 +14,3 @@ Canonical / permanent URL:
 Issues and change requests are managed here:  
 
 Issues:  __https://github.com/who-int/svc-rc1/issues__  
-
