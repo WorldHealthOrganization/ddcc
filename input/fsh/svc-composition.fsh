@@ -2,7 +2,7 @@ Alias: $LOINC = http://loinc.org
 
 Profile:        SVC_Composition
 Parent:         Composition
-Id:             svc-pha-composition
+Id:             svc-composition
 Title:          "SVC Composition"
 Description:    """ 
 Container for the health content contained on a Paper SVC.  This profile is not intended to be instantiated directly, rather a New SVC Composition or a Updarted SVC Composition should be used.
@@ -42,7 +42,7 @@ A SVC Composition be accessible from a SVC Registry as located via the WHO SMART
 
 Profile:        SVC_Composition_New
 Parent:         SVC_Composition
-Id:             svc-pha-composition-new
+Id:             svc-composition-new
 Title:          "New SVC Composition"
 Description:    """ 
 Empty container for the health content contained on a new Paper SVC.
@@ -60,7 +60,7 @@ When a new Paper SVC is issued, the following rules apply to a New SVC Compositi
 
 Profile:        SVC_Composition_Updated
 Parent:         SVC_Composition
-Id:             svc-pha-composition-updated
+Id:             svc-composition-updated
 Title:          "Updated SVC Composition"
 Description:    """ 
 Populated container for the health content contained on a reissued Paper SVC which
@@ -82,7 +82,7 @@ An Update SVC Composition may:
 
 Profile:        SVC_Composition_Ingested
 Parent:         SVC_Composition
-Id:             svc-pha-composition-ingested
+Id:             svc-composition-ingested
 Title:          "Ingested SVC Composition"
 Description:    """ 
 Populated container for the health content contained on a  Paper SVC issued by a PHA when ingesting an SVC issued by an external PHA
