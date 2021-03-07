@@ -1,10 +1,9 @@
-
 Profile:        SVC_Provenance
 Parent:         Provenance 
 Id:             svc-provenance
 Title:          "Provenance of SVC"
 Description:    """ 
-Used to assert the provenance of a Public Health Auhority (PHA) over either a Paper or a Digital Smart Vaccination Card (SVC). This profile is not intended to be instantiated directly, rather a  [Provenance of an New Digital SVC](StructureDefinition-svc-provenance-digital-new.html), [Provenance of an Updated Digital SVC](StructureDefinition-svc-provenance-digital-udpated.html),  a [Provenance of an Ingested Digital SVC](StructureDefinition-svc-provenance-digital-ingested.html) or a [Provenance of an Paper SVC](StructureDefinition-svc-provenance-paper.html) should be used.
+Used to assert the provenance of a Public Health Auhority (PHA) over either a Paper or a Digital Smart Vaccination Card (SVC). This profile is not intended to be instantiated directly, rather a  [Provenance of an New Digital SVC](StructureDefinition-svc-provenance-digital-new.html), [Provenance of an Updated Digital SVC](StructureDefinition-svc-provenance-digital-updated.html),  a [Provenance of an Ingested Digital SVC](StructureDefinition-svc-provenance-digital-ingested.html) or a [Provenance of an Paper SVC](StructureDefinition-svc-provenance-paper.html) should be used.
 
 """
 * reason = #PUBHLTH
@@ -42,8 +41,8 @@ The [Provenance of a Paper SVC](StructureDefinition-svc-provenance-paper.html) i
 When a new Paper SVC is printed, the following rules apply:
  * generate a [New SVC Patient](StructureDefinition-svc-patient-new.html) and a [New SVC Composition](StructureDefinition-svc-composition-new.html) resource 
  * set the [agent.onBehalfOf](StructureDefinition-svc-provenance-paper-definitions.html#Provenance.agent.onBehalfOf) to reference the generated [New SVC Patient](StructureDefinition-svc-patient-new.html) resource 
- * set the [agent.who]](StructureDefinition-svc-provenance-papar-definitions.html#Provenance.agent.who) to reference the Organization resource associated to the PHA via the WHO Smart Directory
- * set the [entity.role.what](StructureDefinition-svc-provenance-papar-definitions.html#Provenance.entity.role.waht) to reference the generated [New SVC Composition](StructureDefinition-svc-composition-new.html) resource
+ * set the [agent.who]](StructureDefinition-svc-provenance-paper-definitions.html#Provenance.agent.who) to reference the Organization resource associated to the PHA via the WHO Smart Directory
+ * set the [entity.what](StructureDefinition-svc-provenance-paper-definitions.html#Provenance.entity.what) to reference the generated [New SVC Composition](StructureDefinition-svc-composition-new.html) resource
 
 """
 * entity contains Provenance_Paper_Entity 1..1
@@ -61,7 +60,7 @@ Parent:         SVC_Provenance
 Id:             svc-provenance-digital
 Title:          "Provenance of a Digital SVC"
 Description:    """ 
-Abstraction for the Provenance of a Digital SVC.  This profile is not intended to be instantiated directly, rather a   [Provenance of an New Digital SVC](StructureDefinition-svc-provenance-digital-new.html), [Provenance of an Updated Digital SVC](StructureDefinition-svc-provenance-digital-udpated.html),  or a [Provenance of an Ingested Digital SVC](StructureDefinition-svc-provenance-digital-ingested.html) should be used.
+Abstraction for the Provenance of a Digital SVC.  This profile is not intended to be instantiated directly, rather a   [Provenance of an New Digital SVC](StructureDefinition-svc-provenance-digital-new.html), [Provenance of an Updated Digital SVC](StructureDefinition-svc-provenance-digital-updated.html),  or a [Provenance of an Ingested Digital SVC](StructureDefinition-svc-provenance-digital-ingested.html) should be used.
 
 Non-digital content in a Paper SVC may be digitized by a PHA by any of the following methods:
   * Issue and print a QR-sticker which encodes an updated SVC Bundle  to place on the front page of the Paper SVC.  
@@ -84,11 +83,12 @@ Title:          "Provenance of a New Digital SVC"
 Description:    """ 
 The Provenance of a New Digital SVC is used to assert the provenance of a Public Health Auhority (PHA) over a new Digital SVC document.  
 
-The Provencance of a New Dgivial SVC should:
+The [Provencance of a New Digital SVC](StructureDefinition-svc-provenance-digital-new.html)  should:
  * be generated at the time of printing a new Paper SVC
- * have as target a New SVC Composition 
- * set the role to derived
- * set the agent.behalfOf to refence a New SVC Patient
+ * have as target a [New SVC Composition](StructureDefinition-svc-composition-new.html)
+ * set the [role](StructureDefinition-svc-provenance-paper-definitions.html#role)  to #derived
+ * set the [entity.what](StructureDefinition-svc-provenance-digital-new-definitions.html#Provenance.entity.what) to reference the generated [New SVC Composition](StructureDefinition-svc-composition-new.html) resource
+ * set the [agent.onBehalfOf](StructureDefinition-svc-provenance-new-definitions.html#Provenance.agent.onBehalfOf) to reference the generated [New SVC Patient](StructureDefinition-svc-patient-new.html) resource 
 """
 * entity contains Provenance_Digital_New_Entity 1..1
 * entity[Provenance_Digital_New_Entity].role = #derived
@@ -100,17 +100,18 @@ The Provencance of a New Dgivial SVC should:
 
 Profile:        SVC_Provenance_Digital_Updated
 Parent:         SVC_Provenance_Digital
-Id:             svc-provenance-digitalupdated
+Id:             svc-provenance-digital-updated
 Title:          "Provenance of an Updated Digital SVC"
 Description:    """ 
 The Provenance of a Digital SVC is used to assert the provenance of a Public Health Auhority (PHA) over an updated Digital SVC document.  
 
 The Provenance of an Updated Digital SVC should:
- * contain the Updated SVC Patient demographic content tranferred from a Paper SVC
- * contain the Updated SVC Immunization content tranferred from a Paper SVC 
+ * contain the [Updated SVC Patient](StructureDefinition-svc-patient-updated.html) demographic content tranferred from a Paper SVC
+ * contain the [Updated SVC Immunization](StructureDefinition-svc-immunization-updated.html) content tranferred from a Paper SVC 
  * be generated by a PHA when a Paper SVC document is printed by a PHA, in which case:
- * set entity.role.quotation to #deriverd
- * set entity role.what to reference the Updated SVC Composition associated to Paper SVC
+ * set the [entity.what](StructureDefinition-svc-provenance-digital-updated-definitions.html#Provenance.entity.what) to reference the generated [Updated SVC Composition](StructureDefinition-svc-composition-updated.html) resource associated to Paper SVC
+ * set the [role](StructureDefinition-svc-provenance-digital-updated-definitions.html#role)  to #derived
+
 
 """
 * entity ^slicing.discriminator.type = #type
@@ -137,14 +138,16 @@ The Provenance of a Digital SVC is used to assert the provenance of a Public Hea
 
 The Provenacne of Ingested Digital SVC should:
  * be generated by a PHA when ingests a Paper SVC or Digital SVC from another PHA
- * set entity.role.quotation  to #quotation
- * set entity.what to reference the SVC Composition in the external SVC
- * set target to the id of the new Digital SVC is generated by the PHA
- * updated by a PHA when content is transferred from a Paper SVC 
+ * set the [role](StructureDefinition-svc-provenance-digital-ingested-definitions.html#role)  to #quotation
+ * set the [entity.what](StructureDefinition-svc-provenance-digital-ingested-definitions.html#Provenance.entity.what) to reference the [SVC Composition](StructureDefinition-svc-composition.html) in the SVC card issued by the external PHA
+ * set [target](StructureDefinition-svc-provenance-digital-ingested-definitions.html#Provenance.target) to one of:
+ **  the id of a  [New SVC Composition](StructureDefinition-svc-composition-new.html) generated by the PHA
+ **  the id of the  [Updated SVC Composition](StructureDefinition-svc-composition-updated.html) which is already managed by the PHA on behalf of the [Updated SVC Patient](StructureDefinition-svc-patient-updated.html) referenced in the SVC card issued by the external PHA
+ * be updated by a PHA when content is transferred from a Paper SVC 
 
 The PHA may:
- * print a QR-code to place on the back page of the external Paper SVC which encodes the Provenance of an Ingested Digital SVC.
- * issue and print a new Paper SVC containing an Updated SVC Bundle 
+ * print a QR-code to place on the back page of the external Paper SVC which encodes the [Provenance of an Ingested Digital SVC](StructureDefinition-svc-provenance-digital-updated.html).
+ * issue and print a new Paper SVC containing an [Updated SVC Bundle](StructureDefinition-svc-bundle-updated.html)
 """
 * entity ^slicing.discriminator.type = #type
 * entity ^slicing.discriminator.path = "what"
