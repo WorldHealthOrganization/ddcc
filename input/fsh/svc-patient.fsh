@@ -6,7 +6,7 @@ Title:		"SVC Patient"
 Description:	"""
 Correponds to the demographic information on the front page of the Paper SVC. This profile is not intended to be instantiated directly, rather a [New SVC Patient](StructureDefinition-svc-patient-new.html) or an [Updated SVC Patient](StructureDefinition-svc-patient-updated.html) should be used.  
 A SVC_Patient should:
-* set the [identifier.assigner]((StructureDefinition-svc-patient-definitions.html#Patient.identifier.assigner) to reference the [SVC Organization](StructureDefinition-svc-organization.html) resource associated to the PHA via the WHO Smart Directory
+* set the [identifier.assigner](StructureDefinition-svc-patient-definitions.html#Patient.identifier.assigner) to reference the [SVC Organization](StructureDefinition-svc-organization.html) resource associated to the PHA via the WHO Smart Directory
 
 """
 * identifier 1..
@@ -32,7 +32,7 @@ Description:	"""
 Correponds to the demographic information on the front page of a new Paper SVC.
 
 When a new Paper SVC is issued, the following rules apply:
-  * a [Person.identifier]((StructureDefinition-svc-patient-definitions.html#Patient.identifier)  entry is generated with system set to 'urn:uuid' and value set to a v4 UUID.
+  * a [Person.identifier](StructureDefinition-svc-patient-definitions.html#Patient.identifier)  entry is generated with system set to 'urn:uuid' and value set to a v4 UUID.
 """
 * ^abstract = false
 
