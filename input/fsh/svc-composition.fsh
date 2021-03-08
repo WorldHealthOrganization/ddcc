@@ -53,7 +53,6 @@ When a new Paper SVC is issued, the following rules apply to a [New SVC Composit
   * a [Person.identifier](StructureDefinition-svc-person-definitions.html#Person.identifier)  entry is generated for a [SVC Patient](StructureDefinition-svc-patient.html) with system set to 'urn:uuid' and value set to a v4 UUID.
   * [Composition.author](StructureDefinition-svc-composition-new-definitions.html#Composition.author) is set to reference the Organization resource associated to the PHA via the WHO Smart Directory
   * set the [status](StructureDefinition-svc-composition-new-definitions.html#Composition.status) to #preliminary
-  * for each row of the Paper SVC, an [New SVC Immunization](StructureDefinition-svc-immunization-new.html) should be generated and an entry should be created to reference this
 
 """
 * status  = #preliminary
@@ -69,9 +68,8 @@ Populated container for the health content contained on a reissued Paper SVC whi
 
 When a Paper SVC is reissued, the following rules apply:
   * [status](StructureDefinition-svc-composition-new-definitions.html#Composition.status)  is set to #final
-  * each row in the Vaccination Events section of the Paper SVC should contain a QR-code encoding an [SVC Immunization](StructureDefinition-svc-immunization.html)
-  * transfer written content from the Vaccination Events section of the existing Paper SVC into corresponding [Updated SVC Immunizations](StructureDefinittion-svc-immunization.html)
-  * preserve entries in the from the external SVC Composition that correspond to [Updated SVC Immunizations](StructureDefintion-svc-composition-updated.html)
+  * transfer written content from the Vaccination Events section of the existing Paper SVC into corresponding [SVC Immunizations](StructureDefinittion-svc-immunization.html)
+
 
 
 An Update SVC Composition may:
