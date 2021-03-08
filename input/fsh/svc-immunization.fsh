@@ -71,4 +71,3 @@ An Updated SVC Immunization is derived from an existing [SVC Immunization](Struc
 * protocolApplied[ProtocolApplied_Authority].targetDisease from WHO_SVC_Vaccines (required)
 * ^abstract = false
 
-B
