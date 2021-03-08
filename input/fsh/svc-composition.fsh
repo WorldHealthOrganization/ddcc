@@ -50,7 +50,7 @@ Description:    """
 Empty container for the health content contained on a new Paper SVC.
 
 When a new Paper SVC is issued, the following rules apply to a [New SVC Composition](StructureDefinition-svc-composition-new.html):
-  * a [Person.identifier](StructureDefinition-svc-person-definitions.html#Person.identifier)  entry is generated for a [SVC Patient](StructureDefinition-svc-patient.html) with system set to 'urn:uuid' and value set to a v4 UUID.
+  * a [Person.identifier](StructureDefinition-svc-patient-definitions.html#Person.identifier)  entry is generated for a [SVC Patient](StructureDefinition-svc-patient.html) with system set to 'urn:uuid' and value set to a v4 UUID.
   * [Composition.author](StructureDefinition-svc-composition-new-definitions.html#Composition.author) is set to reference the Organization resource associated to the PHA via the WHO Smart Directory
   * set the [status](StructureDefinition-svc-composition-new-definitions.html#Composition.status) to #preliminary
 
