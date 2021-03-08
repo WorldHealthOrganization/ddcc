@@ -54,17 +54,3 @@ An [Updated SVC Bundle](StructureDefinition-svc-bundle-update.html) is generated
 * ^abstract = false
 
 
-Profile:        SVC_Bundle_Ingested
-Parent:         SVC_Bundle
-Id:             svc-bundle-ingested
-Title:          "Ingested SVC Bundle"
-Description:    """ 
-An [Ingested SVC Bundle](StructureDefinition-svc-bundle-ingested.html) is generated PHA when the PHA transfers content from a Paper SVC issued by an externa;l PHA.  An [Ingested SVC Bundle](StructureDefinition-svc-bundle-ingested.html) is derived from an existing [SVC Bundle](StructureDefinition-svc-bundle.html) according to the following rules:
- * generate an [Updated SVC Patient](StructureDefinition-svc-bundle-updated.html)
- * generate an [Updated SVC Compostion](StructureDefinition-svc-composition-updated.html)
-"""
-* type = #document
-* entry[SVC_Patient_Entry].resource only SVC_Patient_Ingested
-* entry[SVC_Composition_Entry].resource only SVC_Composition_Ingested
-* entry[SVC_Provenance_Entry].resource only SVC_Provenance_Digital_Ingested
-* ^abstract = false

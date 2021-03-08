@@ -54,27 +54,3 @@ Correponds to the demographic information on the front page of a Paper SVC which
 * birthDate 1..1
 * ^abstract = false
 
-Profile:        SVC_Patient_Ingested
-Parent: 	SVC_Patient
-Id:		svc-patient-ingested
-Title:		"Ingested SVC Patient"
-Description:	"""
-Correponds to the demographic information on the front page a of Paper SVC which is ingested by a PHA from an external PHA.  
-
-The following rules apply to an Ingested SVC Patient:
- * the identifier in the [SVC Patient](StructureDefinition-svc-patient.html) from the external SVC should be preserved in the Ingested SVC Patient
- * demographic content from the extenal SVC may be used to populate the Ingested SVC Patient.  
-
-The PHA may also identify the referenced [SVC Patient](StructureDefinition-svc-patient.html) with a another record in their system and use that in populating the Ingested SVC Patient. 
-
-"""
-* name 1..
-* name ^slicing.discriminator.type = #value
-* name ^slicing.discriminator.path = "use"
-* name ^slicing.rules = #open
-* name ^slicing.ordered = true
-* name contains Name_Official_Ingested 1..1 MS
-* name[Name_Official_Ingested].use = #official
-* name[Name_Official_Ingested].text 1..
-* birthDate 1..1
-* ^abstract = false
