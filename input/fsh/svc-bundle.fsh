@@ -13,8 +13,8 @@ An [SVC Bundle](StructureDefinition-svc-bundle.html) contains the content to be 
 * entry ^slicing.rules = #open
 * entry ^slicing.ordered = true
 * entry contains
-  SVC_Patient_Entry 1..1 and
   SVC_Composition_Entry 1..1 and
+  SVC_Patient_Entry 1..1 and
   SVC_Provenance_Entry 1..1
 * entry[SVC_Patient_Entry].resource only SVC_Patient
 * entry[SVC_Composition_Entry].resource only SVC_Composition
@@ -32,8 +32,8 @@ Description:    """
  * amend this by transferring the non-digital demographic content  from the Paper SVC into the [SVC Patient] resource 
 """
 * type = #document
-* entry[SVC_Patient_Entry].resource only SVC_Patient_New
 * entry[SVC_Composition_Entry].resource only SVC_Composition_New
+* entry[SVC_Patient_Entry].resource only SVC_Patient_New
 * entry[SVC_Provenance_Entry].resource only SVC_Provenance_Digital_New
 * ^abstract = false
 
@@ -48,8 +48,8 @@ An [Updated SVC Bundle](StructureDefinition-svc-bundle-update.html) is generated
  * generate an [Updated SVC Compostion](StructureDefinition-svc-composition-updated.html)
 """
 * type = #document
-* entry[SVC_Patient_Entry].resource only SVC_Patient_Updated
 * entry[SVC_Composition_Entry].resource only SVC_Composition_Updated
+* entry[SVC_Patient_Entry].resource only SVC_Patient_Updated
 * entry[SVC_Provenance_Entry].resource only SVC_Provenance_Digital_Updated
 * ^abstract = false
 
