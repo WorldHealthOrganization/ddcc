@@ -37,7 +37,7 @@ A [SVC Composition](StructureDefinition-svc-composition.html) should:
 * section[Section_Vaccinations].entry contains Section_Vaccinations_Entry 1.. MS
 * section[Section_Vaccinations].entry[Section_Vaccinations_Entry] only Reference(SVC_Immunization)
 * type.coding.system =  "urn:EXAMPLE-who.int:smart-vaccine-certificate" 
-* type.coding.code =  #RC1
+* type.coding.code =  #RC2
 * ^abstract = true
 
 
