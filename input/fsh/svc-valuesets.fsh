@@ -1,4 +1,4 @@
-Alias: $ICD11 = https://icd.who.int/browse11
+Alias: $ICD11 = https://icd.who.int/browse11  
 
 ValueSet:      WHO_SVC_Vaccines
 Id:	       who-svc-vaccines
