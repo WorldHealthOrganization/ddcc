@@ -23,7 +23,7 @@ An SVC Immunization contains the content to be encoded in a QR-code on a row in 
 * ^abstract = true
 * expirationDate MS
 * lotNumber MS
-* patient only Reference(SVC_Patient_Updated)
+* patient only Reference(SVC_Patient)
 * occurrence[x] only dateTime
 * performer 1.. MS
 * performer.actor only Reference(SVC_Practitioner)
@@ -34,6 +34,5 @@ An SVC Immunization contains the content to be encoded in a QR-code on a row in 
 * protocolApplied ^slicing.ordered = true
 * protocolApplied contains ProtocolApplied_Authority 1.. MS
 * protocolApplied[ProtocolApplied_Authority].authority  only Reference(SVC_Organization)
-* protocolApplied[ProtocolApplied_Authority].targetDisease from WHO_SVC_Vaccines (required)
-* ^abstract = false
+* protocolApplied[ProtocolApplied_Authority].targetDisease from WHO_SVC_Vaccinable_Conditions (required)
 
