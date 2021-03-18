@@ -20,7 +20,6 @@ An SVC Immunization contains the content to be encoded in a QR-code on a row in 
 * vaccineCode.coding.code 1..1 MS
 * vaccineCode.coding.system = "urn:EXAMPLE-who-:smart:vaccine-certificate:RC1:coding"
 * vaccineCode.coding.code from who-svc-vaccines (required)
-* ^abstract = true
 * expirationDate MS
 * lotNumber MS
 * patient only Reference(SVC_Patient)

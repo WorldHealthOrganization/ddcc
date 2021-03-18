@@ -6,6 +6,7 @@ This is the WHO Smart Vaccination Card (SVC) Release Candidate 1 (RC1).
 ### Publication
 This ImplementationGuide is published in the following locations:
 
+
 Continuous Build: __https://who-int.github.io/svc
 Canonical / permanent URL: 
 <br> </br>
