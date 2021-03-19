@@ -27,5 +27,6 @@ Used to assert the provenance of a public health auhority (PHA) over either a Pa
 * agent[Provenance_Agent].onBehalfOf only Reference(SVC_Patient)
 * signature 1.. MS
 * signature.type 1.. MS
+* singature.who only Reference(SVC_Organization) or Reference(SVC_Practitioner) or Reference(SVC_PractitionerRole)
 
 
