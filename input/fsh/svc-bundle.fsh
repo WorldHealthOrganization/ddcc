@@ -3,7 +3,7 @@ Parent:         Bundle
 Id:             svc-bundle
 Title:          "SVC Bundle"
 Description:    """ 
-An [SVC Bundle](StructureDefinition-svc-bundle.html) contains the content to be encoded in QR-code on the front page of a Paper SVC.
+An [SVC Bundle](StructureDefinition-svc-bundle.html) is a document bundle containing the Smart Vaccination Certificate (SVC) content. 
 
 """
 * ^publisher = "World Health Organization (WHO)"

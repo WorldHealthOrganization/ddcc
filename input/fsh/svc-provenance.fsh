@@ -3,7 +3,7 @@ Parent:         Provenance
 Id:             svc-provenance
 Title:          "Provenance of SVC"
 Description:    """ 
-Used to assert the provenance of a Public Health Auhority (PHA) over either a Paper or a Digital Smart Vaccination Card (SVC). This profile is not intended to be instantiated directly, rather a  [Provenance of an New Digital SVC](StructureDefinition-svc-provenance-digital-new.html), or a [Provenance of an Updated Digital SVC](StructureDefinition-svc-provenance-digital-updated.html), or a [Provenance of an Paper SVC](StructureDefinition-svc-provenance-paper.html) should be used.
+Used to assert the provenance of a public health auhority (PHA) over either a Paper or a Digital Smart Vaccination Certificate (SVC). 
 
 """
 * policy = "urn:EXAMPLE-who:smart:vaccine-certificate:RC1"

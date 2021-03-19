@@ -5,8 +5,8 @@ Parent:         Composition
 Id:             svc-composition
 Title:          "SVC Composition"
 Description:    """ 
-Container for the health content contained on a Paper SVC.  A [SVC Composition](StructureDefinition-svc-composition.html) should:
- * be accessible from a SVC Registry as located via the WHO SMART Directory for the PHA referenced in the [author](StructureDefinition-svc-composition-definitions.html#Composition.agent).
+Describes the logical structure for the health content contained in a SVC.  An [SVC Composition](StructureDefinition-svc-composition.html) should:
+ * be accessible from a SVC Registry as located via the WHO Public Key Directory for the PHA referenced in the [author](StructureDefinition-svc-composition-definitions.html#Composition.agent).
 """
 * ^publisher = "World Health Organization (WHO)"
 * . ^short = "SVC Composition"
