@@ -3,7 +3,7 @@ Parent:         Immunization
 Id:             svc-immunization
 Title:          "SVC Immunization"
 Description:    """ 
-An SVC Immunization contains the content to be encoded in a QR-code on a row in the Vaccination Events section of the Paper SVC. While this is not a further profile of the IPS Immunization (due to the requirement of gender/sex in IPS in the IPS Patient profile), this is intended to map onto an IPS Immunization.
+An SVC Immunization contains the content corresponding to a row in the Vaccination Events section of a Paper SVC. While this is not a further profile of the International Patient Summary (IPS) Immunization resouce, this is intended to map into an IPS Immunization resource.
 
 """
 * identifier 1..
@@ -11,10 +11,9 @@ An SVC Immunization contains the content to be encoded in a QR-code on a row in 
 * identifier ^slicing.discriminator.path = "system"
 * identifier ^slicing.rules = #open
 * identifier ^slicing.ordered = true
-* identifier contains Identifier_URN 1..1
-* identifier[Identifier_URN].system 1..1
-* identifier[Identifier_URN].value 1..1
-* identifier[Identifier_URN].system = "urn:uuid"
+* identifier contains SVC_Identifier 1..1
+* identifier[SVC_Identifier].system 1..1
+* identifier[SVC_Identifier].value 1..1
 * vaccineCode.coding 1..1
 * vaccineCode.coding.system 1..1 MS
 * vaccineCode.coding.code 1..1 MS

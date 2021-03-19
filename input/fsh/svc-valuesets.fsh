@@ -1,4 +1,5 @@
-Alias: $ICD11 = https://icd.who.int/browse11
+Alias: $ICD9CM = http://hl7.org/fhir/sid/icd-9-cm
+Alias: $ICD11 = http://hl7.org/fhir/sid/icd-11
 
 
 ValueSet:      WHO_SVC_Vaccinable_Conditions
@@ -10,7 +11,34 @@ The WHO Vaccinable Conditions List from [ICD 11](https://icd.who.int/browse11) i
  
 """ 
 * ^status = #draft
-
+* include $ICD11#XM9QP0 "Cervical cancer (Human papilloma virus)"
+* include $ICD11#XM29K4 "Cholera"
+* include $ICD11#XM86V7 "Diphtheria"
+* include $ICD11#XM9V38 "Hepatitis B "
+* include $ICD11#XM1LR5 "Influenza"
+* include $ICD11#XM0RC1 "Japanese encephalitis"
+* include $ICD11#XM28X5 "Measles"
+* include $ICD11#XM8L15 "Measles - Measles, live attenuated"
+* include $ICD11#XM2KH7 "Measles- Diplovax"
+* include $ICD11#XM2WV4 "Meningitis - Meningococcal vaccines"
+* include $ICD11#XM18Y8 "Meningitis - Meningococcal conjugate (Strain C) vaccine"
+* include $ICD11#XM2280 "Meningitis - Meningovax (-AC) (-C)"
+* include $ICD11#XM1131 "Mumps"
+* include $ICD11#XM43M9 "Pertussis"
+* include $ICD9CM#V03.82 "Pneumonia - Streptococcus pneumoniae [pneumococcus]"
+* include $ICD11#XM0N50 "Polio"
+* include $ICD11#XM4KG4 "Polio - Orimune"
+* include $ICD11#XM1Y59 "Polio - Vaccine sabin oral"
+* include $ICD11#XM6T09 "Rabies"
+* include $ICD11#XM1CE0 "Rotavirus"
+* include $ICD11#XM7PP1 "Rubella"
+* include $ICD11#XM9PS9 "Rubella - Meruvax"
+* include $ICD11#XM5L44 "Tetanus"
+* include $ICD11#XM29H5 "Tetanus - tetanus toxoid"
+* include $ICD11#XM1G86 "Tetanus - tetanus toxoid, combinations with diphtheria toxoid"
+* include $ICD11#XM8BU8 "Typhoid"
+* include $ICD11#XM8DG3 "Varicella (chicken pox)"
+* include $ICD11#XM0N24 "Yellow fever"
 
 
 ValueSet:      WHO_SVC_Vaccines
