@@ -15,4 +15,5 @@ Canonical / permanent URL:
 ### Issues
 Issues and change requests are managed here:  
 
-Issues:  __https://github.com/who-int/svc/issues1__  
+Issues:  __https://github.com/who-int/svc/issues__  
+    or the Kanban board: __https://github.com/who-int/svc/projects/1__
