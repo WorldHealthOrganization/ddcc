@@ -1,4 +1,4 @@
-Instance: svc-sq-bundle
+Instance: svc-qr-bundle
 InstanceOf: StructureDefinition
 Description: "Data elements from SVC Bundle identified by the UVCI to be QR encoded"
 Title: "SVC UVCI QR" // user-friendly name
@@ -32,7 +32,7 @@ Usage: #definition
 * differential.element[2].path = "SVC_QR_UVCI.elements.name"
 * differential.element[2].short = "Name"
 * differential.element[2].definition = "Name of SVC holder"
-* differential.element[2].type.code = #text
+* differential.element[2].type.code = #string
 * differential.element[2].min = 0
 * differential.element[2].max = "1"
 
