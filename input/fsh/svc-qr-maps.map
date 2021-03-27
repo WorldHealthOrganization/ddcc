@@ -1,0 +1,143 @@
+map "http://who-int.github.io/svc/StructureMap/SVC_QR_Provenance" = "Map from QR code to SVC Bundle"
+
+uses "http://who-int.github.io/svc/refs/heads/qr-encoding/StructureDefinition/svc-qr-bundle" alias QR as source
+uses "http://who-int.github.io/svc/StructureDefinition/svc-bundle" alias SVC_Bundle as target
+uses "http://who-int.github.io/svc/StructureDefinition/svc-composition" alias SVC_Composition as produced
+uses "http://who-int.github.io/svc/StructureDefinition/svc-patient" alias SVC_Patient as produced
+uses "http://who-int.github.io/svc/StructureDefinition/svc-organization" alias SVC_Organization as produced
+uses "http://who-int.github.io/svc/StructureDefinition/svc-provenance" alias SVC_Provenance as produced
+
+
+group Decode_QR
+	input qr: QR as source
+	
+	start: for qr make
+	       create("SVC_Bundle") as bundle
+	       create("SVC_Patient") as patient
+	       create("SVC_Organization") as organization
+	       then {
+       	       	    Decode_QR_Patient(qr,patient)
+         	    Decode_QR_Organization(qr,organization)
+        	    Decode_QR_Bundle(qr,patient,organzation,bundle)
+		    }
+endgroup
+
+
+group Decode_QR_Patient
+	input qr : QR as source
+	input patient : SVC_Patient as target
+
+	name: for qr.elements.name make
+	     patient.name.text 
+	     patient.name.use = "official"
+	dob: for qr.elements.birthDate make
+	     patient.birthDate
+	patientid: for qr.elements.patientid  make
+		   patient.identifier.value
+	      	   patient.identifier.system = "XXXXXurn:ietf:rfc:3986”
+}
+
+
+group Decode_QR_Organization
+	input qr : QR as source
+	input organization : SVC_Organization as target
+
+	pha: for qr.elements.phaid make
+		   organization.identifier.value
+	      	   organization.identifier.system = "XXXXXurn:ietf:rfc:3986”	      
+}
+
+
+group Decode_QR_Bundle
+	input qr : QR as source
+	input patient : SVC_Patient as target
+	input bundle : SVC_Bundle as target
+
+	id: for qr.elements.digitalid make
+	      bundle.identifier.value
+      	      bundle.identifier.system = "XXXXXurn:ietf:rfc:3986”
+
+	meta: for qr make
+	      bundle.status = "final"
+	      bundle.type = "document"
+
+	entries: for qr make
+		 bundle.entry as e_composition 
+		 e_composition.resource = create("SVC_Composition") as compostion
+		 Decode_QR_Composition(qr,bundle,composition)
+
+ 		 bundle.entry e_patient
+		 e_patient.resource = reference(patient)
+
+		 bundle.entry as e_provenance
+		 e_provenance.resource = create("SVC_Provenance") as provenance
+		 Decode_QR_Provenance(qr,bundle,composition,provenance)
+
+	signature: for qr.elements.signature make
+		   bundle.signature.data
+		   bundle.signature.type = "1.2.840.10065.1.12.1.14" //Source Signature https://www.hl7.org/fhir/valueset-signature-type.html
+		   bundle.signature.format = "XXXXXX TBD"
+		   bundle.signature.who = reference(organization)		   
+
+endgroup
+
+
+group Decode_QR_Composition
+	input qr : QR as source
+	input bundle : SVC_Bundle as target
+	input patient : SVC_Patient as target
+	input organization : SVC_Organization as target
+	input composition : SVC_Composition as target
+
+	id: for qr.elements.digitalid make
+	    composition.identifier.value
+	    composition.identifier.system = "XXXXXurn:ietf:rfc:3986”	      
+
+	meta: for qr make
+		composition.subject = reference(patient)				    
+		composition.author = reference(organization)
+	
+endgroup
+
+
+group Decode_QR_Provenance
+	input qr : QR as source
+	input bundle : SVC_Bundle as target
+	input patient : SVC_Patient as target
+	input organization : SVC_Organization as target
+	input paper : SVC_Composition as target
+	input digital : SVC_Composition as target
+	input provenance : SVC_Provenance as target
+
+
+
+	agent: for qr make
+	       provenance.agent.who.reference = reference(organization)
+	       provenance.agent.who.onBehalfOf = reference(patient)
+
+	policy: for qr make
+  		 provenance.policy = “XXXXXXX urn:example:who:smart:vaccine-certificate:RC1"
+		 provenance.reason = “PUBHLTH"
+	docs: for qr make
+		provenance.target = reference(bundle)
+
+		provenance.entity e_digital
+		e_digital.role = "source"
+		e_digital.what = reference(composition)
+		e_digital.agent = reference(organization)
+
+		provenance.entity e_paper
+		e_paper.role = "source"
+		e_paper.what = reference(bundle)
+		e_paper.agent = reference(organization)
+
+	signature: for qr.elements.signature make
+		   provenance.signature.data
+		   provenance.signature.type = "1.2.840.10065.1.12.1.14" //Source Signature https://www.hl7.org/fhir/valueset-signature-type.html
+		   provenance.signature.format = "XXXXXX TBD"
+		   provenance.signature.who = reference(organization)		   
+		   
+endgroup
+
+
+
