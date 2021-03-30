@@ -16,12 +16,10 @@ group Decode_QR(source qr : QR, target bundle) {
   qr -&gt;  create('SVC_Patient') as patient,  create('SVC_Organization') as organization then Decode_QR_Patient(qr, patient), Decode_QR_Organization(qr, organization), Decode_QR_Bundle(qr, patient, organzation, bundle) "Create resources and process bundle";
 }
 
-group Decode_QR_Patient(source elements, target patient : SVC_Patient) {
-  qr.elements as elements then {
-    elements.name as qrname, patient.name as pname -&gt;  pname.text = qrname,  pname.use = 'official' "Load Name";
-    elements.pid as pid -&gt; patient.identifier = id('XXXXXurn:uetf:rfc:3986', pid) "Load Patient Identifer";
-    elements.birthDate as birthDate -&gt; patient.birthDate = birthDate "Load Birth Date";
-  };
+group Decode_QR_Patient(source qr : QR, target patient : SVC_Patient) {
+  elements.name as qrname, patient.name as pname -&gt;  pname.text = qrname,  pname.use = 'official' "Load Name";
+  elements.pid as pid -&gt; patient.identifier = id('XXXXXurn:uetf:rfc:3986', pid) "Load Patient Identifer";
+  elements.birthDate as birthDate -&gt; patient.birthDate = birthDate "Load Birth Date";
 }
 
 group Decode_QR_Organization(source qr : QR, target organization : SVC_Organization) {
@@ -142,7 +140,8 @@ group Decode_QR_Provenance(source qr : QR, target bundle : SVC_Bundle, target pa
       <name value="Decode_QR_Patient"></name>
       <typeMode value="none"></typeMode>
       <input>
-         <name value="elements"></name>
+         <name value="qr"></name>
+         <type value="QR"></type>
          <mode value="source"></mode>
       </input>
       <input>
@@ -151,80 +150,72 @@ group Decode_QR_Provenance(source qr : QR, target bundle : SVC_Bundle, target pa
          <mode value="target"></mode>
       </input>
       <rule>
-         <name value="elements"></name>
+         <name value="Load Name"></name>
          <source>
-            <context value="qr"></context>
-            <element value="elements"></element>
-            <variable value="elements"></variable>
+            <context value="elements"></context>
+            <element value="name"></element>
+            <variable value="qrname"></variable>
          </source>
-         <rule>
-            <name value="Load Name"></name>
-            <source>
-               <context value="elements"></context>
-               <element value="name"></element>
-               <variable value="qrname"></variable>
-            </source>
-            <source>
-               <context value="patient"></context>
-               <element value="name"></element>
-               <variable value="pname"></variable>
-            </source>
-            <target>
-               <context value="pname"></context>
-               <contextType value="variable"></contextType>
-               <element value="text"></element>
-               <transform value="copy"></transform>
-               <parameter>
-                  <valueId value="qrname"></valueId>
-               </parameter>
-            </target>
-            <target>
-               <context value="pname"></context>
-               <contextType value="variable"></contextType>
-               <element value="use"></element>
-               <transform value="copy"></transform>
-               <parameter>
-                  <valueString value="official"></valueString>
-               </parameter>
-            </target>
-         </rule>
-         <rule>
-            <name value="Load Patient Identifer"></name>
-            <source>
-               <context value="elements"></context>
-               <element value="pid"></element>
-               <variable value="pid"></variable>
-            </source>
-            <target>
-               <context value="patient"></context>
-               <contextType value="variable"></contextType>
-               <element value="identifier"></element>
-               <transform value="id"></transform>
-               <parameter>
-                  <valueString value="XXXXXurn:uetf:rfc:3986"></valueString>
-               </parameter>
-               <parameter>
-                  <valueId value="pid"></valueId>
-               </parameter>
-            </target>
-         </rule>
-         <rule>
-            <name value="Load Birth Date"></name>
-            <source>
-               <context value="elements"></context>
-               <element value="birthDate"></element>
-               <variable value="birthDate"></variable>
-            </source>
-            <target>
-               <context value="patient"></context>
-               <contextType value="variable"></contextType>
-               <element value="birthDate"></element>
-               <transform value="copy"></transform>
-               <parameter>
-                  <valueId value="birthDate"></valueId>
-               </parameter>
-            </target>
-         </rule>
+         <source>
+            <context value="patient"></context>
+            <element value="name"></element>
+            <variable value="pname"></variable>
+         </source>
+         <target>
+            <context value="pname"></context>
+            <contextType value="variable"></contextType>
+            <element value="text"></element>
+            <transform value="copy"></transform>
+            <parameter>
+               <valueId value="qrname"></valueId>
+            </parameter>
+         </target>
+         <target>
+            <context value="pname"></context>
+            <contextType value="variable"></contextType>
+            <element value="use"></element>
+            <transform value="copy"></transform>
+            <parameter>
+               <valueString value="official"></valueString>
+            </parameter>
+         </target>
+      </rule>
+      <rule>
+         <name value="Load Patient Identifer"></name>
+         <source>
+            <context value="elements"></context>
+            <element value="pid"></element>
+            <variable value="pid"></variable>
+         </source>
+         <target>
+            <context value="patient"></context>
+            <contextType value="variable"></contextType>
+            <element value="identifier"></element>
+            <transform value="id"></transform>
+            <parameter>
+               <valueString value="XXXXXurn:uetf:rfc:3986"></valueString>
+            </parameter>
+            <parameter>
+               <valueId value="pid"></valueId>
+            </parameter>
+         </target>
+      </rule>
+      <rule>
+         <name value="Load Birth Date"></name>
+         <source>
+            <context value="elements"></context>
+            <element value="birthDate"></element>
+            <variable value="birthDate"></variable>
+         </source>
+         <target>
+            <context value="patient"></context>
+            <contextType value="variable"></contextType>
+            <element value="birthDate"></element>
+            <transform value="copy"></transform>
+            <parameter>
+               <valueId value="birthDate"></valueId>
+            </parameter>
+         </target>
       </rule>
    </group>
    <group>
