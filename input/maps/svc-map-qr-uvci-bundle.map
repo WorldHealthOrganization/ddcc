@@ -126,33 +126,38 @@ group Decode_QR_Provenance(
 	target provenance : SVC_Provenance
 	){
 
-	qr as qr,
+	qr ,
 	provenance.entity as e_digital,
 	provenance.agent as agent,
-	provenance.signature as psig then {
-	   provenance.reason = “PUBHLTH" "Set reason";
-	   provenance.policy = “XXXXXXX urn:example:who:smart:vaccine-certificate:RC1" "Set policy";
-	   provenance.target = reference(bundle) "Set target";
+	provenance.signature as psig
+	   ->
+	   provenance.reason = "PUBHLTH" ,
+	   provenance.policy = "XXXXXXX urn:example:who:smart:vaccine-certificate:RC1" ,
+	   provenance.target = reference(bundle), 
 
-	   e_digital.role = "source" "Set role";
-	   e_digital.what = reference(composition) "Set what";
-	   e_digital.agent = reference(organization) "Set org";
+	   e_digital.role = "source" ,
+	   e_digital.what = reference(composition) ,
+	   e_digital.agent = reference(organization) ,
 
-	   e_paper.role = "source" "Set source";
-	   e_paper.what = reference(bundle) "Set what";
-	   e_paper.agent = reference(organization) "Set agent";
-	   
-	   agent.who as who -> 
-	        who.reference = reference(organization),
-	        who.onBehalfOf = reference(patient)
-		"Set Who";
+	   e_paper.role = "source" ,
+	   e_paper.what = reference(bundle) ,
+	   e_paper.agent = reference(organization) ,
 
-   	   psig.format = "XXXXX TBD" "Set sig format";
-	   psig.who = reference(organization) "Set sig who";
-	   psg.type = "1.2.840.10065.1.12.1.14" "Set sig type" //Source Signature https://www.hl7.org/fhir/valueset-signature-type.html
-	   qr.elements as elements  then psig.data = elements.signature
-	   	"Set signature data";
-	} "Set Provenance";
+   	   psig.format = "XXXXX TBD" ,
+	   psig.who = reference(organization) ,
+	   psg.type = "1.2.840.10065.1.12.1.14"  //Source Signature https://www.hl7.org/fhir/valueset-signature-type.html
+
+	   then {
+	   	agent.who as who -> 
+	            who.reference = reference(organization),
+	            who.onBehalfOf = reference(patient)
+		    "Set Who";
+
+		 qr.elements as elements ->
+		    psig.data = elements.signature
+	   	    "Set signature data";
+	       }
+	  "Set provenace";	       
 
 }	   
 
