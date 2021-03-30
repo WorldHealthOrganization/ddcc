@@ -31,17 +31,17 @@ group Decode_QR_Patient(
       ) {
 
 
-      		  elements.name as qrname,
+      		  qr.name as qrname,
 		  patient.name as pname ->
       		       pname.text = qrname,
 		       pname.use = "official"
 		  "Load Name";
 
-		  elements.pid as pid ->
+		  qr.pid as pid ->
 		       patient.identifier = id("XXXXXurn:uetf:rfc:3986",pid)
 		  "Load Patient Identifer";
 
-		  elements.birthDate as birthDate->
+		  qr.birthDate as birthDate->
 		       patient.birthDate = birthDate
 		  "Load Birth Date";
 
@@ -54,11 +54,9 @@ group Decode_QR_Organization(
 	target organization : SVC_Organization
 	){
 
-	qr.elements as elements then {
-		    elements.phaid as phaid ->
+		    qr.phaid as phaid ->
 		    	organization.identifier = id("XXXXXurn:ietf:rfc:3986",phaid)
 		    "Load PHA ID";
-		    };
 }
 
 
@@ -73,19 +71,19 @@ group Decode_QR_Bundle(
 	      "Set Bundle Metadata";
 
 
-	qr.elements as elements then {
-		    elements.paperid as paperid ->
+
+		    qr.paperid as paperid ->
 		         bundle.identifier = id("XXXXXurn:ietf:rfc:3986",paperid)
 		    "Load Paper SVC ID";
 
-		    elements.signature as qrsig,
+		    qr.signature as qrsig,
 		    bundle.signature as bsig ->
 		         bsig.data = qrsig,
 			 bsig.type = "1.2.840.10065.1.12.1.14", //Source Signature https://www.hl7.org/fhir/valueset-signature-type.html
 			 bsig.format = "XXXXXXX TBD",
 			 bsig.who = reference(organization)
 		    "Load Signature";
-		    };
+
 
 
         qr -> bundle.entry as e,
@@ -108,11 +106,11 @@ group Decode_QR_Composition(
 	      composition.author = reference(organization)
 	      "Set Composition Meta";
 
-	qr.elements as elements then { 
-            elements.digitalid as digitalid -> 
+
+            qr.digitalid as digitalid -> 
 	       composition.identifier = id("XXXXXurn:ietf:rfc:3986",digitalid)
 	    "Load Digital SVC ID";
-	    };
+
 }
 
 
@@ -145,19 +143,15 @@ group Decode_QR_Provenance(
 
    	   psig.format = "XXXXX TBD" ,
 	   psig.who = reference(organization) ,
-	   psg.type = "1.2.840.10065.1.12.1.14"  //Source Signature https://www.hl7.org/fhir/valueset-signature-type.html
+	   psg.type = "1.2.840.10065.1.12.1.14",  //Source Signature https://www.hl7.org/fhir/valueset-signature-type.html
+	   psig.data = signature
 
 	   then {
 	   	agent.who as who -> 
 	            who.reference = reference(organization),
-	            who.onBehalfOf = reference(patient)
-		    "Set Who";
-
-		 qr.elements as elements ->
-		    psig.data = elements.signature
-	   	    "Set signature data";
-	       }
-	  "Set provenace";	       
+	            who.onBehalfOf = reference(patient) as "Set who";
+		}
+	   "Set provenance";
 
 }	   
 

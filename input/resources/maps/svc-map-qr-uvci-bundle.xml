@@ -17,38 +17,31 @@ group Decode_QR(source qr : QR, target bundle) {
 }
 
 group Decode_QR_Patient(source qr : QR, target patient : SVC_Patient) {
-  elements.name as qrname, patient.name as pname -&gt;  pname.text = qrname,  pname.use = 'official' "Load Name";
-  elements.pid as pid -&gt; patient.identifier = id('XXXXXurn:uetf:rfc:3986', pid) "Load Patient Identifer";
-  elements.birthDate as birthDate -&gt; patient.birthDate = birthDate "Load Birth Date";
+  qr.name as qrname, patient.name as pname -&gt;  pname.text = qrname,  pname.use = 'official' "Load Name";
+  qr.pid as pid -&gt; patient.identifier = id('XXXXXurn:uetf:rfc:3986', pid) "Load Patient Identifer";
+  qr.birthDate as birthDate -&gt; patient.birthDate = birthDate "Load Birth Date";
 }
 
 group Decode_QR_Organization(source qr : QR, target organization : SVC_Organization) {
-  qr.elements as elements then {
-    elements.phaid as phaid -&gt; organization.identifier = id('XXXXXurn:ietf:rfc:3986', phaid) "Load PHA ID";
-  };
+  qr.phaid as phaid -&gt; organization.identifier = id('XXXXXurn:ietf:rfc:3986', phaid) "Load PHA ID";
 }
 
 group Decode_QR_Bundle(source qr : QR, target patient : SVC_Patient, target bundle : SVC_Bundle) {
   qr -&gt;  bundle.status = 'final',  bundle.type = 'document' "Set Bundle Metadata";
-  qr.elements as elements then {
-    elements.paperid as paperid -&gt; bundle.identifier = id('XXXXXurn:ietf:rfc:3986', paperid) "Load Paper SVC ID";
-    elements.signature as qrsig, bundle.signature as bsig -&gt;  bsig.data = qrsig,  bsig.type = '1.2.840.10065.1.12.1.14',  bsig.format = 'XXXXXXX TBD',  bsig.who = reference(organization) "Load Signature";
-  };
+  qr.paperid as paperid -&gt; bundle.identifier = id('XXXXXurn:ietf:rfc:3986', paperid) "Load Paper SVC ID";
+  qr.signature as qrsig, bundle.signature as bsig -&gt;  bsig.data = qrsig,  bsig.type = '1.2.840.10065.1.12.1.14',  bsig.format = 'XXXXXXX TBD',  bsig.who = reference(organization) "Load Signature";
   qr -&gt;  bundle.entry as e,  e.resource = create('SVC_Composition') as compostion then Decode_QR_Composition(qr, bundle, composition) "Process Composition Entry";
 }
 
 group Decode_QR_Composition(source qr : QR, source ,, target bundle : SVC_Bundle, target patient : SVC_Patient, target organization : SVC_Organization, target composition : SVC_Composition) {
   qr -&gt;  composition.subject = reference(patient),  composition.author = reference(organization) "Set Composition Meta";
-  qr.elements as elements then {
-    elements.digitalid as digitalid -&gt; composition.identifier = id('XXXXXurn:ietf:rfc:3986', digitalid) "Load Digital SVC ID";
-  };
+  qr.digitalid as digitalid -&gt; composition.identifier = id('XXXXXurn:ietf:rfc:3986', digitalid) "Load Digital SVC ID";
 }
 
 group Decode_QR_Provenance(source qr : QR, target bundle : SVC_Bundle, target patient : SVC_Patient, target organization : SVC_Organization, target paper : SVC_Composition, target digital : SVC_Composition, target provenance : SVC_Provenance) {
-  qr, provenance.entity as e_digital, provenance.agent as agent, provenance.signature as psig -&gt;  provenance.reason = 'PUBHLTH',  provenance.policy = 'XXXXXXX urn:example:who:smart:vaccine-certificate:RC1',  provenance.target = reference(bundle),  e_digital.role = 'source',  e_digital.what = reference(composition),  e_digital.agent = reference(organization),  e_paper.role = 'source',  e_paper.what = reference(bundle),  e_paper.agent = reference(organization),  psig.format = 'XXXXX TBD',  psig.who = reference(organization),  psg.type = '1.2.840.10065.1.12.1.14' then {
-    agent.who as who -&gt;  who.reference = reference(organization),  who.onBehalfOf = reference(patient) "Set Who";
-    qr.elements as elements -&gt; psig.data = elements.signature "Set signature data";
-  } "Set provenace";
+  qr, provenance.entity as e_digital, provenance.agent as agent, provenance.signature as psig -&gt;  provenance.reason = 'PUBHLTH',  provenance.policy = 'XXXXXXX urn:example:who:smart:vaccine-certificate:RC1',  provenance.target = reference(bundle),  e_digital.role = 'source',  e_digital.what = reference(composition),  e_digital.agent = reference(organization),  e_paper.role = 'source',  e_paper.what = reference(bundle),  e_paper.agent = reference(organization),  psig.format = 'XXXXX TBD',  psig.who = reference(organization),  psg.type = '1.2.840.10065.1.12.1.14',  psig.data = signature then {
+    agent.who as who -&gt;  who.reference = reference(organization),  who.onBehalfOf = reference(patient) as "Set who";
+  } "Set provenance";
 }
 
 </pre>
@@ -152,7 +145,7 @@ group Decode_QR_Provenance(source qr : QR, target bundle : SVC_Bundle, target pa
       <rule>
          <name value="Load Name"></name>
          <source>
-            <context value="elements"></context>
+            <context value="qr"></context>
             <element value="name"></element>
             <variable value="qrname"></variable>
          </source>
@@ -183,7 +176,7 @@ group Decode_QR_Provenance(source qr : QR, target bundle : SVC_Bundle, target pa
       <rule>
          <name value="Load Patient Identifer"></name>
          <source>
-            <context value="elements"></context>
+            <context value="qr"></context>
             <element value="pid"></element>
             <variable value="pid"></variable>
          </source>
@@ -203,7 +196,7 @@ group Decode_QR_Provenance(source qr : QR, target bundle : SVC_Bundle, target pa
       <rule>
          <name value="Load Birth Date"></name>
          <source>
-            <context value="elements"></context>
+            <context value="qr"></context>
             <element value="birthDate"></element>
             <variable value="birthDate"></variable>
          </source>
@@ -232,32 +225,24 @@ group Decode_QR_Provenance(source qr : QR, target bundle : SVC_Bundle, target pa
          <mode value="target"></mode>
       </input>
       <rule>
-         <name value="elements"></name>
+         <name value="Load PHA ID"></name>
          <source>
             <context value="qr"></context>
-            <element value="elements"></element>
-            <variable value="elements"></variable>
+            <element value="phaid"></element>
+            <variable value="phaid"></variable>
          </source>
-         <rule>
-            <name value="Load PHA ID"></name>
-            <source>
-               <context value="elements"></context>
-               <element value="phaid"></element>
-               <variable value="phaid"></variable>
-            </source>
-            <target>
-               <context value="organization"></context>
-               <contextType value="variable"></contextType>
-               <element value="identifier"></element>
-               <transform value="id"></transform>
-               <parameter>
-                  <valueString value="XXXXXurn:ietf:rfc:3986"></valueString>
-               </parameter>
-               <parameter>
-                  <valueId value="phaid"></valueId>
-               </parameter>
-            </target>
-         </rule>
+         <target>
+            <context value="organization"></context>
+            <contextType value="variable"></contextType>
+            <element value="identifier"></element>
+            <transform value="id"></transform>
+            <parameter>
+               <valueString value="XXXXXurn:ietf:rfc:3986"></valueString>
+            </parameter>
+            <parameter>
+               <valueId value="phaid"></valueId>
+            </parameter>
+         </target>
       </rule>
    </group>
    <group>
@@ -303,81 +288,73 @@ group Decode_QR_Provenance(source qr : QR, target bundle : SVC_Bundle, target pa
          </target>
       </rule>
       <rule>
-         <name value="elements"></name>
+         <name value="Load Paper SVC ID"></name>
          <source>
             <context value="qr"></context>
-            <element value="elements"></element>
-            <variable value="elements"></variable>
+            <element value="paperid"></element>
+            <variable value="paperid"></variable>
          </source>
-         <rule>
-            <name value="Load Paper SVC ID"></name>
-            <source>
-               <context value="elements"></context>
-               <element value="paperid"></element>
-               <variable value="paperid"></variable>
-            </source>
-            <target>
-               <context value="bundle"></context>
-               <contextType value="variable"></contextType>
-               <element value="identifier"></element>
-               <transform value="id"></transform>
-               <parameter>
-                  <valueString value="XXXXXurn:ietf:rfc:3986"></valueString>
-               </parameter>
-               <parameter>
-                  <valueId value="paperid"></valueId>
-               </parameter>
-            </target>
-         </rule>
-         <rule>
-            <name value="Load Signature"></name>
-            <source>
-               <context value="elements"></context>
-               <element value="signature"></element>
-               <variable value="qrsig"></variable>
-            </source>
-            <source>
-               <context value="bundle"></context>
-               <element value="signature"></element>
-               <variable value="bsig"></variable>
-            </source>
-            <target>
-               <context value="bsig"></context>
-               <contextType value="variable"></contextType>
-               <element value="data"></element>
-               <transform value="copy"></transform>
-               <parameter>
-                  <valueId value="qrsig"></valueId>
-               </parameter>
-            </target>
-            <target>
-               <context value="bsig"></context>
-               <contextType value="variable"></contextType>
-               <element value="type"></element>
-               <transform value="copy"></transform>
-               <parameter>
-                  <valueString value="1.2.840.10065.1.12.1.14"></valueString>
-               </parameter>
-            </target>
-            <target>
-               <context value="bsig"></context>
-               <contextType value="variable"></contextType>
-               <element value="format"></element>
-               <transform value="copy"></transform>
-               <parameter>
-                  <valueString value="XXXXXXX TBD"></valueString>
-               </parameter>
-            </target>
-            <target>
-               <context value="bsig"></context>
-               <contextType value="variable"></contextType>
-               <element value="who"></element>
-               <transform value="reference"></transform>
-               <parameter>
-                  <valueId value="organization"></valueId>
-               </parameter>
-            </target>
-         </rule>
+         <target>
+            <context value="bundle"></context>
+            <contextType value="variable"></contextType>
+            <element value="identifier"></element>
+            <transform value="id"></transform>
+            <parameter>
+               <valueString value="XXXXXurn:ietf:rfc:3986"></valueString>
+            </parameter>
+            <parameter>
+               <valueId value="paperid"></valueId>
+            </parameter>
+         </target>
+      </rule>
+      <rule>
+         <name value="Load Signature"></name>
+         <source>
+            <context value="qr"></context>
+            <element value="signature"></element>
+            <variable value="qrsig"></variable>
+         </source>
+         <source>
+            <context value="bundle"></context>
+            <element value="signature"></element>
+            <variable value="bsig"></variable>
+         </source>
+         <target>
+            <context value="bsig"></context>
+            <contextType value="variable"></contextType>
+            <element value="data"></element>
+            <transform value="copy"></transform>
+            <parameter>
+               <valueId value="qrsig"></valueId>
+            </parameter>
+         </target>
+         <target>
+            <context value="bsig"></context>
+            <contextType value="variable"></contextType>
+            <element value="type"></element>
+            <transform value="copy"></transform>
+            <parameter>
+               <valueString value="1.2.840.10065.1.12.1.14"></valueString>
+            </parameter>
+         </target>
+         <target>
+            <context value="bsig"></context>
+            <contextType value="variable"></contextType>
+            <element value="format"></element>
+            <transform value="copy"></transform>
+            <parameter>
+               <valueString value="XXXXXXX TBD"></valueString>
+            </parameter>
+         </target>
+         <target>
+            <context value="bsig"></context>
+            <contextType value="variable"></contextType>
+            <element value="who"></element>
+            <transform value="reference"></transform>
+            <parameter>
+               <valueId value="organization"></valueId>
+            </parameter>
+         </target>
       </rule>
       <rule>
          <name value="Process Composition Entry"></name>
@@ -465,32 +442,24 @@ group Decode_QR_Provenance(source qr : QR, target bundle : SVC_Bundle, target pa
          </target>
       </rule>
       <rule>
-         <name value="elements"></name>
+         <name value="Load Digital SVC ID"></name>
          <source>
             <context value="qr"></context>
-            <element value="elements"></element>
-            <variable value="elements"></variable>
+            <element value="digitalid"></element>
+            <variable value="digitalid"></variable>
          </source>
-         <rule>
-            <name value="Load Digital SVC ID"></name>
-            <source>
-               <context value="elements"></context>
-               <element value="digitalid"></element>
-               <variable value="digitalid"></variable>
-            </source>
-            <target>
-               <context value="composition"></context>
-               <contextType value="variable"></contextType>
-               <element value="identifier"></element>
-               <transform value="id"></transform>
-               <parameter>
-                  <valueString value="XXXXXurn:ietf:rfc:3986"></valueString>
-               </parameter>
-               <parameter>
-                  <valueId value="digitalid"></valueId>
-               </parameter>
-            </target>
-         </rule>
+         <target>
+            <context value="composition"></context>
+            <contextType value="variable"></contextType>
+            <element value="identifier"></element>
+            <transform value="id"></transform>
+            <parameter>
+               <valueString value="XXXXXurn:ietf:rfc:3986"></valueString>
+            </parameter>
+            <parameter>
+               <valueId value="digitalid"></valueId>
+            </parameter>
+         </target>
       </rule>
    </group>
    <group>
@@ -532,7 +501,7 @@ group Decode_QR_Provenance(source qr : QR, target bundle : SVC_Bundle, target pa
          <mode value="target"></mode>
       </input>
       <rule>
-         <name value="Set provenace"></name>
+         <name value="Set provenance"></name>
          <source>
             <context value="qr"></context>
          </source>
@@ -659,8 +628,17 @@ group Decode_QR_Provenance(source qr : QR, target bundle : SVC_Bundle, target pa
                <valueString value="1.2.840.10065.1.12.1.14"></valueString>
             </parameter>
          </target>
+         <target>
+            <context value="psig"></context>
+            <contextType value="variable"></contextType>
+            <element value="data"></element>
+            <transform value="copy"></transform>
+            <parameter>
+               <valueId value="signature"></valueId>
+            </parameter>
+         </target>
          <rule>
-            <name value="Set Who"></name>
+            <name value="who"></name>
             <source>
                <context value="agent"></context>
                <element value="who"></element>
@@ -679,26 +657,10 @@ group Decode_QR_Provenance(source qr : QR, target bundle : SVC_Bundle, target pa
                <context value="who"></context>
                <contextType value="variable"></contextType>
                <element value="onBehalfOf"></element>
+               <variable value="&quot;Set who&quot;"></variable>
                <transform value="reference"></transform>
                <parameter>
                   <valueId value="patient"></valueId>
-               </parameter>
-            </target>
-         </rule>
-         <rule>
-            <name value="Set signature data"></name>
-            <source>
-               <context value="qr"></context>
-               <element value="elements"></element>
-               <variable value="elements"></variable>
-            </source>
-            <target>
-               <context value="psig"></context>
-               <contextType value="variable"></contextType>
-               <element value="data"></element>
-               <transform value="copy"></transform>
-               <parameter>
-                  <valueId value="elements.signature"></valueId>
                </parameter>
             </target>
          </rule>
