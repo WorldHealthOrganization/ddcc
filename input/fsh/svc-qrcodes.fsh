@@ -5,7 +5,7 @@ Title: "SVC UVCI QR" // user-friendly name
 Usage: #definition
 
 * name = "SVC-QR-UVCI" // computer ready name
-* url = "http://who-int.github.io/svc/StructureDefinition/SVC-QR-UVCI"
+* url = "http://who-int.github.io/svc/SVC-QR-UVCI"
 * version = "0.1.0"
 * kind = #resource
 * abstract = false
