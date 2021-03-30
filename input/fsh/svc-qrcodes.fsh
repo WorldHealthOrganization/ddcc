@@ -78,6 +78,14 @@ Usage: #definition
 * differential.element[7].min = 0
 * differential.element[7].max = "1"
 
+* differential.element[8].id = "svc-qr-uvci.elements.version"
+* differential.element[8].path = "svc-qr-uvci.elements.version"
+* differential.element[8].short = "SVC Signature"
+* differential.element[8].definition = "Version of the [SVC Bundle](StructureDefinition-svc-bundle.html) "
+* differential.element[8].type.code = #string
+* differential.element[8].min = 0
+* differential.element[8].max = "1"
+
 
 
 
