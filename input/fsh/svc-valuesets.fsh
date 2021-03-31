@@ -1,5 +1,5 @@
 Alias: $ICD9CM = http://hl7.org/fhir/sid/icd-9-cm
-Alias: $ICD11 = http://hl7.org/fhir/sid/icd-11
+Alias: $ICD11 = http://id.who.int/icd11/mms
 
 
 ValueSet:      WHO_SVC_Vaccinable_Conditions

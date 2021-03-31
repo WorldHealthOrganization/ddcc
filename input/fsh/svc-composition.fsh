@@ -42,7 +42,7 @@ Describes the logical structure for the health content contained in a SVC.  An [
 * section[Section_Vaccinations].code  = $LOINC#11369-6
 * section[Section_Vaccinations].entry 1.. MS
 * section[Section_Vaccinations].entry ^slicing.discriminator[0].type = #type
-* section[Section_Vaccinations].entry ^slicing.discriminator[0].path = ""
+* section[Section_Vaccinations].entry ^slicing.discriminator[0].path = "$this"
 * section[Section_Vaccinations].entry ^slicing.rules = #open
 * section[Section_Vaccinations].entry ^short = "Patient's vaccination history."
 * section[Section_Vaccinations].entry ^definition = "It defines the patient's current vaccination  history.\r\nThe primary use case for the Vaccination Section is to enable communication of a patient's vaccination status.\r\nIt may contain the entire vaccination history that is relevant to the period of time being summarized. This entry shall be used to document that no information about vaccination is available, or that no vaccinations are known."
