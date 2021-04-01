@@ -6,40 +6,59 @@ Parent:         Composition
 Id:             svc-composition
 Title:          "SVC Composition"
 Description:    """ 
-Container for the health content contained on a Paper SVC.  This profile is not intended to be instantiated directly, rather a [New SVC Composition](StructureDefinition-svc-composition-new.html) or a [Updated SVC Composition](StructureDefinition-svc-composition-updated.html) should be used.
-
-A [SVC Composition](StructureDefinition-svc-composition.html) should:
- * be accessible from a SVC Registry as located via the WHO SMART Directory for the PHA referenced in the [author](StructureDefinition-svc-composition-definitions.html#Composition.agent).
+Describes the logical structure for the health content contained in a SVC.  An [SVC Composition](StructureDefinition-svc-composition.html) should:
+ * be accessible from a SVC Registry as located via the WHO Public Key Directory for the PHA referenced in the [author](StructureDefinition-svc-composition-definitions.html#Composition.agent).
 """
+* ^publisher = "World Health Organization (WHO)"
+* . ^short = "SVC Composition"
+* ^abstract = true
+
 * title = "International Certificate of Vaccination or Prophylaxis"
 * author only Reference(SVC_Organization)
 * subject 1..1
 * subject only Reference(SVC_Patient)
 * status 1..1
+
+
+//  a document should have a type
+* type = $LOINC#82593-5
+* type ^short = "Kind of composition (\"Smart Vaccination Certificate\")"
+* type ^definition = "Specifies that this composition refers to a Smart vaccination Certificate (Loinc \"11369-6\")"
+* title MS
+
+// Why only one identifier ?
 * identifier 1..1 MS
 * identifier.system 1..1
 * identifier.value 1..1 MS
-* identifier.system = "urn:uuid"
+
+// * identifier.system = "urn:uuid"
+// from the FHIR stadnard "If the identifier value itself is naturally a globally unique URI (e.g. an OID, a UUID, or a URI with no trailing local part), then the system SHALL be "urn:ietf:rfc:3986", and the URI is in the value (OIDs and UUIDs using urn:oid: and urn:uuid: - see note on the V3 mapping and the examples). Naturally globally unique identifiers are those for which no system has been assigned and where the value of the identifier is reasonably expected to not be re-used. Typically, these are absolute URIs of some kind."
+
+ * identifier.system = "urn:ietf:rfc:3986"
+
 * section 1..
-* section ^slicing.discriminator.type = #value
-* section ^slicing.discriminator.path = "code.coding.code"
+// * section ^slicing.discriminator.type = #value
+// * section ^slicing.discriminator.path = "code.coding.code"
+* section ^slicing.discriminator[0].type = #pattern
+* section ^slicing.discriminator[0].path = "code"
 * section ^slicing.rules = #open
+//  do you need ordered slices ?
 * section ^slicing.ordered = true
 * section contains Section_Vaccinations 1..1
-* section[Section_Vaccinations].code.coding.system  = $LOINC
-* section[Section_Vaccinations].code.coding.code  = #11369-6
-* section[Section_Vaccinations].code MS
-* section[Section_Vaccinations].entry 1..
-* section[Section_Vaccinations].entry ^slicing.discriminator.type = #type
-* section[Section_Vaccinations].entry ^slicing.discriminator.path = ""
+
+* section[Section_Vaccinations] ^short = "Vaccinations Section"
+* section[Section_Vaccinations] ^definition = "Vaccination Section lists the relvant vaccinations received by the patient"
+* section[Section_Vaccinations].code 1.. MS
+* section[Section_Vaccinations].code  = $LOINC#11369-6
+* section[Section_Vaccinations].entry 1.. MS
+* section[Section_Vaccinations].entry ^slicing.discriminator[0].type = #type
+* section[Section_Vaccinations].entry ^slicing.discriminator[0].path = "$this"
+
 * section[Section_Vaccinations].entry ^slicing.rules = #open
+
 * section[Section_Vaccinations].entry ^slicing.ordered = true
 * section[Section_Vaccinations].entry contains Section_Vaccinations_Entry 1.. MS
 * section[Section_Vaccinations].entry[Section_Vaccinations_Entry] only Reference(SVC_Immunization)
-* type.coding.system =  "urn:EXAMPLE-who.int:smart-vaccine-certificate" 
-* type.coding.code =  #RC2
-* ^abstract = true
-
 
 
 Profile:        SVC_Composition_New
