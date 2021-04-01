@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<StructureDefinition xmlns="http://hl7.org/fhir">
+	<id value="Immunization-pre-uv-ips"/>
+	<url value="http://hl7.org/fhir/uv/ips/StructureDefinition/Immunization-pre-uv-ips"/>
+	<name value="ImmunizationUvIps"/>
+	<title value="Immunization (IPS)"/>
+	<status value="active"/>
+	<description value="This profile represents the constraints applied to the Immunization resource by the International Patient Summary (IPS) FHIR Implementation Guide. A record of an immunization is represented in the patient summary as an instance of an Immunization resource constrained by this profile.&#xD;&#xA;&#xD;&#xA;It describes the event of a patient being administered a vaccination or a record of a vaccination as reported by a patient, a clinician or another party."/>
+	<purpose value="This profile constrains the representation of a record of a vaccination of the patient, in the context of the international patient summary as specified by the IPS project of HL7 International."/>
+	<kind value="resource"/>
+	<abstract value="false"/>
+	<type value="Immunization"/>
+	<baseDefinition value="http://hl7.org/fhir/StructureDefinition/Immunization"/>
+	<derivation value="constraint"/>
+	<differential>
+		<element id="Immunization">
+			<path value="Immunization"/>
+			<definition value="Describes the event of a patient being administered a vaccination or a record of a vaccination as reported by a patient, a clinician or another party and may include vaccine reaction information and what vaccination protocol was followed"/>
+			<mustSupport value="true"/>
+		</element>
+		<element id="Immunization.status">
+			<path value="Immunization.status"/>
+			<mustSupport value="true"/>
+		</element>
+		<element id="Immunization.vaccineCode">
+			<path value="Immunization.vaccineCode"/>
+			<slicing>
+				<discriminator>
+					<type value="pattern"/>
+					<path value="$this"/>
+				</discriminator>
+				<description value="Discriminated by bound value set"/>
+				<rules value="open"/>
+			</slicing>
+			<short value="Vaccine that was administered or was to be administered.Several kinds of vaccine product coding could be provided.&#xD;&#xA;&#xD;&#xA;
+				The IPS assumes that either the type of the vaccine for particular disease or diseases (e.g. MMR vaccine) against which the patient has been immunised is provided; or the known absent / unknown code.&#xD;&#xA;&#xD;&#xA;
+				Other coded information can be provided as well as: the IDMP Pharmaceutical Product Identifiers (PhPID), Medicinal Product Identifier (MPID), Packaged Medicinal Product Identifier (PCID), when available, or equivalent coded concepts; the WHO ATC codes; or any other kind of code that that identifies, classifies or cluster the administered product."/>
+			<definition value="Vaccine that was administered or was to be administered. Several kinds of vaccine product coding could be provided.&#xD;&#xA;&#xD;&#xA;The IPS assumes that either the type of the vaccine for particular disease or diseases (e.g. MMR vaccine) against which the patient has been immunized is provided; or the known absent / unknown.&#xD;&#xA;&#xD;&#xA;
+			Other coded information can be provided as well as:&#xD;&#xA;&#xD;&#xA;
+			1. The IDMP Pharmaceutical Product Identifier (PhPID), Level 1, [Substance(s)]. Example: Amoxicillin and Clavulanate Potassium; or any other equivalent coded concept.&#xD;&#xA;
+			2. The IDMP Pharmaceutical Product Identifier (PhPID), Level 2 [Substance(s) + Strength + reference strength]. Example: Amoxicillin 875 mg and Clavulanate Potassium 125 mg; or any other equivalent coded concept.&#xD;&#xA;
+			3. The IDMP Pharmaceutical Product Identifier (PhPID), Level 3 [Substance(s) + administrable dose form]. Example: Amoxicillin and Clavulanate Potassium, Oral Tablet; or any other equivalent coded concept.&#xD;&#xA;
+			4. The IDMP Pharmaceutical Product Identifier (PhPID), Level 4 [Substance(s) + strength + reference strength + administrable dose form]. Example: Amoxicillin 875 mg and clavulanate potassium 125 mg, oral tablet; or any other equivalent coded concept.&#xD;&#xA;
+			5. The IDMP Medicinal Product Identifier (MPID) or any equivalent Medicinal Product Identifier. IDMP MPID uniquely identifies a Medicinal Product, reflecting (but not replacing) any other authorization numbers allocated by a regulator. MPID implies one (set of) PhPID. 
+			The MPID shall use a common segment pattern related to a Medicinal Product, which, when each segment is valued shall define a specific MPID concept.&#xD;&#xA;
+			6. The IDMP Packaged Medicinal Product Identifier (PCID) or any equivalent Packaged Medicinal Product Identifier. 
+			Uniquely identifies a Medicinal Product based on its packaging. This implies one MPID can be associated with more than one PCID, if the same Medicinal Product has more than one type of package.&#xD;&#xA;
+			7. Any other kind of code that that identifies, classifies or clusters the administered product (e.g. the medicinal product or the product class).&#xD;&#xA;&#xD;&#xA;
+			The value sets used for the PhPID, MPID and PCID identifiers are provisional and include only few equivalent concepts used for exemplification purposes, they will be updated with real IDMP identifiers when they will become available."/>
+			<min value="1"/>
+			<max value="1"/>
+			<type>
+				<code value="CodeableConcept"/>
+				<profile value="http://hl7.org/fhir/uv/ips/StructureDefinition/CodeableConcept-uv-ips"/>
+			</type>
+			<mustSupport value="true"/>
+			<binding>
+				<strength value="preferred"/>
+				<description value="The type of vaccine for particular disease or diseases against which the patient has been immunised."/>
+				<valueSet value="http://hl7.org/fhir/uv/ips/ValueSet/vaccines-uv-ips"/>
+			</binding>
+		</element>
+		<element id="Immunization.vaccineCode:vaccineGPSCode">
+			<path value="Immunization.vaccineCode"/>
+			<sliceName value="vaccineGPSCode"/>
+			<short value="Code for vaccine from the SNOMED CT GPS code set"/>
+			<definition value="Code for a vaccine that is selected from the SNOMED CT GPS code set."/>
+			<min value="0"/>
+			<max value="1"/>
+			<mustSupport value="true"/>
+			<binding>
+				<extension url="http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName">
+					<valueString value="vaccineGPS"/>
+				</extension>
+				<strength value="required"/>
+				<valueSet value="http://hl7.org/fhir/uv/ips/ValueSet/vaccines-gps-uv-ips"/>
+			</binding>
+		</element>
+		<element id="Immunization.vaccineCode:atcClass">
+			<path value="Immunization.vaccineCode"/>
+			<sliceName value="atcClass"/>
+			<short value="WHO ATC classification"/>
+			<definition value="WHO ATC classification"/>
+			<min value="0"/>
+			<max value="1"/>
+			<mustSupport value="true"/>
+			<binding>
+				<extension url="http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName">
+					<valueString value="WHO ATC"/>
+				</extension>
+				<strength value="required"/>
+				<valueSet value="http://hl7.org/fhir/uv/ips/ValueSet/whoatc-uv-ips"/>
+			</binding>
+		</element>
+		<element id="Immunization.vaccineCode:absentOrUnknownImmunization">
+			<path value="Immunization.vaccineCode"/>
+			<sliceName value="absentOrUnknownImmunization"/>
+			<short value="Absent Unknown Immunization"/>
+			<definition value="A reference to a code indicating that there there are no known immunizations or that this information is unknown."/>
+			<min value="0"/>
+			<max value="1"/>
+			<mustSupport value="true"/>
+			<binding>
+				<extension url="http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName">
+					<valueString value="Absent Unknown Immunization"/>
+				</extension>
+				<strength value="required"/>
+				<valueSet value="http://hl7.org/fhir/uv/ips/ValueSet/absent-or-unknown-immunizations-uv-ips"/>
+			</binding>
+		</element>
+		<element id="Immunization.patient">
+			<path value="Immunization.patient"/>
+			<type>
+				<code value="Reference"/>
+				<targetProfile value="http://hl7.org/fhir/uv/ips/StructureDefinition/Patient-uv-ips"/>
+			</type>
+			<mustSupport value="true"/>
+		</element>
+		<element id="Immunization.patient.reference">
+			<path value="Immunization.patient.reference"/>
+			<min value="1"/>
+			<mustSupport value="true"/>
+		</element>
+		<element id="Immunization.occurrence[x]">
+			<path value="Immunization.occurrence[x]"/>
+			<min value="1"/>
+			<max value="1"/>
+			<mustSupport value="true"/>
+		</element>
+		<element id="Immunization.occurrence[x]:data-absent-reason">
+			<path value="Immunization.occurrence[x].extension"/>
+			<sliceName value="data-absent-reason"/>
+			<short value="occurrence[x] absence reason"/>
+			<definition value="Provides a reason why the occurrence is missing."/>
+			<max value="1"/>
+			<type>
+				<code value="Extension"/>
+				<profile value="http://hl7.org/fhir/StructureDefinition/data-absent-reason"/>
+			</type>
+			<mustSupport value="true"/>
+		</element>
+		<element id="Immunization.site">
+			<path value="Immunization.site"/>
+			<type>
+				<code value="CodeableConcept"/>
+				<profile value="http://hl7.org/fhir/uv/ips/StructureDefinition/CodeableConcept-uv-ips"/>
+			</type>
+			<binding>
+				<strength value="preferred"/>
+				<valueSet value="http://hl7.org/fhir/uv/ips/ValueSet/target-site-uv-ips"/>
+			</binding>
+		</element>
+		<element id="Immunization.route">
+			<path value="Immunization.route"/>
+			<type>
+				<code value="CodeableConcept"/>
+				<profile value="http://hl7.org/fhir/uv/ips/StructureDefinition/CodeableConcept-uv-ips"/>
+			</type>
+			<mustSupport value="true"/>
+			<binding>
+				<extension url="http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName">
+					<valueString value="ImmunizationRoute"/>
+				</extension>
+				<strength value="preferred"/>
+				<valueSet value="http://hl7.org/fhir/uv/ips/ValueSet/medicine-route-of-administration"/>
+			</binding>
+		</element>
+		<element id="Immunization.performer">
+			<path value="Immunization.performer"/>			
+			<mustSupport value="true"/>
+		</element>
+		<element id="Immunization.performer.actor">
+			<path value="Immunization.performer.actor"/>
+			<mustSupport value="true"/>
+		</element>
+		<element id="Immunization.protocolApplied">
+			<path value="Immunization.protocolApplied"/>
+		</element>
+		<element id="Immunization.protocolApplied.targetDisease">
+			<path value="Immunization.protocolApplied.targetDisease"/>
+			<slicing>
+				<discriminator>
+					<type value="pattern"/>
+					<path value="$this"/>
+				</discriminator>
+				<description value="Discriminated by bound value set"/>
+				<rules value="open"/>
+			</slicing>
+			<binding>
+				<strength value="preferred"/>
+				<valueSet value="http://hl7.org/fhir/uv/ips/ValueSet/targetDiseases-uv-ips"/>
+			</binding>
+		</element>
+		<element id="Immunization.protocolApplied.targetDisease:targetDiseaseGPSCode">
+			<path value="Immunization.protocolApplied.targetDisease"/>
+			<sliceName value="targetDiseaseGPSCode"/>
+			<short value="Code for a disease the vaccination is against from the SNOMED CT GPS code set."/>
+			<definition value="Code for a disease the vaccination is against from the SNOMED CT GPS code set."/>
+			<min value="0"/>
+			<max value="1"/>
+			<mustSupport value="true"/>
+			<binding>
+				<extension url="http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName">
+					<valueString value="TargetDiseasesGpsUvIps"/>
+				</extension>
+				<strength value="required"/>
+				<valueSet value="http://hl7.org/fhir/uv/ips/ValueSet/targetDiseases-gps-uv-ips"/>
+			</binding>
+		</element>
+	</differential>
+</StructureDefinition>
