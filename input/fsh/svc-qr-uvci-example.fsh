@@ -1,5 +1,5 @@
 Instance: example
-InstanceOf: http://who-int.github.io/svc/refs/heads/rc2/svc-qr-uvci
+InstanceOf: svc-qr-uvci
 Description: "Example of data elements from SVC Bundle identified by the UVCI to be QR encoded"
 Title: "SVC UVCI QR Example" // user-friendly name
 Usage: #definition

@@ -36,7 +36,7 @@ curl -vvv ${HOST}/StructureMap \
 
 source /usr/local/opt/chruby/share/chruby/chruby.sh
 chruby 3.0.0
-mkdir -p input/examples
+
 
 
 rm -f input/resources/StructureDefinition-svc-qr-uvci.xml
@@ -52,5 +52,8 @@ cp input/pre-generated/svc-qr-uvci-example.fsh input/fsh
 rm -f input/fsh/svc-qr-uvci.fsh
 ./_genonce.sh
 
+#get cleaned up and ready for a git commit continuous build
+mkdir -p input/examples
+cp fsh-generated/resources/svc-qr-uvci-example.json input/examples
 
 
