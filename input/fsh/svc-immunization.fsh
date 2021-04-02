@@ -3,8 +3,7 @@ Parent:         http://hl7.org/fhir/uv/ips/StructureDefinition/Immunization-uv-i
 Id:             svc-immunization
 Title:          "SVC Immunization"
 Description:    """ 
-An SVC Immunization contains the content corresponding to a row in the Vaccination Events section of a Paper SVC. While this is not a further profile of the International Patient Summary (IPS) Immunization resouce, this is intended to map into an IPS Immunization resource.
-"""
+
 
 * identifier 1..
 * identifier ^slicing.discriminator.type = #value
@@ -14,25 +13,14 @@ An SVC Immunization contains the content corresponding to a row in the Vaccinati
 * identifier contains SVC_Identifier 1..1
 * identifier[SVC_Identifier].system 1..1
 * identifier[SVC_Identifier].value 1..1
-
-// * vaccineCode.coding 1..1
-// -- Is this actually needed ?
+* vaccineCode.coding 1.. MS
 * vaccineCode.coding.system 1..1 MS
 * vaccineCode.coding.code 1..1 MS
-//-- end --
-
-
-// --  added -- 
 * vaccineCode.coding ^slicing.discriminator.type = #pattern
 * vaccineCode.coding ^slicing.discriminator.path = "$this"
 * vaccineCode.coding ^slicing.rules = #open
-* vaccineCode.coding contains who-vaccine 1..1
-* vaccineCode.coding[who-vaccine] from who-svc-vaccines (required)
-
-// * vaccineCode.coding.system = "urn:EXAMPLE-who-:smart:vaccine-certificate:RC1:coding"
-// * vaccineCode.coding.code from who-svc-vaccines (required)
-
-
+* vaccineCode.coding contains WHO_Vaccine 1..1
+* vaccineCode.coding[WHO_Vaccine] from who-svc-vaccines (required)
 * expirationDate MS
 * lotNumber MS
 * patient only Reference(SVC_Patient)
@@ -47,4 +35,3 @@ An SVC Immunization contains the content corresponding to a row in the Vaccinati
 * protocolApplied contains ProtocolApplied_Authority 1.. MS
 * protocolApplied[ProtocolApplied_Authority].authority  only Reference(SVC_Organization)
 * protocolApplied[ProtocolApplied_Authority].targetDisease from WHO_SVC_Vaccinable_Conditions (required)
-

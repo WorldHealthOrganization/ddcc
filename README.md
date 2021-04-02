@@ -1,14 +1,13 @@
-WHO Smart Vaccination Card (SVC) - Release Candidate 1 (RC1) IG
+WHO Smart Vaccination Card (SVC) - Release Candidate 2 (RC2) 
 ---
-This is the WHO Smart Vaccination Card (SVC) Release Candidate 1 (RC1).
+This is the WHO Smart Vaccination Card (SVC) Release Candidate 2 (RC2)
 <br> </br>
 ###
 ### Publication
 This ImplementationGuide is published in the following locations:
 
 
-Continuous Build: __https://who-int.github.io/svc
-
+Continuous Build: __https://who-int.github.io/svc/refs/heads/rc2__  
 Canonical / permanent URL: 
 <br> </br>
 

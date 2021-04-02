@@ -1,6 +1,6 @@
 Profile:        SVC_Patient
-//Parent: 	Patient
-Parent: 	Patient-uv-ips //this forces gender.  not good.
+Parent: 	Patient
+//Parent: 	Patient-uv-ips //this forces gender.  not good.
 Id:		svc-patient
 Title:		"SVC Patient"
 Description:	"""
@@ -19,4 +19,3 @@ An SVC_Patient should:
 * identifier[SVC_Identifier].system 1.. MS
 * identifier[SVC_Identifier].value 1.. MS
 * identifier[SVC_Identifier].assigner 1.. MS
-
