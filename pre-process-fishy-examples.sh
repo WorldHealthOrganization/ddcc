@@ -53,7 +53,8 @@ rm -f input/fsh/svc-qr-uvci.fsh
 ./_genonce.sh
 
 #get cleaned up and ready for a git commit continuous build
+rm input/fsh/svc-qr-uvci-example.fsh
 mkdir -p input/examples
 cp fsh-generated/resources/svc-qr-uvci-example.json input/examples
-
+sushi
 
