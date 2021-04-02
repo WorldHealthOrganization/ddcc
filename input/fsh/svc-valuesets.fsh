@@ -3,7 +3,7 @@ Alias: $ICD11 = http://id.who.int/icd11/mms
 
 
 ValueSet:      WHO_SVC_Vaccinable_Conditions
-Id:	       who-svc-vaccinable-confitions
+Id:	       who-svc-vaccinable-conditions
 Title:	       "WHO List of Vaccinable Conditions"
 Description:   """
 The WHO Vaccinable Conditions List from [ICD 11](https://icd.who.int/browse11) is used by:

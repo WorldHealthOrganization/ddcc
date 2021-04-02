@@ -1,10 +1,11 @@
 Profile:        SVC_Immunization
-Parent:         http://hl7.org/fhir/uv/ips/StructureDefinition/Immunization-uv-ips
+//Parent:         http://hl7.org/fhir/uv/ips/StructureDefinition/Immunization-uv-ips
+Parent:         Immunization
 Id:             svc-immunization
 Title:          "SVC Immunization"
 Description:    """ 
-
-
+An SVC Immunization contains the content corresponding to a row in the Vaccination Events section of a Paper SVC. While this is not a further profile of the International Patient Summary (IPS) Immunization resouce, this is intended to map into an IPS Immunization resource.
+"""
 * identifier 1..
 * identifier ^slicing.discriminator.type = #value
 * identifier ^slicing.discriminator.path = "system"
