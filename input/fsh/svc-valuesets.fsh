@@ -14,7 +14,6 @@ The WHO Vaccinable Conditions List from [ICD 11](https://icd.who.int/browse11) i
 * include $ICD11#RA01.0 "COVID-19, virus identified"
 * include $ICD11#RA01.1 "COVID-19, virus not identified"
 
-
 ValueSet:      WHO_SVC_Vaccines
 Id:	       who-svc-vaccines
 Title:	       "WHO Vaccine List"
