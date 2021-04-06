@@ -55,7 +55,7 @@ Usage: #definition
 
 
 * differential.element[5].id = "svc-qr-uvcei.protocol"
-* differential.element[5].path = "svc-qr-uvcei.protool"
+* differential.element[5].path = "svc-qr-uvcei.protocol"
 * differential.element[5].short = "Vaccination Protocol"
 * differential.element[5].definition = "Vaccination Protocol"
 * differential.element[5].type.code = #code

@@ -71,13 +71,23 @@ Usage: #definition
 * differential.element[6].max = "1"
 
 
-* differential.element[7].id = "svc-qr-uvci.signature"
-* differential.element[7].path = "svc-qr-uvci.signature"
+* differential.element[7].id = "svc-qr-uvci.phaid"
+* differential.element[7].path = "svc-qr-uvci.phaid"
 * differential.element[7].short = "SVC Signature"
 * differential.element[7].definition = "Signature of the [SVC Bundle](StructureDefinition-svc-bundle.html) using a PHA's DSC"
-* differential.element[7].type.code = #string
+* differential.element[7].type.code = #code
 * differential.element[7].min = 0
 * differential.element[7].max = "1"
+
+
+
+* differential.element[8].id = "svc-qr-uvci.signature"
+* differential.element[8].path = "svc-qr-uvci.signature"
+* differential.element[8].short = "SVC Signature"
+* differential.element[8].definition = "Signature of the [SVC Bundle](StructureDefinition-svc-bundle.html) using a PHA's DSC"
+* differential.element[8].type.code = #string
+* differential.element[8].min = 0
+* differential.element[8].max = "1"
 
 
 
