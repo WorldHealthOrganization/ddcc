@@ -40,21 +40,31 @@ chruby 3.0.0
 
 
 rm -f input/resources/StructureDefinition-svc-qr-uvci.xml
+rm -f input/resources/StructureDefinition-svc-qr-uvcei.xml
 rm -f input/fsh/svc-qr-uvci-example.fsh
-rm -f  input/examples/svc-qr-uvci-example.json
+rm -f input/fsh/svc-qr-uvcei-example.fsh
+rm -f input/examples/svc-qr-uvci-example.json
+rm -f input/examples/svc-qr-uvcei-example.json
 cp input/pre-generated/svc-qr-uvci.fsh input/fsh/svc-qr-uvci.fsh
+cp input/pre-generated/svc-qr-uvcei.fsh input/fsh/svc-qr-uvcei.fsh
+
 sushi
 ls -R fsh-generated
 ./_genonce.sh
 ls -R fsh-generated/
 cp output/StructureDefinition-svc-qr-uvci.xml input/resources/
+cp output/StructureDefinition-svc-qr-uvcei.xml input/resources/
 cp input/pre-generated/svc-qr-uvci-example.fsh input/fsh
+cp input/pre-generated/svc-qr-uvcei-example.fsh input/fsh
 rm -f input/fsh/svc-qr-uvci.fsh
+rm -f input/fsh/svc-qr-uvcei.fsh
 ./_genonce.sh
 
 #get cleaned up and ready for a git commit continuous build
-rm input/fsh/svc-qr-uvci-example.fsh
+rm -f input/fsh/svc-qr-uvci-example.fsh
+rm -f input/fsh/svc-qr-uvcei-example.fsh
 mkdir -p input/examples
 cp fsh-generated/resources/svc-qr-uvci-example.json input/examples
+cp fsh-generated/resources/svc-qr-uvcei-example.json input/examples
 sushi
 
