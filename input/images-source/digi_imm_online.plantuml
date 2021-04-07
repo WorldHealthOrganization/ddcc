@@ -1,0 +1,62 @@
+@startuml
+title Transaction: Digitize Immunization Event (Online)
+
+hide footbox
+
+!include ./style.iuml
+
+actor "Subject of Care" as SOC
+actor "SVC Holder" as Holder
+actor "Vaccinator" as Vaxer
+actor "Data Entry Personnel" as DEP
+Participant "Point of Care\nDigital Health Tool" as POC
+Participant "Paper\nRegistry" as PaperReg
+Participant "SVC Certificate\nGenerator" as CertGen
+Participant "Shared Health\nRecord" as SHR
+Participant "SVC\nRegistry" as SVCReg
+
+autonumber 1.1.1
+
+   activate Holder
+   activate SOC
+   activate Vaxer
+
+    alt Subject of Care has an SVC Card
+      Holder->Vaxer: Give Subject of Care's\nPaper SVC to Vaccinator
+    else Subject of Care needs an SVC Card
+      Vaxer->Holder: Give SVC Holder new\nSVC Card	
+    end
+   
+    Vaxer->SOC : Vaccinate
+
+
+    Vaxer->Holder:  record immunization event\nin Paper SVC 
+    Vaxer->POC: record immunization\nevent details
+    POC->CertGen: send immunization event\ndetails as unsigned\nQR UVCEI
+    CertGen->POC: return signed QR UVCEI
+    POC->POC: store QR UVCEI in\nSubect of Care's record
+    opt Can Print QR Stickers
+         Vaxer->Vaxer: Print QR code sticker\nfrom signed UVCEI
+ 	 Vaxer->Holder: Place QR code\nsticker on SVC
+    end	
+
+
+   deactivate Holder
+   deactivate SOC
+   deactivate Vaxer
+
+
+   
+
+   alt  Has Shared Health Record
+	POC->SHR: upload IPS Bundle
+	SHR->SHR: $transform IPS Bundle to SVC Bundle
+	SHR->SVCReg: upload SVC Bundle
+   else Has SVC Registry
+   	POC->SVCReg: upload SVC Bundle
+   end
+
+
+@enduml
+
+
