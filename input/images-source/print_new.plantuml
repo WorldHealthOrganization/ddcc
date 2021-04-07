@@ -1,0 +1,27 @@
+@startuml
+title Transaction: Print Paper SVC
+
+hide footbox
+
+!include ./style.iuml
+
+actor "Public\nHealth\nAuthority" as PHA
+Participant "Verifier" 
+Participant "SVC\nRegistry" as SVCReg
+
+autonumber 1.1.1
+
+PHA->PHA : generate a new pair of SVC document identifiers (Bundle,Composition)
+PHA->SVCReg : register new SVC identifiers on internal list of reserved identifiers
+opt Validate Composition Identifier
+   Verifier -> SVCReg: request current Digital SVC with a given Composition identifier
+   SVCReg->SVCReg: search list of reserved identifiers for the requested composition identifier
+   alt Composition Identifier Found
+       SVCReg->Verifier: Return (empty) SVC document bundle
+   else Composition Identifier Not Found
+       SVCReg->Verifier: Return error condition
+   end
+end 
+
+@enduml
+
