@@ -1,20 +1,9 @@
-CodeSystem:   SVCBasicResourceCodeSystem
-Id:           SVC-Basic-Resource
-Title:        "CodeSystem for SVC Basic Resources."
-* #qrcode  "SVC QR Code"  "SVC QR Code resource."
-
-ValueSet:     SVCBasicResourceValueSet
-Id:           SVC-Basic-Resource
-Title:        "ValueSet for SVC Basic Resources."
-* include codes from system SVCBasicResourceCodeSystem
-
-
 Profile:      SVCBasicQRCode
 Parent:       Basic
 Id:           SVC-Basic-QRCode
 Title:        "SVC Basic based QR Code resource"
 Description:  "SVC Profile of Basic resource for QR Code."
-* code = SVCBasicResourceCodeSystem#qrcode
+* code = #adminact
 * extension contains SVCQRCode named qrcode 1..1 MS
 
 Extension:    SVCQRCode
@@ -67,7 +56,7 @@ Description: "Example of data elements from SVC Bundle identified by the UVCI to
 Title: "SVC UVCI QR Example" // user-friendly name
 Usage: #example
 
-* code = SVCBasicResourceCodeSystem#qrcode
+* code = #adminact
 * extension[qrcode].extension[version].valueString = "RC-2-draft"
 * extension[qrcode].extension[name].valueString = "Felix Cat"
 * extension[qrcode].extension[birthDate].valueDate = "2003-01-02"
