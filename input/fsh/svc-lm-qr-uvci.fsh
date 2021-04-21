@@ -5,7 +5,7 @@ Title: "SVC UVCI QR" // user-friendly name
 Usage: #definition
 
 * name = "SVC-LM-QR-UVCI" // computer ready name
-* title = "SVC Logical Model for UVC QR code"
+* title = "SVC Logical Model for UVCI QR code"
 * description = "SVC QR Code for an Immunization card."
 * url = "http://who-int.github.io/svc/refs/heads/rc2/SVC-LM-QR-UVCI"
 * version = "0.1.0"
