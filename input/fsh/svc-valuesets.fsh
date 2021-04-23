@@ -1,5 +1,6 @@
 Alias: $ICD9CM = http://hl7.org/fhir/sid/icd-9-cm
 Alias: $ICD11 = http://id.who.int/icd11/mms
+Alias: SCT = http://snomed.info/sct
 
 
 ValueSet:      WHO_SVC_Vaccinable_Conditions
@@ -126,3 +127,71 @@ WHO Vaccine List (COVID-19) from [ICD 11](https://icd.who.int/browse11)
 * include $ICD11#XM5JC5 "COVID-19 vaccine, virus protein subunit"
 * include $ICD11#XM1J92 "COVID-19 vaccine, virus like particle (VLP)"
 * include $ICD11#XM6AT1 "COVID-19 vaccine, DNA based"
+
+
+ValueSet:      WHO_SVC_Disease_Targeted_COVID_19
+Id:	       who-svc-disease-targeted-covid-19
+Title:	       "WHO Disease or Agent Targeted (COVID-19)"
+Description:   """
+WHO Disease or Agent Targeted List (COVID-19) from [ICD 11](https://icd.who.int/browse11)
+"""
+* ^status = #draft
+* include $ICD11#RA01.0 "COVID-19, virus identified"
+* include $ICD11#RA01.1 "COVID-19, virus not identified"
+
+
+Instance:       WHO_SVC_Map_ICD11_to_SCT_Vaccines
+InstanceOf:     ConceptMap
+Title:          "ConceptMap from ICD-11 to SNOMED CT for Vaccines"
+Usage:          #definition
+
+* id = "who-svc-map-icd11-sct-vaccines"
+* name = "ICD-11 to SNOMED CT mappings for COVID-19 vaccines"
+* status = #draft
+* experimental = true
+* date = "2021-04-23"
+* description = "Rule-based mappings between ICD-11 and SNOMED CT for COVID-19 Vaccines"
+* sourceCanonical = $ICD11
+* targetCanonical = SCT
+
+* group[+].source = $ICD11
+* group[=].target = SCT
+
+* group[=].element[+].code = #XM68M6
+* group[=].element[=].target[+].code = #111930505
+* group[=].element[=].target[=].equivalence = #equivalent
+
+* group[=].element[+].code = #XM0GQ8
+* group[=].element[=].target[+].code = #1119349007
+* group[=].element[=].target[=].equivalence = #equivalent
+
+
+
+Instance:       WHO_SVC_Map_ICD11_to_SCT_Disease_Targeted
+InstanceOf:     ConceptMap
+Title:          "ConceptMap from ICD-11 to SNOMED CT for Disease or Agent Target
+ed"
+Usage:          #definition
+
+* id = "who-svc-map-icd11-sct-disease-targeted"
+* name = "ICD-11 to SNOMED CT mappings for COVID-19 Disease or Agent Targeted"
+* status = #draft
+* experimental = true
+* date = "2021-04-23"
+* description = "Rule-based mappings between ICD-11 and SNOMED CT for COVID-19 Disease or Agent Targeted"
+* sourceCanonical = $ICD11
+* targetCanonical = SCT
+
+* group[+].source = $ICD11
+* group[=].target = SCT
+
+* group[=].element[+].code = #RA01.0
+* group[=].element[=].target[+].code = #840539006
+* group[=].element[=].target[=].equivalence = #equivalent
+* group[=].element[=].target[+].code = #1119302008
+* group[=].element[=].target[=].equivalence = #equivalent
+
+* group[=].element[+].code = #RA01.1
+* group[=].element[=].target[+].code = #840544004
+* group[=].element[=].target[=].equivalence = #equivalent
+
