@@ -30,7 +30,7 @@ An SVC Immunization contains the content corresponding to a row in the Vaccinati
 * patient only Reference(SVC_Patient)
 * occurrence[x] only dateTime
 * performer 1.. MS
-* performer.actor only Reference(SVC_Practitioner)
+* performer.actor only Reference(SVC_Practitioner or SVC_Organization)
 * protocolApplied 1.. MS
 * protocolApplied ^slicing.discriminator.type = #type
 * protocolApplied ^slicing.discriminator.path = "authority"
