@@ -14,7 +14,8 @@ Container for an SVC Practitioner, which is a Practitioner authorized by the PHA
 * identifier contains SVC_Identifier 1..
 * identifier[SVC_Identifier].system 1.. MS
 * identifier[SVC_Identifier].value 1.. MS
-* identifier[SVC_Identifier].assigner 1.. MS
+* identifier[SVC_Identifier].assigner 1.. MS 
+* identifier[SVC_Identifier].assigner only Reference(SVC_Organization)
 
 
 
