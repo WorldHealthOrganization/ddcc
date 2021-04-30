@@ -14,17 +14,23 @@ An SVC Immunization contains the content corresponding to a row in the Vaccinati
 * identifier contains SVC_Identifier 1..1
 * identifier[SVC_Identifier].system 1..1
 * identifier[SVC_Identifier].value 1..1
-* vaccineCode.coding 1..1
-* vaccineCode.coding.system 1..1 MS
-* vaccineCode.coding.code 1..1 MS
-* vaccineCode.coding.system = "urn:EXAMPLE-who-:smart:vaccine-certificate:RC1:coding"
-* vaccineCode.coding.code from who-svc-vaccines (required)
+
+* vaccineCode.coding ^slicing.discriminator.type = #value
+* vaccineCode.coding ^slicing.discriminator.path = "system"
+* vaccineCode.coding ^slicing.rules = #open
+* vaccineCode.coding ^slicing.ordered = true
+* vaccineCode.coding contains SVC_Vaccine 1..1
+* vaccineCode.coding[SVC_Vaccine].system 1..1 MS
+* vaccineCode.coding[SVC_Vaccine].code 1..1 MS
+* vaccineCode.coding[SVC_Vaccine].system = "urn:EXAMPLE-who-:smart:vaccine-certificate:RC1:coding"
+* vaccineCode.coding[SVC_Vaccine].code from who-svc-vaccines (required)
+
 * expirationDate MS
 * lotNumber MS
 * patient only Reference(SVC_Patient)
 * occurrence[x] only dateTime
 * performer 1.. MS
-* performer.actor only Reference(SVC_Practitioner)
+* performer.actor only Reference(SVC_Practitioner or SVC_Organization)
 * protocolApplied 1.. MS
 * protocolApplied ^slicing.discriminator.type = #type
 * protocolApplied ^slicing.discriminator.path = "authority"
