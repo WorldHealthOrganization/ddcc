@@ -1,7 +1,163 @@
 <div xmlns="http://www.w3.org/1999/xhtml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://hl7.org/fhir ../../input-cache/schemas/R5/fhir-single.xsd">
+  
+  <h3>Submit Health Event</h3>  <a name="submit-health-event"> </a>
+  The Submit Health Event transaction is initiated by a <a href="actors.html#point-of-care">Point of Care</a> system against the <a href="actors.html#shc-generator">SHC Generator</a>.
+
+  {% include submit_health_event.svg %}
+  
+
+  <h4>Trigger Event</h4><a name="submit-health-event-trigger"/>
+  The Submit Health Event transaction may be initiated in any of the following ways:
+  <ul>
+    <li>The <a href="actors.html#point-of-care">Point of Care</a> system is online and a health event was recorded by the Vaccinator or the Data Entry Personnel</li>
+    <li>The <a href="actors.html#point-of-care">Point of Care</a> system comes online after recording one or more health events while in an offline mode</li>
+  </ul>
+
+  <h4>Message Semantics</h4><a name="register-health-certificate-message-semantics"/>
+
+  <h5>Message Semantics Request</h5><a name="register-health-certificate-message-semantics-request"/>
+  The message semantics for the Register Health  Certificate transaction utilizes a <a href="StructureDefinition-shc-submit-health-event-request.html">SHC Submit Health Event Request</a> which is a Transaction Bundle of <a href="StructureDefinition-shc-questionnaire-response.html">SHC Questionnaire Response</a> resources for the request message. The specific SHC Questionnaire Response resource is determined by the health event that is the subject of the transaction  
+  
+  <h6>Message Semantics Request- Smart Vaccination Certificate</h6><a name="register-health-certificate-message-semantics-svc"/>
+  The <a href="actors.html#point-of-care">Point of Care</a> system should submit an <a href="StructureDefinition-svc-questionnaireresponse.html">SVC Questionnaire Response</a>  
+
+
+  <h5>Message Semantics Response</h5><a name="register-health-certificate-message-semantics-request"/>
+  The response to a Register Health Certificate transaction is a <a href="StructureDefinition-shc-submit-health-event-response.html">SHC Submit Health Event Response</a> which consists of a Bundle of OperationOutcome resources.  Each OperationOutcome must be associated to one of the QuestionnaireResponse elements. 
+
+  <h4>Pre-conditions</h4><a name="submit-health-event-preconditions"/>
+  The SHC Genrator should have a Document Signing Certificate (DSC) issued by the Public Health Authority and registered with the <a href="actors.html#npkd">National Public Key Directory</a>.  
+
+  When a jurisdiction participates in the Digital-Online scenario, the DSC should be registered with the <a href="actors.html#npkd">National Public Key Directory</a> and the <a href="actors.html#who-pkd">WHO Public Key Directory</a>.
+  
+  <h4>Expected Actions</h4><a name="submit-health-event-expected-actions"/>
+  The following are the expected actions for the actors participating in this transaction:
+  <ul>
+    <li>
+      The <a href="actors.html#shc-generator">SHC Generator></a> should:
+      <ol>
+	<li>serialize the content as payload for encoding as a QR code</li>
+	<li>use their DSC  to sign the QR code payload as part of the QR content schema</li>
+	<li>return the generated signed QR content as an base64 encoded .png to the oint of Care<a href="actors.html#point-of-care">SHC Generator</a> system</li>
+      </ol>
+    </li>
+    <li>
+      If a jurisdiction participates in the Digital-Online scenario, the <a href="actors.html#shc-generator">SHC Generator</a> should:
+      <ol>
+	<li>extract the relevant content from the <a href="StructureDefintion-shc-questionnairereponse.html">SHC Questionnaire Response</a> into the relevant <a href="StructureDefinition-shc-bundle.html">SHC Bundle</a> using the associated Structure Map [StructureDefinition-shc-questionnaire.html#Questionnaire.extension:targetStructureMap)</li>
+	<li>initiate a <a href="transactions.html#register-health-certificate">Register Health Certificate</a> transaction using the extracted <a href="StructureDefinition-shc-bundle.html">SHC Bundle</a> </li>
+	<li>include the resulting <a href="actors.html#shc-registry">SHC Registry Service</a> endpoints for signed Smart Health Certificate as part of the response message</li>
+      </ol>
+    </li>
+  </ul>
+  
+  
+  <h3>Register Health Certificate</h3>  <a name="register-health-certificate"> </a>
+  The Register Health Certiciate transaction is initiated by a <a href="actors.html#shc-generator">SHC Generator</a> system against the <a href="actors.html#shc-registry">SHC Registry Service</a>.
+
+  {% include register_certificate.svg %}
+  
+  <h4>Trigger Event</h4><a name="register-health-certificate-trigger"/>
+  The Register Health Certificate transaction is initiated when a <a href="actors.html#shc-generator">SHC Generator</a> receives a valid Submit Health Event request from a <a href="actors.html#point-of-care">Point of Care</a> system.
+
+  <h4>Message Semantics</h4><a name="register-health-certificate-message-semantics"/>
+
+  
+  <h4>Expected Actions</h4><a name="register-health-certificate-expected-actions"/>
+  
+  The following are the expected actions for the actors participating in this transaction:
+  <ul>
+    <li>
+      The<a href="actors.html#shc-registry">SHC Registry Service</a>
+      <ol>
+	<li></li>
+	<li>Return the endpoint of the signed SHC to the <a href="actors.html#shc-generator">SHC Generator</a></li>
+      </ol>
+    </li>
+  </ul>
 
 
   
+  <h3>Retrieve Health Certificate</h3>  <a name="retrieve-health-certificate"> </a>
+  The Retrieve Health Certiciate transaction is used in the Digital-Online context and is used for the retrieval and optional verification of a single Smart Health Certificate.
+
+  The Retrieve Health Certificate transaction may be initiated by a <a href="actors.html#verifier">Verifier</a> or <a href="actors.html#point-of-care">Point of Care</a> against the <a href="actors.html#shc-registry">SHC Registry Service</a> in a jursidicition particpating in the Digital-Online scenario.
+
+
+  {% include retrieve_health_certificate.svg %}
   
+  <h3></h3>  <a name="retrieve-health-certificate-trigger"> </a>
+  The Retrieve Health Certificate may be initiated by:
+  <ol>
+    <li> a <a href="actors.html#verifier">Verifier</a> wishing to validate and verify content of a Smart Health Certificate</li>
+    <li> a <a href="actors.html#point-of-care">Point of Care</a> wishing to retrieve a Smart Health Certificate for continuity of care</li>
+  </ol>
+
+  <h4>Message Semantics</h4><a name="retrieve-health-certificate-message-semantics"/>
+
+  <h5>Message Semantics Request</h5><a name="retrieve-health-certificate-message-semantics-request"/>
+  The Retrieve Health Certificate transaction request message is the request message of a  <a href="http://hl7.org/fhir/composition-operation-document.html">$document</a> operation perfomed on the <a href="StructureDefinition-shc-composition.html">SHC Composition</a> with the following parameters:
+  <ul>
+    <li>id: (Required) the id of the SHC Composition </li>
+  </ul>
+      
+
+  <h5>Message Semantics Response</h5><a name="retrieve-health-certificate-message-semantics-response"/>
+  The Retrieve Health Certificate transaction response message is the response message of a  <a href="http://hl7.org/fhir/composition-operation-document.html">$document</a> operation performed.  
+
+
+  <h4>Expected Actions</h4><a name="retrieve-health-expected-actions"/>
+  The <a href="actors.html#shc-registry">SHC Registry Service</a> is expected to return all available requested content as permissable according to jursidiction policy.
+
+
+  A <a href="actors.html#verifier">Verifier</a> actor should utilize the appropriate public key, as referenced in the response message and as retrieved from <a href="actors.html#npkd">National Public Key Directory</a> or <a href="actors.html#who-pkd">WHO Public Key Directory</a>,  to verify that the signed SHC.
+
+
+  
+
+  
+  <h3>Retrieve Health Folder</h3>  <a name="retrieve-health-folder"> </a>
+  The Retrieve Health Folder transaction is used in the Digital-Online context and is used for the retrieval and optional verification of Smart Health Certificates contained in the <a href="StructureDefinition-shf-composition.html">Smart Health Folder</a>.
+
+  The Retrieve Health Folder transaction may be initiated by a <a href="actors.html#verifier">Verifier</a> or <a href="actors.html#point-of-care">Point of Care</a> against the <a href="actors.html#shc-registry">SHC Registry Service</a> in a jursidicition particpating in the Digital-Online scenario.
+
+
+  {% include retrieve_health_folder.svg %}
+  
+  <h3></h3>  <a name="retrieve-health-folder-trigger"> </a>
+  The Retrieve Health Folder may be initiated by:
+  <ol>
+    <li> a <a href="actors.html#verifier">Verifier</a> wishing to validate and verify content of a Smart Health Certificate</li>
+    <li> a <a href="actors.html#point-of-care">Point of Care</a> wishing to retrieve a Smart Health Certificate for continuity of care</li>
+  </ol>
+
+  <h4>Message Semantics</h4><a name="retrieve-health-folder-message-semantics"/>
+
+  <h5>Message Semantics Request</h5><a name="retrieve-health-folder-message-semantics-request"/>
+  The Retrieve Health Folder transaction request message is the request message of a  <a href="http://hl7.org/fhir/composition-operation-document.html">$document</a> operation perfomed on the <a href="StructureDefinition-shf-composition.html">SHF Composition</a> with the following parameters:
+  <ul>
+    <li>id: (Required) the id of the SHF Composition </li>
+    <li>
+      graph: (Optional) a canonical reference to a  GraphDefintion resource indicating which of the linked SHCs should be included in the result.  The following options are required to be supported:
+      <ul>
+	<li>GraphDefintion/shf-svc: will include the <a href="StructureDefintion-svc-bundle.html">SVC Bundle</a></li>
+      </ul>
+    </li>
+  </ul>
+      
+
+  <h5>Message Semantics Response</h5><a name="retrieve-health-folder-message-semantics-response"/>
+  The Retrieve Health Folder transaction response message is the response message of a  <a href="http://hl7.org/fhir/composition-operation-document.html">$document</a> operation performed.  Specifically:
+  <ul>
+    <li>An list of entries of <a href="StructureDefintion-shc-composition.html">SHC Compositions</a> that the PHA wishes to expose to the requestor according to the polocy of the jursidiction</li>
+    <li>If the <i>graph</i> parameter was utilized, the linked resources as defined by the GraphDefintion</li>
+  </ul>
+
+  
+  <h4>Expected Actions</h4><a name="retrieve-health-expected-actions"/>
+  The SHC Registry Service<a href="actors.html#shc-registry">SHC Compositions</a> is expected to return all available requested content as permissable according to jursidiction policy.
+
+  A <a href="actors.html#verifier">Verifier</a> actor should utilize the appropriate public key, as referenced in the response message and as retrieved from <a href="actors.html#npkd">National Public Key Directory</a> or <a href="actors.html#who-pkd">WHO Public Key Directory</a>,  to verify that the signed SHC.
   
 </div>
+

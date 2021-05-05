@@ -1,0 +1,145 @@
+Alias: $ICD11 = http://id.who.int/icd11/mms
+Alias: $QRCodeQuestionnaireURL = http:OA//who-int.github.io/svc/refs/heads/rc2/SVC-Questionnaire
+Alias: $targetStructureMap = http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-targetStructureMap
+
+Profile:        SHC_Questionnaire
+Parent:         sdc-questionnaire-extr-smap
+Id:             shc-questionnaire
+Title:          "SHC Questionniare"
+Description:    """ 
+Describes the logical structure for a questionnaire associacted to a Smart Health Certificate which includes a Structure Map to generate the relevant SHC from a given [SHC QuestionnaireResponse](StructureDefintion-shc-questionnaire-response.html) which responds to the SHC Questionnaire.
+"""
+* ^abstract = true
+// * extension[$targetStructureMap] 1.. MS
+// * extension[$targetStructureMap].valueCanonical = SHC_Bundle
+
+Profile:        SHC_QuestionnaireResponse
+Parent:         sdc-questionnaireresponse
+Id:             shc-questionnaireresponse
+Title:          "SHC Questionnaire Response"
+Description:    """ 
+Describes the logical structure for a questionnaire response associacted to a [SHC Questionaire](StructureDefinition-shc-questionnaire.html). 
+"""
+* ^abstract = true
+
+
+
+
+
+Instance: SVC-Questionnaire
+InstanceOf: SHC_Questionnaire
+Usage: #definition
+
+* url = $QRCodeQuestionnaireURL
+* name = "SVC-QR-Questionnaire" // computer ready name
+* title = "SVC Questionnaire "
+* description = "SVC QR Code Questionnaire for an Immunization event."
+* version = "0.1.0"
+* status = #draft
+* experimental = true
+* date = "2021-04-21"
+//@Luke * extension[$targetStructureMap].value = svc-map-qr-bundle
+
+* item[+].linkId = "version"
+* item[=].text = "Version/type of the SVC"
+* item[=].type = #string
+* item[=].required = false
+
+* item[+].linkId = "vaccinecode"
+* item[=].text = "Vaccine Code"
+* item[=].type = #choice
+* item[=].required = false
+
+* item[+].linkId = "status"
+* item[=].text = "Status of course of vacccination"
+* item[=].type = #choice
+* item[=].required = true
+
+* item[+].linkId = "protocol"
+* item[=].text = "Vaccination Protocol"
+* item[=].type = #choice
+* item[=].required = true
+
+* item[=].linkId = "lot"
+* item[=].text = "Lot number of the adminstered vaccine"
+* item[=].type = #string
+* item[=].required = true
+
+* item[+].linkId = "expiry"
+* item[=].text = "Expiration Date of the vaccine"
+* item[=].type = #date
+* item[=].required = true
+
+* item[+].linkId = "paperid"
+* item[=].text = "Identifier of the [SVC Bundle](StructureDefinition-svc-bunclde.html) that represents the Paper SVC Card"
+* item[=].type = #string
+* item[=].required = false
+
+* item[+].linkId = "pha"
+* item[=].text = "ID of the Public Health Authority"
+* item[=].type = #string
+* item[=].required = false
+
+* item[+].linkId = "hw"
+* item[=].text = "ID of the Health Worker"
+* item[=].type = #string
+* item[=].required = false
+
+
+// * item[+].linkId = "signature"
+// * item[=].text = "Signature of the [SVC Bundle](StructureDefinition-svc-bundle.html) using a PHA's DSC"
+// * item[=].type = #string
+// * item[=].required = false
+
+
+
+
+Profile:        SVC_QuestionnaireResponse
+Parent:         shc-questionnaireresponse
+Id:             svc-questionnaireresponse
+Title:          "SVC Questionnaire Response"
+Description:    """ 
+Describes the logical structure for a questionnaire response associacted to a [SVC Questionaire](StructureDefinition-svc-questionnaire.html). 
+"""
+* ^abstract = false
+//@Luke: * questionnaire = SVC_Questionnaire
+
+
+
+Instance:     SVC-QR-QuestionnaireResponse-Example
+InstanceOf:   SVC_QuestionnaireResponse
+Usage:        #example
+
+* questionnaire = $QRCodeUVCIQuestionnaireURL
+* status = #completed
+
+* subject = Reference(SVC_Patient_Example)
+* authored = "2021-04-01"
+
+* item[+].linkId = "version"
+* item[=].answer.valueString = "RC-2-draft"
+
+* item[+].linkId = "vaccinecode"
+* item[=].answer.valueCoding = $ICD11#XM1NL1
+
+* item[=].linkId = "lot"
+* item[=].answer.valueString = "ER8732"
+
+* item[+].linkId = "expiry"
+* item[=].answer.valueDate = "2021-06-30"
+
+* item[+].linkId = "paperid"
+* item[=].answer.valueString = "bMlJkAt0V92RYhhG3fNt"
+
+* item[+].linkId = "pha"
+* item[=].answer.valueString = "dPD2PfwzBQyphcjeUiAdRP"
+
+* item[+].linkId = "hw"
+* item[=].answer.valueString = "dPD2PfwzBQyphcjeUiAdRP"
+
+
+
+// * item[+].linkId = "signature"
+// * item[=].answer.valueString = "SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+
+
