@@ -26,10 +26,11 @@ Describes the logical structure for a questionnaire response associacted to a [S
 
 
 
-Instance: SVC-Questionnaire
+Instance: SVC_Questionnaire
 InstanceOf: SHC_Questionnaire
 Usage: #definition
 
+* id = "SVC-Questionnaire"
 * url = $QRCodeQuestionnaireURL
 * name = "SVC-QR-Questionnaire" // computer ready name
 * title = "SVC Questionnaire "
@@ -38,7 +39,7 @@ Usage: #definition
 * status = #draft
 * experimental = true
 * date = "2021-04-21"
-//@Luke * extension[$targetStructureMap].value = svc-map-qr-bundle
+* extension[$targetStructureMap].valueCanonical = "http://who-int.github.io/svc/StructureMap/svc-map-qr-bundle"
 
 * item[+].linkId = "version"
 * item[=].text = "Version/type of the SVC"
@@ -102,7 +103,7 @@ Description:    """
 Describes the logical structure for a questionnaire response associacted to a [SVC Questionaire](StructureDefinition-svc-questionnaire.html). 
 """
 * ^abstract = false
-//@Luke: * questionnaire = SVC_Questionnaire
+* questionnaire = Canonical(SVC_Questionnaire)
 
 
 
@@ -110,7 +111,7 @@ Instance:     SVC-QR-QuestionnaireResponse-Example
 InstanceOf:   SVC_QuestionnaireResponse
 Usage:        #example
 
-* questionnaire = $QRCodeUVCIQuestionnaireURL
+//* questionnaire = $QRCodeUVCIQuestionnaireURL
 * status = #completed
 
 * subject = Reference(SVC_Patient_Example)
