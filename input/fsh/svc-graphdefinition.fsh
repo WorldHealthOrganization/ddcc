@@ -26,6 +26,7 @@ SHF Graph Definition for retrieving Smart Vaccination Certificates under a [Retr
 """
 * link[+].path = "SHF_Composition.section[Section_Health_Certificates].entry[SVC]"
 * link[=].description = "SVC Composition Entry"
+* link[=].target[+].type = #Immunization
 
 
 
