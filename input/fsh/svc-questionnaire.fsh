@@ -1,6 +1,7 @@
 Alias: $ICD11 = http://id.who.int/icd11/mms
 Alias: $QRCodeQuestionnaireURL = http:OA//who-int.github.io/svc/refs/heads/rc2/SVC-Questionnaire
 Alias: $targetStructureMap = http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-targetStructureMap
+Alias: $QRMapURL = http://who-int.github.io/svc/StructureMap/svc-map-qr-bundle
 
 Instance: SVC_Questionnaire
 InstanceOf: SHC_Questionnaire
@@ -15,7 +16,7 @@ Usage: #definition
 * status = #draft
 * experimental = true
 * date = "2021-04-21"
-//* extension[$targetStructureMap].valueCanonical = "http://who-int.github.io/svc/StructureMap/svc-map-qr-bundle"
+* extension[$targetStructureMap].valueCanonical = $QRMapURL
 
 * item[+].linkId = "version"
 * item[=].text = "Version/type of the SVC"

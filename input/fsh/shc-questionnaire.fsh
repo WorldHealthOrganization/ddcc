@@ -9,7 +9,7 @@ Describes the logical structure for a questionnaire associacted to a Smart Healt
 """
 * ^abstract = true
 * extension[$targetStructureMap] 1.. MS
-* extension[$targetStructureMap].valueCanonical = "http://who-int.github.io/svc/StructureMap/shc-bundle"
+// * extension[$targetStructureMap].valueCanonical = "http://who-int.github.io/svc/StructureMap/shc-bundle"
 
 Profile:        SHC_QuestionnaireResponse
 Parent:         sdc-questionnaireresponse
