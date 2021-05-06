@@ -47,8 +47,8 @@ Describes the logical structure for the Smart Health Folder which contains the S
 * section[sectionHealthCertificates].entry ^slicing.rules = #open
 * section[sectionHealthCertificates].entry ^short = "Patient's Smarth Health Certificates"
 * section[sectionHealthCertificates].entry ^definition = "It contains the patient's current Smart Health Certifactes."
-* section[sectionHealthCertificates].entry contains svcEntry 0.. MS
-* section[sectionHealthCertificates].entry[svcEntry] only Reference(SVC_Composition)
+* section[sectionHealthCertificates].entry contains shcEntry 0.. MS
+* section[sectionHealthCertificates].entry[shcEntry] only Reference(SHC_Composition)
 
 
 
