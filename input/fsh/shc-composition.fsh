@@ -36,21 +36,19 @@ Describes the logical structure for the Smart Health Folder which contains the S
 * section ^short = "Sections composing the SHF"
 * section ^definition = "The root of the sections that make up the SHF Composition."
 
-* section contains Section_Health_Certificates  1..1 MS
-* section[Section_Health_Certificates] ^short = "Certificates Section"
-* section[Section_Health_Certificates] ^definition = "Certiciates Section  lists the relvant Smart Health Certificates received by the patient"
-* section[Section_Health_Certificates].code 1.. MS
-* section[Section_Health_Certificates].code  = $LOINC#80571-3
-* section[Section_Health_Certificates].entry 1.. MS
-* section[Section_Health_Certificates].entry ^slicing.discriminator[0].type = #type
-* section[Section_Health_Certificates].entry ^slicing.discriminator[0].path = "$this"
-* section[Section_Health_Certificates].entry ^slicing.rules = #open
-* section[Section_Health_Certificates].entry ^short = "Patient's Smarth Health Certificates"
-* section[Section_Health_Certificates].entry ^definition = "It contains the patient's current Smart Health Certifactes."
-* section[Section_Health_Certificates].entry contains Section_Health_Certificates_Entry 0.. MS
-* section[Section_Health_Certificates].entry[Section_Health_Certificates_Entry] contains
-  SVC_entry 0.. MS
-* section[Section_Health_Certificates].entry[SVC_entry].resource only SVC_Composition
+* section contains sectionHealthCertificates  1..1 MS
+* section[sectionHealthCertificates] ^short = "Certificates Section"
+* section[sectionHealthCertificates] ^definition = "Certiciates Section  lists the relvant Smart Health Certificates received by the patient"
+* section[sectionHealthCertificates].code 1.. MS
+* section[sectionHealthCertificates].code  = $LOINC#80571-3
+* section[sectionHealthCertificates].entry 1.. MS
+* section[sectionHealthCertificates].entry ^slicing.discriminator[0].type = #type
+* section[sectionHealthCertificates].entry ^slicing.discriminator[0].path = "$this"
+* section[sectionHealthCertificates].entry ^slicing.rules = #open
+* section[sectionHealthCertificates].entry ^short = "Patient's Smarth Health Certificates"
+* section[sectionHealthCertificates].entry ^definition = "It contains the patient's current Smart Health Certifactes."
+* section[sectionHealthCertificates].entry contains svcEntry 0.. MS
+* section[sectionHealthCertificates].entry[svcEntry] only Reference(SVC_Composition)
 
 
 

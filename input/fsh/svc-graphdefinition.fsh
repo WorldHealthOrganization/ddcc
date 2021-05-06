@@ -1,5 +1,5 @@
 
-Profile:	SHF-GraphDefinition
+Profile:	      SHF_GraphDefinition
 Parent:         GraphDefinition
 Id:             shf-graphdefinition
 Title:          "SHF Graph Defintion"
@@ -9,11 +9,11 @@ Abstract Graph Definition for Smart Health Folder to describe information retrie
 * ^publisher = "World Health Organization (WHO)"
 * . ^short = "SHF Composition"
 * ^abstract = true
-* start = "SHF_Composition"
+* start = #Composition
 
 
-Instance:       SVC-Graph
-InstanceOf:     SHF-GraphDefinition
+Instance:       SVC_Graph
+InstanceOf:     SHF_GraphDefinition
 Title:          "GraphDefintion for retrieving a Smart Vaccination Certificate from the Smart Health Folder"
 Usage:          #definition
 * id = "svc-graph"
