@@ -25,7 +25,6 @@ Invariant:      who-shc-patient-1
 Description:    "Patient.identifier OR (Patient.name AND Patient.birthDate) SHALL be present"
 Expression:     "identifier.exists() or ( name.exists() and birthDate.exists() )"
 Severity:       #error
-XPath:          "exists(f:identifier) or ( exists(f:name) and exists(f:birthDate) )"
 
 
 Instance:     SHC-Patient-Example
