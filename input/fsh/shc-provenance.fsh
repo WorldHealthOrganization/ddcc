@@ -1,9 +1,9 @@
-Profile:        SVC_Provenance
+Profile:        SHC_Provenance
 Parent:         Provenance 
-Id:             svc-provenance
-Title:          "Provenance of SVC"
+Id:             shc-provenance
+Title:          "Provenance of SHC"
 Description:    """ 
-Used to assert the provenance of a public health authority (PHA) over either a Paper or a Digital Smart Vaccination Certificate (SVC). 
+Used to assert the provenance of a public health authority (PHA) over either a Paper or a Digital Smart Vaccination Certificate (SHC). 
 
 """
 * policy = "urn:EXAMPLE-who:smart:vaccine-certificate:RC1"
@@ -14,7 +14,7 @@ Used to assert the provenance of a public health authority (PHA) over either a P
 * entity ^slicing.rules = #open
 * entity ^slicing.ordered = true
 * entity contains Provenance_Entity 1.. MS
-* entity[Provenance_Entity].what only Reference(SVC_Bundle)
+* entity[Provenance_Entity].what only Reference(SHC_Bundle)
 * agent 1.. MS
 * agent ^slicing.discriminator.type = #type
 * agent ^slicing.discriminator.path = "who"
@@ -22,9 +22,9 @@ Used to assert the provenance of a public health authority (PHA) over either a P
 * agent ^slicing.ordered = true
 * agent contains Provenance_Agent 1.. MS
 * agent[Provenance_Agent].who 1..1
-* agent[Provenance_Agent].who only Reference(SVC_Organization)
+* agent[Provenance_Agent].who only Reference(SHC_Organization)
 * agent[Provenance_Agent].onBehalfOf 1..1 
-* agent[Provenance_Agent].onBehalfOf only Reference(SVC_Patient)
+* agent[Provenance_Agent].onBehalfOf only Reference(SHC_Patient)
 * signature 1.. MS
 * signature ^slicing.discriminator.type = #type
 * signature ^slicing.discriminator.path = "who"
@@ -32,4 +32,4 @@ Used to assert the provenance of a public health authority (PHA) over either a P
 * signature ^slicing.ordered = true
 * signature contains Provenance_Signature 1.. MS
 * signature[Provenance_Signature].who 1..1 MS
-* signature[Provenance_Signature].who only Reference(SVC_Organization or SVC_PractitionerRole or SVC_Practitioner)
+* signature[Provenance_Signature].who only Reference(SHC_Organization or SVC_PractitionerRole or SHC_Practitioner)

@@ -1,7 +1,7 @@
-Profile:      SVCQRCode
+Profile:      SVCBasicQRCode
 Parent:       Basic
-Id:           SVC-QRCode
-Title:        "SVC QR Code resource"
+Id:           SVC-Basic-QRCode
+Title:        "SVC Basic QR Code resource"
 Description:  "SVC Profile of Basic resource for QR Code."
 * code = #adminact
 * extension contains SVCQRCode named qrcode 1..1 MS
@@ -11,7 +11,7 @@ Id:           SVC-QRCode
 Title:        "SVC QRCode Extension"
 Description:  "SVC QRCode Extension"
 * ^context.type = #element
-* ^context.expression = "SVCQRCode"
+* ^context.expression = "SVCBasicQRCode"
 * extension contains 
             version 0..1 MS and
             name 0..1 MS and
@@ -50,10 +50,10 @@ Description:  "SVC QRCode Extension"
 * extension[signature].valueString ^label = "Signature of the [SVC Bundle](StructureDefinition-svc-bundle.html) using a PHA's DSC"
 
 
-Instance: svc-qrcode-example
-InstanceOf: SVCQRCode
+Instance: svc-basic-qrcode-example
+InstanceOf: SVCBasicQRCode
 Description: "Example of data elements from SVC Bundle identified to be QR encoded"
-Title: "SVC UVCI QR Example" // user-friendly name
+Title: "SVC QR Example" // user-friendly name
 Usage: #example
 
 * code = #adminact

@@ -27,15 +27,15 @@ An SVC Immunization contains the content corresponding to a row in the Vaccinati
 
 * expirationDate MS
 * lotNumber MS
-* patient only Reference(SVC_Patient)
+* patient only Reference(SHC_Patient)
 * occurrence[x] only dateTime
 * performer 1.. MS
-* performer.actor only Reference(SVC_Practitioner or SVC_Organization)
+* performer.actor only Reference(SHC_Practitioner or SHC_Organization)
 * protocolApplied 1.. MS
 * protocolApplied ^slicing.discriminator.type = #type
 * protocolApplied ^slicing.discriminator.path = "authority"
 * protocolApplied ^slicing.rules = #open
 * protocolApplied ^slicing.ordered = true
 * protocolApplied contains ProtocolApplied_Authority 1.. MS
-* protocolApplied[ProtocolApplied_Authority].authority  only Reference(SVC_Organization)
+* protocolApplied[ProtocolApplied_Authority].authority  only Reference(SHC_Organization)
 * protocolApplied[ProtocolApplied_Authority].targetDisease from WHO_SVC_Vaccinable_Conditions (required)

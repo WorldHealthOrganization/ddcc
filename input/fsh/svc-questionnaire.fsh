@@ -1,3 +1,7 @@
+Alias: $ICD11 = http://id.who.int/icd11/mms
+Alias: $QRCodeQuestionnaireURL = http:OA//who-int.github.io/svc/refs/heads/rc2/SVC-Questionnaire
+Alias: $targetStructureMap = http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-targetStructureMap
+
 Instance: SVC_Questionnaire
 InstanceOf: SHC_Questionnaire
 Usage: #definition
@@ -11,7 +15,7 @@ Usage: #definition
 * status = #draft
 * experimental = true
 * date = "2021-04-21"
-* extension[$targetStructureMap].valueCanonical = "http://who-int.github.io/svc/StructureMap/svc-map-qr-bundle"
+//* extension[$targetStructureMap].valueCanonical = "http://who-int.github.io/svc/StructureMap/svc-map-qr-bundle"
 
 * item[+].linkId = "version"
 * item[=].text = "Version/type of the SVC"
@@ -75,7 +79,7 @@ Description:    """
 Describes the logical structure for a questionnaire response associacted to a [SVC Questionaire](StructureDefinition-svc-questionnaire.html). 
 """
 * ^abstract = false
-* questionnaire = Canonical(SVC_Questionnaire)
+// * questionnaire = Canonical(SVC_Questionnaire)
 
 
 
@@ -83,7 +87,7 @@ Instance:     SVC-QR-QuestionnaireResponse-Example
 InstanceOf:   SVC_QuestionnaireResponse
 Usage:        #example
 
-//* questionnaire = $QRCodeUVCIQuestionnaireURL
+* questionnaire = $QRCodeQuestionnaireURL
 * status = #completed
 
 * subject = Reference(SVC_Patient_Example)
