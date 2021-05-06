@@ -14,11 +14,11 @@ An SHC_Patient should:
 * identifier ^slicing.discriminator.path = "system"
 * identifier ^slicing.rules = #open
 * identifier ^slicing.ordered = true
-* identifier contains SHC_Identifier 0.. MS
-* identifier[SHC_Identifier].system 1.. MS
-* identifier[SHC_Identifier].value 1.. MS
-* identifier[SHC_Identifier].assigner 1.. MS
-* identifier[SHC_Identifier].assigner only Reference(SHC_Organization)
+* identifier contains shcIdentifier 0.. MS
+* identifier[shcIdentifier].system 1.. MS
+* identifier[shcIdentifier].value 1.. MS
+* identifier[shcIdentifier].assigner 1.. MS
+* identifier[shcIdentifier].assigner only Reference(SHC_Organization)
 
 
 Invariant:      who-shc-patient-1

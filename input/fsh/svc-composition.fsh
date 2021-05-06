@@ -23,16 +23,16 @@ Describes the logical structure for the health content contained in a Smart Vacc
 * section ^short = "Sections composing the SVC"
 * section ^definition = "The root of the sections that make up the SVC Composition."
 
-* section contains Section_Vaccinations  1..1 MS
-* section[Section_Vaccinations] ^short = "Vaccinations Section"
-* section[Section_Vaccinations] ^definition = "Vaccination Section lists the relvant vaccinations received by the patient"
-* section[Section_Vaccinations].code 1.. MS
-* section[Section_Vaccinations].code  = $LOINC#11369-6
-* section[Section_Vaccinations].entry 1.. MS
-* section[Section_Vaccinations].entry ^slicing.discriminator[0].type = #type
-* section[Section_Vaccinations].entry ^slicing.discriminator[0].path = "$this"
-* section[Section_Vaccinations].entry ^slicing.rules = #open
-* section[Section_Vaccinations].entry ^short = "Patient's vaccination history."
-* section[Section_Vaccinations].entry ^definition = "It contains the patient's current vaccination  history.\r\nThe primary use case for the Vaccination Section is to enable communication of a patient's vaccination status.\r\nIt may contain the entire vaccination history that is relevant to the period of time being summarized. This entry shall be used to document that no information about vaccination is available, or that no vaccinations are known."
-* section[Section_Vaccinations].entry contains Section_Vaccinations_Entry 0.. MS
-* section[Section_Vaccinations].entry[Section_Vaccinations_Entry] only Reference(SVC_Immunization)
+* section contains sectionVaccinations  1..1 MS
+* section[sectionVaccinations] ^short = "Vaccinations Section"
+* section[sectionVaccinations] ^definition = "Vaccination Section lists the relvant vaccinations received by the patient"
+* section[sectionVaccinations].code 1.. MS
+* section[sectionVaccinations].code  = $LOINC#11369-6
+* section[sectionVaccinations].entry 1.. MS
+* section[sectionVaccinations].entry ^slicing.discriminator[0].type = #type
+* section[sectionVaccinations].entry ^slicing.discriminator[0].path = "$this"
+* section[sectionVaccinations].entry ^slicing.rules = #open
+* section[sectionVaccinations].entry ^short = "Patient's vaccination history."
+* section[sectionVaccinations].entry ^definition = "It contains the patient's current vaccination  history.\r\nThe primary use case for the Vaccination Section is to enable communication of a patient's vaccination status.\r\nIt may contain the entire vaccination history that is relevant to the period of time being summarized. This entry shall be used to document that no information about vaccination is available, or that no vaccinations are known."
+* section[sectionVaccinations].entry contains sectionVaccinationsEntry 0.. MS
+* section[sectionVaccinations].entry[sectionVaccinationsEntry] only Reference(SVC_Immunization)

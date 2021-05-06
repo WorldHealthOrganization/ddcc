@@ -16,20 +16,20 @@ An [SVC Bundle](StructureDefinition-svc-bundle.html) is a document bundle contai
 * entry ^slicing.ordered = true
 
 * entry contains
-  SVC_Composition_Entry 1..1 MS and
-  SVC_Patient_Entry 1..1 MS and
-  SVC_Author_Entry 1..1 MS and
-  SVC_Immunization_Entry 1..1 MS and
-  SVC_Other_Entry 0.. and
-  SVC_Provenance_Entry 0.. MS
-* entry[SVC_Composition_Entry].resource 1..1 MS
-* entry[SVC_Composition_Entry].resource only SVC_Composition
-* entry[SVC_Patient_Entry].resource 1..1 MS
-* entry[SVC_Patient_Entry].resource only SHC_Patient
-* entry[SVC_Author_Entry].resource 1..1 MS
-* entry[SVC_Author_Entry].resource only SHC_Organization
-* entry[SVC_Immunization_Entry].resource 1..1 MS
-* entry[SVC_Immunization_Entry].resource only SVC_Immunization
-* entry[SVC_Other_Entry].resource 1..1 MS
-* entry[SVC_Provenance_Entry].resource 1..1 MS
-* entry[SVC_Provenance_Entry].resource only SHC_Provenance
+  svcCompositionEntry 1..1 MS and
+  svcPatientEntry 1..1 MS and
+  svcAuthorEntry 1..1 MS and
+  svcImmunizationEntry 1..1 MS and
+  svcOtherEntry 0.. and
+  svcProvenanceEntry 0.. MS
+* entry[svcCompositionEntry].resource 1..1 MS
+* entry[svcCompositionEntry].resource only SVC_Composition
+* entry[svcPatientEntry].resource 1..1 MS
+* entry[svcPatientEntry].resource only SHC_Patient
+* entry[svcAuthorEntry].resource 1..1 MS
+* entry[svcAuthorEntry].resource only SHC_Organization
+* entry[svcImmunizationEntry].resource 1..1 MS
+* entry[svcImmunizationEntry].resource only SVC_Immunization
+* entry[svcOtherEntry].resource 1..1 MS
+* entry[svcProvenanceEntry].resource 1..1 MS
+* entry[svcProvenanceEntry].resource only SHC_Provenance

@@ -11,20 +11,20 @@ Container for an SHC Practitioner, which is a Practitioner authorized by the PHA
 * identifier ^slicing.discriminator.path = "system"
 * identifier ^slicing.rules = #open
 * identifier ^slicing.ordered = true
-* identifier contains SHC_Identifier 1..
-* identifier[SHC_Identifier].system 1.. MS
-* identifier[SHC_Identifier].value 1.. MS
-* identifier[SHC_Identifier].assigner 1.. MS 
-* identifier[SHC_Identifier].assigner only Reference(SHC_Organization)
+* identifier contains shcIdentifier 1..
+* identifier[shcIdentifier].system 1.. MS
+* identifier[shcIdentifier].value 1.. MS
+* identifier[shcIdentifier].assigner 1.. MS 
+* identifier[shcIdentifier].assigner only Reference(SHC_Organization)
 
 
 
-Profile:        SVC_PractitionerRole
+Profile:        SHC_PractitionerRole
 Parent:         PractitionerRole
-Id:             svc-practitioner-role
-Title:          "SVC Practitioner Role"
+Id:             shc-practitioner-role
+Title:          "SHC Practitioner Role"
 Description:    """ 
-Association of an [SVC Practitioner](StructureDefinition-svc-practitioner-role.html) to a managing [SVC Organization](StructureDefinition-svc-orgaznization.html), indicating that an SVC Practitioner is authorized by the public health authority (PHA) to vaccinate an [SVC Patient](StructureDefinition-svc-patient.html).
+Association of an [SHC Practitioner](StructureDefinition-shc-practitioner-role.html) to a managing [SHC Organization](StructureDefinition-shc-orgaznization.html), indicating that an SHC Practitioner is authorized by the public health authority (PHA) to vaccinate an [SHC Patient](StructureDefinition-shc-patient.html).
 
 """
 * practitioner only Reference(SHC_Practitioner)

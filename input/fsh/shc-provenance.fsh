@@ -20,16 +20,16 @@ Used to assert the provenance of a public health authority (PHA) over either a P
 * agent ^slicing.discriminator.path = "who"
 * agent ^slicing.rules = #open
 * agent ^slicing.ordered = true
-* agent contains Provenance_Agent 1.. MS
-* agent[Provenance_Agent].who 1..1
-* agent[Provenance_Agent].who only Reference(SHC_Organization)
-* agent[Provenance_Agent].onBehalfOf 1..1 
-* agent[Provenance_Agent].onBehalfOf only Reference(SHC_Patient)
+* agent contains provenanceAgent 1.. MS
+* agent[provenanceAgent].who 1..1
+* agent[provenanceAgent].who only Reference(SHC_Organization)
+* agent[provenanceAgent].onBehalfOf 1..1 
+* agent[provenanceAgent].onBehalfOf only Reference(SHC_Patient)
 * signature 1.. MS
 * signature ^slicing.discriminator.type = #type
 * signature ^slicing.discriminator.path = "who"
 * signature ^slicing.rules = #open
 * signature ^slicing.ordered = true
-* signature contains Provenance_Signature 1.. MS
-* signature[Provenance_Signature].who 1..1 MS
-* signature[Provenance_Signature].who only Reference(SHC_Organization or SVC_PractitionerRole or SHC_Practitioner)
+* signature contains provenanceSignature 1.. MS
+* signature[provenanceSignature].who 1..1 MS
+* signature[provenanceSignature].who only Reference(SHC_Organization or SHC_PractitionerRole or SHC_Practitioner)
