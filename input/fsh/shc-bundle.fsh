@@ -9,7 +9,7 @@ An [SHC Submit Health Event Request](StructureDefinition-shc-submit-health-event
 * . MS
 * . ^short = "SHC Submit Health Event Request"
 * type MS
-* type = #transaction
+* type = #batch
 * timestamp MS
 * entry 0.. MS
 
@@ -29,7 +29,7 @@ An [SHC Submit Health Event Response](StructureDefinition-shc-submit-health-even
 * . ^short = "SHC Submit Health Event Response"
 * identifier 1.. MS
 * type MS
-* type = #transaction-response
+* type = #batch-response
 * timestamp MS
 * entry 0.. MS
 
