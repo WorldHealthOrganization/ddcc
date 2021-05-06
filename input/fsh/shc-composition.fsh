@@ -36,8 +36,6 @@ Describes the logical structure for the Smart Health Folder which contains the S
 * section ^short = "Sections composing the SHF"
 * section ^definition = "The root of the sections that make up the SHF Composition."
 
-
-
 * section contains Section_Health_Certificates  1..1 MS
 * section[Section_Health_Certificates] ^short = "Certificates Section"
 * section[Section_Health_Certificates] ^definition = "Certiciates Section  lists the relvant Smart Health Certificates received by the patient"
@@ -50,7 +48,10 @@ Describes the logical structure for the Smart Health Folder which contains the S
 * section[Section_Health_Certificates].entry ^short = "Patient's Smarth Health Certificates"
 * section[Section_Health_Certificates].entry ^definition = "It contains the patient's current Smart Health Certifactes."
 * section[Section_Health_Certificates].entry contains Section_Health_Certificates_Entry 0.. MS
-* section[Section_Health_Certificates].entry[Section_Health_Certificates_Entry] only Reference(SHC_Composition)
+* section[Section_Health_Certificates].entry[Section_Health_Certificates_Entry] contains
+  SVC_entry 0.. MS
+* section[Section_Health_Certificates].entry[SVC_entry].resource only SVC_Composition
+
 
 
 
