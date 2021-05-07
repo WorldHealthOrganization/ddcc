@@ -39,3 +39,7 @@ An SVC Immunization contains the content corresponding to a row in the Vaccinati
 * protocolApplied contains protocolAppliedAuthority 1.. MS
 * protocolApplied[protocolAppliedAuthority].authority  only Reference(SHC_Organization)
 * protocolApplied[protocolAppliedAuthority].targetDisease from WHO_SVC_Vaccinable_Conditions (required)
+* protocolApplied[protocolAppliedAuthority].doseNumber[x] 1..1 MS
+* protocolApplied[protocolAppliedAuthority].doseNumber[x] only positiveInt
+* protocolApplied[protocolAppliedAuthority].seriesDoses[x] 0..1 MS
+* protocolApplied[protocolAppliedAuthority].seriesDoses[x] only positiveInt
