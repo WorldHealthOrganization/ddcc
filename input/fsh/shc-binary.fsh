@@ -1,5 +1,6 @@
 Alias: $certificateUsage = http://who-int.github.io/svc/StructureDefinition/shc-binary-qr-certificateUsage
 
+/*
 Extension:    SHCCertificateUsage
 Id:           SHC-CertificateUsage
 Title:        "SHC Certificate Usage Extension"
@@ -9,6 +10,7 @@ Description:  "SHC Certificate Usage Extension"
 * extension contains usage 0..1 MS 
 * extension[usage].value[x] only code
 * extension[usage].valueCode 1..1 MS
+*/
 
 
 Profile:        SHC_Binary_QR
@@ -17,7 +19,7 @@ Id:		shc-binary-qr
 Title:		"SHC Binary return for QR"
 * ^abstract = true
 * data 1..1 MS
-* extension contains SHC-CertificateUsage named usage 1..1 MS
+//* extension contains SHCCertificateUsage named usage 1..1 MS
 
 Profile:        SHC_Binary_QRPNG
 Parent: 	SHC_Binary_QR
