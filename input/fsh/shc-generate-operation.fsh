@@ -9,8 +9,7 @@ Usage:          #definition
 * experimental = true
 * date = "2021-05-07"
 * description = """
-Generate a signed QR Code based on a [SHC 
-QuestionnaireResponse](StructureDefinition-shc-questionnaireresponse.html)
+Generate one or more signed QR Codes based on a [SHC QuestionnaireResponse](StructureDefinition-shc-questionnaireresponse.html)
 """
 * code = #generateHealthCertificate
 * resource = #QuestionnaireResponse
@@ -35,22 +34,20 @@ QuestionnaireResponse](StructureDefinition-shc-questionnaireresponse.html)
 * parameter[+].name = #qr-code
 * parameter[=].use = #out
 * parameter[=].min = 1
-* parameter[=].max = "1"
 * parameter[=].documentation = "The QR Code PNG that was generated."
-* parameter[=].type = #Binary
+* parameter[=].type = #SHC_Binary_QRPNG
 
 * parameter[+].name = #qr-content
 * parameter[=].use = #out
 * parameter[=].min = 1
-* parameter[=].max = "1"
-* parameter[=].documentation = "The signed QR Code content that was used to generate the image."
-* parameter[=].type = #QuestionnaireResponse
+* parameter[=].documentation = "The signed QR Code content that was used to generate the image.  QR Code content must be listed in the same order as the cooresponding QR Code PNG"
+* parameter[=].type = #SHC_Binary_QRContent
 
 * parameter[+].name = #certificate
 * parameter[=].use = #out
 * parameter[=].min = 0
 * parameter[=].max = "1"
-* parameter[=].documentation = "The URI of the location of the certificate when available."
+* parameter[=].documentation = "The URI of the location of the certificate when the available."
 * parameter[=].type = #uri
 
 
