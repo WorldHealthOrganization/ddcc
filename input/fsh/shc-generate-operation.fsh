@@ -34,12 +34,14 @@ Generate one or more signed QR Codes based on a [SHC QuestionnaireResponse](Stru
 * parameter[+].name = #qr-code
 * parameter[=].use = #out
 * parameter[=].min = 1
+* parameter[=].max = "*"
 * parameter[=].documentation = "The QR Code PNG that was generated."
 * parameter[=].type = #SHC_Binary_QRPNG
 
 * parameter[+].name = #qr-content
 * parameter[=].use = #out
 * parameter[=].min = 1
+* parameter[=].max = "*"
 * parameter[=].documentation = "The signed QR Code content that was used to generate the image.  QR Code content must be listed in the same order as the cooresponding QR Code PNG"
 * parameter[=].type = #SHC_Binary_QRContent
 

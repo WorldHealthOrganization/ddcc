@@ -1,12 +1,14 @@
-Alias $certificateUsage = http://who-int.github.io/svc/StructureDefinition/shc-binary-qr-certificateUsage
+Alias: $certificateUsage = http://who-int.github.io/svc/StructureDefinition/shc-binary-qr-certificateUsage
 
-
-Instance:       SHC_Binary_QR_CertificateUsage
-InstanceOf:     StructureDefinition
-Description:    "Extension indicating intended usage of QR content"
-Title:          "Usage extension for SHC"
-Usage:          #definition
-
+Extension:    SHCCertificateUsage
+Id:           SHC-CertificateUsage
+Title:        "SHC Certificate Usage Extension"
+Description:  "SHC Certificate Usage Extension"
+* ^context.type = #element
+* ^context.expression = "SHC_Binary_QR"
+* extension contains usage 0..1 MS 
+* extension[usage].value[x] only code
+* extension[usage].valueCode 1..1 MS
 
 
 Profile:        SHC_Binary_QR
@@ -15,8 +17,7 @@ Id:		shc-binary-qr
 Title:		"SHC Binary return for QR"
 * ^abstract = true
 * data 1..1 MS
-* extension[$SHCCertificateUsage].valueCode 1.. MS
-
+* extension contains SHC-CertificateUsage named usage 1..1 MS
 
 Profile:        SHC_Binary_QRPNG
 Parent: 	SHC_Binary_QR
@@ -25,15 +26,15 @@ Title:		"SHC Binary for QR (PNG representation)"
 Description:	"""
 PNG representation of the QR code returned under the [Register Health Certificate](transactions.html#register-health-certificate-message-semantics-response)
 """
-* contentType = "image/png"
+* contentType = #image/png
 
 
 Profile:        SHC_Binary_QRContent
 Parent: 	SHC_Binary_QR
-Id:		shc-binary-qrpng
+Id:		shc-binary-qrcontent
 Title:		"SHC Binary for QR Content"
 Description:	"""
 PNG representation of the QR code returned under the [Register Health Certificate](transactions.html#register-health-certificate-message-semantics-response)
 """
-* contentType = "image/png"
+* contentType = #application/octet-stream
 * data 1..1 MS
