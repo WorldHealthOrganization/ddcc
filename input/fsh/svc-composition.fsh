@@ -13,6 +13,7 @@ Describes the logical structure for the health content contained in a Smart Vacc
 * type ^definition = "Specifies that this composition refers to a Smart Vaccination Certificate"
 * title MS
 * title ^short = "Smart Vaccination Certificate"
+* category = #svc-covid19
 * section 1..
 * section ^extension[0].url = "http://hl7.org/fhir/StructureDefinition/structuredefinition-explicit-type-name"
 * section ^extension[0].valueString = "Section"
