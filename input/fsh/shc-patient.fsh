@@ -25,13 +25,3 @@ Invariant:      who-shc-patient-1
 Description:    "Patient.identifier OR (Patient.name AND Patient.birthDate) SHALL be present"
 Expression:     "identifier.exists() or ( name.exists() and birthDate.exists() )"
 Severity:       #error
-
-
-Instance:     SHC-Patient-Example
-InstanceOf:   SHC_Patient
-Usage:        #example
-
-* name[+].text = "Felix Cat"
-* birthDate = "2000-01-02"
-
-
