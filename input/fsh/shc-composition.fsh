@@ -20,6 +20,11 @@ Describes the logical structure for a Smart Health Certificate.
 * identifier.value 1.. MS
 * category 1..1 MS
 * category from SHC_Category_ValueSet (extensible)
+* section ^slicing.discriminator.type = #pattern
+* section ^slicing.discriminator.path = "code"
+* section contains qrCode 0..* MS
+* section[qrCode].entry only Reference(SHC_DocumentReference_QR)
+* section[qrCode].code = SHC_SectionCode_CodeSystem#qrdoc
 
 
 
@@ -33,7 +38,20 @@ ValueSet:       SHC_Category_ValueSet
 Id:             SHC-Category-ValueSet
 Description:   """
 Content categorization of Smart Health Certificates (SHC)
- 
 """
 * include codes from system SHC_Category_CodeSystem
+
+
+CodeSystem:     SHC_SectionCode_CodeSystem
+Id:             SHC-SectionCode-CodeSystem
+Title:          "SHC QR SectionCode Usage Codes"
+Description:    "Section Codes for Smart Health Certificates"
+* #qrdoc       "QR Code Document"
+
+ValueSet:       SHC_SectionCode_ValueSet
+Id:             SHC-SectionCode-ValueSet
+Description:   """
+Content section codes for Smart Health Certificates (SHC)
+"""
+* include codes from system SHC_SectionCode_CodeSystem
 

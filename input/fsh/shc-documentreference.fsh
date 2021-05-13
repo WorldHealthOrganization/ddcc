@@ -5,13 +5,17 @@ Profile:        SHC_DocumentReference_QR
 Parent: 	DocumentReference
 Id:		shc-documentreference-qr
 Title:		"SHC DocumentReference return for QR"
-* category 1..1 MS
-* category from SHC_QR_Category_Usage_ValueSet (required)
+* category 1.. MS
+* category from SHC_QR_Category_Usage_ValueSet (extensible)
+* subject only Reference(SHC_Patient)
+* authenticator 1.. MS
+* authenticator only Reference(SHC_Organization)
 * content ^slicing.discriminator.type = #value
 * content ^slicing.discriminator.path = "format"
 * content ^slicing.rules = #closed
 * content ^slicing.ordered = true
-* content.format from SHC_QR_Format_ValueSet
+* content.format 1.. MS
+* content.format from SHC_QR_Format_ValueSet (extensible)
 * content contains qrImage 1..1 MS and qrContent 1..1 MS
 * content[qrImage].attachment.data 1..1 MS
 * content[qrImage].attachment.contentType 1..1 MS

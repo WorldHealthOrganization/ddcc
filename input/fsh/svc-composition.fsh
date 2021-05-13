@@ -17,8 +17,8 @@ Describes the logical structure for the health content contained in a Smart Vacc
 * section 1..
 * section ^extension[0].url = "http://hl7.org/fhir/StructureDefinition/structuredefinition-explicit-type-name"
 * section ^extension[0].valueString = "Section"
-* section ^slicing.discriminator[0].type = #pattern
-* section ^slicing.discriminator[0].path = "code"
+* section ^slicing.discriminator.type = #pattern
+* section ^slicing.discriminator.path = "code"
 * section ^slicing.rules = #open
 * section ^slicing.ordered = false
 * section ^short = "Sections composing the SVC"
