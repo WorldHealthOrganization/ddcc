@@ -31,8 +31,9 @@ Description:    "Categorization of Smart Health Certificates"
 
 ValueSet:       SHC_Category_ValueSet
 Id:             SHC-Category-ValueSet
-* include codes from system SHC_Category_CodeSystem
-* Description:   """
+Description:   """
 Content categorization of Smart Health Certificates (SHC)
  
-""" 
+"""
+* include codes from system SHC_Category_CodeSystem
+

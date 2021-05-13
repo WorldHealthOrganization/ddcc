@@ -32,8 +32,9 @@ Description:    "Possible formats available for QR usage."
 
 ValueSet:       SHC_QR_Category_Usage_ValueSet
 Id:             SHC-QR-Category-Usage-ValueSet
+Description: 	"Categorization of QR codes by their business usage"
 * include codes from system SHC_QR_Category_Usage_CodeSystem
-* Description: 	"Categorization of QR codes by their business usage"
+
 
 CodeSystem:     SHC_QR_Format_CodeSystem
 Id:             SHC-QR-Format-CodeSystem
@@ -44,5 +45,5 @@ Description:    "Possible formats available for QR data."
 
 ValueSet:       SHC_QR_Format_ValueSet
 Id:             SHC-QR-Format-ValueSet
+Description: 	"Format of the representation of QR code"
 * include codes from system SHC_QR_Format_CodeSystem
-* Description: 	"Format of the representation of QR code"
