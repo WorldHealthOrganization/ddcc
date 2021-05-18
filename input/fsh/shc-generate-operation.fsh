@@ -30,32 +30,9 @@ Generate one or more signed QR Codes based on a [SHC QuestionnaireResponse](Stru
 * parameter[=].documentation = "The questionnaire response resource id used to generate the QR code."
 * parameter[=].type = #id
 
-
-* parameter[+].name = #qr-code
-* parameter[=].use = #out
-* parameter[=].min = 1
-* parameter[=].max = "*"
-* parameter[=].documentation = "The QR Code PNG that was generated."
-* parameter[=].type = #Binary
-
-* parameter[+].name = #qr-content
-* parameter[=].use = #out
-* parameter[=].min = 1
-* parameter[=].max = "*"
-* parameter[=].documentation = "The signed QR Code content that was used to generate the image.  QR Code content must be listed in the same order as the cooresponding QR Code PNG"
-* parameter[=].type = #Binary
-
-* parameter[+].name = #certificate
+* parameter[+].name = #shc
 * parameter[=].use = #out
 * parameter[=].min = 0
 * parameter[=].max = "1"
-* parameter[=].documentation = "The URI of the location of the certificate when the available."
-* parameter[=].type = #uri
-
-
-
-
-
-
-
-
+* parameter[=].documentation = """The Smart Health Certificate, including any QR codes, that was created under the [Generate Health Certificate](transactions.html#submit-health-event-expected-actions) expected actions"""
+* parameter[=].type = #Bundle
