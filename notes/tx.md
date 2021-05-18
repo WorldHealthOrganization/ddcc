@@ -106,7 +106,8 @@ POST /fhir/
     },
     {
       "request": {
-        "method": "QuestionnaireReponse/UUID1/$generateHealthCertificate"
+        "method": "POST",
+        "url": "QuestionnaireReponse/UUID1/$generateHealthCertificate"
       }
     }
   ]
