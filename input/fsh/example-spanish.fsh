@@ -34,6 +34,6 @@ Usage: #example
 * performer.actor = Reference(SHC-Organization-Spanish)
 // 
 * protocolApplied[protocolAppliedAuthority].authority = Reference(SHC-Organization-Spanish)
-* protocolApplied[protocolAppliedAuthority].targetDisease = #RA01.0
+* protocolApplied[protocolAppliedAuthority].targetDisease = $ICD11#RA01.0
 * protocolApplied[protocolAppliedAuthority].doseNumberPositiveInt = 1
 * protocolApplied[protocolAppliedAuthority].seriesDosesPositiveInt = 2
