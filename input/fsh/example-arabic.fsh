@@ -1,3 +1,5 @@
+Alias: $ICD11 = http://id.who.int/icd11/mms
+
 Instance:     SHC-Patient-Arabic
 InstanceOf:   SHC_Patient
 Usage:        #example

@@ -1,3 +1,5 @@
+Alias: $ICD11 = http://id.who.int/icd11/mms
+
 Instance:     SHC-Patient-English
 InstanceOf:   SHC_Patient
 Usage:        #example
@@ -23,7 +25,7 @@ Usage: #example
 * identifier[SVC_Identifier].system = "https://who-int.github.io/svc/refs/heads/rc2/test_system"
 * identifier[SVC_Identifier].value = "123"
 * vaccineCode.coding[svcVaccine].system = "urn:EXAMPLE-who-:smart:vaccine-certificate:RC1:coding"
-* vaccineCode.coding[svcVaccine].code = #XM0CX4
+* vaccineCode.coding[svcVaccine].code = $ICD11#XM0CX4
 // 
 * expirationDate = "2021-06-30"
 * lotNumber = "123"
