@@ -1,5 +1,5 @@
 
-Profile:	      SHF_GraphDefinition
+Profile:	SHF_GraphDefinition
 Parent:         GraphDefinition
 Id:             shf-graphdefinition
 Title:          "SHF Graph Defintion"
