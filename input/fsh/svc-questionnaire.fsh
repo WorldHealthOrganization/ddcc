@@ -1,5 +1,5 @@
 Alias: $ICD11 = http://id.who.int/icd11/mms
-Alias: $QRCodeQuestionnaireURL = http:OA//who-int.github.io/svc/refs/heads/rc2/SVC-Questionnaire
+Alias: $QRCodeQuestionnaireURL = http://who-int.github.io/svc/refs/heads/rc2/SVC-Questionnaire
 Alias: $targetStructureMap = http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-targetStructureMap
 Alias: $QRMapURL = http://who-int.github.io/svc/StructureMap/svc-map-qr-bundle
 
