@@ -1,4 +1,4 @@
-Instance:     SHC-Patient-Example-Russian
+Instance:     SHC-Patient-Russian
 InstanceOf:   SHC_Patient
 Usage:        #example
 // Title: ""

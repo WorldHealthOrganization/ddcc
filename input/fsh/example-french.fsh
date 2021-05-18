@@ -1,4 +1,4 @@
-Instance:     SHC-Patient-Example-French
+Instance:     SHC-Patient-French
 InstanceOf:   SHC_Patient
 Usage:        #example
 // Title: ""
