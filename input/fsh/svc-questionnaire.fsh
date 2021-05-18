@@ -1,5 +1,5 @@
 Alias: $ICD11 = http://id.who.int/icd11/mms
-Alias: $QRCodeQuestionnaireURL = http:OA//who-int.github.io/svc/refs/heads/rc2/SVC-Questionnaire
+Alias: $QRCodeQuestionnaireURL = http://who-int.github.io/svc/refs/heads/rc2/SVC-Questionnaire
 Alias: $targetStructureMap = http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-targetStructureMap
 Alias: $QRMapURL = http://who-int.github.io/svc/StructureMap/svc-map-qr-bundle
 
@@ -23,6 +23,16 @@ Usage: #definition
 * item[=].type = #string
 * item[=].required = false
 
+* item[+].linkId = "name"
+* item[=].text = "Patient Name"
+* item[=].type = #string
+* item[=].required = true
+
+* item[+].linkId = "birthDate"
+* item[=].text = "Patient Birth Date"
+* item[=].type = #date
+* item[=].required = true
+
 * item[+].linkId = "vaccinecode"
 * item[=].text = "Vaccine Code"
 * item[=].type = #choice
@@ -38,7 +48,7 @@ Usage: #definition
 * item[=].type = #choice
 * item[=].required = true
 
-* item[=].linkId = "lot"
+* item[+].linkId = "lot"
 * item[=].text = "Lot number of the adminstered vaccine"
 * item[=].type = #string
 * item[=].required = true
@@ -97,10 +107,16 @@ Usage:        #example
 * item[+].linkId = "version"
 * item[=].answer.valueString = "RC-2-draft"
 
+* item[+].linkId = "name"
+* item[=].answer.valueString = "Felix Cat"
+
+* item[+].linkId = "birthDate"
+* item[=].answer.valueDate = "2003-03-03"
+
 * item[+].linkId = "vaccinecode"
 * item[=].answer.valueCoding = $ICD11#XM1NL1
 
-* item[=].linkId = "lot"
+* item[+].linkId = "lot"
 * item[=].answer.valueString = "ER8732"
 
 * item[+].linkId = "expiry"
