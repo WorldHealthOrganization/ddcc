@@ -101,7 +101,7 @@ Usage:        #example
 * questionnaire = $QRCodeQuestionnaireURL
 * status = #completed
 
-* subject = Reference(SVC_Patient_Example)
+* subject = Reference(SHC-Patient-English)
 * authored = "2021-04-01"
 
 * item[+].linkId = "version"

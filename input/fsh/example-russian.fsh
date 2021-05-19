@@ -27,7 +27,7 @@ Usage: #example
 // 
 * expirationDate = "2021-06-30"
 * lotNumber = "123"
-* patient = Reference(SHC-Patient-Russian)
+* patient = Reference(SHC-Patient-Example-Russian)
 * occurrenceDateTime =  "2021-02-02"
 * performer.actor = Reference(SHC-Organization-Russian)
 // 
