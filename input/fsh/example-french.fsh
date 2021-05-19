@@ -15,7 +15,7 @@ Usage: #example
 // Description: ""
 * name = "Hôpital du gouvernement"
 
-Instance: SVC-Immunizaton-French
+Instance: SVC-Immunization-French
 InstanceOf: SVC_Immunization
 Usage: #example
 // Title: ""
