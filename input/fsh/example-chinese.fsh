@@ -15,7 +15,7 @@ Usage: #example
 // Description: ""
 * name = "政府医院"
 
-Instance: SVC-Immunizaton-Chinese
+Instance: SVC-Immunization-Chinese
 InstanceOf: SVC_Immunization
 Usage: #example
 // Title: ""
@@ -29,7 +29,7 @@ Usage: #example
 // 
 * expirationDate = "2021-06-30"
 * lotNumber = "123"
-* patient = Reference(SHC-Patient-Example-Chinese)
+* patient = Reference(SHC-Patient-Chinese)
 * occurrenceDateTime =  "2021-02-02"
 * performer.actor = Reference(SHC-Organization-Chinese)
 // 
