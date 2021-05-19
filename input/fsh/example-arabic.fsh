@@ -1,3 +1,5 @@
+Alias: $ICD11 = http://id.who.int/icd11/mms
+
 Instance:     SHC-Patient-Arabic
 InstanceOf:   SHC_Patient
 Usage:        #example
@@ -20,7 +22,7 @@ Usage: #example
 // Description: ""
 * status = #completed
 // 
-* identifier[SVC_Identifier].system = "test.com"
+* identifier[SVC_Identifier].system = "https://who-int.github.io/svc/refs/heads/rc2/test_system"
 * identifier[SVC_Identifier].value = "123"
 * vaccineCode.coding[svcVaccine].system = "urn:EXAMPLE-who-:smart:vaccine-certificate:RC1:coding"
 * vaccineCode.coding[svcVaccine].code = #XM0CX4
@@ -32,7 +34,6 @@ Usage: #example
 * performer.actor = Reference(SHC-Organization-Arabic)
 // 
 * protocolApplied[protocolAppliedAuthority].authority = Reference(SHC-Organization-Arabic)
-* protocolApplied[protocolAppliedAuthority].targetDisease = #RA01.0
-* protocolApplied[protocolAppliedAuthority].doseNumber[x] = 1
-* protocolApplied[protocolAppliedAuthority].seriesDoses[x] = 2
-
+* protocolApplied[protocolAppliedAuthority].targetDisease = $ICD11#RA01.0
+* protocolApplied[protocolAppliedAuthority].doseNumberPositiveInt = 1
+* protocolApplied[protocolAppliedAuthority].seriesDosesPositiveInt = 2
