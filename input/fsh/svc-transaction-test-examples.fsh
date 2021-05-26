@@ -26,7 +26,7 @@ Usage:        #inline
 * item[+].linkId = "expiry"
 * item[=].answer.valueDate = "2021-06-30"
 
-* item[+].linkId = "paperid"
+* item[+].linkId = "shfid"
 * item[=].answer.valueString = "bMlJkAt0V92RYhhG3fNt"
 
 * item[+].linkId = "pha"
