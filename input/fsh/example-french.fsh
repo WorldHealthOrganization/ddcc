@@ -37,3 +37,23 @@ Usage: #example
 * protocolApplied[protocolAppliedAuthority].targetDisease = $ICD11#RA01.0
 * protocolApplied[protocolAppliedAuthority].doseNumberPositiveInt = 1
 * protocolApplied[protocolAppliedAuthority].seriesDosesPositiveInt = 2
+
+Instance: Example-French
+InstanceOf: Bundle
+Usage: #example
+
+* type = #transaction
+* entry[+].fullUrl = "http://www.example.org/fhir/Patient/SHC-Patient-French"
+* entry[=].request.url = "Patient"
+* entry[=].request.method = #PUT
+* entry[=].resource = SHC-Patient-French
+
+* entry[+].fullUrl = "http://www.example.org/fhir/Patient/SHC-Organization-French"
+* entry[=].request.url = "Organization"
+* entry[=].request.method = #PUT
+* entry[=].resource = SHC-Organization-French
+
+* entry[+].fullUrl = "http://www.example.org/fhir/Patient/SVC-Immunization-French"
+* entry[=].request.url = "Immunization"
+* entry[=].request.method = #PUT
+* entry[=].resource = SVC-Immunization-French
