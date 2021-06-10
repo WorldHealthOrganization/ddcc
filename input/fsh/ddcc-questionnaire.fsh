@@ -13,14 +13,14 @@ Describes the logical structure for a questionnaire associacted to a DDCC which 
 """
 * ^abstract = true
 * extension[$targetStructureMap] 1.. MS
-// * extension[$targetStructureMap].valueCanonical = "http://who-int.github.io/svc/StructureMap/shc-bundle"
+// * extension[$targetStructureMap].valueCanonical = "http://who-int.github.io/svc/StructureMap/ddcc-bundle"
 
 Profile:        DDCCQuestionnaireResponse
 Parent:         sdc-questionnaireresponse
 Id:             DDCCQuestionnaireResponse
-Title:          "SHC Questionnaire Response"
+Title:          "DDCC Questionnaire Response"
 Description:    """ 
-Describes the logical structure for a questionnaire response associacted to a [SHC Questionaire](StructureDefinition-shc-questionnaire.html). 
+Describes the logical structure for a questionnaire response associacted to a [DDCC Questionaire](StructureDefinition-DDCCQuestionnaire.html). 
 """
 * ^abstract = true
 
@@ -111,7 +111,7 @@ Usage:        #example
 * questionnaire = $QRCodeQuestionnaireURL
 * status = #completed
 
-* subject = Reference(SHC-Patient-English)
+* subject = Reference(DDCC-Patient-English)
 * authored = "2021-04-01"
 
 * item[+].linkId = "version"

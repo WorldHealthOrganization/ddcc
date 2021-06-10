@@ -21,9 +21,11 @@ Describes the logical structure for a Digital Documentation of COVID-19 Certific
 * subject 1..1 MS
 * subject.reference 1..1 MS
 * subject only Reference(DDCCPatient)
-* author MS
-* author only Reference(DDCCOrganization)
-* author ^label = "Certificate issuer"
+* attester 1..1 MS
+* attester.mode = #official
+* attester.party 1..1 MS
+* attester.party only Reference(DDCCOrganization)
+* attester.party ^label = "Certificate issuer"
 * event 0..1 
 * event.period 0..1
 * event.period.start ^label = "Certificate valid from"
@@ -32,9 +34,7 @@ Describes the logical structure for a Digital Documentation of COVID-19 Certific
 * section ^slicing.discriminator.type = #value
 * section ^slicing.discriminator.path = "focus"
 * section contains
-    vaccination 1..* MS 
-    and test 0..*
-    and recovery 0..*
+    vaccination 1..1 MS 
 
 * section[vaccination] ^short = "Vaccination Status Section"
 * section[vaccination] ^definition = "Vaccination Status Section lists the relvant vaccinations received by the patient"
@@ -43,17 +43,56 @@ Describes the logical structure for a Digital Documentation of COVID-19 Certific
 * section[vaccination].focus only Reference(DDCCImmunization)
 * section[vaccination].entry only Reference(DDCCDocumentReferenceQR)
 
-* section[test] ^short = "SARS-CoV-2 Test Section"
-* section[test] ^definition = "SARS-CoV-2 Test Section lists the relvant tests done on the patient"
-* section[test].code = DDCC_SectionCode_CodeSystem#test
+Profile:        DDCCDocument
+Parent:         Bundle
+Id:             DDCCDocument
+Title:          "DDCC Document"
+Description:    """ 
+A [DDCC Document](StructureDefinition-DDCCDocument.html) is a document bundle containing the DDCC.
 
-* section[recovery] ^short = "Recovery Status Section"
-* section[recovery] ^definition = "Recovery Status Section lists the relvant recovery status details of the patient"
-* section[recovery].code = DDCC_SectionCode_CodeSystem#test
+"""
+* ^publisher = "World Health Organization (WHO)"
+* . MS
+* . ^short = "DDCC Document"
+* ^abstract = true
+* identifier 1.. MS
+* type MS
+* type = #document
+* timestamp MS
+* entry ^slicing.discriminator.type = #value
+* entry ^slicing.discriminator.path = "resource"
+* entry contains ddccComposition 1..1
+    and ddccPatient 1..1
+    and ddccOrganization 1..1
+    and ddccImmunization 1..1
+    and ddccQR 0..*
+* entry[ddccComposition].resource only DDCCComposition
+* entry[ddccPatient].resource only DDCCPatient
+* entry[ddccOrganization].resource only DDCCOrganization
+* entry[ddccImmunization].resource only DDCCImmunization
+* entry[ddccQR].resource only DDCCDocumentReferenceQR
+* signature 0..1 MS
+
+Profile:        DDCCDocumentReference
+Parent:         DocumentReference
+Id:             DDCCDocumentReference
+Title:          "DDCC Document Reference"
+Description:    """ 
+A [DDCC Document Reference](StructureDefinition-DDCCDocumentReference.html) is a 
+document reference to a [DDCC Document](StructureDefinition-DDCCDocument.html) 
+containing the DDCC.
+The content attachment data will be a base64 encoded representation of the DDCC Document.
+"""
+* subject 1..1 MS
+* subject.reference 1..1 MS
+* subject only Reference(DDCCPatient)
+* content 1..1 MS
+* content.attachment.data 1..1 MS
+* content.attachment.hash 0..1 MS
 
 CodeSystem:     DDCC_SectionCode_CodeSystem
 Id:             DDCC-SectionCode-CodeSystem
-Title:          "SHC QR SectionCode Usage Codes"
+Title:          "DDCC QR SectionCode Usage Codes"
 Description:    "Section Codes for DDCC"
 * #vaccination  "DDCC: Vaccination Status"
 * #test         "DDCC: SARS-CoV-2 Test"
@@ -63,4 +102,7 @@ ValueSet:       DDCC_SectionCode_ValueSet
 Id:             DDCC-SectionCode-ValueSet
 Description:   "Content section codes for DDCC."
 * include codes from system DDCC_SectionCode_CodeSystem
+
+
+
 

@@ -32,9 +32,6 @@ Immunization resource.
 * location ^label = "Administering centre"
 * location.display 1..1 MS
 * manufacturer 0..1 MS
-* manufacturer.identifier 1..1 MS
-* manufacturer.identifier.system 1..1 MS
-* manufacturer.identifier.value 1..1 MS
 * lotNumber MS
 * lotNumber ^label = "Vaccine batch number"
 * patient only Reference(DDCCPatient)
@@ -44,11 +41,6 @@ Immunization resource.
 * performer 0.. 
 * performer.actor only Reference(DDCCPractitioner or DDCCOrganization)
 * performer.actor ^label = "Health worker identifier"
-* note ^slicing.discriminator.type = #value
-* note ^slicing.discriminator.path = "text"
-* note contains ddccDueDate 0..1 
-* note[ddccDueDate].time 1..1 
-* note[ddccDueDate].text = "Due date of next dose"
 * protocolApplied 1.. MS
 * protocolApplied ^slicing.discriminator.type = #type
 * protocolApplied ^slicing.discriminator.path = "authority"
@@ -92,4 +84,42 @@ Description:    "DDCC Country Of Vaccination for Immunization"
 * ^context.expression = "DDCCImmunization"
 * value[x] only code
 * valueCode 1..1 MS
-* valueCode from 	http://hl7.org/fhir/ValueSet/iso3166-1-3
+* valueCode from 	http://hl7.org/fhir/ValueSet/iso3166-1-3 (preferred)
+
+
+Profile:        DDCCImmunizationRecommendation
+Parent:         ImmunizationRecommendation
+Id:             DDCCImmunizationRecommendation
+Title:          "DDCC Immunization Recommendation"
+Description:    """ 
+A DDCC Immunization Recommendation contains the content corresponding to when
+a patient should return for a booster shot.
+"""
+* patient 1..1 MS
+* patient only Reference(DDCCPatient)
+* date 1..1
+* recommendation 1..1 MS
+* recommendation.vaccineCode 1..1 MS
+* recommendation.vaccineCode ^label = "Vaccine or prophylaxis"
+* recommendation.vaccineCode.coding ^slicing.discriminator.type = #value
+* recommendation.vaccineCode.coding ^slicing.discriminator.path = "system"
+* recommendation.vaccineCode.coding ^slicing.rules = #open
+* recommendation.vaccineCode.coding ^slicing.ordered = true
+* recommendation.vaccineCode.coding contains ddccVaccine 1..1 MS
+* recommendation.vaccineCode.coding[ddccVaccine].system 1..1 MS
+* recommendation.vaccineCode.coding[ddccVaccine].code 1..1 MS
+* recommendation.vaccineCode.coding[ddccVaccine].system = "urn:EXAMPLE-who-:smart:vaccine-certificate:RC1:coding"
+* recommendation.vaccineCode.coding[ddccVaccine].code from WHO_DDCC_Vaccines_COVID_19 (example)
+* recommendation.targetDisease from WHO_DDCC_Disease_Targeted_COVID_19 (example)
+* recommendation.forecastStatus.coding = http://terminology.hl7.org/CodeSystem/immunization-recommendation-status#due
+* recommendation.dateCriterion 1..1 MS
+* recommendation.dateCriterion ^slicing.discriminator.type = #value
+* recommendation.dateCriterion ^slicing.discriminator.path = "system"
+* recommendation.dateCriterion ^slicing.rules = #closed
+* recommendation.dateCriterion contains nextDose 1..1 MS
+* recommendation.dateCriterion[nextDose].code.coding = http://loinc.org#30980-7
+* recommendation.dateCriterion[nextDose].value 1..1 MS
+* recommendation.supportingImmunization 1..1 MS
+* recommendation.supportingImmunization only Reference(DDCCImmunization)
+
+

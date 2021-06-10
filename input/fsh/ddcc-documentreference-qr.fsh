@@ -1,6 +1,3 @@
-
-
-
 Profile:      DDCCDocumentReferenceQR
 Parent:       DocumentReference
 Id:           DDCCDocumentReferenceQR
