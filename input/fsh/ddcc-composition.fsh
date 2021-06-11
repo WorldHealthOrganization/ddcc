@@ -41,7 +41,7 @@ Describes the logical structure for a Digital Documentation of COVID-19 Certific
 * section[vaccination].code = DDCC_SectionCode_CodeSystem#vaccination
 * section[vaccination].focus 1..1 MS
 * section[vaccination].focus only Reference(DDCCImmunization)
-* section[vaccination].entry only Reference(DDCCDocumentReferenceQR)
+* section[vaccination].entry only Reference(DDCCDocumentReferenceQR or DDCCImmunizationRecommendation)
 
 Profile:        DDCCDocument
 Parent:         Bundle
@@ -65,11 +65,13 @@ A [DDCC Document](StructureDefinition-DDCCDocument.html) is a document bundle co
     and ddccPatient 1..1
     and ddccOrganization 1..1
     and ddccImmunization 1..1
+    and ddccImmunizationRecommendation 0..1
     and ddccQR 0..*
 * entry[ddccComposition].resource only DDCCComposition
 * entry[ddccPatient].resource only DDCCPatient
 * entry[ddccOrganization].resource only DDCCOrganization
 * entry[ddccImmunization].resource only DDCCImmunization
+* entry[ddccImmunizationRecommendation].resource only DDCCImmunizationRecommendation
 * entry[ddccQR].resource only DDCCDocumentReferenceQR
 * signature 0..1 MS
 

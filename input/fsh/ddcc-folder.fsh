@@ -1,8 +1,8 @@
-Profile:        DDCCDigitalTwin
+Profile:        DDCCFolder
 Parent:         http://profiles.ihe.net/ITI/MHD/StructureDefinition/IHE.MHD.Minimal.Folder
-Title:          "DDCC Digital Twin"
+Title:          "DDCC Folder"
 Description:    """
-DDCC Digital Twin of the Paper Certificate
+DDCC Folder of the Paper Certificate
 """
 
 * subject 1..1 MS
