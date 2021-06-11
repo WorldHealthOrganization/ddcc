@@ -40,68 +40,118 @@ Usage: #definition
 * date = "2021-06-03"
 * extension[$targetStructureMap].valueCanonical = $QRMapURL
 
-* item[+].linkId = "version"
-* item[=].text = "Version/type of the SVC"
-* item[=].type = #string
-* item[=].required = false
-
 * item[+].linkId = "name"
-* item[=].text = "Patient Name"
+* item[=].text = "Name"
 * item[=].type = #string
 * item[=].required = true
 
 * item[+].linkId = "birthDate"
-* item[=].text = "Patient Birth Date"
+* item[=].text = "Date of birth"
 * item[=].type = #date
+* item[=].required = false
+
+* item[+].linkId = "identifier"
+* item[=].text = "Unique identifier"
+* item[=].type = #string
+* item[=].required = false
+
+* item[+].linkId = "sex"
+* item[=].text = "Sex"
+* item[=].type = #choice
+* item[=].answerValueSet = "http://hl7.org/fhir/ValueSet/administrative-gender"
+* item[=].required = false
+
+* item[+].linkId = "vaccine"
+* item[=].text = "Vaccine or prophylaxis"
+* item[=].type = #choice
 * item[=].required = true
 
-* item[+].linkId = "vaccinecode"
-* item[=].text = "Vaccine Code"
+* item[+].linkId = "brand"
+* item[=].text = "Vaccine brand"
+* item[=].type = #choice
+* item[=].required = true
+
+* item[+].linkId = "manufacturer"
+* item[=].text = "Vaccine manufacturer"
 * item[=].type = #choice
 * item[=].required = false
 
-* item[+].linkId = "status"
-* item[=].text = "Status of course of vacccination"
+* item[+].linkId = "ma_holder"
+* item[=].text = "Vaccine market authorization holder"
 * item[=].type = #choice
-* item[=].required = true
-
-* item[+].linkId = "protocol"
-* item[=].text = "Vaccination Protocol"
-* item[=].type = #choice
-* item[=].required = true
+* item[=].required = false
 
 * item[+].linkId = "lot"
-* item[=].text = "Lot number of the adminstered vaccine"
+* item[=].text = "Vaccine batch number"
 * item[=].type = #string
 * item[=].required = true
 
-* item[+].linkId = "expiry"
-* item[=].text = "Expiration Date of the vaccine"
+* item[+].linkId = "date"
+* item[=].text = "Date of vaccine"
 * item[=].type = #date
 * item[=].required = true
 
-* item[+].linkId = "paperid"
-* item[=].text = "Identifier of the [SVC Bundle](StructureDefinition-svc-bunclde.html) that represents the Paper SVC Card"
+* item[+].linkId = "dose"
+* item[=].text = "Dose number"
+* item[=].type = #integer
+* item[=].required = true
+
+* item[+].linkId = "total_doses"
+* item[=].text = "Total doses"
+* item[=].type = #integer
+* item[=].required = false
+
+* item[+].linkId = "country"
+* item[=].text = "Country of vaccination"
+* item[=].type = #choice
+* item[=].answerValueSet = "http://hl7.org/fhir/ValueSet/iso3166-1-3"
+* item[=].required = true
+
+* item[+].linkId = "centre"
+* item[=].text = "Administering centre"
 * item[=].type = #string
+* item[=].required = true
+
+* item[+].linkId = "hw"
+* item[=].text = "Health worker identifier"
+* item[=].type = #string
+* item[=].required = false
+
+* item[+].linkId = "disease"
+* item[=].text = "Disease or agent targeted"
+* item[=].type = #choice
+* item[=].required = false
+
+* item[+].linkId = "due_date"
+* item[=].text = "Due date of next dose"
+* item[=].type = #date
 * item[=].required = false
 
 * item[+].linkId = "pha"
-* item[=].text = "ID of the Public Health Authority"
+* item[=].text = "Certificate issuer"
 * item[=].type = #string
+* item[=].required = true
+
+* item[+].linkId = "paperid"
+* item[=].text = "Certificate identifier"
+* item[=].type = #string
+* item[=].required = true
+
+* item[+].linkId = "valid_from"
+* item[=].text = "Certificate valid from"
+* item[=].type = #date
 * item[=].required = false
 
-* item[+].linkId = "hw"
-* item[=].text = "ID of the Health Worker"
-* item[=].type = #string
+* item[+].linkId = "valid_until"
+* item[=].text = "Certificate valid until"
+* item[=].type = #date
 * item[=].required = false
 
 
 // * item[+].linkId = "signature"
-// * item[=].text = "Signature of the [SVC Bundle](StructureDefinition-svc-bundle.html) using a PHA's DSC"
+// * item[=].text = "Signature of the health worker"
 // * item[=].type = #string
 // * item[=].required = false
-
-
 
 
 Instance:     DDCC-QuestionnaireResponse-Example
@@ -114,33 +164,68 @@ Usage:        #example
 * subject = Reference(DDCC-Patient-English)
 * authored = "2021-04-01"
 
-* item[+].linkId = "version"
-* item[=].answer.valueString = "RC-2-draft"
-
 * item[+].linkId = "name"
 * item[=].answer.valueString = "Felix Cat"
 
 * item[+].linkId = "birthDate"
 * item[=].answer.valueDate = "2003-03-03"
 
-* item[+].linkId = "vaccinecode"
+* item[+].linkId = "identifier"
+* item[=].answer.valueString = "1234567890"
+
+* item[+].linkId = "sex"
+* item[=].answer.valueCoding = http://hl7.org/fhir/administrative-gender#male
+
+* item[+].linkId = "vaccine"
 * item[=].answer.valueCoding = $ICD11#XM1NL1
+
+* item[+].linkId = "brand"
+* item[=].answer.valueCoding = #test-brand
+
+* item[+].linkId = "manufacturer"
+* item[=].answer.valueCoding = #test-manufacturer
+
+* item[+].linkId = "ma_holder"
+* item[=].answer.valueCoding = #test-ma-holder
 
 * item[+].linkId = "lot"
 * item[=].answer.valueString = "ER8732"
 
-* item[+].linkId = "expiry"
-* item[=].answer.valueDate = "2021-06-30"
+* item[+].linkId = "date"
+* item[=].answer.valueDate = "2021-04-05"
 
-* item[+].linkId = "paperid"
-* item[=].answer.valueString = "bMlJkAt0V92RYhhG3fNt"
+* item[+].linkId = "dose"
+* item[=].answer.valueInteger = 1
+
+* item[+].linkId = "total_doses"
+* item[=].answer.valueInteger = 2
+
+* item[+].linkId = "country"
+* item[=].answer.valueCoding = #USA
+
+* item[+].linkId = "centre"
+* item[=].answer.valueString = "Vaccination Site"
+
+* item[+].linkId = "hw"
+* item[=].answer.valueString = "lAH8TnzqAInqwkslHzOlSA"
+
+* item[+].linkId = "disease"
+* item[=].answer.valueCoding = $ICD11#RA01.0
+
+* item[+].linkId = "due_date"
+* item[=].answer.valueDate = "2021-04-28"
 
 * item[+].linkId = "pha"
 * item[=].answer.valueString = "dPD2PfwzBQyphcjeUiAdRP"
 
-* item[+].linkId = "hw"
-* item[=].answer.valueString = "dPD2PfwzBQyphcjeUiAdRP"
+* item[+].linkId = "paperid"
+* item[=].answer.valueString = "bMlJkAt0V92RYhhG3fNt"
 
+* item[+].linkId = "valid_from"
+* item[=].answer.valueDate = "2021-04-05"
+
+* item[+].linkId = "valid_until"
+* item[=].answer.valueDate = "2022-04-05"
 
 
 // * item[+].linkId = "signature"
