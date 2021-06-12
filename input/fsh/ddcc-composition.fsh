@@ -38,7 +38,7 @@ Describes the logical structure for a Digital Documentation of COVID-19 Certific
 
 * section[vaccination] ^short = "Vaccination Status Section"
 * section[vaccination] ^definition = "Vaccination Status Section lists the relvant vaccinations received by the patient"
-* section[vaccination].code = DDCC_SectionCode_CodeSystem#vaccination
+* section[vaccination].code = $LOINC#11369-6
 * section[vaccination].focus 1..1 MS
 * section[vaccination].focus only Reference(DDCCImmunization)
 * section[vaccination].entry only Reference(DDCCDocumentReferenceQR or DDCCImmunizationRecommendation)
@@ -92,6 +92,8 @@ The content attachment data will be a base64 encoded representation of the DDCC 
 * content.attachment.data 1..1 MS
 * content.attachment.hash 0..1 MS
 
+/*
+
 CodeSystem:     DDCC_SectionCode_CodeSystem
 Id:             DDCC-SectionCode-CodeSystem
 Title:          "DDCC QR SectionCode Usage Codes"
@@ -105,6 +107,7 @@ Id:             DDCC-SectionCode-ValueSet
 Description:   "Content section codes for DDCC."
 * include codes from system DDCC_SectionCode_CodeSystem
 
+*/
 
 
 
