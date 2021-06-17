@@ -7,7 +7,7 @@ This is the WHO Smart Vaccination Card (SVC) Release Candidate 1 (RC1).
 This ImplementationGuide is published in the following locations:
 
 
-Continuous Build: __https://who-int.github.io/svc
+Continuous Build: __https://github.com/WorldHealthOrganization/ddcc
 
 Canonical / permanent URL: 
 <br> </br>
@@ -15,6 +15,6 @@ Canonical / permanent URL:
 ### Issues
 Issues and change requests are managed here:  
 
-Issues:  __https://github.com/who-int/svc/issues__  
-    or the Kanban board: __https://github.com/who-int/svc/projects/1__
+Issues:  __https://github.com/WorldHealthOrganization/ddcc/issues__  
+    or the Kanban board: __https://github.com/WorldHealthOrganization/ddcc/projects/1__
 
