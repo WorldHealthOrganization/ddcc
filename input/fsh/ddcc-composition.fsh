@@ -41,7 +41,7 @@ Describes the logical structure for a Digital Documentation of COVID-19 Certific
 * section[vaccination].code = $LOINC#11369-6
 * section[vaccination].focus 1..1 MS
 * section[vaccination].focus only Reference(DDCCImmunization)
-* section[vaccination].entry only Reference(DDCCDocumentReferenceQR or DDCCImmunizationRecommendation)
+* section[vaccination].entry only Reference(DDCCImmunization or DDCCDocumentReferenceQR or DDCCImmunizationRecommendation)
 
 Profile:        DDCCDocument
 Parent:         Bundle
@@ -54,7 +54,6 @@ A [DDCC Document](StructureDefinition-DDCCDocument.html) is a document bundle co
 * ^publisher = "World Health Organization (WHO)"
 * . MS
 * . ^short = "DDCC Document"
-* ^abstract = true
 * identifier 1.. MS
 * type MS
 * type = #document

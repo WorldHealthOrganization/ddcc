@@ -1,16 +1,16 @@
-Instance:     DDCC-TX-SHE-Parameters-1
-InstanceOf:   Parameters
+Instance:     DDCC-VS-TX-SHE-Parameters-1
+InstanceOf:   DDCCGenerateHealthCertificateParameters
 Usage:        #inline
 
 * parameter[+].name = "response"
-* parameter[=].resource = DDCC-QuestionnaireResponse-Example
+* parameter[=].resource = DDCC-VS-QuestionnaireResponse-Example
 
 
 Instance:     DDCC-TX-SHE-bundle-example-1
-InstanceOf:   Bundle
+InstanceOf:   DDCCSubmitHealthEventRequest
 Usage:        #example
 
 * type = #batch
-* entry[+].resource = DDCC-TX-SHE-Parameters-1
+* entry[+].resource = DDCC-VS-TX-SHE-Parameters-1
 * entry[=].request.method = #POST
 * entry[=].request.url = "QuestionnaireResponse/$generateHealthCertificate"

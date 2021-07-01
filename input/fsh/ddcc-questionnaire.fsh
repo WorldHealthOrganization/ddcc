@@ -1,7 +1,7 @@
 Alias: $ICD11 = http://id.who.int/icd11/mms
-Alias: $QRCodeQuestionnaireURL = http://who-int.github.io/svc/refs/heads/rc2/SVC-Questionnaire
+Alias: $DDCCQuestionnaireURL = http://worldhealthorganization.github.io/ddcc-rc1/DDCCVSCoreDataSetQuestionnaire
 Alias: $targetStructureMap = http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-targetStructureMap
-Alias: $QRMapURL = http://who-int.github.io/svc/StructureMap/svc-map-qr-bundle
+Alias: $QRMapURL = http://worldhealthorganization.github.io/ddcc-rc1/StructureMap/ddcc-map-qr-bundle
 Alias: $targetStructureMap = http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-targetStructureMap
 
 Profile:        DDCCQuestionnaire
@@ -13,7 +13,7 @@ Describes the logical structure for a questionnaire associacted to a DDCC which 
 """
 * ^abstract = true
 * extension[$targetStructureMap] 1.. MS
-// * extension[$targetStructureMap].valueCanonical = "http://who-int.github.io/svc/StructureMap/ddcc-bundle"
+// * extension[$targetStructureMap].valueCanonical = "http://worldhealthorganization.github.io/svc/StructureMap/ddcc-bundle"
 
 Profile:        DDCCQuestionnaireResponse
 Parent:         sdc-questionnaireresponse
@@ -25,12 +25,12 @@ Describes the logical structure for a questionnaire response associacted to a [D
 * ^abstract = true
 
 
-Instance: DDCCCoreDataSetQuestionnaire
+Instance: DDCCVSCoreDataSetQuestionnaire
 InstanceOf: DDCCQuestionnaire
 Usage: #definition
 
-* id = "DDCCCoreDataSetQuestionnaire"
-* url = $QRCodeQuestionnaireURL
+* id = "DDCCVSCoreDataSetQuestionnaire"
+* url = $DDCCQuestionnaireURL
 * name = "DDCCCoreDataSetQuestionnaire" // computer ready name
 * title = "DDCC Core Data Set Questionnaire "
 * description = "DDCC Questionnaire for an Immunization event."
@@ -154,11 +154,11 @@ Usage: #definition
 // * item[=].required = false
 
 
-Instance:     DDCC-QuestionnaireResponse-Example
+Instance:     DDCC-VS-QuestionnaireResponse-Example
 InstanceOf:   DDCCQuestionnaireResponse
 Usage:        #example
 
-* questionnaire = $QRCodeQuestionnaireURL
+* questionnaire = $DDCCQuestionnaireURL
 * status = #completed
 
 * subject = Reference(DDCC-Patient-English)
