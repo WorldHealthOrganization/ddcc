@@ -16,19 +16,15 @@
   <h4 id="register-health-certificate-message-semantics">Message Semantics</h4>
 
   <h5 id="register-health-certificate-message-semantics-request"> Message Semantics Request</h5>
-  The message semantics for the Register Health  Certificate transaction utilizes a <a href="StructureDefinition-DDCCSubmitHealthEventRequest.html">DDCC Submit Health Event Request</a> which is a Transaction Bundle of <a href="StructureDefinition-DDCCQQuestionnaireResponse.html">DDCC Questionnaire Response</a> resources for the request message. The specific DDCC Questionnaire Response resource is determined by the health event that is the subject of the transaction  
+    The message semantics for the Register Health  Certificate transaction utilizes a <a href="StructureDefinition-DDCCSubmitHealthEventRequest.html">DDCC Submit Health Event Request</a> which is a batch Bundle of <a href="StructureDefinition-DDCCGenerateHealthCertificateParameters.html">Parameters</a> for the <a href="OperationDefinition-DDCC-QuestionnaireReponse-generateHealthCertificate.html">Generate Health Certificate Operation</a> which include <a href="StructureDefinition-DDCCQQuestionnaireResponse.html">DDCC Questionnaire Response</a> resources for the request message. The specific DDCC Questionnaire Response resource is determined by the health event that is the subject of the transaction  
   
-  <h6 id="register-health-certificate-message-semantics-ddcc"> Message Semantics Request- DDCC</h6>
-  The <a href="actors.html#point-of-care">Point of Care</a> system should submit an <a href="StructureDefinition-DDCCQuestionnaireResponse.html">DDCC Questionnaire Response</a>  
-
-
   <h5 id="register-health-certificate-message-semantics-response"> Message Semantics Response</h5>
-    The response to a Register Health Certificate transaction is a <a href="StructureDefinition-DDCCSubmitHealthEventResponse.html">DDCC Submit Health Event Response</a> which consists of a Bundle of type transaction-response following the FHIR specification for <a href="https://www.hl7.org/fhir/http.html#transaction-response">transaction responses</a>.  
+    The response to a Register Health Certificate transaction is a <a href="StructureDefinition-DDCCSubmitHealthEventResponse.html">DDCC Submit Health Event Response</a> which consists of a Bundle of type batch-response following the FHIR specification for <a href="https://www.hl7.org/fhir/http.html#transaction-response">transaction responses</a>.  
 
   <h4 id="submit-health-event-preconditions"> Pre-conditions</h4>
-  The DDCC Genrator should have a Document Signing Certificate (DSC) issued by the Public Health Authority and registered with the <a href="actors.html#npkd">National Public Key Directory</a>.  
+  The DDCC Generator should have a Document Signing Certificate (DSC) issued by the Public Health Authority and registered with an approved Public Key Directory such as the <a href="actors.html#npkd">National Public Key Directory</a>.  
 
-  When a jurisdiction participates in the Digital-Online scenario, the DSC should be registered with the <a href="actors.html#npkd">National Public Key Directory</a> and the <a href="actors.html#who-pkd">WHO Public Key Directory</a>.
+  When a jurisdiction participates in the Digital-Online scenario, the DSC should be registered with an approved Public Key Directory.
   
   <h4 id="submit-health-event-expected-actions"> Expected Actions</h4>
   The following are the expected actions for the actors participating in this transaction:
@@ -36,16 +32,16 @@
     <li>
       The <a href="actors.html#ddcc-generator">DDCC Generator</a> should:
       <ol>
-	<li>serialize the <a href="StructureDefinition-svc-questionnaireresponse.html">SVC Questionnaire Response</a> content as payload for encoding as a QR code</li>
+	<li>serialize the <a href="StructureDefinition-DDCCQuestionnaireResponse.html">DDCC Questionnaire Response</a> content as payload for encoding as a QR code</li>
 	<li>use their DSC to sign the QR Code Content as part of the QR Content schema</li>
-	<li>return the generated signed <a href="StructureDefinition-DDCCBinaryQRContent.html">Binary QR Content</a> and <a href="StructureDefinition-DDCCBinaryQRPNG.html">Binary QR PNG</a> resources to the  <a href="actors.html#point-of-care">Point of Care</a> system</li>
+	<li>return the generated signed <a href="StructureDefinition-DDCCDocument.html">DDCC Document</a> to the  <a href="actors.html#point-of-care">Point of Care</a> system</li>
       </ol>
     </li>
     <li>
       If a jurisdiction participates in the Digital-Online scenario, the <a href="actors.html#ddcc-generator">DDCC Generator</a> should:
       <ol>
-	<li>use their DSC  to sign the <a href="StructureDefinition-DDCCBundle.html">DDCC Bundle</a> code payload as part of the QR content schema</li>
-	<li>initiate a <a href="transactions.html#register-health-certificate">Register Health Certificate</a> transaction using the extracted <a href="StructureDefinition-DDCCBundle.html">DDCC Bundle</a> </li>
+	<li>use their DSC  to sign the <a href="StructureDefinition-DDCCDocument.html">DDCC Document</a> code payload as part of the QR content schema</li>
+	<li>initiate a <a href="transactions.html#register-health-certificate">Register Health Certificate</a> transaction using the extracted <a href="StructureDefinition-DDCCDocument.html">DDCC Document</a> </li>
 	<li>include the resulting <a href="actors.html#ddcc-registry">DDCC Registry Service</a> endpoints for signed DDCC as part of the response message</li>
       </ol>
     </li>
