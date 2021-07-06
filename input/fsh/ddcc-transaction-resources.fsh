@@ -63,3 +63,35 @@ A DDCC Submit Health Event Response](StructureDefinition-DDCCSubmitHealthEventRe
 * entry[ddccBundle].resource only DDCCDocument
 
 
+Profile:        DDCCAddBundle
+Parent:         Bundle
+Id:             DDCCAddBundle
+Title:          "DDCC Add Bundle"
+Description:    """
+Bundle to be transformed to from the DDCC QuestionnaireResponse
+to add on the DDCC generator.
+"""
+* ^publisher = "World Health Organization (WHO)"
+* type = #transaction
+* entry ^slicing.discriminator.type = #value
+* entry ^slicing.discriminator.path = "resource"
+* entry ^slicing.rules = #closed
+* entry contains ddccQR 1..1
+        and ddccPatient 1..1
+        and ddccImmunization 1..1
+        and ddccImmunizationRecommendation 0..1
+        and ddccDocumentReference 0..*
+        and ddccComposition 1..1
+* entry[ddccQR].resource only DDCCQuestionnaireResponse
+* entry[ddccQR].request.method = #PUT
+* entry[ddccPatient].resource only DDCCPatient
+* entry[ddccPatient].request.method = #PUT
+* entry[ddccImmunization].resource only DDCCImmunization
+* entry[ddccImmunization].request.method = #PUT
+* entry[ddccImmunizationRecommendation].resource only DDCCImmunizationRecommendation
+* entry[ddccImmunizationRecommendation].request.method = #PUT
+* entry[ddccDocumentReference].resource only DDCCDocumentReference
+* entry[ddccDocumentReference].request.method = #PUT
+* entry[ddccComposition].resource only DDCCComposition
+* entry[ddccComposition].request.method = #PUT
+
