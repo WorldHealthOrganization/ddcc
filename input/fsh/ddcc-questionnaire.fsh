@@ -1,7 +1,7 @@
 Alias: $ICD11 = http://id.who.int/icd11/mms
-Alias: $DDCCQuestionnaireURL = http://worldhealthorganization.github.io/ddcc-rc1/DDCCVSCoreDataSetQuestionnaire
+Alias: $DDCCQuestionnaireURL = http://worldhealthorganization.github.io/ddcc/DDCCVSCoreDataSetQuestionnaire
 Alias: $targetStructureMap = http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-targetStructureMap
-Alias: $QRMapURL = http://worldhealthorganization.github.io/ddcc-rc1/StructureMap/ddcc-map-qr-bundle
+Alias: $QRMapURL = http://worldhealthorganization.github.io/ddcc/StructureMap/ddcc-map-qr-bundle
 Alias: $targetStructureMap = http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-targetStructureMap
 
 Profile:        DDCCQuestionnaire
