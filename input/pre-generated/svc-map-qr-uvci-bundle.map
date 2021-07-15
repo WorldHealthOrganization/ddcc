@@ -1,0 +1,158 @@
+map "http://who-int.github.io/svc/StructureMap/svc-map-qr-uvci-bundle" = "svc-map-qr-uvci-bundle"
+
+uses "http://who-int.github.io/svc/refs/heads/qr-encoding/StructureDefinition/svc-qr-uvci" alias QR as source
+uses "http://who-int.github.io/svc/StructureDefinition/svc-bundle" alias SVC_Bundle as target
+uses "http://who-int.github.io/svc/StructureDefinition/svc-composition" alias SVC_Composition as produced
+uses "http://who-int.github.io/svc/StructureDefinition/svc-patient" alias SVC_Patient as produced
+uses "http://who-int.github.io/svc/StructureDefinition/svc-organization" alias SVC_Organization as produced
+uses "http://who-int.github.io/svc/StructureDefinition/svc-provenance" alias SVC_Provenance as produced
+
+
+group Decode_QR(
+	source qr: QR,
+	target bundle
+	){
+
+	qr ->  create("SVC_Patient") as patient,
+	       create("SVC_Organization") as organization
+	       then 
+       	       	    Decode_QR_Patient(qr,patient),
+         	    Decode_QR_Organization(qr,organization),
+        	    Decode_QR_Bundle(qr,patient,organzation,bundle)
+	       "Create resources and process bundle";
+
+}		    
+
+
+
+group Decode_QR_Patient(
+      source qr: QR,
+      target patient : SVC_Patient 
+      ) {
+
+
+      		  qr.name as qrname,
+		  patient.name as pname ->
+      		       pname.text = qrname,
+		       pname.use = "official"
+		  "Load Name";
+
+		  qr.pid as pid ->
+		       patient.identifier = id("XXXXXurn:uetf:rfc:3986",pid)
+		  "Load Patient Identifer";
+
+		  qr.birthDate as birthDate->
+		       patient.birthDate = birthDate
+		  "Load Birth Date";
+
+		  
+}
+
+
+group Decode_QR_Organization(
+	source qr : QR ,
+	target organization : SVC_Organization
+	){
+
+		    qr.phaid as phaid ->
+		    	organization.identifier = id("XXXXXurn:ietf:rfc:3986",phaid)
+		    "Load PHA ID";
+}
+
+
+group Decode_QR_Bundle(
+	source qr : QR,
+	target patient : SVC_Patient,
+	target bundle : SVC_Bundle
+	) {
+
+        qr -> bundle.status = "final",
+	      bundle.type = "document"
+	      "Set Bundle Metadata";
+
+
+
+		    qr.paperid as paperid ->
+		         bundle.identifier = id("XXXXXurn:ietf:rfc:3986",paperid)
+		    "Load Paper SVC ID";
+
+		    qr.signature as qrsig,
+		    bundle.signature as bsig ->
+		         bsig.data = qrsig,
+			 bsig.type = "1.2.840.10065.1.12.1.14", //Source Signature https://www.hl7.org/fhir/valueset-signature-type.html
+			 bsig.format = "XXXXXXX TBD",
+			 bsig.who = reference(organization)
+		    "Load Signature";
+
+
+
+        qr -> bundle.entry as e,
+	      e.resource = create("SVC_Composition") as compostion
+	      then  Decode_QR_Composition(qr,bundle,composition) 
+	      "Process Composition Entry"; 
+
+}
+
+
+group Decode_QR_Composition(
+	source qr : QR  source,
+	target bundle : SVC_Bundle,
+	target patient : SVC_Patient,
+	target organization : SVC_Organization,
+	target composition : SVC_Composition,
+	){
+
+	qr -> composition.subject = reference(patient),
+	      composition.author = reference(organization)
+	      "Set Composition Meta";
+
+
+            qr.digitalid as digitalid -> 
+	       composition.identifier = id("XXXXXurn:ietf:rfc:3986",digitalid)
+	    "Load Digital SVC ID";
+
+}
+
+
+group Decode_QR_Provenance(
+	source qr : QR,
+	target bundle : SVC_Bundle,
+	target patient : SVC_Patient,
+	target organization : SVC_Organization,
+	target paper : SVC_Composition,
+	target digital : SVC_Composition,
+	target provenance : SVC_Provenance
+	){
+
+	qr ,
+	provenance.entity as e_digital,
+	provenance.agent as agent,
+	provenance.signature as psig
+	   ->
+	   provenance.reason = "PUBHLTH" ,
+	   provenance.policy = "XXXXXXX urn:example:who:smart:vaccine-certificate:RC1" ,
+	   provenance.target = reference(bundle), 
+
+	   e_digital.role = "source" ,
+	   e_digital.what = reference(composition) ,
+	   e_digital.agent = reference(organization) ,
+
+	   e_paper.role = "source" ,
+	   e_paper.what = reference(bundle) ,
+	   e_paper.agent = reference(organization) ,
+
+   	   psig.format = "XXXXX TBD" ,
+	   psig.who = reference(organization) ,
+	   psg.type = "1.2.840.10065.1.12.1.14",  //Source Signature https://www.hl7.org/fhir/valueset-signature-type.html
+	   psig.data = signature
+
+	   then {
+	   	agent.who as who -> 
+	            who.reference = reference(organization),
+	            who.onBehalfOf = reference(patient) as "Set who";
+		}
+	   "Set provenance";
+
+}	   
+
+

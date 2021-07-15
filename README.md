@@ -1,15 +1,15 @@
-WHO Smart Vaccination Card (SVC) - Release Candidate 1 (RC1) IG
+WHO Digital Documentation of COVID-19 Certificates: Vaccination Status (DDCC:VS)
 ---
-This is the WHO Smart Vaccination Card (SVC) Release Candidate 1 (RC1).
+This is the WHO Digital Documentation of COVID-19 Certificates: Vaccination Status (DDCC:VS)
 <br> </br>
 ###
 ### Publication
 This ImplementationGuide is published in the following locations:
 
 
-Continuous Build: __https://github.com/WorldHealthOrganization/ddcc
+Continuous Build:  __https://github.com/WorldHealthOrganization/ddcc__  
+Canonical / permanent URL: __https://WorldHealthOrganization.github.io/ddcc__  
 
-Canonical / permanent URL: 
 <br> </br>
 
 ### Issues

@@ -1,0 +1,24 @@
+@startuml
+title Transaction: Request Smart Health Certificate
+
+hide footbox
+
+!include ./style.iuml
+
+actor "Public\nHealth\nAuthority" as PHA
+Participant "Verifier" 
+Participant "DDCC\nRegistry\nSerice" as DDCCReg
+
+autonumber 1.1.1
+
+Verifier -> DDCCReg: request current Digital DDCC with a given Composition identifier
+DDCCReg->DDCCReg: search list of reserved\nidentifiers for the requested\ncomposition identifier
+    alt Composition Identifier Found
+    	DDCCReg->Verifier: Return DDCC document bundle
+    else Composition Identifier Not Found
+     	 DDCCReg->Verifier: Return error condition
+    end
+
+@enduml
+
+

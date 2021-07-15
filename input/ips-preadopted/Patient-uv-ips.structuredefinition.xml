@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<StructureDefinition xmlns="http://hl7.org/fhir">
+	<id value="Patient-pre-uv-ips"/>
+	<url value="http://hl7.org/fhir/uv/ips/StructureDefinition/Patient-pre-uv-ips"/>
+	<name value="PatientUvIps"/>
+	<title value="Patient (IPS)"/>
+	<status value="active"/>
+	<description value="This profile represents the constraints applied to the Patient resource by the International Patient Summary (IPS) FHIR Implementation Guide and describes the minimum expectations for the Patient resource when used in the IPS composition or in one of the referred resources."/>
+	<kind value="resource"/>
+	<abstract value="false"/>
+	<type value="Patient"/>
+	<baseDefinition value="http://hl7.org/fhir/StructureDefinition/Patient"/>
+	<derivation value="constraint"/>
+	<differential>
+		<element id="Patient">
+			<path value="Patient"/>
+			<mustSupport value="true"/>
+		</element>
+		<element id="Patient.identifier">
+			<path value="Patient.identifier"/>
+			<mustSupport value="true"/>
+		</element>
+		<element id="Patient.name">
+			<path value="Patient.name"/>
+			<requirements value="Need to be able to track the patient by multiple names. Examples are your official name and a partner name.&#xD;&#xA;The Alphabetic representation of the name SHALL be always provided"/>
+			<min value="1"/>
+			<max value="*"/>
+<!-- 			<constraint>
+				<key value="ips-pat-1"/>
+				<severity value="error"/>
+				<human value="Patient.name.given or Patient.name.family or both SHALL be present"/>
+				<expression value="family.exists() or given.exists()"/>
+				<xpath value="f:given or f:family"/>
+			</constraint> -->
+			<mustSupport value="true"/>
+		</element>
+		<element id="Patient.name.text">
+			<path value="Patient.name.text"/>
+			<definition value="Text representation of the full name. Due to the cultural variance around the world a consuming system may not know how to present the name correctly; moreover not all the parts of the name go in given or family. Creators are therefore strongly encouraged to provide through this element a presented version of the name. Future versions of this guide may require this element"/>
+			<min value="0"/>
+			<mustSupport value="true"/>
+		</element>
+		<element id="Patient.name.family">
+			<path value="Patient.name.family"/>
+			<min value="0"/>
+			<max value="1"/>
+			<mustSupport value="true"/>
+		</element>
+		<element id="Patient.name.given">
+			<path value="Patient.name.given"/>
+			<min value="0"/>
+			<mustSupport value="true"/>
+		</element>
+		<element id="Patient.telecom">
+			<path value="Patient.telecom"/>
+			<mustSupport value="true"/>
+		</element>
+		<element id="Patient.gender">
+			<path value="Patient.gender"/>
+			<!-- <min value="1"/> -->
+			<mustSupport value="true"/>
+		</element>
+		<element id="Patient.birthDate">
+			<path value="Patient.birthDate"/>
+			<min value="1"/>
+			<mustSupport value="true"/>
+		</element>
+		<element id="Patient.address">
+			<path value="Patient.address"/>
+			<constraint>
+				<key value="pat-cnt-2or3-char"/>
+				<severity value="warning"/>
+				<human value="The content of the country element (if present) SHALL be selected EITHER from ValueSet ISO Country Alpha-2 http://hl7.org/fhir/ValueSet/iso3166-1-2 OR MAY be selected from ISO Country Alpha-3 Value Set http://hl7.org/fhir/ValueSet/iso3166-1-3, IF the country is not specified in value Set ISO Country Alpha-2 http://hl7.org/fhir/ValueSet/iso3166-1-2."/>
+				<expression value="country.empty() or (country.memberOf('http://hl7.org/fhir/ValueSet/iso3166-1-2') or country.memberOf('http://hl7.org/fhir/ValueSet/iso3166-1-3'))"/>
+			</constraint>
+			<mustSupport value="true"/>
+		</element>
+		<element id="Patient.contact">
+			<extension url="http://hl7.org/fhir/StructureDefinition/structuredefinition-explicit-type-name">
+				<valueString value="Contact"/>
+			</extension>
+			<path value="Patient.contact"/>
+			<mustSupport value="true"/>
+		</element>
+		<element id="Patient.contact.relationship">
+			<path value="Patient.contact.relationship"/>
+			<type>
+				<code value="CodeableConcept"/>
+				<profile value="http://hl7.org/fhir/uv/ips/StructureDefinition/CodeableConcept-uv-ips"/>
+			</type>
+			<mustSupport value="true"/>
+			<binding>
+				<extension url="http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName">
+					<valueString value="ContactRelationship"/>
+				</extension>
+				<strength value="required"/>
+				<valueSet value="http://hl7.org/fhir/uv/ips/ValueSet/personal-relationship-uv-ips"/>
+			</binding>
+		</element>
+		<element id="Patient.contact.name">
+			<path value="Patient.contact.name"/>
+			<mustSupport value="true"/>
+		</element>
+		<element id="Patient.contact.telecom">
+			<path value="Patient.contact.telecom"/>
+			<mustSupport value="true"/>
+		</element>
+		<element id="Patient.contact.address">
+			<path value="Patient.contact.address"/>
+			<mustSupport value="true"/>
+		</element>
+		<element id="Patient.contact.organization">
+			<path value="Patient.contact.organization"/>
+			<mustSupport value="true"/>
+		</element>
+		<element id="Patient.communication">
+			<path value="Patient.communication"/>
+			<mustSupport value="true"/>
+		</element>
+		<element id="Patient.communication.language">
+			<path value="Patient.communication.language"/>
+			<mustSupport value="true"/>
+			<binding>
+				<strength value="required"/>
+				<valueSet value="http://hl7.org/fhir/ValueSet/all-languages"/>
+			</binding>
+		</element>
+		<element id="Patient.generalPractitioner">
+			<path value="Patient.generalPractitioner"/>
+			<mustSupport value="true"/>
+		</element>
+	</differential>
+</StructureDefinition>

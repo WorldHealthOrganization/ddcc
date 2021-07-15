@@ -1,0 +1,59 @@
+@startuml
+title Transaction: Digitize Immunization Event (Offline)
+
+hide footbox
+
+!include ./style.iuml
+
+actor "Subject of Care" as SOC
+actor "DDCC Holder" as Holder
+actor "Vaccinator" as Vaxer
+actor "Data Entry Personnel" as DEP
+Participant "Point of Care\nDigital Health Tool" as POC
+Participant "Paper\nRegistry" as PaperReg
+Participant "DDCC Certificate\nGenerator" as CertGen
+Participant "Shared Health\nRecord" as SHR
+Participant "DDCC\nRegistry" as DDCCReg
+
+autonumber 1.1.1
+
+   activate Holder
+   activate SOC
+   activate Vaxer
+
+   alt Subject of Care has an DDCC Card
+      Holder->Vaxer: Give Subject of Care's\nPaper DDCC to Vaccinator
+   else Subject of Care needs an DDCC Card
+      Vaxer->Holder: Give DDCC Holder new\nDDCC Card	
+   end
+   
+   Vaxer->SOC : Vaccinate
+   Vaxer->Holder:  record immunization event\nin Paper DDCC 
+   Vaxer->PaperReg: record immunization event\nin paper register
+
+   deactivate Holder
+   deactivate SOC
+   deactivate Vaxer
+
+   activate DEP
+   DEP->PaperReg: read register row
+   DEP->POC: record immunization\nevent details
+   deactivate DEP
+
+   
+   POC->CertGen: send immunization event\ndetails as unsigned\nQR UVCEI
+   CertGen->POC: return signed QR UVCEI
+   POC->POC: store QR UVCEI in\nSubect of Care's record
+
+   alt  Has Shared Health Record
+	POC->SHR: upload IPS Bundle
+	SHR->SHR: $transform IPS Bundle to\nDDCC Bundle
+	SHR->DDCCReg: upload DDCC Bundle
+   else Has DDCC Registry
+   	POC->DDCCReg: upload DDCC Bundle
+   end
+
+
+@enduml
+
+
