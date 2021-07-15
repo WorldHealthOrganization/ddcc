@@ -128,7 +128,6 @@ WHO Vaccine List (COVID-19) from [ICD 11](https://icd.who.int/browse11)
 * include $ICD11#XM1J92 "COVID-19 vaccine, virus like particle (VLP)"
 * include $ICD11#XM6AT1 "COVID-19 vaccine, DNA based"
 
-
 ValueSet:      WHO_SVC_Disease_Targeted_COVID_19
 Id:	       who-svc-disease-targeted-covid-19
 Title:	       "WHO Disease or Agent Targeted (COVID-19)"
@@ -169,8 +168,7 @@ Usage:          #definition
 
 Instance:       WHO_SVC_Map_ICD11_to_SCT_Disease_Targeted
 InstanceOf:     ConceptMap
-Title:          "ConceptMap from ICD-11 to SNOMED CT for Disease or Agent Target
-ed"
+Title:          "ConceptMap from ICD-11 to SNOMED CT for Disease or Agent Targeted"
 Usage:          #definition
 
 * id = "who-svc-map-icd11-sct-disease-targeted"
@@ -194,4 +192,3 @@ Usage:          #definition
 * group[=].element[+].code = #RA01.1
 * group[=].element[=].target[+].code = #840544004
 * group[=].element[=].target[=].equivalence = #equivalent
-
