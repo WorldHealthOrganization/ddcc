@@ -9,7 +9,7 @@ actor "Subject of Care" as SOC
 actor "DDCC Holder" as Holder
 actor "Vaccinator" as Vaxer
 actor "Data Entry Personnel" as DEP
-Participant "Point of Care\nDigital Health Tool" as POC
+Participant "Digital Health Solution" as DHS
 Participant "Paper\nRegistry" as PaperReg
 Participant "DDCC Certificate\nGenerator" as CertGen
 Participant "Shared Health\nRecord" as SHR
@@ -31,10 +31,10 @@ autonumber 1.1.1
 
 
     Vaxer->Holder:  record immunization event\nin Paper DDCC 
-    Vaxer->POC: record immunization\nevent details
-    POC->CertGen: send immunization event\ndetails as unsigned\nQR UVCEI
-    CertGen->POC: return signed QR UVCEI
-    POC->POC: store QR UVCEI in\nSubect of Care's record
+    Vaxer->DHS: record immunization\nevent details
+    DHS->CertGen: send immunization event\ndetails as unsigned\nQR UVCEI
+    CertGen->DHS: return signed QR UVCEI
+    DHS->DHS: store QR UVCEI in\nSubect of Care's record
     opt Can Print QR Stickers
          Vaxer->Vaxer: Print QR code sticker\nfrom signed UVCEI
  	 Vaxer->Holder: Place QR code\nsticker on DDCC
@@ -49,11 +49,11 @@ autonumber 1.1.1
    
 
    alt  Has Shared Health Record
-	POC->SHR: upload IPS Bundle
+	DHS->SHR: upload IPS Bundle
 	SHR->SHR: $transform IPS Bundle to DDCC Bundle
 	SHR->DDCCReg: upload DDCC Bundle
    else Has DDCC Registry
-   	POC->DDCCReg: upload DDCC Bundle
+   	DHS->DDCCReg: upload DDCC Bundle
    end
 
 

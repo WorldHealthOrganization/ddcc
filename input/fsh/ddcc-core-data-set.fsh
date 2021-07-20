@@ -77,7 +77,7 @@ Usage:          #definition
 * differential.element[=].max = "1"
 * differential.element[=].type[+].code = #Coding
 * differential.element[=].binding.strength = #preferred
-* differential.element[=].binding.valueSet = "https://worldhealthorganization.github.io/ddcc/ValueSet/who-ddcc-vaccines"
+* differential.element[=].binding.valueSet = "https://worldhealthorganization.github.io/ddcc/ValueSet/who-ddcc-vaccines-covid-19"
 
 * differential.element[+].id = "DDCCCoreDataSet.vaccination.brand"
 * differential.element[=].path = "DDCCCoreDataSet.vaccination.brand"

@@ -121,6 +121,7 @@ Description:   """
 WHO Vaccine List (COVID-19) from [ICD 11](https://icd.who.int/browse11)
 """
 * ^status = #draft
+* include $ICD11#XM68M6 "COVID-19 vaccine"
 * include $ICD11#XM1NL1 "COVID-19 vaccine, inactivated virus"
 * include $ICD11#XM5DF6 "COVID-19 vaccine, live attenuated virus"
 * include $ICD11#XM9QW8 "COVID-19 vaccine, non-replicating viral vector"
@@ -128,6 +129,7 @@ WHO Vaccine List (COVID-19) from [ICD 11](https://icd.who.int/browse11)
 * include $ICD11#XM5JC5 "COVID-19 vaccine, virus protein subunit"
 * include $ICD11#XM1J92 "COVID-19 vaccine, virus like particle (VLP)"
 * include $ICD11#XM6AT1 "COVID-19 vaccine, DNA based"
+* include $ICD11#XM0GQ8 "COVID-19 vaccine, RNA based"
 
 
 ValueSet:      WHO_DDCC_Disease_Targeted_COVID_19
