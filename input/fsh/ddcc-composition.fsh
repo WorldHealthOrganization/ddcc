@@ -87,6 +87,7 @@ The content attachment url will point to a DDCC Document.
 * subject 1..1 MS
 * subject.reference 1..1 MS
 * subject only Reference(DDCCPatient)
+* date 1..1 MS
 * content 1..1 MS
 * content.attachment.url 1..1 MS
 * content.attachment.hash 0..1 MS
