@@ -75,20 +75,20 @@ A [DDCC Document](StructureDefinition-DDCCDocument.html) is a document bundle co
 * signature 0..1 MS
 
 Profile:        DDCCDocumentReference
-Parent:         DocumentReference
+Parent:         http://profiles.ihe.net/ITI/MHD/StructureDefinition/IHE.MHD.Minimal.DocumentReference
 Id:             DDCCDocumentReference
 Title:          "DDCC Document Reference"
 Description:    """ 
 A [DDCC Document Reference](StructureDefinition-DDCCDocumentReference.html) is a 
 document reference to a [DDCC Document](StructureDefinition-DDCCDocument.html) 
 containing the DDCC.
-The content attachment data will be a base64 encoded representation of the DDCC Document.
+The content attachment url will point to a DDCC Document.
 """
 * subject 1..1 MS
 * subject.reference 1..1 MS
 * subject only Reference(DDCCPatient)
 * content 1..1 MS
-* content.attachment.data 1..1 MS
+* content.attachment.url 1..1 MS
 * content.attachment.hash 0..1 MS
 
 /*
