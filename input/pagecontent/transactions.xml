@@ -1,37 +1,50 @@
 <div xmlns="http://www.w3.org/1999/xhtml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://hl7.org/fhir ../../input-cache/schemas/R5/fhir-single.xsd">
   
   <h3 id="submit-health-event">Submit Health Event</h3> 
-  The Submit Health Event transaction is initiated by a <a href="actors.html#digital-health-solution">Digital Health Solution</a> system against the <a href="actors.html#ddcc-generator">DDCC Generator</a>.
+  <p>
+  The Submit Health Event transaction is initiated by a <a href="actors.html#digital-health-solution">Digital Health Solution</a> system against the <a href="actors.html#ddcc-generator">DDCC:VS Generation Service</a>.
+  </p>
 
   {% include submit_health_event.svg %}
   
 
   <h4  id="submit-health-event-trigger">Trigger Event </h4>
+  <p>
   The Submit Health Event transaction may be initiated in any of the following ways:
   <ul>
     <li>The <a href="actors.html#digital-health-solution">Digital Health Solution</a> system is online and a health event was recorded by the Vaccinator or the Data Entry Personnel</li>
     <li>The <a href="actors.html#digital-health-solution">Digital Health Solution</a> system comes online after recording one or more health events while in an offline mode</li>
     <li>The <a href="actors.html#digital-health-solution">Digital Health Solution</a> is used to record health events recorded on a paper register sometime after the event</li>
   </ul>
+  </p>
 
   <h4 id="register-health-certificate-message-semantics">Message Semantics</h4>
 
   <h5 id="register-health-certificate-message-semantics-request"> Message Semantics Request</h5>
+  <p>
     The message semantics for the Register Health  Certificate transaction utilizes a <a href="StructureDefinition-DDCCSubmitHealthEventRequest.html">DDCC Submit Health Event Request</a> which is a batch Bundle of <a href="StructureDefinition-DDCCGenerateHealthCertificateParameters.html">Parameters</a> for the <a href="OperationDefinition-DDCC-QuestionnaireReponse-generateHealthCertificate.html">Generate Health Certificate Operation</a> which include <a href="StructureDefinition-DDCCQQuestionnaireResponse.html">DDCC Questionnaire Response</a> resources for the request message. The specific DDCC Questionnaire Response resource is determined by the health event that is the subject of the transaction  
+  </p>
   
   <h5 id="register-health-certificate-message-semantics-response"> Message Semantics Response</h5>
+  <p>
     The response to a Register Health Certificate transaction is a <a href="StructureDefinition-DDCCSubmitHealthEventResponse.html">DDCC Submit Health Event Response</a> which consists of a Bundle of type batch-response following the FHIR specification for <a href="https://www.hl7.org/fhir/http.html#transaction-response">transaction responses</a>.  
+  </p>
 
   <h4 id="submit-health-event-preconditions"> Pre-conditions</h4>
-  The DDCC Generator should have a Document Signing Certificate (DSC) issued by the <a href="actors.html#public-health-authority">Public Health Authority</a> and registered with an approved Public Key Directory such as the National Public Key Directory.  
+  <p>
+  The DDCC:VS Generation Service should have a Document Signing Certificate (DSC) issued by the <a href="actors.html#public-health-authority">Public Health Authority</a> and registered with an approved Public Key Directory such as the National Public Key Directory.  
+  </p>
 
+  <p>
   When a jurisdiction participates in the Digital-Online scenario, the DSC should be registered with an approved Public Key Directory.
+  </p>
   
   <h4 id="submit-health-event-expected-actions"> Expected Actions</h4>
+  <p>
   The following are the expected actions for the actors participating in this transaction:
   <ul>
     <li>
-      The <a href="actors.html#ddcc-generator">DDCC Generator</a>:
+      The <a href="actors.html#ddcc-generator">DDCC:VS Generation Service</a>:
       <ol>
 	<li>may serialize the <a href="StructureDefinition-DDCCQuestionnaireResponse.html">DDCC Questionnaire Response</a> content as payload for encoding as a QR code</li>
 	<li>may use their DSC to sign the QR Code Content as part of the QR Content schema</li>
@@ -40,88 +53,157 @@
       </ol>
     </li>
     <li>
-      If a jurisdiction also participates in the Digital-Online scenario, the <a href="actors.html#ddcc-generator">DDCC Generator</a>:
+      If a jurisdiction also participates in the Digital-Online scenario, the <a href="actors.html#ddcc-generator">DDCC:VS Generation Service</a>:
       <ol>
         <li>shall determine if the paper id associated with the transaction already has content in the registry using the <a href="transactions.html#retrieve-health-folder">Retrieve Health Folder</a> transaction</li>
-	<li>shall initiate a <a href="transactions.html#register-health-certificate">Register Health Certificate</a> transaction using the generated <a href="StructureDefinition-DDCCDocument.html">DDCC Document</a> </li>
-	<li>include the resulting <a href="actors.html#ddcc-registry">DDCC Registry Service</a> endpoints for signed DDCC as part of the response message</li>
+	<li>If a jurisdiction also has an <a href="actors.html#ddcc-repository">DDCC:VS Repository Service</a>:
+	<ol>
+	  <li>shall initiate a <a href="#store-health-certificate">Store Health Certificate</a> transaction using the generated DDCC Document</li>
+      </ol></li>
+	<li>shall initiate a <a href="transactions.html#register-health-certificate">Register Health Certificate</a> transaction using a <a href="StructureDefinition-DDCCProvideDocumentBundle.html">DDCC Provide Document Bundle</a> </li>
+	<li>include the resulting <a href="actors.html#ddcc-registry">DDCC:VS Registry Service</a> endpoints for the signed DDCC as part of the response message</li>
       </ol>
     </li>
   </ul>
+  </p>
   
+  <h3 id="store-health-certificate">Store Health Certificate</h3> 
+  <p>
+  The Store Health Certificagte transaction is initiated by a <a href="actors.html#ddcc-generator">DDCC:VS Generation Service</a> against the <a href="actors.html#ddcc-repository">DDCC:VS Repository Service</a>.
+  </p>
+
+  {% include store_health_certificate.svg %}
   
+
+  <h4  id="submit-health-event-trigger">Trigger Event </h4>
+  <p>
+    The Submit Health Event transaction may be initiated when a <a href="actors.html#ddcc-generator">DDCC:VS Generation Service</a> has received a <a href="#submit-health-event">Submit Health Event</a> and needs to store the resulting DDCC Document in the DDCC:VS Repository Service.
+  </p>
+
+  <h4 id="register-health-certificate-message-semantics">Message Semantics</h4>
+
+  <h5 id="register-health-certificate-message-semantics-request"> Message Semantics Request</h5>
+  <p>
+    The message semantics for the Store Health Certificate transaction utilizes a <a href="https://www.hl7.org/fhir/http.html#create">FHIR Create interaction</a> to create a <a href="StructureDefinition-DDCCDocument.html">DDCC Document</a>.
+  </p>
+  
+  <h5 id="register-health-certificate-message-semantics-response"> Message Semantics Response</h5>
+  <p>
+    The response to a Store Health Certificate transaction is documented in the <a href="https://www.hl7.org/fhir/http.html#create">FHIR create interaction</a>.
+  </p>
+
+  <h4 id="submit-health-event-expected-actions"> Expected Actions</h4>
+  <p>
+    The following are the expected actions for the <a href="actors.html#ddcc-repository">DDCC:VS Repository Service</a> in this transaction:
+    <ol>
+      <li>shall store the DDCC Document</li>
+      <li>shall return the location of the DDCC Document</li>
+  </ol>
+  </p>
+
   <h3 id="register-health-certificate"> Register Health Certificate</h3>  
-  The Register Health Certiciate transaction is initiated by a <a href="actors.html#ddcc-generator">DDCC Generator</a> system against the <a href="actors.html#ddcc-registry">DDCC Registry Service</a>.  This is based off of the <a href="https://profiles.ihe.net/ITI/MHD/ITI-65.html">Provide Document Bundle [ITI-65]</a> transaction from the MHD profile.
+  <p>
+  The Register Health Certiciate transaction is initiated by a <a href="actors.html#ddcc-generator">DDCC:VS Generation Service</a> against the <a href="actors.html#ddcc-registry">DDCC:VS Registry Service</a>.  This is based off of the <a href="https://profiles.ihe.net/ITI/MHD/ITI-65.html">Provide Document Bundle [ITI-65]</a> transaction from the MHD profile.
+  </p>
 
   {% include register_certificate.svg %}
   
   <h4 id="register-health-certificate-trigger"> Trigger Event</h4>
-  The Register Health Certificate transaction is initiated when a <a href="actors.html#ddcc-generator">DDCC Generator</a> receives a valid Submit Health Event request from a <a href="actors.html#digital-health-solution">Digital Health Solution</a> system in a Digital-Online scenario.
+  <p>
+  The Register Health Certificate transaction is initiated when a <a href="actors.html#ddcc-generator">DDCC:VS Generation Service</a> receives a valid Submit Health Event request from a <a href="actors.html#digital-health-solution">Digital Health Solution</a> system in a Digital-Online scenario.
+  </p>
 
   <h4 id="register-health-certificate-message-semantics"> Message Semantics</h4>
 
-  The DDCC Generator will follow the message semantics from <a href="https://profiles.ihe.net/ITI/MHD/ITI-65.html#2365412-message-semantics">MHD's Provide Document Bundle transaction [ITI-65]</a>.
+  <p>
+  The DDCC:VS Generation Service will follow the message semantics from <a href="https://profiles.ihe.net/ITI/MHD/ITI-65.html#2365412-message-semantics">MHD's Provide Document Bundle transaction [ITI-65]</a>.
+  </p>
 
-  The DDCC Generator will compose a <a href="StructureDefinition-DDCCProvideDocumentBundle.html">DDCC Provide Document Bundle</a> to submit to the DDCC Registry.
+  <p>
+  The DDCC:VS Generation Service will compose a <a href="StructureDefinition-DDCCProvideDocumentBundle.html">DDCC Provide Document Bundle</a> to submit to the DDCC:VS Registry Service.
+  </p>
   
   <h4 id="register-health-certificate-expected-actions"> Expected Actions</h4>
   
+  <p>
   The actors will follow the expected actions from <a href="https://profiles.ihe.net/ITI/MHD/ITI-65.html#2365413-expected-actions">MHD's ITI-65</a>.
+  </p>
 
   
   <h3 id="retrieve-health-certificate-reference"> Retrieve Health Certificate Reference</h3>  
+  <p>
   The Retrieve Health Certiciate transaction is used in the Digital-Online context and is used for the retrieval and optional verification of a single line of a DDCC.
+  </p>
 
-  The Retrieve Health Certificate transaction may be initiated by a <a href="actors.html#verifier">Verifier</a> against the <a href="actors.html#ddcc-registry">DDCC Registry Service</a> in a jursidicition particpating in the Digital-Online scenario.
+  <p>
+  The Retrieve Health Certificate transaction may be initiated by a <a href="actors.html#verifier">Verifier</a> against the <a href="actors.html#ddcc-registry">DDCC:VS Registry Service</a> in a jursidicition particpating in the Digital-Online scenario.
+  </p>
 
-	  The Retrieve Health Certificate Reference transaction is based on <a href="https://profiles.ihe.net/ITI/MHD/ITI-67.html">MHD's Find Document References transaction [ITI-67]</a>.  It can be used to verify the existence of the Document Reference for the Immunization event.  All message semantics and expected actions are the same as documented by MHD.
+  <p>
+  The Retrieve Health Certificate Reference transaction is based on <a href="https://profiles.ihe.net/ITI/MHD/ITI-67.html">MHD's Find Document References transaction [ITI-67]</a>.  It can be used to verify the existence of the Document Reference for the Immunization event.  All message semantics and expected actions are the same as documented by MHD.
+  </p>
 
-
-  {% include retrieve_health_certificate.svg %}
+  {% include retrieve_health_reference.svg %}
   
   <h4 id="retrieve-health-certificate-trigger"> Trigger Event</h4>  
+  <p>
   The Retrieve Health Certificate Reference may be initiated by:
   <ol>
     <li> a <a href="actors.html#verifier">Verifier</a> wishing to validate and verify a DDCC</li>
+
   </ol>
+  </p>
 
 
 
   <h3 id="retrieve-health-certificate"> Retrieve Health Certificate</h3>  
+  <p>
   The Retrieve Health Certiciate transaction is used in the Digital-Online context and is used for the retrieval and optional verification of a single line of a DDCC.
+  </p>
 
-  The Retrieve Health Certificate transaction may be initiated by a <a href="actors.html#verifier">Verifier</a> or <a href="actors.html#digital-health-solution">Digital Health Solution</a> against the <a href="actors.html#ddcc-repository">DDCC Repository Service</a> in a jursidicition particpating in the Digital-Online scenario after retrieving the location from the <a href="#retrieve-health-certificate-reference">Retrieve Health Certificate Reference</a> or <a href="#retrieve-health-folder">Retrieve Health Folder</a> transactions.
+  <p>
+  The Retrieve Health Certificate transaction may be initiated by a <a href="actors.html#verifier">Verifier</a> or <a href="actors.html#digital-health-solution">Digital Health Solution</a> against the <a href="actors.html#ddcc-repository">DDCC:VS Repository Service</a> in a jursidicition particpating in the Digital-Online scenario after retrieving the location from the <a href="#retrieve-health-certificate-reference">Retrieve Health Certificate Reference</a> or <a href="#retrieve-health-folder">Retrieve Health Folder</a> transactions.
+  </p>
 
-	  The Retrieve Health Certificate transaction is based on <a href="https://profiles.ihe.net/ITI/MHD/ITI-68.html">MHD's Retrieve Document transaction [ITI-68]</a>.  It can be used to verify the contents of a DDCC Immunization event.
-
-  <br />
+  <p>
+  The Retrieve Health Certificate transaction is based on <a href="https://profiles.ihe.net/ITI/MHD/ITI-68.html">MHD's Retrieve Document transaction [ITI-68]</a>.  It can be used to verify the contents of a DDCC Immunization event.
+  </p>
 
   {% include retrieve_health_certificate.svg %}
   
   <h4 id="retrieve-health-certificate-trigger"> Trigger Event</h4>  
+  <p>
   The Retrieve Health Certificate may be initiated by:
   <ol>
     <li> a <a href="actors.html#verifier">Verifier</a> wishing to validate and verify a DDCC</li>
     <li> a <a href="actors.html#digital-health-solution">Digital Health Solution</a> wishing to retrieve a DDCC for continuity of care</li>
   </ol>
+  </p>
 
   
   <h3 id="retrieve-health-folder"> Retrieve Health Folder</h3>  
+  <p>
   The Retrieve Health Folder transaction is used in the Digital-Online context and is used for the retrieval and optional verification of DDCC contained in the <a href="StructureDefinition-DDCCFolder.html">DDCC Folder</a>.
+  </p>
 
-  The Retrieve Health Folder transaction may be initiated by a <a href="actors.html#verifier">Verifier</a> or <a href="actors.html#digital-health-solution">Digital Health Solution</a> against the <a href="actors.html#ddcc-registry">DDCC Registry Service</a> in a jursidicition particpating in the Digital-Online scenario.
+  <p>
+  The Retrieve Health Folder transaction may be initiated by a <a href="actors.html#verifier">Verifier</a> or <a href="actors.html#digital-health-solution">Digital Health Solution</a> against the <a href="actors.html#ddcc-registry">DDCC:VS Registry Service</a> in a jursidicition particpating in the Digital-Online scenario.
+  </p>
 
-
-	  The Retrieve Health Folder transaction is based on <a href="https://profiles.ihe.net/ITI/MHD/ITI-66.html">MHD's Find Document Lists transaction [ITI-66]</a>.  It can be used to find a DDCC Folder for a DDCC Patient with all the Immunization events.
+  <p>
+  The Retrieve Health Folder transaction is based on <a href="https://profiles.ihe.net/ITI/MHD/ITI-66.html">MHD's Find Document Lists transaction [ITI-66]</a>.  It can be used to find a DDCC Folder for a DDCC Patient with all the Immunization events.
+  </p>
 
   {% include retrieve_health_folder.svg %}
   
   <h4 id="retrieve-health-folder-trigger"> Trigger Event</h4>  
+  <p>
   The Retrieve Health Folder may be initiated by:
   <ol>
     <li> a <a href="actors.html#verifier">Verifier</a> wishing to validate and verify content of a DDCC</li>
-    <li> a <a href="actors.html#digital-health-solution">Digital Health Solution</a> wishing to retrieve a DDCC for continuity of care</li>
+    <li> a <a href="actors.html#digital-health-solution">Digital Health Solution</a> wishing to find a DDCC to update during a <a href="#submit-health-event">Submit Health Event transaction</a></li>
   </ol>
+  </p>
 
 </div>
 
