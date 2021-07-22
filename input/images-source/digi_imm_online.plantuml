@@ -9,11 +9,15 @@ actor "Subject of Care" as SOC
 actor "DDCC Holder" as Holder
 actor "Vaccinator" as Vaxer
 actor "Data Entry Personnel" as DEP
-Participant "Digital Health Solution" as DHS
 Participant "Paper\nRegistry" as PaperReg
-Participant "DDCC Certificate\nGenerator" as CertGen
-Participant "Shared Health\nRecord" as SHR
-Participant "DDCC\nRegistry" as DDCCReg
+Participant "Digital\nHealth\nSolution" as DHS
+Participant "DDCC:VS\nGeneration\nService" as CertGen
+Participant "Shared\nHealth\nRecord" as SHR
+Participant "DDCC:VS\nRegistry\nService" as DDCCReg
+Participant "DDCC:VS\nRepository\nService" as DDCCRepo
+
+
+
 
 autonumber 1.1.1
 
@@ -32,11 +36,25 @@ autonumber 1.1.1
 
     Vaxer->Holder:  record immunization event\nin Paper DDCC 
     Vaxer->DHS: record immunization\nevent details
-    DHS->CertGen: send immunization event\ndetails as unsigned\nQR UVCEI
-    CertGen->DHS: return signed QR UVCEI
-    DHS->DHS: store QR UVCEI in\nSubect of Care's record
+    DHS->CertGen: send immunization\nevent details
+    CertGen->CertGen: Generate DDCC\nDocument
+    opt Generate 2D Barcode
+      CertGen->CertGen: Generate 2D Barcode
+      CertGen->CertGen: Add 2D Barcode to\nDDCC Document
+    end
+    CertGen->CertGen: Sign DDCC Document
+    opt Has DDCC:VS Registry
+	 opt Has DDCC:VS Repository
+	   CertGen->DDCCRepo: upload DDCC Document
+	 end
+   	 CertGen->DDCCReg: upload DDCC Bundle
+    end
+    CertGen->DHS: return signed\nDDCC Document
+
+    DHS->DHS: store signed DDCC\nDocument in\nSubect of Care's record
+
     opt Can Print QR Stickers
-         Vaxer->Vaxer: Print QR code sticker\nfrom signed UVCEI
+         Vaxer->Vaxer: Print QR code sticker\nfrom signed DDCC Document
  	 Vaxer->Holder: Place QR code\nsticker on DDCC
     end	
 
@@ -44,16 +62,10 @@ autonumber 1.1.1
    deactivate Holder
    deactivate SOC
    deactivate Vaxer
-
-
    
 
-   alt  Has Shared Health Record
+   opt  Has Shared Health Record
 	DHS->SHR: upload IPS Bundle
-	SHR->SHR: $transform IPS Bundle to DDCC Bundle
-	SHR->DDCCReg: upload DDCC Bundle
-   else Has DDCC Registry
-   	DHS->DDCCReg: upload DDCC Bundle
    end
 
 

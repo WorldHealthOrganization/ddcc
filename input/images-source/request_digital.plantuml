@@ -7,15 +7,20 @@ hide footbox
 
 actor "Public\nHealth\nAuthority" as PHA
 Participant "Verifier" 
-Participant "DDCC\nRegistry\nSerice" as DDCCReg
+Participant "DDCC:VS\nRegistry\nSerice" as DDCCReg
+Participant "DDCC:VS\nRepository\nSerice" as DDCCRepo
 
 autonumber 1.1.1
 
-Verifier -> DDCCReg: request current Digital DDCC with a given Composition identifier
-DDCCReg->DDCCReg: search list of reserved\nidentifiers for the requested\ncomposition identifier
-    alt Composition Identifier Found
-    	DDCCReg->Verifier: Return DDCC document bundle
-    else Composition Identifier Not Found
+Verifier -> DDCCReg: request current Digital DDCC with a given identifier
+DDCCReg->DDCCReg: search list of reserved\nidentifiers for the requested\nidentifier
+    alt DDCC Folder Found
+    	DDCCReg->Verifier: Return DDCC Folder
+	opt DDCC:VS Repository exists
+	  Verifier->DDCCRepo: Request DDCC Document
+	  DDCCRepo->Verifier: Return DDCC Document
+	end
+    else DDCC Folder Not Found
      	 DDCCReg->Verifier: Return error condition
     end
 
