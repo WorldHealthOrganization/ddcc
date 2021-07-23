@@ -177,7 +177,7 @@ Usage:          #definition
 * differential.element[=].max = "1"
 * differential.element[=].type[+].code = #Coding
 * differential.element[=].binding.strength = #preferred
-* differential.element[=].binding.valueSet = $ICD11
+* differential.element[=].binding.valueSet = "https://worldhealthorganization.github.io/ddcc/ValueSet/who-ddcc-disease-targeted-covid-19"
 
 * differential.element[+].id = "DDCCCoreDataSet.vaccination.nextDose"
 * differential.element[=].path = "DDCCCoreDataSet.vaccination.nextDose"

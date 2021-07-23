@@ -4,18 +4,6 @@ Alias: $LOINC = http://loinc.org
 Alias: SCT = http://snomed.info/sct
 
 
-ValueSet:      WHO_DDCC_Vaccinable_Conditions
-Id:	       who-ddcc-vaccinable-conditions
-Title:	       "WHO List of Vaccinable Conditions"
-Description:   """
-The WHO Vaccinable Conditions List from [ICD 11](https://icd.who.int/browse11) is used by:
- *  the [DDCC Immunization](StructureDefinition-DDCCImmunization.html) 
- 
-""" 
-* ^status = #draft
-* include $ICD11#RA01.0 "COVID-19, virus identified"
-* include $ICD11#RA01.1 "COVID-19, virus not identified"
-
 ValueSet:      WHO_DDCC_Vaccines
 Id:	       who-ddcc-vaccines
 Title:	       "WHO Vaccine List"
