@@ -13,9 +13,11 @@ Immunization resource.
 * extension contains DDCCVaccineBrand named vaccineBrand 1..1 MS
             and DDCCVaccineMarketAuthorization named vaccineMarketAuthorization 0..1 MS
             and DDCCCountryOfVaccination named country 1..1 MS
+	    and DDCCVaccineValidFrom named validFrom 0..1 MS
 * extension[DDCCVaccineBrand] ^label = "Vaccine brand"
 * extension[DDCCVaccineMarketAuthorization] ^label = "Vaccine market authorization holder"
 * extension[DDCCCountryOfVaccination] ^label = "Country of vaccination"
+* extension[DDCCVaccineValidFrom] ^label = "Vaccination valid from"
 * vaccineCode 1..1 MS
 * vaccineCode ^label = "Vaccine or prophylaxis"
 * vaccineCode.coding ^slicing.discriminator.type = #value
@@ -85,6 +87,15 @@ Description:    "DDCC Country Of Vaccination for Immunization"
 * value[x] only code
 * valueCode 1..1 MS
 * valueCode from 	http://hl7.org/fhir/ValueSet/iso3166-1-3 (preferred)
+
+Extension:      DDCCVaccineValidFrom
+Id:             DDCCVaccineValidFrom
+Title:          "DDCC Vaccine Valid From"
+Description:    "Date upon which provided vaccination is considered valid"
+* ^context.type = #element
+* ^context.expression = "DDCCImmunization"
+* value[x] only dateTime
+* valueDateTime 1..1 MS
 
 
 Profile:        DDCCImmunizationRecommendation
