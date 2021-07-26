@@ -1,13 +1,13 @@
-Instance:       DDCCCoreDataSet
+Instance:       DDCCCoreDataSetPoV
 InstanceOf:     StructureDefinition
-Description:    "Data elements for the DDCC Core Data Set."
-Title:          "DDCC Core Data Set Logical Model"
+Description:    "Data elements for the DDCC Core Data Set - Proof of Vaccination."
+Title:          "DDCC Core Data Set - Proof of Vaccination Logical Model"
 Usage:          #definition
 
-* id = "DDCCCoreDataSet"
-* name = "DDCCCoreDataSet"
-* description = "DDCC Core Data elements."
-* url = "http://worldhealthorganization.github.io/ddcc/DDCCCoreDataSet"
+* id = "DDCCCoreDataSetPoV"
+* name = "DDCCCoreDataSetPoV"
+* description = "DDCC Core Data - Proof of Vaccination elements."
+* url = "http://worldhealthorganization.github.io/ddcc/DDCCCoreDataSetPoV"
 * version = "RC2"
 * kind = #logical
 * abstract = false
@@ -77,7 +77,7 @@ Usage:          #definition
 * differential.element[=].max = "1"
 * differential.element[=].type[+].code = #Coding
 * differential.element[=].binding.strength = #preferred
-* differential.element[=].binding.valueSet = "https://worldhealthorganization.github.io/ddcc/ValueSet/who-ddcc-vaccines"
+* differential.element[=].binding.valueSet = "https://worldhealthorganization.github.io/ddcc/ValueSet/who-ddcc-vaccines-covid-19"
 
 * differential.element[+].id = "DDCCCoreDataSet.vaccination.brand"
 * differential.element[=].path = "DDCCCoreDataSet.vaccination.brand"
@@ -149,7 +149,7 @@ Usage:          #definition
 * differential.element[=].path = "DDCCCoreDataSet.vaccination.centre"
 * differential.element[=].short = "Administering centre"
 * differential.element[=].definition = "The name or identifier of the vaccination facility responsible for providing the vaccination."
-* differential.element[=].min = 1
+* differential.element[=].min = 0
 * differential.element[=].max = "1"
 * differential.element[=].type[+].code = #string
 
@@ -177,7 +177,7 @@ Usage:          #definition
 * differential.element[=].max = "1"
 * differential.element[=].type[+].code = #Coding
 * differential.element[=].binding.strength = #preferred
-* differential.element[=].binding.valueSet = $ICD11
+* differential.element[=].binding.valueSet = "https://worldhealthorganization.github.io/ddcc/ValueSet/who-ddcc-disease-targeted-covid-19"
 
 * differential.element[+].id = "DDCCCoreDataSet.vaccination.nextDose"
 * differential.element[=].path = "DDCCCoreDataSet.vaccination.nextDose"
@@ -240,6 +240,32 @@ Usage:          #definition
 * differential.element[=].path = "DDCCCoreDataSet.certificate.version"
 * differential.element[=].short = "Certificate schema version"
 * differential.element[=].definition = ""
+* differential.element[=].min = 1
+* differential.element[=].max = "1"
+* differential.element[=].type[+].code = #string
+
+Instance:       DDCCCoreDataSetCoC
+InstanceOf:     StructureDefinition
+Description:    "Data elements for the DDCC Core Data Set - Continuity of Care."
+Title:          "DDCC Core Data Set - Continuity of Care Logical Model"
+Usage:          #definition
+
+* id = "DDCCCoreDataSetCoC"
+* name = "DDCCCoreDataSetCoC"
+* description = "DDCC Core Data - Continuity of Care elements."
+* url = "http://worldhealthorganization.github.io/ddcc/DDCCCoreDataSetCoC"
+* version = "RC2"
+* kind = #logical
+* abstract = false
+* status = #draft
+* type = "DDCCCoreDataSet"
+* baseDefinition = "http://worldhealthorganization.github.io/ddcc/DDCCCoreDataSetPoV"
+* derivation = #specialization
+
+* differential.element[+].id = "DDCCCoreDataSet.vaccination.centre"
+* differential.element[=].path = "DDCCCoreDataSet.vaccination.centre"
+* differential.element[=].short = "Administering centre"
+* differential.element[=].definition = "The name or identifier of the vaccination facility responsible for providing the vaccination."
 * differential.element[=].min = 1
 * differential.element[=].max = "1"
 * differential.element[=].type[+].code = #string
