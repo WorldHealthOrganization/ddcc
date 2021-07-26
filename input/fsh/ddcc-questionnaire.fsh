@@ -91,6 +91,11 @@ Usage: #definition
 * item[=].type = #date
 * item[=].required = true
 
+* item[+].linkId = "vaccine_valid"
+* item[=].text = "Vaccination valid from"
+* item[=].type = #date
+* item[=].required = false
+
 * item[+].linkId = "dose"
 * item[=].text = "Dose number"
 * item[=].type = #integer
@@ -132,8 +137,8 @@ Usage: #definition
 * item[=].type = #string
 * item[=].required = true
 
-* item[+].linkId = "paperid"
-* item[=].text = "Certificate identifier"
+* item[+].linkId = "hcid"
+* item[=].text = "Health certificate identifier"
 * item[=].type = #string
 * item[=].required = true
 
@@ -194,6 +199,9 @@ Usage:        #example
 * item[+].linkId = "date"
 * item[=].answer.valueDate = "2021-04-05"
 
+* item[+].linkId = "vaccine_valid"
+* item[=].answer.valueDate = "2021-04-19"
+
 * item[+].linkId = "dose"
 * item[=].answer.valueInteger = 1
 
@@ -218,7 +226,7 @@ Usage:        #example
 * item[+].linkId = "pha"
 * item[=].answer.valueString = "dPD2PfwzBQyphcjeUiAdRP"
 
-* item[+].linkId = "paperid"
+* item[+].linkId = "hcid"
 * item[=].answer.valueString = "bMlJkAt0V92RYhhG3fNt"
 
 * item[+].linkId = "valid_from"

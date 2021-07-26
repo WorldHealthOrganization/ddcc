@@ -30,7 +30,7 @@ Generate one or more signed QR Codes based on a [DDCC QuestionnaireResponse](Str
 * parameter[=].documentation = "The questionnaire response resource id used to generate the QR code."
 * parameter[=].type = #id
 
-* parameter[+].name = #shc
+* parameter[+].name = #hc
 * parameter[=].use = #out
 * parameter[=].min = 0
 * parameter[=].max = "1"

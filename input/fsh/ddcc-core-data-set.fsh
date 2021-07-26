@@ -119,6 +119,14 @@ Usage:          #definition
 * differential.element[=].max = "1"
 * differential.element[=].type[+].code = #date
 
+* differential.element[+].id = "DDCCCoreDataSet.vaccination.valid_from"
+* differential.element[=].path = "DDCCCoreDataSet.vaccination.valid_from"
+* differential.element[=].short = "Vaccination valid from"
+* differential.element[=].definition = "Date upon which provided vaccination is considered valid."
+* differential.element[=].min = 0
+* differential.element[=].max = "1"
+* differential.element[=].type[+].code = #date
+
 * differential.element[+].id = "DDCCCoreDataSet.vaccination.dose"
 * differential.element[=].path = "DDCCCoreDataSet.vaccination.dose"
 * differential.element[=].short = "Dose number"
@@ -187,6 +195,30 @@ Usage:          #definition
 * differential.element[=].max = "1"
 * differential.element[=].type[+].code = #date
 
+* differential.element[+].id = "DDCCCoreDataSet.vaccination.period"
+* differential.element[=].path = "DDCCCoreDataSet.vaccination.period"
+* differential.element[=].short = "Certificate Validity Period"
+* differential.element[=].definition = ""
+* differential.element[=].min = 0
+* differential.element[=].max = "1"
+* differential.element[=].type[+].code = #Period
+
+* differential.element[+].id = "DDCCCoreDataSet.vaccination.period.start"
+* differential.element[=].path = "DDCCCoreDataSet.vaccination.period.start"
+* differential.element[=].short = "Certificate valid from"
+* differential.element[=].definition = ""
+* differential.element[=].min = 0
+* differential.element[=].max = "1"
+* differential.element[=].type[+].code = #date
+
+* differential.element[+].id = "DDCCCoreDataSet.vaccination.period.end"
+* differential.element[=].path = "DDCCCoreDataSet.vaccination.period.end"
+* differential.element[=].short = "Certificate valid until"
+* differential.element[=].definition = ""
+* differential.element[=].min = 0
+* differential.element[=].max = "1"
+* differential.element[=].type[+].code = #date
+
 * differential.element[+].id = "DDCCCoreDataSet.certificate"
 * differential.element[=].path = "DDCCCoreDataSet.certificate"
 * differential.element[=].short = "Certificate Metadata"
@@ -204,37 +236,13 @@ Usage:          #definition
 * differential.element[=].type[+].code = #Reference
 * differential.element[=].type[=].targetProfile = "https://worldhealthorganization.github.io/ddcc/StructureDefinition/shc-organization"
 
-* differential.element[+].id = "DDCCCoreDataSet.certificate.identifier"
-* differential.element[=].path = "DDCCCoreDataSet.certificate.identifier"
-* differential.element[=].short = "Certificate identifier"
+* differential.element[+].id = "DDCCCoreDataSet.certificate.hcid"
+* differential.element[=].path = "DDCCCoreDataSet.certificate.hcid"
+* differential.element[=].short = "Health certificate identifier (HCID)"
 * differential.element[=].definition = ""
 * differential.element[=].min = 1
 * differential.element[=].max = "1"
 * differential.element[=].type[+].code = #Identifier
-
-* differential.element[+].id = "DDCCCoreDataSet.certificate.period"
-* differential.element[=].path = "DDCCCoreDataSet.certificate.period"
-* differential.element[=].short = "Certificate Validity Period"
-* differential.element[=].definition = ""
-* differential.element[=].min = 0
-* differential.element[=].max = "1"
-* differential.element[=].type[+].code = #Period
-
-* differential.element[+].id = "DDCCCoreDataSet.certificate.period.start"
-* differential.element[=].path = "DDCCCoreDataSet.certificate.period.start"
-* differential.element[=].short = "Certificate valid from"
-* differential.element[=].definition = ""
-* differential.element[=].min = 0
-* differential.element[=].max = "1"
-* differential.element[=].type[+].code = #date
-
-* differential.element[+].id = "DDCCCoreDataSet.certificate.period.end"
-* differential.element[=].path = "DDCCCoreDataSet.certificate.period.end"
-* differential.element[=].short = "Certificate valid until"
-* differential.element[=].definition = ""
-* differential.element[=].min = 0
-* differential.element[=].max = "1"
-* differential.element[=].type[+].code = #date
 
 * differential.element[+].id = "DDCCCoreDataSet.certificate.version"
 * differential.element[=].path = "DDCCCoreDataSet.certificate.version"
