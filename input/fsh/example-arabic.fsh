@@ -1,39 +1,41 @@
 Alias: $ICD11 = http://id.who.int/icd11/mms
 
-Instance:     SHC-Patient-Arabic
-InstanceOf:   SHC_Patient
+Instance:     DDCC-Patient-Arabic
+InstanceOf:   DDCCPatient
 Usage:        #example
 // Title: ""
 // Description: ""
 * name[+].text = "أولوس أجيريوس"
 * birthDate = "2003-03-03"
 
-Instance: SHC-Organization-Arabic
-InstanceOf: SHC_Organization
+Instance: DDCC-Organization-Arabic
+InstanceOf: DDCCOrganization
 Usage: #example
 // Title: ""
 // Description: ""
 * name = "مستشفى حكومي"
 
-Instance: SVC-Immunization-Arabic
-InstanceOf: SVC_Immunization
+Instance: DDCC-Immunization-Arabic
+InstanceOf: DDCCImmunization
 Usage: #example
 // Title: ""
 // Description: ""
 * status = #completed
 // 
-* identifier[SVC_Identifier].system = "https://who-int.github.io/svc/refs/heads/rc2/test_system"
-* identifier[SVC_Identifier].value = "123"
-* vaccineCode.coding[svcVaccine].system = "urn:EXAMPLE-who-:smart:vaccine-certificate:RC1:coding"
-* vaccineCode.coding[svcVaccine].code = #XM0CX4
+* extension[vaccineBrand].valueCoding.system = "urn:EXAMPLE-who-:smart:vaccine-certificate:RC1:coding"
+* extension[vaccineBrand].valueCoding.code = #TEST
+* extension[country].valueCode = #SAU
+* vaccineCode.coding[ddccVaccine].system = "urn:EXAMPLE-who-:smart:vaccine-certificate:RC1:coding"
+* vaccineCode.coding[ddccVaccine].code = #XM0CX4
 // 
 * expirationDate = "2021-06-30"
 * lotNumber = "123"
-* patient = Reference(SHC-Patient-Arabic)
+* patient = Reference(DDCC-Patient-Arabic)
+* location.display = "موقع التطعيم"
 * occurrenceDateTime =  "2021-02-02"
-* performer.actor = Reference(SHC-Organization-Arabic)
+* performer.actor = Reference(DDCC-Organization-Arabic)
 // 
-* protocolApplied[protocolAppliedAuthority].authority = Reference(SHC-Organization-Arabic)
+* protocolApplied[protocolAppliedAuthority].authority = Reference(DDCC-Organization-Arabic)
 * protocolApplied[protocolAppliedAuthority].targetDisease = $ICD11#RA01.0
 * protocolApplied[protocolAppliedAuthority].doseNumberPositiveInt = 1
 * protocolApplied[protocolAppliedAuthority].seriesDosesPositiveInt = 2
@@ -43,17 +45,17 @@ InstanceOf: Bundle
 Usage: #example
 
 * type = #transaction
-* entry[+].fullUrl = "http://www.example.org/fhir/Patient/SHC-Patient-Arabic"
+* entry[+].fullUrl = "http://www.example.org/fhir/Patient/DDCC-Patient-Arabic"
 * entry[=].request.url = "Patient"
 * entry[=].request.method = #PUT
-* entry[=].resource = SHC-Patient-Arabic
+* entry[=].resource = DDCC-Patient-Arabic
 
-* entry[+].fullUrl = "http://www.example.org/fhir/Patient/SHC-Organization-Arabic"
+* entry[+].fullUrl = "http://www.example.org/fhir/Patient/DDCC-Organization-Arabic"
 * entry[=].request.url = "Organization"
 * entry[=].request.method = #PUT
-* entry[=].resource = SHC-Organization-Arabic
+* entry[=].resource = DDCC-Organization-Arabic
 
-* entry[+].fullUrl = "http://www.example.org/fhir/Patient/SVC-Immunization-Arabic"
+* entry[+].fullUrl = "http://www.example.org/fhir/Patient/DDCC-Immunization-Arabic"
 * entry[=].request.url = "Immunization"
 * entry[=].request.method = #PUT
-* entry[=].resource = SVC-Immunization-Arabic
+* entry[=].resource = DDCC-Immunization-Arabic
