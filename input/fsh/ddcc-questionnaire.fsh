@@ -170,7 +170,7 @@ Usage:        #example
 * authored = "2021-04-01"
 
 * item[+].linkId = "name"
-* item[=].answer.valueString = "Felix Cat"
+* item[=].answer.valueString = "Aulus Agerius"
 
 * item[+].linkId = "birthDate"
 * item[=].answer.valueDate = "2003-03-03"

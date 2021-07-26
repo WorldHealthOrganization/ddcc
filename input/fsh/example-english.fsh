@@ -5,8 +5,8 @@ InstanceOf:   DDCCPatient
 Usage:        #example
 // Title: ""
 // Description: ""
-* name[+].text = "Felix Cat"
-* birthDate = "2000-01-02"
+* name[+].text = "Aulus Agerius"
+* birthDate = "2003-03-03"
 
 Instance: DDCC-Organization-English
 InstanceOf: DDCCOrganization
