@@ -1,6 +1,6 @@
 Instance:       DDCCGenerateHealthCertificate
 InstanceOf:     OperationDefinition
-Title:          "OperationDefinition for generating a health certificate QR code that is signed."
+Title:          "OperationDefinition for generating a health certificate (DDCC) that is signed."
 Usage:          #definition
 * id = "DDCC-QuestionnaireResponse-generateHealthCertificate"
 * name = "QuestionnaireResponse Generate Health Certificate"
@@ -9,7 +9,7 @@ Usage:          #definition
 * experimental = true
 * date = "2021-06-03"
 * description = """
-Generate one or more signed QR Codes based on a [DDCC QuestionnaireResponse](StructureDefinition-DDCCQuestionnaireResponse.html)
+Generate one or more signed DDCC Documents based on a [DDCC QuestionnaireResponse](StructureDefinition-DDCCQuestionnaireResponse.html)
 """
 * code = #generateHealthCertificate
 * resource = #QuestionnaireResponse
@@ -20,15 +20,29 @@ Generate one or more signed QR Codes based on a [DDCC QuestionnaireResponse](Str
 * parameter[=].use = #in
 * parameter[=].min = 0
 * parameter[=].max = "1"
-* parameter[=].documentation = "The questionnaire response resource used to generate the QR code."
+* parameter[=].documentation = "The questionnaire response resource used to generate the DDCC Document.  Can only use one of response, id, or immunization."
 * parameter[=].type = #QuestionnaireResponse
 
 * parameter[+].name = #id
 * parameter[=].use = #in
 * parameter[=].min = 0
 * parameter[=].max = "1"
-* parameter[=].documentation = "The questionnaire response resource id used to generate the QR code."
+* parameter[=].documentation = "The questionnaire response resource id used to generate the DDCC Document.  Can only use one of response, id, or immunization."
 * parameter[=].type = #id
+
+* parameter[+].name = #immunization
+* parameter[=].use = #in
+* parameter[=].min = 0
+* parameter[=].max = "1"
+* parameter[=].documentation = "The Immunization resource generate the DDCC Document. Required with hcid parameter.  Can only use one of response, id, or immunization."
+* parameter[=].type = #reference
+
+* parameter[+].name = #hcid
+* parameter[=].use = #in
+* parameter[=].min = 0
+* parameter[=].max = "1"
+* parameter[=].documentation = "The HCID used to generate the DDCC Document.  Required with immunization parameter."
+* parameter[=].type = #string
 
 * parameter[+].name = #return
 * parameter[=].use = #out
