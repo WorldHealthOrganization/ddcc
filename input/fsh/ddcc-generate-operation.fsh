@@ -35,7 +35,7 @@ Generate one or more signed DDCC Documents based on a [DDCC QuestionnaireRespons
 * parameter[=].min = 0
 * parameter[=].max = "1"
 * parameter[=].documentation = "The Immunization resource generate the DDCC Document. Required with hcid parameter.  Can only use one of response, id, or immunization."
-* parameter[=].type = #reference
+* parameter[=].type = #Reference
 
 * parameter[+].name = #hcid
 * parameter[=].use = #in
