@@ -43,18 +43,15 @@ Instance: Example-English
 InstanceOf: Bundle
 Usage: #example
 
-* type = #transaction
+* type = #document
+//* entry[+].fullUrl = "https://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCComposition"
+//* entry[=].resource = DDCCComposition
+
 * entry[+].fullUrl = "http://www.example.org/fhir/Patient/DDCC-Patient-English"
-* entry[=].request.url = "Patient"
-* entry[=].request.method = #PUT
 * entry[=].resource = DDCC-Patient-English
 
 * entry[+].fullUrl = "http://www.example.org/fhir/Patient/DDCC-Organization-English"
-* entry[=].request.url = "Organization"
-* entry[=].request.method = #PUT
 * entry[=].resource = DDCC-Organization-English
 
 * entry[+].fullUrl = "http://www.example.org/fhir/Patient/DDCC-Immunization-English"
-* entry[=].request.url = "Immunization"
-* entry[=].request.method = #PUT
 * entry[=].resource = DDCC-Immunization-English
