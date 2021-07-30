@@ -65,8 +65,8 @@ Usage:          #definition
 * differential.element[=].type[+].code = #BackboneElement
 * differential.element[=].constraint[+].key = "who-ddcc-data-1"
 * differential.element[=].constraint[=].severity = #error
-* differential.element[=].constraint[=].human = "Manufacturer or Marketer SHALL be present"
-* differential.element[=].constraint[=].expression = "manufacturer.exists() or marketer.exists()"
+* differential.element[=].constraint[=].human = "Manufacturer or Market Authorization Holder SHALL be present"
+* differential.element[=].constraint[=].expression = "manufacturer.exists() or maholder.exists()"
 
 
 * differential.element[+].id = "DDCCCoreDataSet.vaccination.vaccine"
@@ -95,8 +95,8 @@ Usage:          #definition
 * differential.element[=].max = "1"
 * differential.element[=].type[+].code = #Coding
 
-* differential.element[+].id = "DDCCCoreDataSet.vaccination.marketer"
-* differential.element[=].path = "DDCCCoreDataSet.vaccination.marketer"
+* differential.element[+].id = "DDCCCoreDataSet.vaccination.maholder"
+* differential.element[=].path = "DDCCCoreDataSet.vaccination.maholder"
 * differential.element[=].short = "Vaccine market authorization holder"
 * differential.element[=].definition = "Name of the market authorization holder of the vaccine received. If market authorization holder is unknown, vaccine manufacturer is REQUIRED."
 * differential.element[=].min = 0

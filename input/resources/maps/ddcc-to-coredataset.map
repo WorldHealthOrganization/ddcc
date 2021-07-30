@@ -2,6 +2,8 @@ map "http://who-int.github.io/svc/StructureMap/ddcc-to-coredataset" = "ddcc-to-c
 
 uses "https://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCComposition" alias DDCC as source
 uses "http://hl7.org/fhir/StructureDefinition/Bundle" alias Bundle as source
+uses "https://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCComposition" alias DDCCComposition as source
+uses "https://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCOrganization" alias DDCCOrganization as source
 uses "http://worldhealthorganization.github.io/ddcc/DDCCCoreDataSetPoV" alias DDCCCoreDataSetPoV as target
 
 
@@ -19,7 +21,7 @@ group Decode_DDCC_to_QR (
 
 	ddcc.entry as entry then {
  	     entry.resource : Immunization as immunization
-	     then  Decode_Immunization_To_QR(immunization,qr) "Immunization";
+	     then  Decode_Immunization_To_QR(ddcc,immunization,qr) "Immunization";
 	};
 
 }
@@ -38,24 +40,31 @@ group Decode_Patient_To_QR(
 
 
 group Decode_Immunization_To_QR(
+      source ddcc: Bundle,
       source immunization: Immunization,
       target qr : DDCCCoreDataSetPoV
       ) {
         immunization ->
-	   qr.vaccination = create('BackboneElement') as vaccination then {	   
+	   qr.vaccination = create('BackboneElement') as vacEvent then {	   
 	   	immunization.protocolApplied as protocol then {
-			     protocol.doseNumberPositiveInt as dose -> vaccination.dose = dose;
+			     protocol.doseNumberPositiveInt as dose -> vacEvent.dose = dose;
+        		     protocol.seriesDoesePositiveInt as doseNum -> vacEvent.totalDoses = doseNum;
+			     protocol.targetDisease as targetDisease 		     then {		     
+			     	     	 targetDisease.valueCodableConcept as valueCodableConcept ->
+					     	    vacEvent.disease = valueCodableConcept;
+					 } "Target Disease";
 			             };
 
-                immunization.occurrenceDateTime as date -> vaccination.date = date;
-
+                immunization.occurrenceDateTime as date -> vacEvent.date = date;
+		
+		// TODO: need to populate vacEvent.maholder 
 
 
 		immunization.extension as country
 		     where (url = 'https://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCountryOfVaccination')
 		     then {
 		         country.valueCode as code ->
-			       vaccination.country =  create('Coding') as coding,
+			       vacEvent.country =  create('Coding') as coding,
 			       coding.code = code,
 			       coding.system = 'http://hl7.org/fhir/ValueSet/iso3166-1-3';			       
 			 
@@ -64,15 +73,23 @@ group Decode_Immunization_To_QR(
 		immunization.extension as brand
 		     where ( url = 'https://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCVaccineBrand')
 		     then {		     
-		     	 brand.valueCoding as valueCoding ->
-		    	    vaccination.brand = valueCoding;
+		     	 brand.valueCoding as valueCoding ->  vacEvent.brand = valueCoding;
 		     } "Vaccine Brand";
 		     
 		immunization.vaccineCode as vaccineCode then {
-			     vaccineCode.coding as coding -> vaccination.vaccine = coding;
+			     vaccineCode.coding as coding -> vacEvent.vaccine = coding;
 		    } "Vaccine Code";
+		    
+		ddcc.entry as entry then {
+		     entry.resource : DDCCOrganization as organization ->  vacEvent.centre =  organization.name ;
+		} "Vaccination Centre";
+
+		ddcc.entry as entry then {
+	             entry.resource : DDCCComposition as composition ->  vacEvent.identifier = composition.identifier; 
+		} "Vaccincation Event";	      
 
 	} "Vaccination";
 
-};
+}
+
 
