@@ -75,11 +75,19 @@ curl --request POST "$HOST/StructureMap/\$transform?source=http://who-int.github
 
 #EU DCC LM for QR
 
-#curl -sS http://build.fhir.org/ig/hl7-eu/dgc/branches/master/StructureDefinition-HC1.json > StructureDefinition-HC1.json
+echo "Rertrieving EU DCC LMs"
+curl -sS http://build.fhir.org/ig/hl7-eu/dgc/branches/master/StructureDefinition-HC1.json > StructureDefinition-HC1.json
+curl -sS http://build.fhir.org/ig/hl7-eu/dcc/branches/master/StructureDefinition-v.json > StructureDefinition-HC1-v.json
 
-#curl  --request PUT $HOST/StructureDefinition/HC1  \
-#      --data-binary @StructureDefinition-HC1.json \
-#      -H "Accept: application/fhir+json"  -H "Content-Type: application/fhir+json " 
+
+echo "Posting EU DCC LMs"
+curl  --request PUT $HOST/StructureDefinition/HC1  \
+      --data-binary @StructureDefinition-HC1.json \
+      -H "Accept: application/fhir+json"  -H "Content-Type: application/fhir+json " 
+
+curl  --request PUT $HOST/StructureDefinition/v  \
+      --data-binary @StructureDefinition-HC1-v.json \
+      -H "Accept: application/fhir+json"  -H "Content-Type: application/fhir+json " 
 
 
 
