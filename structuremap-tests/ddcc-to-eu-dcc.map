@@ -1,0 +1,41 @@
+map "http://who-int.github.io/svc/StructureMap/ddcc-to-eu-dcc" = "ddcc-to-eu-dcc"
+
+uses "https://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCComposition" alias DDCC as source
+uses "http://hl7.org/fhir/StructureDefinition/Bundle" alias Bundle as source
+uses "http://hl7.eu/fhir/ig/dcc/StructureDefinition/HC1" alias EUDCC as target
+
+
+group Decode_DDCC_to_QR (
+	source ddcc: Bundle,
+	target qr : EUDCC
+	){
+
+	ddcc.entry as entry then {
+ 	     entry.resource : Patient as patient
+	     then  Decode_Patient_To_QR(patient,qr) "Patient";
+	};
+
+
+
+	ddcc.entry as entry then {
+ 	     entry.resource : Immunization as immunization
+	     then  Decode_Immunization_To_QR(immunization,qr) "Immunization";
+	};
+
+}
+
+group Decode_Patient_To_QR(
+      source patient: Patient,
+      target qr  : EUDCC
+      ) {
+	     		  
+}
+
+
+group Decode_Immunization_To_QR(
+      source immunization: Immunization,
+      target qr : EUDCC
+      ) {
+
+};
+

@@ -16,37 +16,29 @@ curl --request GET $HOST/metadata \
 
 
 
-# curl  --request PUT $HOST/StructureDefinition/DDCCOrganization \
-#       --data-binary @../fsh-generated/resources/StructureDefinition-DDCCOrganization.json \
-#       -H "Accept: application/fhir+json"  -H "Content-Type: application/fhir+json "
+#Preload some structure defintiions for funsies
+curl  --request PUT $HOST/StructureDefinition/DDCCOrganization \
+      --data-binary @../fsh-generated/resources/StructureDefinition-DDCCOrganization.json \
+      -H "Accept: application/fhir+json"  -H "Content-Type: application/fhir+json "
 
-# curl  --request PUT $HOST/StructureDefinition/DDCCImmunizationRecommendation \
-#       --data-binary @../fsh-generated/resources/StructureDefinition-DDCCImmunizationRecommendation.json \
-#       -H "Accept: application/fhir+json"  -H "Content-Type: application/fhir+json " 
-
-
-# curl  --request PUT $HOST/StructureDefinition/DDCCImmunization \
-#       --data-binary @../fsh-generated/resources/StructureDefinition-DDCCImmunization.json \
-#       -H "Accept: application/fhir+json"  -H "Content-Type: application/fhir+json " 
-
-# curl  --request PUT $HOST/StructureDefinition/DDCCDocumentReferenceQR \
-#       --data-binary @../fsh-generated/resources/StructureDefinition-DDCCDocumentReferenceQR.json \
-#       -H "Accept: application/fhir+json"  -H "Content-Type: application/fhir+json " 
+curl  --request PUT $HOST/StructureDefinition/DDCCImmunizationRecommendation \
+      --data-binary @../fsh-generated/resources/StructureDefinition-DDCCImmunizationRecommendation.json \
+      -H "Accept: application/fhir+json"  -H "Content-Type: application/fhir+json " 
 
 
-# curl  --request PUT $HOST/StructureDefinition/DDCCComposition \
-#       --data-binary @../fsh-generated/resources/StructureDefinition-DDCCComposition.json \
-#       -H "Accept: application/fhir+json"  -H "Content-Type: application/fhir+json " 
+curl  --request PUT $HOST/StructureDefinition/DDCCImmunization \
+      --data-binary @../fsh-generated/resources/StructureDefinition-DDCCImmunization.json \
+      -H "Accept: application/fhir+json"  -H "Content-Type: application/fhir+json " 
+
+curl  --request PUT $HOST/StructureDefinition/DDCCDocumentReferenceQR \
+      --data-binary @../fsh-generated/resources/StructureDefinition-DDCCDocumentReferenceQR.json \
+      -H "Accept: application/fhir+json"  -H "Content-Type: application/fhir+json " 
 
 
-# curl  --request PUT $HOST/QuestionnaireResponse/DDCC-VS-QuestionnaireResponse-Example  \
-#       --data-binary @../fsh-generated/resources/QuestionnaireResponse-DDCC-VS-QuestionnaireResponse-Example.json \
-#       -H "Accept: application/fhir+json"  -H "Content-Type: application/fhir+json "
+curl  --request PUT $HOST/StructureDefinition/DDCCComposition \
+      --data-binary @../fsh-generated/resources/StructureDefinition-DDCCComposition.json \
+      -H "Accept: application/fhir+json"  -H "Content-Type: application/fhir+json " 
 
-
-# curl  --request PUT $HOST/Bundle/Example-English  \
-#       --data-binary @../fsh-generated/resources/Bundle-Example-English.json \
-#       -H "Accept: application/fhir+json"  -H "Content-Type: application/fhir+json " 
 
 
 #LM for WHO QR
@@ -80,7 +72,7 @@ curl -sS http://build.fhir.org/ig/hl7-eu/dgc/branches/master/StructureDefinition
 curl -sS http://build.fhir.org/ig/hl7-eu/dcc/branches/master/StructureDefinition-v.json > StructureDefinition-HC1-v.json
 
 
-echo "Posting EU DCC LMs"
+echo "Updating EU DCC LMs"
 curl  --request PUT $HOST/StructureDefinition/HC1  \
       --data-binary @StructureDefinition-HC1.json \
       -H "Accept: application/fhir+json"  -H "Content-Type: application/fhir+json " 
@@ -90,4 +82,14 @@ curl  --request PUT $HOST/StructureDefinition/v  \
       -H "Accept: application/fhir+json"  -H "Content-Type: application/fhir+json " 
 
 
+echo "Updating EU DCC LMs"
+curl  --request POST $HOST/StructureMap \
+      --data-binary @ddcc-to-eu-dcc.map \
+      -H "Accept: application/fhir+json"  -H "Content-Type: text/fhir-mapping"
+
+
+echo "Transforming Example DDCC Bundle to EU DCC QR Serialization"
+curl --request POST "$HOST/StructureMap/\$transform?source=http://who-int.github.io/svc/StructureMap/ddcc-to-eu-dcc" \
+     --data-binary @../fsh-generated/resources/Bundle-Example-English.json  \
+      -H "Accept: application/fhir+json"  -H "Content-Type: application/fhir+json"
 
