@@ -3,7 +3,9 @@ map "http://who-int.github.io/svc/StructureMap/ddcc-to-coredataset" = "ddcc-to-c
 uses "https://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCComposition" alias DDCC as source
 uses "http://hl7.org/fhir/StructureDefinition/Bundle" alias Bundle as source
 uses "https://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCComposition" alias DDCCComposition as source
+uses "https://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCVaccineBrand" alias DDCCVaccineBrand as source
 uses "https://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCOrganization" alias DDCCOrganization as source
+uses "https://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCImmunization" alias DDCCImmunization as source
 uses "http://worldhealthorganization.github.io/ddcc/DDCCCoreDataSetPoV" alias DDCCCoreDataSetPoV as target
 
 
@@ -20,7 +22,7 @@ group Decode_DDCC_to_QR (
 
 
 	ddcc.entry as entry then {
- 	     entry.resource : Immunization as immunization
+ 	     entry.resource : DDCCImmunization as immunization
 	     then  Decode_Immunization_To_QR(ddcc,immunization,qr) "Immunization";
 	};
 
@@ -70,7 +72,7 @@ group Decode_Immunization_To_QR(
 			 
 		     } "Country";
 
-		immunization.extension as brand
+		immunization.extension : DDCCBrand as brand 
 		     where ( url = 'https://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCVaccineBrand')
 		     then {		     
 		     	 brand.valueCoding as valueCoding ->  vacEvent.brand = valueCoding;
