@@ -1,4 +1,5 @@
 #!/bin/sh
+set -e
 ### @host = http://localhost:8080/hapi-fhir-jpavalidator/fhir
 ### @host = http://test.ahdis.ch/hapi-fhir-jpavalidator/fhir
 ### @host = https://ehealthsuisse.ihe-europe.net/hapi-fhir-jpavalidator/fhir
@@ -18,7 +19,7 @@ curl --request GET $HOST/metadata \
 
 #Preload some structure defintiions for funsies
 curl  --request PUT $HOST/StructureDefinition/DDCCOrganization \
-      --data-binary @../fsh-generated/resources/StructureDefinition-DDCCOrganization.json \
+      --data-binary  @../fsh-generated/resources/StructureDefinition-DDCCOrganization.json \
       -H "Accept: application/fhir+json"  -H "Content-Type: application/fhir+json "
 
 curl  --request PUT $HOST/StructureDefinition/DDCCImmunizationRecommendation \
@@ -29,6 +30,21 @@ curl  --request PUT $HOST/StructureDefinition/DDCCImmunizationRecommendation \
 curl  --request PUT $HOST/StructureDefinition/DDCCImmunization \
       --data-binary @../fsh-generated/resources/StructureDefinition-DDCCImmunization.json \
       -H "Accept: application/fhir+json"  -H "Content-Type: application/fhir+json " 
+
+
+curl  --request PUT $HOST/StructureDefinition/DDCCPatient \
+      --data-binary @../fsh-generated/resources/StructureDefinition-DDCCPatient.json \
+      -H "Accept: application/fhir+json"  -H "Content-Type: application/fhir+json " 
+
+
+curl  --request PUT $HOST/StructureDefinition/DDCCVaccineBrand \
+      --data-binary @../fsh-generated/resources/StructureDefinition-DDCCVaccineBrand.json \
+      -H "Accept: application/fhir+json"  -H "Content-Type: application/fhir+json " 
+
+curl  --request PUT $HOST/StructureDefinition/DDCCCountryOfVaccination \
+      --data-binary @../fsh-generated/resources/StructureDefinition-DDCCCountryOfVaccination.json \
+      -H "Accept: application/fhir+json"  -H "Content-Type: application/fhir+json " 
+
 
 curl  --request PUT $HOST/StructureDefinition/DDCCDocumentReferenceQR \
       --data-binary @../fsh-generated/resources/StructureDefinition-DDCCDocumentReferenceQR.json \

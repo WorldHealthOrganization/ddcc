@@ -1,7 +1,8 @@
 map "http://who-int.github.io/svc/StructureMap/ddcc-to-coredataset" = "ddcc-to-coredataset"
 
 uses "https://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCComposition" alias DDCC as source
-uses "https://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCDocument"  alias DDCCBundle as source
+uses "https://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCDocument"  alias DDCCDocument as source
+uses "https://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCPatient"  alias DDCCPatient as source
 uses "https://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCComposition" alias DDCCComposition as source
 uses 'https://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCountryOfVaccination' alias DDCCCountryOfVaccination as source
 uses "https://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCVaccineBrand" alias DDCCVaccineBrand as source
@@ -11,28 +12,30 @@ uses "http://worldhealthorganization.github.io/ddcc/DDCCCoreDataSetPoV" alias DD
 
 
 group Decode_DDCC_to_QR (
-	source ddcc: DDCCBundle,
+	source ddcc: DDCCDocument,
 	target qr : DDCCCoreDataSetPoV
 	){
 
-	ddcc.entry as entry then {
- 	     entry.resource : Patient as patient
+
+	ddcc.entry as entry  then {
+// 	     entry.resource : DDCCPatient as patient
+      	     entry.resource : Patient as patient
 	     then  Decode_Patient_To_QR(patient,qr) "Patient";
 	};
 
 
 
-	ddcc.entry as entry then {
-	     entry.resource : Immunization as immunization
+	ddcc.entry as entry  then {
+	     entry.resource : Immunization as immunization log immunization
 //     	     entry.resource : Immunization as immunization where entry.resource.ofType(DDCCImmunization)
-//     	     entry.resource : Immunization as immunization 
+//     	     entry.resource : DDCCImmunization as immunization log immunization
 	     then  Decode_Immunization_To_QR(ddcc,immunization,qr) "Immunization";
 	};
 
 }
 
 group Decode_Patient_To_QR(
-      source patient: Patient,
+      source patient: DDCCPatient,
       target qr  : DDCCCoreDataSetPoV
       ) {
       	patient.birthDate as birthDate ->  qr.birthDate = birthDate;
@@ -45,7 +48,7 @@ group Decode_Patient_To_QR(
 
 
 group Decode_Immunization_To_QR(
-      source ddcc: DDCCBundle,
+      source ddcc : DDCCDocument,
       source immunization: DDCCImmunization,
       target qr : DDCCCoreDataSetPoV
       ) {
@@ -53,7 +56,7 @@ group Decode_Immunization_To_QR(
 	   qr.vaccination = create('BackboneElement') as vacEvent then {	   
 	   	immunization.protocolApplied as protocol then {
 			     protocol.doseNumberPositiveInt as dose -> vacEvent.dose = dose;
-        		     protocol.seriesDoesePositiveInt as doseNum -> vacEvent.totalDoses = doseNum;
+        		     protocol.seriesDosesPositiveInt as doseNum -> vacEvent.totalDoses = doseNum;
 			     protocol.targetDisease as targetDisease 		     then {		     
 			     	     	 targetDisease.valueCodableConcept as valueCodableConcept ->
 					     	    vacEvent.disease = valueCodableConcept;
@@ -65,7 +68,11 @@ group Decode_Immunization_To_QR(
 		// TODO: need to populate vacEvent.maholder 
 
 
-		immunization.extension : DDCCCountryOfVaccination as country
+
+//		immunization.extension : DDCCCountryOfVaccination as country
+		immunization.extension  as country
+		     where ( url = 'https://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCountryOfVaccination')
+
 		     then {
 		         country.valueCode as code ->
 			       vacEvent.country =  create('Coding') as coding,
@@ -74,7 +81,8 @@ group Decode_Immunization_To_QR(
 			 
 		     } "Country";
 
-		immunization.extension : DDCCBrand as brand 
+//		immunization.extension : DDCCBrand as brand
+		immunization.extension  as brand 
 		     where ( url = 'https://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCVaccineBrand')
 		     then {		     
 		     	 brand.valueCoding as valueCoding ->  vacEvent.brand = valueCoding;
@@ -83,13 +91,22 @@ group Decode_Immunization_To_QR(
 		immunization.vaccineCode  as vaccineCode then {
 			     vaccineCode.coding as coding -> vacEvent.vaccine = coding;
 		    } "Vaccine Code";
-		    
-		ddcc.entry as entry then {
-		     entry.resource : DDCCOrganization as organization ->  vacEvent.centre =  organization.name ;
+
+
+		ddcc.entry  as entry then {
+//		     entry.resource : DDCCOrganization as organization
+		     entry.resource : Organization as organization
+		         then {
+			      organization.name as name ->  vacEvent.centre =  name ;
+			 } "Centre Name";   
 		} "Vaccination Centre";
 
 		ddcc.entry as entry then {
-	             entry.resource : DDCCComposition as composition ->  vacEvent.identifier = composition.identifier; 
+//	             entry.resource : DDCCComposition as composition 
+	             entry.resource : Composition as composition
+		     then {
+		     	   composition.identifier as identifier -> qr.identifier = identifier;
+  		      } "Vaccination Event ID";
 		} "Vaccincation Event";	      
 
 	} "Vaccination";

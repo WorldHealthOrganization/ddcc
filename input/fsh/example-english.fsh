@@ -27,7 +27,7 @@ Usage: #example
 * status = #completed
 // 
 * extension[vaccineBrand].valueCoding.system = "urn:EXAMPLE-who-:smart:vaccine-certificate:RC1:coding"
-* extension[vaccineBrand].valueCoding.code = #TEST
+* extension[vaccineBrand].valueCoding.code = #VAX-BRAND-EX
 * extension[country].valueCode = #CHE
 * vaccineCode.coding[ddccVaccine].code = $ICD11#XM0CX4
 // 
@@ -62,10 +62,12 @@ InstanceOf:   DDCCComposition
 
 
 Instance: Example-English
-InstanceOf: Bundle
+InstanceOf: DDCCDocument
 Usage: #example
 
 * type = #document
+* identifier[+].system = "urn:EXAMPLE-who-:ddcc:bundle:ids"
+* identifier[=].value = "9990123012301230123"
 * entry[+].fullUrl = "https://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCComposition"
 * entry[=].resource = DDCC-Composition-Example-English
 
