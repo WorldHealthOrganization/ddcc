@@ -56,7 +56,7 @@ curl --request PUT $HOST/StructureDefinition/DDCCCoreDataSetCoC \
 
 echo "Updating DDCC to Core Data Set Structure Map"
 curl  --request POST $HOST/StructureMap \
-      --data-binary @ddcc-to-coredataset.map \
+      --data-binary @../input/resources/maps/ddcc-to-coredataset.map \
       -H "Accept: application/fhir+json"  -H "Content-Type: text/fhir-mapping"
 
 echo "Transforming Example DDCC Bundle to Core Data Set"
@@ -84,7 +84,7 @@ curl  --request PUT $HOST/StructureDefinition/v  \
 
 echo "Updating EU DCC LMs"
 curl  --request POST $HOST/StructureMap \
-      --data-binary @ddcc-to-eu-dcc.map \
+      --data-binary @../input/resources/maps/ddcc-to-eu-dcc.map \
       -H "Accept: application/fhir+json"  -H "Content-Type: text/fhir-mapping"
 
 
