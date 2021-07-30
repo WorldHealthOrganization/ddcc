@@ -1,4 +1,7 @@
 Alias: $ICD11 = http://id.who.int/icd11/mms
+Alias: $LOINC = http://loinc.org
+
+
 
 Instance:     DDCC-Patient-English
 InstanceOf:   DDCCPatient
@@ -7,6 +10,7 @@ Usage:        #example
 // Description: ""
 * name[+].text = "Aulus Agerius"
 * birthDate = "2003-03-03"
+
 
 Instance: DDCC-Organization-English
 InstanceOf: DDCCOrganization
@@ -39,13 +43,31 @@ Usage: #example
 * protocolApplied[protocolAppliedAuthority].doseNumberPositiveInt = 1
 * protocolApplied[protocolAppliedAuthority].seriesDosesPositiveInt = 2
 
+
+Instance:     DDCC-Composition-Example-English
+InstanceOf:   DDCCComposition
+* identifier[+].system = "urn:EXAMPLE-who-:ddcc:composition:ids"
+* identifier[=].value = "999123456123456123456"
+* status = #final
+* subject = Reference(DDCC-Patient-English)
+* date = "2020-05-22"
+* author = Reference(DDCC-Organization-English)
+* title = "Digital Documentation of COVID-19 Certificate (DDCC)"
+* attester.party = Reference(DDCC-Organization-English)
+* section[vaccination].code[+].coding.system = $LOINC
+* section[vaccination].code[=].coding.code = #11369-6
+* section[vaccination].focus = Reference(DDCC-Immunization-English)
+* section[vaccination].entry = Reference(DDCC-Immunization-English)
+
+
+
 Instance: Example-English
 InstanceOf: Bundle
 Usage: #example
 
 * type = #document
-//* entry[+].fullUrl = "https://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCComposition"
-//* entry[=].resource = DDCCComposition
+* entry[+].fullUrl = "https://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCComposition"
+* entry[=].resource = DDCC-Composition-Example-English
 
 * entry[+].fullUrl = "http://www.example.org/fhir/Patient/DDCC-Patient-English"
 * entry[=].resource = DDCC-Patient-English
