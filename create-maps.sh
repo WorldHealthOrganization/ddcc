@@ -15,13 +15,16 @@ echo "Accessing $HOST/metadata"
 #curl --request GET $HOST/metadata \
 #     -H "Accept: application/fhir+json" 
 
+DIR="input/resources/"
+FILES=`ls $DIR/maps-src/*.map`
+for FILE in $FILES
+do
+    NAME=${FILE##*/}
 
-DIR="input/resources/maps/*.map"
-for FILE in ls $DIR
-do    
+    echo $NAME
     echo "Updating DDCC to Core Data Set Structure Map $FILE"
     curl  --request POST $HOST/StructureMap \
       --data-binary @$FILE \
       -H "Accept: application/fhir+json"  -H "Content-Type: text/fhir-mapping" \
-      > $FILE.json
+      > "$DIR/maps/$NAME.json"
 done
