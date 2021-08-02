@@ -1,8 +1,8 @@
 Alias: $ICD11 = http://id.who.int/icd11/mms
 Alias: $DDCCQuestionnaireURL = https://worldhealthorganization.github.io/ddcc/DDCCVSCoreDataSetQuestionnaire
-Alias: $targetStructureMap = https://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-targetStructureMap
+Alias: $targetStructureMap = http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-targetStructureMap
 Alias: $QRMapURL = https://worldhealthorganization.github.io/ddcc/StructureMap/ddcc-map-qr-bundle
-Alias: $targetStructureMap = https://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-targetStructureMap
+
 
 Profile:        DDCCQuestionnaire
 Parent:         sdc-questionnaire-extr-smap
@@ -13,7 +13,8 @@ Describes the logical structure for a questionnaire associacted to a DDCC which 
 """
 * ^abstract = true
 * extension[$targetStructureMap] 1.. MS
-// * extension[$targetStructureMap].valueCanonical = "https://worldhealthorganization.github.io/svc/StructureMap/ddcc-bundle"
+* extension[$targetStructureMap].valueCanonical = $QRMapURL
+
 
 Profile:        DDCCQuestionnaireResponse
 Parent:         sdc-questionnaireresponse
