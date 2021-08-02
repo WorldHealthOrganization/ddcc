@@ -31,7 +31,7 @@ Describes the logical structure for a Digital Documentation of COVID-19 Certific
 * event.period.start ^label = "Certificate valid from"
 * event.period.end ^label = "Certificate valid until"
 
-* section ^slicing.discriminator.type = #value
+* section ^slicing.discriminator.type = #exists
 * section ^slicing.discriminator.path = "focus"
 * section contains
     vaccination 1..1 MS 

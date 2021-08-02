@@ -14,21 +14,25 @@ Immunization resource.
             and DDCCVaccineMarketAuthorization named vaccineMarketAuthorization 0..1 MS
             and DDCCCountryOfVaccination named country 1..1 MS
 	    and DDCCVaccineValidFrom named validFrom 0..1 MS
-* extension[DDCCVaccineBrand] ^label = "Vaccine brand"
-* extension[DDCCVaccineMarketAuthorization] ^label = "Vaccine market authorization holder"
-* extension[DDCCCountryOfVaccination] ^label = "Country of vaccination"
-* extension[DDCCVaccineValidFrom] ^label = "Vaccination valid from"
+// * extension[DDCCVaccineBrand] ^label = "Vaccine brand"
+// * extension[DDCCVaccineMarketAuthorization] ^label = "Vaccine market authorization holder"
+// * extension[DDCCCountryOfVaccination] ^label = "Country of vaccination"
+// * extension[DDCCVaccineValidFrom] ^label = "Vaccination valid from"
+* extension[vaccineBrand] ^label = "Vaccine brand"
+* extension[vaccineMarketAuthorization] ^label = "Vaccine market authorization holder"
+* extension[country] ^label = "Country of vaccination"
+* extension[validFrom] ^label = "Vaccination valid from"
 * vaccineCode 1..1 MS
 * vaccineCode ^label = "Vaccine or prophylaxis"
-* vaccineCode.coding ^slicing.discriminator.type = #value
+* vaccineCode.coding ^slicing.discriminator.type = #exists
 * vaccineCode.coding ^slicing.discriminator.path = "system"
 * vaccineCode.coding ^slicing.rules = #open
 * vaccineCode.coding ^slicing.ordered = true
 * vaccineCode.coding contains ddccVaccine 1..1 MS
 * vaccineCode.coding[ddccVaccine].system 1..1 MS
 * vaccineCode.coding[ddccVaccine].code 1..1 MS
-* vaccineCode.coding[ddccVaccine].system = "urn:EXAMPLE-who-:smart:vaccine-certificate:RC1:coding"
-* vaccineCode.coding[ddccVaccine].code from WHO_DDCC_Vaccines_COVID_19 (example)
+//  do we need this ?  * vaccineCode.coding[ddccVaccine].system = "urn:EXAMPLE-who-:smart:vaccine-certificate:RC1:coding"
+//  do we need this ?   * vaccineCode.coding[ddccVaccine].code from WHO_DDCC_Vaccines_COVID_19 (example)
 
 * location 1..1 MS
 * location ^label = "Administering centre"
@@ -112,20 +116,20 @@ a patient should return for a booster shot.
 * recommendation 1..1 MS
 * recommendation.vaccineCode 1..1 MS
 * recommendation.vaccineCode ^label = "Vaccine or prophylaxis"
-* recommendation.vaccineCode.coding ^slicing.discriminator.type = #value
-* recommendation.vaccineCode.coding ^slicing.discriminator.path = "system"
+* recommendation.vaccineCode.coding ^slicing.discriminator.type = #exists
+* recommendation.vaccineCode.coding ^slicing.discriminator.path = "value"
 * recommendation.vaccineCode.coding ^slicing.rules = #open
 * recommendation.vaccineCode.coding ^slicing.ordered = true
 * recommendation.vaccineCode.coding contains ddccVaccine 1..1 MS
 * recommendation.vaccineCode.coding[ddccVaccine].system 1..1 MS
 * recommendation.vaccineCode.coding[ddccVaccine].code 1..1 MS
-* recommendation.vaccineCode.coding[ddccVaccine].system = "urn:EXAMPLE-who-:smart:vaccine-certificate:RC1:coding"
-* recommendation.vaccineCode.coding[ddccVaccine].code from WHO_DDCC_Vaccines_COVID_19 (example)
+// do we need this? * recommendation.vaccineCode.coding[ddccVaccine].system = "urn:EXAMPLE-who-:smart:vaccine-certificate:RC1:coding"
+// do we need this? * recommendation.vaccineCode.coding[ddccVaccine].code from WHO_DDCC_Vaccines_COVID_19 (example)
 * recommendation.targetDisease from WHO_DDCC_Disease_Targeted_COVID_19 (example)
 * recommendation.forecastStatus.coding = http://terminology.hl7.org/CodeSystem/immunization-recommendation-status#due
 * recommendation.dateCriterion 1..1 MS
-* recommendation.dateCriterion ^slicing.discriminator.type = #value
-* recommendation.dateCriterion ^slicing.discriminator.path = "system"
+* recommendation.dateCriterion ^slicing.discriminator.type = #exists
+* recommendation.dateCriterion ^slicing.discriminator.path = "code"
 * recommendation.dateCriterion ^slicing.rules = #closed
 * recommendation.dateCriterion contains nextDose 1..1 MS
 * recommendation.dateCriterion[nextDose].code.coding = http://loinc.org#30980-7

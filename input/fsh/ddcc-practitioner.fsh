@@ -7,16 +7,19 @@ Container for an DDCC Practitioner, which is a Practitioner authorized by the PH
 vaccinate an [DDCC Patient](StructureDefinition-DDCCPatient.html).
 
 """
-* identifier 1..
+* identifier 1.. MS
 * identifier ^slicing.discriminator.type = #value
-* identifier ^slicing.discriminator.path = "system"
+* identifier ^slicing.discriminator.path = "use"
+* identifier contains ddccIdentifier 0..
 * identifier ^slicing.rules = #open
 * identifier ^slicing.ordered = true
-* identifier contains shcIdentifier 1..
-* identifier[shcIdentifier].system 1.. 
-* identifier[shcIdentifier].value 1.. 
-* identifier[shcIdentifier].assigner 1.. 
-* identifier[shcIdentifier].assigner only Reference(DDCCOrganization)
+* identifier[ddccIdentifier].use 1..1 MS
+* identifier[ddccIdentifier].use = #official
+* identifier[ddccIdentifier].system 1.. MS
+* identifier[ddccIdentifier].value 1.. MS 
+* identifier[ddccIdentifier].assigner 1.. MS 
+* identifier[ddccIdentifier].assigner only Reference(DDCCOrganization)
+
 
 
 

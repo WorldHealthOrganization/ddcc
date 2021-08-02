@@ -9,21 +9,21 @@ A DDCCPatient should:
 * obeys who-ddcc-patient-1
 
 """
-* identifier 0.. 
-* identifier ^slicing.discriminator.type = #value
-* identifier ^slicing.discriminator.path = "system"
-* identifier contains ddccIdentifier 0.. 
-* identifier[ddccIdentifier] ^label = "Unique identifier"
-* identifier[ddccIdentifier].system 1..1 MS
-* identifier[ddccIdentifier].value 1..1 MS
-* identifier[ddccIdentifier].assigner 1..1 MS
-* identifier[ddccIdentifier].assigner only Reference(DDCCOrganization)
-* name 0..* MS
+* identifier 0.. MS
+* identifier only DDCCOrganizationIdentifier
+// * identifier ^slicing.discriminator.type = #value
+// * identifier ^slicing.discriminator.path = "use"
+// * identifier contains ddccIdentifier 0..1 MS
+// * identifier[ddccIdentifier] ^label = "Unique identifier"
+// * identifier[ddccIdentifier].use = #official
+// 
+//* name 1..* MS
 * name ^slicing.discriminator.type = #value
 * name ^slicing.discriminator.path = "use"
 * name contains ddccName 1..1 MS
 * name[ddccName] ^label = "Name"
-* name[ddccName].text 1..1 MS
+* name[ddccName].text 1.. MS
+* name[ddccName].use  1..1 MS
 * name[ddccName].use = #official
 * gender 0..1 
 * gender ^label = "Sex"

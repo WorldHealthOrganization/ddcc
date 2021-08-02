@@ -7,7 +7,7 @@ Usage:          #definition
 * id = "DDCCCoreDataSetPoV"
 * name = "DDCCCoreDataSetPoV"
 * description = "DDCC Core Data - Proof of Vaccination elements."
-* url = "http://worldhealthorganization.github.io/ddcc/DDCCCoreDataSetPoV"
+* url = "https://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSetPoV"
 * version = "RC2"
 * kind = #logical
 * abstract = false
@@ -119,8 +119,8 @@ Usage:          #definition
 * differential.element[=].max = "1"
 * differential.element[=].type[+].code = #date
 
-* differential.element[+].id = "DDCCCoreDataSet.vaccination.valid_from"
-* differential.element[=].path = "DDCCCoreDataSet.vaccination.valid_from"
+* differential.element[+].id = "DDCCCoreDataSet.vaccination.validFrom"
+* differential.element[=].path = "DDCCCoreDataSet.vaccination.validFrom"
 * differential.element[=].short = "Vaccination valid from"
 * differential.element[=].definition = "Date upon which provided vaccination is considered valid."
 * differential.element[=].min = 0
@@ -198,7 +198,7 @@ Usage:          #definition
 * differential.element[+].id = "DDCCCoreDataSet.vaccination.period"
 * differential.element[=].path = "DDCCCoreDataSet.vaccination.period"
 * differential.element[=].short = "Certificate Validity Period"
-* differential.element[=].definition = ""
+* differential.element[=].definition = "Certificate valifity period"
 * differential.element[=].min = 0
 * differential.element[=].max = "1"
 * differential.element[=].type[+].code = #Period
@@ -206,7 +206,7 @@ Usage:          #definition
 * differential.element[+].id = "DDCCCoreDataSet.vaccination.period.start"
 * differential.element[=].path = "DDCCCoreDataSet.vaccination.period.start"
 * differential.element[=].short = "Certificate valid from"
-* differential.element[=].definition = ""
+* differential.element[=].definition = "Start date of certificate validity"
 * differential.element[=].min = 0
 * differential.element[=].max = "1"
 * differential.element[=].type[+].code = #date
@@ -214,7 +214,7 @@ Usage:          #definition
 * differential.element[+].id = "DDCCCoreDataSet.vaccination.period.end"
 * differential.element[=].path = "DDCCCoreDataSet.vaccination.period.end"
 * differential.element[=].short = "Certificate valid until"
-* differential.element[=].definition = ""
+* differential.element[=].definition = "End date of certificate validity"
 * differential.element[=].min = 0
 * differential.element[=].max = "1"
 * differential.element[=].type[+].code = #date
@@ -230,16 +230,16 @@ Usage:          #definition
 * differential.element[+].id = "DDCCCoreDataSet.certificate.issuer"
 * differential.element[=].path = "DDCCCoreDataSet.certificate.issuer"
 * differential.element[=].short = "Certificate issuer"
-* differential.element[=].definition = ""
+* differential.element[=].definition = "Certificate issuer"
 * differential.element[=].min = 1
 * differential.element[=].max = "1"
 * differential.element[=].type[+].code = #Reference
-* differential.element[=].type[=].targetProfile = "https://worldhealthorganization.github.io/ddcc/StructureDefinition/shc-organization"
+* differential.element[=].type[=].targetProfile = "https://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCOrganization"
 
 * differential.element[+].id = "DDCCCoreDataSet.certificate.hcid"
 * differential.element[=].path = "DDCCCoreDataSet.certificate.hcid"
 * differential.element[=].short = "Health certificate identifier (HCID)"
-* differential.element[=].definition = ""
+* differential.element[=].definition = "health certificate identifier"
 * differential.element[=].min = 1
 * differential.element[=].max = "1"
 * differential.element[=].type[+].code = #Identifier
@@ -247,7 +247,7 @@ Usage:          #definition
 * differential.element[+].id = "DDCCCoreDataSet.certificate.version"
 * differential.element[=].path = "DDCCCoreDataSet.certificate.version"
 * differential.element[=].short = "Certificate schema version"
-* differential.element[=].definition = ""
+* differential.element[=].definition = "certificate schema version"
 * differential.element[=].min = 1
 * differential.element[=].max = "1"
 * differential.element[=].type[+].code = #string
@@ -261,13 +261,13 @@ Usage:          #definition
 * id = "DDCCCoreDataSetCoC"
 * name = "DDCCCoreDataSetCoC"
 * description = "DDCC Core Data - Continuity of Care elements."
-* url = "http://worldhealthorganization.github.io/ddcc/DDCCCoreDataSetCoC"
+* url = "https://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSetCoC"
 * version = "RC2"
 * kind = #logical
 * abstract = false
 * status = #draft
 * type = "DDCCCoreDataSet"
-* baseDefinition = "http://worldhealthorganization.github.io/ddcc/DDCCCoreDataSetPoV"
+* baseDefinition = "https://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSetPoV"
 * derivation = #specialization
 
 * differential.element[+].id = "DDCCCoreDataSet.vaccination.centre"
