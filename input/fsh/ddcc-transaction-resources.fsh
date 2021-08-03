@@ -3,17 +3,27 @@ Parent:         Parameters
 Id:             DDCCGenerateHealthCertificateParameters
 Title:          "DDCC Generate Health Certificate Parameters"
 * ^publisher = "World Health Organization (WHO)"
-* parameter 1..1
+* parameter 1..
 * parameter ^slicing.discriminator.type = #value
 * parameter ^slicing.discriminator.path = "name"
 * parameter ^slicing.rules = #closed
-* parameter contains ddccResponse 0..1 and ddccId 0..1
+* parameter contains 
+        ddccResponse 0..1 and 
+        ddccId 0..1 and
+        ddccImmunization 0..1 and
+        ddccHCID 0..1
 * parameter[ddccResponse].name = "response"
 * parameter[ddccResponse].resource 1..1
 * parameter[ddccResponse].resource only DDCCQuestionnaireResponse
 * parameter[ddccId].name = "id"
 * parameter[ddccId].value[x] only id
 * parameter[ddccId].valueId 1..1
+* parameter[ddccImmunization].name = "immunization"
+* parameter[ddccImmunization].value[x] only Reference(DDCCImmunization)
+* parameter[ddccImmunization].valueReference 1..1
+* parameter[ddccHCID].name = "hcid"
+* parameter[ddccHCID].value[x] only string
+* parameter[ddccHCID].valueString 1..1
 
 
 
@@ -30,11 +40,11 @@ An [DDCC Submit Health Event Request](StructureDefinition-DDCCSubmitHealthEventR
 * type MS
 * type = #batch
 * timestamp MS
-* entry ^slicing.discriminator.type = #value
-* entry ^slicing.discriminator.path = "resource"
+* entry ^slicing.discriminator.type = #profile
+* entry ^slicing.discriminator.path = "resource.resolve()"
 * entry ^slicing.rules = #closed
 * entry contains ddccParameters 1..*
-* entry[ddccParameters].resource only DDCCGenerateHealthCertificateParameters
+* entry[ddccParameters].resource only DDCCGenerateHealthCertificateParameters or DDCCQuestionnaireResponse
 * entry[ddccParameters].request.method = #POST
 * entry[ddccParameters].request.url 1..1
 
@@ -56,8 +66,8 @@ A DDCC Submit Health Event Response](StructureDefinition-DDCCSubmitHealthEventRe
 * type MS
 * type = #batch-response
 * timestamp MS
-* entry ^slicing.discriminator.type = #value
-* entry ^slicing.discriminator.path = "resource"
+* entry ^slicing.discriminator.type = #profile
+* entry ^slicing.discriminator.path = "resource.resolve()"
 * entry ^slicing.rules = #closed
 * entry contains ddccBundle 1..*
 * entry[ddccBundle].resource only DDCCDocument
@@ -73,8 +83,8 @@ to add on the DDCC generator.
 """
 * ^publisher = "World Health Organization (WHO)"
 * type = #transaction
-* entry ^slicing.discriminator.type = #value
-* entry ^slicing.discriminator.path = "resource"
+* entry ^slicing.discriminator.type = #profile
+* entry ^slicing.discriminator.path = "resource.resolve()"
 * entry ^slicing.rules = #closed
 * entry contains ddccQR 1..1
         and ddccPatient 1..1

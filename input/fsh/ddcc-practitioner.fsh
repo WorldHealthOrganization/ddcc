@@ -8,11 +8,13 @@ vaccinate an [DDCC Patient](StructureDefinition-DDCCPatient.html).
 
 """
 * identifier 1.. MS
-* identifier ^slicing.discriminator.type = #value
-* identifier ^slicing.discriminator.path = "use"
-* identifier contains ddccIdentifier 0..
+* identifier ^slicing.discriminator[+].type = #value
+* identifier ^slicing.discriminator[=].path = "use"
+* identifier ^slicing.discriminator[+].type = #profile
+* identifier ^slicing.discriminator[=].path = "assigner.resolve()"
 * identifier ^slicing.rules = #open
 * identifier ^slicing.ordered = true
+* identifier contains ddccIdentifier 0..
 * identifier[ddccIdentifier].use 1..1 MS
 * identifier[ddccIdentifier].use = #official
 * identifier[ddccIdentifier].system 1.. MS

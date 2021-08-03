@@ -28,9 +28,9 @@ Usage: #example
 * date = "2021-05-06"
 * patient = Reference(DDCC-Patient-English)
 * recommendation.vaccineCode.coding[ddccVaccine] = $ICD11#XM0CX4
-* recommendation.dateCriterion[nextDose].value = "2021-05-20"
-* recommendation.dateCriterion[nextDose].code.coding = http://loinc.org#30980-7
-* recommendation.forecastStatus.coding = http://terminology.hl7.org/CodeSystem/immunization-recommendation-status#due
+* recommendation.dateCriterion.value = "2021-05-20"
+* recommendation.dateCriterion.code = http://loinc.org#30980-7
+* recommendation.forecastStatus = http://terminology.hl7.org/CodeSystem/immunization-recommendation-status#due
 * recommendation.supportingImmunization = Reference(DDCC-Immunization-English)
 
 Instance: DDCC-Immunization-English

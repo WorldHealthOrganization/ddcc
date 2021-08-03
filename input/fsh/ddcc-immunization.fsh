@@ -24,13 +24,15 @@ Immunization resource.
 * extension[validFrom] ^label = "Vaccination valid from"
 * vaccineCode 1..1 MS
 * vaccineCode ^label = "Vaccine or prophylaxis"
-* vaccineCode.coding ^slicing.discriminator.type = #exists
-* vaccineCode.coding ^slicing.discriminator.path = "system"
+* vaccineCode.coding ^slicing.discriminator[+].type = #exists
+* vaccineCode.coding ^slicing.discriminator[=].path = "system"
+* vaccineCode.coding ^slicing.discriminator[+].type = #exists
+* vaccineCode.coding ^slicing.discriminator[=].path = "code"
 * vaccineCode.coding ^slicing.rules = #open
-* vaccineCode.coding ^slicing.ordered = true
 * vaccineCode.coding contains ddccVaccine 1..1 MS
 * vaccineCode.coding[ddccVaccine].system 1..1 MS
 * vaccineCode.coding[ddccVaccine].code 1..1 MS
+* vaccineCode.coding[ddccVaccine] from WHO_DDCC_Vaccines_COVID_19 (example)
 //  do we need this ?  * vaccineCode.coding[ddccVaccine].system = "urn:EXAMPLE-who-:smart:vaccine-certificate:RC1:coding"
 //  do we need this ?   * vaccineCode.coding[ddccVaccine].code from WHO_DDCC_Vaccines_COVID_19 (example)
 
@@ -48,10 +50,9 @@ Immunization resource.
 * performer.actor only Reference(DDCCPractitioner or DDCCOrganization)
 * performer.actor ^label = "Health worker identifier"
 * protocolApplied 1.. MS
-* protocolApplied ^slicing.discriminator.type = #type
-* protocolApplied ^slicing.discriminator.path = "authority"
+* protocolApplied ^slicing.discriminator.type = #profile
+* protocolApplied ^slicing.discriminator.path = "authority.resolve()"
 * protocolApplied ^slicing.rules = #open
-* protocolApplied ^slicing.ordered = true
 * protocolApplied contains protocolAppliedAuthority 1.. MS
 * protocolApplied[protocolAppliedAuthority].authority only Reference(DDCCOrganization)
 * protocolApplied[protocolAppliedAuthority].targetDisease from WHO_DDCC_Disease_Targeted_COVID_19 (example)
@@ -116,24 +117,22 @@ a patient should return for a booster shot.
 * recommendation 1..1 MS
 * recommendation.vaccineCode 1..1 MS
 * recommendation.vaccineCode ^label = "Vaccine or prophylaxis"
-* recommendation.vaccineCode.coding ^slicing.discriminator.type = #exists
-* recommendation.vaccineCode.coding ^slicing.discriminator.path = "value"
+* recommendation.vaccineCode.coding ^slicing.discriminator[+].type = #exists
+* recommendation.vaccineCode.coding ^slicing.discriminator[=].path = "system"
+* recommendation.vaccineCode.coding ^slicing.discriminator[+].type = #exists
+* recommendation.vaccineCode.coding ^slicing.discriminator[=].path = "code"
 * recommendation.vaccineCode.coding ^slicing.rules = #open
-* recommendation.vaccineCode.coding ^slicing.ordered = true
 * recommendation.vaccineCode.coding contains ddccVaccine 1..1 MS
 * recommendation.vaccineCode.coding[ddccVaccine].system 1..1 MS
 * recommendation.vaccineCode.coding[ddccVaccine].code 1..1 MS
+* recommendation.vaccineCode.coding[ddccVaccine] from WHO_DDCC_Vaccines_COVID_19 (example)
 // do we need this? * recommendation.vaccineCode.coding[ddccVaccine].system = "urn:EXAMPLE-who-:smart:vaccine-certificate:RC1:coding"
 // do we need this? * recommendation.vaccineCode.coding[ddccVaccine].code from WHO_DDCC_Vaccines_COVID_19 (example)
 * recommendation.targetDisease from WHO_DDCC_Disease_Targeted_COVID_19 (example)
-* recommendation.forecastStatus.coding = http://terminology.hl7.org/CodeSystem/immunization-recommendation-status#due
+* recommendation.forecastStatus = http://terminology.hl7.org/CodeSystem/immunization-recommendation-status#due
 * recommendation.dateCriterion 1..1 MS
-* recommendation.dateCriterion ^slicing.discriminator.type = #exists
-* recommendation.dateCriterion ^slicing.discriminator.path = "code"
-* recommendation.dateCriterion ^slicing.rules = #closed
-* recommendation.dateCriterion contains nextDose 1..1 MS
-* recommendation.dateCriterion[nextDose].code.coding = http://loinc.org#30980-7
-* recommendation.dateCriterion[nextDose].value 1..1 MS
+* recommendation.dateCriterion.code = http://loinc.org#30980-7
+* recommendation.dateCriterion.value 1..1 MS
 * recommendation.supportingImmunization 1..1 MS
 * recommendation.supportingImmunization only Reference(DDCCImmunization)
 

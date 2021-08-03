@@ -10,8 +10,7 @@ Title:        "DDCC DocumentReference return for QR"
 * content ^slicing.discriminator.type = #value
 * content ^slicing.discriminator.path = "format"
 * content ^slicing.rules = #closed
-* content ^slicing.ordered = true
-* content.format 1.. MS
+* content 2..2 MS
 * content.format from DDCC_QR_Format_ValueSet (extensible)
 * content contains qrImage 1..1 MS and qrContent 1..1 MS
 * content[qrImage].attachment.data 1..1 MS
