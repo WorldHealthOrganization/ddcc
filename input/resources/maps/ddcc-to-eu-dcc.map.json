@@ -3,9 +3,9 @@
   "id": "ddcc-to-eu-dcc",
   "text": {
     "status": "generated",
-    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><pre>map &quot;http://who-int.github.io/svc/StructureMap/ddcc-to-eu-dcc&quot; = &quot;ddcc-to-eu-dcc&quot;\r\n\r\nuses &quot;http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCComposition&quot; alias DDCC as source\r\nuses &quot;http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCDocument&quot; alias DDCCDocument as source\r\nuses &quot;http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCPatient&quot; alias DDCCPatient as source\r\nuses &quot;http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCComposition&quot; alias DDCCComposition as source\r\nuses &quot;http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCOrganization&quot; alias DDCCOrganization as source\r\nuses &quot;http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCountryOfVaccination&quot; alias DDCCCountryOfVaccination as source\r\nuses &quot;http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCVaccineBrand&quot; alias DDCCVaccineBrand as source\r\nuses &quot;http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCImmunization&quot; alias DDCCImmunization as source\r\nuses &quot;http://hl7.eu/fhir/ig/dcc/StructureDefinition/HC1&quot; alias EUDCC as target\r\nuses &quot;http://hl7.eu/fhir/ig/dcc/StructureDefinition/v&quot; alias vacEvent as target\r\n\r\ngroup Decode_DDCC_to_QR(source ddcc : DDCCDocument, target qr : EUDCC) {\r\n  ddcc -&gt; qr.ver = 'XXX' &quot;Version&quot;;\r\n  ddcc.entry as entry then {\r\n    entry.resource : DDCCPatient as patient then Decode_Patient_To_QR(patient, qr) &quot;Patient&quot;;\r\n  } &quot;Patient&quot;;\r\n  ddcc.entry as entry then {\r\n    entry.resource : Immunization as immunization then Decode_Immunization_To_QR(ddcc, immunization, qr) &quot;Immunization&quot;;\r\n  } &quot;Immunization&quot;;\r\n}\r\n\r\ngroup Decode_Patient_To_QR(source patient : DDCCPatient, target qr : EUDCC) {\r\n  patient.birthDate as birthDate -&gt; qr.dob = birthDate;\r\n  patient.name as name then {\r\n    name.text as text -&gt; qr.nam = text;\r\n  };\r\n}\r\n\r\ngroup Decode_Immunization_To_QR(source ddcc : DDCCDocument, source immunization : DDCCImmunization, target qr : EUDCC) {\r\n  immunization -&gt; qr.v = create('http://hl7.eu/fhir/ig/dcc/StructureDefinition/v') as vacEvent then {\r\n    immunization.protocolApplied as protocol then {\r\n      protocol.doseNumberPositiveInt as dose -&gt; vacEvent.dn = dose;\r\n      protocol.seriesDosesPositiveInt as doseNum -&gt; vacEvent.sd = doseNum;\r\n      protocol.targetDisease as targetDisease then {\r\n        targetDisease.coding as coding then {\r\n          coding.code as code -&gt; vacEvent.tg = code;\r\n        } &quot;Protocol Disease Code&quot;;\r\n      } &quot;Protocol Disease&quot;;\r\n    } &quot;Protocol&quot;;\r\n    immunization.occurrenceDateTime as date -&gt; vacEvent.dt = date;\r\n    // TODO: need to populate vacEvent.ma market authorization holder\r\n    immunization.extension as country where (url = 'http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCountryOfVaccination') then {\r\n      country.valueCode as code -&gt; vacEvent.co = code;\r\n    } &quot;Country&quot;;\r\n    // immunization.extension : DDCCBrand as brand\r\n    immunization.extension as brand where (url = 'http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCVaccineBrand') then {\r\n      brand.valueCoding as valueCoding then {\r\n        valueCoding.code as code -&gt; vacEvent.mp = code;\r\n      } &quot;Vaccine Brand Code&quot;;\r\n    } &quot;Vaccine Brand&quot;;\r\n    // immunization.vaccineCode : Coding as vaccineCode then {\r\n    immunization.vaccineCode as vaccineCode then {\r\n      vaccineCode.coding as coding then {\r\n        coding.code as code -&gt; vacEvent.vp = code;\r\n      } &quot;Vaccine Code&quot;;\r\n    } &quot;Vaccine Coding&quot;;\r\n    ddcc.entry as entry then {\r\n      // entry.resource : DDCCOrganization as organization\r\n      entry.resource : Organization as organization then {\r\n        organization.name as name -&gt; vacEvent.is = name;\r\n      } &quot;Centre Name&quot;;\r\n    } &quot;Vaccination Centre&quot;;\r\n    ddcc.entry as entry then {\r\n      // entry.resource : DDCCComposition as composition\r\n      entry.resource : Composition as composition then {\r\n        composition.identifier as identifier then {\r\n          identifier.value as value -&gt; vacEvent.ci = value;\r\n        } &quot;Vaccination Event ID Value&quot;;\r\n      } &quot;Vaccination Event ID&quot;;\r\n    } &quot;Vaccincation Event&quot;;\r\n  } &quot;Vaccination&quot;;\r\n}\r\n\r\n</pre></div>"
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><pre>map &quot;http://who-int.github.io/svc/StructureMap/ddcc-to-eu-dcc&quot; = &quot;ddcc-to-eu-dcc&quot;\r\n\r\nuses &quot;http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCComposition&quot; alias DDCC as source\r\nuses &quot;http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCDocument&quot; alias DDCCDocument as source\r\nuses &quot;http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCPatient&quot; alias DDCCPatient as source\r\nuses &quot;http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCComposition&quot; alias DDCCComposition as source\r\nuses &quot;http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCOrganization&quot; alias DDCCOrganization as source\r\nuses &quot;http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCountryOfVaccination&quot; alias DDCCCountryOfVaccination as source\r\nuses &quot;http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCVaccineBrand&quot; alias DDCCVaccineBrand as source\r\nuses &quot;http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCImmunization&quot; alias DDCCImmunization as source\r\nuses &quot;http://hl7.eu/fhir/ig/dcc/StructureDefinition/HC1&quot; alias EUDCC as target\r\nuses &quot;http://hl7.eu/fhir/ig/dcc/StructureDefinition/v&quot; alias vacEvent as target\r\n\r\ngroup Decode-DDCC-to-QR(source ddcc : DDCCDocument, target qr : EUDCC) {\r\n  ddcc -&gt; qr.ver = 'XXX' &quot;Version&quot;;\r\n  ddcc.entry as entry then {\r\n    entry.resource : DDCCPatient as patient then Decode-Patient-To-QR(patient, qr) &quot;Patient&quot;;\r\n  } &quot;Patient&quot;;\r\n  ddcc.entry as entry then {\r\n    entry.resource : Immunization as immunization then Decode-Immunization-To-QR(ddcc, immunization, qr) &quot;Immunization&quot;;\r\n  } &quot;Immunization&quot;;\r\n}\r\n\r\ngroup Decode-Patient-To-QR(source patient : DDCCPatient, target qr : EUDCC) {\r\n  patient.birthDate as birthDate -&gt; qr.dob = birthDate;\r\n  patient.name as name then {\r\n    name.text as text -&gt; qr.nam = text;\r\n  };\r\n}\r\n\r\ngroup Decode-Immunization-To-QR(source ddcc : DDCCDocument, source immunization : DDCCImmunization, target qr : EUDCC) {\r\n  immunization -&gt; qr.v = create('http://hl7.eu/fhir/ig/dcc/StructureDefinition/v') as vacEvent then {\r\n    immunization.protocolApplied as protocol then {\r\n      protocol.doseNumberPositiveInt as dose -&gt; vacEvent.dn = dose;\r\n      protocol.seriesDosesPositiveInt as doseNum -&gt; vacEvent.sd = doseNum;\r\n      protocol.targetDisease as targetDisease then {\r\n        targetDisease.coding as coding then {\r\n          coding.code as code -&gt; vacEvent.tg = code;\r\n        } &quot;Protocol-Disease-Code&quot;;\r\n      } &quot;Protocol-Disease&quot;;\r\n    } &quot;Protocol&quot;;\r\n    immunization.occurrenceDateTime as date -&gt; vacEvent.dt = date;\r\n    // TODO: need to populate vacEvent.ma market authorization holder\r\n    immunization.extension as country where (url = 'http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCountryOfVaccination') then {\r\n      country.valueCode as code -&gt; vacEvent.co = code;\r\n    } &quot;Country&quot;;\r\n    // immunization.extension : DDCCBrand as brand\r\n    immunization.extension as brand where (url = 'http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCVaccineBrand') then {\r\n      brand.valueCoding as valueCoding then {\r\n        valueCoding.code as code -&gt; vacEvent.mp = code;\r\n      } &quot;Vaccine-Brand-Code&quot;;\r\n    } &quot;Vaccine-Brand&quot;;\r\n    // immunization.vaccineCode : Coding as vaccineCode then {\r\n    immunization.vaccineCode as vaccineCode then {\r\n      vaccineCode.coding as coding then {\r\n        coding.code as code -&gt; vacEvent.vp = code;\r\n      } &quot;Vaccine-Code&quot;;\r\n    } &quot;Vaccine-Coding&quot;;\r\n    ddcc.entry as entry then {\r\n      // entry.resource : DDCCOrganization as organization\r\n      entry.resource : Organization as organization then {\r\n        organization.name as name -&gt; vacEvent.is = name;\r\n      } &quot;Centre-Name&quot;;\r\n    } &quot;Vaccination-Centre&quot;;\r\n    ddcc.entry as entry then {\r\n      // entry.resource : DDCCComposition as composition\r\n      entry.resource : Composition as composition then {\r\n        composition.identifier as identifier then {\r\n          identifier.value as value -&gt; vacEvent.ci = value;\r\n        } &quot;Vaccination-Event-ID-Value&quot;;\r\n      } &quot;Vaccination-Event-ID&quot;;\r\n    } &quot;Vaccination-Event&quot;;\r\n  } &quot;Vaccination&quot;;\r\n}\r\n\r\n</pre></div>"
   },
-  "url": "http://who-int.github.io/svc/StructureMap/ddcc-to-eu-dcc",
+  "url": "http://worldhealthorganization.github.io/ddcc/StructureMap/ddcc-to-eu-dcc",
   "name": "ddcc-to-eu-dcc",
   "structure": [ {
     "url": "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCComposition",
@@ -49,7 +49,7 @@
     "alias": "vacEvent"
   } ],
   "group": [ {
-    "name": "Decode_DDCC_to_QR",
+    "name": "Decode-DDCC-to-QR",
     "typeMode": "none",
     "input": [ {
       "name": "ddcc",
@@ -90,7 +90,7 @@
           "variable": "patient"
         } ],
         "dependent": [ {
-          "name": "Decode_Patient_To_QR",
+          "name": "Decode-Patient-To-QR",
           "variable": [ "patient", "qr" ]
         } ]
       } ]
@@ -110,13 +110,13 @@
           "variable": "immunization"
         } ],
         "dependent": [ {
-          "name": "Decode_Immunization_To_QR",
+          "name": "Decode-Immunization-To-QR",
           "variable": [ "ddcc", "immunization", "qr" ]
         } ]
       } ]
     } ]
   }, {
-    "name": "Decode_Patient_To_QR",
+    "name": "Decode-Patient-To-QR",
     "typeMode": "none",
     "input": [ {
       "name": "patient",
@@ -169,7 +169,7 @@
       } ]
     } ]
   }, {
-    "name": "Decode_Immunization_To_QR",
+    "name": "Decode-Immunization-To-QR",
     "typeMode": "none",
     "input": [ {
       "name": "ddcc",
@@ -239,14 +239,14 @@
             } ]
           } ]
         }, {
-          "name": "Protocol Disease",
+          "name": "Protocol-Disease",
           "source": [ {
             "context": "protocol",
             "element": "targetDisease",
             "variable": "targetDisease"
           } ],
           "rule": [ {
-            "name": "Protocol Disease Code",
+            "name": "Protocol-Disease-Code",
             "source": [ {
               "context": "targetDisease",
               "element": "coding",
@@ -314,7 +314,7 @@
         } ],
         "documentation": "TODO: need to populate vacEvent.ma market authorization holder"
       }, {
-        "name": "Vaccine Brand",
+        "name": "Vaccine-Brand",
         "source": [ {
           "context": "immunization",
           "element": "extension",
@@ -322,7 +322,7 @@
           "condition": "(url = 'http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCVaccineBrand')"
         } ],
         "rule": [ {
-          "name": "Vaccine Brand Code",
+          "name": "Vaccine-Brand-Code",
           "source": [ {
             "context": "brand",
             "element": "valueCoding",
@@ -348,14 +348,14 @@
         } ],
         "documentation": "immunization.extension : DDCCBrand as brand"
       }, {
-        "name": "Vaccine Coding",
+        "name": "Vaccine-Coding",
         "source": [ {
           "context": "immunization",
           "element": "vaccineCode",
           "variable": "vaccineCode"
         } ],
         "rule": [ {
-          "name": "Vaccine Code",
+          "name": "Vaccine-Code",
           "source": [ {
             "context": "vaccineCode",
             "element": "coding",
@@ -381,14 +381,14 @@
         } ],
         "documentation": "immunization.vaccineCode : Coding as vaccineCode then {"
       }, {
-        "name": "Vaccination Centre",
+        "name": "Vaccination-Centre",
         "source": [ {
           "context": "ddcc",
           "element": "entry",
           "variable": "entry"
         } ],
         "rule": [ {
-          "name": "Centre Name",
+          "name": "Centre-Name",
           "source": [ {
             "context": "entry",
             "type": "Organization",
@@ -415,14 +415,14 @@
           "documentation": "entry.resource : DDCCOrganization as organization"
         } ]
       }, {
-        "name": "Vaccincation Event",
+        "name": "Vaccination-Event",
         "source": [ {
           "context": "ddcc",
           "element": "entry",
           "variable": "entry"
         } ],
         "rule": [ {
-          "name": "Vaccination Event ID",
+          "name": "Vaccination-Event-ID",
           "source": [ {
             "context": "entry",
             "type": "Composition",
@@ -430,7 +430,7 @@
             "variable": "composition"
           } ],
           "rule": [ {
-            "name": "Vaccination Event ID Value",
+            "name": "Vaccination-Event-ID-Value",
             "source": [ {
               "context": "composition",
               "element": "identifier",

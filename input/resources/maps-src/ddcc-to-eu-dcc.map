@@ -12,7 +12,7 @@ uses "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCImmu
 uses "http://hl7.eu/fhir/ig/dcc/StructureDefinition/HC1" alias EUDCC as target
 uses "http://hl7.eu/fhir/ig/dcc/StructureDefinition/v" alias vacEvent as target
 
-group Decode_DDCC_to_QR (
+group Decode-DDCC-to-QR (
 	source ddcc: DDCCDocument,
 	target qr : EUDCC
 	){
@@ -21,19 +21,19 @@ group Decode_DDCC_to_QR (
 	
 	ddcc.entry as entry then {
  	     entry.resource : DDCCPatient as patient
-	     then  Decode_Patient_To_QR(patient,qr) "Patient";
+	     then  Decode-Patient-To-QR(patient,qr) "Patient";
 	} "Patient" ;
 
 
 
 	ddcc.entry as entry then {
  	     entry.resource : Immunization as immunization
-	     then  Decode_Immunization_To_QR(ddcc, immunization,qr) "Immunization";
+	     then  Decode-Immunization-To-QR(ddcc, immunization,qr) "Immunization";
 	} "Immunization";
 	
 }
 
-group Decode_Patient_To_QR(
+group Decode-Patient-To-QR(
       source patient: DDCCPatient,
       target qr  : EUDCC
       ) {
@@ -47,7 +47,7 @@ group Decode_Patient_To_QR(
 }
 
 
-group Decode_Immunization_To_QR(
+group Decode-Immunization-To-QR(
       source ddcc: DDCCDocument,
       source immunization: DDCCImmunization,
       target qr : EUDCC
@@ -61,8 +61,8 @@ group Decode_Immunization_To_QR(
      			     protocol.targetDisease as targetDisease 		     then {
 			           targetDisease.coding as coding then {
 				   	coding.code as code -> vacEvent.tg = code;
-				     } "Protocol Disease Code";
-			     } "Protocol Disease";
+				     } "Protocol-Disease-Code";
+			     } "Protocol-Disease";
 		     }  "Protocol";
 
                 immunization.occurrenceDateTime as date -> vacEvent.dt = date;
@@ -83,15 +83,15 @@ group Decode_Immunization_To_QR(
 		     then {		     
 		     	 brand.valueCoding as valueCoding  then {
 			 	valueCoding.code as code  -> vacEvent.mp = code;
-			 } "Vaccine Brand Code";
-		     } "Vaccine Brand";
+			 } "Vaccine-Brand-Code";
+		     } "Vaccine-Brand";
 		     
 //		immunization.vaccineCode : Coding as vaccineCode then {
 		immunization.vaccineCode  as vaccineCode then {
 			     vaccineCode.coding as coding then {
 			     	 coding.code as code -> vacEvent.vp = code;
-			      } "Vaccine Code";
-		    } "Vaccine Coding";
+			      } "Vaccine-Code";
+		    } "Vaccine-Coding";
 
 
 
@@ -100,8 +100,8 @@ group Decode_Immunization_To_QR(
 		     entry.resource : Organization as organization
 		         then {
 			      organization.name as name ->  vacEvent.is =  name ;
-			 } "Centre Name";   
-		} "Vaccination Centre";
+			 } "Centre-Name";   
+		} "Vaccination-Centre";
 
 
 		ddcc.entry as entry then {
@@ -110,9 +110,9 @@ group Decode_Immunization_To_QR(
 		     then {
 		     	   composition.identifier as identifier then {
 			       identifier.value as value -> vacEvent.ci = value;
-			   } "Vaccination Event ID Value";
-    		      } "Vaccination Event ID";
-		} "Vaccincation Event";	      
+			   } "Vaccination-Event-ID-Value";
+    		      } "Vaccination-Event-ID";
+		} "Vaccination-Event";	      
 		    
 	   } "Vaccination";
 	   

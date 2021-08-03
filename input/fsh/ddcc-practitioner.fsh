@@ -14,7 +14,7 @@ vaccinate an [DDCC Patient](StructureDefinition-DDCCPatient.html).
 * identifier ^slicing.discriminator[=].path = "assigner.resolve()"
 * identifier ^slicing.rules = #open
 * identifier ^slicing.ordered = true
-* identifier contains ddccIdentifier 0..
+* identifier contains ddccIdentifier 1..
 * identifier[ddccIdentifier].use 1..1 MS
 * identifier[ddccIdentifier].use = #official
 * identifier[ddccIdentifier].system 1.. MS
