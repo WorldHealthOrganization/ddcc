@@ -2,6 +2,7 @@ Profile:      DDCCDocumentReferenceQR
 Parent:       DocumentReference
 Id:           DDCCDocumentReferenceQR
 Title:        "DDCC DocumentReference return for QR"
+Description:  "DDCC DocumentReference for QR codes including the QR image and the serialized content."
 * category 1.. MS
 * category from DDCC_QR_Category_Usage_ValueSet (extensible)
 * subject only Reference(DDCCPatient)

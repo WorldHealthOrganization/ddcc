@@ -2,6 +2,7 @@ Profile:        DDCCGenerateHealthCertificateParameters
 Parent:         Parameters
 Id:             DDCCGenerateHealthCertificateParameters
 Title:          "DDCC Generate Health Certificate Parameters"
+Description:    "Parameters for the [DDCC Generate Health Certificate Operation](OperationDefinition-DDCC-QuestionnaireResponse-generateHealthCertificate.html)."
 * ^publisher = "World Health Organization (WHO)"
 * parameter 1..
 * parameter ^slicing.discriminator.type = #value

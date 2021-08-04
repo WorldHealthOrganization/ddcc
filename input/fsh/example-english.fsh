@@ -70,7 +70,6 @@ Usage: #example
 * subject = Reference(DDCC-Patient-English)
 * date = "2020-05-06"
 * author = Reference(DDCC-Organization-English)
-* title = "Digital Documentation of COVID-19 Certificate (DDCC)"
 * attester.party = Reference(DDCC-Organization-English)
 * section[vaccination].code = $LOINC#11369-6
 * section[vaccination].focus = Reference(DDCC-Immunization-English)
