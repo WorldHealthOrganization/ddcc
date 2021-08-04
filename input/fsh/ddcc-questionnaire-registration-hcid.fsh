@@ -25,12 +25,20 @@ Usage: #definition
 * extension[$launchContext].extension[type].valueCode = #Patient
 * extension[$launchContext].extension[description].valueString = "Patient used in form pre-population"
 
+* item[+].linkId = "name"
+* item[=].text = "Patient Name"
+* item[=].type = #string
+* item[=].extension[$populationContext].valueExpression.description = "Patient Name"
+* item[=].extension[$populationContext].valueExpression.language = #text/fhirpath
+* item[=].extension[$populationContext].valueExpression.expression = "%patient.name"
+
+
 * item[+].linkId = "birthDate"
 * item[=].text = "Patient Date of Birth"
 * item[=].type = #date
 * item[=].extension[$populationContext].valueExpression.description = "Patient Date of Birth"
 * item[=].extension[$populationContext].valueExpression.language = #text/fhirpath
-* item[=].extension[$populationContext].valueExpression.expression = "%patient.name.birthDate"
+* item[=].extension[$populationContext].valueExpression.expression = "%patient.birthDate"
 
 
 
