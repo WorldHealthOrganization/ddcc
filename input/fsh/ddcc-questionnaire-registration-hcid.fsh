@@ -41,7 +41,7 @@ Usage: #definition
 * item[=].required = true
 * item[=].extension[$extractionContext].valueExpression.description = "Health Certificate Identifier"
 * item[=].extension[$extractionContext].valueExpression.language = #text/fhirpath
-* item[=].extension[$extractionContext].valueExpression.expression = "%List.identifier.system.value"
+* item[=].extension[$extractionContext].valueExpression.expression = "http://hl7.org/fhir/StructureDefinition/List#List.identifier.system.value"
 
 * item[=].item[+].linkId = "patientid"
 * item[=].item[=].text = "Patient ID (internal)"
@@ -53,7 +53,7 @@ Usage: #definition
 * item[=].item[=].extension[$populationContext].valueExpression.expression = "%patient.id"
 * item[=].item[=].extension[$extractionContext].valueExpression.description = "Health Certificate Identifier"
 * item[=].item[=].extension[$extractionContext].valueExpression.language = #text/fhirpath
-* item[=].item[=].extension[$extractionContext].valueExpression.expression = "%List.subject.reference(%patient)"
+* item[=].item[=].extension[$extractionContext].valueExpression.expression = "http://hl7.org/fhir/StructureDefinition/List#List.subject.reference)"
 
 
 
