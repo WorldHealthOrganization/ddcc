@@ -1,7 +1,11 @@
 Alias: $ICD11 = http://id.who.int/icd11/mms
 Alias: $LOINC = http://loinc.org
 
-
+CodeSystem:     DDCC_Example_Test_CodeSystem
+Id:             DDCC-Example-Test-CodeSystem
+Title:          "DDCC Codes for examples"
+Description:    "Example codes for example resources."
+* #TEST        "Test"
 
 Instance:     DDCC-Patient-English
 InstanceOf:   DDCCPatient
@@ -27,7 +31,7 @@ Usage: #example
 // Description: ""
 * date = "2021-05-06"
 * patient = Reference(DDCC-Patient-English)
-* recommendation.vaccineCode.coding[ddccVaccine] = $ICD11#XM0CX4
+* recommendation.vaccineCode.coding[ddccVaccine] = $ICD11#XM0CX4 "COVID-19 vaccine, replicating viral vector"
 * recommendation.dateCriterion.value = "2021-05-20"
 * recommendation.dateCriterion.code = http://loinc.org#30980-7
 * recommendation.forecastStatus = http://terminology.hl7.org/CodeSystem/immunization-recommendation-status#due
@@ -39,13 +43,11 @@ Usage: #example
 // Title: ""
 // Description: ""
 * status = #completed
-* extension[vaccineBrand].valueCoding.system = "http://EXAMPLE.ORG/brands"
-* extension[vaccineBrand].valueCoding.code = #VAX-BRAND-EX
-* extension[vaccineMarketAuthorization].valueCoding.system = "http://EXAMPLE.ORG/mahs"
-* extension[vaccineMarketAuthorization].valueCoding.code = #VAX-MAH-EX
+* extension[vaccineBrand].valueCoding = DDCC_Example_Test_CodeSystem#TEST
+* extension[vaccineMarketAuthorization].valueCoding = DDCC_Example_Test_CodeSystem#TEST
 * extension[validFrom].valueDateTime = "2021-05-30"
-* extension[country].valueCode = #CHE
-* vaccineCode.coding[ddccVaccine] = $ICD11#XM0CX4
+* extension[country].valueCode = urn:iso:std:iso:3166#CHE
+* vaccineCode.coding[ddccVaccine] = $ICD11#XM0CX4 "COVID-19 vaccine, replicating viral vector"
 * expirationDate = "2021-06-30"
 * lotNumber = "123"
 * patient = Reference(DDCC-Patient-English)
@@ -53,7 +55,7 @@ Usage: #example
 * occurrenceDateTime =  "2021-05-06"
 * performer.actor = Reference(DDCC-Organization-English)
 * protocolApplied[protocolAppliedAuthority].authority = Reference(DDCC-Organization-English)
-* protocolApplied[protocolAppliedAuthority].targetDisease = $ICD11#RA01.0
+* protocolApplied[protocolAppliedAuthority].targetDisease = $ICD11#RA01 "COVID-19"
 * protocolApplied[protocolAppliedAuthority].doseNumberPositiveInt = 1
 * protocolApplied[protocolAppliedAuthority].seriesDosesPositiveInt = 2
 
@@ -87,7 +89,7 @@ Usage: #example
 * identifier[=].value = "9990123012301230123"
 
 
-* entry[ddccComposition].fullUrl = "http://www.example.org/fhir/Organization/DDCCComposition"
+* entry[ddccComposition].fullUrl = "http://www.example.org/fhir/Composition/DDCC-Composition-Example-English"
 * entry[ddccComposition].resource = DDCC-Composition-Example-English
 
 * entry[ddccPatient].fullUrl = "http://www.example.org/fhir/Patient/DDCC-Patient-English"
@@ -99,5 +101,5 @@ Usage: #example
 * entry[ddccImmunization].fullUrl = "http://www.example.org/fhir/Immunization/DDCC-Immunization-English"
 * entry[ddccImmunization].resource = DDCC-Immunization-English
 
-* entry[ddccImmunizationRecommendation].fullUrl = "http://www.example.org/fhir/ImmunizationReccomendation/DDCC-ImmunizationRecommendation-English"
+* entry[ddccImmunizationRecommendation].fullUrl = "http://www.example.org/fhir/ImmunizationRecommendation/DDCC-ImmunizationRecommendation-English"
 * entry[ddccImmunizationRecommendation].resource = DDCC-ImmunizationRecommendation-English

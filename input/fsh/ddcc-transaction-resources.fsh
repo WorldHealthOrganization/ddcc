@@ -40,14 +40,17 @@ An [DDCC Submit Health Event Request](StructureDefinition-DDCCSubmitHealthEventR
 * type MS
 * type = #batch
 * timestamp MS
-* entry ^slicing.discriminator.type = #profile
-* entry ^slicing.discriminator.path = "resource.resolve()"
+* entry ^slicing.discriminator.type = #type
+* entry ^slicing.discriminator.path = "resource"
 * entry ^slicing.rules = #closed
-* entry contains ddccParameters 1..*
-* entry[ddccParameters].resource only DDCCGenerateHealthCertificateParameters or DDCCQuestionnaireResponse
+* entry 1..* MS
+* entry contains ddccParameters 0..1 and ddccQuestionnaireResponse 0..1
+* entry[ddccParameters].resource only DDCCGenerateHealthCertificateParameters
 * entry[ddccParameters].request.method = #POST
 * entry[ddccParameters].request.url 1..1
-
+* entry[ddccQuestionnaireResponse].resource only DDCCQuestionnaireResponse
+* entry[ddccQuestionnaireResponse].request.method = #POST
+* entry[ddccQuestionnaireResponse].request.url 1..1
 
 
 
@@ -66,8 +69,8 @@ A DDCC Submit Health Event Response](StructureDefinition-DDCCSubmitHealthEventRe
 * type MS
 * type = #batch-response
 * timestamp MS
-* entry ^slicing.discriminator.type = #profile
-* entry ^slicing.discriminator.path = "resource.resolve()"
+* entry ^slicing.discriminator.type = #type
+* entry ^slicing.discriminator.path = "resource"
 * entry ^slicing.rules = #closed
 * entry contains ddccBundle 1..*
 * entry[ddccBundle].resource only DDCCDocument
@@ -83,8 +86,8 @@ to add on the DDCC generator.
 """
 * ^publisher = "World Health Organization (WHO)"
 * type = #transaction
-* entry ^slicing.discriminator.type = #profile
-* entry ^slicing.discriminator.path = "resource.resolve()"
+* entry ^slicing.discriminator.type = #type
+* entry ^slicing.discriminator.path = "resource"
 * entry ^slicing.rules = #closed
 * entry contains ddccQR 1..1
         and ddccPatient 1..1

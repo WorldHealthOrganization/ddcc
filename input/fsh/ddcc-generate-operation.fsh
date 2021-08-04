@@ -3,7 +3,7 @@ InstanceOf:     OperationDefinition
 Title:          "OperationDefinition for generating a health certificate (DDCC) that is signed."
 Usage:          #definition
 * id = "DDCC-QuestionnaireResponse-generateHealthCertificate"
-* name = "QuestionnaireResponse Generate Health Certificate"
+* name = "QuestionnaireResponse_Generate_Health_Certificate"
 * status = #draft
 * kind = #operation
 * experimental = true

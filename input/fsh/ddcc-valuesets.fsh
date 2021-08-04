@@ -40,7 +40,7 @@ Title:          "ConceptMap from ICD-11 to SNOMED CT for Vaccines"
 Usage:          #definition
 
 * id = "who-ddcc-map-icd11-sct-vaccines"
-* name = "ICD-11 to SNOMED CT mappings for COVID-19 vaccines"
+* name = "ICD11_SNOMED_CT_COVID19_vaccines"
 * status = #draft
 * experimental = true
 * date = "2021-04-23"
@@ -68,7 +68,7 @@ ed"
 Usage:          #definition
 
 * id = "who-ddcc-map-icd11-sct-disease-targeted"
-* name = "ICD-11 to SNOMED CT mappings for COVID-19 Disease or Agent Targeted"
+* name = "ICD_11_SNOMED_CT_COVID19_Disease"
 * status = #draft
 * experimental = true
 * date = "2021-04-23"

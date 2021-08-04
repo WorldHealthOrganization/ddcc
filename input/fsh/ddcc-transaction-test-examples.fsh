@@ -11,6 +11,7 @@ InstanceOf:   DDCCSubmitHealthEventRequest
 Usage:        #example
 
 * type = #batch
-* entry[+].resource = DDCC-VS-TX-SHE-Parameters-1
+* entry[+].fullUrl = "http://www.example.org/fhir/Parameters/DDCC-VS-TX-SHE-Parameters-1"
+* entry[=].resource = DDCC-VS-TX-SHE-Parameters-1
 * entry[=].request.method = #POST
 * entry[=].request.url = "QuestionnaireResponse/$generateHealthCertificate"

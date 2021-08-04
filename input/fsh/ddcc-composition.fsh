@@ -33,8 +33,8 @@ Describes the logical structure for a Digital Documentation of COVID-19 Certific
 
 * section ^slicing.discriminator[+].type = #value
 * section ^slicing.discriminator[=].path = "code"
-* section ^slicing.discriminator[+].type = #profile
-* section ^slicing.discriminator[=].path = "focus.resolve()"
+* section ^slicing.discriminator[+].type = #type
+* section ^slicing.discriminator[=].path = "focus"
 * section ^slicing.rules = #closed
 * section contains
     vaccination 1..1 MS 
@@ -61,8 +61,8 @@ A [DDCC Document](StructureDefinition-DDCCDocument.html) is a document bundle co
 * type MS
 * type = #document
 * timestamp MS
-* entry ^slicing.discriminator.type = #profile
-* entry ^slicing.discriminator.path = "resource.resolve()"
+* entry ^slicing.discriminator.type = #type
+* entry ^slicing.discriminator.path = "resource"
 * entry ^slicing.rules = #closed
 * entry contains ddccComposition 1..1
     and ddccPatient 1..1

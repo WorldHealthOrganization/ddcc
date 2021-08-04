@@ -9,7 +9,7 @@ Parent:         sdc-questionnaire-extr-smap
 Id:             DDCCQuestionnaire
 Title:          "DDCC Questionniare"
 Description:    """ 
-Describes the logical structure for a questionnaire associacted to a DDCC which includes a Structure Map to generate the relevant DDCC from a given [DDCC QuestionnaireResponse](StructureDefintion-DDCCQuestionnaireResponse.html) which responds to the DDCC Questionnaire.
+Describes the logical structure for a questionnaire associacted to a DDCC which includes a Structure Map to generate the relevant DDCC from a given [DDCC QuestionnaireResponse](StructureDefinition-DDCCQuestionnaireResponse.html) which responds to the DDCC Questionnaire.
 """
 * ^abstract = true
 * extension[$targetStructureMap] 1.. MS
@@ -33,7 +33,7 @@ Usage: #definition
 * id = "DDCCVSCoreDataSetQuestionnaire"
 * url = $DDCCQuestionnaireURL
 * name = "DDCCCoreDataSetQuestionnaire" // computer ready name
-* title = "DDCC Core Data Set Questionnaire "
+* title = "DDCC Core Data Set Questionnaire"
 * description = "DDCC Questionnaire for an Immunization event."
 * version = "0.1.0"
 * status = #draft
@@ -186,13 +186,13 @@ Usage:        #example
 * item[=].answer.valueCoding = $ICD11#XM1NL1
 
 * item[+].linkId = "brand"
-* item[=].answer.valueCoding = #test-brand
+* item[=].answer.valueCoding = DDCC_Example_Test_CodeSystem#TEST
 
 * item[+].linkId = "manufacturer"
-* item[=].answer.valueCoding = #test-manufacturer
+* item[=].answer.valueCoding = DDCC_Example_Test_CodeSystem#TEST
 
 * item[+].linkId = "ma_holder"
-* item[=].answer.valueCoding = #test-ma-holder
+* item[=].answer.valueCoding = DDCC_Example_Test_CodeSystem#TEST
 
 * item[+].linkId = "lot"
 * item[=].answer.valueString = "ER8732"
@@ -210,7 +210,7 @@ Usage:        #example
 * item[=].answer.valueInteger = 2
 
 * item[+].linkId = "country"
-* item[=].answer.valueCoding = #USA
+* item[=].answer.valueCoding = urn:iso:std:iso:3166#USA
 
 * item[+].linkId = "centre"
 * item[=].answer.valueString = "Vaccination Site"
@@ -219,7 +219,7 @@ Usage:        #example
 * item[=].answer.valueString = "lAH8TnzqAInqwkslHzOlSA"
 
 * item[+].linkId = "disease"
-* item[=].answer.valueCoding = $ICD11#RA01.0
+* item[=].answer.valueCoding = $ICD11#RA01
 
 * item[+].linkId = "due_date"
 * item[=].answer.valueDate = "2021-04-28"

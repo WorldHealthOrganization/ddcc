@@ -31,7 +31,7 @@ Id:             DDCCPractitionerRole
 Title:          "DDCC Practitioner Role"
 Description:    """ 
 Association of an [DDCC Practitioner](StructureDefinition-DDCCPractitioner.html) to a 
-managing [DDCC Organization](StructureDefinition-DDCCOrgaznization.html), indicating 
+managing [DDCC Organization](StructureDefinition-DDCCOrganization.html), indicating 
 that an DDCC Practitioner is authorized by the public health authority (PHA) to 
 vaccinate an [DDCC Patient](StructureDefinition-DDCCPatient.html).
 

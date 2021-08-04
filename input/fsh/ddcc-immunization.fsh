@@ -50,8 +50,8 @@ Immunization resource.
 * performer.actor only Reference(DDCCPractitioner or DDCCOrganization)
 * performer.actor ^label = "Health worker identifier"
 * protocolApplied 1.. MS
-* protocolApplied ^slicing.discriminator.type = #profile
-* protocolApplied ^slicing.discriminator.path = "authority.resolve()"
+* protocolApplied ^slicing.discriminator.type = #type
+* protocolApplied ^slicing.discriminator.path = "authority"
 * protocolApplied ^slicing.rules = #open
 * protocolApplied contains protocolAppliedAuthority 1.. MS
 * protocolApplied[protocolAppliedAuthority].authority only Reference(DDCCOrganization)

@@ -22,21 +22,19 @@ Usage: #example
 // Description: ""
 * status = #completed
 // 
-* extension[vaccineBrand].valueCoding.system = "urn:EXAMPLE-who-:smart:vaccine-certificate:RC1:coding"
-* extension[vaccineBrand].valueCoding.code = #TEST
-* extension[country].valueCode = #RUS
-* vaccineCode.coding[ddccVaccine].system = "urn:EXAMPLE-who-:smart:vaccine-certificate:RC1:coding"
-* vaccineCode.coding[ddccVaccine].code = $ICD11#XM0CX4
+* extension[vaccineBrand].valueCoding = DDCC_Example_Test_CodeSystem#TEST
+* extension[country].valueCode = urn:iso:std:iso:3166#RUS
+* vaccineCode.coding[ddccVaccine] = $ICD11#XM0CX4 "COVID-19 vaccine, replicating viral vector"
 // 
 * expirationDate = "2021-06-30"
 * lotNumber = "123"
-* patient = Reference(DDCC-Patient-Example-Russian)
+* patient = Reference(DDCC-Patient-Russian)
 * location.display = "Сайт вакцинации"
 * occurrenceDateTime =  "2021-02-02"
 * performer.actor = Reference(DDCC-Organization-Russian)
 // 
 * protocolApplied[protocolAppliedAuthority].authority = Reference(DDCC-Organization-Russian)
-* protocolApplied[protocolAppliedAuthority].targetDisease = $ICD11#RA01.0
+* protocolApplied[protocolAppliedAuthority].targetDisease = $ICD11#RA01 "COVID-19"
 * protocolApplied[protocolAppliedAuthority].doseNumberPositiveInt = 1
 * protocolApplied[protocolAppliedAuthority].seriesDosesPositiveInt = 2
 
