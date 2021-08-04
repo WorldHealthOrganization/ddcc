@@ -4,7 +4,7 @@ Alias: $launchContext = http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-quest
 Alias: $populationContext = http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemPopulationContext
 Alias: $hiddenItem = http://hl7.org/fhir/StructureDefinition/questionnaire-hidden
 Alias: $itemContext = http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext
-Alias: $DDCCHCIDRegistrationQuestionnaireURL = http://worldhealthorganization.github.io/ddcc/DDCCHCIDRegistrationQuestionnaire
+Alias: $DDCCHCIDRegistrationQuestionnaireURL = https://worldhealthorganization.github.io/ddcc/DDCCHCIDRegistrationQuestionnaire
 
 //see: https://developer.commure.com/docs/apis/sdc/examples/#retaining-ids-through-the-populate-and-extract-lifecycle
 
@@ -22,7 +22,7 @@ Usage: #definition
 * experimental = true
 * date = "2021-06-03"
 * extension[$launchContext].extension[name].valueId = "patient"
-* extension[$launchContext].extension[type].valueCode = #Patient
+* extension[$launchContext].extension[type].valueCode = #patient
 * extension[$launchContext].extension[description].valueString = "Patient used in form pre-population"
 
 * item[+].linkId = "name"
