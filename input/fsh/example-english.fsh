@@ -31,7 +31,7 @@ Usage: #example
 // Description: ""
 * date = "2021-05-06"
 * patient = Reference(DDCC-Patient-English)
-* recommendation.vaccineCode.coding[ddccVaccine] = $ICD11#XM0CX4 "COVID-19 vaccine, replicating viral vector"
+* recommendation.vaccineCode.coding[ddccVaccine] = $ICD11#XM0CX4
 * recommendation.dateCriterion.value = "2021-05-20"
 * recommendation.dateCriterion.code = http://loinc.org#30980-7
 * recommendation.forecastStatus = http://terminology.hl7.org/CodeSystem/immunization-recommendation-status#due
@@ -47,7 +47,7 @@ Usage: #example
 * extension[vaccineMarketAuthorization].valueCoding = DDCC_Example_Test_CodeSystem#TEST
 * extension[validFrom].valueDateTime = "2021-05-30"
 * extension[country].valueCode = urn:iso:std:iso:3166#CHE
-* vaccineCode.coding[ddccVaccine] = $ICD11#XM0CX4 "COVID-19 vaccine, replicating viral vector"
+* vaccineCode.coding[ddccVaccine] = $ICD11#XM0CX4
 * expirationDate = "2021-06-30"
 * lotNumber = "123"
 * patient = Reference(DDCC-Patient-English)
@@ -55,7 +55,7 @@ Usage: #example
 * occurrenceDateTime =  "2021-05-06"
 * performer.actor = Reference(DDCC-Organization-English)
 * protocolApplied[protocolAppliedAuthority].authority = Reference(DDCC-Organization-English)
-* protocolApplied[protocolAppliedAuthority].targetDisease = $ICD11#RA01 "COVID-19"
+* protocolApplied[protocolAppliedAuthority].targetDisease = $ICD11#RA01
 * protocolApplied[protocolAppliedAuthority].doseNumberPositiveInt = 1
 * protocolApplied[protocolAppliedAuthority].seriesDosesPositiveInt = 2
 
