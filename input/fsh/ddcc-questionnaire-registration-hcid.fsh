@@ -4,7 +4,7 @@ Alias: $launchContext = http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-quest
 Alias: $populationContext = http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemPopulationContext
 Alias: $hiddenItem = http://hl7.org/fhir/StructureDefinition/questionnaire-hidden
 Alias: $itemContext = http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext
-Alias: $DDCCHCIDRegistrationQuestionnaireURL = https://worldhealthorganization.github.io/ddcc/DDCCHCIDRegistrationQuestionnaire
+Alias: $DDCCHCIDRegistrationQuestionnaireURL = https://worldhealthorganization.github.io/ddcc/Questionnaire/DDCCHCIDRegistrationQuestionnaire
 
 //see: https://developer.commure.com/docs/apis/sdc/examples/#retaining-ids-through-the-populate-and-extract-lifecycle
 
