@@ -36,11 +36,12 @@ WHO Disease or Agent Targeted List (COVID-19) from [ICD 11](https://icd.who.int/
 
 Instance:       WHO_DDCC_Map_ICD11_to_SCT_Vaccines
 InstanceOf:     ConceptMap
-Title:          "ConceptMap from ICD-11 to SNOMED CT for Vaccines"
+Description:    "Mapping from ICD-11 to SNOMED CT for COVID-19 Vaccines"
 Usage:          #definition
 
 * id = "who-ddcc-map-icd11-sct-vaccines"
 * name = "ICD11_SNOMED_CT_COVID19_vaccines"
+* title = "ConceptMap from ICD-11 to SNOMED CT for Vaccines"
 * status = #draft
 * experimental = true
 * date = "2021-04-23"
@@ -63,12 +64,12 @@ Usage:          #definition
 
 Instance:       WHO_DDCC_Map_ICD11_to_SCT_Disease_Targeted
 InstanceOf:     ConceptMap
-Title:          "ConceptMap from ICD-11 to SNOMED CT for Disease or Agent Target
-ed"
+Description:    "Mapping from ICD-11 to SNOMED CT for COVID-19 disease."
 Usage:          #definition
 
 * id = "who-ddcc-map-icd11-sct-disease-targeted"
 * name = "ICD_11_SNOMED_CT_COVID19_Disease"
+* title = "ConceptMap from ICD-11 to SNOMED CT for Disease or Agent Targeted"
 * status = #draft
 * experimental = true
 * date = "2021-04-23"

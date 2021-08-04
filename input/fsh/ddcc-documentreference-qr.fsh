@@ -32,6 +32,7 @@ Description:    "Possible formats available for QR usage."
 
 ValueSet:       DDCC_QR_Category_Usage_ValueSet
 Id:             DDCC-QR-Category-Usage-ValueSet
+Title:          "DDCC QR Category Usage Codes"
 Description: 	"Categorization of QR codes by their business usage"
 * include codes from system DDCC_QR_Category_Usage_CodeSystem
 
@@ -45,5 +46,6 @@ Description:    "Possible formats available for QR data."
 
 ValueSet:       DDCC_QR_Format_ValueSet
 Id:             DDCC-QR-Format-ValueSet
+Title:          "DDCC QR Format Codes"
 Description: 	"Format of the representation of QR code"
 * include codes from system DDCC_QR_Format_CodeSystem

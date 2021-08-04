@@ -1,9 +1,9 @@
 Instance:       DDCCGenerateHealthCertificate
 InstanceOf:     OperationDefinition
-Title:          "OperationDefinition for generating a health certificate (DDCC) that is signed."
 Usage:          #definition
 * id = "DDCC-QuestionnaireResponse-generateHealthCertificate"
 * name = "QuestionnaireResponse_Generate_Health_Certificate"
+* title = "OperationDefinition for generating a health certificate (DDCC) that is signed."
 * status = #draft
 * kind = #operation
 * experimental = true

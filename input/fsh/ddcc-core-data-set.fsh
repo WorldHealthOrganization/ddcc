@@ -1,11 +1,11 @@
 Instance:       DDCCCoreDataSetPoV
 InstanceOf:     StructureDefinition
 Description:    "Data elements for the DDCC Core Data Set - Proof of Vaccination."
-Title:          "DDCC Core Data Set - Proof of Vaccination Logical Model"
 Usage:          #definition
 
 * id = "DDCCCoreDataSetPoV"
 * name = "DDCCCoreDataSetPoV"
+* title = "DDCC Core Data Set - Proof of Vaccination Logical Model"
 * description = "DDCC Core Data - Proof of Vaccination elements."
 * url = "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSetPoV"
 * version = "RC2"
@@ -255,11 +255,11 @@ Usage:          #definition
 Instance:       DDCCCoreDataSetCoC
 InstanceOf:     StructureDefinition
 Description:    "Data elements for the DDCC Core Data Set - Continuity of Care."
-Title:          "DDCC Core Data Set - Continuity of Care Logical Model"
 Usage:          #definition
 
 * id = "DDCCCoreDataSetCoC"
 * name = "DDCCCoreDataSetCoC"
+* title = "DDCC Core Data Set - Continuity of Care Logical Model"
 * description = "DDCC Core Data - Continuity of Care elements."
 * url = "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSetCoC"
 * version = "RC2"
