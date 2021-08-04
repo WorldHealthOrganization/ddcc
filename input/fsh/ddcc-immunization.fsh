@@ -70,7 +70,7 @@ Id:             DDCCVaccineBrand
 Title:          "DDCC Vaccine Brand for Immunization"
 Description:    "DDCC Vaccine Brand for Immunization"
 * ^context.type = #element
-* ^context.expression = "DDCCImmunization"
+* ^context.expression = "Immunization"
 * value[x] only Coding
 * valueCoding 1..1 MS
 
@@ -79,7 +79,7 @@ Id:             DDCCVaccineMarketAuthorization
 Title:          "DDCC Vaccine Market Authorization for Immunization"
 Description:    "DDCC Vaccine Market Authorization for Immunization"
 * ^context.type = #element
-* ^context.expression = "DDCCImmunization"
+* ^context.expression = "Immunization"
 * value[x] only Coding
 * valueCoding 1..1 MS
 
@@ -88,7 +88,7 @@ Id:             DDCCCountryOfVaccination
 Title:          "DDCC Country Of Vaccination for Immunization"
 Description:    "DDCC Country Of Vaccination for Immunization"
 * ^context.type = #element
-* ^context.expression = "DDCCImmunization"
+* ^context.expression = "Immunization"
 * value[x] only code
 * valueCode 1..1 MS
 * valueCode from 	http://hl7.org/fhir/ValueSet/iso3166-1-3 (preferred)
@@ -98,7 +98,7 @@ Id:             DDCCVaccineValidFrom
 Title:          "DDCC Vaccine Valid From"
 Description:    "Date upon which provided vaccination is considered valid"
 * ^context.type = #element
-* ^context.expression = "DDCCImmunization"
+* ^context.expression = "Immunization"
 * value[x] only dateTime
 * valueDateTime 1..1 MS
 
