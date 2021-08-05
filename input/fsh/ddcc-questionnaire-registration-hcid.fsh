@@ -70,7 +70,7 @@ Usage: #definition
 * item[=].item[=].extension[populationContext].valueExpression.expression = "%patient.id"
 * item[=].item[=].extension[extractionContext].valueExpression.description = "Health Certificate Identifier"
 * item[=].item[=].extension[extractionContext].valueExpression.language = #text/fhirpath
-* item[=].item[=].extension[extractionContext].valueExpression.expression = "http://hl7.org/fhir/StructureDefinition/List#List.subject.reference)"
+* item[=].item[=].extension[extractionContext].valueExpression.expression = "http://hl7.org/fhir/StructureDefinition/List#List.subject.reference"
 
 
 
