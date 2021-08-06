@@ -78,13 +78,7 @@ Usage:          #definition
 * group[+].source = $ICD11
 * group[=].target = SCT
 
-* group[=].element[+].code = #RA01.0
+* group[=].element[+].code = #RA01
 * group[=].element[=].target[+].code = #840539006
-* group[=].element[=].target[=].equivalence = #equivalent
-* group[=].element[=].target[+].code = #1119302008
-* group[=].element[=].target[=].equivalence = #equivalent
-
-* group[=].element[+].code = #RA01.1
-* group[=].element[=].target[+].code = #840544004
 * group[=].element[=].target[=].equivalence = #equivalent
 
