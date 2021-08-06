@@ -51,13 +51,24 @@ Usage:          #definition
 * group[=].target = SCT
 
 * group[=].element[+].code = #XM68M6
-* group[=].element[=].target[+].code = #111930505
+* group[=].element[=].target[+].code = #28531000087107
 * group[=].element[=].target[=].equivalence = #equivalent
 
 * group[=].element[+].code = #XM0GQ8
 * group[=].element[=].target[+].code = #1119349007
 * group[=].element[=].target[=].equivalence = #equivalent
 
+* group[=].element[+].code = #XM1NL1
+* group[=].element[=].target[+].code = #1157024006
+* group[=].element[=].target[=].equivalence = #equivalent
+
+* group[=].element[+].code = #XM9QW8
+* group[=].element[=].target[+].code = #29061000087103
+* group[=].element[=].target[=].equivalence = #equivalent
+
+
+         
+       
 
 
 Instance:       WHO_DDCC_Map_ICD11_to_SCT_Disease_Targeted
