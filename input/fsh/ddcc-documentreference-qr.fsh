@@ -13,13 +13,16 @@ Description:  "DDCC DocumentReference for QR codes including the QR image and th
 * content ^slicing.rules = #closed
 * content 2..2 MS
 * content.format from DDCC_QR_Format_ValueSet (extensible)
-* content contains qrImage 1..1 MS and qrContent 1..1 MS
+* content contains qrImage 1..1 MS and qrContent 1..1 MS and qrPDF 0..1 MS
 * content[qrImage].attachment.data 1..1 MS
 * content[qrImage].attachment.contentType 1..1 MS
 * content[qrImage].format = DDCC_QR_Format_CodeSystem#image
 * content[qrContent].attachment.data 1..1 MS
 * content[qrContent].attachment.contentType 1..1 MS
 * content[qrContent].format = DDCC_QR_Format_CodeSystem#serialized
+* content[qrPDF].attachment.data 1..1 MS
+* content[qrPDF].attachment.contentType 1..1 MS
+* content[qrPDF].format = DDCC_QR_Format_CodeSystem#pdf
 
 
 CodeSystem:     DDCC_QR_Category_Usage_CodeSystem
@@ -44,6 +47,7 @@ Title:          "DDCC QR Format Codes"
 Description:    "Possible formats available for QR data."
 * #image        "Image"
 * #serialized   "Serialized QR Content"
+* #pdf          "PDF version of the QR image"
 
 ValueSet:       DDCC_QR_Format_ValueSet
 Id:             DDCC-QR-Format-ValueSet
