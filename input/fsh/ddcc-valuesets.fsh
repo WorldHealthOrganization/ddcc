@@ -30,8 +30,6 @@ WHO Disease or Agent Targeted List (COVID-19) from [ICD 11](https://icd.who.int/
 """
 * ^status = #draft
 * include $ICD11#RA01 "COVID-19"
-* include $ICD11#RA01.0 "COVID-19, virus identified"
-* include $ICD11#RA01.1 "COVID-19, virus not identified"
 
 
 Instance:       WHO_DDCC_Map_ICD11_to_SCT_Vaccines
