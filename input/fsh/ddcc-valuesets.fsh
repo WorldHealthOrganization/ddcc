@@ -1,4 +1,5 @@
 Alias: $ICD9CM = http://hl7.org/fhir/sid/icd-9-cm
+Alias: $ICD10 = http://hl7.org/fhir/sid/icd-10
 Alias: $ICD11 = http://id.who.int/icd11/mms
 Alias: $LOINC = http://loinc.org
 Alias: SCT = http://snomed.info/sct
@@ -91,5 +92,28 @@ Usage:          #definition
 
 * group[=].element[+].code = #RA01
 * group[=].element[=].target[+].code = #840539006
+* group[=].element[=].target[=].equivalence = #equivalent
+
+
+Instance:       WHO_DDCC_Map_ICD11_to_ICD10_Disease_Targeted
+InstanceOf:     ConceptMap
+Description:    "Mapping from ICD-11 to ICD-10 for COVID-19 disease."
+Usage:          #definition
+
+* id = "who-ddcc-map-icd11-icd10-disease-targeted"
+* name = "ICD_11_ICD_10_COVID19_Disease"
+* title = "ConceptMap from ICD-10 to SNOMED CT for Disease or Agent Targeted"
+* status = #draft
+* experimental = true
+* date = "2021-04-23"
+* description = "Rule-based mappings between ICD-11 and ICD-10 for COVID-19 Disease or Agent Targeted"
+* sourceCanonical = $ICD11
+* targetCanonical = $ICD10
+
+* group[+].source = $ICD11
+* group[=].target = $ICD10
+
+* group[=].element[+].code = #RA01
+* group[=].element[=].target[+].code = #U07.1
 * group[=].element[=].target[=].equivalence = #equivalent
 
