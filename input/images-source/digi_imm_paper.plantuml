@@ -37,23 +37,26 @@ autonumber 1.1.1
    PaperReg->DEP: Read row in\npaper register
    DEP->DHS: Enter vaccination\nevent details
    deactivate DEP
-
    
    DHS->CertGen: Send vaccination\nevent details
-   CertGen->CertGen: Generate DDCC:VS\nHL7 FHIR Document
+   CertGen->CertGen: Generate DDCC:VS\nFHIR Document
+   
    opt Generate 2D barcode
      CertGen->CertGen: Generate 2D barcode
-     CertGen->CertGen: Add 2D barcode to DDCC:VS\nHL7 FHIR Document
+     CertGen->CertGen: Add 2D barcode to\nFHIR Document
    end
-   CertGen->CertGen: Sign DDCC:VS HL7\nFHIR Document
+   
+   CertGen->CertGen: Sign DDCC:VS\nFHIR Document
+   
    opt Has DDCC:VS Registry
 	opt Has DDCC:VS Repository
-	  CertGen->DDCCRepo: upload DDCC:VS HL7 FHIR Document
+	  CertGen->DDCCRepo: Upload FHIR Document
 	end
-   	CertGen->DDCCReg: pload DDCC:VS Bundle
+   	CertGen->DDCCReg: Upload FHIR Bundle
    end
-   CertGen->DHS: Return signed DCC:VS\nHL7 FHIR Document
+   
+   CertGen->DHS: Return signed\nFHIR Document
 
-   DHS->DHS: Store signed DDCC:VS\nHL7 FHIR Document in\nSubect of Care's record
-
+   DHS->DHS: Store signed FHIR\nDocument in\nSubject of Care's record
+   
 @enduml
