@@ -1,18 +1,17 @@
 @startuml
-title Transaction: Digitize Immunization Event (Offline)
+title Transaction: Digitize Vaccination Event (Paper First)
 
 hide footbox
 
 !include ./style.iuml
 
 actor "Subject of Care" as SOC
-actor "DDCC Holder" as Holder
+actor "DDCC:VS Holder" as Holder
 actor "Vaccinator" as Vaxer
 actor "Data Entry Personnel" as DEP
-Participant "Paper\nRegistry" as PaperReg
+Participant "Paper\nRegister" as PaperReg
 Participant "Digital\nHealth\nSolution" as DHS
 Participant "DDCC:VS\nGeneration\nService" as CertGen
-Participant "Shared\nHealth\nRecord" as SHR
 Participant "DDCC:VS\nRegistry\nService" as DDCCReg
 Participant "DDCC:VS\nRepository\nService" as DDCCRepo
 
@@ -22,46 +21,39 @@ autonumber 1.1.1
    activate SOC
    activate Vaxer
 
-   alt Subject of Care has an DDCC Card
-      Holder->Vaxer: Give Subject of Care's\nPaper DDCC to Vaccinator
-   else Subject of Care needs an DDCC Card
-      Vaxer->Holder: Give DDCC Holder new\nDDCC Card	
+   opt Subject of Care has a\nDDCC:VS paper card
+      Holder->Vaxer: Give Subject of Care's\nDDCC:VS paper card\nto Vaccinator
    end
    
-   Vaxer->SOC : Vaccinate
-   Vaxer->Holder:  record immunization\nevent in\nPaper DDCC 
-   Vaxer->PaperReg: record immunization\nevent in\npaper register
+   Vaxer->SOC : Administer vaccination
+   Vaxer->Holder:  Record core data set data\non DDCC:VS paper card
+   Vaxer->PaperReg: Record vaccination\nevent in paper\nregister
 
    deactivate Holder
    deactivate SOC
    deactivate Vaxer
 
    activate DEP
-   PaperReg->DEP: read register row
-   DEP->DHS: record immunization\nevent details
+   PaperReg->DEP: Read row in\npaper register
+   DEP->DHS: Enter vaccination\nevent details
    deactivate DEP
 
    
-   DHS->CertGen: send immunization\nevent details
-   CertGen->CertGen: Generate DDCC\nDocument
-   opt Generate 2D Barcode
-     CertGen->CertGen: Generate 2D Barcode
-     CertGen->CertGen: Add 2D Barcode to\nDDCC Document
+   DHS->CertGen: Send vaccination\nevent details
+   CertGen->CertGen: Generate DDCC:VS\nHL7 FHIR Document
+   opt Generate 2D barcode
+     CertGen->CertGen: Generate 2D barcode
+     CertGen->CertGen: Add 2D barcode to DDCC:VS\nHL7 FHIR Document
    end
-   CertGen->CertGen: Sign DDCC Document
+   CertGen->CertGen: Sign DDCC:VS HL7\nFHIR Document
    opt Has DDCC:VS Registry
 	opt Has DDCC:VS Repository
-	  CertGen->DDCCRepo: upload DDCC Document
+	  CertGen->DDCCRepo: upload DDCC:VS HL7 FHIR Document
 	end
-   	CertGen->DDCCReg: upload DDCC Bundle
+   	CertGen->DDCCReg: pload DDCC:VS Bundle
    end
-   CertGen->DHS: return signed\nDDCC Document
+   CertGen->DHS: Return signed DCC:VS\nHL7 FHIR Document
 
-   DHS->DHS: store signed DDCC\nDocument in\nSubect of Care's record
-   opt  Has Shared Health Record
-	DHS->SHR: upload IPS Bundle
-   end
+   DHS->DHS: Store signed DDCC:VS\nHL7 FHIR Document in\nSubect of Care's record
 
 @enduml
-
-
