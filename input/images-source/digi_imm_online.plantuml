@@ -1,5 +1,5 @@
 @startuml
-title  Digitize Immunization Event (Online)
+title  Digitize Vaccination Event (Online Digital)
 
 hide footbox
 
@@ -11,11 +11,8 @@ actor "Vaccinator" as Vaxer
 actor "Data Entry Personnel" as DEP
 Participant "Digital\nHealth\nSolution" as DHS
 Participant "DDCC:VS\nGeneration\nService" as CertGen
-Participant "Shared\nHealth\nRecord" as SHR
 Participant "DDCC:VS\nRegistry\nService" as DDCCReg
 Participant "DDCC:VS\nRepository\nService" as DDCCRepo
-
-
 
 
 autonumber 1.1.1
@@ -24,49 +21,43 @@ autonumber 1.1.1
    activate SOC
    activate Vaxer
 
-    alt Subject of Care has an DDCC Card
-      Holder->Vaxer: Give Subject of Care's\nPaper DDCC to Vaccinator
-    else Subject of Care needs an DDCC Card
-      Vaxer->Holder: Give DDCC Holder new\nDDCC Card	
-    end
+   opt Subject of Care has a\nDDCC:VS paper card
+      Holder->Vaxer: Give Subject of Care's\nDDCC:VS paper card\nto Vaccinator
+   end
    
-    Vaxer->SOC : Vaccinate
+    Vaxer->SOC : Administer vaccination
 
-
-    Vaxer->Holder:  record immunization event\nin Paper DDCC 
-    Vaxer->DHS: record immunization\nevent details
-    DHS->CertGen: send immunization\nevent details
-    CertGen->CertGen: Generate DDCC\nDocument
+    Vaxer->Holder:  Record core data set\ndata on DDCC:VS\npaper card
+    Vaxer->DHS: Enter vaccination\nevent details
+    DHS->CertGen: Send vaccination\nevent details
+    CertGen->CertGen: Generate DDCC:VS\nHL7 FHIR Document
+    
     opt Generate 2D Barcode
       CertGen->CertGen: Generate 2D Barcode
-      CertGen->CertGen: Add 2D Barcode to\nDDCC Document
+      CertGen->CertGen: Add 2D Barcode to\nDDCC:VS FHIR Document
     end
-    CertGen->CertGen: Sign DDCC Document
-    opt Has DDCC:VS Registry
-	 opt Has DDCC:VS Repository
-	   CertGen->DDCCRepo: upload DDCC Document
+   
+   CertGen->CertGen: Sign DDCC:VS\nFHIR Document
+    
+    opt Has DDCC:VS:VS Registry
+	 opt Has DDCC:VS:VS Repository
+	   CertGen->DDCCRepo: Upload DDCC:VS\nFHIR Document
 	 end
-   	 CertGen->DDCCReg: upload DDCC Bundle
+   	 CertGen->DDCCReg: Upload DDCC:VS\nFHIR Bundle
     end
-    CertGen->DHS: return signed\nDDCC Document
+    
+    CertGen->DHS: Return signed\nDDCC:VS FHIR Document
 
-    DHS->DHS: store signed DDCC\nDocument in\nSubect of Care's record
+    DHS->DHS: Store signed DDCC:VS\nFHIR Document in\nSubect of Care's record
 
     opt Can Print QR Stickers
-         Vaxer->Vaxer: Print QR code sticker\nfrom signed DDCC Document
- 	 Vaxer->Holder: Place QR code\nsticker on DDCC
+         Vaxer->Vaxer: Print QR code sticker\nfrom signed DDCC:VS\nFHIR Document
+ 	 Vaxer->Holder: Place QR code\nsticker on DDCC:VS
     end	
-
 
    deactivate Holder
    deactivate SOC
    deactivate Vaxer
-   
-
-   opt  Has Shared Health Record
-	DHS->SHR: upload IPS Bundle
-   end
-
 
 @enduml
 
