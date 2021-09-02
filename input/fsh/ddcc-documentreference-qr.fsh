@@ -33,6 +33,7 @@ Description:    "Possible formats available for QR usage."
 * #dgc          "EU DGC"
 * #icao         "ICAO"
 * #au           "AU"
+* #shc          "SMART Health Card"
 
 ValueSet:       DDCC_QR_Category_Usage_ValueSet
 Id:             DDCC-QR-Category-Usage-ValueSet
