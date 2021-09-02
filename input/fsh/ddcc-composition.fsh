@@ -61,6 +61,12 @@ A [DDCC Document](StructureDefinition-DDCCDocument.html) is a document bundle co
 * type MS
 * type = #document
 * timestamp MS
+* link ^slicing.discriminator.type = #value 
+* link ^slicing.discriminator.path = "relation"
+* link ^slicing.rules = #open
+* link contains hcid 1..1
+* link[hcid].relation = "publication"
+* link[hcid].url 1..1
 * entry ^slicing.discriminator.type = #type
 * entry ^slicing.discriminator.path = "resource"
 * entry ^slicing.rules = #closed

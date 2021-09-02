@@ -78,6 +78,8 @@ Usage: #example
 * identifier[+].system = "urn:EXAMPLE-who-:ddcc:bundle:ids"
 * identifier[=].value = "9990123012301230123"
 
+* link[+].relation = "publication"
+* link[=].url = "urn:HCID:1234567890"
 
 * entry[ddccComposition].fullUrl = "http://www.example.org/fhir/Composition/DDCC-Composition-Example-Russian"
 * entry[ddccComposition].resource = DDCC-Composition-Example-Russian

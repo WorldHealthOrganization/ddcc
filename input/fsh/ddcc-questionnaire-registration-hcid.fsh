@@ -30,7 +30,7 @@ Usage: #definition
 * status = #draft
 * experimental = true
 * date = "2021-06-03"
-* extension[$launchContext].extension[name].valueId = "patient"
+* extension[$launchContext].extension[name].valueCoding = http://hl7.org/fhir/uv/sdc/CodeSystem/launchContext#patient
 * extension[$launchContext].extension[type].valueCode = #patient
 * extension[$launchContext].extension[description].valueString = "Patient used in form pre-population"
 
