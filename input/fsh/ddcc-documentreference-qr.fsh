@@ -30,7 +30,7 @@ Id:             DDCC-QR-Category-Usage-CodeSystem
 Title:          "DDCC QR Category Usage Codes"
 Description:    "Possible formats available for QR usage."
 * #who          "WHO SVC"
-* #dgc          "EU DGC"
+* #dcc          "EU DCC"
 * #icao         "ICAO"
 * #au           "AU"
 
