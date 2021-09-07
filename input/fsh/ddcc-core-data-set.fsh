@@ -1,3 +1,140 @@
+Invariant:      who-ddcc-data-1
+Description:    "Manufacturer or Market Authorization Holder SHALL be present"
+Expression:     "manufacturer.exists() or maholder.exists()"
+Severity:       #error
+
+/* Inheritance doesn't seem to work well when it's modifying a backbone element.  Snapshot and differential don't combine
+Logical:        DDCCCoreDataSet
+Title:          "DDCC Core Data Set Logical Model"
+Description:    "Data elements for the DDCC Core Data Set."
+
+* ^url = "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet"
+* ^version = "RC2"
+* ^abstract = true
+* ^status = #draft
+
+* name 1..1 SU string "Name" "The full name of the vaccinated person."
+* birthDate 0..1 SU date "Date of birth" "The vaccinated person's date of birth (DOB) if known. If unknown, use given DOB for administrative purposes"
+* identifier 0..1 SU Identifier "Unique identifier" "Unique identifier for the vaccinated person, according to the policies applicable to each country. There can be more than one unique identifier used to link records. (e.g. national ID, health ID, immunization information system ID, medical record ID)."
+* sex 0..1 SU code "Sex" "Documentation of a specific instance of sex information for the vaccinated person."
+* sex from http://hl7.org/fhir/ValueSet/administrative-gender (required)
+* vaccination 0..* SU BackboneElement "Vaccination Event" "A vaccination event."
+* vaccination obeys who-ddcc-data-1
+  * vaccine 1..1 SU Coding "Vaccine or prophylaxis" "Generic description of the vaccine or vaccine sub-type. e.g. COVID-19 mRNA vaccine, HPV vaccine."
+  * vaccine from WHO_DDCC_Vaccines_COVID_19 (preferred)
+  * brand 1..1 SU Coding "Vaccine brand" "The brand or trade name used to refer to the vaccine received."
+  * manufacturer 0..1 SU Coding "Vaccine manufacturer" "Name of the manufacturer of the vaccine received. e.g. Serum institute of India, AstraZeneca. If vaccine manufacturer is unknown, market authorization holder is REQUIRED."
+  * maholder 0..1 SU Coding "Vaccine market authorization holder" "Name of the market authorization holder of the vaccine received. If market authorization holder is unknown, vaccine manufacturer is REQUIRED."
+  * lot 1..1 SU string "Vaccine lot number" "Lot number or batch number of vaccination."
+  * date 1..1 SU date "Date of vaccination" "Date in which the vaccine was provided."
+  * validFrom 0..1 date "Vaccination valid from" "Date upon which provided vaccination is considered valid."
+  * dose 1..1 SU positiveInt "Dose number" "Vaccine dose number."
+  * totalDoses 0..1 positiveInt "Total doses" "Total expected doses as defined by Member State care plan and immunization programme policies."
+  * country 1..1 SU Coding "Country of vaccination" "The country in which the individual has been vaccinated."
+  * country from http://hl7.org/fhir/ValueSet/iso3166-1-3 (preferred)
+  * centre 0..1 string "Administering centre" "The name or identifier of the vaccination facility responsible for providing the vaccination."
+  * signature 0..1 Signature "Signature of health worker" "REQUIRED for PAPER vaccination certificates ONLY. The health worker who provided the vaccination or the supervising clinician's hand-written signature."
+  * practitioner 0..1 Identifier "Health worker identifier" "OPTIONAL for DIGITAL and PAPER vaccination certificates. The unique identifier for the health worker as determined by the member state. There can be more than one unique identifier used. (e.g. system generated ID, health profession number, cryptographic signature, or any other form of health worker unique identifier). This can be used in lieu of a paper-based signature."
+  * disease 0..1 Coding "Disease or agent targeted" "Name of disease vaccinated against (such as COVID-19)."
+  * disease from WHO_DDCC_Disease_Targeted_COVID_19 (preferred)
+  * nextDose 0..1 date "Due date of next dose" "Date on which the next vaccination should be administered, if a next dose is REQUIRED."
+  * period 0..1 Period "Certificate Validity Period" "Certificate validity period."
+    * start 0..1 date "Certificate valid from" "Start date of certificate validity."
+    * end 0..1 date "Certificate valid until" "End date of certificate validity."
+* certificate 0..1 SU BackboneElement "Certificate Metadata" "Metadata associated with the certificate"    
+  * issuer 1..1 SU Reference(DDCCOrganization) "Certificate issuer" "Certificate issuer."
+  * hcid 1..1 SU Identifier "Health certificate identifier (HCID)" "Health certificate identifier (HCID)."
+  * version 1..1 SU string "Certificate schema version" "Certificate schema version"
+*/
+
+Logical:        DDCCCoreDataSetPoV
+//Parent:         DDCCCoreDataSet
+Title:          "DDCC Core Data Set Logical Model - Proof of Vaccination"
+Description:    "Data elements for the DDCC Core Data Set - Proof of Vaccination."
+
+* ^url = "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSetPoV"
+* ^version = "RC2"
+* ^abstract = false
+* ^status = #draft
+
+* name 1..1 SU string "Name" "The full name of the vaccinated person."
+* birthDate 0..1 SU date "Date of birth" "The vaccinated person's date of birth (DOB) if known. If unknown, use given DOB for administrative purposes"
+* identifier 0..1 SU Identifier "Unique identifier" "Unique identifier for the vaccinated person, according to the policies applicable to each country. There can be more than one unique identifier used to link records. (e.g. national ID, health ID, immunization information system ID, medical record ID)."
+* sex 0..1 SU code "Sex" "Documentation of a specific instance of sex information for the vaccinated person."
+* sex from http://hl7.org/fhir/ValueSet/administrative-gender (required)
+* vaccination 0..* SU BackboneElement "Vaccination Event" "A vaccination event."
+* vaccination obeys who-ddcc-data-1
+  * vaccine 1..1 SU Coding "Vaccine or prophylaxis" "Generic description of the vaccine or vaccine sub-type. e.g. COVID-19 mRNA vaccine, HPV vaccine."
+  * vaccine from WHO_DDCC_Vaccines_COVID_19 (preferred)
+  * brand 1..1 SU Coding "Vaccine brand" "The brand or trade name used to refer to the vaccine received."
+  * manufacturer 0..1 SU Coding "Vaccine manufacturer" "Name of the manufacturer of the vaccine received. e.g. Serum institute of India, AstraZeneca. If vaccine manufacturer is unknown, market authorization holder is REQUIRED."
+  * maholder 0..1 SU Coding "Vaccine market authorization holder" "Name of the market authorization holder of the vaccine received. If market authorization holder is unknown, vaccine manufacturer is REQUIRED."
+  * lot 1..1 SU string "Vaccine lot number" "Lot number or batch number of vaccination."
+  * date 1..1 SU date "Date of vaccination" "Date in which the vaccine was provided."
+  * validFrom 0..1 date "Vaccination valid from" "Date upon which provided vaccination is considered valid."
+  * dose 1..1 SU positiveInt "Dose number" "Vaccine dose number."
+  * totalDoses 0..1 positiveInt "Total doses" "Total expected doses as defined by Member State care plan and immunization programme policies."
+  * country 1..1 SU Coding "Country of vaccination" "The country in which the individual has been vaccinated."
+  * country from http://hl7.org/fhir/ValueSet/iso3166-1-3 (preferred)
+  * centre 0..1 string "Administering centre" "The name or identifier of the vaccination facility responsible for providing the vaccination."
+  * signature 0..1 Signature "Signature of health worker" "REQUIRED for PAPER vaccination certificates ONLY. The health worker who provided the vaccination or the supervising clinician's hand-written signature."
+  * practitioner 0..1 Identifier "Health worker identifier" "OPTIONAL for DIGITAL and PAPER vaccination certificates. The unique identifier for the health worker as determined by the member state. There can be more than one unique identifier used. (e.g. system generated ID, health profession number, cryptographic signature, or any other form of health worker unique identifier). This can be used in lieu of a paper-based signature."
+  * disease 0..1 Coding "Disease or agent targeted" "Name of disease vaccinated against (such as COVID-19)."
+  * disease from WHO_DDCC_Disease_Targeted_COVID_19 (preferred)
+  * nextDose 0..1 date "Due date of next dose" "Date on which the next vaccination should be administered, if a next dose is REQUIRED."
+  * period 0..1 Period "Certificate Validity Period" "Certificate validity period."
+    * start 0..1 date "Certificate valid from" "Start date of certificate validity."
+    * end 0..1 date "Certificate valid until" "End date of certificate validity."
+* certificate 0..1 SU BackboneElement "Certificate Metadata" "Metadata associated with the certificate"    
+  * issuer 1..1 SU Reference(DDCCOrganization) "Certificate issuer" "Certificate issuer."
+  * hcid 1..1 SU Identifier "Health certificate identifier (HCID)" "Health certificate identifier (HCID)."
+  * version 1..1 SU string "Certificate schema version" "Certificate schema version"
+
+Logical:        DDCCCoreDataSetCoC
+//Parent:         DDCCCoreDataSet
+Title:          "DDCC Core Data Set Logical Model - Continuity of Care"
+Description:    "Data elements for the DDCC Core Data Set - Continuity of Care."
+
+* ^url = "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSetCoC"
+* ^version = "RC2"
+* ^abstract = false
+* ^status = #draft
+* name 1..1 SU string "Name" "The full name of the vaccinated person."
+* birthDate 0..1 SU date "Date of birth" "The vaccinated person's date of birth (DOB) if known. If unknown, use given DOB for administrative purposes"
+* identifier 0..1 SU Identifier "Unique identifier" "Unique identifier for the vaccinated person, according to the policies applicable to each country. There can be more than one unique identifier used to link records. (e.g. national ID, health ID, immunization information system ID, medical record ID)."
+* sex 0..1 SU code "Sex" "Documentation of a specific instance of sex information for the vaccinated person."
+* sex from http://hl7.org/fhir/ValueSet/administrative-gender (required)
+* vaccination 0..* SU BackboneElement "Vaccination Event" "A vaccination event."
+* vaccination obeys who-ddcc-data-1
+  * vaccine 1..1 SU Coding "Vaccine or prophylaxis" "Generic description of the vaccine or vaccine sub-type. e.g. COVID-19 mRNA vaccine, HPV vaccine."
+  * vaccine from WHO_DDCC_Vaccines_COVID_19 (preferred)
+  * brand 1..1 SU Coding "Vaccine brand" "The brand or trade name used to refer to the vaccine received."
+  * manufacturer 0..1 SU Coding "Vaccine manufacturer" "Name of the manufacturer of the vaccine received. e.g. Serum institute of India, AstraZeneca. If vaccine manufacturer is unknown, market authorization holder is REQUIRED."
+  * maholder 0..1 SU Coding "Vaccine market authorization holder" "Name of the market authorization holder of the vaccine received. If market authorization holder is unknown, vaccine manufacturer is REQUIRED."
+  * lot 1..1 SU string "Vaccine lot number" "Lot number or batch number of vaccination."
+  * date 1..1 SU date "Date of vaccination" "Date in which the vaccine was provided."
+  * validFrom 0..1 date "Vaccination valid from" "Date upon which provided vaccination is considered valid."
+  * dose 1..1 SU positiveInt "Dose number" "Vaccine dose number."
+  * totalDoses 0..1 positiveInt "Total doses" "Total expected doses as defined by Member State care plan and immunization programme policies."
+  * country 1..1 SU Coding "Country of vaccination" "The country in which the individual has been vaccinated."
+  * country from http://hl7.org/fhir/ValueSet/iso3166-1-3 (preferred)
+  * centre 0..1 string "Administering centre" "The name or identifier of the vaccination facility responsible for providing the vaccination."
+  * centre 1..1 string "Administering centre" "The name or identifier of the vaccination facility responsible for providing the vaccination."
+  * signature 0..1 Signature "Signature of health worker" "REQUIRED for PAPER vaccination certificates ONLY. The health worker who provided the vaccination or the supervising clinician's hand-written signature."
+  * practitioner 0..1 Identifier "Health worker identifier" "OPTIONAL for DIGITAL and PAPER vaccination certificates. The unique identifier for the health worker as determined by the member state. There can be more than one unique identifier used. (e.g. system generated ID, health profession number, cryptographic signature, or any other form of health worker unique identifier). This can be used in lieu of a paper-based signature."
+  * disease 0..1 Coding "Disease or agent targeted" "Name of disease vaccinated against (such as COVID-19)."
+  * disease from WHO_DDCC_Disease_Targeted_COVID_19 (preferred)
+  * nextDose 0..1 date "Due date of next dose" "Date on which the next vaccination should be administered, if a next dose is REQUIRED."
+  * period 0..1 Period "Certificate Validity Period" "Certificate validity period."
+    * start 0..1 date "Certificate valid from" "Start date of certificate validity."
+    * end 0..1 date "Certificate valid until" "End date of certificate validity."
+* certificate 0..1 SU BackboneElement "Certificate Metadata" "Metadata associated with the certificate"    
+  * issuer 1..1 SU Reference(DDCCOrganization) "Certificate issuer" "Certificate issuer."
+  * hcid 1..1 SU Identifier "Health certificate identifier (HCID)" "Health certificate identifier (HCID)."
+  * version 1..1 SU string "Certificate schema version" "Certificate schema version"
+
+
+/*
 Instance:       DDCCCoreDataSetPoV
 InstanceOf:     StructureDefinition
 Description:    "Data elements for the DDCC Core Data Set - Proof of Vaccination."
@@ -278,4 +415,4 @@ Usage:          #definition
 * differential.element[=].max = "1"
 * differential.element[=].type[+].code = #string
 
-
+*/
