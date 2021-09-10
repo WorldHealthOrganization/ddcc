@@ -48,6 +48,7 @@ Description:    "Data elements for the DDCC Core Data Set."
 */
 
 Logical:        DDCCCoreDataSetPoV
+Parent:		Element
 //Parent:         DDCCCoreDataSet
 Title:          "DDCC Core Data Set Logical Model - Proof of Vaccination"
 Description:    "Data elements for the DDCC Core Data Set - Proof of Vaccination."
@@ -91,6 +92,7 @@ Description:    "Data elements for the DDCC Core Data Set - Proof of Vaccination
   * version 1..1 SU string "Certificate schema version" "Certificate schema version"
 
 Logical:        DDCCCoreDataSetCoC
+Parent:		Element
 //Parent:         DDCCCoreDataSet
 Title:          "DDCC Core Data Set Logical Model - Continuity of Care"
 Description:    "Data elements for the DDCC Core Data Set - Continuity of Care."
