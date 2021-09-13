@@ -48,7 +48,7 @@ Description:    "Data elements for the DDCC Core Data Set."
 */
 
 Logical:        DDCCCoreDataSetPoV
-Parent:		Element
+//Parent:		Element
 //Parent:         DDCCCoreDataSet
 Title:          "DDCC Core Data Set Logical Model - Proof of Vaccination"
 Description:    "Data elements for the DDCC Core Data Set - Proof of Vaccination."
@@ -57,7 +57,7 @@ Description:    "Data elements for the DDCC Core Data Set - Proof of Vaccination
 * ^version = "RC2"
 * ^abstract = false
 * ^status = #draft
-
+* ^type = "DDCCCoreDataSetPoV"
 * name 1..1 SU string "Name" "The full name of the vaccinated person."
 * birthDate 0..1 SU date "Date of birth" "The vaccinated person's date of birth (DOB) if known. If unknown, use given DOB for administrative purposes"
 * identifier 0..1 SU Identifier "Unique identifier" "Unique identifier for the vaccinated person, according to the policies applicable to each country. There can be more than one unique identifier used to link records. (e.g. national ID, health ID, immunization information system ID, medical record ID)."
@@ -92,7 +92,7 @@ Description:    "Data elements for the DDCC Core Data Set - Proof of Vaccination
   * version 1..1 SU string "Certificate schema version" "Certificate schema version"
 
 Logical:        DDCCCoreDataSetCoC
-Parent:		Element
+//Parent:		Element
 //Parent:         DDCCCoreDataSet
 Title:          "DDCC Core Data Set Logical Model - Continuity of Care"
 Description:    "Data elements for the DDCC Core Data Set - Continuity of Care."
@@ -101,6 +101,7 @@ Description:    "Data elements for the DDCC Core Data Set - Continuity of Care."
 * ^version = "RC2"
 * ^abstract = false
 * ^status = #draft
+* ^type = "DDCCCoreDataSetCoC"
 * name 1..1 SU string "Name" "The full name of the vaccinated person."
 * birthDate 0..1 SU date "Date of birth" "The vaccinated person's date of birth (DOB) if known. If unknown, use given DOB for administrative purposes"
 * identifier 0..1 SU Identifier "Unique identifier" "Unique identifier for the vaccinated person, according to the policies applicable to each country. There can be more than one unique identifier used to link records. (e.g. national ID, health ID, immunization information system ID, medical record ID)."
