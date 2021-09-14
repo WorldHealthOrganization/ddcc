@@ -1,0 +1,671 @@
+<StructureMap xmlns="http://hl7.org/fhir">
+   <id value="svc-map-qr-uvci-bundle"></id>
+   <text>
+      <status value="generated"></status>
+      <div xmlns="http://www.w3.org/1999/xhtml">
+         <pre>map "http://who-int.github.io/svc/StructureMap/svc-map-qr-uvci-bundle" = "svc-map-qr-uvci-bundle"
+
+uses "http://who-int.github.io/svc/refs/heads/qr-encoding/StructureDefinition/svc-qr-uvci" alias QR as source
+uses "http://who-int.github.io/svc/StructureDefinition/svc-bundle" alias SVC_Bundle as target
+uses "http://who-int.github.io/svc/StructureDefinition/svc-composition" alias SVC_Composition as produced
+uses "http://who-int.github.io/svc/StructureDefinition/svc-patient" alias SVC_Patient as produced
+uses "http://who-int.github.io/svc/StructureDefinition/svc-organization" alias SVC_Organization as produced
+uses "http://who-int.github.io/svc/StructureDefinition/svc-provenance" alias SVC_Provenance as produced
+
+group Decode_QR(source qr : QR, target bundle) {
+  qr -&gt;  create('SVC_Patient') as patient,  create('SVC_Organization') as organization then Decode_QR_Patient(qr, patient), Decode_QR_Organization(qr, organization), Decode_QR_Bundle(qr, patient, organzation, bundle) "Create resources and process bundle";
+}
+
+group Decode_QR_Patient(source qr : QR, target patient : SVC_Patient) {
+  qr.name as qrname, patient.name as pname -&gt;  pname.text = qrname,  pname.use = 'official' "Load Name";
+  qr.pid as pid -&gt; patient.identifier = id('XXXXXurn:uetf:rfc:3986', pid) "Load Patient Identifer";
+  qr.birthDate as birthDate -&gt; patient.birthDate = birthDate "Load Birth Date";
+}
+
+group Decode_QR_Organization(source qr : QR, target organization : SVC_Organization) {
+  qr.phaid as phaid -&gt; organization.identifier = id('XXXXXurn:ietf:rfc:3986', phaid) "Load PHA ID";
+}
+
+group Decode_QR_Bundle(source qr : QR, target patient : SVC_Patient, target bundle : SVC_Bundle) {
+  qr -&gt;  bundle.status = 'final',  bundle.type = 'document' "Set Bundle Metadata";
+  qr.paperid as paperid -&gt; bundle.identifier = id('XXXXXurn:ietf:rfc:3986', paperid) "Load Paper SVC ID";
+  qr.signature as qrsig, bundle.signature as bsig -&gt;  bsig.data = qrsig,  bsig.type = '1.2.840.10065.1.12.1.14',  bsig.format = 'XXXXXXX TBD',  bsig.who = reference(organization) "Load Signature";
+  qr -&gt;  bundle.entry as e,  e.resource = create('SVC_Composition') as compostion then Decode_QR_Composition(qr, bundle, composition) "Process Composition Entry";
+}
+
+group Decode_QR_Composition(source qr : QR, source ,, target bundle : SVC_Bundle, target patient : SVC_Patient, target organization : SVC_Organization, target composition : SVC_Composition) {
+  qr -&gt;  composition.subject = reference(patient),  composition.author = reference(organization) "Set Composition Meta";
+  qr.digitalid as digitalid -&gt; composition.identifier = id('XXXXXurn:ietf:rfc:3986', digitalid) "Load Digital SVC ID";
+}
+
+group Decode_QR_Provenance(source qr : QR, target bundle : SVC_Bundle, target patient : SVC_Patient, target organization : SVC_Organization, target paper : SVC_Composition, target digital : SVC_Composition, target provenance : SVC_Provenance) {
+  qr, provenance.entity as e_digital, provenance.agent as agent, provenance.signature as psig -&gt;  provenance.reason = 'PUBHLTH',  provenance.policy = 'XXXXXXX urn:example:who:smart:vaccine-certificate:RC1',  provenance.target = reference(bundle),  e_digital.role = 'source',  e_digital.what = reference(composition),  e_digital.agent = reference(organization),  e_paper.role = 'source',  e_paper.what = reference(bundle),  e_paper.agent = reference(organization),  psig.format = 'XXXXX TBD',  psig.who = reference(organization),  psg.type = '1.2.840.10065.1.12.1.14',  psig.data = signature then {
+    agent.who as who -&gt;  who.reference = reference(organization),  who.onBehalfOf = reference(patient) as "Set who";
+  } "Set provenance";
+}
+
+</pre>
+      </div>
+   </text>
+   <url value="http://who-int.github.io/svc/StructureMap/svc-map-qr-uvci-bundle"></url>
+   <name value="svc-map-qr-uvci-bundle"></name>
+   <structure>
+      <url value="http://who-int.github.io/svc/refs/heads/qr-encoding/StructureDefinition/svc-qr-uvci"></url>
+      <mode value="source"></mode>
+      <alias value="QR"></alias>
+   </structure>
+   <structure>
+      <url value="http://who-int.github.io/svc/StructureDefinition/svc-bundle"></url>
+      <mode value="target"></mode>
+      <alias value="SVC_Bundle"></alias>
+   </structure>
+   <structure>
+      <url value="http://who-int.github.io/svc/StructureDefinition/svc-composition"></url>
+      <mode value="produced"></mode>
+      <alias value="SVC_Composition"></alias>
+   </structure>
+   <structure>
+      <url value="http://who-int.github.io/svc/StructureDefinition/svc-patient"></url>
+      <mode value="produced"></mode>
+      <alias value="SVC_Patient"></alias>
+   </structure>
+   <structure>
+      <url value="http://who-int.github.io/svc/StructureDefinition/svc-organization"></url>
+      <mode value="produced"></mode>
+      <alias value="SVC_Organization"></alias>
+   </structure>
+   <structure>
+      <url value="http://who-int.github.io/svc/StructureDefinition/svc-provenance"></url>
+      <mode value="produced"></mode>
+      <alias value="SVC_Provenance"></alias>
+   </structure>
+   <group>
+      <name value="Decode_QR"></name>
+      <typeMode value="none"></typeMode>
+      <input>
+         <name value="qr"></name>
+         <type value="QR"></type>
+         <mode value="source"></mode>
+      </input>
+      <input>
+         <name value="bundle"></name>
+         <mode value="target"></mode>
+      </input>
+      <rule>
+         <name value="Create resources and process bundle"></name>
+         <source>
+            <context value="qr"></context>
+         </source>
+         <target>
+            <contextType value="variable"></contextType>
+            <variable value="patient"></variable>
+            <transform value="create"></transform>
+            <parameter>
+               <valueString value="SVC_Patient"></valueString>
+            </parameter>
+         </target>
+         <target>
+            <contextType value="variable"></contextType>
+            <variable value="organization"></variable>
+            <transform value="create"></transform>
+            <parameter>
+               <valueString value="SVC_Organization"></valueString>
+            </parameter>
+         </target>
+         <dependent>
+            <name value="Decode_QR_Patient"></name>
+            <variable value="qr"></variable>
+            <variable value="patient"></variable>
+         </dependent>
+         <dependent>
+            <name value="Decode_QR_Organization"></name>
+            <variable value="qr"></variable>
+            <variable value="organization"></variable>
+         </dependent>
+         <dependent>
+            <name value="Decode_QR_Bundle"></name>
+            <variable value="qr"></variable>
+            <variable value="patient"></variable>
+            <variable value="organzation"></variable>
+            <variable value="bundle"></variable>
+         </dependent>
+      </rule>
+   </group>
+   <group>
+      <name value="Decode_QR_Patient"></name>
+      <typeMode value="none"></typeMode>
+      <input>
+         <name value="qr"></name>
+         <type value="QR"></type>
+         <mode value="source"></mode>
+      </input>
+      <input>
+         <name value="patient"></name>
+         <type value="SVC_Patient"></type>
+         <mode value="target"></mode>
+      </input>
+      <rule>
+         <name value="Load Name"></name>
+         <source>
+            <context value="qr"></context>
+            <element value="name"></element>
+            <variable value="qrname"></variable>
+         </source>
+         <source>
+            <context value="patient"></context>
+            <element value="name"></element>
+            <variable value="pname"></variable>
+         </source>
+         <target>
+            <context value="pname"></context>
+            <contextType value="variable"></contextType>
+            <element value="text"></element>
+            <transform value="copy"></transform>
+            <parameter>
+               <valueId value="qrname"></valueId>
+            </parameter>
+         </target>
+         <target>
+            <context value="pname"></context>
+            <contextType value="variable"></contextType>
+            <element value="use"></element>
+            <transform value="copy"></transform>
+            <parameter>
+               <valueString value="official"></valueString>
+            </parameter>
+         </target>
+      </rule>
+      <rule>
+         <name value="Load Patient Identifer"></name>
+         <source>
+            <context value="qr"></context>
+            <element value="pid"></element>
+            <variable value="pid"></variable>
+         </source>
+         <target>
+            <context value="patient"></context>
+            <contextType value="variable"></contextType>
+            <element value="identifier"></element>
+            <transform value="id"></transform>
+            <parameter>
+               <valueString value="XXXXXurn:uetf:rfc:3986"></valueString>
+            </parameter>
+            <parameter>
+               <valueId value="pid"></valueId>
+            </parameter>
+         </target>
+      </rule>
+      <rule>
+         <name value="Load Birth Date"></name>
+         <source>
+            <context value="qr"></context>
+            <element value="birthDate"></element>
+            <variable value="birthDate"></variable>
+         </source>
+         <target>
+            <context value="patient"></context>
+            <contextType value="variable"></contextType>
+            <element value="birthDate"></element>
+            <transform value="copy"></transform>
+            <parameter>
+               <valueId value="birthDate"></valueId>
+            </parameter>
+         </target>
+      </rule>
+   </group>
+   <group>
+      <name value="Decode_QR_Organization"></name>
+      <typeMode value="none"></typeMode>
+      <input>
+         <name value="qr"></name>
+         <type value="QR"></type>
+         <mode value="source"></mode>
+      </input>
+      <input>
+         <name value="organization"></name>
+         <type value="SVC_Organization"></type>
+         <mode value="target"></mode>
+      </input>
+      <rule>
+         <name value="Load PHA ID"></name>
+         <source>
+            <context value="qr"></context>
+            <element value="phaid"></element>
+            <variable value="phaid"></variable>
+         </source>
+         <target>
+            <context value="organization"></context>
+            <contextType value="variable"></contextType>
+            <element value="identifier"></element>
+            <transform value="id"></transform>
+            <parameter>
+               <valueString value="XXXXXurn:ietf:rfc:3986"></valueString>
+            </parameter>
+            <parameter>
+               <valueId value="phaid"></valueId>
+            </parameter>
+         </target>
+      </rule>
+   </group>
+   <group>
+      <name value="Decode_QR_Bundle"></name>
+      <typeMode value="none"></typeMode>
+      <input>
+         <name value="qr"></name>
+         <type value="QR"></type>
+         <mode value="source"></mode>
+      </input>
+      <input>
+         <name value="patient"></name>
+         <type value="SVC_Patient"></type>
+         <mode value="target"></mode>
+      </input>
+      <input>
+         <name value="bundle"></name>
+         <type value="SVC_Bundle"></type>
+         <mode value="target"></mode>
+      </input>
+      <rule>
+         <name value="Set Bundle Metadata"></name>
+         <source>
+            <context value="qr"></context>
+         </source>
+         <target>
+            <context value="bundle"></context>
+            <contextType value="variable"></contextType>
+            <element value="status"></element>
+            <transform value="copy"></transform>
+            <parameter>
+               <valueString value="final"></valueString>
+            </parameter>
+         </target>
+         <target>
+            <context value="bundle"></context>
+            <contextType value="variable"></contextType>
+            <element value="type"></element>
+            <transform value="copy"></transform>
+            <parameter>
+               <valueString value="document"></valueString>
+            </parameter>
+         </target>
+      </rule>
+      <rule>
+         <name value="Load Paper SVC ID"></name>
+         <source>
+            <context value="qr"></context>
+            <element value="paperid"></element>
+            <variable value="paperid"></variable>
+         </source>
+         <target>
+            <context value="bundle"></context>
+            <contextType value="variable"></contextType>
+            <element value="identifier"></element>
+            <transform value="id"></transform>
+            <parameter>
+               <valueString value="XXXXXurn:ietf:rfc:3986"></valueString>
+            </parameter>
+            <parameter>
+               <valueId value="paperid"></valueId>
+            </parameter>
+         </target>
+      </rule>
+      <rule>
+         <name value="Load Signature"></name>
+         <source>
+            <context value="qr"></context>
+            <element value="signature"></element>
+            <variable value="qrsig"></variable>
+         </source>
+         <source>
+            <context value="bundle"></context>
+            <element value="signature"></element>
+            <variable value="bsig"></variable>
+         </source>
+         <target>
+            <context value="bsig"></context>
+            <contextType value="variable"></contextType>
+            <element value="data"></element>
+            <transform value="copy"></transform>
+            <parameter>
+               <valueId value="qrsig"></valueId>
+            </parameter>
+         </target>
+         <target>
+            <context value="bsig"></context>
+            <contextType value="variable"></contextType>
+            <element value="type"></element>
+            <transform value="copy"></transform>
+            <parameter>
+               <valueString value="1.2.840.10065.1.12.1.14"></valueString>
+            </parameter>
+         </target>
+         <target>
+            <context value="bsig"></context>
+            <contextType value="variable"></contextType>
+            <element value="format"></element>
+            <transform value="copy"></transform>
+            <parameter>
+               <valueString value="XXXXXXX TBD"></valueString>
+            </parameter>
+         </target>
+         <target>
+            <context value="bsig"></context>
+            <contextType value="variable"></contextType>
+            <element value="who"></element>
+            <transform value="reference"></transform>
+            <parameter>
+               <valueId value="organization"></valueId>
+            </parameter>
+         </target>
+      </rule>
+      <rule>
+         <name value="Process Composition Entry"></name>
+         <source>
+            <context value="qr"></context>
+         </source>
+         <target>
+            <context value="bundle"></context>
+            <contextType value="variable"></contextType>
+            <element value="entry"></element>
+            <variable value="e"></variable>
+         </target>
+         <target>
+            <context value="e"></context>
+            <contextType value="variable"></contextType>
+            <element value="resource"></element>
+            <variable value="compostion"></variable>
+            <transform value="create"></transform>
+            <parameter>
+               <valueString value="SVC_Composition"></valueString>
+            </parameter>
+         </target>
+         <dependent>
+            <name value="Decode_QR_Composition"></name>
+            <variable value="qr"></variable>
+            <variable value="bundle"></variable>
+            <variable value="composition"></variable>
+         </dependent>
+      </rule>
+   </group>
+   <group>
+      <name value="Decode_QR_Composition"></name>
+      <typeMode value="none"></typeMode>
+      <input>
+         <name value="qr"></name>
+         <type value="QR"></type>
+         <mode value="source"></mode>
+      </input>
+      <input>
+         <name value=","></name>
+         <mode value="source"></mode>
+      </input>
+      <input>
+         <name value="bundle"></name>
+         <type value="SVC_Bundle"></type>
+         <mode value="target"></mode>
+      </input>
+      <input>
+         <name value="patient"></name>
+         <type value="SVC_Patient"></type>
+         <mode value="target"></mode>
+      </input>
+      <input>
+         <name value="organization"></name>
+         <type value="SVC_Organization"></type>
+         <mode value="target"></mode>
+      </input>
+      <input>
+         <name value="composition"></name>
+         <type value="SVC_Composition"></type>
+         <mode value="target"></mode>
+      </input>
+      <rule>
+         <name value="Set Composition Meta"></name>
+         <source>
+            <context value="qr"></context>
+         </source>
+         <target>
+            <context value="composition"></context>
+            <contextType value="variable"></contextType>
+            <element value="subject"></element>
+            <transform value="reference"></transform>
+            <parameter>
+               <valueId value="patient"></valueId>
+            </parameter>
+         </target>
+         <target>
+            <context value="composition"></context>
+            <contextType value="variable"></contextType>
+            <element value="author"></element>
+            <transform value="reference"></transform>
+            <parameter>
+               <valueId value="organization"></valueId>
+            </parameter>
+         </target>
+      </rule>
+      <rule>
+         <name value="Load Digital SVC ID"></name>
+         <source>
+            <context value="qr"></context>
+            <element value="digitalid"></element>
+            <variable value="digitalid"></variable>
+         </source>
+         <target>
+            <context value="composition"></context>
+            <contextType value="variable"></contextType>
+            <element value="identifier"></element>
+            <transform value="id"></transform>
+            <parameter>
+               <valueString value="XXXXXurn:ietf:rfc:3986"></valueString>
+            </parameter>
+            <parameter>
+               <valueId value="digitalid"></valueId>
+            </parameter>
+         </target>
+      </rule>
+   </group>
+   <group>
+      <name value="Decode_QR_Provenance"></name>
+      <typeMode value="none"></typeMode>
+      <input>
+         <name value="qr"></name>
+         <type value="QR"></type>
+         <mode value="source"></mode>
+      </input>
+      <input>
+         <name value="bundle"></name>
+         <type value="SVC_Bundle"></type>
+         <mode value="target"></mode>
+      </input>
+      <input>
+         <name value="patient"></name>
+         <type value="SVC_Patient"></type>
+         <mode value="target"></mode>
+      </input>
+      <input>
+         <name value="organization"></name>
+         <type value="SVC_Organization"></type>
+         <mode value="target"></mode>
+      </input>
+      <input>
+         <name value="paper"></name>
+         <type value="SVC_Composition"></type>
+         <mode value="target"></mode>
+      </input>
+      <input>
+         <name value="digital"></name>
+         <type value="SVC_Composition"></type>
+         <mode value="target"></mode>
+      </input>
+      <input>
+         <name value="provenance"></name>
+         <type value="SVC_Provenance"></type>
+         <mode value="target"></mode>
+      </input>
+      <rule>
+         <name value="Set provenance"></name>
+         <source>
+            <context value="qr"></context>
+         </source>
+         <source>
+            <context value="provenance"></context>
+            <element value="entity"></element>
+            <variable value="e_digital"></variable>
+         </source>
+         <source>
+            <context value="provenance"></context>
+            <element value="agent"></element>
+            <variable value="agent"></variable>
+         </source>
+         <source>
+            <context value="provenance"></context>
+            <element value="signature"></element>
+            <variable value="psig"></variable>
+         </source>
+         <target>
+            <context value="provenance"></context>
+            <contextType value="variable"></contextType>
+            <element value="reason"></element>
+            <transform value="copy"></transform>
+            <parameter>
+               <valueString value="PUBHLTH"></valueString>
+            </parameter>
+         </target>
+         <target>
+            <context value="provenance"></context>
+            <contextType value="variable"></contextType>
+            <element value="policy"></element>
+            <transform value="copy"></transform>
+            <parameter>
+               <valueString value="XXXXXXX urn:example:who:smart:vaccine-certificate:RC1"></valueString>
+            </parameter>
+         </target>
+         <target>
+            <context value="provenance"></context>
+            <contextType value="variable"></contextType>
+            <element value="target"></element>
+            <transform value="reference"></transform>
+            <parameter>
+               <valueId value="bundle"></valueId>
+            </parameter>
+         </target>
+         <target>
+            <context value="e_digital"></context>
+            <contextType value="variable"></contextType>
+            <element value="role"></element>
+            <transform value="copy"></transform>
+            <parameter>
+               <valueString value="source"></valueString>
+            </parameter>
+         </target>
+         <target>
+            <context value="e_digital"></context>
+            <contextType value="variable"></contextType>
+            <element value="what"></element>
+            <transform value="reference"></transform>
+            <parameter>
+               <valueId value="composition"></valueId>
+            </parameter>
+         </target>
+         <target>
+            <context value="e_digital"></context>
+            <contextType value="variable"></contextType>
+            <element value="agent"></element>
+            <transform value="reference"></transform>
+            <parameter>
+               <valueId value="organization"></valueId>
+            </parameter>
+         </target>
+         <target>
+            <context value="e_paper"></context>
+            <contextType value="variable"></contextType>
+            <element value="role"></element>
+            <transform value="copy"></transform>
+            <parameter>
+               <valueString value="source"></valueString>
+            </parameter>
+         </target>
+         <target>
+            <context value="e_paper"></context>
+            <contextType value="variable"></contextType>
+            <element value="what"></element>
+            <transform value="reference"></transform>
+            <parameter>
+               <valueId value="bundle"></valueId>
+            </parameter>
+         </target>
+         <target>
+            <context value="e_paper"></context>
+            <contextType value="variable"></contextType>
+            <element value="agent"></element>
+            <transform value="reference"></transform>
+            <parameter>
+               <valueId value="organization"></valueId>
+            </parameter>
+         </target>
+         <target>
+            <context value="psig"></context>
+            <contextType value="variable"></contextType>
+            <element value="format"></element>
+            <transform value="copy"></transform>
+            <parameter>
+               <valueString value="XXXXX TBD"></valueString>
+            </parameter>
+         </target>
+         <target>
+            <context value="psig"></context>
+            <contextType value="variable"></contextType>
+            <element value="who"></element>
+            <transform value="reference"></transform>
+            <parameter>
+               <valueId value="organization"></valueId>
+            </parameter>
+         </target>
+         <target>
+            <context value="psg"></context>
+            <contextType value="variable"></contextType>
+            <element value="type"></element>
+            <transform value="copy"></transform>
+            <parameter>
+               <valueString value="1.2.840.10065.1.12.1.14"></valueString>
+            </parameter>
+         </target>
+         <target>
+            <context value="psig"></context>
+            <contextType value="variable"></contextType>
+            <element value="data"></element>
+            <transform value="copy"></transform>
+            <parameter>
+               <valueId value="signature"></valueId>
+            </parameter>
+         </target>
+         <rule>
+            <name value="who"></name>
+            <source>
+               <context value="agent"></context>
+               <element value="who"></element>
+               <variable value="who"></variable>
+            </source>
+            <target>
+               <context value="who"></context>
+               <contextType value="variable"></contextType>
+               <element value="reference"></element>
+               <transform value="reference"></transform>
+               <parameter>
+                  <valueId value="organization"></valueId>
+               </parameter>
+            </target>
+            <target>
+               <context value="who"></context>
+               <contextType value="variable"></contextType>
+               <element value="onBehalfOf"></element>
+               <variable value="&quot;Set who&quot;"></variable>
+               <transform value="reference"></transform>
+               <parameter>
+                  <valueId value="patient"></valueId>
+               </parameter>
+            </target>
+         </rule>
+      </rule>
+   </group>
+</StructureMap>
