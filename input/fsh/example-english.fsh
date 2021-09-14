@@ -104,3 +104,80 @@ Usage: #example
 
 * entry[ddccImmunizationRecommendation].fullUrl = "http://www.example.org/fhir/ImmunizationRecommendation/DDCC-ImmunizationRecommendation-English"
 * entry[ddccImmunizationRecommendation].resource = DDCC-ImmunizationRecommendation-English
+
+
+Instance:     DDCC-VS-QuestionnaireResponse-Example
+InstanceOf:   DDCCQuestionnaireResponse
+Usage:        #example
+
+* questionnaire = $DDCCQuestionnaireURL
+* status = #completed
+
+* subject = Reference(DDCC-Patient-English)
+* authored = "2021-04-01"
+
+* item[+].linkId = "name"
+* item[=].answer.valueString = "Aulus Agerius"
+
+* item[+].linkId = "birthDate"
+* item[=].answer.valueDate = "2003-03-03"
+
+* item[+].linkId = "identifier"
+* item[=].answer.valueString = "1234567890"
+
+* item[+].linkId = "sex"
+* item[=].answer.valueCoding = http://hl7.org/fhir/administrative-gender#male
+
+* item[+].linkId = "vaccine"
+* item[=].answer.valueCoding = $ICD11#XM1NL1
+
+* item[+].linkId = "brand"
+* item[=].answer.valueCoding = DDCC_Example_Test_CodeSystem#TEST
+
+* item[+].linkId = "manufacturer"
+* item[=].answer.valueCoding = DDCC_Example_Test_CodeSystem#TEST
+
+* item[+].linkId = "ma_holder"
+* item[=].answer.valueCoding = DDCC_Example_Test_CodeSystem#TEST
+
+* item[+].linkId = "lot"
+* item[=].answer.valueString = "ER8732"
+
+* item[+].linkId = "date"
+* item[=].answer.valueDate = "2021-04-05"
+
+* item[+].linkId = "vaccine_valid"
+* item[=].answer.valueDate = "2021-04-19"
+
+* item[+].linkId = "dose"
+* item[=].answer.valueInteger = 1
+
+* item[+].linkId = "total_doses"
+* item[=].answer.valueInteger = 2
+
+* item[+].linkId = "country"
+* item[=].answer.valueCoding = urn:iso:std:iso:3166#USA
+
+* item[+].linkId = "centre"
+* item[=].answer.valueString = "Vaccination Site"
+
+* item[+].linkId = "hw"
+* item[=].answer.valueString = "lAH8TnzqAInqwkslHzOlSA"
+
+* item[+].linkId = "disease"
+* item[=].answer.valueCoding = $ICD11#RA01
+
+* item[+].linkId = "due_date"
+* item[=].answer.valueDate = "2021-04-28"
+
+* item[+].linkId = "pha"
+* item[=].answer.valueString = "dPD2PfwzBQyphcjeUiAdRP"
+
+* item[+].linkId = "hcid"
+* item[=].answer.valueString = "bMlJkAt0V92RYhhG3fNt"
+
+* item[+].linkId = "valid_from"
+* item[=].answer.valueDate = "2021-04-05"
+
+* item[+].linkId = "valid_until"
+* item[=].answer.valueDate = "2022-04-05"
