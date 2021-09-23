@@ -173,3 +173,22 @@ Usage:        #example
 
 * item[+].linkId = "valid_until"
 * item[=].answer.valueDate = "2022-04-05"
+
+
+Instance:     DDCC-VS-TX-SHE-Parameters-French
+InstanceOf:   DDCCGenerateHealthCertificateParameters
+Usage:        #inline
+
+* parameter[+].name = "response"
+* parameter[=].resource = DDCC-VS-QuestionnaireResponse-French
+
+
+Instance:     DDCC-TX-SHE-bundle-example-French
+InstanceOf:   DDCCSubmitHealthEventRequest
+Usage:        #example
+
+* type = #batch
+* entry[+].fullUrl = "http://www.example.org/fhir/Parameters/DDCC-VS-TX-SHE-Parameters-French"
+* entry[=].resource = DDCC-VS-TX-SHE-Parameters-French
+* entry[=].request.method = #POST
+* entry[=].request.url = "QuestionnaireResponse/$generateHealthCertificate"
