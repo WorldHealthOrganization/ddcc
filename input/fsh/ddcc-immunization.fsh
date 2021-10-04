@@ -1,6 +1,6 @@
 Profile:        DDCCImmunization
-//Parent:         http://hl7.org/fhir/uv/ips/StructureDefinition/Immunization-uv-ips
-Parent:         Immunization
+Parent:         http://hl7.org/fhir/uv/ips/StructureDefinition/Immunization-pre-uv-ips
+//Parent:         Immunization
 Id:             DDCCImmunization
 Title:          "DDCC Immunization"
 Description:    """ 
@@ -55,7 +55,7 @@ Immunization resource.
 * protocolApplied ^slicing.rules = #open
 * protocolApplied contains protocolAppliedAuthority 1.. MS
 * protocolApplied[protocolAppliedAuthority].authority only Reference(DDCCOrganization)
-* protocolApplied[protocolAppliedAuthority].targetDisease from WHO_DDCC_Disease_Targeted_COVID_19 (example)
+* protocolApplied[protocolAppliedAuthority].targetDisease from WHO_DDCC_Disease_Targeted_COVID_19 (preferred)
 * protocolApplied[protocolAppliedAuthority].targetDisease ^label = "Disease or agent targeted"
 * protocolApplied[protocolAppliedAuthority].doseNumber[x] 1..1 MS
 * protocolApplied[protocolAppliedAuthority].doseNumber[x] only positiveInt
