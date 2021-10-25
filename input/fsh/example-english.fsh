@@ -45,7 +45,7 @@ Usage: #example
 * status = #completed
 * extension[vaccineBrand].valueCoding = DDCC_Example_Test_CodeSystem#TEST
 * extension[vaccineMarketAuthorization].valueCoding = DDCC_Example_Test_CodeSystem#TEST
-* extension[validFrom].valueDateTime = "2021-05-30"
+* extension[validFrom].valueDate = "2021-05-30"
 * extension[country].valueCode = urn:iso:std:iso:3166#CHE
 * vaccineCode.coding[ddccVaccine] = $ICD11#XM0CX4
 * expirationDate = "2021-06-30"
