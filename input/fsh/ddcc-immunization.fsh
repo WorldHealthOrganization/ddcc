@@ -99,7 +99,7 @@ Title:          "DDCC Vaccine Valid From"
 Description:    "Date upon which provided vaccination is considered valid"
 * ^context.type = #element
 * ^context.expression = "Immunization"
-* value[x] only dateTime
+* value[x] only date
 * valueDateTime 1..1 MS
 
 
