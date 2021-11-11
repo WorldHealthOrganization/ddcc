@@ -1,0 +1,44 @@
+@startuml
+title  Workflow Across FHIR Servers
+
+hide footbox
+
+!include ./style.iuml
+
+Actor "Data\nEntrant" as Entry
+Participant "Digital\nHealth\nSolution" as DHS
+Database "DHS\nFHIR" as DHSFHIR
+Participant "DDCC\nGeneration\nService" as CertGen
+Control "DDCC\nRegistry\nService" as DDCCReg
+Control "DDCC\nRepository\nService" as DDCCRepo
+Database "FHIR\nServer" as RIFHIR
+
+activate Entry
+activate DHS
+Entry -> DHS: Enter Record
+activate DHSFHIR
+DHS -> DHSFHIR: Save FHIR\nResources
+
+
+activate CertGen
+DHS -> CertGen: Submit\nQuestionnaireResponse
+activate RIFHIR
+CertGen -> RIFHIR: Save FHIR\nResources
+CertGen -> RIFHIR: Create\nDocument
+RIFHIR -> CertGen: Return\nDocument
+CertGen -> CertGen: Sign\nDocument
+activate DDCCRepo
+CertGen -> RIFHIR: Save\nDocument
+deactivate DDCCRepo
+activate DDCCReg
+CertGen -> RIFHIR: Save Provide\nDocument Bundle
+deactivate DDCCReg
+CertGen -> DHS: Return\nSigned Document
+deactivate CertGen
+DHS -> DHSFHIR: Save\nSigned Document
+deactivate DHSFHIR
+DHS -> Entry: Print\nDocument
+deactivate DHS
+deactivate Entry
+
+@enduml

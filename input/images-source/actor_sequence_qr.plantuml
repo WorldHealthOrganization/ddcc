@@ -1,0 +1,43 @@
+@startuml
+title DDCC:VS Certificate Generator - QuestionnaireResponse
+
+hide footbox
+
+!include ./style.iuml
+
+Participant     "Digital\nHealth\nSolution"                 as DHS
+Participant     "DDCC:VS\nCertificate\nGeneration\nService" as DDCCGen
+Database        "Certficate\nGeneration\nFHIR Server"       as FHIR
+Participant     "DDCC:VS\nRegistry\nService"                as DDCCReg
+Participant     "DDCC:VS\nRepository\nService"              as DDCCRep
+
+autonumber 1.1.1
+
+DHS->DDCCGen: Submit QuestionnaireResponse
+DDCCGen->DDCCReg: Query for DDCC Folder by HCID
+DDCCReg->DDCCGen: Return Folder or Not Found
+alt DDCC Folder Exists
+DDCCGen->DDCCGen: Create transaction Bundle to UPDATE Patient,\nand CREATE Immunization, ImmunizationReccomendation,\nQuestionnaireResponse
+else No DDCC Folder
+DDCCGen->DDCCGen: Create transaction Bundle to CREATE Patient,\nImmunization, ImmunizationReccomendation,\nQuestionnaireResponse
+end
+DDCCGen->FHIR: Save transaction Bundle
+alt DDCC Folder Exists
+DDCCGen->DDCCGen: Create transaction Bundle to CREATE\nDocumentReference of QR, Composition
+else No DDCC Folder
+DDCCGen->DDCCGen: Create transaction Bundle to CREATE\nDocumentReference of QR, Composition
+end
+DDCCGen->FHIR: Save transaction Bundle
+DDCCGen->FHIR: Request $document from created Composition
+FHIR->DDCCGen: Return document Bundle
+DDCCGen->DDCCGen: Sign document Bundle
+DDCCGen->DDCCRepo: Save document Bundle
+alt DDCC Folder Exists
+DDCCGen->DDCCGen: Create Provide Document Bundle to UPDATE DDCC Folder,\nPatient, and CREATE SubmissionSet,\nDocumentReference to Document on Repo,\nBinary of updated PDF, DocumentReference to Binary
+else No DDCC Folder
+DDCCGen->DDCCGen: Create Provide Document Bundle to CREATE DDCC Folder,\nPatient, SubmissionSet,\nDocumentReference to Document on Repo,\nBinary of new PDF, DocumentReference to Binary
+end
+DDCCGen->DDCCReg: Save Provide Document Bundle (ITI-65)
+
+
+@enduml

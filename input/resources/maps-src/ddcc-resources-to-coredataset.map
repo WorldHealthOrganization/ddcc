@@ -1,51 +1,36 @@
 
-map "http://worldhealthorganization.github.io/ddcc/StructureMap/QRespToCoreDataSet" = "QRespToCoreDataSet"
+map "http://worldhealthorganization.github.io/ddcc/StructureMap/ResourcesToCoreDataSet" = "ResourcesToCoreDataSet"
 
-uses "http://hl7.org/fhir/StructureDefinition/QuestionnaireResponse" alias QResp as source
+uses "http://hl7.org/fhir/StructureDefinition/Bundle" alias Bundle as source
+uses "http://hl7.org/fhir/StructureDefinition/HumanName" alias HumanName as produced
+
+uses "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCPatient"  alias DDCCPatient as source
+uses "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCImmunization" alias DDCCImmunization as source
+uses "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCImmunizationRecommendation" alias DDCCImmunizationRecommendation as source
+
 uses "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSetPoV" alias DDCCPoV as target
 
 
-group QRespToCoreDataSet ( 
-  source qr : QResp,
+group ResourcesToCoreDataSet ( 
+  source bundle : Bundle,
   target ddcc : DDCCPoV 
 ) {
-  /*
-  qr.item as item where item.linkId = 'name' -> ddcc.name as name then {
-    log 'got answer';
-    item.answer first as answer -> name = answer.valueString;
-  };
-  */
-  ///qr.id as a -> ddcc.name = a "testing";
-  ///qr.item as a where QuestionnaireResponse.item.exists(linkId = 'name') -> ddcc.name = 'success' "test again";
-  /* this works
-  qr.item as item then {
-    item.linkId as link where $this = 'name' -> ddcc.name = link;
-  };
-  */
-  /*
-  qr.item as a then {
-    a as item where linkId = 'name' -> ddcc.name = item "set name";
-     
-    item.linkId as link where $this = 'name' then {
 
-    }; ddcc.name = link;
-    
-  } "items";
+
+  bundle.entry as entry then {
+    entry.resource : Patient as patient then PatientToHeader ( patient, ddcc ) "set header";
+  } "set header from patient";
+  /*
+    // 	     entry.resource : DDCCPatient as patient
+                 entry.resource : Patient as patient
+           then  Decode-Patient-To-QR(patient,qr) "Patient";
+      };
 */
-///  qr.item as item where linkId = 'name' -> ddcc.name = item "set name";
-/* GOOD, fallback to this if all else fails!!!
-  qr.item as item where linkId = 'name' then {
-    item.answer first as answer then {
-      answer.valueString as content -> ddcc.name = content "set name";
-    } "get first answer";
-  } "get name";
-  */
-
-  
-  qr as src then QRespToHeader( src, ddcc ) "set header content";
-  qr as src -> ddcc.vaccination as vaccination then QRespToVaccination( src, vaccination ) "set vaccination content";
-  qr as src -> ddcc.certificate as certificate then QRespToCertificate( src, certificate ) "set certificate content";
-
+      /*
+  bundle as src then QRespToHeader( src, ddcc ) "set header content";
+  bundle as src -> ddcc.vaccination as vaccination then QRespToVaccination( src, vaccination ) "set vaccination content";
+  bundle as src -> ddcc.certificate as certificate then QRespToCertificate( src, certificate ) "set certificate content";
+*/
   
 /*
   then {
@@ -55,6 +40,30 @@ group QRespToCoreDataSet (
 */
 }
 
+group PatientToHeader (
+  source patient : DDCCPatient,
+  target ddcc : DDCCPoV
+) {
+  patient.name as name then {
+    name as src -> ddcc as tgt then NameToText( src, tgt ) "setting name";
+    /*
+    name.text as text -> newname = text "set name text";
+    name.given first as given -> newname = append('Luke',given);
+    /*
+    name.family as family then {
+      name.given first as given -> ddcc.name = append(given, " ", family) "set family";
+    } "combine name";*/
+  } "set name";
+}
+
+group NameToText (
+  source src : HumanName,
+  target tgt
+) {
+  src.given as given -> tgt.name = given "set here";
+}
+
+/*
 group QRespToHeader (
   source qr,
   target ddcc
@@ -186,3 +195,4 @@ group QRespToCertificate(
 
   } "certificate items";
 }
+*/

@@ -1,0 +1,54 @@
+@startuml
+title  Workflow Across Reference Implementation
+
+hide footbox
+
+!include ./style.iuml
+
+Actor "Data\nEntrant" as Entry
+Participant "Digital\nHealth\nSolution" as DHS
+Database "DHS\nFHIR" as DHSFHIR
+Participant "DDCC\nGeneration\nService" as CertGen
+Database "Generation\nService\nFHIR" as CertFHIR
+Participant "DDCC\nRegistry\nService" as DDCCReg
+Database "Registry\nFHIR" as RegFHIR
+Participant "DDCC\nRepository\nService" as DDCCRepo
+Database "Repository\nFHIR" as RepoFHIR
+
+activate Entry
+activate DHS
+Entry -> DHS: Enter Record
+activate DHSFHIR
+DHS -> DHSFHIR: Save FHIR\nResources
+
+
+activate CertGen
+DHS -> CertGen: Submit\nQuestionnaireResponse
+activate CertFHIR
+CertGen -> CertFHIR: Save FHIR\nResources
+CertGen -> CertFHIR: Create\nDocument
+CertFHIR -> CertGen: Return\nDocument
+CertGen -> CertGen: Sign\nDocument
+CertGen -> CertFHIR: Save\nDocument
+deactivate CertFHIR
+activate DDCCRepo
+CertGen -> DDCCRepo: Save Document
+activate RepoFHIR
+DDCCRepo -> RepoFHIR: Save\nDocument
+deactivate RepoFHIR
+deactivate DDCCRepo
+activate DDCCReg
+CertGen -> DDCCReg: Save Provide\nDocument Bundle
+activate RegFHIR
+DDCCReg -> RegFHIR: Save Provide\nDocument Bundle
+deactivate RegFHIR
+deactivate DDCCReg
+CertGen -> DHS: Return\nSigned Document
+deactivate CertGen
+DHS -> DHSFHIR: Save\nSigned Document
+deactivate DHSFHIR
+DHS -> Entry: Print\nDocument
+deactivate DHS
+deactivate Entry
+
+@enduml

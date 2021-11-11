@@ -3,7 +3,7 @@ Description:    "Manufacturer or Market Authorization Holder SHALL be present"
 Expression:     "manufacturer.exists() or maholder.exists()"
 Severity:       #error
 
-/* Inheritance doesn't seem to work well when it's modifying a backbone element.  Snapshot and differential don't combine
+/* Inheritance doesn't seem to work well when it's modifying a backbone element.  Snapshot and differential don't combine */
 Logical:        DDCCCoreDataSet
 Title:          "DDCC Core Data Set Logical Model"
 Description:    "Data elements for the DDCC Core Data Set."
@@ -45,11 +45,11 @@ Description:    "Data elements for the DDCC Core Data Set."
   * issuer 1..1 SU Reference(DDCCOrganization) "Certificate issuer" "Certificate issuer."
   * hcid 1..1 SU Identifier "Health certificate identifier (HCID)" "Health certificate identifier (HCID)."
   * version 1..1 SU string "Certificate schema version" "Certificate schema version"
-*/
+
 
 Logical:        DDCCCoreDataSetPoV
 //Parent:		Element
-//Parent:         DDCCCoreDataSet
+Parent:         DDCCCoreDataSet
 Title:          "DDCC Core Data Set Logical Model - Proof of Vaccination"
 Description:    "Data elements for the DDCC Core Data Set - Proof of Vaccination."
 
@@ -57,7 +57,8 @@ Description:    "Data elements for the DDCC Core Data Set - Proof of Vaccination
 * ^version = "RC2"
 * ^abstract = false
 * ^status = #draft
-* ^type = "DDCCCoreDataSetPoV"
+* ^type = "DDCCCoreDataSet"
+/*
 * name 1..1 SU string "Name" "The full name of the vaccinated person."
 * birthDate 0..1 SU date "Date of birth" "The vaccinated person's date of birth (DOB) if known. If unknown, use given DOB for administrative purposes"
 * identifier 0..1 SU Identifier "Unique identifier" "Unique identifier for the vaccinated person, according to the policies applicable to each country. There can be more than one unique identifier used to link records. (e.g. national ID, health ID, immunization information system ID, medical record ID)."
@@ -90,10 +91,11 @@ Description:    "Data elements for the DDCC Core Data Set - Proof of Vaccination
   * issuer 1..1 SU Reference(DDCCOrganization) "Certificate issuer" "Certificate issuer."
   * hcid 1..1 SU Identifier "Health certificate identifier (HCID)" "Health certificate identifier (HCID)."
   * version 1..1 SU string "Certificate schema version" "Certificate schema version"
+*/
 
 Logical:        DDCCCoreDataSetCoC
 //Parent:		Element
-//Parent:         DDCCCoreDataSet
+Parent:         DDCCCoreDataSet
 Title:          "DDCC Core Data Set Logical Model - Continuity of Care"
 Description:    "Data elements for the DDCC Core Data Set - Continuity of Care."
 
@@ -101,7 +103,10 @@ Description:    "Data elements for the DDCC Core Data Set - Continuity of Care."
 * ^version = "RC2"
 * ^abstract = false
 * ^status = #draft
-* ^type = "DDCCCoreDataSetCoC"
+* ^type = "DDCCCoreDataSet"
+* vaccination.centre 1..1 string "Administering centre" "The name or identifier of the vaccination facility responsible for providing the vaccination."
+
+/*
 * name 1..1 SU string "Name" "The full name of the vaccinated person."
 * birthDate 0..1 SU date "Date of birth" "The vaccinated person's date of birth (DOB) if known. If unknown, use given DOB for administrative purposes"
 * identifier 0..1 SU Identifier "Unique identifier" "Unique identifier for the vaccinated person, according to the policies applicable to each country. There can be more than one unique identifier used to link records. (e.g. national ID, health ID, immunization information system ID, medical record ID)."
@@ -121,7 +126,6 @@ Description:    "Data elements for the DDCC Core Data Set - Continuity of Care."
   * totalDoses 0..1 positiveInt "Total doses" "Total expected doses as defined by Member State care plan and immunization programme policies."
   * country 1..1 SU Coding "Country of vaccination" "The country in which the individual has been vaccinated."
   * country from http://hl7.org/fhir/ValueSet/iso3166-1-3 (preferred)
-  * centre 0..1 string "Administering centre" "The name or identifier of the vaccination facility responsible for providing the vaccination."
   * centre 1..1 string "Administering centre" "The name or identifier of the vaccination facility responsible for providing the vaccination."
   * signature 0..1 Signature "Signature of health worker" "REQUIRED for PAPER vaccination certificates ONLY. The health worker who provided the vaccination or the supervising clinician's hand-written signature."
   * practitioner 0..1 Identifier "Health worker identifier" "OPTIONAL for DIGITAL and PAPER vaccination certificates. The unique identifier for the health worker as determined by the member state. There can be more than one unique identifier used. (e.g. system generated ID, health profession number, cryptographic signature, or any other form of health worker unique identifier). This can be used in lieu of a paper-based signature."
@@ -135,7 +139,7 @@ Description:    "Data elements for the DDCC Core Data Set - Continuity of Care."
   * issuer 1..1 SU Reference(DDCCOrganization) "Certificate issuer" "Certificate issuer."
   * hcid 1..1 SU Identifier "Health certificate identifier (HCID)" "Health certificate identifier (HCID)."
   * version 1..1 SU string "Certificate schema version" "Certificate schema version"
-
+*/
 
 /*
 Instance:       DDCCCoreDataSetPoV
