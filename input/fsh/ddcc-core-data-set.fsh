@@ -3,7 +3,6 @@ Description:    "Manufacturer or Market Authorization Holder SHALL be present"
 Expression:     "manufacturer.exists() or maholder.exists()"
 Severity:       #error
 
-/* Inheritance doesn't seem to work well when it's modifying a backbone element.  Snapshot and differential don't combine */
 Logical:        DDCCCoreDataSet
 Title:          "DDCC Core Data Set Logical Model"
 Description:    "Data elements for the DDCC Core Data Set."
@@ -18,6 +17,23 @@ Description:    "Data elements for the DDCC Core Data Set."
 * identifier 0..1 SU Identifier "Unique identifier" "Unique identifier for the vaccinated person, according to the policies applicable to each country. There can be more than one unique identifier used to link records. (e.g. national ID, health ID, immunization information system ID, medical record ID)."
 * sex 0..1 SU code "Sex" "Documentation of a specific instance of sex information for the vaccinated person."
 * sex from http://hl7.org/fhir/ValueSet/administrative-gender (required)
+* certificate 0..1 SU BackboneElement "Certificate Metadata" "Metadata associated with the certificate"    
+  * issuer 1..1 SU Reference(DDCCOrganization) "Certificate issuer" "Certificate issuer."
+  * hcid 1..1 SU Identifier "Health certificate identifier (HCID)" "Health certificate identifier (HCID)."
+  * version 1..1 SU string "Certificate schema version" "Certificate schema version"
+
+Logical:        DDCCCoreDataSet_VS
+Id:             DDCCCoreDataSet.VS
+Parent:         DDCCCoreDataSet
+Title:          "DDCC Core Data Set Logical Model for Vaccine Status"
+Description:    "Data elements for the DDCC Core Data Set for Vaccine Status."
+
+* ^url = "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.VS"
+* ^version = "RC2"
+* ^abstract = true
+* ^status = #draft
+* ^type = "DDCCCoreDataSet"
+
 * vaccination 0..* SU BackboneElement "Vaccination Event" "A vaccination event."
 * vaccination obeys who-ddcc-data-1
   * vaccine 1..1 SU Coding "Vaccine or prophylaxis" "Generic description of the vaccine or vaccine sub-type. e.g. COVID-19 mRNA vaccine, HPV vaccine."
@@ -41,19 +57,17 @@ Description:    "Data elements for the DDCC Core Data Set."
   * period 0..1 Period "Certificate Validity Period" "Certificate validity period."
     * start 0..1 date "Certificate valid from" "Start date of certificate validity."
     * end 0..1 date "Certificate valid until" "End date of certificate validity."
-* certificate 0..1 SU BackboneElement "Certificate Metadata" "Metadata associated with the certificate"    
-  * issuer 1..1 SU Reference(DDCCOrganization) "Certificate issuer" "Certificate issuer."
-  * hcid 1..1 SU Identifier "Health certificate identifier (HCID)" "Health certificate identifier (HCID)."
-  * version 1..1 SU string "Certificate schema version" "Certificate schema version"
 
 
-Logical:        DDCCCoreDataSetPoV
+
+Logical:        DDCCCoreDataSet_VS_PoV
+Id:             DDCCCoreDataSet.VS.PoV
 //Parent:		Element
-Parent:         DDCCCoreDataSet
-Title:          "DDCC Core Data Set Logical Model - Proof of Vaccination"
-Description:    "Data elements for the DDCC Core Data Set - Proof of Vaccination."
+Parent:         DDCCCoreDataSet_VS
+Title:          "DDCC Core Data Set Logical Model - Vaccine Status - Proof of Vaccination"
+Description:    "Data elements for the DDCC Core Data Set - Vaccine Status - Proof of Vaccination."
 
-* ^url = "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSetPoV"
+* ^url = "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.VS.PoV"
 * ^version = "RC2"
 * ^abstract = false
 * ^status = #draft
@@ -93,13 +107,14 @@ Description:    "Data elements for the DDCC Core Data Set - Proof of Vaccination
   * version 1..1 SU string "Certificate schema version" "Certificate schema version"
 */
 
-Logical:        DDCCCoreDataSetCoC
+Logical:        DDCCCoreDataSet_VS_CoC
+Id:             DDCCCoreDataSet.VS.CoC
 //Parent:		Element
-Parent:         DDCCCoreDataSet
-Title:          "DDCC Core Data Set Logical Model - Continuity of Care"
-Description:    "Data elements for the DDCC Core Data Set - Continuity of Care."
+Parent:         DDCCCoreDataSet_VS
+Title:          "DDCC Core Data Set Logical Model - Vaccine Status - Continuity of Care"
+Description:    "Data elements for the DDCC Core Data Set - Vaccine Status - Continuity of Care."
 
-* ^url = "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSetCoC"
+* ^url = "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.VS.CoC"
 * ^version = "RC2"
 * ^abstract = false
 * ^status = #draft
