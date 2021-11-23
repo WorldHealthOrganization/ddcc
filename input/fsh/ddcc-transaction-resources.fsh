@@ -38,7 +38,7 @@ An [DDCC Submit Health Event Request](StructureDefinition-DDCCSubmitHealthEventR
 * entry ^slicing.discriminator.path = "resource"
 * entry ^slicing.rules = #closed
 * entry 1..* MS
-* entry contains ddccParameters 0..1 and ddccQuestionnaireResponse 0..1
+* entry contains ddccParameters 0..* and ddccQuestionnaireResponse 0..*
 * entry[ddccParameters].resource only DDCCGenerateHealthCertificateParameters
 * entry[ddccParameters].request.method = #POST
 * entry[ddccParameters].request.url 1..1
