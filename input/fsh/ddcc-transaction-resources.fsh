@@ -44,7 +44,7 @@ An [DDCC Submit Health Event Request](StructureDefinition-DDCCSubmitHealthEventR
 * entry[ddccParameters].request.url 1..1
 * entry[ddccQuestionnaireResponse].resource only DDCCQuestionnaireResponse
 * entry[ddccQuestionnaireResponse].request.method = #POST
-* entry[ddccQuestionnaireResponse].request.url 1..1
+* entry[ddccQuestionnaireResponse].request.url = "QuestionnaireResponse/$generateHealthCertificate"
 
 
 
