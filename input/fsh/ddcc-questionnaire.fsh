@@ -65,6 +65,7 @@ Usage: #definition
 * item[+].linkId = "vaccine"
 * item[=].text = "Vaccine or prophylaxis"
 * item[=].type = #choice
+* item[=].answerValueSet = "http://worldhealthorganization.github.io/ddcc/ValueSet/who-ddcc-vaccines-covid-19"
 * item[=].required = true
 
 * item[+].linkId = "brand"
@@ -126,6 +127,7 @@ Usage: #definition
 * item[+].linkId = "disease"
 * item[=].text = "Disease or agent targeted"
 * item[=].type = #choice
+* item[=].answerValueSet = "http://worldhealthorganization.github.io/ddcc/ValueSet/who-ddcc-disease-targeted-covid-19"
 * item[=].required = false
 
 * item[+].linkId = "due_date"

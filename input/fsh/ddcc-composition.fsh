@@ -46,6 +46,39 @@ Describes the logical structure for a Digital Documentation of COVID-19 Certific
 * section[vaccination].focus only Reference(DDCCImmunization)
 * section[vaccination].entry only Reference(DDCCImmunization or DDCCDocumentReferenceQR or DDCCImmunizationRecommendation)
 
+Profile:        DDCCVSComposition
+Parent:         DDCCComposition
+Id:             DDCCVSComposition
+Title:          "DDCC:VS Composition"
+Description:    """ 
+Describes the logical structure for a Digital Documentation of COVID-19 Certificates - Vaccination Status
+(DDCC:VS).  
+"""
+* category = DDCC_Composition_Category_CodeSystem#ddcc-vs
+
+Profile:        DDCCTRComposition
+Parent:         DDCCComposition
+Id:             DDCCTRComposition
+Title:          "DDCC:TR Composition"
+Description:    """ 
+Describes the logical structure for a Digital Documentation of COVID-19 Certificates - Test Results
+(DDCC:TR).  
+"""
+* category = DDCC_Composition_Category_CodeSystem#ddcc-tr
+
+CodeSystem:     DDCC_Composition_Category_CodeSystem
+Id:             DDCC-Composition-Category-CodeSystem
+Title:          "DDCC Composition Category Codes"
+Description:    "Possible categories available for composition."
+* #ddcc-vs      "DDCC:VS"
+* #ddcc-tr      "DDCC:TR"
+
+ValueSet:       DDCC_Composition_Category_ValueSet
+Id:             DDCC-Composition-Category-ValueSet
+Title:          "DDCC Composition Category Codes"
+Description: 	"Categorization of DDCC Composition"
+* include codes from system DDCC_Composition_Category_CodeSystem
+
 Profile:        DDCCDocument
 Parent:         Bundle
 Id:             DDCCDocument

@@ -1,5 +1,5 @@
 Profile:      DDCCDocumentReferenceQR
-Parent:       DocumentReference
+Parent:       http://profiles.ihe.net/ITI/MHD/StructureDefinition/IHE.MHD.Minimal.DocumentReference
 Id:           DDCCDocumentReferenceQR
 Title:        "DDCC DocumentReference return for QR"
 Description:  "DDCC DocumentReference for QR codes including the QR image and the serialized content."
