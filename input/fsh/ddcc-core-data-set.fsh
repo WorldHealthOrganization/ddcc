@@ -32,6 +32,9 @@ Description:    "Data elements for the DDCC Core Data Set."
   * issuer 1..1 SU Reference(DDCCOrganization) "Certificate issuer" "Certificate issuer."
   * hcid 1..1 SU Identifier "Health certificate identifier (HCID)" "Health certificate identifier (HCID)."
   * version 1..1 SU string "Certificate schema version" "Certificate schema version"
+  * period 0..1 Period "Certificate Validity Period" "Certificate validity period."
+    * start 0..1 date "Certificate valid from" "Start date of certificate validity."
+    * end 0..1 date "Certificate valid until" "End date of certificate validity."
 
 Logical:        DDCCCoreDataSet_VS
 Id:             DDCCCoreDataSet.VS
@@ -54,7 +57,7 @@ Description:    "Data elements for the DDCC Core Data Set for Vaccine Status."
   * ^mapping.map = "Immunization.protocolApplied.authority.identifier"
 */
 
-* vaccination 0..* SU BackboneElement "Vaccination Event" "A vaccination event."
+* vaccination 0..1 SU BackboneElement "Vaccination Event" "A vaccination event."
 * vaccination obeys who-ddcc-data-1
   * vaccine 1..1 SU Coding "Vaccine or prophylaxis" "Generic description of the vaccine or vaccine sub-type. e.g. COVID-19 mRNA vaccine, HPV vaccine."
     * ^mapping.identity = "ddcc"
@@ -102,9 +105,7 @@ Description:    "Data elements for the DDCC Core Data Set for Vaccine Status."
   * nextDose 0..1 date "Due date of next dose" "Date on which the next vaccination should be administered, if a next dose is REQUIRED."
     * ^mapping.identity = "ddcc"
     * ^mapping.map = "ImmunizationRecommendation.dateCriterion.value"   
-  * period 0..1 Period "Certificate Validity Period" "Certificate validity period."
-    * start 0..1 date "Certificate valid from" "Start date of certificate validity."
-    * end 0..1 date "Certificate valid until" "End date of certificate validity."
+
 
 
 

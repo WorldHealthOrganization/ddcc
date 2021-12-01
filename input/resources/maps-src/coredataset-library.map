@@ -62,15 +62,13 @@ group DDCCToComposition(
   src -> comp.type as type, type.coding as coding then {
     src -> coding.system = "http://loinc.org", coding.code = "82593-5" "set type coding";
   } "set type";
-  src.vaccination as vaccination -> comp.event as event then {
-    vaccination.period as period -> event.period = period "set event period";
-  } "set event";
-  src.certificate as certificate -> comp.author as author then {
+  src.certificate as certificate -> comp.author as author, comp.event as event then {
+    certificate.period as period -> event.period = period "set event period";
     certificate.issuer as issuer -> author.type = "Organization" then {
       issuer.identifier as pha -> author.identifier as identifier then {
         pha.value as value -> identifier.value = value "set pha";
       } "set author identifier";
     } "set author ref";
-  } "set author";
+  } "set certificate";
 
 }
