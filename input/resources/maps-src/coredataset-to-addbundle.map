@@ -5,8 +5,13 @@ uses "http://hl7.org/fhir/StructureDefinition/Bundle" alias AddBundle as target
 uses "http://hl7.org/fhir/StructureDefinition/Patient" alias Patient as target
 
 uses "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCPatient" alias DDCCPatient as produced
+uses "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCDocumentReferenceQR" alias DDCCDocRefQR as produced
+uses "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCComposition" alias DDCCComposition as produced
+
 uses "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCImmunization" alias DDCCImmunization as produced
 uses "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCImmunizationRecommendation" alias DDCCImmRec as produced
+
+imports "http://worldhealthorganization.github.io/ddcc/StructureMap/CoreDataSetLibrary"
 
 
 group CoreDataSetToAddBundle ( 
@@ -14,7 +19,7 @@ group CoreDataSetToAddBundle (
   target bundle : AddBundle, 
 ) {
   ddcc -> bundle.type = "transaction" "set bundle type";
-  ddcc -> uuid() as pid, uuid() as iid, uuid() as irid then {
+  ddcc -> uuid() as pid, uuid() as compid, uuid() as iid, uuid() as irid, uuid() as qrwhoid, uuid() as qrdccid then {
     ddcc ->  
       bundle.entry as entry, 
       entry.fullUrl = append("urn:uuid:",pid), 
@@ -26,7 +31,79 @@ group CoreDataSetToAddBundle (
         ddcc then DDCCToPatient( ddcc, patient, pid ) "setup patient";
         ddcc -> entry.resource = patient "set patient resource";
       } "create patient resource";
+
+    ddcc -> 
+      bundle.entry as entry, 
+      entry.fullUrl = append("urn:uuid:",compid), 
+      entry.request as request, 
+      request.method = "PUT", 
+      request.url = append("Composition/", compid),
+      create("http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCComposition") as comp
+      then {
+        ddcc then DDCCToComposition( ddcc, comp, compid, pid ) "setup composition";
+        ddcc -> comp.category as category, category.coding as coding,
+          coding.system = "http://loinc.org", 
+          coding.code = "11369-6" "set category";
+        ddcc -> comp.title = "International Certificate of Vaccination or Prophylaxis" "set title";
+        ddcc -> comp.section as section then {
+          ddcc -> 
+            section.code as code, 
+            code.coding as coding,
+            coding.system = "http://loinc.org",
+            coding.code = "11369-6"
+            "set code";
+          ddcc.certificate as certificate -> section.author as author then {
+            certificate.issuer as issuer -> author.type = "Organization" then {
+              issuer.identifier as pha -> author.identifier as identifier then {
+                pha.value as value -> identifier.value = value "set pha";
+              } "set author identifier";
+            } "set author ref";
+          } "set author";
+          ddcc -> section.focus as focus, focus.reference = append("Immunization/", iid) "set focus";
+          ddcc -> section.entry as entry, entry.reference = append("Immunization/", iid ) "add Immunization entry";
+          ddcc -> section.entry as entry, entry.reference = append("ImmunizationRecommendation/", irid ) "add ImmunizationRecommendation entry";
+          ddcc -> section.entry as entry, entry.reference = append("DocumentReference/", qrwhoid ) "add WHO QR entry";
+          ddcc -> section.entry as entry, entry.reference = append("DocumentReference/", qrdccid ) "add DCC QR entry";
+        } "set section";
+        ddcc -> entry.resource = comp "set composition resource";
+      } "create composition resource";
       
+    ddcc ->
+      bundle.entry as entry,
+      entry.fullUrl = append("urn:uuid:", qrwhoid ),
+      entry.request as request,
+      request.method = "PUT",
+      request.url = append("DocumentReference/", qrwhoid ),
+      create("http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCDocumentReferenceQR") as qr
+      then {
+        ddcc then DDCCToDocumentReference( ddcc, qr, qrwhoid, pid ) "setup WHO DocRef";
+        ddcc -> 
+          qr.category as category, 
+          category.coding as coding, 
+          coding.system = "https://WorldHealthOrganization.github.io/ddcc/CodeSystem/DDCC-QR-Category-Usage-CodeSystem", 
+          coding.code = "who" "set category";
+        ddcc -> qr.description = "WHO QR code for COVID 19 Vaccine Certificate" "set description";
+        ddcc -> entry.resource = qr "set WHO QR";
+      } "create WHO QR Doc Ref";
+
+    ddcc ->
+      bundle.entry as entry,
+      entry.fullUrl = append("urn:uuid:", qrdccid ),
+      entry.request as request,
+      request.method = "PUT",
+      request.url = append("DocumentReference/", qrdccid ),
+      create("http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCDocumentReferenceQR") as qr
+      then {
+        ddcc then DDCCToDocumentReference( ddcc, qr, qrdccid, pid ) "setup DCC DocRef";
+        ddcc -> 
+          qr.category as category, 
+          category.coding as coding, 
+          coding.system = "https://WorldHealthOrganization.github.io/ddcc/CodeSystem/DDCC-QR-Category-Usage-CodeSystem", 
+          coding.code = "dcc" "set category";
+        ddcc -> qr.description = "DCC QR code for COVID 19 Vaccine Certificate" "set description";
+        ddcc -> entry.resource = qr "set DCC QR";
+      } "create DCC QR Doc Ref";
+
     ddcc.vaccination first as vaccination -> 
       bundle.entry as entry,
       entry.fullUrl = append("urn:uuid:", iid),
@@ -52,20 +129,6 @@ group CoreDataSetToAddBundle (
       } "create immunization recommendation resource";
 
   } "set uuids";
-}
-
-group DDCCToPatient(
-  source src : DDCCVS,
-  target patient : DDCCPatient,
-  source pid
-) { 
-  pid -> patient.id = pid "set id";
-  src.name as name -> patient.name as tName then {
-    name as content -> tName.text = content "set name";
-  } "set full name";
-  src.birthDate as birthDate -> patient.birthDate = birthDate "set birthDate";
-  src.sex as sex -> patient.gender = sex "set gender";
-  src.identifier as identifier -> patient.identifier = identifier "set identifier";
 }
 
 group DDCCToImmunization(
@@ -118,10 +181,10 @@ group DDCCToImmunization(
   src -> immunization.protocolApplied as protocol then {
     src -> protocol.authority as authority then {
       certificate.issuer as issuer -> authority.type = "Organization" then {
-          issuer.identifier as pha -> authority.identifier as identifier then {
-            pha.value as value -> identifier.value = value "set pha";
-          } "set issuer identifier";
-        } "set issuer";
+        issuer.identifier as pha -> authority.identifier as identifier then {
+          pha.value as value -> identifier.value = value "set pha";
+        } "set issuer identifier";
+      } "set issuer";
     } "set authority";
     src.disease as disease -> protocol.targetDisease as tdisease then {
       disease -> tdisease.coding = disease "set target disease code";
