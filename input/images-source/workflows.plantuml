@@ -1,0 +1,85 @@
+@startuml
+
+title DDCC Workflows
+
+
+
+actor "Certificate Holder" as CH
+actor "Health Care\nWorker\n(e.g. Vaccinator\nNurse)" as HW
+actor "Validator" as VAL
+participant "Digital Health\nSolution\n(e.g openSRP)" as DHS
+participant "DDCC: Certificate\nGeneration Service\n(e.g. Reference App)" as CGS
+
+box "Public Health Authortity"
+   participant "PKI Gateway\n(e.g. DDCCG)" as GATE
+   participant "Knowledge Repo\nFHIR Server" as KM
+   participant "Data Store\nTrusted FHIR Server\n(DDCC Regsistry Service\n& DDCC Repository Service)"  as SHR
+end box
+
+autonumber "<b>00:</b>"
+
+
+group Vaccination & Certificate Generation
+    GATE->CGS: Establish PKI\ntrust network\n(unspecified, reference implementation is DDCC Gateway)
+    HW->CH: Patient registration
+    HW->CH: Vaccinate subject of certificate holder
+    HW->DHS: Record vaccination event
+    DHS->CGS: DDCC: Submit Health Event / Generate Health Certificate
+    CGS->CGS: Ensure Digital Health Solution has node level authentication\nIHE: ATNA
+    CGS->CGS: Log transaction / audit trail\nIHE: ATNA (RESTful?)
+    CGS->SHR: DDCC: Register Health Certificate\nMHDS: ITI-65\nFHIR: create Bundle: SubmissionSet & DocumentReference
+
+    opt store online content
+         CGS->SHR: DDCC: Store Health Certificate\nFHIR: Create Bundle: DDCC Document
+    end
+
+    CGS->DHS: DDCC: Generate Health Certificate response\nFHIR Bundle: DDCC Document
+    DHS->CH: Share HCID and/or QR codes (paper or wallet, unspecified)
+end 
+
+group Contuinuty of Care
+    HW->CH: Patient registration
+    CH->HW: Share QR code
+    HW->DHS: Scan QR code
+    DHS->DHS: Identify QR code type\nDeserialize\nMap to DDCC Document
+    opt  retrieve online content
+        GATE->HW: Authenticate and authorize usage (unspecified, reference implementation is KeyCloak)
+        DHS->SHR: DDCC: Retrieve Health Folder\nMHD: ITI-66\nFHIR: query List
+        loop DocumentReference
+           DHS->SHR: DDCC: Retrieve Health Certificate\nMHD: ITI-68\nFHIR: retrieve Bundle: DDCC Document
+           loop DocumentReference: retrieve QR-codes or PDFs
+               DHS->SHR: DDCC: Retrieve Health Certificate Reference\nMHD: ITI-67\nFHIR: retrieve DocumentReference:\n attachments of pdf or image (e.g. png)
+            end
+        end
+    end
+    HW->DHS: Review immunization history
+    HW->CH: Take any needed clinical action on subject of Card Holder
+end
+
+group Validate status
+    opt refresh cache
+        DHS->KM: Refresh FHIR ValueSet & Library resources (CQL/ELM) for validation business rules
+	DHS->GATE: Refresh trust network public keys & revoked key list
+    end 
+
+
+    CH->VAL: Share QR code
+    VAL->DHS: Scan QR code
+    DHS->DHS: Identify QR code type\nDeserialize\nMap to DDCC Document
+
+    opt  retrieve online content
+        GATE->VAL: Authenticate and authorize usage (unspecified, reference implementation is KeyCloak)
+        DHS->SHR: DDCC: Retrieve Health Folder\nMHD: ITI-66\nFHIR: query List
+        loop DocumentReference
+           DHS->SHR: DDCC: Retrieve Health Certificate\nMHD: ITI-68\nFHIR: retrieve Bundle: DDCC Document
+        end
+    end
+
+    DHS->DHS: Exectute CQL/ELM validation status business rules against DDCC Documents
+    VAL->DHS: Review validation status
+    VAL->CH: Indicate result of validation check
+end
+
+
+
+@enduml
