@@ -49,6 +49,21 @@ jobs:
           # Get the latest publisher - don't run the batch script but run the line directly
           args: curl -L https://github.com/HL7/fhir-ig-publisher/releases/latest/download/publisher.jar -o ./input-cache/publisher.jar --create-dirs
 
+# To run python pre-processing: After getting the docker image, install python, pip the modules, and run the pyhton script
+      - name: Install python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.9.9' # install the python version needed
+
+      - name: install pip
+        run: |
+          python -m pip install --upgrade pip
+          pip install pandas pathlib jinja2 faker sys
+
+      - name: Run the script (in this case, just check that Python is installed)
+        run: python --version
+
+
       - name: Run the IG publisher
         uses: docker://hl7fhir/ig-publisher-base:latest
         with:
