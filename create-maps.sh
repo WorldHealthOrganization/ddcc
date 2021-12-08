@@ -9,8 +9,8 @@ set -e
 ### @host = http://test.ahdis.ch/hapi-fhir-jpavalidator/fhir
 ### @host = https://ehealthsuisse.ihe-europe.net/hapi-fhir-jpavalidator/fhir
 
-
-HOST="http://127.0.0.1:8080/r4"
+HOST="http://localhost:8080/matchbox/fhir"
+#HOST="http://127.0.0.1:8080/r4"
 #HOST="http://hapi.fhir.org/baseR4"
 #HOST="http://test.ahdis.ch/r4" 
 
@@ -22,7 +22,7 @@ echo "Accessing $HOST/metadata"
 
 
 #make sure all our structure definitions are loaded up
-SDS=(    "fsh-generated/resources/StructureDefinition-DDCCOrganization.json"  "fsh-generated/resources/StructureDefinition-DDCCImmunizationRecommendation.json"    "fsh-generated/resources/StructureDefinition-DDCCImmunization.json"    "fsh-generated/resources/StructureDefinition-DDCCPatient.json"    "fsh-generated/resources/StructureDefinition-DDCCVaccineBrand.json"    "fsh-generated/resources/StructureDefinition-DDCCCountryOfVaccination.json"    "fsh-generated/resources/StructureDefinition-DDCCDocumentReferenceQR.json"    "fsh-generated/resources/StructureDefinition-DDCCComposition.json"    "fsh-generated/resources/StructureDefinition-DDCCCoreDataSetPoV.json"    "fsh-generated/resources/StructureDefinition-DDCCCoreDataSetCoC.json"    "input/resources/StructureDefinition-HC1.json"    "input/resources/StructureDefinition-HC1-v.json"    )
+SDS=(    "fsh-generated/resources/StructureDefinition-DDCCOrganization.json"  "fsh-generated/resources/StructureDefinition-DDCCImmunizationRecommendation.json"    "fsh-generated/resources/StructureDefinition-DDCCImmunization.json"    "fsh-generated/resources/StructureDefinition-DDCCPatient.json"    "fsh-generated/resources/StructureDefinition-DDCCVaccineBrand.json"    "fsh-generated/resources/StructureDefinition-DDCCCountryOfVaccination.json"    "fsh-generated/resources/StructureDefinition-DDCCDocumentReferenceQR.json"    "fsh-generated/resources/StructureDefinition-DDCCComposition.json"    "fsh-generated/resources/StructureDefinition-DDCCCoreDataSetPoV.json"    "fsh-generated/resources/StructureDefinition-DDCCCoreDataSetCoC.json"    "input/resources/structuredefinitions/StructureDefinition-HC1.json"    "input/resources/structuredefinitions/StructureDefinition-HC1-v.json"    )
 
 
 
