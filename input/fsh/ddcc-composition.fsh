@@ -117,6 +117,17 @@ A [DDCC Document](StructureDefinition-DDCCDocument.html) is a document bundle co
 * entry[ddccQR].resource only DDCCDocumentReferenceQR
 * signature 0..1 MS
 
+Profile:        DDCCDocumentSigned
+Parent:         DDCCDocument
+Id:             DDCCDocumentSigned
+Title:          "DDCC DocumentSigned"
+Description:    """ 
+A [DDCC Document Signed](StructureDefinition-DDCCDocumentSigned.html) is a document bundle containing the DDCC
+that has a digital signature.
+
+"""
+* signature 1..1 MS
+
 Profile:        DDCCDocumentReference
 Parent:         http://profiles.ihe.net/ITI/MHD/StructureDefinition/IHE.MHD.Minimal.DocumentReference
 Id:             DDCCDocumentReference
