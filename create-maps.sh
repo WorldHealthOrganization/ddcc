@@ -10,9 +10,9 @@ set -e
 ### @host = https://ehealthsuisse.ihe-europe.net/hapi-fhir-jpavalidator/fhir
 
 
-HOST="http://127.0.0.1:8080/r4"
+#HOST="http://127.0.0.1:8080/matchbox/fhir"
 #HOST="http://hapi.fhir.org/baseR4"
-#HOST="http://test.ahdis.ch/r4" 
+HOST="https://test.ahdis.ch/matchbox/fhir" 
 
 echo "Accessing $HOST/metadata"
 
@@ -22,7 +22,7 @@ echo "Accessing $HOST/metadata"
 
 
 #make sure all our structure definitions are loaded up
-SDS=(    "fsh-generated/resources/StructureDefinition-DDCCOrganization.json"  "fsh-generated/resources/StructureDefinition-DDCCImmunizationRecommendation.json"    "fsh-generated/resources/StructureDefinition-DDCCImmunization.json"    "fsh-generated/resources/StructureDefinition-DDCCPatient.json"    "fsh-generated/resources/StructureDefinition-DDCCVaccineBrand.json"    "fsh-generated/resources/StructureDefinition-DDCCCountryOfVaccination.json"    "fsh-generated/resources/StructureDefinition-DDCCDocumentReferenceQR.json"    "fsh-generated/resources/StructureDefinition-DDCCComposition.json"    "fsh-generated/resources/StructureDefinition-DDCCCoreDataSetPoV.json"    "fsh-generated/resources/StructureDefinition-DDCCCoreDataSetCoC.json"    "input/resources/StructureDefinition-HC1.json"    "input/resources/StructureDefinition-HC1-v.json"    )
+SDS=(    "fsh-generated/resources/StructureDefinition-DDCCOrganization.json"  "fsh-generated/resources/StructureDefinition-DDCCImmunizationRecommendation.json"    "fsh-generated/resources/StructureDefinition-DDCCImmunization.json"    "fsh-generated/resources/StructureDefinition-DDCCPatient.json"    "fsh-generated/resources/StructureDefinition-DDCCVaccineBrand.json"    "fsh-generated/resources/StructureDefinition-DDCCCountryOfVaccination.json"    "fsh-generated/resources/StructureDefinition-DDCCDocumentReferenceQR.json"    "fsh-generated/resources/StructureDefinition-DDCCComposition.json"    "fsh-generated/resources/StructureDefinition-DDCCCoreDataSet.VS.PoV.json"    "fsh-generated/resources/StructureDefinition-DDCCCoreDataSet.VS.CoC.json"    "input/resources/StructureDefinition-HC1.json"    "input/resources/StructureDefinition-HC1-v.json"    )
 
 
 
@@ -39,13 +39,13 @@ done
 
 
 #transform all fhir mapping language files in a maps-src directory to json structure maps in a maps directory
-RDIR="input/resources"
+RDIR="input"
 FILES=`ls $RDIR/maps-src/*.map`
 SMAPS=( )
 for FILE in $FILES
 do
     NAME=${FILE##*/}
-    SMAP="$RDIR/maps/$NAME.json"
+    SMAP="$RDIR/resources/$NAME.json"
     SMAPS+=($SMAP)
     echo $NAME
     echo "Creating StructureMap from FHIR Mapping Language in $FILE"
@@ -57,7 +57,7 @@ do
 done
 
 #transform all ddcc bundle examples with structure maps
-EXDIR=$RDIR/examples
+EXDIR=$RDIR/resources
 mkdir -p $EXDIR
 DDCCS=("fsh-generated/resources/Bundle-Example-English.json")
 SRC='DDCCDocument'
