@@ -1,0 +1,194 @@
+{
+  "resourceType": "StructureMap",
+  "id": "shc-to-ddcc",
+  "meta": {
+    "versionId": "1",
+    "lastUpdated": "2021-12-14T20:52:47.400+00:00"
+  },
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><pre>map &quot;http://worldhealthorganization.github.io/ddcc/StructureMap/shc-to-ddcc&quot; = &quot;SHCtoDDCC&quot;\r\n\r\n\r\nuses &quot;http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-patient-general-dm&quot; alias patientDM as source\r\nuses &quot;http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-patient-general-ad&quot; alias patientAD as source\r\nuses &quot;http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-patient-us-dm&quot; alias patientUSDM as source\r\nuses &quot;http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-patient-us-ad&quot; alias patientUSAD as source\r\nuses &quot;http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-vaccination-dm&quot; alias immunizationDM as source\r\nuses &quot;http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-vaccination-ad&quot; alias immunizationAD as source\r\nuses &quot;http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-vaccination-bundle-dm&quot; alias immunizationDMbundle as source\r\nuses &quot;http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-vaccination-bundle-ad&quot; alias immunizationADbundle as source\r\nuses &quot;http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCComposition&quot; alias DDCC as target\r\nuses &quot;http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCDocument&quot; alias DDCCDocument as target\r\nuses &quot;http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCPatient&quot; alias DDCCPatient as target\r\nuses &quot;http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCComposition&quot; alias DDCCComposition as target\r\nuses &quot;http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCOrganization&quot; alias DDCCOrganization as target\r\nuses &quot;http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCountryOfVaccination&quot; alias DDCCCountryOfVaccination as target\r\nuses &quot;http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCVaccineBrand&quot; alias DDCCVaccineBrand as target\r\nuses &quot;http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCImmunization&quot; alias DDCCImmunization as target\r\n\r\ngroup SHCtoDDCC(source shc : patientDM, target ddcc : DDCCDocument) {\r\n  shc.entry as entry then {\r\n    entry.resource : immunizationDM as immunization then SHCImmunizationtoDDCC(immunization, ddcc) &quot;Immunization&quot;;\r\n  } &quot;create immunization resource&quot;;\r\n}\r\n\r\ngroup SHCImmunizationtoDDCC(source shc : immunizationDM, target ddcc : DDCCImmunization) {\r\n  Immunization.patient as patient -&gt; Immunization.patient = cast(patient, 'Reference: DDCCPatient');\r\n  // step 4 type conversion\r\n  Immunization.occurrence as s_occurrence -&gt; Immunization.occurrence as t_occurrence then {\r\n    s_occurrence.dateTime as dateTime -&gt; t_occurrence.occurrenceDateTime = occurrenceDateTime;\r\n  } &quot;set occurrence dateTime&quot;;\r\n  // step 7 simple nesting?\r\n  performer.actor as actor -&gt; performer.actor = cast(actor, 'Reference: DDCCPractitioner');\r\n}\r\n\r\n</pre></div>"
+  },
+  "url": "http://worldhealthorganization.github.io/ddcc/StructureMap/shc-to-ddcc",
+  "name": "SHCtoDDCC",
+  "structure": [ {
+    "url": "http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-patient-general-dm",
+    "mode": "source",
+    "alias": "patientDM"
+  }, {
+    "url": "http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-patient-general-ad",
+    "mode": "source",
+    "alias": "patientAD"
+  }, {
+    "url": "http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-patient-us-dm",
+    "mode": "source",
+    "alias": "patientUSDM"
+  }, {
+    "url": "http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-patient-us-ad",
+    "mode": "source",
+    "alias": "patientUSAD"
+  }, {
+    "url": "http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-vaccination-dm",
+    "mode": "source",
+    "alias": "immunizationDM"
+  }, {
+    "url": "http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-vaccination-ad",
+    "mode": "source",
+    "alias": "immunizationAD"
+  }, {
+    "url": "http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-vaccination-bundle-dm",
+    "mode": "source",
+    "alias": "immunizationDMbundle"
+  }, {
+    "url": "http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-vaccination-bundle-ad",
+    "mode": "source",
+    "alias": "immunizationADbundle"
+  }, {
+    "url": "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCComposition",
+    "mode": "target",
+    "alias": "DDCC"
+  }, {
+    "url": "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCDocument",
+    "mode": "target",
+    "alias": "DDCCDocument"
+  }, {
+    "url": "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCPatient",
+    "mode": "target",
+    "alias": "DDCCPatient"
+  }, {
+    "url": "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCComposition",
+    "mode": "target",
+    "alias": "DDCCComposition"
+  }, {
+    "url": "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCOrganization",
+    "mode": "target",
+    "alias": "DDCCOrganization"
+  }, {
+    "url": "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCountryOfVaccination",
+    "mode": "target",
+    "alias": "DDCCCountryOfVaccination"
+  }, {
+    "url": "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCVaccineBrand",
+    "mode": "target",
+    "alias": "DDCCVaccineBrand"
+  }, {
+    "url": "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCImmunization",
+    "mode": "target",
+    "alias": "DDCCImmunization"
+  } ],
+  "group": [ {
+    "name": "SHCtoDDCC",
+    "typeMode": "none",
+    "input": [ {
+      "name": "shc",
+      "type": "patientDM",
+      "mode": "source"
+    }, {
+      "name": "ddcc",
+      "type": "DDCCDocument",
+      "mode": "target"
+    } ],
+    "rule": [ {
+      "name": "create immunization resource",
+      "source": [ {
+        "context": "shc",
+        "element": "entry",
+        "variable": "entry"
+      } ],
+      "rule": [ {
+        "name": "Immunization",
+        "source": [ {
+          "context": "entry",
+          "type": "immunizationDM",
+          "element": "resource",
+          "variable": "immunization"
+        } ],
+        "dependent": [ {
+          "name": "SHCImmunizationtoDDCC",
+          "variable": [ "immunization", "ddcc" ]
+        } ]
+      } ]
+    } ]
+  }, {
+    "name": "SHCImmunizationtoDDCC",
+    "typeMode": "none",
+    "input": [ {
+      "name": "shc",
+      "type": "immunizationDM",
+      "mode": "source"
+    }, {
+      "name": "ddcc",
+      "type": "DDCCImmunization",
+      "mode": "target"
+    } ],
+    "rule": [ {
+      "name": "patient",
+      "source": [ {
+        "context": "Immunization",
+        "element": "patient",
+        "variable": "patient"
+      } ],
+      "target": [ {
+        "context": "Immunization",
+        "contextType": "variable",
+        "element": "patient",
+        "transform": "cast",
+        "parameter": [ {
+          "valueId": "patient"
+        }, {
+          "valueString": "Reference: DDCCPatient"
+        } ]
+      } ]
+    }, {
+      "name": "set occurrence dateTime",
+      "source": [ {
+        "context": "Immunization",
+        "element": "occurrence",
+        "variable": "s_occurrence"
+      } ],
+      "target": [ {
+        "context": "Immunization",
+        "contextType": "variable",
+        "element": "occurrence",
+        "variable": "t_occurrence"
+      } ],
+      "rule": [ {
+        "name": "dateTime",
+        "source": [ {
+          "context": "s_occurrence",
+          "element": "dateTime",
+          "variable": "dateTime"
+        } ],
+        "target": [ {
+          "context": "t_occurrence",
+          "contextType": "variable",
+          "element": "occurrenceDateTime",
+          "transform": "copy",
+          "parameter": [ {
+            "valueId": "occurrenceDateTime"
+          } ]
+        } ]
+      } ],
+      "documentation": "step 4 type conversion"
+    }, {
+      "name": "actor",
+      "source": [ {
+        "context": "performer",
+        "element": "actor",
+        "variable": "actor"
+      } ],
+      "target": [ {
+        "context": "performer",
+        "contextType": "variable",
+        "element": "actor",
+        "transform": "cast",
+        "parameter": [ {
+          "valueId": "actor"
+        }, {
+          "valueString": "Reference: DDCCPractitioner"
+        } ]
+      } ],
+      "documentation": "step 7 simple nesting?"
+    } ]
+  } ]
+}
