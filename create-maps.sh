@@ -44,7 +44,8 @@ FILES=`ls $RDIR/maps-src/*.map`
 SMAPS=( )
 for FILE in $FILES
 do
-    NAME=${FILE##*/}
+    FILENAME=${FILE##*/}
+    NAME=${FILENAME%.*}
     SMAP="$RDIR/maps/$NAME.json"
     SMAPS+=($SMAP)
     echo $NAME

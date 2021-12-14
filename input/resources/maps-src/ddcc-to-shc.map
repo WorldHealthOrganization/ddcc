@@ -1,7 +1,5 @@
-
 map "http://worldhealthorganization.github.io/ddcc/StructureMap/ddcc-to-shc" = "DDCCtoSHC"
 
-uses "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCComposition" alias DDCC as source
 uses "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCDocument"  alias DDCCDocument as source
 uses "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCPatient"  alias DDCCPatient as source
 uses "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCComposition" alias DDCCComposition as source
@@ -9,20 +7,19 @@ uses "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCOrga
 uses 'http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCountryOfVaccination' alias DDCCCountryOfVaccination as source
 uses "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCVaccineBrand" alias DDCCVaccineBrand as source
 uses "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCImmunization" alias DDCCImmunization as source
+uses "http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-vaccination-bundle-dm" alias SHCVaccinationBundleDM as target
+uses "http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-vaccination-bundle-ad" alias SHCVaccinationBundleAD as target
 uses "http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-patient-general-dm" alias patientDM as target
 uses "http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-patient-general-ad" alias patientAD as target
 uses "http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-patient-us-dm" alias patientUSDM as target
 uses "http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-patient-us-ad" alias patientUSAD as target
 uses "http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-vaccination-dm"  alias immunizationDM as target
 uses "http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-vaccination-ad" alias immunizationAD as target
-uses "http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-vaccination-bundle-dm" alias immunizationDMbundle as target
-uses "http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-vaccination-bundle-ad" alias immunizationADbundle as target
-
 
 
 group DDCCtoSHC (
     source ddcc : DDCCDocument,
-    target shc : patientDM
+    target shc : SHCVaccinationBundleDM
     ){
 
     ddcc.entry as entry then {
@@ -48,12 +45,11 @@ group DDCCPatienttoSHC(
 
         name.family as familyname -> name.family = familyname "Family Name";
 
-        } "Name";
+    } "Name";
 
     Patient.birthDate as birthDate -> Patient.birthDate = birthDate "Birth Date"; 
     
 }     
-
 
 group DDCCImmunizationtoSHC(
       source immunization: DDCCImmunization,
@@ -75,12 +71,11 @@ group DDCCImmunizationtoSHC(
 
     Immunization.performer only_one as performer -> Immunization.performer = performer then {
 
-    performer.actor as actor -> performer.actor = cast(actor, "Reference: Organization") "Actor";
+        performer.actor as actor -> performer.actor = cast(actor, "Reference: Organization") "Actor";
 
     } "Performer";
 
 }
-
 
 group vaccineCode(
       source immunization: DDCCImmunization,
@@ -88,5 +83,4 @@ group vaccineCode(
       ){
 
       Immunization.coding as coding -> Immunization.coding = coding "vaccineCode Coding"; 
-
 }
