@@ -1,0 +1,92 @@
+
+map "http://worldhealthorganization.github.io/ddcc/StructureMap/ddcc-to-shc" = "DDCCtoSHC"
+
+uses "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCComposition" alias DDCC as source
+uses "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCDocument"  alias DDCCDocument as source
+uses "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCPatient"  alias DDCCPatient as source
+uses "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCComposition" alias DDCCComposition as source
+uses "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCOrganization" alias DDCCOrganization as source
+uses 'http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCountryOfVaccination' alias DDCCCountryOfVaccination as source
+uses "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCVaccineBrand" alias DDCCVaccineBrand as source
+uses "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCImmunization" alias DDCCImmunization as source
+uses "http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-patient-general-dm" alias patientDM as target
+uses "http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-patient-general-ad" alias patientAD as target
+uses "http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-patient-us-dm" alias patientUSDM as target
+uses "http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-patient-us-ad" alias patientUSAD as target
+uses "http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-vaccination-dm"  alias immunizationDM as target
+uses "http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-vaccination-ad" alias immunizationAD as target
+uses "http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-vaccination-bundle-dm" alias immunizationDMbundle as target
+uses "http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-vaccination-bundle-ad" alias immunizationADbundle as target
+
+
+
+group DDCCtoSHC (
+    source ddcc : DDCCDocument,
+    target shc : patientDM
+    ){
+
+    ddcc.entry as entry then {
+        entry.resource : DDCCPatient as patient
+        then DDCCPatienttoSHC(patient,shc) "Patient";
+    } "create patient resource" ;
+
+    ddcc.entry as entry then {
+        entry.resource : DDCCImmunization as immunization
+        then DDCCImmunizationtoSHC(immunization,shc) "Immunization";
+    } "create immunization resource" ;
+}
+
+
+group DDCCPatienttoSHC(
+    source patient: DDCCPatient,
+    target shc : patientDM
+    ){
+    
+    Patient.name only_one as name -> Patient.name = name then {
+        
+        name.given as givenname -> name.given = givenname "Given Name";
+
+        name.family as familyname -> name.family = familyname "Family Name";
+
+        } "Name";
+
+    Patient.birthDate as birthDate -> Patient.birthDate = birthDate "Birth Date"; 
+    
+}     
+
+
+group DDCCImmunizationtoSHC(
+      source immunization: DDCCImmunization,
+      target shc : immunizationDM
+      ) {
+
+
+    Immunization.status as status -> Immunization.status = status then vaccineCode(status, status) "Status";   
+
+    Immunization.patient as patient -> Immunization.patient = cast(patient, "Reference: SHCPatientGeneralAD");  // step 4 type conversion
+
+    Immunization.occurrence as s_occurrence -> Immunization.occurrence as t_occurrence then {
+        s_occurrence.dateTime as dateTime -> t_occurrence.occurrenceDateTime = occurrenceDateTime;
+    } "set occurrence dateTime"; // step 7 simple nesting?
+
+    Immunization.manfacturer as manfacturer -> Immunization.manfacturer = manfacturer "Manufacturer";
+
+    Immunization.lotNumber as lotNumber -> Immunization.lotNumber = lotNumber "Lot Number";
+
+    Immunization.performer only_one as performer -> Immunization.performer = performer then {
+
+    performer.actor as actor -> performer.actor = cast(actor, "Reference: Organization") "Actor";
+
+    } "Performer";
+
+}
+
+
+group vaccineCode(
+      source immunization: DDCCImmunization,
+      target shc : immunizationDM
+      ){
+
+      Immunization.coding as coding -> Immunization.coding = coding "vaccineCode Coding"; 
+
+}
