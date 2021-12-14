@@ -5,14 +5,14 @@ set -e
 #this script assumes matchboxes is running on localhost at port 8080 See: https://github.com/ahdis/matchbox
 #intended to be run after sushi has been run with contents in fsh-generated
 
-### @host = http://localhost:8080/hapi-fhir-jpavalidator/fhir
+### @host = http://localhost:8080/hapi-fhir-jpavalidator/fhir
 ### @host = http://test.ahdis.ch/hapi-fhir-jpavalidator/fhir
 ### @host = https://ehealthsuisse.ihe-europe.net/hapi-fhir-jpavalidator/fhir
 
-HOST="http://localhost:8080/matchbox/fhir"
-#HOST="http://127.0.0.1:8080/r4"
+
+#HOST="http://127.0.0.1:8080/matchbox/fhir"
 #HOST="http://hapi.fhir.org/baseR4"
-#HOST="http://test.ahdis.ch/r4" 
+HOST="https://test.ahdis.ch/matchbox/fhir" 
 
 echo "Accessing $HOST/metadata"
 
@@ -39,26 +39,33 @@ done
 
 
 #transform all fhir mapping language files in a maps-src directory to json structure maps in a maps directory
-RDIR="input/resources"
-FILES=`ls $RDIR/maps-src/*.map`
+RDIR="input"
+FILES=`ls $RDIR/resources/maps-src/*.map`
 SMAPS=( )
 for FILE in $FILES
 do
     FILENAME=${FILE##*/}
     NAME=${FILENAME%.*}
-    SMAP="$RDIR/maps/$NAME.json"
+    SMAP="$RDIR/resources/StructureMap-$NAME.json"
     SMAPS+=($SMAP)
     echo $NAME
     echo "Creating StructureMap from FHIR Mapping Language in $FILE"
-    curl -sS  --request POST $HOST/StructureMap \
+    curl -sS  --request PUT $HOST/StructureMap/$NAME \
       --data-binary @$FILE \
       -H "Accept: application/fhir+json"  -H "Content-Type: text/fhir-mapping" \
       > $SMAP
 
 done
 
+#load SHC implementation guide
+echo Loading SHC IG
+    curl -sS --request POST $HOST/ImplementationGuide \
+      --data-binary '{ "resourceType": "ImplementationGuide", "version": "0.6.2", "name": "hl7.fhir.uv.shc-vaccination", "packageId": "hl7.fhir.uv.shc-vaccination" }' \
+      -H "Accept: application/fhir+json"  -H "Content-Type: application/fhir+json"
+
+
 #transform all ddcc bundle examples with structure maps
-EXDIR=$RDIR/examples
+EXDIR=$RDIR/resources/examples
 mkdir -p $EXDIR
 DDCCS=("fsh-generated/resources/Bundle-Example-English.json")
 SRC='DDCCDocument'
@@ -84,9 +91,4 @@ do
 	fi
     done
  done
-
-
-
-    # for SMAP in $SMAPS			
-
-
+   
