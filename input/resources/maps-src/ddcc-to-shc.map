@@ -23,64 +23,56 @@ group DDCCtoSHC (
     ){
 
     ddcc.entry as entry then {
-        entry.resource : DDCCPatient as patient
-        then DDCCPatienttoSHC(patient,shc) "Patient";
-    } "create patient resource" ;
+        entry.resource : Patient first as patient then {
+            entry -> shc.entry as entrySHC then {
+                entry.fullUrl -> entrySHC.fullUrl = "resource:0" "Full URL";
+                patient -> entrySHC.resource = create('Patient') as patientSHC then DDCCPatienttoSHC(patient,patientSHC) "Patient resource";
+            } "Patient entry";
+        } "Is Patient entry";
+    } "map patients";
 
     ddcc.entry as entry then {
-        entry.resource : DDCCImmunization as immunization
-        then DDCCImmunizationtoSHC(immunization,shc) "Immunization";
-    } "create immunization resource" ;
+        entry.resource : Immunization first as immunization then {
+            entry -> shc.entry as entrySHC then {
+                entry.fullUrl -> entrySHC.fullUrl = "resource:1" "Full URL";
+                immunization -> entrySHC.resource = create('Immunization') as immunizationSHC then DDCCImmunizationtoSHC(immunization,immunizationSHC) "Immunization resource";
+            } "Immunization entry";
+        } "Is Immunization entry";
+    } "map immunizations" ;
 }
 
 
 group DDCCPatienttoSHC(
     source patient: DDCCPatient,
-    target shc : patientDM
+    target patientSHC : patientDM
     ){
-    
-    Patient.name only_one as name -> Patient.name = name then {
-        
+    patient.name only_one as name -> patientSHC.name = name then {
         name.given as givenname -> name.given = givenname "Given Name";
-
         name.family as familyname -> name.family = familyname "Family Name";
-
     } "Name";
 
-    Patient.birthDate as birthDate -> Patient.birthDate = birthDate "Birth Date"; 
+    patient.birthDate as birthDate -> patientSHC.birthDate = birthDate "Birth Date"; 
     
 }     
 
 group DDCCImmunizationtoSHC(
       source immunization: DDCCImmunization,
-      target shc : immunizationDM
+      target immunizationSHC : immunizationDM
       ) {
+    immunization.status as status -> immunizationSHC.status = status "Status";   
+    immunization.patient as patient -> immunizationSHC.patient = create('Reference') as patientRef then {
+        patient.reference -> patientRef.reference = "resource:0" "Patient Reference";
+    };
+    immunization.coding as coding -> immunizationSHC.coding as codingSHC then vaccineCode(immunization, immunizationSHC) "vaccineCode";
+    immunization.occurrence as occurrenceDateTime -> immunizationSHC.occurrence = occurrenceDateTime "Occurrence DateTime";
 
-
-    Immunization.status as status -> Immunization.status = status then vaccineCode(status, status) "Status";   
-
-    Immunization.patient as patient -> Immunization.patient = cast(patient, "Reference: SHCPatientGeneralAD");  // step 4 type conversion
-
-    Immunization.occurrence as s_occurrence -> Immunization.occurrence as t_occurrence then {
-        s_occurrence.dateTime as dateTime -> t_occurrence.occurrenceDateTime = occurrenceDateTime;
-    } "set occurrence dateTime"; // step 7 simple nesting?
-
-    Immunization.manfacturer as manfacturer -> Immunization.manfacturer = manfacturer "Manufacturer";
-
-    Immunization.lotNumber as lotNumber -> Immunization.lotNumber = lotNumber "Lot Number";
-
-    Immunization.performer only_one as performer -> Immunization.performer = performer then {
-
-        performer.actor as actor -> performer.actor = cast(actor, "Reference: Organization") "Actor";
-
-    } "Performer";
-
+    immunization.manfacturer as manfacturer -> immunizationSHC.manfacturer = manfacturer "Manufacturer";
+    immunization.lotNumber as lotNumber -> immunizationSHC.lotNumber = lotNumber "Lot Number";
 }
 
 group vaccineCode(
       source immunization: DDCCImmunization,
-      target shc : immunizationDM
+      target immunizationSHC : immunizationDM
       ){
-
-      Immunization.coding as coding -> Immunization.coding = coding "vaccineCode Coding"; 
+      immunization.coding as coding -> immunizationSHC.coding = coding "vaccineCode Coding"; 
 }
