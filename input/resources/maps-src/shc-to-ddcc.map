@@ -1,0 +1,49 @@
+
+map "http://worldhealthorganization.github.io/ddcc/StructureMap/ddcc-to-shc" = "SHCtoDDCC"
+
+uses "http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-patient-general-dm" alias patientDM as source
+uses "http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-patient-general-ad" alias patientAD as source
+uses "http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-patient-us-dm" alias patientUSDM as source
+uses "http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-patient-us-ad" alias patientUSAD as source
+uses "http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-vaccination-dm"  alias immunizationDM as source
+uses "http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-vaccination-ad" alias immunizationAD as source
+uses "http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-vaccination-bundle-dm" alias immunizationDMbundle as source
+uses "http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-vaccination-bundle-ad" alias immunizationADbundle as source
+uses "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCComposition" alias DDCC as target
+uses "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCDocument"  alias DDCCDocument as target
+uses "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCPatient"  alias DDCCPatient as target
+uses "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCComposition" alias DDCCComposition as target
+uses "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCOrganization" alias DDCCOrganization as target
+uses 'http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCountryOfVaccination' alias DDCCCountryOfVaccination as target
+uses "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCVaccineBrand" alias DDCCVaccineBrand as target
+uses "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCImmunization" alias DDCCImmunization as target
+
+
+
+group SHCtoDDCC (
+    source shc : patientDM
+    target ddcc : DDCCDocument
+    ){
+
+    shc.entry as entry then {
+        entry.resource : immunizationDM as immunization
+        then SHCImmunizationtoDDCC(immunization,ddcc) "Immunization";
+    } "create immunization resource" ;
+}     
+
+
+
+group SHCImmunizationtoDDCC(
+      source shc: immunizationDM,
+      target ddcc : DDCCImmunization
+      ) {
+
+    Immunization.patient as patient -> Immunization.patient = cast(patient, "Reference: DDCCPatient");  // step 4 type conversion
+
+    Immunization.occurrence as s_occurrence -> Immunization.occurrence as t_occurrence then {
+        s_occurrence.dateTime as dateTime -> t_occurrence.occurrenceDateTime = occurrenceDateTime;
+    } "set occurrence dateTime"; // step 7 simple nesting?
+
+    performer.actor as actor -> performer.actor = cast(actor, "Reference: DDCCPractitioner");  // step 4 type conversion but needs to include two reference options
+
+}
