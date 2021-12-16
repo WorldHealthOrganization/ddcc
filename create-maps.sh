@@ -58,10 +58,10 @@ do
 done
 
 #load SHC implementation guide
-echo Loading SHC IG
-    curl -sS --request POST $HOST/ImplementationGuide \
-      --data-binary '{ "resourceType": "ImplementationGuide", "version": "0.6.2", "name": "hl7.fhir.uv.shc-vaccination", "packageId": "hl7.fhir.uv.shc-vaccination" }' \
-      -H "Accept: application/fhir+json"  -H "Content-Type: application/fhir+json"
+# echo Loading SHC IG
+#     curl -sS --request POST $HOST/ImplementationGuide \
+#       --data-binary '{ "resourceType": "ImplementationGuide", "version": "0.6.2", "name": "hl7.fhir.uv.shc-vaccination", "packageId": "hl7.fhir.uv.shc-vaccination" }' \
+#       -H "Accept: application/fhir+json"  -H "Content-Type: application/fhir+json"
 
 
 #transform all ddcc bundle examples with structure maps
