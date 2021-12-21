@@ -23,6 +23,7 @@ group ResourcesToCoreDataSet (
       // There's got to be a better way to do this
       link.url as url -> hcid.value = (url.replaceMatches('[Uu][Rr][Nn]:[Hh][Cc][Ii][Dd]:', '')) "set hcid value"; 
     } "set hcid";
+    bundle.id as id -> certificate.ddccid as ddccid, ddccid.value = id "set ddcc id value";
     bundle.entry as entry then {
       entry.resource : Patient first as patient then PatientToDDCCVS ( patient, ddcc ) "set patient details";
       entry.resource : Immunization first as immunization then ImmunizationToDDCCVS( immunization, vaccination, certificate ) "set immunization";

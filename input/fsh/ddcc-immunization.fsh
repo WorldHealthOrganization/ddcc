@@ -10,9 +10,9 @@ Patient Summary (IPS) Immunization resouce, this is intended to map into an IPS
 Immunization resource.
 """
 
-* extension contains DDCCVaccineBrand named vaccineBrand 1..1 MS
+* extension contains DDCCEventBrand named vaccineBrand 1..1 MS
             and DDCCVaccineMarketAuthorization named vaccineMarketAuthorization 0..1 MS
-            and DDCCCountryOfVaccination named country 1..1 MS
+            and DDCCCountryOfEvent named country 1..1 MS
 	    and DDCCVaccineValidFrom named validFrom 0..1 MS
 // * extension[DDCCVaccineBrand] ^label = "Vaccine brand"
 // * extension[DDCCVaccineMarketAuthorization] ^label = "Vaccine market authorization holder"
@@ -63,44 +63,6 @@ Immunization resource.
 * protocolApplied[protocolAppliedAuthority].seriesDoses[x] 0..1 
 * protocolApplied[protocolAppliedAuthority].seriesDoses[x] only positiveInt
 * protocolApplied[protocolAppliedAuthority].seriesDoses[x] ^label = "Total doses"
-
-
-Extension:      DDCCVaccineBrand
-Id:             DDCCVaccineBrand
-Title:          "DDCC Vaccine Brand for Immunization"
-Description:    "DDCC Vaccine Brand for Immunization"
-* ^context.type = #element
-* ^context.expression = "Immunization"
-* value[x] only Coding
-* valueCoding 1..1 MS
-
-Extension:      DDCCVaccineMarketAuthorization
-Id:             DDCCVaccineMarketAuthorization
-Title:          "DDCC Vaccine Market Authorization for Immunization"
-Description:    "DDCC Vaccine Market Authorization for Immunization"
-* ^context.type = #element
-* ^context.expression = "Immunization"
-* value[x] only Coding
-* valueCoding 1..1 MS
-
-Extension:      DDCCCountryOfVaccination
-Id:             DDCCCountryOfVaccination
-Title:          "DDCC Country Of Vaccination for Immunization"
-Description:    "DDCC Country Of Vaccination for Immunization"
-* ^context.type = #element
-* ^context.expression = "Immunization"
-* value[x] only code
-* valueCode 1..1 MS
-* valueCode from 	http://hl7.org/fhir/ValueSet/iso3166-1-3 (preferred)
-
-Extension:      DDCCVaccineValidFrom
-Id:             DDCCVaccineValidFrom
-Title:          "DDCC Vaccine Valid From"
-Description:    "Date upon which provided vaccination is considered valid"
-* ^context.type = #element
-* ^context.expression = "Immunization"
-* value[x] only date
-* valueDate 1..1 MS
 
 
 Profile:        DDCCImmunizationRecommendation
