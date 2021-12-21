@@ -45,11 +45,12 @@ SMAPS=( )
 for FILE in $FILES
 do
     NAME=${FILE##*/}
-    SMAP="$RDIR/resources/$NAME.json"
+    NAME=${NAME%.*}
+    SMAP="$RDIR/resources/StructureMap-$NAME.json"
     SMAPS+=($SMAP)
     echo $NAME
-    echo "Creating StructureMap from FHIR Mapping Language in $FILE"
-    curl -sS  --request POST $HOST/StructureMap \
+    echo "Creating StructureMap from FHIR Mapping Language in $FILE to $SMAP"
+    curl -sS  --request PUT $HOST/StructureMap/$NAME \
       --data-binary @$FILE \
       -H "Accept: application/fhir+json"  -H "Content-Type: text/fhir-mapping" \
       > $SMAP
