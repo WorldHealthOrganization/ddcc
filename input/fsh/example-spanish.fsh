@@ -101,7 +101,7 @@ Instance:     DDCC-VS-QuestionnaireResponse-Spanish
 InstanceOf:   DDCCQuestionnaireResponse
 Usage:        #example
 
-* questionnaire = $DDCCQuestionnaireURL
+* questionnaire = $DDCCVSQuestionnaireURL
 * status = #completed
 
 * subject = Reference(DDCC-Patient-Spanish)

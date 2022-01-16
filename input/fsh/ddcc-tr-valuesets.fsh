@@ -63,6 +63,18 @@ WHO COVID-19 Test Result from [ICD 11](https://icd.who.int/browse11)
 * include $ICD11#RA01.0 "Detected"
 * include $ICD11#QA02 "Not Detected"
 
+CodeSystem:     DDCC_Device_Property_CodeSystem
+Id:             DDCC-Device-Property-CodeSystem
+Title:          "DDCC Device Property Codes"
+Description:    "Possible properties available for devices."
+* #pathogen     "Pathogen Targeted"
+* #brand        "Test Brand"
+
+ValueSet:       DDCC_Device_Property_ValueSet
+Id:             DDCC-Device-Property-ValueSet
+Title:          "DDCC Device Property Codes"
+Description: 	"Properties of DDCC devices"
+* include codes from system DDCC_Device_Property_CodeSystem
 
 Instance:       WHO_DDCC_Map_LOINC_to_SCT_Type_of_Test
 InstanceOf:     ConceptMap

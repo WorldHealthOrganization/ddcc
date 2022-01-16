@@ -20,15 +20,15 @@ Generate one or more signed DDCC Documents based on a [DDCC QuestionnaireRespons
 * parameter[=].use = #in
 * parameter[=].min = 0
 * parameter[=].max = "1"
-* parameter[=].documentation = "The questionnaire response resource used to generate the DDCC Document.  Can only use one of response, id, or immunization."
+* parameter[=].documentation = "The questionnaire response resource used to generate the DDCC Document.  Can only use one of response or bundle."
 * parameter[=].type = #QuestionnaireResponse
 
-* parameter[+].name = #id
+* parameter[+].name = #bundle
 * parameter[=].use = #in
 * parameter[=].min = 0
 * parameter[=].max = "1"
-* parameter[=].documentation = "The questionnaire response resource id used to generate the DDCC Document.  Can only use one of response, id, or immunization."
-* parameter[=].type = #id
+* parameter[=].documentation = "A bundle resource used to generate the DDCC Document.  Can only use one of response or bundle."
+* parameter[=].type = #Bundle
 
 * parameter[+].name = #return
 * parameter[=].use = #out

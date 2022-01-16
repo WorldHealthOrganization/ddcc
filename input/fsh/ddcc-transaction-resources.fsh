@@ -10,15 +10,26 @@ Description:    "Parameters for the [DDCC Generate Health Certificate Operation]
 * parameter ^slicing.rules = #closed
 * parameter contains 
         ddccResponse 0..1 and 
-        ddccId 0..1 
+        ddccBundle 0..1
 * parameter[ddccResponse].name = "response"
 * parameter[ddccResponse].resource 1..1
-* parameter[ddccResponse].resource only DDCCQuestionnaireResponse
+* parameter[ddccResponse].resource only DDCCQuestionnaireResponse or Bundle
+
+Profile:        DDCCRevokeHealthCertificateParameters
+Parent:         Parameters
+Id:             DDCCRevokeHealthCertificateParameters
+Title:          "DDCC Revoke Health Certificate Parameters"
+Description:    "Parameters for the [DDCC Revoke Health Certificate Operation](OperationDefinition-DDCC-QuestionnaireResponse-revokeHealthCertificate.html)."
+* ^publisher = "World Health Organization (WHO)"
+* parameter 1..
+* parameter ^slicing.discriminator.type = #value
+* parameter ^slicing.discriminator.path = "name"
+* parameter ^slicing.rules = #closed
+* parameter contains 
+        ddccId 1..1
 * parameter[ddccId].name = "id"
+* parameter[ddccId].value[x] 1..1
 * parameter[ddccId].value[x] only id
-* parameter[ddccId].valueId 1..1
-
-
 
 
 Profile:        DDCCSubmitHealthEventRequest

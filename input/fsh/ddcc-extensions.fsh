@@ -38,31 +38,3 @@ Description:    "Date upon which provided vaccination is considered valid"
 * ^context[=].expression = "Observation"
 * value[x] only date
 * valueDate 1..1 MS
-
-Extension:      DDCCTestManufacturer
-Id:             DDCCTestManufacturer
-Title:          "DDCC Test Manufacturer for Observation"
-Description:    "DDCC Test Manufacturer for Observation"
-* ^context.type = #element
-* ^context.expression = "Observation"
-* value[x] only Coding
-* valueCoding 1..1 MS
-
-Extension:      DDCCTestPathogen
-Id:             DDCCTestPathogen
-Title:          "DDCC Test Pathogen for Observation"
-Description:    "DDCC Test Pathogen for Observation"
-* ^context.type = #element
-* ^context.expression = "Observation"
-* value[x] only Coding
-* valueCoding 1..1 MS
-* valueCoding from WHO_DDCC_Agent_Targeted_COVID_19 (preferred)
-
-Extension:      DDCCTestCentre
-Id:             DDCCTestCentre
-Title:          "DDCC Test Centre for Observation"
-Description:    "DDCC Test Centre for Observation"
-* ^context.type = #element
-* ^context.expression = "Observation"
-* value[x] only Coding
-* valueCoding 1..1 MS

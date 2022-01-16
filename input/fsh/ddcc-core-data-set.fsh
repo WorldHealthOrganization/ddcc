@@ -184,12 +184,50 @@ Id:             ddcc-observation
 Title:          "WHO Digital Documentation of COVID Certificates"
 
 * test
-  * pathogen -> "Observation.extension[https://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCTestPathogen]"
   * type -> "Observation.code"
-  * brand -> "Observation.extension[https://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCEventBrand]"
-  * manufacturer -> "Observation.extension[https://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCTestManufacturer]"
   * origin -> "Observation.method"
   * date -> "Observation.effective"
   * result -> "Observation.value"
-  * centre -> "Observation.extension[https://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCTestCentre]"
-  * country -> "Observation.extension[https://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCountryOfEvent]"
+
+Mapping:        DDCCCoreDataSetTRToSpecimen
+Source:         DDCCCoreDataSet_TR
+Target:         "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCSpecimen"
+Id:             ddcc-specimen
+Title:          "WHO Digital Documentation of COVID Certificates"
+
+* test
+  * origin -> "Specimen.code"
+  * date -> "Specimen.collection.collected"
+
+Mapping:        DDCCCoreDataSetTRToTest
+Source:         DDCCCoreDataSet_TR
+Target:         "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCTest"
+Id:             ddcc-test
+Title:          "WHO Digital Documentation of COVID Certificates"
+
+* test
+  * manufacturer -> "Device.manufacturer"
+  * type -> "Device.type"
+  * pathogen -> "Device.property.valueCode"
+  * brand -> "Device.property.valueCode"
+
+Mapping:        DDCCCoreDataSetTRToDignosticReport
+Source:         DDCCCoreDataSet_TR
+Target:         "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCDiagnosticReport"
+Id:             ddcc-diagnostic-report
+Title:          "WHO Digital Documentation of COVID Certificates"
+
+* test
+  * type -> "DiagnosticReport.code"
+  * date -> "DiagnosticReport.effective"
+
+Mapping:        DDCCCoreDataSetTRToProcedure
+Source:         DDCCCoreDataSet_TR
+Target:         "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCProcedure"
+Id:             ddcc-procedure
+Title:          "WHO Digital Documentation of COVID Certificates"
+
+* test
+  * date -> "Procedure.performed"
+  * centre -> "Procedure.location"
+  * country -> "Procedure.extension[https://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCountryOfEvent]"

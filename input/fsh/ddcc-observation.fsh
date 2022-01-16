@@ -10,16 +10,6 @@ Patient Summary (IPS) Observation resouce, this is intended to map into an IPS
 Observation resource.
 """
 
-* extension contains DDCCTestPathogen named testPathogen 1..1 MS 
-            and DDCCEventBrand named testBrand 0..1 MS
-            and DDCCTestManufacturer named testManufacturer 0..1 MS
-            and DDCCTestCentre named testCentre 0..1 MS
-            and DDCCCountryOfEvent named country 1..1 MS
-* extension[testPathogen] ^label = "Pathogen targeted  "
-* extension[testBrand] ^label = "Test brand"
-* extension[testManufacturer] ^label = "Test manufacturer"
-* extension[testCentre] ^label = "Test centre or facility name"
-* extension[country] ^label = "Test centre country"
 * category = http://terminology.hl7.org/CodeSystem/observation-category#laboratory
 * code 1..1 MS 
 * code ^label = "Type of test"

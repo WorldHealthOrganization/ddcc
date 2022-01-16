@@ -3,8 +3,8 @@ Parent:       DocumentReference
 Id:           DDCCDocumentReferenceQR
 Title:        "DDCC DocumentReference return for QR"
 Description:  "DDCC DocumentReference for QR codes including the QR image and the serialized content."
-* category 1.. MS
-* category from DDCC_QR_Category_Usage_ValueSet (extensible)
+* type 1.. MS
+* type from DDCC_QR_Type_ValueSet (extensible)
 * subject only Reference(DDCCPatient)
 * authenticator 1.. MS
 * authenticator only Reference(DDCCOrganization)
@@ -25,22 +25,22 @@ Description:  "DDCC DocumentReference for QR codes including the QR image and th
 * content[qrPDF].format = DDCC_QR_Format_CodeSystem#pdf
 
 
-CodeSystem:     DDCC_QR_Category_Usage_CodeSystem
-Id:             DDCC-QR-Category-Usage-CodeSystem
+CodeSystem:     DDCC_QR_Type_CodeSystem
+Id:             DDCC-QR-Type-CodeSystem
 Title:          "DDCC QR Category Usage Codes"
 Description:    "Possible formats available for QR usage."
-* #who          "WHO SVC"
+* #who          "WHO DDCC"
 * #dcc          "EU DCC"
 * #icao         "ICAO"
 * #au           "AU"
 * #shc          "SMART Health Card"
 * #divoc        "DIVOC"
 
-ValueSet:       DDCC_QR_Category_Usage_ValueSet
-Id:             DDCC-QR-Category-Usage-ValueSet
-Title:          "DDCC QR Category Usage Codes"
-Description: 	"Categorization of QR codes by their business usage"
-* include codes from system DDCC_QR_Category_Usage_CodeSystem
+ValueSet:       DDCC_QR_Type_ValueSet
+Id:             DDCC-QR-Type-ValueSet
+Title:          "DDCC QR Type Codes"
+Description: 	"Type of QR codes by their business usage"
+* include codes from system DDCC_QR_Type_CodeSystem
 
 
 CodeSystem:     DDCC_QR_Format_CodeSystem
