@@ -23,7 +23,7 @@ Generate one or more signed DDCC Documents based on a [DDCC QuestionnaireRespons
 * parameter[=].documentation = "The questionnaire response resource used to generate the DDCC Document.  Can only use one of response or bundle."
 * parameter[=].type = #QuestionnaireResponse
 
-* parameter[+].name = #bundle
+* parameter[+].name = #response
 * parameter[=].use = #in
 * parameter[=].min = 0
 * parameter[=].max = "1"
