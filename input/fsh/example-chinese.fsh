@@ -52,7 +52,7 @@ Usage: #example
 
 
 Instance:     DDCC-Composition-Example-Chinese
-InstanceOf:   DDCCComposition
+InstanceOf:   DDCCVSComposition
 Usage: #example
 * identifier[+].system = "urn:EXAMPLE-who-:ddcc:composition:ids"
 * identifier[=].value = "999123456123456123456"
@@ -69,7 +69,7 @@ Usage: #example
 
 
 Instance: Example-Chinese
-InstanceOf: DDCCDocument
+InstanceOf: DDCCVSDocument
 Usage: #example
 
 * type = #document
