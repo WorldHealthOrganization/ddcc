@@ -8,12 +8,25 @@ Description:    "Parameters for the [DDCC Generate Health Certificate Operation]
 * parameter ^slicing.discriminator.type = #value
 * parameter ^slicing.discriminator.path = "name"
 * parameter ^slicing.rules = #closed
-* parameter contains 
-        ddccResponse 0..1 and 
-        ddccBundle 0..1
+* parameter contains ddccResponse 1..1 
 * parameter[ddccResponse].name = "response"
 * parameter[ddccResponse].resource 1..1
 * parameter[ddccResponse].resource only DDCCQuestionnaireResponse or Bundle
+
+Profile:        DDCCGenerateHealthFolderParameters
+Parent:         Parameters
+Id:             DDCCGenerateHealthFolderParameters
+Title:          "DDCC Generate Health Folder Parameters"
+Description:    "Parameters for the [DDCC Generate Health Folder Operation](OperationDefinition-DDCC-QuestionnaireResponse-generateHealthFolder.html)."
+* ^publisher = "World Health Organization (WHO)"
+* parameter 1..
+* parameter ^slicing.discriminator.type = #value
+* parameter ^slicing.discriminator.path = "name"
+* parameter ^slicing.rules = #closed
+* parameter contains ddccBundle 0..1
+* parameter[ddccBundle].name = "bundle"
+* parameter[ddccBundle].resource 1..1
+* parameter[ddccBundle].resource only Bundle
 
 Profile:        DDCCRevokeHealthCertificateParameters
 Parent:         Parameters
