@@ -1,0 +1,73 @@
+map "http://worldhealthorganization.github.io/ddcc/StructureMap/CoreDataSetLibrary" = "CoreDataSetLibrary"
+
+uses "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.VS" alias DDCCVS as source
+uses "http://hl7.org/fhir/StructureDefinition/Patient" alias Patient as target
+
+uses "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCPatient" alias DDCCPatient as produced
+uses "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCDocumentReferenceQR" alias DDCCDocRefQR as produced
+uses "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCComposition" alias DDCCComposition as produced
+
+
+group DDCCToPatient(
+  source src : DDCCVS,
+  target patient : DDCCPatient,
+  source pid
+) { 
+  pid -> patient.id = pid "set id";
+  src.name as name -> patient.name as tName then {
+    name as content -> tName.text = content "set name";
+  } "set full name";
+  src.birthDate as birthDate -> patient.birthDate = birthDate "set birthDate";
+  src.identifier as identifier -> patient.identifier = identifier "set identifier";
+}
+
+group DDCCToDocumentReference(
+  source src: DDCCVS,
+  target ref: DDCCDocRefQR,
+  source id,
+  source pid
+) {
+  id -> ref.id = id "set id";
+  src -> ref.status = "current" "set status";
+  src -> ref.subject as patient, patient.reference = append( "Patient/", pid ) "set patient";
+  src -> ref.content as content then {
+    src -> content.attachment as attachment, attachment.contentType = "application/json" "set contentType";
+    src -> content.format as format,
+      format.system = "http://worldhealthorganization.github.io/ddcc/CodeSystem/DDCC-QR-Format-CodeSystem",
+      format.code = "serialized" "set format code";
+  } "set serialized content";
+  src -> ref.content as content then {
+    src -> content.attachment as attachment, attachment.contentType = "image/png" "set contentType";
+    src -> content.format as format,
+      format.system = "http://worldhealthorganization.github.io/ddcc/CodeSystem/DDCC-QR-Format-CodeSystem",
+      format.code = "image" "set format code";
+  } "set image content";
+  src -> ref.content as content then {
+    src -> content.attachment as attachment, attachment.contentType = "application/pdf" "set contentType";
+    src -> content.format as format,
+      format.system = "http://worldhealthorganization.github.io/ddcc/CodeSystem/DDCC-QR-Format-CodeSystem",
+      format.code = "pdf" "set format code";
+  } "set pdf content";
+}
+
+group DDCCToComposition(
+  source src: DDCCVS,
+  target comp: DDCCComposition,
+  source id,
+  source pid
+) {
+  id -> comp.id = id "set id";
+  src -> comp.subject as patient, patient.reference = append( "Patient/", pid ) "set patient";
+  src -> comp.type as type, type.coding as coding then {
+    src -> coding.system = "http://loinc.org", coding.code = "82593-5" "set type coding";
+  } "set type";
+  src.certificate as certificate -> comp.author as author, comp.event as event then {
+    certificate.period as period -> event.period = period "set event period";
+    certificate.issuer as issuer -> author.type = "Organization" then {
+      issuer.identifier as pha -> author.identifier as identifier then {
+        pha.value as value -> identifier.value = value "set pha";
+      } "set author identifier";
+    } "set author ref";
+  } "set certificate";
+
+}

@@ -1,43 +1,57 @@
 <div xmlns="http://www.w3.org/1999/xhtml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://hl7.org/fhir ../../input-cache/schemas/R5/fhir-single.xsd">
 
   <p style="background-color: #ffefef; border:1px solid maroon; padding: 5px;max-width: 790px;">
-    For the latest published definitions, refer to the Digital Documentation of COVID-19 Certificates guidance.
+    For the latest published guidance, refer to the <a href="https://www.who.int/publications/i/item/WHO-2019-nCoV-Digital_certificates-vaccination-2021.1">Digital Documentation of COVID-19 Certificates (DDCC): Vaccination Status (DDCC:VS) </a> and the Digital Documentation of COVID-19 Certificates (DDCC): Test Result (DDCC:TR, link forthcoming) Technical Specifications and Implementation Guidance.
   </p>
   
-  <p>The scope of this implementation guide covers two scenarios of use for the DDCC:VS:></p>
+  <p>The scope of this implementation guide covers two scenarios of use for the DDCC:VS and two for the DDCC:TR. For the scenarios, it will be up to Member States to define the purposes for which the scenario is applied and adapted to their own contexts and levels of digital maturity, in compliance with their legal and policy frameworks.</p>
+  <p><b>For the DDCC:VS:</b></p>
+  <ol>
+    <li><b>Continuity of Care:</b> Vaccination records are an important part of an individual’s medical records, starting at birth. The Continuity of Care scenario describes the primary purpose of a vaccination certificate. The vaccination record shows individuals and caregivers which vaccinations an individual has received, as part of that individual’s medical history; it therefore supports informed decision-making on any future health service provision.</li>
+    <li><b>Proof of Vaccination:</b> Vaccination records can also provide proof of vaccination status for purposes not related to health care.</li> 
+  </ol>
+  
+  <p><b>For the DDCC:TR:</b></p>
 
   <ol>
-    <li><b>CONTINUITY OF CARE:</b> Vaccination records are an important part of an individual’s medical records, starting at birth. The Continuity of Care scenario describes the primary purpose of a vaccination certificate. The vaccination record shows individuals and caregivers which vaccinations an individual has received, as part of that individual’s medical history; it therefore supports informed decision-making on any future health service provision.</li>
-    <li><b>PROOF OF VACCINATION:</b> Vaccination records can also provide proof of vaccination status for purposes not related to health care.</li>
+    <li><b>Proof of Negative SARS-CoV-2 Test Result:</b> Test result certificates can be used as documented evidence of a negative test result when SARS-CoV-2 is not detected by a SARS-CoV-2 diagnostic test for viral detection (e.g. a nucleic acid amplification test (NAAT) or an antigen detection rapid diagnostic test (Ag-RDT)).</li>
+    <li><b>Proof of Previous SARS-CoV-2 Infection:</b> Test result certificates can also be used as documented evidence of a previous SARS-CoV-2 infection with a positive result from a SARS-Cov-2 diagnostic test for viral detection (e.g. NAAT or Ag-RDT).<br />
+      Note: This proof does not provide information on infectiousness, transmission risk; or recovery from SARS-CoV-2 infection.
+        </li>
+    
   </ol>
-
-  <h3 id="use-case-care">Continuity of Care</h3> <a name="use-case-care"> </a>
-  <p>In the context of COVID-19, the use of a vaccination record for Continuity of Care is primarily to: ensure that individuals know if, and when, they will need a subsequent dose; for health workers to use the proof of COVID-19 vaccination to decide on provision of health services based on medical history; and for ensuring health workers have access to accurate vaccination history when an adverse event follows immunization. It will be up to Member States to define how this scenario is applied and adapted to their own context and level of digital maturity, in compliance with their legal and policy frameworks.</p> 
   
-    <table class="list">
+  <h3 id="use-case-care">Continuity of Care</h3> <a name="use-case-care"> </a>
+      <table class="list">
       <tr><th width="100">Use case ID</th><th width="120">Use case name</th><th>Use case description</th></tr>
       <tr><td>UC001</td><td>Paper first</td><td>A guideline-based vaccine administration is recorded on paper. After the vaccination event, data about it can be entered into a Digital Health Solution.</td></tr>
       <tr><td>UC002</td><td>Offline digital</td><td>A guideline-based vaccine administration is recorded using an offline secure Digital Health Solution, with the content uploaded, subsequently, to an online Digital Health Solution.</td></tr>
       <tr><td>UC003</td><td>Online digital</td><td>A guideline-based vaccine administration is recorded using an online secure Digital Health Solution which updates the content in real time.</td></tr>
     </table>
 
-  <h3 id="use-case-proof">Proof of Vaccination</h3> <a name="use-case-proof"> </a>  
-  <p>The Proof of Vaccination scenario relies on the Public Health Authority (PHA) having access to a trusted means of digitally signing an HL7 FHIR document, which represents the core data set for the DDCC:VS. It will be up to Member States to define the purposes for which this scenario is applied and adapted to their own contexts and levels of digital maturity, in compliance with their legal and policy frameworks.</p>
-
+  <h3 id="use-case-proof-vs">Proof of Vaccination</h3> <a name="use-case-proof-vs"> </a>  
+     <table class="list">
+      <tr><th width="100">Use case ID</th><th width="120">Use case name</th><th>Use case description</th></tr>
+      <tr><td>VS006</td><td>Manual verification</td><td>A Verifier verifies a DDCC:VS using purely visual means, based on his or her subjective judgement, as is currently done with International Certificate of Vaccination or Prophylaxis. This type of check is currently well accepted, is quick and easy to do, and requires no digital technology.</td></tr>
+      <tr><td>VS007</td><td>Offline cryptographic verification</td><td>A Verifier verifies a DDCC:VS using digital cryptographic processes in an offline mode.</td></tr>
+      <tr><td>VS008</td><td>Online status check (national DDCC:VS)</td><td>This pathway is used when the DDCC:VS is being verified in the same jurisdiction as it was issued. A Verifier verifies a DDCC:VS using digital cryptographic processes in an online mode that includes a status check against the PHA’s DDCC:VS Registry Service and optionally the DDCC:VS Repository.</td></tr>
+      <tr><td>VS009</td><td>Online status check (international DDCC:VS)</td><td>This pathway is used when the DDCC:VS is being verified in a foreign jurisdiction to where it was issued. A Verifier verifies an internationally issued DDCC:VS using digital cryptographic processes in an online mode that includes a status check against the National PHA’s DDCC:VS Registry Service, which in turn accesses an International PHA’s DDCC:VS Registry and DDCC:VS Repository, if such services exist and such access is authorized by the issuing PHA. It is assumed in this workflow that a Verifier does not directly access an International PHA’s DDCC:VS Registry or Repository Service.</td></tr>
+    </table>
+  
+  <h3 id="use-case-proof-tr">Proof Scenarios of the DDCC:TR</h3> <a name="use-case-proof-tr"> </a>  
+  <p>It will be up to the Member State to determine the business rules for acceptance of a test result certificate and the validity period for each proof scenario for domestic and/or international use cases. Validity period is determined by the policies of the country that the certificate is going to be used in.</p>
     <table class="list">
       <tr><th width="100">Use case ID</th><th width="120">Use case name</th><th>Use case description</th></tr>
-      <tr><td>UC006</td><td>Manual verification</td><td>A Verifier verifies a DDCC:VS using purely visual means, based on his or her subjective judgement, as is currently done with International Certificate of Vaccination or Prophylaxis. This type of check is currently well accepted, is quick and easy to do, and requires no digital technology.</td></tr>
-      <tr><td>UC007</td><td>Offline cryptographic verification</td><td>A Verifier verifies a DDCC:VS using digital cryptographic processes in an offline mode.</td></tr>
-      <tr><td>UC008</td><td>Online status check (national DDCC:VS)</td><td>This pathway is used when the DDCC:VS is being verified in the same jurisdiction as it was issued. A Verifier verifies a DDCC:VS using digital cryptographic processes in an online mode that includes a status check against the PHA’s DDCC:VS Registry Service and optionally the DDCC:VS Repository.</td></tr>
-      <tr><td>UC009</td><td>Online status check (international DDCC:VS)</td><td>This pathway is used when the DDCC:VS is being verified in a foreign jurisdiction to where it was issued. A Verifier verifies an internationally issued DDCC:VS using digital cryptographic processes in an online mode that includes a status check against the National PHA’s DDCC:VS Registry Service, which in turn accesses an International PHA’s DDCC:VS Registry and DDCC:VS Repository, if such services exist and such access is authorized by the issuing PHA. It is assumed in this workflow that a Verifier does not directly access an International PHA’s DDCC:VS Registry or Repository Service.</td></tr>
+      <tr><td>TR001</td><td>Manual verification</td><td>A Verifier verifies and validates a DDCC:TR based on its human-readable content using purely visual means, based on their subjective judgement. This type of check is common, currently well accepted, is quick and easy to do, and requires no digital technology.</td></tr>
+      <tr><td>TR002</td><td>Offline cryptographic verification</td><td>A Verifier verifies and validates a DDCC:TR using digital cryptographic processes in an offline mode.</td></tr>
+      <tr><td>TR003</td><td>Online status check (national DDCC:TR)</td><td>This pathway is used when the DDCC:TR is being verified and validated in the same jurisdiction as it was issued. A Verifier verifies and validates a DDCC:TR using digital cryptographic processes in an online mode that includes a status check against the PHA’s DDCC Registry Service and optionally the DDCC:TR Repository.</td></tr>
+      <tr><td>TR004</td><td>Online status check (international DDCC:TR)</td><td>This pathway is used when the DDCC:TR is being verified in a foreign jurisdiction to where it was issued. A Verifier verifies and validates an internationally issued DDCC:TR using digital cryptographic processes in an online mode that includes a status check against the National PHA’s DDCC Registry Service, which in turn accesses an International PHA’s DDCC:TR Registry and DDCC:TR Repository, if such services exist and such access is authorized by the issuing PHA. It is assumed in this workflow that a Verifier does not directly access an International PHA’s DDCC:TR Registry or Repository Service.</td></tr>
     </table>
-
+    
    <h3  id="workflows_and_transactions">Workflows and Transactions </h3>
  
  The following diagram illustrates the business requirement workflows as realized through the system level <a href="transactions.html">transactions</a>. 
   
  {% include workflows.svg %}
-  
-
   
 </div>

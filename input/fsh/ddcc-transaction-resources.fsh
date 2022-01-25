@@ -8,17 +8,41 @@ Description:    "Parameters for the [DDCC Generate Health Certificate Operation]
 * parameter ^slicing.discriminator.type = #value
 * parameter ^slicing.discriminator.path = "name"
 * parameter ^slicing.rules = #closed
-* parameter contains 
-        ddccResponse 0..1 and 
-        ddccId 0..1 
+* parameter contains ddccResponse 1..1 
 * parameter[ddccResponse].name = "response"
 * parameter[ddccResponse].resource 1..1
-* parameter[ddccResponse].resource only DDCCQuestionnaireResponse
+* parameter[ddccResponse].resource only DDCCQuestionnaireResponse or Bundle
+
+Profile:        DDCCGenerateHealthFolderParameters
+Parent:         Parameters
+Id:             DDCCGenerateHealthFolderParameters
+Title:          "DDCC Generate Health Folder Parameters"
+Description:    "Parameters for the [DDCC Generate Health Folder Operation](OperationDefinition-DDCC-QuestionnaireResponse-generateHealthFolder.html)."
+* ^publisher = "World Health Organization (WHO)"
+* parameter 1..
+* parameter ^slicing.discriminator.type = #value
+* parameter ^slicing.discriminator.path = "name"
+* parameter ^slicing.rules = #closed
+* parameter contains ddccBundle 0..1
+* parameter[ddccBundle].name = "bundle"
+* parameter[ddccBundle].resource 1..1
+* parameter[ddccBundle].resource only Bundle
+
+Profile:        DDCCRevokeHealthCertificateParameters
+Parent:         Parameters
+Id:             DDCCRevokeHealthCertificateParameters
+Title:          "DDCC Revoke Health Certificate Parameters"
+Description:    "Parameters for the [DDCC Revoke Health Certificate Operation](OperationDefinition-DDCC-QuestionnaireResponse-revokeHealthCertificate.html)."
+* ^publisher = "World Health Organization (WHO)"
+* parameter 1..
+* parameter ^slicing.discriminator.type = #value
+* parameter ^slicing.discriminator.path = "name"
+* parameter ^slicing.rules = #closed
+* parameter contains 
+        ddccId 1..1
 * parameter[ddccId].name = "id"
+* parameter[ddccId].value[x] 1..1
 * parameter[ddccId].value[x] only id
-* parameter[ddccId].valueId 1..1
-
-
 
 
 Profile:        DDCCSubmitHealthEventRequest
@@ -38,13 +62,13 @@ An [DDCC Submit Health Event Request](StructureDefinition-DDCCSubmitHealthEventR
 * entry ^slicing.discriminator.path = "resource"
 * entry ^slicing.rules = #closed
 * entry 1..* MS
-* entry contains ddccParameters 0..1 and ddccQuestionnaireResponse 0..1
+* entry contains ddccParameters 0..* and ddccQuestionnaireResponse 0..*
 * entry[ddccParameters].resource only DDCCGenerateHealthCertificateParameters
 * entry[ddccParameters].request.method = #POST
 * entry[ddccParameters].request.url 1..1
 * entry[ddccQuestionnaireResponse].resource only DDCCQuestionnaireResponse
 * entry[ddccQuestionnaireResponse].request.method = #POST
-* entry[ddccQuestionnaireResponse].request.url 1..1
+* entry[ddccQuestionnaireResponse].request.url = "QuestionnaireResponse/$generateHealthCertificate"
 
 
 

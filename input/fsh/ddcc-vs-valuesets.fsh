@@ -77,24 +77,33 @@ Usage:          #definition
 * sourceCanonical = $ICD11
 * targetCanonical = SCT
 
-* group[+].source = $ICD11
-* group[=].target = SCT
+* group[+]
+  * source = $ICD11
+  * target = SCT
 
-* group[=].element[+].code = #XM68M6
-* group[=].element[=].target[+].code = #28531000087107
-* group[=].element[=].target[=].equivalence = #equivalent
+  * element[+]
+    * code = #XM68M6
+    * target[+]
+      * code = #28531000087107
+      * equivalence = #equivalent
 
-* group[=].element[+].code = #XM0GQ8
-* group[=].element[=].target[+].code = #1119349007
-* group[=].element[=].target[=].equivalence = #equivalent
+  * element[+]
+    * code = #XM0GQ8
+    * target[+]
+      * code = #1119349007
+      * equivalence = #equivalent
 
-* group[=].element[+].code = #XM1NL1
-* group[=].element[=].target[+].code = #1157024006
-* group[=].element[=].target[=].equivalence = #equivalent
+  * element[+]
+    * code = #XM1NL1
+    * target[+]
+      * code = #1157024006
+      * equivalence = #equivalent
 
-* group[=].element[+].code = #XM9QW8
-* group[=].element[=].target[+].code = #29061000087103
-* group[=].element[=].target[=].equivalence = #equivalent
+  * element[+]
+    * code = #XM9QW8
+    * target[+]
+      * code = #29061000087103
+      * equivalence = #equivalent
 
 
          
@@ -116,12 +125,15 @@ Usage:          #definition
 * sourceCanonical = $ICD11
 * targetCanonical = SCT
 
-* group[+].source = $ICD11
-* group[=].target = SCT
+* group[+]
+  * source = $ICD11
+  * target = SCT
 
-* group[=].element[+].code = #RA01
-* group[=].element[=].target[+].code = #840539006
-* group[=].element[=].target[=].equivalence = #equivalent
+  * element[+]
+    * code = #RA01
+    * target[+]
+      * code = #840539006
+      * equivalence = #equivalent
 
 
 Instance:       WHO_DDCC_Map_ICD11_to_ICD10_Disease_Targeted
@@ -139,10 +151,13 @@ Usage:          #definition
 * sourceCanonical = $ICD11
 * targetCanonical = $ICD10
 
-* group[+].source = $ICD11
-* group[=].target = $ICD10
+* group[+]
+  * source = $ICD11
+  * target = $ICD10
 
-* group[=].element[+].code = #RA01
-* group[=].element[=].target[+].code = #U07.1
-* group[=].element[=].target[=].equivalence = #equivalent
+  * element[+]
+    * code = #RA01
+    * target[+]
+      * code = #U07.1
+      * equivalence = #equivalent
 

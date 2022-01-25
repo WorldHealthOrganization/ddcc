@@ -52,7 +52,7 @@ Usage: #example
 
 
 Instance:     DDCC-Composition-Example-French
-InstanceOf:   DDCCComposition
+InstanceOf:   DDCCVSComposition
 Usage: #example
 * identifier[+].system = "urn:EXAMPLE-who-:ddcc:composition:ids"
 * identifier[=].value = "999123456123456123456"
@@ -70,7 +70,7 @@ Usage: #example
 
 
 Instance: Example-French
-InstanceOf: DDCCDocument
+InstanceOf: DDCCVSDocument
 Usage: #example
 
 * type = #document
@@ -102,7 +102,7 @@ Instance:     DDCC-VS-QuestionnaireResponse-French
 InstanceOf:   DDCCQuestionnaireResponse
 Usage:        #example
 
-* questionnaire = $DDCCQuestionnaireURL
+* questionnaire = $DDCCVSQuestionnaireURL
 * status = #completed
 
 * subject = Reference(DDCC-Patient-French)
