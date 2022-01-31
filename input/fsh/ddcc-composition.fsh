@@ -31,29 +31,13 @@ Describes the logical structure for a Digital Documentation of COVID-19 Certific
 * event.period.start ^label = "Certificate valid from"
 * event.period.end ^label = "Certificate valid until"
 
+/*
 * section ^slicing.discriminator[+].type = #value
 * section ^slicing.discriminator[=].path = "code"
 * section ^slicing.discriminator[+].type = #type
 * section ^slicing.discriminator[=].path = "focus"
-* section ^slicing.rules = #closed
-* section contains
-    vaccination 0..1 MS
-    and testresult 0..1 MS 
-
-* section[vaccination] ^short = "Vaccination Status Section"
-* section[vaccination] ^definition = "Vaccination Status Section lists the relvant vaccinations received by the patient"
-* section[vaccination].code = $LOINC#11369-6
-* section[vaccination].focus 1..1 MS
-* section[vaccination].focus only Reference(DDCCImmunization)
-* section[vaccination].entry only Reference(DDCCImmunization or DDCCDocumentReferenceQR or DDCCImmunizationRecommendation)
-
-* section[testresult] ^short = "Vaccination Test Results Section"
-* section[testresult] ^definition = "Vaccination Test Results Section lists the relvant test results received by the patient"
-* section[testresult].code = $LOINC#30954-2
-* section[testresult].focus 1..1 MS
-* section[testresult].focus only Reference(DDCCObservation)
-* section[testresult].entry only Reference(DDCCObservation or DDCCDocumentReferenceQR or DDCCTest or DDCCDiagnosticReport or DDCCSpecimen or DDCCProcedure)
-	
+* section ^slicing.rules = #open
+*/
 
 
 Profile:        DDCCVSComposition
@@ -65,8 +49,20 @@ Describes the logical structure for a Digital Documentation of COVID-19 Certific
 (DDCC:VS).  
 """
 * category = DDCC_Composition_Category_CodeSystem#ddcc-vs
-* section[vaccination] 1..1
-* section[testresult] 0..0
+* section ^slicing.discriminator[+].type = #value
+* section ^slicing.discriminator[=].path = "code"
+* section ^slicing.discriminator[+].type = #type
+* section ^slicing.discriminator[=].path = "focus"
+* section ^slicing.rules = #closed
+* section contains vaccination 1..1 MS
+
+* section[vaccination] ^short = "Vaccination Status Section"
+* section[vaccination] ^definition = "Vaccination Status Section lists the relvant vaccinations received by the patient"
+* section[vaccination].code = $LOINC#11369-6
+* section[vaccination].focus 1..1 MS
+* section[vaccination].focus only Reference(DDCCImmunization)
+* section[vaccination].entry only Reference(DDCCImmunization or DDCCDocumentReferenceQR or DDCCImmunizationRecommendation)
+	
 
 Profile:        DDCCTRComposition
 Parent:         DDCCComposition
@@ -77,8 +73,20 @@ Describes the logical structure for a Digital Documentation of COVID-19 Certific
 (DDCC:TR).  
 """
 * category = DDCC_Composition_Category_CodeSystem#ddcc-tr
-* section[vaccination] 0..0
-* section[testresult] 1..1
+* section ^slicing.discriminator[+].type = #value
+* section ^slicing.discriminator[=].path = "code"
+* section ^slicing.discriminator[+].type = #type
+* section ^slicing.discriminator[=].path = "focus"
+* section ^slicing.rules = #closed
+* section contains testresult 1..1 MS 
+
+* section[testresult] ^short = "Vaccination Test Results Section"
+* section[testresult] ^definition = "Vaccination Test Results Section lists the relvant test results received by the patient"
+* section[testresult].code = $LOINC#30954-2
+* section[testresult].focus 1..1 MS
+* section[testresult].focus only Reference(DDCCObservation)
+* section[testresult].entry only Reference(DDCCObservation or DDCCDocumentReferenceQR or DDCCTest or DDCCDiagnosticReport or DDCCSpecimen or DDCCProcedure)
+	
 
 
 CodeSystem:     DDCC_Composition_Category_CodeSystem
