@@ -94,12 +94,12 @@ A DDCC Submit Health Event Response](StructureDefinition-DDCCSubmitHealthEventRe
 * entry[ddccBundle].resource only DDCCDocument
 
 
-Profile:        DDCCAddBundle
+Profile:        DDCCVSAddBundle
 Parent:         Bundle
-Id:             DDCCAddBundle
-Title:          "DDCC Add Bundle"
+Id:             DDCCVSAddBundle
+Title:          "DDCC:VS Add Bundle"
 Description:    """
-Bundle to be transformed to from the DDCC QuestionnaireResponse
+Bundle to be transformed to from the DDCC:VS QuestionnaireResponse
 to add on the DDCC generator.
 """
 * ^publisher = "World Health Organization (WHO)"
