@@ -2,57 +2,18 @@
 map "http://worldhealthorganization.github.io/ddcc/StructureMap/QRespToVSCoreDataSet" = "QRespToVSCoreDataSet"
 
 uses "http://hl7.org/fhir/StructureDefinition/QuestionnaireResponse" alias QResp as source
-uses "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.VS.PoV" alias DDCCPoV as target
+uses "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.VS.CoC" alias DDCC as target
 
 
 group QRespToCoreDataSet ( 
   source qr : QResp,
-  target ddcc : DDCCPoV 
+  target ddcc : DDCC
 ) {
-  /*
-  qr.item as item where item.linkId = 'name' -> ddcc.name as name then {
-    log 'got answer';
-    item.answer first as answer -> name = answer.valueString;
-  };
-  */
-  ///qr.id as a -> ddcc.name = a "testing";
-  ///qr.item as a where QuestionnaireResponse.item.exists(linkId = 'name') -> ddcc.name = 'success' "test again";
-  /* this works
-  qr.item as item then {
-    item.linkId as link where $this = 'name' -> ddcc.name = link;
-  };
-  */
-  /*
-  qr.item as a then {
-    a as item where linkId = 'name' -> ddcc.name = item "set name";
-     
-    item.linkId as link where $this = 'name' then {
-
-    }; ddcc.name = link;
-    
-  } "items";
-*/
-///  qr.item as item where linkId = 'name' -> ddcc.name = item "set name";
-/* GOOD, fallback to this if all else fails!!!
-  qr.item as item where linkId = 'name' then {
-    item.answer first as answer then {
-      answer.valueString as content -> ddcc.name = content "set name";
-    } "get first answer";
-  } "get name";
-  */
-
   
   qr as src then QRespToHeader( src, ddcc ) "set header content";
   qr as src -> ddcc.vaccination as vaccination then QRespToVaccination( src, vaccination ) "set vaccination content";
   qr as src -> ddcc.certificate as certificate then QRespToCertificate( src, certificate ) "set certificate content";
 
-  
-/*
-  then {
-    a as item where linkId = 'name' -> ddcc.name = item "set name";
-
-  } "items";
-*/
 }
 
 group QRespToHeader (
