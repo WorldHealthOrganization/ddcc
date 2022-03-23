@@ -4,9 +4,25 @@ title: Functional Requirements
 ---
 Functional requirements are documented in the <a href="https://www.who.int/publications/i/item/WHO-2019-nCoV-Digital_certificates-vaccination-2021.1">Digital Documentation of COVID-19 Certificates (DDCC): Vaccination Status (DDCC:VS) </a> and the Digital Documentation of COVID-19 Certificates (DDCC): Test Result (DDCC:TR, link forthcoming) Technical Specifications and Implementation Guidance.
 
-The following includes functional requirements for DDCC:VS and DDCC:TR, along with mappings to related requirements. As the Test Result guidance does not include the Continuity of Care scenario, there are fewer related requirements for the DDCC:VS Continuity of Care scenario. 
+The high-level functional requirements are written as guidance requirements only to be used as a starting point for Member States or other interested parties that need to develop their own specifications for a digital solution for DDCC to take and adapt.
+
+The following includes functional requirements for DDCC:VS and DDCC:TR, along with mappings to use cases, as well as related requirements.
+
+### Requirement conventions
+The DDCC guidance uses specific terminology in requirements. The definitions are based on the definitions published by the Internet Engineering Task Force (IETF) https://www.ietf.org/rfc/rfc2119.txt.
+
+ * **MAY** is used to describe technical features and functions that are optional, and it is the implementer’s decision on whether
+    to include that feature or function based on the implementation context. 
+ 
+ * **SHALL** is used to describe technical features and functions that are mandatory for this specification.
+
+ * **SHOULD** is used to describe technical features and functions that are recommended, but they are not mandatory. It is the
+    implementer’s decision on whether to include that feature or function based on the implementation context. However, the
+    implementer is highly recommended to review the reasons for not following the recommendations before deviating from the
+    technical specifications outlined.
 
 ### DDCC:VS - Continuity of Care requirements
+As the Test Result guidance does not include the Continuity of Care scenario, there are fewer related requirements for the DDCC:VS Continuity of Care scenario. 
   
 | Requirement ID|Functional requirement|VS001 Paper First |VS002 Offline Digital |VS003 Online Digital|Related requirement|
 | ---|---|---|---|---|---|
@@ -107,6 +123,7 @@ Processes for specimen collection, data collection, sample analysis and the gene
 {:.grid}
 
 ### DDCC:TR - Verification and Validation requirements
+
 |Requirement ID|Functional requirement|TR001 Manual|TR002 Offline|TR003 Online - National|TR004 Online - International|Related requirement|
 | ---|---|---|---|---|---|---|
 | DDCCTR.FXNREQ.023|Paper test result certificate and the validation markings they bear SHOULD be designed to combat fraud and misuse. Any process that generates paper test result certificate SHOULD include elements on the card that support the Verifier in visually checking that the card is genuine (e.g. water marks, holographic seals etc.) without the use of any digital technology.|x|x|x|x|DDCCVS.FXNREQ.037 |
