@@ -2,11 +2,11 @@
 layout: default
 title: Functional Requirements
 ---
-# DDCC: Vaccination Status requirements
+Functional requirements are documented in the <a href="https://www.who.int/publications/i/item/WHO-2019-nCoV-Digital_certificates-vaccination-2021.1">Digital Documentation of COVID-19 Certificates (DDCC): Vaccination Status (DDCC:VS) </a> and the Digital Documentation of COVID-19 Certificates (DDCC): Test Result (DDCC:TR, link forthcoming) Technical Specifications and Implementation Guidance.
 
-The following includes functional requirements for DDCC:VS, along with mappings to related requirements. As the Test Result guidance does not include the Continuity of Care scenario, there are fewer related requirements in this section.
+The following includes functional requirements for DDCC:VS and DDCC:TR, along with mappings to related requirements. As the Test Result guidance does not include the Continuity of Care scenario, there are fewer related requirements for the DDCC:VS Continuity of Care scenario. 
 
-## DDCC:VS - Continuity of Care requirements
+### DDCC:VS - Continuity of Care requirements
   
 | Requirement ID|Functional requirement|VS001 Paper First |VS002 Offline Digital |VS003 Online Digital|Related requirement|
 | ---|---|---|---|---|---|
@@ -48,9 +48,9 @@ The following includes functional requirements for DDCC:VS, along with mappings 
 | DDCCVS.FXNREQ.036 |The DDCC:VS Generation Service SHALL maintain a connection between an HCID, the vaccination data associated with it in a DDCC:VS, any 2D barcode generated from the data, and the private/public key used to sign the data. |||x|DDCCTR.FXNREQ.022|
 {:.grid}
 
-## DDCC:VS - Proof of Vaccination requirements
+### DDCC:VS - Proof of Vaccination requirements
 
-|Requirement ID|Functional requirement|VS004 Manual|VS005 Offline|VS006 Online - National|VS007|Related requirement|
+|Requirement ID|Functional requirement|VS004 Manual|VS005 Offline|VS006 Online - National|VS007 Online - International|Related requirement|
 | ---|---|---|---|---|---|---|
 | DDCCVS.FXNREQ.037 |Paper cards and the validation markings they bear SHOULD be designed to combat fraud and misuse. Any process that generates a paper vaccination card SHALL include elements on the card that support the Verifier in visually checking that the card is genuine (e.g. water marks, holographic seals etc.) without the use of any digital technology. |x|x|x|x|DDCCTR.FXNREQ.023|
 | DDCCVS.FXNREQ.038 |Paper vaccination cards SHALL display an HCID. |x|x|x|x||
@@ -78,3 +78,63 @@ The following includes functional requirements for DDCC:VS, along with mappings 
 | DDCCVS.FXNREQ.061 |There SHOULD be a mechanism for country A to notify country B if a suspected fraudulent certificate from country B’s jurisdiction comes to the attention of country A. ||||x|DDCCTR.FXNREQ.046|
 {:.grid}
   
+### DDCC:TR - Certificate Generation requirements
+Processes for specimen collection, data collection, sample analysis and the generation of test reports (if required) will be defined by Member States, are outside the scope of the DDCC:TR guidance, and are preconditions for generating a test result certificate. Member States will need to define how a certificate will be generated, issued and adapted to their own contexts and levels of digital maturity, in compliance with their legal and policy frameworks. Due to these preconditions and differences, mappings to use cases are not included for DDCC:TR certificate generation.
+
+|Requirement ID|Functional requirement|Related requirement|
+| ---|---|---|
+| DDCCTR.FXNREQ.001|It SHALL be possible to issue a new paper test result certificate to the Tested Person, or DDCC:TR Holder, for the purpose of recording the test event.|DDCCVS.FXNREQ.004 |
+| DDCCTR.FXNREQ.002|A PHA SHALL put in place a process to replace or reissue lost or damaged paper test result certificate with the necessary supporting technology.|DDCCVS.FXNREQ.006 |
+| DDCCTR.FXNREQ.003|It SHALL be possible to associate a globally unique HCID to a Tested Person’s registered Test Result certificate(s). |DDCCVS.FXNREQ.007 |
+| DDCCTR.FXNREQ.004|It SHALL be possible to enter or attach the HCID as a 1D or 2D barcode to any paper test result certificate issued to the Tested Person (or DDCC:TR Holder).|DDCCVS.FXNREQ.008 |
+| DDCCTR.FXNREQ.005|It SHALL be possible to manually record the core data set content on a paper test result certificate issued to the Tested Person (or the DDCC:TR card holder).|DDCCVS.FXNREQ.010 |
+| DDCCTR.FXNREQ.006|It SHALL be possible to manually sign the paper test result certificate and include the official stamp of the administering centre as a non-digital means of certifying that the content has been recorded by an approved authority.|DDCCVS.FXNREQ.011 |
+| DDCCTR.FXNREQ.007|It SHALL be possible to retrieve information about the diagnostic test event of the Tested Person from the content in the DDCC:TR or one of its representations.|DDCCVS.FXNREQ.013 |
+| DDCCTR.FXNREQ.008|All data concerning the test result SHALL be handled in a secure manner to respect confidentiality of the Tested Person’s health data.|DDCCVS.FXNREQ.014 |
+| DDCCTR.FXNREQ.010|Paper test result certificate and the validation markings they bear SHALL be designed to combat fraud and misuse.|DDCCVS.FXNREQ.016 |
+| DDCCTR.FXNREQ.011|If a Digital Health Solution to capture and manage SARS-CoV-2 diagnostic test result and related content is available, then it MAY be responsible for outputting the test data using the HL7 FHIR standard.|DDCCVS.FXNREQ.024 |
+| DDCCTR.FXNREQ.012|If a Digital Health Solution to capture and manage SARS-CoV-2 diagnostic test result and related content is available, is part of the national PKI trust framework, and is authorized by the PHA to sign test result content as a DDCC:TR then it SHALL register the DDCC:TR through the DDCC Registry Service. |DDCCVS.FXNREQ.025 |
+| DDCCTR.FXNREQ.013|If an online or connected DDCC Generation Service is available at the time of recording SARS-CoV-2 test results, then it SHALL be possible to register the test report as soon as possible after the result is available.|DDCCVS.FXNREQ.027 |
+| DDCCTR.FXNREQ.014|The DDCC Generation Service involved in the test result SHALL ensure encryption of data, in transit and at rest, to provide end-to-end security of personal data.|DDCCVS.FXNREQ.028 |
+| DDCCTR.FXNREQ.015|The DDCC Generation Service MAY be the agent responsible for issuing the HCID, provided that the HCID can be associated at the time of test event in a timely manner. If the DDCC Generation Service is responsible for issuing HCIDs, it SHALL only issue unique HCIDs. The same HCID should never be reused for multiple Tested Persons.|DDCCVS.FXNREQ.029 |
+| DDCCTR.FXNREQ.016|If pre-generated HCIDs are used, the generation of the HCIDs, along with any supporting technology to ensure HCIDs will not be duplicated within or across certificate generation sites, SHALL be managed by PHA policy. |DDCCVS.FXNREQ.030 |
+| DDCCTR.FXNREQ.017|It SHALL be possible for the DDCC Generation Service to accept data transferred from an authorized, connected LIS where such a system exists.|DDCCVS.FXNREQ.031 |
+| DDCCTR.FXNREQ.018|It SHALL be possible for the DDCC Generation Service to represent test result data using the HL7 FHIR format.|DDCCVS.FXNREQ.032 |
+| DDCCTR.FXNREQ.019|It SHALL be possible for the DDCC Generation Service to digitally sign the HL7 FHIR document representation of the test result data|DDCCVS.FXNREQ.033 |
+| DDCCTR.FXNREQ.020|It MAY be possible for the DDCC Generation Service to generate a machine-readable 2D barcode (e.g. a QR code) that, in addition to the HCID, contains further useful technical information, such as a web end point for validating the HCID, or a public key. |DDCCVS.FXNREQ.034 |
+| DDCCTR.FXNREQ.021|It MAY be possible for the DDCC Generation Service to generate a 2D QR code that includes the unencrypted minimum core data set content (in HL7 FHIR standard) of the test result, thus providing a machine-readable version of the test result certificate.|DDCCVS.FXNREQ.035 |
+| DDCCTR.FXNREQ.022|The DDCC Generation Service SHALL create an association between an HCID, the test result data associated with it in a DDCC:TR, any QR code generated from the data, and the private key used to sign the data.|DDCCVS.FXNREQ.036 |
+{:.grid}
+
+### DDCC:TR - Verification and Validation requirements
+|Requirement ID|Functional requirement|TR001 Manual|TR002 Offline|TR003 Online - National|TR004 Online - International|Related requirement|
+| ---|---|---|---|---|---|---|
+| DDCCTR.FXNREQ.023|Paper test result certificate and the validation markings they bear SHOULD be designed to combat fraud and misuse. Any process that generates paper test result certificate SHOULD include elements on the card that support the Verifier in visually checking that the card is genuine (e.g. water marks, holographic seals etc.) without the use of any digital technology.|x|x|x|x|DDCCVS.FXNREQ.037 |
+| DDCCTR.FXNREQ.024|If a paper test result document bearing a 1D or 2D barcode is presented to a Verifier, then it SHALL be possible for the Verifier to scan the code and, at a minimum, read the health certificate identifier (HCID) encoded in the barcode, to visually compare it with the HCID written or printed on the paper test result certificate, if present.| |x|x||DDCCVS.FXNREQ.040 |
+| DDCCTR.FXNREQ.025|If a paper test result certificate or computable test report document bears a QR code and that barcode includes a digital signature, then it MAY be possible for the Verifier to check the signature, using information downloaded from a Public Key Directory (PKD), to ensure it is genuine.| | |x|x|DDCCVS.FXNREQ.041 |
+| DDCCTR.FXNREQ.026  |It MAY be possible to log all offline verification operations so that, at a later stage when an online connection is available, verification and validation decisions can be reviewed and reconfirmed against data provided by the online DDCC Registry Service. For example, this may be done to confirm that a certificate that was checked offline in the morning using public key and revocation data downloaded from the DDCC Registry Service the day before has not been added to a public key revocation list issued that same day. However, personal data accessed at the point of verification of the DDCC:TR should not be retained and stored in a repository, database or otherwise.| |x| ||DDCCVS.FXNREQ.042 |
+| DDCCTR.FXNREQ.027|It SHALL always be possible to perform some form of offline verification and validation of paper test result certificate; any solution should be designed so that a loss of connectivity to online components of the solution cannot force the verification and validation work to stop.| |x|x|x|DDCCVS.FXNREQ.043 |
+| DDCCTR.FXNREQ.028|If, at the time of verification, a Verifier has connectivity to a DDCC Registry Service managed by a PHA, then it SHALL be possible to query whether the HCID present in the barcode (and the public key, if also present) of the paper test result certificate are currently valid.| | |x|x|DDCCVS.FXNREQ.044 |
+| DDCCTR.FXNREQ.029|When making the verification check, any solution SHALL send only the minimum information required for the verification to complete. The minimum information comprises the metadata (see section 5.2) and signature of the DDCC:TR.| | |x|x|DDCCVS.FXNREQ.045 |
+| DDCCTR.FXNREQ.030|When receiving a request for verification, a PHA SHALL consult its DDCC Registry Service and respond with a status to indicate that the signing key has not been revoked, that the key was issued by a certified authority, and that the DDCC has not otherwise been revoked.| | |x|x|DDCCVS.FXNREQ.046 |
+| DDCCTR.FXNREQ.031|A PHA servicing a verification request of a test result certificate via an HCID MAY respond with basic details of the test result certificate holder (name, date of birth,  etc.), in accordance with PHA policies, so that the Verifier can confirm that the paper test result certificate corresponds to the DDCC:TR Holder who has presented himself or herself for verification. | | |x|x|DDCCVS.FXNREQ.047 |
+| DDCCTR.FXNREQ.032|A PHA SHALL maintain a PKI to underpin the signing and verification process. Lists of valid public keys and revocation lists will be held in such a system and MAY be linked to the DDCC Generation Service to associate public keys with HCIDs.| |x |x|x|DDCCVS.FXNREQ.048 |
+| DDCCTR.FXNREQ.033|A PHA MAY log the requests it receives for verification (even if rendered anonymous), so that it has a searchable history for the purposes of audit and fighting fraud, provided that such logging respects data protection principles.| | |x|x|DDCCVS.FXNREQ.049 |
+| DDCCTR.FXNREQ.034|A PHA SHALL be able to return a verification status, as defined by the implementer, to a requestor, based on the information provided.| | |x|x|DDCCVS.FXNREQ.051 |
+|  DDCCTR.FXNREQ.035|A PHA MAY be able to service individual verification requests (i.e. details relating to one test result certificate) or requests sent in bulk (details of multiple certificates sent in one request).| | |x|x|DDCCVS.FXNREQ.052 |
+| DDCCTR.FXNREQ.036|When receiving a request for verification, a PHA MAY respond with the last test result certificate or provide history of test result certificates, in accordance with Member State policies.|||x|x||
+| DDCCTR.FXNREQ.037|A PHA SHOULD be able to validate that the requestor making a verification request is an authorized agent, but MAY also allow anonymous verification requests.| | |x|x|DDCCVS.FXNREQ.053 |
+| DDCCTR.FXNREQ.038|The certificate authority (or authorities) in each country SHALL maintain records of the DSCs issued for the purpose of signing test result certificates and expose any service(s) that allow a public key to be looked up and checked against its records to check for validity.| | |x|x|DDCCVS.FXNREQ.054 |
+| DDCCTR.FXNREQ.039|Any communication between a Verifier and a DDCC Registry Service or other data service managed by a PHA SHALL be secured to prevent interference with the data in transit and at rest.| | |x|x|DDCCVS.FXNREQ.055 |
+| DDCCTR.FXNREQ.040|SMS-based verification of alphanumeric HCIDs MAY be provided by a PHA as a means of sending a verification request or receiving a response with a status code.| | |x||DDCCVS.FXNREQ.056 |
+| DDCCTR.FXNREQ.041|If a verification request is made in country A for a certificate that was issued by country B or a supranational entity, then country A’s PHA SHOULD have a means of transferring the request/ querying the data held by that authority.||||x|DDCCVS.FXNREQ.057 |
+| DDCCTR.FXNREQ.042|A Member State SHOULD put in place bilateral or multilateral agreements with other countries or with a supranational entity or regional body for access to those entities’ test result certificate metadata and digital signatures.||x|||DDCCVS.FXNREQ.058, DDCCTR.FXNREQ.043|
+| DDCCTR.FXNREQ.043|A Member State SHOULD put in place bilateral or multilateral agreements with other countries or with a supranational entity or regional body for access to those entities’ test result certificate test event data and digital signatures.||||x|DDCCVS.FXNREQ.058, DDCCTR.FXNREQ.042|
+| DDCCTR.FXNREQ.044|Communications between one country and another’s PHA or a supranational DDCC Registry Service SHALL be secure and prevent interference with the metadata or data in transit and at rest.||x||x|DDCCVS.FXNREQ.059 |
+| DDCCTR.FXNREQ.045|It SHALL be the ultimate responsibility of the country where verification and validation is taking place to decide whether a test result claim is accepted or not.||x||x|DDCCVS.FXNREQ.060 |
+| DDCCTR.FXNREQ.046|There SHOULD be a mechanism for country A to revoke a DDCC.||x|x|x|DDCCVS.FXNREQ.061 |
+| DDCCTR.FXNREQ.047|There SHOULD be a mechanism for country B to be able to determine if a certificate issued by country A has been revoked. ||x||x||
+| DDCCTR.FXNREQ.048|There SHOULD be a mechanism for the Verifier Application to be regularly updated with the defined set of acceptance criteria or business rules, as defined by the policies of the Member State.||x|x|x ||
+| DDCCTR.FXNREQ.049|A Verifier Application SHALL be able to perform a check against the defined set of acceptance criteria or business rules, as defined by the policies of the Member State, to check for validity of the certificate.||x|x|x  ||
+{:.grid}
+ 
