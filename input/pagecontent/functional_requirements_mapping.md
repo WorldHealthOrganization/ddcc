@@ -8,7 +8,7 @@ The following includes functional requirements for DDCC:VS, along with mappings 
 
 ## DDCC:VS - Continuity of Care requirements
   
-| Requirement ID|Functional requirement|UC001 Paper First |UC002 Offline Digital |UC003 Online Digital|Related requirement|
+| Requirement ID|Functional requirement|VS001 Paper First |VS002 Offline Digital |VS003 Online Digital|Related requirement|
 | ---|---|---|---|---|---|
 | DDCCVS.FXNREQ.001 |It SHALL be possible for the Vaccinator to identify the Subject of Care as per the norms and policies of the PHA under whose authority the vaccination is administered. |x|x|x||
 | DDCCVS.FXNREQ.002 |It SHOULD be possible to verify the identity of the Subject of Care against existing records, if such a check is mandated by local procedures, and to retrieve any pertinent health history. |x|x|x||
