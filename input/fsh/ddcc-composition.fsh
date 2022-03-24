@@ -69,7 +69,7 @@ Parent:         DDCCComposition
 Id:             DDCCTRComposition
 Title:          "DDCC:TR Composition"
 Description:    """ 
-Describes the logical structure for a Digital Documentation of COVID-19 Certificates - Test Results
+Describes the logical structure for a Digital Documentation of COVID-19 Certificates - Test Result
 (DDCC:TR).  
 """
 * category = DDCC_Composition_Category_CodeSystem#ddcc-tr
@@ -80,8 +80,8 @@ Describes the logical structure for a Digital Documentation of COVID-19 Certific
 * section ^slicing.rules = #closed
 * section contains testresult 1..1 MS 
 
-* section[testresult] ^short = "Vaccination Test Results Section"
-* section[testresult] ^definition = "Vaccination Test Results Section lists the relvant test results received by the patient"
+* section[testresult] ^short = "Vaccination Test Result Section"
+* section[testresult] ^definition = "Vaccination Test Result Section lists the relvant test results received by the patient"
 * section[testresult].code = $LOINC#30954-2
 * section[testresult].focus 1..1 MS
 * section[testresult].focus only Reference(DDCCObservation)

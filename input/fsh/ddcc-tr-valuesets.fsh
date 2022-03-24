@@ -171,11 +171,11 @@ Usage:          #definition
 
 * id = "who-ddcc-map-icd11-sct-test-result"
 * name = "ICD11_SNOMED_CT_COVID19_Test_Result"
-* title = "ConceptMap from ICD-11 to SNOMED CT for Test Results"
+* title = "ConceptMap from ICD-11 to SNOMED CT for Test Result"
 * status = #draft
 * experimental = true
 * date = "2021-12-16"
-* description = "Rule-based mappings between ICD-11 and SNOMED CT for COVID-19 Test Results"
+* description = "Rule-based mappings between ICD-11 and SNOMED CT for COVID-19 Test Result"
 * sourceCanonical = $ICD11
 * targetCanonical = SCT
 

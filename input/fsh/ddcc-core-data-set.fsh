@@ -46,8 +46,8 @@ Title:          "WHO Digital Documentation of COVID Certificates"
 Logical:        DDCCCoreDataSet_VS
 Id:             DDCCCoreDataSet.VS
 Parent:         DDCCCoreDataSet
-Title:          "DDCC Core Data Set Logical Model for Vaccine Status"
-Description:    "Data elements for the DDCC Core Data Set for Vaccine Status."
+Title:          "DDCC Core Data Set Logical Model for Vaccination Status"
+Description:    "Data elements for the DDCC Core Data Set for Vaccination Status."
 
 * ^url = "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.VS"
 * ^version = "RC2"
@@ -114,8 +114,8 @@ Logical:        DDCCCoreDataSet_VS_PoV
 Id:             DDCCCoreDataSet.VS.PoV
 //Parent:		Element
 Parent:         DDCCCoreDataSet_VS
-Title:          "DDCC Core Data Set Logical Model - Vaccine Status - Proof of Vaccination"
-Description:    "Data elements for the DDCC Core Data Set - Vaccine Status - Proof of Vaccination."
+Title:          "DDCC Core Data Set Logical Model - Vaccination Status - Proof of Vaccination"
+Description:    "Data elements for the DDCC Core Data Set - Vaccination Status - Proof of Vaccination."
 
 * ^url = "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.VS.PoV"
 * ^version = "RC2"
@@ -128,8 +128,8 @@ Logical:        DDCCCoreDataSet_VS_CoC
 Id:             DDCCCoreDataSet.VS.CoC
 //Parent:		Element
 Parent:         DDCCCoreDataSet_VS
-Title:          "DDCC Core Data Set Logical Model - Vaccine Status - Continuity of Care"
-Description:    "Data elements for the DDCC Core Data Set - Vaccine Status - Continuity of Care."
+Title:          "DDCC Core Data Set Logical Model - Vaccination Status - Continuity of Care"
+Description:    "Data elements for the DDCC Core Data Set - Vaccination Status - Continuity of Care."
 
 * ^url = "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.VS.CoC"
 * ^version = "RC2"
@@ -152,8 +152,8 @@ Title:          "WHO Digital Documentation of COVID Certificates"
 Logical:        DDCCCoreDataSet_TR
 Id:             DDCCCoreDataSet.TR
 Parent:         DDCCCoreDataSet
-Title:          "DDCC Core Data Set Logical Model for Test Results"
-Description:    "Data elements for the DDCC Core Data Set for Test Results."
+Title:          "DDCC Core Data Set Logical Model for Test Result"
+Description:    "Data elements for the DDCC Core Data Set for Test Result."
 
 * ^url = "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.TR"
 * ^version = "RC2"
