@@ -111,6 +111,11 @@ Usage:          #definition
       * code = #414464004
       * equivalence = #equivalent
 
+Instance:       WHO_DDCC_Map_ICHI_to_LOINC_Type_of_Test
+InstanceOf:     ConceptMap
+Description:    "Mapping from ICHI to LOINC for COVID-19 Type of Test"
+Usage:          #definition
+
 * id = "who-ddcc-map-ichi-loinc-type-of-test"
 * name = "ICHI_LOINC_COVID19_Type_of_Test"
 * title = "ConceptMap from ICHI to LOINC for Type of Test"
@@ -137,6 +142,11 @@ Usage:          #definition
       * code = #LP217198-3
       * equivalence = #equivalent
 
+
+Instance:       WHO_DDCC_Map_ICHI_to_SCT_Type_of_Test
+InstanceOf:     ConceptMap
+Description:    "Mapping from ICHI to SNOMED CT for COVID-19 Type of Test"
+Usage:          #definition
 
 * id = "who-ddcc-map-ichi-sct-type-of-test"
 * name = "ICHI_SNOMED_CT_COVID19_Type_of_Test"
@@ -195,6 +205,11 @@ Usage:          #definition
       * code = #1240591000000102
       * equivalence = #equivalent
 
+
+Instance:       WHO_DDCC_Map_ICHI_to_SCT_Specimen_Origin
+InstanceOf:     ConceptMap
+Description:    "Mapping from ICHI to SNOMED CT for COVID-19 Specimen Origin"
+Usage:          #definition
 
 * id = "who-ddcc-map-ichi-sct-specimen-origin"
 * name = "ICHI_SNOMED_CT_COVID19_Specimen_Origin"
@@ -264,6 +279,11 @@ Usage:          #definition
       * code = #122592007
       * equivalence = #wider
 
+
+Instance:       WHO_DDCC_Map_SCT_to_ICHI_Specimen_Origin
+InstanceOf:     ConceptMap
+Description:    "Mapping from SNOMED CT to ICHI for COVID-19 Specimen Origin"
+Usage:          #definition
 
 * id = "who-ddcc-map-sct-ichi-specimen-origin"
 * name = "SNOMED_CT_ICHI_COVID19_Specimen_Origin"
