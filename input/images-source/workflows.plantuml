@@ -17,12 +17,12 @@ box "Public Health Authority (PHA)"
 
    participant "Public Key Infrastructure\n (PKI) Gateway\n(e.g. DGCG)" as GATE
    participant "Knowledge Repository\nFHIR Server" as KM
-   participant "Data Store - Trusted FHIR Server\n(DDCC Regsistry Service\n& Repository Service)"  as SHR
+   participant "Data Store - Trusted FHIR Server\n(DDCC Registry Service\n& Repository Service)"  as SHR
 end box
 
 autonumber "<b>00:</b>"
 
-group DDCC:VS-Vaccination & DDCC Certificate Generation
+group DDCC Certificate Generation
     GATE->CGS: Establish PKI trust network\n(unspecified, reference implementation\nis DDCC Gateway)
     
     opt DDCC:VS Vaccination 
@@ -45,7 +45,7 @@ group DDCC:VS-Vaccination & DDCC Certificate Generation
     DHS->DH: Share HCID and/or QR codes\n (paper or wallet, unspecified)
 end 
 
-group DDCC:VS-Contuinuty of Care
+group DDCC:VS-Continuity of Care scenario
     HW->VP: Client registration
     DH->HW: Share QR code
 
@@ -65,11 +65,11 @@ group DDCC:VS-Contuinuty of Care
     HW->VP: Determine if any actions\n are needed and provide care
 end
 
-group Certificate Verification & Validation
+group DDCC Certificate Verification & Validation
 
     opt refresh cache
-        DHS->KM: Refresh FHIR ValueSet & Library resources (CQL/ELM) for validation business rules
-	DHS->GATE: Refresh trust network public keys & revoked key list
+        VAP->KM: Refresh FHIR ValueSet & Library resources (CQL/ELM) for validation business rules
+	VAP->GATE: Refresh trust network public keys & document signer certificate revocation list
     end 
 
     DH->VER: Share QR code
@@ -81,7 +81,7 @@ group Certificate Verification & Validation
 
         VAP->SHR: DDCC: Retrieve Health Folder\nMHD: ITI-66\nFHIR: query List
         loop DocumentReference
-           DHS->SHR: DDCC: Retrieve Health Certificate\nMHD: ITI-68\nFHIR: retrieve Bundle: DDCC Document
+           VAP->SHR: DDCC: Retrieve Health Certificate\nMHD: ITI-68\nFHIR: retrieve Bundle: DDCC Document
         end
     end
 
