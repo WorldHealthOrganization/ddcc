@@ -3,15 +3,13 @@ skinparam svgDimensionStyle false
 
 title DDCC Sequence Diagrams
 
-
-
-actor "Patient\n(Subject of Care)" as VP
+actor "Vaccinated or\nTested Person" as VP
 actor "DDCC Holder\n(usually Vaccinated \nor Tested Person)" as DH
-actor "Vaccinator or Tester\n (Health worker)" as HW
+actor "Health Worker\n or Data Entry \nPersonnel" as HW
 actor "Verifier" as VER
 participant "Digital Health\nSolution (DHS)\n(e.g. openSRP or an LIS)" as DHS
-participant "DDCC Verification\n Application" as VAP
-participant "DDCC \nGeneration Service\n(e.g. DDCC Transactions Mediator)" as CGS
+participant "DDCC Verifier\n Application" as VAP
+participant "DDCC Generation\nService (e.g. DDCC\nTransactions Mediator)" as CGS
 
 box "Public Health Authority (PHA)"
 
@@ -23,23 +21,24 @@ end box
 autonumber "<b>00:</b>"
 
 group DDCC Certificate Generation
-    GATE->CGS: Establish PKI trust network\n(unspecified, reference implementation\nis DDCC Gateway)
-    
+    GATE->CGS: Establish PKI trust network\n(unspecified, reference\nimplementation\nis DDCC Gateway)
+  
     alt DDCC:VS Vaccination 
-   	 HW->VP: Client registration
+
+   	 HW->VP: Record Person demographic information
+  note right: This is a simplified example.\nSee processes in DDCC:VS\nguidance document.
    	 HW->VP: Vaccinate client
      HW->DHS: Record vaccination event
+
     else DDCC:TR Test
-     HW->VP: Client registration
-     HW->VP: Test client
-     HW->DHS: Record test result
-    end
+     HW->DHS: Record core data set\ndata elements for a DDCC:TR
+note left: Process starts after\na test report was generated.\nSee full list of pre-conditions\nfor a DDCC:TR in guidance document. 
+    End
     
     DHS->CGS: DDCC: Submit Health Event /\nGenerate Health Certificate
-
-    CGS->CGS: Ensure DHS has node level authentication\nIHE: ATNA
+    CGS->CGS: Ensure DHS has node level\nauthentication\nIHE: ATNA
     CGS->CGS: Log transaction / audit trail\nIHE: ATNA (RESTful?)
-    CGS->CGS: FHIR: Create Bundle: DDCC Document
+    CGS->CGS: FHIR: Create Bundle:\nDDCC Document
     opt store online content
          CGS->SHR: DDCC: Store Health Certificate\nFHIR: DDCC Document
     end
@@ -48,7 +47,7 @@ group DDCC Certificate Generation
 
 
     CGS->DHS: DDCC: Generate Health Certificate response\nFHIR Bundle: DDCC Document
-    DHS->DH: Share HCID and/or QR codes\n (paper or wallet, unspecified)
+    DHS->DH: Share HCID and/or QR codes  (paper or wallet, unspecified)
 end 
 
 group DDCC:VS-Continuity of Care scenario
@@ -65,14 +64,14 @@ group DDCC:VS-Continuity of Care scenario
         end
     end
     HW->DHS: Review immunization history
-    HW->VP: Determine if any actions\n are needed and provide care
+    HW->VP: Determine if any actions\nare needed and provide care
 end
 
 group DDCC Certificate Verification & Validation
 
     opt refresh cache
         VAP->KM: Refresh FHIR ValueSet & Library resources (CQL/ELM) for validation business rules
-	VAP->GATE: Refresh trust network public keys & document signer certificate revocation list
+	VAP->GATE: Refresh trust network public keys &\n document signer certificate revocation list
     end 
 
     DH->VER: Share QR code
@@ -91,12 +90,10 @@ group DDCC Certificate Verification & Validation
         end
     end
 
-    VAP->VAP: Execute CQL/ELM validation\n status business rules\nagainst DDCC Document
+    VAP->VAP: Execute CQL/ELM validation\nstatus business rules\nagainst DDCC Document
     VER->VAP: Review validation status
-    VER->DH: Indicate result\n of validation check
+    VER->DH: Indicate result\nof validation check
 end
-
-
 
 
 @enduml
