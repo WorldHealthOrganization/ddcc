@@ -5,13 +5,13 @@ title DDCC Sequence Diagrams
 
 
 
-actor "Vaccinated\nPerson\n(Subject of Care)" as VP
+actor "Patient\n(Subject of Care)" as VP
 actor "DDCC Holder\n(usually Vaccinated \nor Tested Person)" as DH
-actor "Vaccinator\n (Health worker)" as HW
+actor "Vaccinator or Tester\n (Health worker)" as HW
 actor "Verifier" as VER
 participant "Digital Health\nSolution (DHS)\n(e.g. openSRP or an LIS)" as DHS
 participant "DDCC Verification\n Application" as VAP
-participant "DDCC \nGeneration Service\n(e.g. Reference App)" as CGS
+participant "DDCC \nGeneration Service\n(e.g. DDCC Transactions Mediator)" as CGS
 
 box "Public Health Authority (PHA)"
 
@@ -25,21 +25,27 @@ autonumber "<b>00:</b>"
 group DDCC Certificate Generation
     GATE->CGS: Establish PKI trust network\n(unspecified, reference implementation\nis DDCC Gateway)
     
-    opt DDCC:VS Vaccination 
+    alt DDCC:VS Vaccination 
    	 HW->VP: Client registration
    	 HW->VP: Vaccinate client
-    	HW->DHS: Record vaccination event
+     HW->DHS: Record vaccination event
+    else DDCC:TR Test
+     HW->VP: Client registration
+     HW->VP: Test client
+     HW->DHS: Record test result
     end
     
     DHS->CGS: DDCC: Submit Health Event /\nGenerate Health Certificate
 
     CGS->CGS: Ensure DHS has node level authentication\nIHE: ATNA
     CGS->CGS: Log transaction / audit trail\nIHE: ATNA (RESTful?)
-    CGS->SHR: DDCC: Register Health Certificate\nMHDS: ITI-65\nFHIR: create Bundle: \nSubmissionSet & DocumentReference
-
+    CGS->CGS: FHIR: Create Bundle: DDCC Document
     opt store online content
-         CGS->SHR: DDCC: Store Health Certificate\nFHIR: Create Bundle: DDCC Document
+         CGS->SHR: DDCC: Store Health Certificate\nFHIR: DDCC Document
     end
+    CGS->SHR: DDCC: Register Health Certificate\nMHDS: ITI-65 Provide Document Bundle\nFHIR: create Bundle: \nSubmissionSet & DocumentReference
+
+
 
     CGS->DHS: DDCC: Generate Health Certificate response\nFHIR Bundle: DDCC Document
     DHS->DH: Share HCID and/or QR codes\n (paper or wallet, unspecified)
@@ -50,15 +56,12 @@ group DDCC:VS-Continuity of Care scenario
     DH->HW: Share QR code
 
     HW->DHS: Scan QR code
-    DHS->DHS: Identify QR code type\nDeserialize\nMap to DDCC Document
+    DHS->DHS: Identify QR code type\nDeserialize
     opt  retrieve online content
         GATE->HW: Authenticate and authorize usage (unspecified, reference implementation is KeyCloak)
-        DHS->SHR: DDCC: Retrieve Health Folder\nMHD: ITI-66\nFHIR: query List
+        DHS->SHR: DDCC: Retrieve Health Folder\nMHD: ITI-66 Find Document Lists\nFHIR: query List
         loop DocumentReference
-           DHS->SHR: DDCC: Retrieve Health Certificate\nMHD: ITI-68\nFHIR: retrieve Bundle: DDCC Document
-           loop DocumentReference: retrieve QR-codes or PDFs
-               DHS->SHR: DDCC: Retrieve Health Certificate Reference\nMHD: ITI-67\nFHIR: retrieve DocumentReference:\n attachments of pdf or image (e.g. png)
-            end
+           DHS->SHR: DDCC: Retrieve Health Certificate\nMHD: ITI-68 Retrieve Document\nFHIR: retrieve Bundle: DDCC Document
         end
     end
     HW->DHS: Review immunization history
@@ -74,14 +77,17 @@ group DDCC Certificate Verification & Validation
 
     DH->VER: Share QR code
     VER->VAP: Scan QR code
-    VAP->VAP: Identify QR code type\nDeserialize\nMap to DDCC Document
+    VAP->VAP: Identify QR code type\nDeserialize
 
     opt  retrieve online content
         GATE->VER: Authenticate and authorize usage (unspecified, reference implementation is KeyCloak)
-
-        VAP->SHR: DDCC: Retrieve Health Folder\nMHD: ITI-66\nFHIR: query List
-        loop DocumentReference
-           VAP->SHR: DDCC: Retrieve Health Certificate\nMHD: ITI-68\nFHIR: retrieve Bundle: DDCC Document
+        alt Validate HCID/Folder
+          VAP->SHR: DDCC: Retrieve Health Folder\nMHD: ITI-66 Find Document Lists\nFHIR: query List
+          loop DocumentReference
+            VAP->SHR: DDCC: Retrieve Health Certificate\nMHD: ITI-68 Retrieve Document\nFHIR: retrieve Bundle: DDCC Document
+          end
+        else Validate Document
+          VAP->SHR: DDCC: Retrieve Health Certificate\nMHD: ITI-68 Retrieve Document\nFHIR: retrieve Bundle: DDCC Document
         end
     end
 
