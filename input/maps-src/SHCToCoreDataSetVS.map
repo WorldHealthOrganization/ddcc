@@ -1,0 +1,51 @@
+map "http://worldhealthorganization.github.io/ddcc/StructureMap/SHCToCoreDataSetVS" = "SHCToCoreDataSetVS"
+
+uses "http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-vaccination-bundle-dm" alias SHCVaccinationBundleDM as source
+uses "http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-patient-general-dm" alias SHCPatientDM as source
+uses "http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-vaccination-dm"  alias SHCImmunizationDM as source
+
+uses "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.VS" alias DDCCVS as target
+
+group SHCToVS ( 
+  source shc : SHCVaccinationBundleDM
+  target ddcc : DDCCVS
+) {
+  shc.entry as patientEntrySHC then {
+    patientEntrySHC.resource : Patient first as patientSHC then {
+      patientSHC then PatientToDDCC(patientSHC, ddcc) "Patient resource";
+      shc.entry as immunizationEntrySHC then {
+        immunizationEntrySHC.resource : Immunization as immunizationSHC -> ddcc.vaccination as vaccination then ImmunizationToDDCC(immunizationSHC,vaccination) "Immunization resource";
+      } "Immunization entry";
+    } "Patient entry";
+  } "map patient";
+}
+
+group PatientToDDCC(
+  source patient : SHCPatientDM,
+  target tgt : DDCCVS
+) { 
+  patient.name as name then {
+    name.text as text -> tgt.name = text "set name";
+  } "set full name";
+  patient.birthDate as birthDate -> tgt.birthDate = birthDate "set birthDate";
+}
+
+group ImmunizationToDDCC(
+  source immunization: SHCImmunizationDM
+  target vaccination
+) {
+  immunization.vaccineCode as vaccineCode -> vaccination.vaccine = vaccineCode "set vaccine";
+  immunization.manufacturer as tman then {
+    tman.identifier as ident -> vaccination.manufacturer as manufacturer then {
+      ident.system as system -> manufacturer.system = system "set system";
+      ident.value as value -> manufacturer.code = value "set value";
+    } "set manufacturer";
+  } "manufacturer";
+  immunization.lotNumber as lot -> vaccination.lot = lot "set lot";
+  immunization.occurrence as date ->  vaccination.date = date "set date";
+  immunization.performer as performer then {
+    performer.actor as actor then {
+      actor.display as centre -> vaccination.centre = centre "set centre";
+    } "actor";
+  } "performer";
+}

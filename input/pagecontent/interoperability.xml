@@ -1,0 +1,88 @@
+<div xmlns="http://www.w3.org/1999/xhtml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://hl7.org/fhir ../../input-cache/schemas/R5/fhir-single.xsd">
+    <h3>DDCC:VS and SMART Health Card interoperability</h3>
+    <p>
+        The table below maps data elements between the DDCC:VS logical model and corresponding profiles in the SMART Health Cards Vaccination and Testing implementation guide.
+        Only required or Must Support elements are included. The Mapping Equivalence indicates if there are mismatches between the corresponding profiles and follows the Concept Map equivalence guidance:
+    <ul>
+      <li>unmatched: No element that is equal or equivalent, will be expected to cause either data loss or mapping errors in unmapped direction.</li>
+      <li>wider: Match exists but left side has stricter criteria, can result in data loss or invalid resource when transforming from right to left. For terminology, code on right is less specific.</li>
+      <li>narrower: Match exists but right side has stricter criteria, can result in data loss or invalid resource when transforming from left to right. For terminology, code on right is more specific.</li>
+    </ul>
+    </p>
+
+    <div style="overflow:auto;">
+        <style type="text/css">
+            table.shc-table {
+                font-size: 12px;
+                border: 1px solid #CCC; 
+                font-family: Arial, Helvetica, sans-serif;
+            } 
+            .shc-table col:nth-child(1) { background-color:#e6e6e6; }
+            .shc-table col:nth-child(8) { background-color:#e6e6e6; }
+            .shc-table col:nth-child(13) { min-width: 600px; }
+            .shc-table th {
+                text-align: center;
+                background-color: #0070A1; 
+                color: #FFF;
+                font-weight: bold;
+            }
+            .shc-table td {
+                padding: 4px;
+                margin: 3px;
+                border: 1px solid #CCC;
+            }
+            .shc-table td:nth-child(5) { word-break: break-all; }
+        </style>
+        <table class="shc-table">
+            <col/><col/><col/><col/><col/><col/><col/><col/><col/><col/><col/><col/><col/>
+            <thead><tr><th colspan="4">DDCC 0.3.1 RC1</th><th>&#160;</th><th>&#160;</th><th>&#160;</th><th colspan="4">SHC V+T IG v0.6.2-STU 1</th><th>&#160;</th><th>&#160;</th></tr></thead>
+            <tbody>
+             <tr><th>Element</th><th>Data Type</th><th colspan="2">Cardinality</th><th colspan="2">Condition (IF True)</th><th>Mapping Equivalence </th><th>Element</th><th>Data Type</th><th colspan="2">Cardinality</th><th>Assignment</th><th>Comments</th></tr>
+             <tr><th>&#160;</th><th>&#160;</th><th>Min</th><th>Max</th><th>Computable FHIRPath</th><th>Narrative</th><th>&#160;</th><th>&#160;</th><th>&#160;</th><th>Min</th><th>Max</th><th>&#160;</th><th>&#160;</th></tr>
+             <tr><td>DDCCCoreDataSet.VS</td><td>DDCCCoreDataSet</td><td>1</td><td>*</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>SHCVaccinationBundleDM</td><td>Bundle</td><td>1</td><td>1</td><td>&#160;</td><td>&#160;</td></tr>
+             <tr><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>SHCVaccinationBundleDM.type</td><td>code</td><td>1</td><td>1</td><td>"collection"</td><td>&#160;</td></tr>
+             <tr><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>SHCVaccinationBundleDM.entry:patient.resource</td><td>SHCPatientGeneralDM</td><td>1</td><td>1</td><td>&#160;</td><td>&#160;</td></tr>
+             <tr><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>SHCPatientGeneralDM.name</td><td>HumanName</td><td>1</td><td>1</td><td>&#160;</td><td>&#160;</td></tr>
+             <tr><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>SHCPatientGeneralDM.name.family</td><td>string</td><td>0</td><td>1</td><td>&#160;</td><td>&#160;</td></tr>
+             <tr><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>SHCPatientGeneralDM.name.given</td><td>string</td><td>0</td><td>*</td><td>&#160;</td><td>&#160;</td></tr>
+             <tr><td>DDCCCoreDataSetVS.name</td><td>string</td><td>1</td><td>1</td><td>&#160;</td><td>&#160;</td><td>wider</td><td>SHCPatientGeneralDM.name.text</td><td>string</td><td>0</td><td>1</td><td>&#160;</td><td>vc-name-invariant allows only either text or structured name. If structured name is present, right to left would need to concatenate components to produce text</td></tr>
+             <tr><td>DDCCCoreDataSetVS.birthDate</td><td>date</td><td>0</td><td>1</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>SHCPatientGeneralDM.birthDate</td><td>date</td><td>0</td><td>1</td><td>&#160;</td><td>&#160;</td></tr>
+             <tr><td>DDCCCoreDataSetVS.identifier</td><td>Identifier</td><td>0</td><td>1</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td></tr>
+             <tr><td>DDCCCoreDataSetVS.certificate</td><td>BackboneElement</td><td>0</td><td>1</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td></tr>
+             <tr><td>DDCCCoreDataSetVS.certificate.issuer</td><td>Reference(DDCC Organization)</td><td>1</td><td>1</td><td>&#160;</td><td>&#160;</td><td>unmatched</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>Issuer in SHC is contained within the credential payload outside the FHIR bundle.</td></tr>
+             <tr><td>DDCCCoreDataSetVS.certificate.hcid</td><td>Identifier</td><td>1</td><td>1</td><td>&#160;</td><td>&#160;</td><td>unmatched</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td></tr>
+             <tr><td>DDCCCoreDataSetVS.certificate.ddccid</td><td>Identifier</td><td>0</td><td>1</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td></tr>
+             <tr><td>DDCCCoreDataSetVS.certificate.version</td><td>string</td><td>1</td><td>1</td><td>&#160;</td><td>&#160;</td><td>unmatched</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td></tr>
+             <tr><td>DDCCCoreDataSetVS.certificate.period</td><td>Period</td><td>0</td><td>1</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td></tr>
+             <tr><td>DDCCCoreDataSetVS.certificate.period.start</td><td>date</td><td>0</td><td>1</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td></tr>
+             <tr><td>DDCCCoreDataSetVS.certificate.period.end</td><td>date</td><td>0</td><td>1</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td></tr>
+             <tr><td>DDCCCoreDataSetVS.vaccination</td><td>BackboneElement</td><td>1</td><td>1</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>SHCVaccinationBundleDM.entry:Immunization.resource</td><td>SHCVaccinationDM</td><td>1</td><td>*</td><td>&#160;</td><td>&#160;</td></tr>
+             <tr><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>SHCVaccinationDM.status</td><td>code</td><td>1</td><td>1</td><td>"completed"</td><td>&#160;</td></tr>
+             <tr><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>SHCVaccinationDM.vaccineCode</td><td>CodeableConcept</td><td>1</td><td>1</td><td>&#160;</td><td>&#160;</td></tr>
+             <tr><td>DDCCCoreDataSetVS.vaccination.vaccine</td><td>Coding</td><td>1</td><td>1</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>SHCVaccinationDM.vaccineCode.coding</td><td>Coding</td><td>1</td><td>*</td><td>&#160;</td><td>Omit display</td></tr>
+             <tr><td>DDCCCoreDataSetVS.vaccination.brand</td><td>Coding</td><td>1</td><td>1</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td></tr>
+             <tr><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>SHCVaccinationDM.manufacturer</td><td>Reference(Organization)</td><td>0</td><td>1</td><td>&#160;</td><td>&#160;</td></tr>
+             <tr><td>DDCCCoreDataSetVS.vaccination.manufacturer</td><td>Coding</td><td>0</td><td>1</td><td>DDCCCoreDataSetVS.maholder.code.hasValue().not()</td><td>&#160;</td><td>wider</td><td>SHCVaccinationDM.manufacturer.identifier</td><td>Identifier</td><td>0</td><td>1</td><td>&#160;</td><td>who-ddcc-data-1: Manufacturer or Market Authorization Holder SHALL be present, invariant may fail from right to left</td></tr>
+             <tr><td>DDCCCoreDataSetVS.vaccination.manufacturer.system</td><td>uri</td><td>0</td><td>1</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>SHCVaccinationDM.manufacturer.identifier.system</td><td>uri</td><td>1</td><td>1</td><td>&#160;</td><td>&#160;</td></tr>
+             <tr><td>DDCCCoreDataSetVS.vaccination.manufacturer.code</td><td>code</td><td>0</td><td>1</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>SHCVaccinationDM.manufacturer.identifier.value</td><td>string</td><td>1</td><td>1</td><td>&#160;</td><td>&#160;</td></tr>
+             <tr><td>DDCCCoreDataSetVS.vaccination.maholder</td><td>Coding</td><td>0</td><td>1</td><td>DDCCCoreDataSetVS.maholder.code.hasValue()</td><td>&#160;</td><td>wider</td><td>SHCVaccinationDM.manufacturer.identifier</td><td>Identifier</td><td>0</td><td>1</td><td>&#160;</td><td>who-ddcc-data-1: Manufacturer or Market Authorization Holder SHALL be present, invariant may fail from right to left</td></tr>
+             <tr><td>DDCCCoreDataSetVS.vaccination.maholder.system</td><td>uri</td><td>0</td><td>1</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>SHCVaccinationDM.manufacturer.identifier.system</td><td>uri</td><td>1</td><td>1</td><td>&#160;</td><td>&#160;</td></tr>
+             <tr><td>DDCCCoreDataSetVS.vaccination.maholder.code</td><td>code</td><td>0</td><td>1</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>SHCVaccinationDM.manufacturer.identifier.value</td><td>string</td><td>1</td><td>1</td><td>&#160;</td><td>&#160;</td></tr>
+             <tr><td>DDCCCoreDataSetVS.vaccination.lot</td><td>string</td><td>1</td><td>1</td><td>&#160;</td><td>&#160;</td><td>wider</td><td>SHCVaccinationDM.lotNumber</td><td>string</td><td>0</td><td>1</td><td>&#160;</td><td>&#160;</td></tr>
+             <tr><td>DDCCCoreDataSetVS.vaccination.date</td><td>dateTime</td><td>1</td><td>1</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>SHCVaccinationDM.occurrence[x]:occurrenceDateTime</td><td>dateTime</td><td>1</td><td>1</td><td>&#160;</td><td>&#160;</td></tr>
+             <tr><td>DDCCCoreDataSetVS.vaccination.validFrom</td><td>date</td><td>0</td><td>1</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td></tr>
+             <tr><td>DDCCCoreDataSetVS.vaccination.dose</td><td>positiveInt</td><td>1</td><td>1</td><td>&#160;</td><td>&#160;</td><td>unmatched</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>protocolApplied is explicitly disallowed in SHC profiles</td></tr>
+             <tr><td>DDCCCoreDataSetVS.vaccination.totalDoses</td><td>positiveInt</td><td>0</td><td>1</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td></tr>
+             <tr><td>DDCCCoreDataSetVS.vaccination.country</td><td>Coding</td><td>1</td><td>1</td><td>&#160;</td><td>&#160;</td><td>unmatched</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td></tr>
+             <tr><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>SHCVaccinationDM.performer</td><td>BackboneElement</td><td>0</td><td>1</td><td>&#160;</td><td>&#160;</td></tr>
+             <tr><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>SHCVaccinationDM.performer.actor</td><td>Reference(Organization)</td><td>1</td><td>1</td><td>&#160;</td><td>&#160;</td></tr>
+             <tr><td>DDCCCoreDataSetVS.vaccination.centre</td><td>string</td><td>0</td><td>1</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>SHCVaccinationDM.performer.actor.display</td><td>string</td><td>0</td><td>1</td><td>&#160;</td><td>&#160;</td></tr>
+             <tr><td>DDCCCoreDataSetVS.vaccination.signature</td><td>Signature</td><td>0</td><td>1</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td></tr>
+             <tr><td>DDCCCoreDataSetVS.vaccination.practitioner</td><td>Identifier</td><td>0</td><td>1</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td></tr>
+             <tr><td>DDCCCoreDataSetVS.vaccination.disease</td><td>Coding</td><td>0</td><td>1</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td></tr>
+             <tr><td>DDCCCoreDataSetVS.vaccination.nextDose</td><td>date</td><td>0</td><td>1</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td></tr>
+             <tr><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>&#160;</td><td>SHCVaccinationDM.isSubpotent</td><td>boolean</td><td>0</td><td>1</td><td>&#160;</td><td></td></tr>
+            </tbody>
+        </table>                           
+    </div>
+</div>

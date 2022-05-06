@@ -49,13 +49,13 @@ WHO Speciman Sample Origin List (COVID-19)
 * ^status = #draft
 * include $ICHI#50872817	  "Nasopharyngeal swab"
 * include $ICHI#555916027	  "Oropharyngeal swab"
-* include $ICHI#555916027	  "Pharyngeal swab"
+// * include $ICHI#555916027	  "Pharyngeal swab"
 * include $ICHI#608172011	  "Swab from nasal sinus"
 * include $ICHI#1162766848	"Saliva specimen"
 * include $ICHI#1695591348	"Blood specimen"
-* include $ICHI#1695591348	"Plasma specimen"
-* include $ICHI#1695591348	"Serum specimen"
-* include $ICHI#1695591348	"Acellular blood (serum or plasma) specimen"
+// * include $ICHI#1695591348	"Plasma specimen"
+// * include $ICHI#1695591348	"Serum specimen"
+// * include $ICHI#1695591348	"Acellular blood (serum or plasma) specimen"
 
 ValueSet:     WHO_DDCC_Test_Result_COVID_19
 Id:           who-ddcc-test-result-covid-19

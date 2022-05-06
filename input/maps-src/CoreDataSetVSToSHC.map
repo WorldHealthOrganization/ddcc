@@ -1,0 +1,71 @@
+map "http://worldhealthorganization.github.io/ddcc/StructureMap/CoreDataSetVSToSHC" = "CoreDataSetVSToSHC"
+
+uses "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.VS" alias DDCCVS as source
+
+uses "http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-vaccination-bundle-dm" alias SHCVaccinationBundleDM as target
+uses "http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-patient-general-dm" alias SHCPatientDM as produced
+uses "http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-vaccination-dm"  alias SHCImmunizationDM as produced
+
+group VSToSHC ( 
+  source ddcc : DDCCVS,
+  target shc : SHCVaccinationBundleDM, 
+) {
+  ddcc -> shc.type = "collection" "set bundle type";
+  ddcc -> shc then {
+    ddcc ->  
+      shc.entry as entry, 
+      entry.fullUrl = "resource:0",
+      create("http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-patient-general-dm") as patient
+      then {
+        ddcc then DDCCToPatient( ddcc, patient ) "setup patient";
+        ddcc -> entry.resource = patient "set patient resource";
+      } "create patient resource";
+
+    ddcc.vaccination first as vaccination -> 
+      shc.entry as entry,
+      entry.fullUrl = "resource:1",
+      create("http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-vaccination-dm") as immunization
+      then {
+        vaccination then DDCCToImmunization( vaccination, immunization ) "setup immunization";
+        ddcc -> entry.resource = immunization "set immunization resource";
+      } "create immunization resource";
+
+  } "set bundle entries";
+}
+
+group DDCCToPatient(
+  source src : DDCCVS,
+  target patient : SHCPatientDM
+) { 
+  src.name as name -> patient.name as tName then {
+    name as content -> tName.text = content "set name";
+  } "set full name";
+  src.birthDate as birthDate -> patient.birthDate = birthDate "set birthDate";
+}
+
+group DDCCToImmunization(
+  source src: DDCCVS,
+  target immunization : SHCImmunizationDM
+) {
+  src -> immunization.status = "completed" "set status";
+  src.vaccine as vaccine -> immunization.vaccineCode as vaccineCode, vaccineCode.coding as coding then {
+    vaccine.system as system -> coding.system = system "set vaccine code system";
+    vaccine.code as code -> coding.code = code "set vaccine code";
+  } "set vaccine";
+  src -> immunization.patient as patient, patient.reference = "resource:0" "set patient";
+  src.maholder as maholder where src.maholder.code.hasValue() -> immunization.manufacturer as tman, tman.identifier as ident then {
+    maholder.system as system -> ident.system = system "set system";
+    maholder.code as code -> ident.value = code "set value";
+  } "set maholder";
+  src as ddccvs where ddccvs.maholder.code.hasValue().not() then {
+    ddccvs.manufacturer as manufacturer -> immunization.manufacturer as tman, tman.identifier as ident then {
+      manufacturer.system as system -> ident.system = system "set system";
+      manufacturer.code as code -> ident.value = code "set value";
+    } "set manufacturer";
+  } "if maholder code empty";
+  src.lot as lot -> immunization.lotNumber = lot "set lot number";
+  src.date as date -> immunization.occurrence = date "set occurrence date";
+  src.centre as centre -> immunization.performer as performer, performer.actor as actor then {
+    centre -> actor.display = centre "set actor display";
+  } "set performer";
+}

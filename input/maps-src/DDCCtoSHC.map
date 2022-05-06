@@ -1,0 +1,107 @@
+map "http://worldhealthorganization.github.io/ddcc/StructureMap/DDCCtoSHC" = "DDCCtoSHC"
+
+uses "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCDocument"  alias DDCCDocument as source
+uses "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCPatient"  alias DDCCPatient as source
+uses "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCComposition" alias DDCCComposition as source
+uses "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCOrganization" alias DDCCOrganization as source
+uses 'http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCountryOfVaccination' alias DDCCCountryOfVaccination as source
+uses "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCVaccineBrand" alias DDCCVaccineBrand as source
+uses "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCImmunization" alias DDCCImmunization as source
+
+uses "http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-vaccination-bundle-dm" alias SHCVaccinationBundleDM as target
+uses "http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-patient-general-dm" alias SHCPatientDM as produced
+uses "http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-vaccination-dm"  alias SHCImmunizationDM as produced
+
+
+group DDCCtoSHC (
+    source ddcc : DDCCDocument,
+    target shc : SHCVaccinationBundleDM
+    ){
+
+    ddcc -> shc.type = "collection" "set bundle type";
+
+    ddcc.entry as entry then {
+        entry.resource : Patient first as patient then {
+            entry -> shc.entry as entrySHC then {
+                entry.fullUrl -> entrySHC.fullUrl = "resource:0" "Full URL";
+                patient -> entrySHC.resource = create('Patient') as patientSHC then DDCCPatienttoSHC(patient,patientSHC) "Patient resource";
+            } "Patient entry";
+        } "Is Patient entry";
+    } "map patients";
+
+    ddcc.entry as entry then {
+        entry.resource : Immunization first as immunization where status="completed" then {
+            entry -> shc.entry as entrySHC then {
+                entry.fullUrl -> entrySHC.fullUrl = "resource:1" "Full URL";
+                immunization -> entrySHC.resource = create('Immunization') as immunizationSHC then {
+                    immunization -> immunizationSHC then DDCCImmunizationtoSHC(immunization,immunizationSHC) "Immunization";
+                    ddcc.entry as orgEntry then {
+                        orgEntry.resource : Organization first as organization then DDCCOrganizationtoSHCImmunization(organization,immunizationSHC) "Organization entry";
+                    } "map organizations";
+                } "Immunization resource";
+            } "Immunization entry";
+        } "Is Immunization entry";
+    } "map immunizations" ;
+}
+
+
+group DDCCPatienttoSHC(
+    source patient: DDCCPatient,
+    target patientSHC : SHCPatientDM
+    ){
+    patient.name only_one as name -> patientSHC.name as nameSHC then {
+        name.given as givenname -> nameSHC.given = givenname "Given Name";
+        name.family as familyname -> nameSHC.family = familyname "Family Name";
+        name where name.given.exists().not() and name.family.exists().not() then {
+            name.text as text -> nameSHC.text = text "Text Name";
+        } "vc-name-invariant";
+    } "Name";
+
+    patient.birthDate as birthDate -> patientSHC.birthDate = birthDate "Birth Date"; 
+    
+}     
+
+group DDCCImmunizationtoSHC(
+      source immunization: DDCCImmunization,
+      target immunizationSHC : SHCImmunizationDM
+      ) {
+    immunization.status as status -> immunizationSHC.status = status "Status";   
+    immunization.vaccineCode as vaccineCode -> immunizationSHC.vaccineCode as vaccineCodeSHC then {
+        vaccineCode.coding first as coding -> vaccineCodeSHC.coding as codingSHC then MinimizeCoding(coding, codingSHC) "coding";
+    } "VaccineCode";
+    immunization.patient as patient -> immunizationSHC.patient as patientSHC, patientSHC.reference = "resource:0" "Patient";
+    immunization.occurrence as occurrenceDateTime -> immunizationSHC.occurrence = occurrenceDateTime "Occurrence DateTime";
+    immunization.extension as ext then {
+        ext first as maholder where ext.url = 'http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCVaccineMarketAuthorization' then {
+            maholder.valueCoding as coding -> immunizationSHC.manufacturer as tman, tman.identifier as tident then {
+                coding.system as system -> tident.system = system "system";
+                coding.code as code -> tident.value = code "value";
+            } "Manufacturer";
+        } "DDCCVaccineMarketAuthorization";
+    } "Extension";
+    immunization as src where extension.where(url = 'http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCVaccineMarketAuthorization').first().valueCoding.exists().not() then {
+        src.manufacturer as manufacturer then {
+            manufacturer.identifier as identifier -> immunizationSHC.manufacturer as tman, tman.identifier as tident then {
+                identifier.system as system -> tident.system = system "system";
+                identifier.value as value -> tident.value = value "value";
+            } "identifier";
+        } "Manufacturer";
+    } "if maholder code empty";
+    immunization.lotNumber as lotNumber -> immunizationSHC.lotNumber = lotNumber "Lot Number";
+    immunization.isSubpotent as isSubpotent where true -> immunizationSHC.isSubpotent = isSubpotent "Is Subpotent";
+}
+
+group DDCCOrganizationtoSHCImmunization(
+      source organization: DDCCOrganization,
+      target immunizationSHC : SHCImmunizationDM
+      ) {
+    organization.name as name -> immunizationSHC.performer as performer, performer.actor as actor, actor.display = name "Performer Actor Display";
+}
+
+group MinimizeCoding(
+      source src: Coding,
+      target tgt : Coding
+      ) {
+    src.system as system -> tgt.system = system "system";
+    src.code as code -> tgt.code = code "code";              
+}
