@@ -34,7 +34,7 @@ Usage: #example
 // Title: ""
 // Description: ""
 * status = #completed
-* extension[vaccineBrand].valueCoding = DDCC_Example_Test_CodeSystem#TEST
+* extension[vaccineBrand].valueCoding = $ICD11#XM1G90
 * extension[vaccineMarketAuthorization].valueCoding = DDCC_Example_Test_CodeSystem#TEST
 * extension[validFrom].valueDate = "2021-05-30"
 * extension[country].valueCode = urn:iso:std:iso:3166#SAU
@@ -123,7 +123,7 @@ Usage:        #example
 * item[=].answer.valueCoding = $ICD11#XM1NL1
 
 * item[+].linkId = "brand"
-* item[=].answer.valueCoding = DDCC_Example_Test_CodeSystem#TEST
+* item[=].answer.valueCoding = $ICD11#XM1G90
 
 * item[+].linkId = "manufacturer"
 * item[=].answer.valueCoding = DDCC_Example_Test_CodeSystem#TEST

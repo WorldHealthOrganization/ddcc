@@ -22,7 +22,7 @@ Usage: #example
 // Description: ""
 * date = "2021-05-06"
 * patient = Reference(DDCC-Patient-Russian)
-* recommendation.vaccineCode.coding[ddccVaccine] = $ICD11#XM0CX4
+* recommendation.vaccineCode.coding[ddccVaccine] = $ICD11#XM9QW8
 * recommendation.dateCriterion.value = "2021-05-20"
 * recommendation.dateCriterion.code = http://loinc.org#30980-7
 * recommendation.forecastStatus = http://terminology.hl7.org/CodeSystem/immunization-recommendation-status#due
@@ -34,11 +34,11 @@ Usage: #example
 // Title: ""
 // Description: ""
 * status = #completed
-* extension[vaccineBrand].valueCoding = DDCC_Example_Test_CodeSystem#TEST
+* extension[vaccineBrand].valueCoding = $ICD11#XM5QM6
 * extension[vaccineMarketAuthorization].valueCoding = DDCC_Example_Test_CodeSystem#TEST
 * extension[validFrom].valueDate = "2021-05-30"
 * extension[country].valueCode = urn:iso:std:iso:3166#RUS
-* vaccineCode.coding[ddccVaccine] = $ICD11#XM0CX4
+* vaccineCode.coding[ddccVaccine] = $ICD11#XM9QW8
 * expirationDate = "2021-06-30"
 * lotNumber = "123"
 * patient = Reference(DDCC-Patient-Russian)
@@ -120,10 +120,10 @@ Usage:        #example
 * item[=].answer.valueCoding = http://hl7.org/fhir/administrative-gender#male
 
 * item[+].linkId = "vaccine"
-* item[=].answer.valueCoding = $ICD11#XM1NL1
+* item[=].answer.valueCoding = $ICD11#XM9QW8
 
 * item[+].linkId = "brand"
-* item[=].answer.valueCoding = DDCC_Example_Test_CodeSystem#TEST
+* item[=].answer.valueCoding = $ICD11#XM5QM6
 
 * item[+].linkId = "manufacturer"
 * item[=].answer.valueCoding = DDCC_Example_Test_CodeSystem#TEST

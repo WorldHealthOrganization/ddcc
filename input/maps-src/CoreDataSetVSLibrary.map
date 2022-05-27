@@ -52,13 +52,17 @@ group VSToAddBundle (
             coding.system = "http://loinc.org",
             coding.code = "11369-6"
             "set code";
+          ddcc.certificate as certificate, certificate.issuer as issuer -> section.author = issuer "set author";
+          /*
           ddcc.certificate as certificate -> section.author as author then {
-            certificate.issuer as issuer -> author.type = "Organization" then {
-              issuer.identifier as pha -> author.identifier as identifier then {
+            certificate.issuer as issuer then {
+              issuer.identifier as pha -> author.identifier as identifier, author.type = "Organization" then {
                 pha.value as value -> identifier.value = value "set pha";
               } "set author identifier";
             } "set author ref";
+            
           } "set author";
+          */
           ddcc -> section.focus as focus, focus.reference = append("Immunization/", iid) "set focus";
           ddcc -> section.entry as entry, entry.reference = append("Immunization/", iid ) "add Immunization entry";
           ddcc -> section.entry as entry, entry.reference = append("ImmunizationRecommendation/", irid ) "add ImmunizationRecommendation entry";
