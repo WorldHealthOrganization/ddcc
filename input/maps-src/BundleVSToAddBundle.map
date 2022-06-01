@@ -1,0 +1,14 @@
+map "http://worldhealthorganization.github.io/ddcc/StructureMap/BundleVSToAddBundle" = "BundleVSToAddBundle"
+
+uses "http://hl7.org/fhir/StructureDefinition/Bundle" alias DDCCBundle as source
+uses "http://hl7.org/fhir/StructureDefinition/Bundle" alias AddBundle as target
+
+imports "http://worldhealthorganization.github.io/ddcc/StructureMap/CoreDataSetVSToAddBundle"
+
+
+group BundleVSToAddBundle ( 
+  source ddccbundle : DDCCBundle,
+  target bundle : AddBundle, 
+) {
+  ddccbundle.entry first as ddcc -> bundle then CoreDataSetVSToAddBundle( ddcc, bundle ) "get first entry from bundle";
+}

@@ -19,6 +19,7 @@ group VSToAddBundle (
   target bundle : AddBundle, 
 ) {
   ddcc -> bundle.type = "transaction" "set bundle type";
+
   ddcc -> uuid() as pid, uuid() as compid, uuid() as iid, uuid() as irid, uuid() as qrwhoid, uuid() as qrdccid then {
     ddcc ->  
       bundle.entry as entry, 
@@ -52,7 +53,9 @@ group VSToAddBundle (
             coding.system = "http://loinc.org",
             coding.code = "11369-6"
             "set code";
-          ddcc.certificate as certificate, certificate.issuer as issuer -> section.author = issuer "set author";
+          ddcc.certificate as certificate then {
+            certificate.issuer as issuer -> section.author = issuer "set author";
+          } "set certificate";
           /*
           ddcc.certificate as certificate -> section.author as author then {
             certificate.issuer as issuer then {
@@ -133,6 +136,7 @@ group VSToAddBundle (
       } "create immunization recommendation resource";
 
   } "set uuids";
+
 }
 
 group DDCCToImmunization(
