@@ -2,7 +2,7 @@
 layout: default
 title: Functional Requirements
 ---
-Functional requirements are documented in the <a href="https://www.who.int/publications/i/item/WHO-2019-nCoV-Digital_certificates-vaccination-2021.1">Digital Documentation of COVID-19 Certificates (DDCC): Vaccination Status (DDCC:VS) </a> and the Digital Documentation of COVID-19 Certificates (DDCC): Test Result (DDCC:TR, link forthcoming) Technical Specifications and Implementation Guidance.
+Functional requirements are documented in the <a href="https://www.who.int/publications/i/item/WHO-2019-nCoV-Digital_certificates-vaccination-2021.1">Digital Documentation of COVID-19 Certificates (DDCC): Vaccination Status (DDCC:VS)</a> and the <a href="https://www.who.int/publications/i/item/WHO-2019-nCoV-Digital_certificates_diagnostic_test_results-2022.1">DDCC: Test Result (DDCC:TR) - Technical Specifications and Implementation Guidance</a>.
 
 The high-level functional requirements are written as guidance requirements only to be used as a starting point for Member States or other interested parties that need to develop their own specifications for a digital solution for DDCC to take and adapt.
 
