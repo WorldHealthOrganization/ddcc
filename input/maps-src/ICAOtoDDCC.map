@@ -1,0 +1,184 @@
+map "http://worldhealthorganization.github.io/ddcc/StructureMap/ICAOtoDDCC" = "ICAOtoDDCC"
+
+uses "http://hl7.eu/fhir/ig/icao/StructureDefinition/IJson"                 alias IJson as source
+uses "http://hl7.eu/fhir/ig/icao/StructureDefinition/Data"                  alias Data as source
+uses "http://hl7.eu/fhir/ig/icao/StructureDefinition/Header"                alias Header as source
+uses "http://hl7.eu/fhir/ig/icao/StructureDefinition/Message"               alias Message as source
+uses "http://hl7.eu/fhir/ig/icao/StructureDefinition/Patient"               alias Patient as source
+uses "http://hl7.eu/fhir/ig/icao/StructureDefinition/VaccinationEvent"      alias VaccinationEvent as source
+uses "http://hl7.eu/fhir/ig/icao/StructureDefinition/VaccinationDetails"    alias VaccinationDetails as source
+uses "http://hl7.eu/fhir/ig/icao/StructureDefinition/ServiceProvider"       alias ServiceProvider as source
+uses "http://hl7.eu/fhir/ig/icao/StructureDefinition/Contact"               alias Contact as source
+uses "http://hl7.eu/fhir/ig/icao/StructureDefinition/DateTimeTestReport"    alias DateTimeTestReport as source
+uses "http://hl7.eu/fhir/ig/icao/StructureDefinition/TestResult"            alias TestResult as source
+uses "http://hl7.eu/fhir/ig/icao/StructureDefinition/Signature"             alias Signature as source
+
+uses "http://hl7.org/fhir/StructureDefinition/Bundle"                                     alias Bundle as target
+uses "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCDocument"     alias DDCCDocument as produced
+uses "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCPatient"      alias DDCCPatient as produced
+uses "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCComposition"  alias DDCCComposition as produced
+uses "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCOrganization" alias DDCCOrganization as produced
+uses "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCountryOfVaccination" alias DDCCCountryOfVaccination as produced
+uses "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCVaccineBrand" alias DDCCVaccineBrand as produced
+uses "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCImmunization" alias DDCCImmunization as produced
+
+group ICAOtoDDCC (source src: IJson, target bundle: Bundle){
+    src.data as data -> bundle then ExtractData(data, bundle) "Base Rule";
+}
+
+group ExtractData(source src: Data, target bundle: Bundle){
+    src -> bundle.type = "transaction" "set bundle type";
+
+    src -> bundle, bundle.entry as entry, entry.resource = create('Composition') as comp then {
+        src -> bundle then ExtractCert(src, bundle, comp) "Certificate";
+        src -> bundle then ExtractComposition(src, comp) "Composition";
+    } "Patient and Composition Create";
+}
+
+group ExtractCert(source src: Data, target bundle: Bundle, target comp: Composition){
+    src -> comp, bundle.entry as entry, entry.resource = create('Patient') as patient, uuid() as pid then {
+        src.msg as msg -> patient then ExtractPatientFromMsg(msg, pid, patient) "extract patient";
+        src -> comp.subject as subj, subj.reference = append("Patient/", pid) "Composition.Set patient";
+    
+        src.msg as msg where src.hdr.t = "icao.vacc" -> comp then {
+            msg.ve as vac -> comp then {
+                vac.vd as vacDetails -> comp, 
+                    bundle.entry as entryImm, entryImm.resource = create('Immunization') as immunization, uuid() as iid, 
+                    bundle.entry as entryOrg, entryOrg.resource = create('Organization') as org, uuid() as oid 
+                    then {
+                        src -> immunization.id = iid "Immunization ID";
+                        src -> org.id = oid "Organization ID";
+        
+                        src -> 
+                            comp.section as section, 
+                            section.entry as entry, 
+                            entry.reference = append("Immunization/", iid ),
+                            section.author as author, 
+                            author.reference = append("Organization/", oid)
+                            "add section";
+                        
+                        src -> comp.author as author, author.reference = append("Organization/", oid) "Composition.Set org";
+        
+                        src -> immunization.patient as subj, subj.reference = append("Patient/", pid) "Immunization.Set patient";
+                
+                        vacDetails.adm as adm -> org.name = adm "Set Organization name";
+        
+                        src -> bundle then ExtractVaccine(vac, vacDetails, oid, immunization) "extract vaccine info";
+                    } "Imminization Create vac";
+                } "Imminization Create msg";
+            } "Immunization Create";
+
+        // TODO: Tests
+        // TODO: Recovery
+
+    } "Patient Create";
+}
+
+group ExtractVaccine(source vac: VaccinationEvent, source vacDetails: VaccinationDetails, source oid, target immunization: Immunization) {
+    vacDetails.dvc as dvc -> 
+        immunization.occurrence = dvc
+        "set occurrence date";
+
+    vac.des as des -> 
+        immunization.vaccineCode as type, 
+        type.coding as coding,
+        coding.system = "http://hl7.org/fhir/sid/icd-11", 
+        coding.code = des
+        "set vaccine coding";
+
+    vac.nam as nam -> 
+        immunization.extension as ext, 
+        ext.value = create('Coding') as coding,
+        ext.url = "https://WorldHealthOrganization.github.io/ddcc/StructureDefinition/DDCCVaccineBrand",
+        coding.code = nam
+        "set brand";
+
+    vacDetails.ctr as co -> 
+        immunization.extension as ext, 
+        ext.value = create('Coding') as coding,
+        ext.url = "https://WorldHealthOrganization.github.io/ddcc/StructureDefinition/DDCCCountryOfVaccination",
+        coding.code = co,
+        coding.system = "urn:iso:std:iso:3166"
+        "set country";
+
+    vacDetails.lot as lot -> immunization.lotNumber = lot "set lot number";
+
+    vac -> immunization.protocolApplied as protocolApplied then {
+        vacDetails -> protocolApplied then {
+            vac -> protocolApplied then ExtractProtocolApplied(vac, vacDetails, oid, protocolApplied) "set protocol applied";
+        } "set protocol applied vacdetails";
+    }  "set protocol applied vac";
+}
+
+group ExtractProtocolApplied(source vac: VaccinationEvent, source vacDetails: VaccinationDetails, source oid, target protocol: ProtocolApplied) {
+    vacDetails.seq as seq -> protocol.doseNumber = seq "set dose number";
+
+    vac.dis as dis -> 
+        protocol.targetDisease as codeable, 
+        codeable.coding as coding,
+        coding.system = "http://hl7.org/fhir/sid/icd-11", 
+        coding.code = dis
+        "set target disease type";    
+
+    oid -> protocol.authority as authority, authority.reference = append("Organization/", oid) "set authority"; 
+}
+
+group ExtractPatientFromMsg(source src: Message, source pid, target patient: Patient) {
+    src.pid as patData -> patient then ExtractPatient(patData, pid, patient) "extract patient from msg";
+}
+
+group ExtractPatient(source src: Patient, source pid, target patient: Patient) {
+    pid -> patient.id = pid "Patient ID";
+    src.i as priorityIdentifier -> patient.identifier as identif, identif.value = priorityIdentifier "set priorityIdentifier"; 
+    src.ai as additionalIdentifier -> patient.identifier as identif, identif.value = additionalIdentifier "set additionalIdentifier"; 
+    src -> patient.identifier as identif then ExtractDocumentTypeNumber(src, identif) "Document Type Number" ; 
+
+    src.n as name -> patient.name = create('HumanName') as humanName, humanName.text = name  "Patient Name";
+    src.sex as gender -> patient then ExtractGender(gender, patient) "Patient Gender";
+    src.dob as birthDate -> patient.birthDate = birthDate "set birthDate";
+} 
+
+group ExtractGender(source gender, target patient: Patient) {
+    gender where(gender = "M") -> patient.gender = "male" "set male";
+    gender where(gender = "F") -> patient.gender = "female" "set female";
+}
+
+group ExtractDocumentTypeNumber(source src: Patient, target identif: Identifier) {
+    src.dn as docNumber -> identif.value = docNumber "set doc number";
+    src.dt as docType where (docType = "P") -> identif.system = "PPN"  "set doc number P";  // P – Passport (Doc 9303-4)
+    src.dt as docType where (docType = "A") -> identif.system = "DL"   "set doc number A";  // A – ID Card (Doc 9303-5)
+    src.dt as docType where (docType = "C") -> identif.system = "DL"   "set doc number C";  // C – ID Card (Doc 9303-5)
+    src.dt as docType where (docType = "I") -> identif.system = "DL"   "set doc number I" ; // I – ID Card Doc 9303-5)
+    src.dt as docType where (docType = "AC") -> identif.system = "EN"  "set doc number AC";  // AC - Crew Member Certificate (Doc 9303-5)
+    src.dt as docType where (docType = "V") -> identif.system = "ACSN" "set doc number V";  // V – Visa (Doc 9303-7)
+    src.dt as docType where (docType = "D") -> identif.system = "DL"   "set doc number D" ; // D – Driving License (ISO18013-1)
+}
+
+group ExtractComposition(source src: Data, target composition: Composition) {
+    src.msg as msg -> composition then {
+        msg.ucti as ucti -> composition.identifier as identif, identif.value = ucti "set comp test identifier"; 
+    } "set comp vaccine identifier parent";
+    src.msg as msg -> composition then {
+        msg.uvci as uvci -> composition.identifier as identif, identif.value = uvci "set comp vaccine identifier"; 
+    } "set comp vaccine identifier parent";
+
+    src -> composition.title = "International Certificate of Vaccination or Prophylaxis" "Title";
+
+    src -> composition.category as category, category.coding as coding then {
+        src -> coding.code = "ddcc-vs" "Category";
+    } "set category";
+
+    src -> composition.type as type, type.coding as coding then {
+      src -> coding.system = "http://loinc.org", coding.code = "82593-5", coding.display = "Immunization summary report" "set type coding";
+    } "set type";
+
+    src -> composition.section as section then {
+        src -> 
+          section.code as code, 
+          code.coding as coding,
+          coding.system = "http://loinc.org",
+          coding.code = "11369-6",
+          coding.display = "History of Immunization Narrative"
+          "set code";
+    } "set section";
+}
