@@ -1,17 +1,17 @@
 map "http://worldhealthorganization.github.io/ddcc/StructureMap/ICAOtoDDCC" = "ICAOtoDDCC"
 
-uses "http://hl7.eu/fhir/ig/icao/StructureDefinition/IJson"                 alias IJson as source
-uses "http://hl7.eu/fhir/ig/icao/StructureDefinition/Data"                  alias Data as source
-uses "http://hl7.eu/fhir/ig/icao/StructureDefinition/Header"                alias Header as source
-uses "http://hl7.eu/fhir/ig/icao/StructureDefinition/Message"               alias Message as source
-uses "http://hl7.eu/fhir/ig/icao/StructureDefinition/Patient"               alias Patient as source
-uses "http://hl7.eu/fhir/ig/icao/StructureDefinition/VaccinationEvent"      alias VaccinationEvent as source
-uses "http://hl7.eu/fhir/ig/icao/StructureDefinition/VaccinationDetails"    alias VaccinationDetails as source
-uses "http://hl7.eu/fhir/ig/icao/StructureDefinition/ServiceProvider"       alias ServiceProvider as source
-uses "http://hl7.eu/fhir/ig/icao/StructureDefinition/Contact"               alias Contact as source
-uses "http://hl7.eu/fhir/ig/icao/StructureDefinition/DateTimeTestReport"    alias DateTimeTestReport as source
-uses "http://hl7.eu/fhir/ig/icao/StructureDefinition/TestResult"            alias TestResult as source
-uses "http://hl7.eu/fhir/ig/icao/StructureDefinition/Signature"             alias Signature as source
+uses "http://hl7.org/fhir/ig/icao/StructureDefinition/IJson"                 alias IJson as source
+uses "http://hl7.org/fhir/ig/icao/StructureDefinition/Data"                  alias Data as source
+uses "http://hl7.org/fhir/ig/icao/StructureDefinition/Header"                alias Header as source
+uses "http://hl7.org/fhir/ig/icao/StructureDefinition/Message"               alias Message as source
+uses "http://hl7.org/fhir/ig/icao/StructureDefinition/Patient"               alias Patient as source
+uses "http://hl7.org/fhir/ig/icao/StructureDefinition/VaccinationEvent"      alias VaccinationEvent as source
+uses "http://hl7.org/fhir/ig/icao/StructureDefinition/VaccinationDetails"    alias VaccinationDetails as source
+uses "http://hl7.org/fhir/ig/icao/StructureDefinition/ServiceProvider"       alias ServiceProvider as source
+uses "http://hl7.org/fhir/ig/icao/StructureDefinition/Contact"               alias Contact as source
+uses "http://hl7.org/fhir/ig/icao/StructureDefinition/DateTimeTestReport"    alias DateTimeTestReport as source
+uses "http://hl7.org/fhir/ig/icao/StructureDefinition/TestResult"            alias TestResult as source
+uses "http://hl7.org/fhir/ig/icao/StructureDefinition/Signature"             alias Signature as source
 
 uses "http://hl7.org/fhir/StructureDefinition/Bundle"                                     alias Bundle as target
 uses "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCDocument"     alias DDCCDocument as produced
@@ -40,7 +40,15 @@ group ExtractCert(source src: Data, target bundle: Bundle, target comp: Composit
         src.msg as msg -> patient then ExtractPatientFromMsg(msg, pid, patient) "extract patient";
         src -> comp.subject as subj, subj.reference = append("Patient/", pid) "Composition.Set patient";
     
-        src.msg as msg where src.hdr.t = "icao.vacc" -> comp then {
+        src.msg as msg where src.hdr.t = "icao.vacc" -> comp, comp.section as section then {
+            src -> 
+                section.code as code, 
+                code.coding as coding,
+                coding.system = "http://loinc.org",
+                coding.code = "11369-6",
+                coding.display = "History of Immunization Narrative"
+                "add section";
+
             msg.ve as vac -> comp then {
                 vac.vd as vacDetails -> comp, 
                     bundle.entry as entryImm, entryImm.resource = create('Immunization') as immunization, uuid() as iid, 
@@ -48,15 +56,14 @@ group ExtractCert(source src: Data, target bundle: Bundle, target comp: Composit
                     then {
                         src -> immunization.id = iid "Immunization ID";
                         src -> org.id = oid "Organization ID";
-        
+                        
                         src -> 
-                            comp.section as section, 
                             section.entry as entry, 
                             entry.reference = append("Immunization/", iid ),
                             section.author as author, 
                             author.reference = append("Organization/", oid)
-                            "add section";
-                        
+                            "add author immunization to section ";
+
                         src -> comp.author as author, author.reference = append("Organization/", oid) "Composition.Set org";
         
                         src -> immunization.patient as subj, subj.reference = append("Patient/", pid) "Immunization.Set patient";
@@ -171,14 +178,4 @@ group ExtractComposition(source src: Data, target composition: Composition) {
     src -> composition.type as type, type.coding as coding then {
       src -> coding.system = "http://loinc.org", coding.code = "82593-5", coding.display = "Immunization summary report" "set type coding";
     } "set type";
-
-    src -> composition.section as section then {
-        src -> 
-          section.code as code, 
-          code.coding as coding,
-          coding.system = "http://loinc.org",
-          coding.code = "11369-6",
-          coding.display = "History of Immunization Narrative"
-          "set code";
-    } "set section";
 }

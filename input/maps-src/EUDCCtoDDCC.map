@@ -31,23 +31,38 @@ group ExtractCert(source src: HC1, target bundle: Bundle, target comp: Compositi
         src -> patient then ExtractPatient(src, pid, patient) "extract patient";
         src -> comp.subject as subj, subj.reference = append("Patient/", pid) "Composition.Set patient";
     
-        src.v as vac -> comp, 
-            bundle.entry as entryImm, entryImm.resource = create('Immunization') as immunization, uuid() as iid, 
-            bundle.entry as entryOrg, entryOrg.resource = create('Organization') as org, uuid() as oid 
-            then {
-                src -> immunization.id = iid "Immunization ID";
-                src -> org.id = oid "Organization ID";
+        src where (src.v.count() > 0) -> comp.section as section then {
+            src -> 
+                section.code as code, 
+                code.coding as coding,
+                coding.system = "http://loinc.org",
+                coding.code = "11369-6",
+                coding.display = "History of Immunization Narrative"
+                "add section";
 
-                src -> comp.section as section, section.entry as entry, entry.reference = append("Immunization/", iid ) "add Immunization entry";
-                src -> comp.section as section, section.author as author, author.reference = append("Organization/", oid) "Compositionm section add org";
-                src -> comp.author as author, author.reference = append("Organization/", oid) "Composition.Set org";
+            src.v as vac -> comp, 
+                bundle.entry as entryImm, entryImm.resource = create('Immunization') as immunization, uuid() as iid, 
+                bundle.entry as entryOrg, entryOrg.resource = create('Organization') as org, uuid() as oid 
+                then {
+                    src -> immunization.id = iid "Immunization ID";
+                    src -> org.id = oid "Organization ID";
 
-                src -> immunization.patient as subj, subj.reference = append("Patient/", pid) "Immunization.Set patient";
+                    src -> 
+                        section.entry as entry, 
+                        entry.reference = append("Immunization/", iid ),
+                        section.author as author, 
+                        author.reference = append("Organization/", oid)
+                        "add entry/author to section";
 
-                vac.is as is -> org.name = is "Set Organization name";
-        
-                src -> bundle then ExtractVaccine(vac, oid, immunization) "extract vaccine info";
-            } "Immunization Create";
+                    src -> comp.author as author, author.reference = append("Organization/", oid) "Composition.Set org";
+
+                    src -> immunization.patient as subj, subj.reference = append("Patient/", pid) "Immunization.Set patient";
+
+                    vac.is as is -> org.name = is "Set Organization name";
+            
+                    src -> bundle then ExtractVaccine(vac, oid, immunization) "extract vaccine info";
+                } "Immunization Create";
+        } "Vaccination List";
     
         // TODO: Tests
         // TODO: Recovery
@@ -148,16 +163,6 @@ group ExtractComposition(source src: CWT, target composition: Composition) {
     } "set type";
 
     src -> composition.event as event, event.period = create('Period') as period then ExtractPeriod(src, period) "Extract Period";
-
-    src -> composition.section as section then {
-        src -> 
-          section.code as code, 
-          code.coding as coding,
-          coding.system = "http://loinc.org",
-          coding.code = "11369-6",
-          coding.display = "History of Immunization Narrative"
-          "set code";
-    } "set section";
 }
 
 group ExtractPeriod(source src: CWT, target tgt : Period) {
