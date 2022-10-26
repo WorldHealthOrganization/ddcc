@@ -1,4 +1,4 @@
-Logical:        CertICAOVDS
+Logical:        CertICAO
 Title:          "Certificate - ICAO Visible Digital Seal Logical Model"
 Description:    "Data elements for the ICAO Visible Digital Seal Core Data Set."
 
