@@ -1,8 +1,8 @@
-Logical:         DCCCoreDataSet
-Title:           "DCC Core Data Set Logical Model"
-Description:     "Data elements for the EU DCC Core Data Set."
+Logical:         CertDCC
+Title:           "Certificate - EU DCC CBOR Web Token Logical Model"
+Description:     "Data elements for the EU Digital COVID Certificate Core Data Set."
 
-* ^url = "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DCCCoreDataSet"
+* ^url = "http://worldhealthorganization.github.io/ddcc/StructureDefinition/CertDCC"
 * ^version = "1"
 * ^abstract = true
 * ^status = #draft
@@ -10,10 +10,10 @@ Description:     "Data elements for the EU DCC Core Data Set."
 * iss 0..1 string "Issuer"
 * sub 0..1 string "Subject"
 * aud 0..1 string "Audience"
-* exp 0..1 dateTime "expiration"
-* nbf 0..1 dateTime "not before date"
-* iat 0..1 dateTime "issued at date"
-* id 0..1 string "Audience"
+* exp 0..1 dateTime "Expiration Date"
+* nbf 0..1 dateTime "Not before Date"
+* iat 0..1 dateTime "Issued at Date"
+* id 0..1 string "Identifier"
 * cert 0..1 BackboneElement "HC1"
   * ver 0..1 string "Schema version"
   * nam 0..1 BackboneElement "PersonName"

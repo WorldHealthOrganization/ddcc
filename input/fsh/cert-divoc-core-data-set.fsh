@@ -1,8 +1,8 @@
-Logical:        DIVOCCoreDataSet
-Title:          "DIVOC Core Data Set Logical Model"
+Logical:        CertDIVOC
+Title:          "Certificate - DIVOC Verifiable Credential Logical Model"
 Description:    "Data elements for the DIVOC Core Data Set."
 
-* ^url = "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DIVOCCoreDataSet"
+* ^url = "http://worldhealthorganization.github.io/ddcc/StructureDefinition/CertDIVOC"
 * ^version = "1"
 * ^abstract = true
 * ^status = #draft

@@ -1,8 +1,8 @@
-Logical:        ICAOCoreDataSet
-Title:          "ICAO Core Data Set Logical Model"
-Description:    "Data elements for the ICAO Core Data Set."
+Logical:        CertICAOVDS
+Title:          "Certificate - ICAO Visible Digital Seal Logical Model"
+Description:    "Data elements for the ICAO Visible Digital Seal Core Data Set."
 
-* ^url = "http://worldhealthorganization.github.io/ddcc/StructureDefinition/ICAOCoreDataSet"
+* ^url = "http://worldhealthorganization.github.io/ddcc/StructureDefinition/CertICAOVDS"
 * ^version = "1"
 * ^abstract = true
 * ^status = #draft

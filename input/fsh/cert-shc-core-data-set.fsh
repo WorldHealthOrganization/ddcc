@@ -1,8 +1,8 @@
-Logical:         SHCCoreDataSet
-Title:           "SHC Core Data Set Logical Model"
+Logical:         CertSHC
+Title:           "Certificate - Smart Health Card's JSon Web Token Logical Model"
 Description:     "Data elements for the Smart Health Cards Core Data Set."
 
-* ^url = "http://worldhealthorganization.github.io/ddcc/StructureDefinition/SHCCoreDataSet"
+* ^url = "http://worldhealthorganization.github.io/ddcc/StructureDefinition/CertSHC"
 * ^version = "1"
 * ^abstract = true
 * ^status = #draft
