@@ -1,0 +1,104 @@
+map "http://worldhealthorganization.github.io/ddcc/StructureMap/CertSHCtoDDCC" = "SHCJWTtoDDCC"
+
+uses "http://worldhealthorganization.github.io/ddcc/StructureDefinition/CertSHC" alias JWTPayload as source
+uses "http://hl7.org/fhir/uv/shc/StructureDefinition/vc" alias VC as source
+uses "http://hl7.org/fhir/uv/shc/StructureDefinition/creadential-subject"  alias CredentialSubject as source
+
+uses "http://hl7.org/fhir/StructureDefinition/Bundle"                                     alias Bundle as target
+
+group SHCtoDDCC(source src: JWTPayload, target bundle: Bundle){
+    src -> bundle.type = "transaction" "set bundle type";
+
+    src -> bundle, bundle.entry as entry, entry.resource = create('Composition') as comp then {
+        src -> bundle then ExtractCert(src, bundle, comp) "Certificate";
+        src -> bundle then ExtractComposition(src, comp) "Composition";
+    } "Patient and Composition Create";
+}
+
+group ExtractCert(source src: JWTPayload, target bundle: Bundle, target comp: Composition){
+    src.vc as vc -> bundle, 
+        bundle.entry as entryOrg, entryOrg.resource = create('Organization') as org, uuid() as oid 
+        then {
+            src -> org.id = oid "Organization ID";
+            src -> comp.author as author, author.reference = append("Organization/", oid) "Composition.Set org";
+            src.iss as iss -> org.identifier as identif, identif.value = iss "Set Organization name";
+
+            vc.credentialSubject as credentialSubject -> bundle then {
+                credentialSubject.fhirBundle as fhirBundle -> bundle then {
+
+                    fhirBundle.entry as bundleEntrySHC then {
+                        bundleEntrySHC.resource : Patient first as patientSHC then {
+                            bundleEntrySHC.fullUrl as ref -> comp.subject as subj, subj.reference = append("Patient/", ref) "Composition.Set patient";
+                        } "patient filter";
+                        bundleEntrySHC.resource as anyRes -> bundle.entry as entry, entry.resource = anyRes "adding resource to bundle";
+                    } "for each entry";
+
+                    src where (fhirBundle.entry.resource.ofType(Immunization).exists()) -> comp.section as section then {
+                        src ->
+                            section.code as code, 
+                                code.coding as coding,
+                                coding.system = "http://loinc.org",
+                                coding.code = "11369-6",
+                                coding.display = "History of Immunization Narrative"
+                                "Adding code to imm section";
+
+                        src -> 
+                            section.author as author, 
+                                author.reference = append("Organization/", oid) "assing org entry to section";
+
+                        fhirBundle.entry as bundleEntrySHC then {
+                            bundleEntrySHC.resource : Immunization as immunizationSHC then {
+                                bundleEntrySHC.fullUrl as ref -> 
+                                    section.entry as entry, 
+                                    entry.reference = append("Immunization/", ref)
+                                    "add imm section";
+                            } "assign immunization to composition";
+                        } "Each entry";
+                    } "SHC Immunization Section";
+                    
+                    src where (fhirBundle.entry.resource.ofType(Observation).exists()) -> comp.section as section then {
+                        src ->
+                            section.code as code, 
+                                code.coding as coding,
+                                coding.system = "http://loinc.org",
+                                coding.code = "30954-2",
+                                coding.display = "Results (Diagnostic findings)"
+                                "Adding code to obs section";
+
+                        src -> 
+                            section.author as author, 
+                                author.reference = append("Organization/", oid)  "assing org entry to section";
+
+                        fhirBundle.entry as bundleEntrySHC then {
+                            bundleEntrySHC.resource : Observation as observationSHC then {
+                                bundleEntrySHC.fullUrl as ref -> 
+                                    section.entry as entry, 
+                                    entry.reference = append("Observation/", oid)
+                                    "add obs section";    
+                            } "assign immunization to composition";
+                        } "Entry Obs";
+                    } "SHC Observation Section";
+                } "SHC FhirBundle";
+            } "SHC Credential Subject";
+        } "Org Create";
+}
+
+group ExtractComposition(source src: Data, target composition: Composition) {
+    src -> composition.title = "International Certificate of Vaccination or Prophylaxis" "Title";
+
+    src -> composition.category as category, category.coding as coding then {
+        src -> coding.code = "ddcc-vs" "Category";
+    } "set category";
+
+    src -> composition.type as type, type.coding as coding then {
+      src -> coding.system = "http://loinc.org", coding.code = "82593-5", coding.display = "Immunization summary report" "set type coding";
+    } "set type";
+
+    src -> composition.event as event, event.period = create('Period') as period then ExtractPeriod(src, period) "Extract Period";
+}
+
+group ExtractPeriod(source src: JWTPayload, target tgt : Period) {
+    src.nbf as nbf -> tgt.start = nbf "Start notBefore";
+    src.iat as iat -> tgt.start = iat "Start issuedAt";
+    src.exp as exp -> tgt.end = exp "End expiration";
+}

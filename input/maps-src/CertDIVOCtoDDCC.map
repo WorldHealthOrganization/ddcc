@@ -1,0 +1,216 @@
+map "http://worldhealthorganization.github.io/ddcc/StructureMap/CertDIVOCtoDDCC" = "DIVOCtoDDCC"
+
+uses "http://worldhealthorganization.github.io/ddcc/StructureDefinition/CertDIVOC"               alias W3CVC as source
+uses "http://hl7.org/fhir/ig/divoc/StructureDefinition/CredentialSubject"   alias CredentialSubject as source
+uses "http://hl7.org/fhir/ig/divoc/StructureDefinition/Proof"               alias Proof as source
+uses "http://hl7.org/fhir/ig/divoc/StructureDefinition/Address"             alias Address as source
+uses "http://hl7.org/fhir/ig/divoc/StructureDefinition/Evidence"            alias Evidence as source
+uses "http://hl7.org/fhir/ig/divoc/StructureDefinition/Verifier"            alias Verifier as source
+uses "http://hl7.org/fhir/ig/divoc/StructureDefinition/Facility"            alias Facility as source
+
+uses "http://hl7.org/fhir/StructureDefinition/Bundle"                                     alias Bundle as target
+
+group DIVOCtoDDCC (source src: W3CVC, target bundle: Bundle){
+    src -> bundle.type = "transaction" "set bundle type";
+
+    src -> bundle, bundle.entry as entry, entry.resource = create('Composition') as comp then {
+        src -> bundle then ExtractCert(src, bundle, comp) "Certificate";
+        src -> bundle then ExtractComposition(src, comp) "Composition";
+    } "Patient and Composition Create";
+}
+
+group ExtractCert(source src: W3CVC, target bundle: Bundle, target comp: Composition){
+    src -> comp, bundle.entry as entry, entry.resource = create('Patient') as patient, uuid() as pid then {
+        src -> patient then ExtractPatient(src, pid, patient) "extract patient";
+        src -> comp.subject as subj, subj.reference = append("Patient/", pid) "Composition.Set patient";
+    
+        src where (src.evidence.count() > 0) -> comp.section as section then {
+            src -> 
+                section.code as code, 
+                code.coding as coding,
+                coding.system = "http://loinc.org",
+                coding.code = "11369-6",
+                coding.display = "History of Immunization Narrative"
+                "add section";
+
+            src.evidence as ev -> comp, 
+                bundle.entry as entryImm, entryImm.resource = create('Immunization') as immunization, uuid() as iid, 
+                bundle.entry as entryOrg, entryOrg.resource = create('Organization') as org, uuid() as oid, 
+                bundle.entry as entryManuf, entryOrg.resource = create('Organization') as manuf, uuid() as mid 
+                then {
+                    src -> immunization.id = iid "Immunization ID";
+                    src -> org.id = oid "Organization ID";
+                    src -> manuf.id = mid "Organization ID";
+
+                    src -> 
+                        section.entry as entry, 
+                        entry.reference = append("Immunization/", iid ),
+                        section.author as author, 
+                        author.reference = append("Organization/", oid)
+                        "add entry/author to section";
+
+                    src -> comp.author as author, author.reference = append("Organization/", oid) "Composition.Set org";
+
+                    src -> immunization.patient as subj, subj.reference = append("Patient/", pid) "Immunization.Set patient";
+
+                    ev.facility as facility then {
+                        facility.name as name -> org.name = name "Set Organization name";
+                    } "facility";
+
+                    ev.manufacturer as manufName -> manuf.name = manufName "Set Manufacturer name";
+
+                    ev.verifier as practitioner then  {
+                        practitioner.name as practName -> 
+                            bundle.entry as entry, 
+                            entry.resource = create('Practitioner') as practitioner,
+                            practitioner.id = uuid() as pracid, 
+                            practitioner.name = create('HumanName') as humanName, 
+                            humanName.text = practName,
+                            immunization.performer as performer,
+                            performer.actor as actor, 
+                            actor.reference = append("Practitioner/", pracid)
+                            "set pract name";
+                    } "create practitioner";
+            
+                    src -> bundle then ExtractVaccine(ev, oid, mid, immunization, bundle) "extract vaccine info";
+                } "Immunization Create";
+        } "Vaccination List";
+    
+        // TODO: Tests
+        // TODO: Recovery
+
+    } "Patient Create";
+}
+
+group ExtractVaccine(source ev: Evidence, source oid, source mid, target immunization: Immunization, target bundle: Bundle) {
+    ev.date as dt -> 
+        immunization.occurrence = dt 
+        "set occurrence date";
+
+    ev.batch as lot -> immunization.lotNumber = lot "set lot number";
+
+    ev.icd11Code as icd11Code then {
+        ev.prophylaxis as prophylaxis -> 
+            immunization.vaccineCode as type, 
+            type.coding as coding,
+            coding.system = "http://hl7.org/fhir/sid/icd-11", 
+            coding.code = icd11Code, 
+            coding.display = prophylaxis
+            "set vaccine coding";
+    } "Parse ICD11Code and Prophylaxis";
+
+    ev.certificateId as ci -> 
+        immunization.identifier as identif, 
+        identif.value = ci 
+        "set identifier ci"; 
+
+    ev.vaccine as mp -> 
+        immunization.extension as ext, 
+        ext.value = create('Coding') as coding,
+        ext.url = "https://WorldHealthOrganization.github.io/ddcc/StructureDefinition/DDCCVaccineBrand",
+        coding.display = mp
+        "set brand";
+
+    ev.facility as facility then {
+        facility.address as address then {
+            address.addressCountry as contry -> 
+                immunization.extension as ext, 
+                ext.value = create('Coding') as coding,
+                ext.url = "https://WorldHealthOrganization.github.io/ddcc/StructureDefinition/DDCCCountryOfVaccination",
+                coding.code = contry,
+                coding.system = "urn:iso:std:iso:3166"
+                "set country";
+        } "ev.facility.address";
+    } "ev.facility rule";
+
+    ev.effectiveUntil as validFrom -> 
+        immunization.extension as ext, 
+        ext.value = validFrom,
+        ext.url = "https://WorldHealthOrganization.github.io/ddcc/StructureDefinition/DDCCVaccineValidFrom"
+        "ev.effectiveUntil rule";
+
+    oid -> immunization.manufacturer as manuf, manuf.reference = append("Organization/", oid) "set manuf"; 
+
+    ev.facility as w3cFacility ->  
+        bundle.entry as entry, 
+        entry.resource = create('Location') as location, 
+        location.id = uuid() as locid, 
+        immunization.location as loc, 
+        loc.reference = append("Location/", locid)
+        then ExtractLocation(w3cFacility, location) "Extracting Immunization Location";
+
+    ev -> immunization.protocolApplied as protocolApplied then ExtractProtocolApplied(ev, oid, protocolApplied) "set protocol applied";
+}
+
+group ExtractProtocolApplied(source ev: Evidence, source oid, target protocol: ProtocolApplied) {
+    ev.dose as dn -> protocol.doseNumber = dn "set dose number";
+    ev.totalDoses as sd -> protocol.seriesDoses = sd "set series doses";
+
+    ev -> 
+        protocol.targetDisease as codeable, 
+        codeable.coding as coding,
+        coding.system = "http://snomed.info/sct", 
+        coding.code = "840539006"
+        "set target disease type";    
+
+    ev -> protocol.authority as authority, authority.reference = append("Organization/", oid) "set authority"; 
+}
+
+group ExtractPatient(source src: W3CVC, source pid, target patient: Patient) {
+    pid -> patient.id = pid "Patient ID";
+    src.credentialSubject as credentialSubject -> patient then ExtractPatientFromSubj(credentialSubject, patient)  "Patient Data from Subj";
+    //birthDateElement = parseDoB(vc.credentialSubject.dob) ?: parseAge(vc.issuanceDate, vc.credentialSubject.age)
+} 
+
+group ExtractPatientFromSubj(source src: CredentialSubject, target patient: Patient) {
+    src.name as patientName -> patient.name = create('HumanName') as humanName, humanName.text = patientName "Patient Name";
+    src.id as id -> patient.identifier as identif, identif.value = id "set patient identifier"; 
+    src.dob as birthDate -> patient.birthDate = birthDate "set birthDate";
+    
+    src.gender as gender -> patient then ExtractGender(gender, patient) "Extract Gender";
+    src.sex as sex -> patient then ExtractGender(gender, patient) "Extract Sex";
+
+    src.address as w3cAddress -> patient.address as fhirAddress then ExtractAddress(w3cAddress, fhirAddress) "Extracting Patient Address";
+} 
+
+group ExtractLocation(source facility: Facility, target location: Address) {
+    facility.name as name -> location.name = name "facility name";
+    facility.address as w3cAddress -> location.address as fhirAddress then ExtractAddress(w3cAddress, fhirAddress) "facility address";
+} 
+
+group ExtractAddress(source w3cAddress: Address, target fhirAddress: Address) {
+    w3cAddress.streetAddress as line1 -> fhirAddress.line = line1 "Line 1";
+    w3cAddress.streetAddress2 as line2 -> fhirAddress.line = line2 "Line 2";
+    w3cAddress.city as city -> fhirAddress.city = city "City";
+    w3cAddress.district as district -> fhirAddress.district = district "District";
+    w3cAddress.postalCode as postal -> fhirAddress.postalCode = postal "Postal";
+    w3cAddress.addressRegion as region -> fhirAddress.state = region "Region";
+    w3cAddress.addressCountry as country  -> fhirAddress.country = country "Country";
+} 
+
+group ExtractGender(source gender, target patient: Patient) {
+    gender where(gender = "M") -> patient.gender = "male" "set male";
+    gender where(gender = "F") -> patient.gender = "female" "set female";
+}
+
+group ExtractComposition(source src: W3CVC, target composition: Composition) {
+    src -> composition.title = "International Certificate of Vaccination or Prophylaxis" "Title";
+
+    src -> composition.category as category, category.coding as coding then {
+        src -> coding.code = "ddcc-vs" "Category";
+    } "set category";
+
+    src -> composition.type as type, type.coding as coding then {
+      src -> coding.system = "http://loinc.org", coding.code = "82593-5", coding.display = "Immunization summary report" "set type coding";
+    } "set type";
+
+    src -> composition.event as event, event.period = create('Period') as period then ExtractPeriod(src, period) "Extract Period";
+
+    src.credentialSubject as credentialSubject -> composition then {
+        credentialSubject.refId as refId -> composition.identifier as identif, identif.value = refId "set comp identifier"; 
+    } "set comp identifier parent";
+}
+
+group ExtractPeriod(source src: W3CVC, target tgt : Period) {
+    src.issuanceDate as issuanceDate -> tgt.start = issuanceDate "Start issuedAt";
+}
