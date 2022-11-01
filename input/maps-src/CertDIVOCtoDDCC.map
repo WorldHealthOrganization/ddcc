@@ -159,8 +159,14 @@ group ExtractProtocolApplied(source ev: Evidence, source oid, target protocol: P
 group ExtractPatient(source src: W3CVC, source pid, target patient: Patient) {
     pid -> patient.id = pid "Patient ID";
     src.credentialSubject as credentialSubject -> patient then ExtractPatientFromSubj(credentialSubject, patient)  "Patient Data from Subj";
-    //birthDateElement = parseDoB(vc.credentialSubject.dob) ?: parseAge(vc.issuanceDate, vc.credentialSubject.age)
-} 
+
+    src.credentialSubject as credSubj then {
+        src.issuanceDate as issuanceDate then {
+            credSubj.age as age ->
+                patient.birthDate = evaluate(issuanceDate, (($this - age).toString().substring(0,4)) ) "set age";
+        } "set age issuance date";
+    } "set cred age";
+}
 
 group ExtractPatientFromSubj(source src: CredentialSubject, target patient: Patient) {
     src.name as patientName -> patient.name = create('HumanName') as humanName, humanName.text = patientName "Patient Name";
