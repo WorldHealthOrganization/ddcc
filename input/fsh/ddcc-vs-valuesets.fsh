@@ -4,6 +4,7 @@ Alias: $ICD11 = http://id.who.int/icd11/mms
 Alias: $LOINC = http://loinc.org
 Alias: SCT = http://snomed.info/sct
 Alias: $CVX = http://hl7.org/fhir/sid/cvx
+Alias: $EUDCC = https://ec.europa.eu/health/documents/community-register/html/
 
 
 ValueSet:      WHO_DDCC_Vaccines_COVID_19
@@ -215,6 +216,158 @@ Usage:          #definition
     * code = #XM9QW8
     * target[+]
       * code = #29061000087103
+      * equivalence = #equivalent
+
+Instance:       WHO_DDCC_Map_ICD11_to_EUDCC_Vaccines
+InstanceOf:     ConceptMap
+Description:    "Mapping from ICD-11 to EU DCC for COVID-19 Vaccines"
+Usage:          #definition
+
+* id = "who-ddcc-map-icd11-eudcc-vaccines"
+* name = "ICD11_EU_DCC_COVID19_vaccines"
+* title = "ConceptMap from ICD-11 to EU DCC for Vaccines"
+* status = #draft
+* experimental = true
+* date = "2022-11-22"
+* description = "Rule-based mappings between ICD-11 and EU DCC for COVID-19 Vaccines"
+* sourceCanonical = $ICD11
+* targetCanonical = $EUDCC
+
+* group[+]
+  * source = $ICD11
+  * target = $EUDCC
+
+  * element[+]
+    * code = #XM0GQ8
+    * target[+]
+      * code = #EU/1/20/1528
+      * equivalence = #narrower
+    * target[+]
+      * code = #EU/1/20/1507
+      * equivalence = #narrower
+
+  * element[+]
+    * code = #XM9QW8
+    * target[+]
+      * code = #EU/1/21/1529
+      * equivalence = #narrower
+    * target[+]
+      * code = #Covishield
+      * equivalence = #narrower
+    * target[+]
+      * code = #Sputnik-V
+      * equivalence = #narrower
+    * target[+]
+      * code = #Convidecia
+      * equivalence = #narrower    
+
+  * element[+]
+    * code = #XM0CX4
+    * target[+]
+      * code = #EU/1/20/1525
+      * equivalence = #equivalent
+
+  * element[+]
+    * code = #XM1NL1
+    * target[+]
+      * code = #Covaxin
+      * equivalence = #narrower
+    * target[+]
+      * code = #CoronaVac
+      * equivalence = #narrower
+    * target[+]
+      * code = #BBIBP-CorV
+      * equivalence = #narrower
+
+  * element[+]
+    * code = #XM5JC5
+    * target[+]
+      * code = #NVX-CoV2373
+      * equivalence = #equivalent
+
+Instance:       WHO_DDCC_Map_EUDCC_to_ICD11_Vaccines
+InstanceOf:     ConceptMap
+Description:    "Mapping from EU DCC to ICD-11 for COVID-19 Vaccines"
+Usage:          #definition
+
+* id = "who-ddcc-map-eudcc-icd11-vaccines"
+* name = "EU_DCC_ICD11_COVID19_vaccines"
+* title = "ConceptMap from EU DCC to ICD-11 for Vaccines"
+* status = #draft
+* experimental = true
+* date = "2022-11-22"
+* description = "Rule-based mappings between EU DCC and ICD11 for COVID-19 Vaccines"
+* sourceCanonical = $EUDCC
+* targetCanonical = $ICD11
+
+* group[+]
+  * source = $EUDCC
+  * target = $ICD11
+
+  * element[+]
+    * code = #Covaxin
+    * target[+]
+      * code = #XM1NL1
+      * equivalence = #equivalent
+
+  * element[+]
+    * code = #Covishield
+    * target[+]
+      * code = #XM9QW8
+      * equivalence = #equivalent
+      
+  * element[+]
+    * code = #Sputnik-V
+    * target[+]
+      * code = #XM9QW8
+      * equivalence = #equivalent
+
+  * element[+]
+    * code = #EU/1/20/1528
+    * target[+]
+      * code = #XM0GQ8
+      * equivalence = #equivalent
+      
+  * element[+]
+    * code = #EU/1/20/1525
+    * target[+]
+      * code = #XM0CX4
+      * equivalence = #equivalent
+
+  * element[+]
+    * code = #EU/1/20/1507
+    * target[+]
+      * code = #XM0GQ8
+      * equivalence = #equivalent
+
+  * element[+]
+    * code = #EU/1/21/1529
+    * target[+]
+      * code = #XM9QW8
+      * equivalence = #equivalent
+
+  * element[+]
+    * code = #CoronaVac
+    * target[+]
+      * code = #XM1NL1
+      * equivalence = #equivalent
+
+  * element[+]
+    * code = #BBIBP-CorV
+    * target[+]
+      * code = #XM1NL1
+      * equivalence = #equivalent
+      
+  * element[+]
+    * code = #Convidecia
+    * target[+]
+      * code = #XM9QW8
+      * equivalence = #equivalent
+
+  * element[+]
+    * code = #NVX-CoV2373
+    * target[+]
+      * code = #XM5JC5
       * equivalence = #equivalent
 
 Instance:       WHO_DDCC_Map_CVX_To_ICD11_Vaccines
