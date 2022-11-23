@@ -4,6 +4,7 @@ Alias: $ICD11 = http://id.who.int/icd11/mms
 Alias: $LOINC = http://loinc.org
 Alias: SCT = http://snomed.info/sct
 Alias: $CVX = http://hl7.org/fhir/sid/cvx
+Alias: $EUDCC = https://ec.europa.eu/health/documents/community-register/html/
 Alias: $ICAOV1 = http://worldhealthorganization.github.io/ddcc/ICAOV1
 
 
@@ -284,6 +285,61 @@ Description:    "ICAO vaccines codes for DDCC so the FHIR server can perform exp
 * ^status = #draft
 * include codes from system ICAOV1_CodeSystem
 
+
+CodeSystem:     EU_DCC_CodeSystem
+Id:             vaccines-covid-19-names
+Title:          "Covid-19 Vaccine Codes for EU DCC"
+Description:    "EU DCC codes for Covid-19 vaccines so the FHIR server can perform expansions."
+* ^url = $EUDCC
+* ^date = 2022-09-13
+* #EU/1/20/1528 "Comirnaty"
+* #EU/1/20/1507 "Spikevax"
+* #EU/1/21/1529 "Vaxzevria"
+* #EU/1/20/1525 "Jcovden"
+* #CVnCoV "CVnCoV"
+* #NVX-CoV2373 "NVX-CoV2373 (deprecated)"
+* #Sputnik-V "Sputnik-V"
+* #Convidecia "Convidecia"
+* #EpiVacCorona "EpiVacCorona"
+* #BBIBP-CorV "BBIBP-CorV"
+* #Inactivated-SARS-CoV-2-Vero-Cell "Inactivated SARS-CoV-2 (Vero Cell) (deprecated)"
+* #CoronaVac "CoronaVac"
+* #Covaxin "Covaxin"
+* #Covishield "Covishield"
+* #Covid-19-recombinant "Covid-19 (recombinant)"
+* #R-COVI "R-COVI"
+* #CoviVac "CoviVac"
+* #Sputnik-Light "Sputnik Light"
+* #Hayat-Vax "Hayat-Vax"
+* #Abdala "Abdala"
+* #WIBP-CorV "WIBP-CorV"
+* #MVC-COV1901 "MVC COVID-19 vaccine"
+* #EU/1/21/1618 "Nuvaxovid"
+* #Covovax "Covovax"
+* #Vidprevtyn "Vidprevtyn"
+* #VLA2001 "VLA2001 (deprecated)"
+* #EpiVacCorona-N "EpiVacCorona-N"
+* #Sputnik-M "Sputnik M"
+* #Covid-19-adsorvida-inativada "Vacina adsorvida covid-19 (inativada)"
+* #NVSI-06-08 "NVSI-06-08"
+* #YS-SC2-010 "YS-SC2-010"
+* #SCTV01C "SCTV01C"
+* #Covifenz "Covifenz"
+* #AZD2816 "AZD2816"
+* #Soberana-02 "Soberana 02"
+* #Soberana-Plus "Soberana Plus"
+* #EU/1/21/1624 "COVID-19 Vaccine Valneva"
+
+ValueSet:      EU_DCC_ValueSet
+Id:	           vaccines-covid-19-names
+Title:	       "EU DCC Allowed Vaccine List (COVID-19)"
+Description:   """
+EU DCC Allowed Vaccine List (COVID-19).
+"""
+* ^status = #draft
+* ^date = 2022-09-13
+* include codes from system EU_DCC_CodeSystem
+
 Instance:       WHO_DDCC_Map_ICD11_to_SCT_Vaccines
 InstanceOf:     ConceptMap
 Description:    "Mapping from ICD-11 to SNOMED CT for COVID-19 Vaccines"
@@ -325,6 +381,159 @@ Usage:          #definition
     * code = #XM9QW8
     * target[+]
       * code = #29061000087103
+      * equivalence = #equivalent
+
+
+Instance:       WHO_DDCC_Map_ICD11_to_EUDCC_Vaccines
+InstanceOf:     ConceptMap
+Description:    "Mapping from ICD-11 to EU DCC for COVID-19 Vaccines"
+Usage:          #definition
+
+* id = "who-ddcc-map-icd11-eudcc-vaccines"
+* name = "ICD11_EU_DCC_COVID19_vaccines"
+* title = "ConceptMap from ICD-11 to EU DCC for Vaccines"
+* status = #draft
+* experimental = true
+* date = "2022-11-22"
+* description = "Rule-based mappings between ICD-11 and EU DCC for COVID-19 Vaccines"
+* sourceCanonical = $ICD11
+* targetCanonical = $EUDCC
+
+* group[+]
+  * source = $ICD11
+  * target = $EUDCC
+
+  * element[+]
+    * code = #XM0GQ8
+    * target[+]
+      * code = #EU/1/20/1528
+      * equivalence = #narrower
+    * target[+]
+      * code = #EU/1/20/1507
+      * equivalence = #narrower
+
+  * element[+]
+    * code = #XM9QW8
+    * target[+]
+      * code = #EU/1/21/1529
+      * equivalence = #narrower
+    * target[+]
+      * code = #Covishield
+      * equivalence = #narrower
+    * target[+]
+      * code = #Sputnik-V
+      * equivalence = #narrower
+    * target[+]
+      * code = #Convidecia
+      * equivalence = #narrower    
+
+  * element[+]
+    * code = #XM0CX4
+    * target[+]
+      * code = #EU/1/20/1525
+      * equivalence = #equivalent
+
+  * element[+]
+    * code = #XM1NL1
+    * target[+]
+      * code = #Covaxin
+      * equivalence = #narrower
+    * target[+]
+      * code = #CoronaVac
+      * equivalence = #narrower
+    * target[+]
+      * code = #BBIBP-CorV
+      * equivalence = #narrower
+
+  * element[+]
+    * code = #XM5JC5
+    * target[+]
+      * code = #NVX-CoV2373
+      * equivalence = #equivalent
+
+Instance:       WHO_DDCC_Map_EUDCC_to_ICD11_Vaccines
+InstanceOf:     ConceptMap
+Description:    "Mapping from EU DCC to ICD-11 for COVID-19 Vaccines"
+Usage:          #definition
+
+* id = "who-ddcc-map-eudcc-icd11-vaccines"
+* name = "EU_DCC_ICD11_COVID19_vaccines"
+* title = "ConceptMap from EU DCC to ICD-11 for Vaccines"
+* status = #draft
+* experimental = true
+* date = "2022-11-22"
+* description = "Rule-based mappings between EU DCC and ICD11 for COVID-19 Vaccines"
+* sourceCanonical = $EUDCC
+* targetCanonical = $ICD11
+
+* group[+]
+  * source = $EUDCC
+  * target = $ICD11
+
+  * element[+]
+    * code = #Covaxin
+    * target[+]
+      * code = #XM1NL1
+      * equivalence = #equivalent
+
+  * element[+]
+    * code = #Covishield
+    * target[+]
+      * code = #XM9QW8
+      * equivalence = #equivalent
+      
+  * element[+]
+    * code = #Sputnik-V
+    * target[+]
+      * code = #XM9QW8
+      * equivalence = #equivalent
+
+  * element[+]
+    * code = #EU/1/20/1528
+    * target[+]
+      * code = #XM0GQ8
+      * equivalence = #equivalent
+      
+  * element[+]
+    * code = #EU/1/20/1525
+    * target[+]
+      * code = #XM0CX4
+      * equivalence = #equivalent
+
+  * element[+]
+    * code = #EU/1/20/1507
+    * target[+]
+      * code = #XM0GQ8
+      * equivalence = #equivalent
+
+  * element[+]
+    * code = #EU/1/21/1529
+    * target[+]
+      * code = #XM9QW8
+      * equivalence = #equivalent
+
+  * element[+]
+    * code = #CoronaVac
+    * target[+]
+      * code = #XM1NL1
+      * equivalence = #equivalent
+
+  * element[+]
+    * code = #BBIBP-CorV
+    * target[+]
+      * code = #XM1NL1
+      * equivalence = #equivalent
+      
+  * element[+]
+    * code = #Convidecia
+    * target[+]
+      * code = #XM9QW8
+      * equivalence = #equivalent
+
+  * element[+]
+    * code = #NVX-CoV2373
+    * target[+]
+      * code = #XM5JC5
       * equivalence = #equivalent
 
 Instance:       WHO_DDCC_Map_ICD11_to_ICAO_Vaccines
