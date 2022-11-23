@@ -5,6 +5,7 @@ Alias: $LOINC = http://loinc.org
 Alias: SCT = http://snomed.info/sct
 Alias: $CVX = http://hl7.org/fhir/sid/cvx
 Alias: $EUDCC = https://ec.europa.eu/health/documents/community-register/html/
+Alias: $ICAOV1 = http://worldhealthorganization.github.io/ddcc/ICAOV1
 
 
 ValueSet:      WHO_DDCC_Vaccines_COVID_19
@@ -174,6 +175,115 @@ WHO Disease or Agent Targeted List (COVID-19) from [ICD 11](https://icd.who.int/
 * ^status = #draft
 * include $ICD11#RA01 "COVID-19"
 
+CodeSystem:     ICAOV1_CodeSystem
+Id:             ICAOVaccineListV1
+Title:          "DDCC Codes for ICAO Vaccines"
+Description:    "ICAO vaccines codes for DDCC so the FHIR server can perform expansions."
+* ^url = $ICAOV1
+* #ICAO001 "Comirnaty"
+* #ICAO002 "Tozinameran"
+* #ICAO003 "Pfizer-BioNTech COVID-19 vaccine BNT162b2"
+* #ICAO004 "3 LNP-mRNAS"
+* #ICAO005 "Tozinameran (INN)"
+* #ICAO006 "BNT162b2/COMIRNATY"
+* #ICAO007 "Pfizer BioNTech-Comirnaty"
+* #ICAO008 "BNT162"
+* #ICAO009 "COVID-19 Vaccine Moderna"
+* #ICAO010 "COVID-19 mRNA Vaccine Moderna mRNA-1273"
+* #ICAO011 "Spikevax"
+* #ICAO012 "Moderna-Spikevax"
+* #ICAO013 "ZyCov-D"
+* #ICAO014 "Zydus-ZyCov-D"
+* #ICAO015 "Recombinant SARS-CoV-2 vaccine"
+* #ICAO016 "Anhui ZL - Recombinant"
+* #ICAO017 "Adjuvanted recombinant protein (RBD-DIMER)"
+* #ICAO018 "ZF2001"
+* #ICAO019 "ZF-UZ-VAC 2001"
+* #ICAO020 "Soberana-02"
+* #ICAO021 "Finlay - Soberana-02"
+* #ICAO022 "RRBD produced in CHO-cell chemically conjugated to tetanus toxoid"
+* #ICAO023 "FINLAY-FR2"
+* #ICAO024 "PASTUCOVAC"
+* #ICAO025 "MVC-COV1901"
+* #ICAO026 "Medigen-MVC-COV1901"
+* #ICAO027 "MVC COVID-19 vaccine"
+* #ICAO028 "EpiVacCorona"
+* #ICAO029 "SRCVB-EpiVacCorona"
+* #ICAO030 "Soberana Plus"
+* #ICAO031 "Finlay-Soberana Plus"
+* #ICAO032 "EpiVacCorona-N"
+* #ICAO033 "SRCVB-EpiVacCorona-N"
+* #ICAO034 "SpikoGen"
+* #ICAO035 "Vaxine-SpikoGen"
+* #ICAO036 "COVAX-19"
+* #ICAO037 "Novavax COVID-19 vaccine"
+* #ICAO038 "Novavax-Covovax"
+* #ICAO039 "Nuvaxovid"
+* #ICAO040 "NVX-CoV2373"
+* #ICAO041 "Covovax"
+* #ICAO042 "Razi COV PARS"
+* #ICAO043 "COVID-19 Vaccine AstraZeneca"
+* #ICAO044 "Vaxzevria"
+* #ICAO045 "COVID-19 Vaccine AstraZeneca AZD1222"
+* #ICAO046 "COVID-19 Vaccine AstraZeneca ChAdOx1 nCoV-19"
+* #ICAO047 "COVID-19 Vaccine AstraZeneca ChAdOx1-S"
+* #ICAO048 "AstraZeneca-Vaxzevria"
+* #ICAO049 "R-Covi"
+* #ICAO050 "Covishield"
+* #ICAO051 "Covishield AZD1222"
+* #ICAO052 "Covishield ChAdOx1 nCoV-19"
+* #ICAO053 "Covishield ChAdOx1-S"
+* #ICAO054 "SII-Covishield"
+* #ICAO055 "COVID-19 Vaccine Janssen"
+* #ICAO056 "Ad26.COV 2.S"
+* #ICAO057 "Johnson & Johnson COVID-19 vaccine"
+* #ICAO058 "Janssen - Ad26.COV 2-S"
+* #ICAO059 "Convidecia"
+* #ICAO060 "CanSino-Convidecia"
+* #ICAO061 "Ad5-nCOV"
+* #ICAO062 "Gam-Covid-Vac"
+* #ICAO063 "Gamaleya-Gam-Covid-Vac"
+* #ICAO064 "Sputnik-V"
+* #ICAO065 "Gam-KOVID-Vak"
+* #ICAO066 "Sputnik-Light"
+* #ICAO067 "Gamaleya-Sputnik-Light"
+* #ICAO068 "CoronaVac"
+* #ICAO069 "Sinovac COVID-19 Vaccine"
+* #ICAO070 "PICOVACC"
+* #ICAO071 "BBIBP-CorV"
+* #ICAO072 "Sinopharm BBIBP-CorV"
+* #ICAO073 "Sinopharm COVID-19 vaccine"
+* #ICAO074 "Beijing CNBG - BBIBP-CorV"
+* #ICAO075 "COVID-19 Vaccine BIBP"
+* #ICAO076 "KCONVAC"
+* #ICAO077 "Beijing Minhai-KCONVAC"
+* #ICAO078 "Inactivated SARS-COV-2 vaccine, Vero cell"
+* #ICAO079 "Covaxin"
+* #ICAO080 "Bharat-Covaxin"
+* #ICAO081 "BBV152"
+* #ICAO082 "Covi-Vac"
+* #ICAO083 "Chumakov-Covi-Vac"
+* #ICAO084 "CoviVac"
+* #ICAO085 "Hayat-Vax"
+* #ICAO086 "Julphar-Hayat-Vax"
+* #ICAO087 "QazVac"
+* #ICAO088 "RIBSP-QazVac"
+* #ICAO089 "QazCovid-in"
+* #ICAO090 "COVIran Barakat"
+* #ICAO091 "Shifa-COVIran Barakat"
+* #ICAO092 "Covidful"
+* #ICAO093 "IMB-inactivated"
+* #ICAO094 "IMB-Covidful"
+* #ICAO095 "Sinopharm WIBP-CorV"
+* #ICAO096 "WIBP-CorV"
+* #ICAO097 "Wuhan CNBG-Inactivated"
+
+ValueSet:     ICAOV1_ValueSet
+Id:             ICAOVaccineListV1
+Title:          "DDCC Codes for ICAO Vaccines"
+Description:    "ICAO vaccines codes for DDCC so the FHIR server can perform expansions."
+* ^status = #draft
+* include codes from system ICAOV1_CodeSystem
 
 
 CodeSystem:     EU_DCC_CodeSystem
@@ -272,6 +382,7 @@ Usage:          #definition
     * target[+]
       * code = #29061000087103
       * equivalence = #equivalent
+
 
 Instance:       WHO_DDCC_Map_ICD11_to_EUDCC_Vaccines
 InstanceOf:     ConceptMap
@@ -424,6 +535,880 @@ Usage:          #definition
     * target[+]
       * code = #XM5JC5
       * equivalence = #equivalent
+
+Instance:       WHO_DDCC_Map_ICD11_to_ICAO_Vaccines
+InstanceOf:     ConceptMap
+Description:    "Mapping from ICD-11 to ICAO for COVID-19 Vaccines"
+Usage:          #definition
+
+* id = "who-ddcc-map-icd11-icao-vaccines"
+* name = "ICD11_ICAO_COVID19_vaccines"
+* title = "ConceptMap from ICD-11 to ICAO for Vaccines"
+* status = #draft
+* experimental = true
+* date = "2022-11-23"
+* description = "Rule-based mappings between ICD-11 and ICAO for COVID-19 Vaccines"
+* sourceCanonical = $ICD11
+* targetCanonical = $ICAOV1
+
+* group[+]
+  * source = $ICD11
+  * target = $ICAOV1
+
+  * element[+]
+    * code = #XM68M6
+    * target[+]
+      * code = #ICAO001
+      * equivalence = #narrower
+    * target[+]
+      * code = #ICAO002
+      * equivalence = #narrower
+    * target[+]
+      * code = #ICAO003
+      * equivalence = #narrower
+    * target[+]
+      * code = #ICAO004
+      * equivalence = #narrower
+    * target[+]
+      * code = #ICAO005
+      * equivalence = #narrower
+    * target[+]
+      * code = #ICAO006
+      * equivalence = #narrower
+    * target[+]
+      * code = #ICAO007
+      * equivalence = #narrower
+    * target[+]
+      * code = #ICAO008
+      * equivalence = #narrower
+  * element[+]
+    * code = #XM3DT5
+    * target[+]
+      * code = #ICAO009
+      * equivalence = #narrower
+    * target[+]
+      * code = #ICAO010
+      * equivalence = #narrower
+    * target[+]
+      * code = #ICAO011
+      * equivalence = #narrower
+    * target[+]
+      * code = #ICAO012
+      * equivalence = #narrower
+  * element[+]
+    * code = #XM52P3
+    * target[+]
+      * code = #ICAO013
+      * equivalence = #narrower
+    * target[+]
+      * code = #ICAO014
+      * equivalence = #narrower
+  * element[+]
+    * code = #XM3CT4
+    * target[+]
+      * code = #ICAO015
+      * equivalence = #narrower
+    * target[+]
+      * code = #ICAO016
+      * equivalence = #narrower
+    * target[+]
+      * code = #ICAO017
+      * equivalence = #narrower
+    * target[+]
+      * code = #ICAO018
+      * equivalence = #narrower
+    * target[+]
+      * code = #ICAO019
+      * equivalence = #narrower
+  * element[+]
+    * code = #XM3PG0
+    * target[+]
+      * code = #ICAO020
+      * equivalence = #narrower
+    * target[+]
+      * code = #ICAO021
+      * equivalence = #narrower
+    * target[+]
+      * code = #ICAO022
+      * equivalence = #narrower
+    * target[+]
+      * code = #ICAO023
+      * equivalence = #narrower
+    * target[+]
+      * code = #ICAO024
+      * equivalence = #narrower
+  * element[+]
+    * code = #XM4EC8
+    * target[+]
+      * code = #ICAO025
+      * equivalence = #narrower
+    * target[+]
+      * code = #ICAO026
+      * equivalence = #narrower
+    * target[+]
+      * code = #ICAO027
+      * equivalence = #narrower
+  * element[+]
+    * code = #XM6SZ8
+    * target[+]
+      * code = #ICAO028
+      * equivalence = #narrower
+    * target[+]
+      * code = #ICAO029
+      * equivalence = #narrower
+  * element[+]
+    * code = #XM0RV9
+    * target[+]
+      * code = #ICAO030
+      * equivalence = #narrower
+    * target[+]
+      * code = #ICAO031
+      * equivalence = #narrower
+  * element[+]
+    * code = #XM3SK8
+    * target[+]
+      * code = #ICAO032
+      * equivalence = #narrower
+    * target[+]
+      * code = #ICAO033
+      * equivalence = #narrower
+  * element[+]
+    * code = #XM9P21
+    * target[+]
+      * code = #ICAO034
+      * equivalence = #narrower
+    * target[+]
+      * code = #ICAO035
+      * equivalence = #narrower
+    * target[+]
+      * code = #ICAO036
+      * equivalence = #narrower
+  * element[+]
+    * code = #XM9T65
+    * target[+]
+      * code = #ICAO037
+      * equivalence = #narrower
+    * target[+]
+      * code = #ICAO038
+      * equivalence = #narrower
+    * target[+]
+      * code = #ICAO039
+      * equivalence = #narrower
+    * target[+]
+      * code = #ICAO040
+      * equivalence = #narrower
+    * target[+]
+      * code = #ICAO041
+      * equivalence = #narrower
+  * element[+]
+    * code = #XM9N08
+    * target[+]
+      * code = #ICAO042
+      * equivalence = #narrower
+  * element[+]
+    * code = #XM4YL8
+    * target[+]
+      * code = #ICAO043
+      * equivalence = #narrower
+    * target[+]
+      * code = #ICAO044
+      * equivalence = #narrower
+    * target[+]
+      * code = #ICAO045
+      * equivalence = #narrower
+    * target[+]
+      * code = #ICAO046
+      * equivalence = #narrower
+    * target[+]
+      * code = #ICAO047
+      * equivalence = #narrower
+    * target[+]
+      * code = #ICAO048
+      * equivalence = #narrower
+    * target[+]
+      * code = #ICAO049
+      * equivalence = #narrower
+  * element[+]
+    * code = #XM97T2
+    * target[+]
+      * code = #ICAO050
+      * equivalence = #narrower
+    * target[+]
+      * code = #ICAO051
+      * equivalence = #narrower
+    * target[+]
+      * code = #ICAO052
+      * equivalence = #narrower
+    * target[+]
+      * code = #ICAO053
+      * equivalence = #narrower
+    * target[+]
+      * code = #ICAO054
+      * equivalence = #narrower
+  * element[+]
+    * code = #XM6QV1
+    * target[+]
+      * code = #ICAO055
+      * equivalence = #narrower
+    * target[+]
+      * code = #ICAO056
+      * equivalence = #narrower
+    * target[+]
+      * code = #ICAO057
+      * equivalence = #narrower
+    * target[+]
+      * code = #ICAO058
+      * equivalence = #narrower
+  * element[+]
+    * code = #XM1AG7
+    * target[+]
+      * code = #ICAO059
+      * equivalence = #narrower
+    * target[+]
+      * code = #ICAO060
+      * equivalence = #narrower
+    * target[+]
+      * code = #ICAO061
+      * equivalence = #narrower
+  * element[+]
+    * code = #XM5ZJ4
+    * target[+]
+      * code = #ICAO062
+      * equivalence = #narrower
+    * target[+]
+      * code = #ICAO063
+      * equivalence = #narrower
+    * target[+]
+      * code = #ICAO064
+      * equivalence = #narrower
+    * target[+]
+      * code = #ICAO065
+      * equivalence = #narrower
+  * element[+]
+    * code = #XM5QM6
+    * target[+]
+      * code = #ICAO066
+      * equivalence = #narrower
+    * target[+]
+      * code = #ICAO067
+      * equivalence = #narrower
+  * element[+]
+    * code = #XM7HT3
+    * target[+]
+      * code = #ICAO068
+      * equivalence = #narrower
+    * target[+]
+      * code = #ICAO069
+      * equivalence = #narrower
+    * target[+]
+      * code = #ICAO070
+      * equivalence = #narrower
+  * element[+]
+    * code = #XM8866
+    * target[+]
+      * code = #ICAO071
+      * equivalence = #narrower
+    * target[+]
+      * code = #ICAO072
+      * equivalence = #narrower
+    * target[+]
+      * code = #ICAO073
+      * equivalence = #narrower
+    * target[+]
+      * code = #ICAO074
+      * equivalence = #narrower
+    * target[+]
+      * code = #ICAO075
+      * equivalence = #narrower
+  * element[+]
+    * code = #XM9TQ1
+    * target[+]
+      * code = #ICAO076
+      * equivalence = #narrower
+    * target[+]
+      * code = #ICAO077
+      * equivalence = #narrower
+    * target[+]
+      * code = #ICAO078
+      * equivalence = #narrower
+  * element[+]
+    * code = #XM1G90
+    * target[+]
+      * code = #ICAO079
+      * equivalence = #narrower
+    * target[+]
+      * code = #ICAO080
+      * equivalence = #narrower
+    * target[+]
+      * code = #ICAO081
+      * equivalence = #narrower
+  * element[+]
+    * code = #XM85P5
+    * target[+]
+      * code = #ICAO082
+      * equivalence = #narrower
+    * target[+]
+      * code = #ICAO083
+      * equivalence = #narrower
+    * target[+]
+      * code = #ICAO084
+      * equivalence = #narrower
+  * element[+]
+    * code = #XM9FQ7
+    * target[+]
+      * code = #ICAO085
+      * equivalence = #narrower
+    * target[+]
+      * code = #ICAO086
+      * equivalence = #narrower
+  * element[+]
+    * code = #XM97N6
+    * target[+]
+      * code = #ICAO087
+      * equivalence = #narrower
+    * target[+]
+      * code = #ICAO088
+      * equivalence = #narrower
+    * target[+]
+      * code = #ICAO089
+      * equivalence = #narrower
+  * element[+]
+    * code = #XM2YG8
+    * target[+]
+      * code = #ICAO090
+      * equivalence = #narrower
+    * target[+]
+      * code = #ICAO091
+      * equivalence = #narrower
+  * element[+]
+    * code = #XM0K39
+    * target[+]
+      * code = #ICAO092
+      * equivalence = #narrower
+    * target[+]
+      * code = #ICAO093
+      * equivalence = #narrower
+    * target[+]
+      * code = #ICAO094
+      * equivalence = #narrower
+  * element[+]
+    * code = #XM1AU2
+    * target[+]
+      * code = #ICAO095
+      * equivalence = #narrower
+    * target[+]
+      * code = #ICAO096
+      * equivalence = #narrower
+    * target[+]
+      * code = #ICAO097
+      * equivalence = #narrower
+
+Instance:       WHO_DDCC_Map_ICAO_to_ICD11_Vaccines
+InstanceOf:     ConceptMap
+Description:    "Mapping from ICAO to ICD11 for COVID-19 Vaccines"
+Usage:          #definition
+
+* id = "who-ddcc-map-icao-icd11-vaccines"
+* name = "ICAO_ICD11_COVID19_vaccines"
+* title = "ConceptMap from ICAO to ICD-11 for Vaccines"
+* status = #draft
+* experimental = true
+* date = "2022-11-23"
+* description = "Rule-based mappings between ICAO and ICD-11 for COVID-19 Vaccines"
+* sourceCanonical = $ICAOV1
+* targetCanonical = $ICD11
+
+* group[+]
+  * source = $ICD11
+  * target = $ICAOV1
+
+  * element[+]
+    * code = #ICAO001
+    * target[+]
+      * code = #XM68M6
+      * equivalence = #equivalent
+  * element[+]
+    * code = #ICAO002
+    * target[+]
+      * code = #XM68M6
+      * equivalence = #equivalent
+  * element[+]
+    * code = #ICAO003
+    * target[+]
+      * code = #XM68M6
+      * equivalence = #equivalent
+  * element[+]
+    * code = #ICAO004
+    * target[+]
+      * code = #XM68M6
+      * equivalence = #equivalent
+  * element[+]
+    * code = #ICAO005
+    * target[+]
+      * code = #XM68M6
+      * equivalence = #equivalent
+  * element[+]
+    * code = #ICAO006
+    * target[+]
+      * code = #XM68M6
+      * equivalence = #equivalent
+  * element[+]
+    * code = #ICAO007
+    * target[+]
+      * code = #XM68M6
+      * equivalence = #equivalent
+  * element[+]
+    * code = #ICAO008
+    * target[+]
+      * code = #XM68M6
+      * equivalence = #equivalent
+  * element[+]
+    * code = #ICAO009
+    * target[+]
+      * code = #XM3DT5
+      * equivalence = #equivalent
+  * element[+]
+    * code = #ICAO010
+    * target[+]
+      * code = #XM3DT5
+      * equivalence = #equivalent
+  * element[+]
+    * code = #ICAO011
+    * target[+]
+      * code = #XM3DT5
+      * equivalence = #equivalent
+  * element[+]
+    * code = #ICAO012
+    * target[+]
+      * code = #XM3DT5
+      * equivalence = #equivalent
+  * element[+]
+    * code = #ICAO013
+    * target[+]
+      * code = #XM52P3
+      * equivalence = #equivalent
+  * element[+]
+    * code = #ICAO014
+    * target[+]
+      * code = #XM52P3
+      * equivalence = #equivalent
+  * element[+]
+    * code = #ICAO015
+    * target[+]
+      * code = #XM3CT4
+      * equivalence = #equivalent
+  * element[+]
+    * code = #ICAO016
+    * target[+]
+      * code = #XM3CT4
+      * equivalence = #equivalent
+  * element[+]
+    * code = #ICAO017
+    * target[+]
+      * code = #XM3CT4
+      * equivalence = #equivalent
+  * element[+]
+    * code = #ICAO018
+    * target[+]
+      * code = #XM3CT4
+      * equivalence = #equivalent
+  * element[+]
+    * code = #ICAO019
+    * target[+]
+      * code = #XM3CT4
+      * equivalence = #equivalent
+  * element[+]
+    * code = #ICAO020
+    * target[+]
+      * code = #XM3PG0
+      * equivalence = #equivalent
+  * element[+]
+    * code = #ICAO021
+    * target[+]
+      * code = #XM3PG0
+      * equivalence = #equivalent
+  * element[+]
+    * code = #ICAO022
+    * target[+]
+      * code = #XM3PG0
+      * equivalence = #equivalent
+  * element[+]
+    * code = #ICAO023
+    * target[+]
+      * code = #XM3PG0
+      * equivalence = #equivalent
+  * element[+]
+    * code = #ICAO024
+    * target[+]
+      * code = #XM3PG0
+      * equivalence = #equivalent
+  * element[+]
+    * code = #ICAO025
+    * target[+]
+      * code = #XM4EC8
+      * equivalence = #equivalent
+  * element[+]
+    * code = #ICAO026
+    * target[+]
+      * code = #XM4EC8
+      * equivalence = #equivalent
+  * element[+]
+    * code = #ICAO027
+    * target[+]
+      * code = #XM4EC8
+      * equivalence = #equivalent
+  * element[+]
+    * code = #ICAO028
+    * target[+]
+      * code = #XM6SZ8
+      * equivalence = #equivalent
+  * element[+]
+    * code = #ICAO029
+    * target[+]
+      * code = #XM6SZ8
+      * equivalence = #equivalent
+  * element[+]
+    * code = #ICAO030
+    * target[+]
+      * code = #XM0RV9
+      * equivalence = #equivalent
+  * element[+]
+    * code = #ICAO031
+    * target[+]
+      * code = #XM0RV9
+      * equivalence = #equivalent
+  * element[+]
+    * code = #ICAO032
+    * target[+]
+      * code = #XM3SK8
+      * equivalence = #equivalent
+  * element[+]
+    * code = #ICAO033
+    * target[+]
+      * code = #XM3SK8
+      * equivalence = #equivalent
+  * element[+]
+    * code = #ICAO034
+    * target[+]
+      * code = #XM9P21
+      * equivalence = #equivalent
+  * element[+]
+    * code = #ICAO035
+    * target[+]
+      * code = #XM9P21
+      * equivalence = #equivalent
+  * element[+]
+    * code = #ICAO036
+    * target[+]
+      * code = #XM9P21
+      * equivalence = #equivalent
+  * element[+]
+    * code = #ICAO037
+    * target[+]
+      * code = #XM9T65
+      * equivalence = #equivalent
+  * element[+]
+    * code = #ICAO038
+    * target[+]
+      * code = #XM9T65
+      * equivalence = #equivalent
+  * element[+]
+    * code = #ICAO039
+    * target[+]
+      * code = #XM9T65
+      * equivalence = #equivalent
+  * element[+]
+    * code = #ICAO040
+    * target[+]
+      * code = #XM9T65
+      * equivalence = #equivalent
+  * element[+]
+    * code = #ICAO041
+    * target[+]
+      * code = #XM9T65
+      * equivalence = #equivalent
+  * element[+]
+    * code = #ICAO042
+    * target[+]
+      * code = #XM9N08
+      * equivalence = #equivalent
+  * element[+]
+    * code = #ICAO043
+    * target[+]
+      * code = #XM4YL8
+      * equivalence = #equivalent
+  * element[+]
+    * code = #ICAO044
+    * target[+]
+      * code = #XM4YL8
+      * equivalence = #equivalent
+  * element[+]
+    * code = #ICAO045
+    * target[+]
+      * code = #XM4YL8
+      * equivalence = #equivalent
+  * element[+]
+    * code = #ICAO046
+    * target[+]
+      * code = #XM4YL8
+      * equivalence = #equivalent
+  * element[+]
+    * code = #ICAO047
+    * target[+]
+      * code = #XM4YL8
+      * equivalence = #equivalent
+  * element[+]
+    * code = #ICAO048
+    * target[+]
+      * code = #XM4YL8
+      * equivalence = #equivalent
+  * element[+]
+    * code = #ICAO049
+    * target[+]
+      * code = #XM4YL8
+      * equivalence = #equivalent
+  * element[+]
+    * code = #ICAO050
+    * target[+]
+      * code = #XM97T2
+      * equivalence = #equivalent
+  * element[+]
+    * code = #ICAO051
+    * target[+]
+      * code = #XM97T2
+      * equivalence = #equivalent
+  * element[+]
+    * code = #ICAO052
+    * target[+]
+      * code = #XM97T2
+      * equivalence = #equivalent
+  * element[+]
+    * code = #ICAO053
+    * target[+]
+      * code = #XM97T2
+      * equivalence = #equivalent
+  * element[+]
+    * code = #ICAO054
+    * target[+]
+      * code = #XM97T2
+      * equivalence = #equivalent
+  * element[+]
+    * code = #ICAO055
+    * target[+]
+      * code = #XM6QV1
+      * equivalence = #equivalent
+  * element[+]
+    * code = #ICAO056
+    * target[+]
+      * code = #XM6QV1
+      * equivalence = #equivalent
+  * element[+]
+    * code = #ICAO057
+    * target[+]
+      * code = #XM6QV1
+      * equivalence = #equivalent
+  * element[+]
+    * code = #ICAO058
+    * target[+]
+      * code = #XM6QV1
+      * equivalence = #equivalent
+  * element[+]
+    * code = #ICAO059
+    * target[+]
+      * code = #XM1AG7
+      * equivalence = #equivalent
+  * element[+]
+    * code = #ICAO060
+    * target[+]
+      * code = #XM1AG7
+      * equivalence = #equivalent
+  * element[+]
+    * code = #ICAO061
+    * target[+]
+      * code = #XM1AG7
+      * equivalence = #equivalent
+  * element[+]
+    * code = #ICAO062
+    * target[+]
+      * code = #XM5ZJ4
+      * equivalence = #equivalent
+  * element[+]
+    * code = #ICAO063
+    * target[+]
+      * code = #XM5ZJ4
+      * equivalence = #equivalent
+  * element[+]
+    * code = #ICAO064
+    * target[+]
+      * code = #XM5ZJ4
+      * equivalence = #equivalent
+  * element[+]
+    * code = #ICAO065
+    * target[+]
+      * code = #XM5ZJ4
+      * equivalence = #equivalent
+  * element[+]
+    * code = #ICAO066
+    * target[+]
+      * code = #XM5QM6
+      * equivalence = #equivalent
+  * element[+]
+    * code = #ICAO067
+    * target[+]
+      * code = #XM5QM6
+      * equivalence = #equivalent
+  * element[+]
+    * code = #ICAO068
+    * target[+]
+      * code = #XM7HT3
+      * equivalence = #equivalent
+  * element[+]
+    * code = #ICAO069
+    * target[+]
+      * code = #XM7HT3
+      * equivalence = #equivalent
+  * element[+]
+    * code = #ICAO070
+    * target[+]
+      * code = #XM7HT3
+      * equivalence = #equivalent
+  * element[+]
+    * code = #ICAO071
+    * target[+]
+      * code = #XM8866
+      * equivalence = #equivalent
+  * element[+]
+    * code = #ICAO072
+    * target[+]
+      * code = #XM8866
+      * equivalence = #equivalent
+  * element[+]
+    * code = #ICAO073
+    * target[+]
+      * code = #XM8866
+      * equivalence = #equivalent
+  * element[+]
+    * code = #ICAO074
+    * target[+]
+      * code = #XM8866
+      * equivalence = #equivalent
+  * element[+]
+    * code = #ICAO075
+    * target[+]
+      * code = #XM8866
+      * equivalence = #equivalent
+  * element[+]
+    * code = #ICAO076
+    * target[+]
+      * code = #XM9TQ1
+      * equivalence = #equivalent
+  * element[+]
+    * code = #ICAO077
+    * target[+]
+      * code = #XM9TQ1
+      * equivalence = #equivalent
+  * element[+]
+    * code = #ICAO078
+    * target[+]
+      * code = #XM9TQ1
+      * equivalence = #equivalent
+  * element[+]
+    * code = #ICAO079
+    * target[+]
+      * code = #XM1G90
+      * equivalence = #equivalent
+  * element[+]
+    * code = #ICAO080
+    * target[+]
+      * code = #XM1G90
+      * equivalence = #equivalent
+  * element[+]
+    * code = #ICAO081
+    * target[+]
+      * code = #XM1G90
+      * equivalence = #equivalent
+  * element[+]
+    * code = #ICAO082
+    * target[+]
+      * code = #XM85P5
+      * equivalence = #equivalent
+  * element[+]
+    * code = #ICAO083
+    * target[+]
+      * code = #XM85P5
+      * equivalence = #equivalent
+  * element[+]
+    * code = #ICAO084
+    * target[+]
+      * code = #XM85P5
+      * equivalence = #equivalent
+  * element[+]
+    * code = #ICAO085
+    * target[+]
+      * code = #XM9FQ7
+      * equivalence = #equivalent
+  * element[+]
+    * code = #ICAO086
+    * target[+]
+      * code = #XM9FQ7
+      * equivalence = #equivalent
+  * element[+]
+    * code = #ICAO087
+    * target[+]
+      * code = #XM97N6
+      * equivalence = #equivalent
+  * element[+]
+    * code = #ICAO088
+    * target[+]
+      * code = #XM97N6
+      * equivalence = #equivalent
+  * element[+]
+    * code = #ICAO089
+    * target[+]
+      * code = #XM97N6
+      * equivalence = #equivalent
+  * element[+]
+    * code = #ICAO090
+    * target[+]
+      * code = #XM2YG8
+      * equivalence = #equivalent
+  * element[+]
+    * code = #ICAO091
+    * target[+]
+      * code = #XM2YG8
+      * equivalence = #equivalent
+  * element[+]
+    * code = #ICAO092
+    * target[+]
+      * code = #XM0K39
+      * equivalence = #equivalent
+  * element[+]
+    * code = #ICAO093
+    * target[+]
+      * code = #XM0K39
+      * equivalence = #equivalent
+  * element[+]
+    * code = #ICAO094
+    * target[+]
+      * code = #XM0K39
+      * equivalence = #equivalent
+  * element[+]
+    * code = #ICAO095
+    * target[+]
+      * code = #XM1AU2
+      * equivalence = #equivalent
+  * element[+]
+    * code = #ICAO096
+    * target[+]
+      * code = #XM1AU2
+      * equivalence = #equivalent
+  * element[+]
+    * code = #ICAO097
+    * target[+]
+      * code = #XM1AU2
+      * equivalence = #equivalent
+
+
 
 Instance:       WHO_DDCC_Map_CVX_To_ICD11_Vaccines
 InstanceOf:     ConceptMap
