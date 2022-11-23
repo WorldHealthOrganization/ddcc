@@ -4,6 +4,7 @@ Alias: $ICD11 = http://id.who.int/icd11/mms
 Alias: $LOINC = http://loinc.org
 Alias: SCT = http://snomed.info/sct
 Alias: $CVX = http://hl7.org/fhir/sid/cvx
+Alias: $DIVOC = http://worldhealthorganization.github.io/ddcc/DIVOC
 Alias: $EUDCC = https://ec.europa.eu/health/documents/community-register/html/
 Alias: $ICAOV1 = http://worldhealthorganization.github.io/ddcc/ICAOV1
 
@@ -175,6 +176,34 @@ WHO Disease or Agent Targeted List (COVID-19) from [ICD 11](https://icd.who.int/
 * ^status = #draft
 * include $ICD11#RA01 "COVID-19"
 
+
+CodeSystem:     DIVOC_CodeSystem
+Id:             DIVOC-CodeSystem
+Title:          "COVID-19 Vaccine Codes for DIVOC"
+Description:    "COVID-19 Vaccine codes for DIVOC so the FHIR server can perform expansions."
+* ^url = $DIVOC
+
+* #DIVOC001 "Zycov-D"
+* #DIVOC002 "Covaxin"
+* #DIVOC003 "Covishield"
+* #DIVOC004 "Sputnik V"
+* #DIVOC005 "Pfizer-BioNTech or Comirnaty"
+* #DIVOC006 "Janssen"
+* #DIVOC007 "Moderna or Modema or Spikevax"
+* #DIVOC008 "AstraZeneca or Vaxzevria"
+* #DIVOC009 "Sinovac or Coronavac"
+* #DIVOC010 "BBIBP- CorV or Sinopharm"
+* #DIVOC011 "Convidecia"
+* #DIVOC012 "Corbevax"
+* #DIVOC013 "Novavax/Covovax NVX - CoV2373"
+
+ValueSet:       DIVOC_ValueSet
+Id:             DIVOC-ValueSet
+Title:          "COVID-19 Vaccine Codes for DIVOC"
+Description:    "COVID-19 Vaccine codes for DIVOC so the FHIR server can perform expansions."
+* ^status = #draft
+* include codes from system DIVOC_CodeSystem
+
 CodeSystem:     ICAOV1_CodeSystem
 Id:             ICAOVaccineListV1
 Title:          "DDCC Codes for ICAO Vaccines"
@@ -340,6 +369,7 @@ EU DCC Allowed Vaccine List (COVID-19).
 * ^date = 2022-09-13
 * include codes from system EU_DCC_CodeSystem
 
+
 Instance:       WHO_DDCC_Map_ICD11_to_SCT_Vaccines
 InstanceOf:     ConceptMap
 Description:    "Mapping from ICD-11 to SNOMED CT for COVID-19 Vaccines"
@@ -381,6 +411,179 @@ Usage:          #definition
     * code = #XM9QW8
     * target[+]
       * code = #29061000087103
+      * equivalence = #equivalent
+
+
+Instance:       WHO_DDCC_Map_ICD11_to_DIVOC_Vaccines
+InstanceOf:     ConceptMap
+Description:    "Mapping from ICD-11 to DIVOC for COVID-19 Vaccines"
+Usage:          #definition
+
+* id = "who-ddcc-map-icd11-divoc-vaccines"
+* name = "ICD11_DIVOC_COVID19_vaccines"
+* title = "ConceptMap from ICD-11 to DIVOC for Vaccines"
+* status = #draft
+* experimental = true
+* date = "2022-11-22"
+* description = "Rule-based mappings between ICD-11 and DIVOC for COVID-19 Vaccines"
+* sourceCanonical = $ICD11
+* targetCanonical = $DIVOC
+
+* group[+]
+  * source = $ICD11
+  * target = $DIVOC
+
+  * element[+]
+    * code = #XM6AT1
+    * target[+]
+      * code = #DIVOC001
+      * equivalence = #equivalent
+
+  * element[+]
+    * code = #XM1NL1
+    * target[+]
+      * code = #DIVOC002
+      * equivalence = #narrower
+    * target[+]
+      * code = #DIVOC009
+      * equivalence = #narrower
+    * target[+]
+      * code = #DIVOC010
+      * equivalence = #narrower
+
+  * element[+]
+    * code = #XM9QW8
+    * target[+]
+      * code = #DIVOC003
+      * equivalence = #narrower
+    * target[+]
+      * code = #DIVOC004
+      * equivalence = #narrower
+    * target[+]
+      * code = #DIVOC008
+      * equivalence = #narrower
+    * target[+]
+      * code = #DIVOC011
+      * equivalence = #narrower
+
+  * element[+]
+    * code = #XM0GQ8
+    * target[+]
+      * code = #DIVOC005
+      * equivalence = #narrower
+    * target[+]
+      * code = #DIVOC007
+      * equivalence = #narrower
+  * element[+]
+    * code = #XM0CX4
+    * target[+]
+      * code = #DIVOC006
+      * equivalence = #equivalent
+
+  * element[+]
+    * code = #XM5JC5
+    * target[+]
+      * code = #DIVOC012
+      * equivalence = #narrower
+    * target[+]
+      * code = #DIVOC013
+      * equivalence = #narrower
+
+Instance:       WHO_DDCC_Map_DIVOC_to_ICD11_Vaccines
+InstanceOf:     ConceptMap
+Description:    "Mapping from DIVOC to ICD-11 for COVID-19 Vaccines"
+Usage:          #definition
+
+* id = "who-ddcc-map-divoc-icd11-vaccines"
+* name = "DIVOC_ICD11_COVID19_vaccines"
+* title = "ConceptMap from DIVOC to ICD-11 for Vaccines"
+* status = #draft
+* experimental = true
+* date = "2022-11-22"
+* description = "Rule-based mappings between DIVOC and ICD-11 for COVID-19 Vaccines"
+* sourceCanonical = $DIVOC
+* targetCanonical = $ICD11
+
+* group[+]
+  * source = $DIVOC
+  * target = $ICD11
+
+  * element[+]
+    * code = #DIVOC001
+    * target[+]
+      * code = #XM6AT1
+      * equivalence = #equivalent
+
+  * element[+]
+    * code = #DIVOC002
+     * target[+]
+      * code = #XM1NL1
+      * equivalence = #equivalent
+
+  * element[+]
+    * code = #DIVOC003
+    * target[+]
+      * code = #XM9QW8
+      * equivalence = #equivalent
+
+  * element[+]
+    * code = #DIVOC004
+    * target[+]
+      * code = #XM9QW8
+      * equivalence = #equivalent
+
+  * element[+]    
+    * code = #DIVOC005
+    * target[+]
+      * code = #XM0GQ8
+      * equivalence = #equivalent
+
+  * element[+]
+    * code = #DIVOC006  
+    * target[+]
+      * code = #XM0CX4
+      * equivalence = #equivalent
+
+  * element[+]    
+    * code = #DIVOC007
+    
+    * target[+]
+      * code = #XM0GQ8
+      * equivalence = #equivalent
+
+  * element[+]
+    * code = #DIVOC008
+    * target[+]
+      * code = #XM9QW8
+      * equivalence = #equivalent
+
+  * element[+]
+  * code = #DIVOC009
+    * target[+]
+      * code = #XM1NL1
+      * equivalence = #equivalent
+
+  * element[+]
+    * code = #DIVOC010
+    * target[+]
+      * code = #XM1NL1
+      * equivalence = #equivalent
+
+  * element[+]
+    * code = #DIVOC011
+    * target[+]
+      * code = #XM9QW8
+      * equivalence = #equivalent
+
+  * element[+]
+     * code = #DIVOC012
+    * target[+]
+      * code = #XM5JC5
+      * equivalence = #equivalent
+  * element[+]
+    * code = #DIVOC013
+    * target[+]
+      * code = #XM5JC5
       * equivalence = #equivalent
 
 
@@ -426,7 +629,6 @@ Usage:          #definition
     * target[+]
       * code = #Convidecia
       * equivalence = #narrower    
-
   * element[+]
     * code = #XM0CX4
     * target[+]
@@ -471,12 +673,12 @@ Usage:          #definition
   * target = $ICD11
 
   * element[+]
-    * code = #Covaxin
+    * code = #Covaxin    
     * target[+]
       * code = #XM1NL1
       * equivalence = #equivalent
 
-  * element[+]
+  * element[+]   
     * code = #Covishield
     * target[+]
       * code = #XM9QW8
@@ -488,33 +690,33 @@ Usage:          #definition
       * code = #XM9QW8
       * equivalence = #equivalent
 
-  * element[+]
+  * element[+] 
     * code = #EU/1/20/1528
     * target[+]
       * code = #XM0GQ8
       * equivalence = #equivalent
       
   * element[+]
-    * code = #EU/1/20/1525
+    * code = #EU/1/20/1525  
     * target[+]
       * code = #XM0CX4
       * equivalence = #equivalent
 
-  * element[+]
-    * code = #EU/1/20/1507
-    * target[+]
+  * element[+]   
+    * code = #EU/1/20/1507  
+      * target[+]
       * code = #XM0GQ8
       * equivalence = #equivalent
 
   * element[+]
-    * code = #EU/1/21/1529
+    * code = #EU/1/21/1529  
     * target[+]
       * code = #XM9QW8
       * equivalence = #equivalent
 
-  * element[+]
+  * element[+]    
     * code = #CoronaVac
-    * target[+]
+      * target[+]
       * code = #XM1NL1
       * equivalence = #equivalent
 
@@ -526,7 +728,7 @@ Usage:          #definition
       
   * element[+]
     * code = #Convidecia
-    * target[+]
+      * target[+]
       * code = #XM9QW8
       * equivalence = #equivalent
 
@@ -534,7 +736,7 @@ Usage:          #definition
     * code = #NVX-CoV2373
     * target[+]
       * code = #XM5JC5
-      * equivalence = #equivalent
+      * equivalence = #equivalent   
 
 Instance:       WHO_DDCC_Map_ICD11_to_ICAO_Vaccines
 InstanceOf:     ConceptMap
@@ -1407,6 +1609,8 @@ Usage:          #definition
     * target[+]
       * code = #XM1AU2
       * equivalence = #equivalent
+
+
 
 
 
