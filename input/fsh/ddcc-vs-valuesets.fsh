@@ -516,7 +516,7 @@ Usage:          #definition
 
   * element[+]
     * code = #DIVOC002
-     * target[+]
+    * target[+]
       * code = #XM1NL1
       * equivalence = #wider
 
@@ -558,7 +558,7 @@ Usage:          #definition
       * equivalence = #wider
 
   * element[+]
-  * code = #DIVOC009
+    * code = #DIVOC009
     * target[+]
       * code = #XM1NL1
       * equivalence = #wider
@@ -576,7 +576,7 @@ Usage:          #definition
       * equivalence = #wider
 
   * element[+]
-     * code = #DIVOC012
+    * code = #DIVOC012
     * target[+]
       * code = #XM5JC5
       * equivalence = #wider
@@ -704,7 +704,7 @@ Usage:          #definition
 
   * element[+]   
     * code = #EU/1/20/1507  
-      * target[+]
+    * target[+]
       * code = #XM0GQ8
       * equivalence = #wider
 
@@ -716,7 +716,7 @@ Usage:          #definition
 
   * element[+]    
     * code = #CoronaVac
-      * target[+]
+    * target[+]
       * code = #XM1NL1
       * equivalence = #wider
 
@@ -728,7 +728,7 @@ Usage:          #definition
       
   * element[+]
     * code = #Convidecia
-      * target[+]
+    * target[+]
       * code = #XM9QW8
       * equivalence = #wider
 
