@@ -518,13 +518,13 @@ Usage:          #definition
     * code = #DIVOC002
     * target[+]
       * code = #XM1NL1
-      * equivalence = #equivalent
+      * equivalence = #wider
 
   * element[+]
     * code = #DIVOC003
     * target[+]
       * code = #XM9QW8
-      * equivalence = #equivalent
+      * equivalence = #wider
 
   * element[+]
     * code = #DIVOC004
@@ -536,56 +536,55 @@ Usage:          #definition
     * code = #DIVOC005
     * target[+]
       * code = #XM0GQ8
-      * equivalence = #equivalent
+      * equivalence = #wider
 
   * element[+]
     * code = #DIVOC006  
     * target[+]
       * code = #XM0CX4
-      * equivalence = #equivalent
+      * equivalence = #wider
 
   * element[+]    
     * code = #DIVOC007
     
     * target[+]
       * code = #XM0GQ8
-      * equivalence = #equivalent
+      * equivalence = #wider
 
   * element[+]
     * code = #DIVOC008
     * target[+]
       * code = #XM9QW8
-      * equivalence = #equivalent
+      * equivalence = #wider
 
   * element[+]
     * code = #DIVOC009
     * target[+]
       * code = #XM1NL1
-      * equivalence = #equivalent
+      * equivalence = #wider
 
   * element[+]
     * code = #DIVOC010
     * target[+]
       * code = #XM1NL1
-      * equivalence = #equivalent
+      * equivalence = #wider
 
   * element[+]
     * code = #DIVOC011
     * target[+]
       * code = #XM9QW8
-      * equivalence = #equivalent
+      * equivalence = #wider
 
   * element[+]
     * code = #DIVOC012
     * target[+]
       * code = #XM5JC5
-      * equivalence = #equivalent
-
+      * equivalence = #wider
   * element[+]
     * code = #DIVOC013
     * target[+]
       * code = #XM5JC5
-      * equivalence = #equivalent
+      * equivalence = #wider
 
 
 Instance:       WHO_DDCC_Map_ICD11_to_EUDCC_Vaccines
@@ -677,25 +676,25 @@ Usage:          #definition
     * code = #Covaxin    
     * target[+]
       * code = #XM1NL1
-      * equivalence = #equivalent
+      * equivalence = #wider
 
   * element[+]   
     * code = #Covishield
     * target[+]
       * code = #XM9QW8
-      * equivalence = #equivalent
+      * equivalence = #wider
       
   * element[+]
     * code = #Sputnik-V
     * target[+]
       * code = #XM9QW8
-      * equivalence = #equivalent
+      * equivalence = #wider
 
   * element[+] 
     * code = #EU/1/20/1528
     * target[+]
       * code = #XM0GQ8
-      * equivalence = #equivalent
+      * equivalence = #wider
       
   * element[+]
     * code = #EU/1/20/1525  
@@ -707,31 +706,31 @@ Usage:          #definition
     * code = #EU/1/20/1507  
     * target[+]
       * code = #XM0GQ8
-      * equivalence = #equivalent
+      * equivalence = #wider
 
   * element[+]
     * code = #EU/1/21/1529  
     * target[+]
       * code = #XM9QW8
-      * equivalence = #equivalent
+      * equivalence = #wider
 
   * element[+]    
     * code = #CoronaVac
     * target[+]
       * code = #XM1NL1
-      * equivalence = #equivalent
+      * equivalence = #wider
 
   * element[+]
     * code = #BBIBP-CorV
     * target[+]
       * code = #XM1NL1
-      * equivalence = #equivalent
+      * equivalence = #wider
       
   * element[+]
     * code = #Convidecia
     * target[+]
       * code = #XM9QW8
-      * equivalence = #equivalent
+      * equivalence = #wider
 
   * element[+]
     * code = #NVX-CoV2373
@@ -1129,487 +1128,487 @@ Usage:          #definition
     * code = #ICAO001
     * target[+]
       * code = #XM68M6
-      * equivalence = #equivalent
+      * equivalence = #wider
   * element[+]
     * code = #ICAO002
     * target[+]
       * code = #XM68M6
-      * equivalence = #equivalent
+      * equivalence = #wider
   * element[+]
     * code = #ICAO003
     * target[+]
       * code = #XM68M6
-      * equivalence = #equivalent
+      * equivalence = #wider
   * element[+]
     * code = #ICAO004
     * target[+]
       * code = #XM68M6
-      * equivalence = #equivalent
+      * equivalence = #wider
   * element[+]
     * code = #ICAO005
     * target[+]
       * code = #XM68M6
-      * equivalence = #equivalent
+      * equivalence = #wider
   * element[+]
     * code = #ICAO006
     * target[+]
       * code = #XM68M6
-      * equivalence = #equivalent
+      * equivalence = #wider
   * element[+]
     * code = #ICAO007
     * target[+]
       * code = #XM68M6
-      * equivalence = #equivalent
+      * equivalence = #wider
   * element[+]
     * code = #ICAO008
     * target[+]
       * code = #XM68M6
-      * equivalence = #equivalent
+      * equivalence = #wider
   * element[+]
     * code = #ICAO009
     * target[+]
       * code = #XM3DT5
-      * equivalence = #equivalent
+      * equivalence = #wider
   * element[+]
     * code = #ICAO010
     * target[+]
       * code = #XM3DT5
-      * equivalence = #equivalent
+      * equivalence = #wider
   * element[+]
     * code = #ICAO011
     * target[+]
       * code = #XM3DT5
-      * equivalence = #equivalent
+      * equivalence = #wider
   * element[+]
     * code = #ICAO012
     * target[+]
       * code = #XM3DT5
-      * equivalence = #equivalent
+      * equivalence = #wider
   * element[+]
     * code = #ICAO013
     * target[+]
       * code = #XM52P3
-      * equivalence = #equivalent
+      * equivalence = #wider
   * element[+]
     * code = #ICAO014
     * target[+]
       * code = #XM52P3
-      * equivalence = #equivalent
+      * equivalence = #wider
   * element[+]
     * code = #ICAO015
     * target[+]
       * code = #XM3CT4
-      * equivalence = #equivalent
+      * equivalence = #wider
   * element[+]
     * code = #ICAO016
     * target[+]
       * code = #XM3CT4
-      * equivalence = #equivalent
+      * equivalence = #wider
   * element[+]
     * code = #ICAO017
     * target[+]
       * code = #XM3CT4
-      * equivalence = #equivalent
+      * equivalence = #wider
   * element[+]
     * code = #ICAO018
     * target[+]
       * code = #XM3CT4
-      * equivalence = #equivalent
+      * equivalence = #wider
   * element[+]
     * code = #ICAO019
     * target[+]
       * code = #XM3CT4
-      * equivalence = #equivalent
+      * equivalence = #wider
   * element[+]
     * code = #ICAO020
     * target[+]
       * code = #XM3PG0
-      * equivalence = #equivalent
+      * equivalence = #wider
   * element[+]
     * code = #ICAO021
     * target[+]
       * code = #XM3PG0
-      * equivalence = #equivalent
+      * equivalence = #wider
   * element[+]
     * code = #ICAO022
     * target[+]
       * code = #XM3PG0
-      * equivalence = #equivalent
+      * equivalence = #wider
   * element[+]
     * code = #ICAO023
     * target[+]
       * code = #XM3PG0
-      * equivalence = #equivalent
+      * equivalence = #wider
   * element[+]
     * code = #ICAO024
     * target[+]
       * code = #XM3PG0
-      * equivalence = #equivalent
+      * equivalence = #wider
   * element[+]
     * code = #ICAO025
     * target[+]
       * code = #XM4EC8
-      * equivalence = #equivalent
+      * equivalence = #wider
   * element[+]
     * code = #ICAO026
     * target[+]
       * code = #XM4EC8
-      * equivalence = #equivalent
+      * equivalence = #wider
   * element[+]
     * code = #ICAO027
     * target[+]
       * code = #XM4EC8
-      * equivalence = #equivalent
+      * equivalence = #wider
   * element[+]
     * code = #ICAO028
     * target[+]
       * code = #XM6SZ8
-      * equivalence = #equivalent
+      * equivalence = #wider
   * element[+]
     * code = #ICAO029
     * target[+]
       * code = #XM6SZ8
-      * equivalence = #equivalent
+      * equivalence = #wider
   * element[+]
     * code = #ICAO030
     * target[+]
       * code = #XM0RV9
-      * equivalence = #equivalent
+      * equivalence = #wider
   * element[+]
     * code = #ICAO031
     * target[+]
       * code = #XM0RV9
-      * equivalence = #equivalent
+      * equivalence = #wider
   * element[+]
     * code = #ICAO032
     * target[+]
       * code = #XM3SK8
-      * equivalence = #equivalent
+      * equivalence = #wider
   * element[+]
     * code = #ICAO033
     * target[+]
       * code = #XM3SK8
-      * equivalence = #equivalent
+      * equivalence = #wider
   * element[+]
     * code = #ICAO034
     * target[+]
       * code = #XM9P21
-      * equivalence = #equivalent
+      * equivalence = #wider
   * element[+]
     * code = #ICAO035
     * target[+]
       * code = #XM9P21
-      * equivalence = #equivalent
+      * equivalence = #wider
   * element[+]
     * code = #ICAO036
     * target[+]
       * code = #XM9P21
-      * equivalence = #equivalent
+      * equivalence = #wider
   * element[+]
     * code = #ICAO037
     * target[+]
       * code = #XM9T65
-      * equivalence = #equivalent
+      * equivalence = #wider
   * element[+]
     * code = #ICAO038
     * target[+]
       * code = #XM9T65
-      * equivalence = #equivalent
+      * equivalence = #wider
   * element[+]
     * code = #ICAO039
     * target[+]
       * code = #XM9T65
-      * equivalence = #equivalent
+      * equivalence = #wider
   * element[+]
     * code = #ICAO040
     * target[+]
       * code = #XM9T65
-      * equivalence = #equivalent
+      * equivalence = #wider
   * element[+]
     * code = #ICAO041
     * target[+]
       * code = #XM9T65
-      * equivalence = #equivalent
+      * equivalence = #wider
   * element[+]
     * code = #ICAO042
     * target[+]
       * code = #XM9N08
-      * equivalence = #equivalent
+      * equivalence = #wider
   * element[+]
     * code = #ICAO043
     * target[+]
       * code = #XM4YL8
-      * equivalence = #equivalent
+      * equivalence = #wider
   * element[+]
     * code = #ICAO044
     * target[+]
       * code = #XM4YL8
-      * equivalence = #equivalent
+      * equivalence = #wider
   * element[+]
     * code = #ICAO045
     * target[+]
       * code = #XM4YL8
-      * equivalence = #equivalent
+      * equivalence = #wider
   * element[+]
     * code = #ICAO046
     * target[+]
       * code = #XM4YL8
-      * equivalence = #equivalent
+      * equivalence = #wider
   * element[+]
     * code = #ICAO047
     * target[+]
       * code = #XM4YL8
-      * equivalence = #equivalent
+      * equivalence = #wider
   * element[+]
     * code = #ICAO048
     * target[+]
       * code = #XM4YL8
-      * equivalence = #equivalent
+      * equivalence = #wider
   * element[+]
     * code = #ICAO049
     * target[+]
       * code = #XM4YL8
-      * equivalence = #equivalent
+      * equivalence = #wider
   * element[+]
     * code = #ICAO050
     * target[+]
       * code = #XM97T2
-      * equivalence = #equivalent
+      * equivalence = #wider
   * element[+]
     * code = #ICAO051
     * target[+]
       * code = #XM97T2
-      * equivalence = #equivalent
+      * equivalence = #wider
   * element[+]
     * code = #ICAO052
     * target[+]
       * code = #XM97T2
-      * equivalence = #equivalent
+      * equivalence = #wider
   * element[+]
     * code = #ICAO053
     * target[+]
       * code = #XM97T2
-      * equivalence = #equivalent
+      * equivalence = #wider
   * element[+]
     * code = #ICAO054
     * target[+]
       * code = #XM97T2
-      * equivalence = #equivalent
+      * equivalence = #wider
   * element[+]
     * code = #ICAO055
     * target[+]
       * code = #XM6QV1
-      * equivalence = #equivalent
+      * equivalence = #wider
   * element[+]
     * code = #ICAO056
     * target[+]
       * code = #XM6QV1
-      * equivalence = #equivalent
+      * equivalence = #wider
   * element[+]
     * code = #ICAO057
     * target[+]
       * code = #XM6QV1
-      * equivalence = #equivalent
+      * equivalence = #wider
   * element[+]
     * code = #ICAO058
     * target[+]
       * code = #XM6QV1
-      * equivalence = #equivalent
+      * equivalence = #wider
   * element[+]
     * code = #ICAO059
     * target[+]
       * code = #XM1AG7
-      * equivalence = #equivalent
+      * equivalence = #wider
   * element[+]
     * code = #ICAO060
     * target[+]
       * code = #XM1AG7
-      * equivalence = #equivalent
+      * equivalence = #wider
   * element[+]
     * code = #ICAO061
     * target[+]
       * code = #XM1AG7
-      * equivalence = #equivalent
+      * equivalence = #wider
   * element[+]
     * code = #ICAO062
     * target[+]
       * code = #XM5ZJ4
-      * equivalence = #equivalent
+      * equivalence = #wider
   * element[+]
     * code = #ICAO063
     * target[+]
       * code = #XM5ZJ4
-      * equivalence = #equivalent
+      * equivalence = #wider
   * element[+]
     * code = #ICAO064
     * target[+]
       * code = #XM5ZJ4
-      * equivalence = #equivalent
+      * equivalence = #wider
   * element[+]
     * code = #ICAO065
     * target[+]
       * code = #XM5ZJ4
-      * equivalence = #equivalent
+      * equivalence = #wider
   * element[+]
     * code = #ICAO066
     * target[+]
       * code = #XM5QM6
-      * equivalence = #equivalent
+      * equivalence = #wider
   * element[+]
     * code = #ICAO067
     * target[+]
       * code = #XM5QM6
-      * equivalence = #equivalent
+      * equivalence = #wider
   * element[+]
     * code = #ICAO068
     * target[+]
       * code = #XM7HT3
-      * equivalence = #equivalent
+      * equivalence = #wider
   * element[+]
     * code = #ICAO069
     * target[+]
       * code = #XM7HT3
-      * equivalence = #equivalent
+      * equivalence = #wider
   * element[+]
     * code = #ICAO070
     * target[+]
       * code = #XM7HT3
-      * equivalence = #equivalent
+      * equivalence = #wider
   * element[+]
     * code = #ICAO071
     * target[+]
       * code = #XM8866
-      * equivalence = #equivalent
+      * equivalence = #wider
   * element[+]
     * code = #ICAO072
     * target[+]
       * code = #XM8866
-      * equivalence = #equivalent
+      * equivalence = #wider
   * element[+]
     * code = #ICAO073
     * target[+]
       * code = #XM8866
-      * equivalence = #equivalent
+      * equivalence = #wider
   * element[+]
     * code = #ICAO074
     * target[+]
       * code = #XM8866
-      * equivalence = #equivalent
+      * equivalence = #wider
   * element[+]
     * code = #ICAO075
     * target[+]
       * code = #XM8866
-      * equivalence = #equivalent
+      * equivalence = #wider
   * element[+]
     * code = #ICAO076
     * target[+]
       * code = #XM9TQ1
-      * equivalence = #equivalent
+      * equivalence = #wider
   * element[+]
     * code = #ICAO077
     * target[+]
       * code = #XM9TQ1
-      * equivalence = #equivalent
+      * equivalence = #wider
   * element[+]
     * code = #ICAO078
     * target[+]
       * code = #XM9TQ1
-      * equivalence = #equivalent
+      * equivalence = #wider
   * element[+]
     * code = #ICAO079
     * target[+]
       * code = #XM1G90
-      * equivalence = #equivalent
+      * equivalence = #wider
   * element[+]
     * code = #ICAO080
     * target[+]
       * code = #XM1G90
-      * equivalence = #equivalent
+      * equivalence = #wider
   * element[+]
     * code = #ICAO081
     * target[+]
       * code = #XM1G90
-      * equivalence = #equivalent
+      * equivalence = #wider
   * element[+]
     * code = #ICAO082
     * target[+]
       * code = #XM85P5
-      * equivalence = #equivalent
+      * equivalence = #wider
   * element[+]
     * code = #ICAO083
     * target[+]
       * code = #XM85P5
-      * equivalence = #equivalent
+      * equivalence = #wider
   * element[+]
     * code = #ICAO084
     * target[+]
       * code = #XM85P5
-      * equivalence = #equivalent
+      * equivalence = #wider
   * element[+]
     * code = #ICAO085
     * target[+]
       * code = #XM9FQ7
-      * equivalence = #equivalent
+      * equivalence = #wider
   * element[+]
     * code = #ICAO086
     * target[+]
       * code = #XM9FQ7
-      * equivalence = #equivalent
+      * equivalence = #wider
   * element[+]
     * code = #ICAO087
     * target[+]
       * code = #XM97N6
-      * equivalence = #equivalent
+      * equivalence = #wider
   * element[+]
     * code = #ICAO088
     * target[+]
       * code = #XM97N6
-      * equivalence = #equivalent
+      * equivalence = #wider
   * element[+]
     * code = #ICAO089
     * target[+]
       * code = #XM97N6
-      * equivalence = #equivalent
+      * equivalence = #wider
   * element[+]
     * code = #ICAO090
     * target[+]
       * code = #XM2YG8
-      * equivalence = #equivalent
+      * equivalence = #wider
   * element[+]
     * code = #ICAO091
     * target[+]
       * code = #XM2YG8
-      * equivalence = #equivalent
+      * equivalence = #wider
   * element[+]
     * code = #ICAO092
     * target[+]
       * code = #XM0K39
-      * equivalence = #equivalent
+      * equivalence = #wider
   * element[+]
     * code = #ICAO093
     * target[+]
       * code = #XM0K39
-      * equivalence = #equivalent
+      * equivalence = #wider
   * element[+]
     * code = #ICAO094
     * target[+]
       * code = #XM0K39
-      * equivalence = #equivalent
+      * equivalence = #wider
   * element[+]
     * code = #ICAO095
     * target[+]
       * code = #XM1AU2
-      * equivalence = #equivalent
+      * equivalence = #wider
   * element[+]
     * code = #ICAO096
     * target[+]
       * code = #XM1AU2
-      * equivalence = #equivalent
+      * equivalence = #wider
   * element[+]
     * code = #ICAO097
     * target[+]
       * code = #XM1AU2
-      * equivalence = #equivalent
+      * equivalence = #wider
 
 
 
