@@ -29,6 +29,8 @@ CodeSystem:     DDCC_QR_Type_CodeSystem
 Id:             DDCC-QR-Type-CodeSystem
 Title:          "DDCC QR Category Usage Codes"
 Description:    "Possible formats available for QR usage."
+* ^experimental = false
+* ^caseSensitive = true
 * #who          "WHO DDCC"
 * #dcc          "EU DCC"
 * #icao         "ICAO"
@@ -47,6 +49,8 @@ CodeSystem:     DDCC_QR_Format_CodeSystem
 Id:             DDCC-QR-Format-CodeSystem
 Title:          "DDCC QR Format Codes"
 Description:    "Possible formats available for QR data."
+* ^experimental = false
+* ^caseSensitive = true
 * #image        "Image"
 * #serialized   "Serialized QR Content"
 * #pdf          "PDF version of the QR image"

@@ -26,6 +26,8 @@ CodeSystem:     DDCC_Folder_DesignationType_Codesystem
 Id:             DDCC-Folder-DesignationType
 Title:          "DDCC Designation Types for Folder"
 Description:    "DDCC Designation Types to use for DDCC Folders."
+* ^experimental = false
+* ^caseSensitive = true
 * #ddcc         "DDCC"
 
 ValueSet:       DDCC_Folder_DesignationType_ValueSet

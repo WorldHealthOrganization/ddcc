@@ -107,6 +107,8 @@ CodeSystem:     DDCC_ICD11_CodeSystem
 Id:             DDCC-ICD11-CodeSystem
 Title:          "DDCC Codes for ICD11"
 Description:    "ICD11 codes for DDCC so the FHIR server can perform expansions."
+* ^experimental = false
+* ^caseSensitive = true
 * ^url = $ICD11
 * #RA01   "COVID-19 Disease"
 
@@ -181,6 +183,8 @@ CodeSystem:     DIVOC_CodeSystem
 Id:             DIVOC-CodeSystem
 Title:          "COVID-19 Vaccine Codes for DIVOC"
 Description:    "COVID-19 Vaccine codes for DIVOC so the FHIR server can perform expansions."
+* ^experimental = false
+* ^caseSensitive = true
 * ^url = $DIVOC
 
 * #DIVOC001 "Zycov-D"
@@ -208,6 +212,8 @@ CodeSystem:     ICAOV1_CodeSystem
 Id:             ICAOVaccineListV1
 Title:          "DDCC Codes for ICAO Vaccines"
 Description:    "ICAO vaccines codes for DDCC so the FHIR server can perform expansions."
+* ^experimental = false
+* ^caseSensitive = true
 * ^url = $ICAOV1
 * #ICAO001 "Comirnaty"
 * #ICAO002 "Tozinameran"
@@ -319,6 +325,8 @@ CodeSystem:     EU_DCC_CodeSystem
 Id:             vaccines-covid-19-names
 Title:          "Covid-19 Vaccine Codes for EU DCC"
 Description:    "EU DCC codes for Covid-19 vaccines so the FHIR server can perform expansions."
+* ^experimental = false
+* ^caseSensitive = true
 * ^url = $EUDCC
 * ^date = 2022-09-13
 * #EU/1/20/1528 "Comirnaty"
@@ -370,7 +378,7 @@ EU DCC Allowed Vaccine List (COVID-19).
 * include codes from system EU_DCC_CodeSystem
 
 
-Instance:       WHO_DDCC_Map_ICD11_to_SCT_Vaccines
+Instance:       who-ddcc-map-icd11-sct-vaccines
 InstanceOf:     ConceptMap
 Description:    "Mapping from ICD-11 to SNOMED CT for COVID-19 Vaccines"
 Usage:          #definition
@@ -382,8 +390,6 @@ Usage:          #definition
 * experimental = true
 * date = "2021-04-23"
 * description = "Rule-based mappings between ICD-11 and SNOMED CT for COVID-19 Vaccines"
-* sourceCanonical = $ICD11
-* targetCanonical = SCT
 
 * group[+]
   * source = $ICD11
@@ -414,7 +420,7 @@ Usage:          #definition
       * equivalence = #equivalent
 
 
-Instance:       WHO_DDCC_Map_ICD11_to_DIVOC_Vaccines
+Instance:       who-ddcc-map-icd11-divoc-vaccines
 InstanceOf:     ConceptMap
 Description:    "Mapping from ICD-11 to DIVOC for COVID-19 Vaccines"
 Usage:          #definition
@@ -426,8 +432,6 @@ Usage:          #definition
 * experimental = true
 * date = "2022-11-22"
 * description = "Rule-based mappings between ICD-11 and DIVOC for COVID-19 Vaccines"
-* sourceCanonical = $ICD11
-* targetCanonical = $DIVOC
 
 * group[+]
   * source = $ICD11
@@ -444,36 +448,45 @@ Usage:          #definition
     * target[+]
       * code = #DIVOC002
       * equivalence = #narrower
+      * comment = "DIVOC codes are brands and ICD11 is the generic type."
     * target[+]
       * code = #DIVOC009
       * equivalence = #narrower
+      * comment = "DIVOC codes are brands and ICD11 is the generic type."
     * target[+]
       * code = #DIVOC010
       * equivalence = #narrower
+      * comment = "DIVOC codes are brands and ICD11 is the generic type."
 
   * element[+]
     * code = #XM9QW8
     * target[+]
       * code = #DIVOC003
       * equivalence = #narrower
+      * comment = "DIVOC codes are brands and ICD11 is the generic type."
     * target[+]
       * code = #DIVOC004
       * equivalence = #narrower
+      * comment = "DIVOC codes are brands and ICD11 is the generic type."
     * target[+]
       * code = #DIVOC008
       * equivalence = #narrower
+      * comment = "DIVOC codes are brands and ICD11 is the generic type."
     * target[+]
       * code = #DIVOC011
       * equivalence = #narrower
+      * comment = "DIVOC codes are brands and ICD11 is the generic type."
 
   * element[+]
     * code = #XM0GQ8
     * target[+]
       * code = #DIVOC005
       * equivalence = #narrower
+      * comment = "DIVOC codes are brands and ICD11 is the generic type."
     * target[+]
       * code = #DIVOC007
       * equivalence = #narrower
+      * comment = "DIVOC codes are brands and ICD11 is the generic type."
   * element[+]
     * code = #XM0CX4
     * target[+]
@@ -485,11 +498,13 @@ Usage:          #definition
     * target[+]
       * code = #DIVOC012
       * equivalence = #narrower
+      * comment = "DIVOC codes are brands and ICD11 is the generic type."
     * target[+]
       * code = #DIVOC013
       * equivalence = #narrower
+      * comment = "DIVOC codes are brands and ICD11 is the generic type."
 
-Instance:       WHO_DDCC_Map_DIVOC_to_ICD11_Vaccines
+Instance:       who-ddcc-map-divoc-icd11-vaccines
 InstanceOf:     ConceptMap
 Description:    "Mapping from DIVOC to ICD-11 for COVID-19 Vaccines"
 Usage:          #definition
@@ -501,8 +516,6 @@ Usage:          #definition
 * experimental = true
 * date = "2022-11-22"
 * description = "Rule-based mappings between DIVOC and ICD-11 for COVID-19 Vaccines"
-* sourceCanonical = $DIVOC
-* targetCanonical = $ICD11
 
 * group[+]
   * source = $DIVOC
@@ -587,7 +600,7 @@ Usage:          #definition
       * equivalence = #wider
 
 
-Instance:       WHO_DDCC_Map_ICD11_to_EUDCC_Vaccines
+Instance:       who-ddcc-map-icd11-eudcc-vaccines
 InstanceOf:     ConceptMap
 Description:    "Mapping from ICD-11 to EU DCC for COVID-19 Vaccines"
 Usage:          #definition
@@ -599,8 +612,6 @@ Usage:          #definition
 * experimental = true
 * date = "2022-11-22"
 * description = "Rule-based mappings between ICD-11 and EU DCC for COVID-19 Vaccines"
-* sourceCanonical = $ICD11
-* targetCanonical = $EUDCC
 
 * group[+]
   * source = $ICD11
@@ -611,24 +622,30 @@ Usage:          #definition
     * target[+]
       * code = #EU/1/20/1528
       * equivalence = #narrower
+      * comment = "EU codes are brands and ICD11 is the generic type."
     * target[+]
       * code = #EU/1/20/1507
       * equivalence = #narrower
+      * comment = "EU codes are brands and ICD11 is the generic type."
 
   * element[+]
     * code = #XM9QW8
     * target[+]
       * code = #EU/1/21/1529
       * equivalence = #narrower
+      * comment = "EU codes are brands and ICD11 is the generic type."
     * target[+]
       * code = #Covishield
       * equivalence = #narrower
+      * comment = "EU codes are brands and ICD11 is the generic type."
     * target[+]
       * code = #Sputnik-V
       * equivalence = #narrower
+      * comment = "EU codes are brands and ICD11 is the generic type."
     * target[+]
       * code = #Convidecia
       * equivalence = #narrower    
+      * comment = "EU codes are brands and ICD11 is the generic type."
   * element[+]
     * code = #XM0CX4
     * target[+]
@@ -640,12 +657,15 @@ Usage:          #definition
     * target[+]
       * code = #Covaxin
       * equivalence = #narrower
+      * comment = "EU codes are brands and ICD11 is the generic type."
     * target[+]
       * code = #CoronaVac
       * equivalence = #narrower
+      * comment = "EU codes are brands and ICD11 is the generic type."
     * target[+]
       * code = #BBIBP-CorV
       * equivalence = #narrower
+      * comment = "EU codes are brands and ICD11 is the generic type."
 
   * element[+]
     * code = #XM5JC5
@@ -653,7 +673,7 @@ Usage:          #definition
       * code = #NVX-CoV2373
       * equivalence = #equivalent
 
-Instance:       WHO_DDCC_Map_EUDCC_to_ICD11_Vaccines
+Instance:       who-ddcc-map-eudcc-icd11-vaccines
 InstanceOf:     ConceptMap
 Description:    "Mapping from EU DCC to ICD-11 for COVID-19 Vaccines"
 Usage:          #definition
@@ -665,8 +685,6 @@ Usage:          #definition
 * experimental = true
 * date = "2022-11-22"
 * description = "Rule-based mappings between EU DCC and ICD11 for COVID-19 Vaccines"
-* sourceCanonical = $EUDCC
-* targetCanonical = $ICD11
 
 * group[+]
   * source = $EUDCC
@@ -738,7 +756,7 @@ Usage:          #definition
       * code = #XM5JC5
       * equivalence = #equivalent   
 
-Instance:       WHO_DDCC_Map_ICD11_to_ICAO_Vaccines
+Instance:       who-ddcc-map-icd11-icao-vaccines
 InstanceOf:     ConceptMap
 Description:    "Mapping from ICD-11 to ICAO for COVID-19 Vaccines"
 Usage:          #definition
@@ -750,8 +768,6 @@ Usage:          #definition
 * experimental = true
 * date = "2022-11-23"
 * description = "Rule-based mappings between ICD-11 and ICAO for COVID-19 Vaccines"
-* sourceCanonical = $ICD11
-* targetCanonical = $ICAOV1
 
 * group[+]
   * source = $ICD11
@@ -762,350 +778,447 @@ Usage:          #definition
     * target[+]
       * code = #ICAO001
       * equivalence = #narrower
+      * comment = "ICAO codes are brands and ICD11 is the generic type."
     * target[+]
       * code = #ICAO002
       * equivalence = #narrower
+      * comment = "ICAO codes are brands and ICD11 is the generic type."
     * target[+]
       * code = #ICAO003
       * equivalence = #narrower
+      * comment = "ICAO codes are brands and ICD11 is the generic type."
     * target[+]
       * code = #ICAO004
       * equivalence = #narrower
+      * comment = "ICAO codes are brands and ICD11 is the generic type."
     * target[+]
       * code = #ICAO005
       * equivalence = #narrower
+      * comment = "ICAO codes are brands and ICD11 is the generic type."
     * target[+]
       * code = #ICAO006
       * equivalence = #narrower
+      * comment = "ICAO codes are brands and ICD11 is the generic type."
     * target[+]
       * code = #ICAO007
       * equivalence = #narrower
+      * comment = "ICAO codes are brands and ICD11 is the generic type."
     * target[+]
       * code = #ICAO008
       * equivalence = #narrower
+      * comment = "ICAO codes are brands and ICD11 is the generic type."
   * element[+]
     * code = #XM3DT5
     * target[+]
       * code = #ICAO009
       * equivalence = #narrower
+      * comment = "ICAO codes are brands and ICD11 is the generic type."
     * target[+]
       * code = #ICAO010
       * equivalence = #narrower
+      * comment = "ICAO codes are brands and ICD11 is the generic type."
     * target[+]
       * code = #ICAO011
       * equivalence = #narrower
+      * comment = "ICAO codes are brands and ICD11 is the generic type."
     * target[+]
       * code = #ICAO012
       * equivalence = #narrower
+      * comment = "ICAO codes are brands and ICD11 is the generic type."
   * element[+]
     * code = #XM52P3
     * target[+]
       * code = #ICAO013
       * equivalence = #narrower
+      * comment = "ICAO codes are brands and ICD11 is the generic type."
     * target[+]
       * code = #ICAO014
       * equivalence = #narrower
+      * comment = "ICAO codes are brands and ICD11 is the generic type."
   * element[+]
     * code = #XM3CT4
     * target[+]
       * code = #ICAO015
       * equivalence = #narrower
+      * comment = "ICAO codes are brands and ICD11 is the generic type."
     * target[+]
       * code = #ICAO016
       * equivalence = #narrower
+      * comment = "ICAO codes are brands and ICD11 is the generic type."
     * target[+]
       * code = #ICAO017
       * equivalence = #narrower
+      * comment = "ICAO codes are brands and ICD11 is the generic type."
     * target[+]
       * code = #ICAO018
       * equivalence = #narrower
+      * comment = "ICAO codes are brands and ICD11 is the generic type."
     * target[+]
       * code = #ICAO019
       * equivalence = #narrower
+      * comment = "ICAO codes are brands and ICD11 is the generic type."
   * element[+]
     * code = #XM3PG0
     * target[+]
       * code = #ICAO020
       * equivalence = #narrower
+      * comment = "ICAO codes are brands and ICD11 is the generic type."
     * target[+]
       * code = #ICAO021
       * equivalence = #narrower
+      * comment = "ICAO codes are brands and ICD11 is the generic type."
     * target[+]
       * code = #ICAO022
       * equivalence = #narrower
+      * comment = "ICAO codes are brands and ICD11 is the generic type."
     * target[+]
       * code = #ICAO023
       * equivalence = #narrower
+      * comment = "ICAO codes are brands and ICD11 is the generic type."
     * target[+]
       * code = #ICAO024
       * equivalence = #narrower
+      * comment = "ICAO codes are brands and ICD11 is the generic type."
   * element[+]
     * code = #XM4EC8
     * target[+]
       * code = #ICAO025
       * equivalence = #narrower
+      * comment = "ICAO codes are brands and ICD11 is the generic type."
     * target[+]
       * code = #ICAO026
       * equivalence = #narrower
+      * comment = "ICAO codes are brands and ICD11 is the generic type."
     * target[+]
       * code = #ICAO027
       * equivalence = #narrower
+      * comment = "ICAO codes are brands and ICD11 is the generic type."
   * element[+]
     * code = #XM6SZ8
     * target[+]
       * code = #ICAO028
       * equivalence = #narrower
+      * comment = "ICAO codes are brands and ICD11 is the generic type."
     * target[+]
       * code = #ICAO029
       * equivalence = #narrower
+      * comment = "ICAO codes are brands and ICD11 is the generic type."
   * element[+]
     * code = #XM0RV9
     * target[+]
       * code = #ICAO030
       * equivalence = #narrower
+      * comment = "ICAO codes are brands and ICD11 is the generic type."
     * target[+]
       * code = #ICAO031
       * equivalence = #narrower
+      * comment = "ICAO codes are brands and ICD11 is the generic type."
   * element[+]
     * code = #XM3SK8
     * target[+]
       * code = #ICAO032
       * equivalence = #narrower
+      * comment = "ICAO codes are brands and ICD11 is the generic type."
     * target[+]
       * code = #ICAO033
       * equivalence = #narrower
+      * comment = "ICAO codes are brands and ICD11 is the generic type."
   * element[+]
     * code = #XM9P21
     * target[+]
       * code = #ICAO034
       * equivalence = #narrower
+      * comment = "ICAO codes are brands and ICD11 is the generic type."
     * target[+]
       * code = #ICAO035
       * equivalence = #narrower
+      * comment = "ICAO codes are brands and ICD11 is the generic type."
     * target[+]
       * code = #ICAO036
       * equivalence = #narrower
+      * comment = "ICAO codes are brands and ICD11 is the generic type."
   * element[+]
     * code = #XM9T65
     * target[+]
       * code = #ICAO037
       * equivalence = #narrower
+      * comment = "ICAO codes are brands and ICD11 is the generic type."
     * target[+]
       * code = #ICAO038
       * equivalence = #narrower
+      * comment = "ICAO codes are brands and ICD11 is the generic type."
     * target[+]
       * code = #ICAO039
       * equivalence = #narrower
+      * comment = "ICAO codes are brands and ICD11 is the generic type."
     * target[+]
       * code = #ICAO040
       * equivalence = #narrower
+      * comment = "ICAO codes are brands and ICD11 is the generic type."
     * target[+]
       * code = #ICAO041
       * equivalence = #narrower
+      * comment = "ICAO codes are brands and ICD11 is the generic type."
   * element[+]
     * code = #XM9N08
     * target[+]
       * code = #ICAO042
       * equivalence = #narrower
+      * comment = "ICAO codes are brands and ICD11 is the generic type."
   * element[+]
     * code = #XM4YL8
     * target[+]
       * code = #ICAO043
       * equivalence = #narrower
+      * comment = "ICAO codes are brands and ICD11 is the generic type."
     * target[+]
       * code = #ICAO044
       * equivalence = #narrower
+      * comment = "ICAO codes are brands and ICD11 is the generic type."
     * target[+]
       * code = #ICAO045
       * equivalence = #narrower
+      * comment = "ICAO codes are brands and ICD11 is the generic type."
     * target[+]
       * code = #ICAO046
       * equivalence = #narrower
+      * comment = "ICAO codes are brands and ICD11 is the generic type."
     * target[+]
       * code = #ICAO047
       * equivalence = #narrower
+      * comment = "ICAO codes are brands and ICD11 is the generic type."
     * target[+]
       * code = #ICAO048
       * equivalence = #narrower
+      * comment = "ICAO codes are brands and ICD11 is the generic type."
     * target[+]
       * code = #ICAO049
       * equivalence = #narrower
+      * comment = "ICAO codes are brands and ICD11 is the generic type."
   * element[+]
     * code = #XM97T2
     * target[+]
       * code = #ICAO050
       * equivalence = #narrower
+      * comment = "ICAO codes are brands and ICD11 is the generic type."
     * target[+]
       * code = #ICAO051
       * equivalence = #narrower
+      * comment = "ICAO codes are brands and ICD11 is the generic type."
     * target[+]
       * code = #ICAO052
       * equivalence = #narrower
+      * comment = "ICAO codes are brands and ICD11 is the generic type."
     * target[+]
       * code = #ICAO053
       * equivalence = #narrower
+      * comment = "ICAO codes are brands and ICD11 is the generic type."
     * target[+]
       * code = #ICAO054
       * equivalence = #narrower
+      * comment = "ICAO codes are brands and ICD11 is the generic type."
   * element[+]
     * code = #XM6QV1
     * target[+]
       * code = #ICAO055
       * equivalence = #narrower
+      * comment = "ICAO codes are brands and ICD11 is the generic type."
     * target[+]
       * code = #ICAO056
       * equivalence = #narrower
+      * comment = "ICAO codes are brands and ICD11 is the generic type."
     * target[+]
       * code = #ICAO057
       * equivalence = #narrower
+      * comment = "ICAO codes are brands and ICD11 is the generic type."
     * target[+]
       * code = #ICAO058
       * equivalence = #narrower
+      * comment = "ICAO codes are brands and ICD11 is the generic type."
   * element[+]
     * code = #XM1AG7
     * target[+]
       * code = #ICAO059
       * equivalence = #narrower
+      * comment = "ICAO codes are brands and ICD11 is the generic type."
     * target[+]
       * code = #ICAO060
       * equivalence = #narrower
+      * comment = "ICAO codes are brands and ICD11 is the generic type."
     * target[+]
       * code = #ICAO061
       * equivalence = #narrower
+      * comment = "ICAO codes are brands and ICD11 is the generic type."
   * element[+]
     * code = #XM5ZJ4
     * target[+]
       * code = #ICAO062
       * equivalence = #narrower
+      * comment = "ICAO codes are brands and ICD11 is the generic type."
     * target[+]
       * code = #ICAO063
       * equivalence = #narrower
+      * comment = "ICAO codes are brands and ICD11 is the generic type."
     * target[+]
       * code = #ICAO064
       * equivalence = #narrower
+      * comment = "ICAO codes are brands and ICD11 is the generic type."
     * target[+]
       * code = #ICAO065
       * equivalence = #narrower
+      * comment = "ICAO codes are brands and ICD11 is the generic type."
   * element[+]
     * code = #XM5QM6
     * target[+]
       * code = #ICAO066
       * equivalence = #narrower
+      * comment = "ICAO codes are brands and ICD11 is the generic type."
     * target[+]
       * code = #ICAO067
       * equivalence = #narrower
+      * comment = "ICAO codes are brands and ICD11 is the generic type."
   * element[+]
     * code = #XM7HT3
     * target[+]
       * code = #ICAO068
       * equivalence = #narrower
+      * comment = "ICAO codes are brands and ICD11 is the generic type."
     * target[+]
       * code = #ICAO069
       * equivalence = #narrower
+      * comment = "ICAO codes are brands and ICD11 is the generic type."
     * target[+]
       * code = #ICAO070
       * equivalence = #narrower
+      * comment = "ICAO codes are brands and ICD11 is the generic type."
   * element[+]
     * code = #XM8866
     * target[+]
       * code = #ICAO071
       * equivalence = #narrower
+      * comment = "ICAO codes are brands and ICD11 is the generic type."
     * target[+]
       * code = #ICAO072
       * equivalence = #narrower
+      * comment = "ICAO codes are brands and ICD11 is the generic type."
     * target[+]
       * code = #ICAO073
       * equivalence = #narrower
+      * comment = "ICAO codes are brands and ICD11 is the generic type."
     * target[+]
       * code = #ICAO074
       * equivalence = #narrower
+      * comment = "ICAO codes are brands and ICD11 is the generic type."
     * target[+]
       * code = #ICAO075
       * equivalence = #narrower
+      * comment = "ICAO codes are brands and ICD11 is the generic type."
   * element[+]
     * code = #XM9TQ1
     * target[+]
       * code = #ICAO076
       * equivalence = #narrower
+      * comment = "ICAO codes are brands and ICD11 is the generic type."
     * target[+]
       * code = #ICAO077
       * equivalence = #narrower
+      * comment = "ICAO codes are brands and ICD11 is the generic type."
     * target[+]
       * code = #ICAO078
       * equivalence = #narrower
+      * comment = "ICAO codes are brands and ICD11 is the generic type."
   * element[+]
     * code = #XM1G90
     * target[+]
       * code = #ICAO079
       * equivalence = #narrower
+      * comment = "ICAO codes are brands and ICD11 is the generic type."
     * target[+]
       * code = #ICAO080
       * equivalence = #narrower
+      * comment = "ICAO codes are brands and ICD11 is the generic type."
     * target[+]
       * code = #ICAO081
       * equivalence = #narrower
+      * comment = "ICAO codes are brands and ICD11 is the generic type."
   * element[+]
     * code = #XM85P5
     * target[+]
       * code = #ICAO082
       * equivalence = #narrower
+      * comment = "ICAO codes are brands and ICD11 is the generic type."
     * target[+]
       * code = #ICAO083
       * equivalence = #narrower
+      * comment = "ICAO codes are brands and ICD11 is the generic type."
     * target[+]
       * code = #ICAO084
       * equivalence = #narrower
+      * comment = "ICAO codes are brands and ICD11 is the generic type."
   * element[+]
     * code = #XM9FQ7
     * target[+]
       * code = #ICAO085
       * equivalence = #narrower
+      * comment = "ICAO codes are brands and ICD11 is the generic type."
     * target[+]
       * code = #ICAO086
       * equivalence = #narrower
+      * comment = "ICAO codes are brands and ICD11 is the generic type."
   * element[+]
     * code = #XM97N6
     * target[+]
       * code = #ICAO087
       * equivalence = #narrower
+      * comment = "ICAO codes are brands and ICD11 is the generic type."
     * target[+]
       * code = #ICAO088
       * equivalence = #narrower
+      * comment = "ICAO codes are brands and ICD11 is the generic type."
     * target[+]
       * code = #ICAO089
       * equivalence = #narrower
+      * comment = "ICAO codes are brands and ICD11 is the generic type."
   * element[+]
     * code = #XM2YG8
     * target[+]
       * code = #ICAO090
       * equivalence = #narrower
+      * comment = "ICAO codes are brands and ICD11 is the generic type."
     * target[+]
       * code = #ICAO091
       * equivalence = #narrower
+      * comment = "ICAO codes are brands and ICD11 is the generic type."
   * element[+]
     * code = #XM0K39
     * target[+]
       * code = #ICAO092
       * equivalence = #narrower
+      * comment = "ICAO codes are brands and ICD11 is the generic type."
     * target[+]
       * code = #ICAO093
       * equivalence = #narrower
+      * comment = "ICAO codes are brands and ICD11 is the generic type."
     * target[+]
       * code = #ICAO094
       * equivalence = #narrower
+      * comment = "ICAO codes are brands and ICD11 is the generic type."
   * element[+]
     * code = #XM1AU2
     * target[+]
       * code = #ICAO095
       * equivalence = #narrower
+      * comment = "ICAO codes are brands and ICD11 is the generic type."
     * target[+]
       * code = #ICAO096
       * equivalence = #narrower
+      * comment = "ICAO codes are brands and ICD11 is the generic type."
     * target[+]
       * code = #ICAO097
       * equivalence = #narrower
+      * comment = "ICAO codes are brands and ICD11 is the generic type."
 
-Instance:       WHO_DDCC_Map_ICAO_to_ICD11_Vaccines
+Instance:       who-ddcc-map-icao-icd11-vaccines
 InstanceOf:     ConceptMap
 Description:    "Mapping from ICAO to ICD11 for COVID-19 Vaccines"
 Usage:          #definition
@@ -1117,8 +1230,6 @@ Usage:          #definition
 * experimental = true
 * date = "2022-11-23"
 * description = "Rule-based mappings between ICAO and ICD-11 for COVID-19 Vaccines"
-* sourceCanonical = $ICAOV1
-* targetCanonical = $ICD11
 
 * group[+]
   * source = $ICD11
@@ -1614,7 +1725,7 @@ Usage:          #definition
 
 
 
-Instance:       WHO_DDCC_Map_CVX_To_ICD11_Vaccines
+Instance:       who-ddcc-map-cvx-icd11-vaccines
 InstanceOf:     ConceptMap
 Description:    "Mapping from CVX to ICD-11 for COVID-19 Vaccines"
 Usage:          #definition
@@ -1626,8 +1737,6 @@ Usage:          #definition
 * experimental = true
 * date = "2022-05-23"
 * description = "Rule-based mappings between CVX and ICD-11 and for COVID-19 Vaccines"
-* sourceCanonical = $CVX
-* targetCanonical = $ICD11
 
 * group[+]
   * source = $CVX
@@ -1640,7 +1749,7 @@ Usage:          #definition
       * equivalence = #equivalent
   * unmapped.mode = #provided
 
-Instance:       WHO_DDCC_Map_CVX_To_ICD11_Brands
+Instance:       who-ddcc-map-cvx-icd11-brands
 InstanceOf:     ConceptMap
 Description:    "Mapping from CVX to ICD-11 for COVID-19 Brands"
 Usage:          #definition
@@ -1652,8 +1761,6 @@ Usage:          #definition
 * experimental = true
 * date = "2022-05-23"
 * description = "Rule-based mappings between CVX and ICD-11 and for COVID-19 Brands"
-* sourceCanonical = $CVX
-* targetCanonical = $ICD11
 
 * group[+]
   * source = $CVX
@@ -1666,7 +1773,7 @@ Usage:          #definition
       * equivalence = #equivalent
   * unmapped.mode = #provided
 
-Instance:       WHO_DDCC_Map_ICD11_to_SCT_Disease_Targeted
+Instance:       who-ddcc-map-icd11-sct-disease-targeted
 InstanceOf:     ConceptMap
 Description:    "Mapping from ICD-11 to SNOMED CT for COVID-19 disease."
 Usage:          #definition
@@ -1678,8 +1785,6 @@ Usage:          #definition
 * experimental = true
 * date = "2021-04-23"
 * description = "Rule-based mappings between ICD-11 and SNOMED CT for COVID-19 Disease or Agent Targeted"
-* sourceCanonical = $ICD11
-* targetCanonical = SCT
 
 * group[+]
   * source = $ICD11
@@ -1692,7 +1797,7 @@ Usage:          #definition
       * equivalence = #equivalent
 
 
-Instance:       WHO_DDCC_Map_ICD11_to_ICD10_Disease_Targeted
+Instance:       who-ddcc-map-icd11-icd10-disease-targeted
 InstanceOf:     ConceptMap
 Description:    "Mapping from ICD-11 to ICD-10 for COVID-19 disease."
 Usage:          #definition
@@ -1704,8 +1809,6 @@ Usage:          #definition
 * experimental = true
 * date = "2021-04-23"
 * description = "Rule-based mappings between ICD-11 and ICD-10 for COVID-19 Disease or Agent Targeted"
-* sourceCanonical = $ICD11
-* targetCanonical = $ICD10
 
 * group[+]
   * source = $ICD11

@@ -5,6 +5,8 @@ CodeSystem:     DDCC_Example_Test_CodeSystem
 Id:             DDCC-Example-Test-CodeSystem
 Title:          "DDCC Codes for examples"
 Description:    "Example codes for example resources."
+* ^experimental = false
+* ^caseSensitive = true
 * #TEST        "Test"
 
 Instance:     DDCC-Patient-English

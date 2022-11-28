@@ -71,6 +71,8 @@ CodeSystem:     DDCC_Device_Property_CodeSystem
 Id:             DDCC-Device-Property-CodeSystem
 Title:          "DDCC Device Property Codes"
 Description:    "Possible properties available for devices."
+* ^experimental = false
+* ^caseSensitive = true
 * #pathogen     "Pathogen Targeted"
 * #brand        "Test Brand"
 
@@ -80,7 +82,7 @@ Title:          "DDCC Device Property Codes"
 Description: 	"Properties of DDCC devices"
 * include codes from system DDCC_Device_Property_CodeSystem
 
-Instance:       WHO_DDCC_Map_LOINC_to_SCT_Type_of_Test
+Instance:       who-ddcc-map-loinc-sct-type-of-test
 InstanceOf:     ConceptMap
 Description:    "Mapping from LOINC to SNOMED CT for COVID-19 Type of Test"
 Usage:          #definition
@@ -92,8 +94,6 @@ Usage:          #definition
 * experimental = true
 * date = "2021-12-16"
 * description = "Rule-based mappings between LOINC and SNOMED CT for COVID-19 Type of Test"
-* sourceCanonical = $LOINC
-* targetCanonical = SCT
 
 * group[+]
   * source = $LOINC
@@ -111,7 +111,7 @@ Usage:          #definition
       * code = #414464004
       * equivalence = #equivalent
 
-Instance:       WHO_DDCC_Map_ICHI_to_LOINC_Type_of_Test
+Instance:       who-ddcc-map-ichi-loinc-type-of-test
 InstanceOf:     ConceptMap
 Description:    "Mapping from ICHI to LOINC for COVID-19 Type of Test"
 Usage:          #definition
@@ -123,8 +123,6 @@ Usage:          #definition
 * experimental = true
 * date = "2022-03-22"
 * description = "Rule-based mappings between ICHI and LOINC for COVID-19 Type of Test"
-* sourceCanonical = $LOINC
-* targetCanonical = SCT
 
 * group[+]
   * source = $ICHI
@@ -143,7 +141,7 @@ Usage:          #definition
       * equivalence = #equivalent
 
 
-Instance:       WHO_DDCC_Map_ICHI_to_SCT_Type_of_Test
+Instance:       who-ddcc-map-ichi-sct-type-of-test
 InstanceOf:     ConceptMap
 Description:    "Mapping from ICHI to SNOMED CT for COVID-19 Type of Test"
 Usage:          #definition
@@ -155,8 +153,6 @@ Usage:          #definition
 * experimental = true
 * date = "2022-03-22"
 * description = "Rule-based mappings between ICHI and SNOMED CT for COVID-19 Type of Test"
-* sourceCanonical = $ICHI
-* targetCanonical = SCT
 
 * group[+]
   * source = $ICHI
@@ -174,7 +170,7 @@ Usage:          #definition
       * code = #414464004
       * equivalence = #equivalent
 
-Instance:       WHO_DDCC_Map_ICD11_to_SCT_Test_Result
+Instance:       who-ddcc-map-icd11-sct-test-result
 InstanceOf:     ConceptMap
 Description:    "Mapping from ICD-11 to SNOMED CT for COVID-19 Test Result"
 Usage:          #definition
@@ -186,8 +182,6 @@ Usage:          #definition
 * experimental = true
 * date = "2021-12-16"
 * description = "Rule-based mappings between ICD-11 and SNOMED CT for COVID-19 Test Result"
-* sourceCanonical = $ICD11
-* targetCanonical = SCT
 
 * group[+]
   * source = $ICD11
@@ -206,7 +200,7 @@ Usage:          #definition
       * equivalence = #equivalent
 
 
-Instance:       WHO_DDCC_Map_ICHI_to_SCT_Specimen_Origin
+Instance:       who-ddcc-map-ichi-sct-specimen-origin
 InstanceOf:     ConceptMap
 Description:    "Mapping from ICHI to SNOMED CT for COVID-19 Specimen Origin"
 Usage:          #definition
@@ -218,8 +212,6 @@ Usage:          #definition
 * experimental = true
 * date = "2022-03-22"
 * description = "Rule-based mappings between ICHI and SNOMED CT for COVID-19 Specimen Origin"
-* sourceCanonical = $ICHI
-* targetCanonical = SCT
 
 * group[+]
   * source = $ICHI
@@ -280,7 +272,7 @@ Usage:          #definition
       * equivalence = #wider
 
 
-Instance:       WHO_DDCC_Map_SCT_to_ICHI_Specimen_Origin
+Instance:       who-ddcc-map-sct-ichi-specimen-origin
 InstanceOf:     ConceptMap
 Description:    "Mapping from SNOMED CT to ICHI for COVID-19 Specimen Origin"
 Usage:          #definition
@@ -292,8 +284,6 @@ Usage:          #definition
 * experimental = true
 * date = "2022-03-22"
 * description = "Rule-based mappings between SNOMED CT and ICHI for COVID-19 Specimen Origin"
-* sourceCanonical = SCT
-* targetCanonical = $ICHI
 
 * group[+]
   * source = SCT
@@ -354,7 +344,7 @@ Usage:          #definition
       * equivalence = #equivalent
 
 
-Instance:       WHO_DDCC_Map_ICD11_to_SCT_Agent_Targeted
+Instance:       who-ddcc-map-icd11-sct-agent-targeted
 InstanceOf:     ConceptMap
 Description:    "Mapping from ICD-11 to SNOMED CT for COVID-19 Agent Targeted"
 Usage:          #definition
@@ -366,8 +356,6 @@ Usage:          #definition
 * experimental = true
 * date = "2021-12-16"
 * description = "Rule-based mappings between ICD-11 and SNOMED CT for COVID-19 Agent Targeted"
-* sourceCanonical = $ICD11
-* targetCanonical = SCT
 
 * group[+]
   * source = $ICD11

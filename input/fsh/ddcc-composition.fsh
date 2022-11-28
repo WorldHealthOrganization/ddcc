@@ -93,6 +93,8 @@ CodeSystem:     DDCC_Composition_Category_CodeSystem
 Id:             DDCC-Composition-Category-CodeSystem
 Title:          "DDCC Composition Category Codes"
 Description:    "Possible categories available for composition."
+* ^experimental = false
+* ^caseSensitive = true
 * #ddcc-vs      "DDCC:VS"
 * #ddcc-tr      "DDCC:TR"
 
