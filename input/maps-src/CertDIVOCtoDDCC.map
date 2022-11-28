@@ -159,8 +159,14 @@ group ExtractProtocolApplied(source ev: Evidence, source oid, target protocol: P
 group ExtractPatient(source src: W3CVC, source pid, target patient: Patient) {
     pid -> patient.id = pid "Patient ID";
     src.credentialSubject as credentialSubject -> patient then ExtractPatientFromSubj(credentialSubject, patient)  "Patient Data from Subj";
-    //birthDateElement = parseDoB(vc.credentialSubject.dob) ?: parseAge(vc.issuanceDate, vc.credentialSubject.age)
-} 
+
+    src.credentialSubject as credSubj then {
+        src.issuanceDate as issuanceDate then {
+            credSubj.age as age ->
+                patient.birthDate = evaluate(issuanceDate, (($this - age).toString().substring(0,4)) ) "set age";
+        } "set age issuance date";
+    } "set cred age";
+}
 
 group ExtractPatientFromSubj(source src: CredentialSubject, target patient: Patient) {
     src.name as patientName -> patient.name = create('HumanName') as humanName, humanName.text = patientName "Patient Name";
@@ -168,7 +174,7 @@ group ExtractPatientFromSubj(source src: CredentialSubject, target patient: Pati
     src.dob as birthDate -> patient.birthDate = birthDate "set birthDate";
     
     src.gender as gender -> patient then ExtractGender(gender, patient) "Extract Gender";
-    src.sex as sex -> patient then ExtractGender(gender, patient) "Extract Sex";
+    src.sex as sex -> patient then ExtractGender(sex, patient) "Extract Sex";
 
     src.address as w3cAddress -> patient.address as fhirAddress then ExtractAddress(w3cAddress, fhirAddress) "Extracting Patient Address";
 } 
@@ -191,6 +197,9 @@ group ExtractAddress(source w3cAddress: Address, target fhirAddress: Address) {
 group ExtractGender(source gender, target patient: Patient) {
     gender where(gender = "M") -> patient.gender = "male" "set male";
     gender where(gender = "F") -> patient.gender = "female" "set female";
+
+    gender where(gender = "Male") -> patient.gender = "male" "set male";
+    gender where(gender = "Female") -> patient.gender = "female" "set female";
 }
 
 group ExtractComposition(source src: W3CVC, target composition: Composition) {

@@ -14,7 +14,9 @@ group EUDCCtoDDCC (source src: CWT, target bundle: Bundle){
     src -> bundle.type = "transaction" "set bundle type";
 
     src -> bundle, bundle.entry as entry, entry.resource = create('Composition') as comp then {
-        src.cert as cert -> bundle then ExtractCert(cert, bundle, comp) "Certificate";
+        src.data as data then {
+            data.cert as cert -> bundle then ExtractCert(cert, bundle, comp) "Certificate";
+        } "Processing cert data";
         src -> bundle then ExtractComposition(src, comp) "Composition";
     } "Patient and Composition Create";
 }
