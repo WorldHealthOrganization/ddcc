@@ -1,4 +1,4 @@
-Instance:       DDCCGenerateHealthCertificate
+Instance:       DDCC-QuestionnaireResponse-generateHealthCertificate
 InstanceOf:     OperationDefinition
 Usage:          #definition
 * id = "DDCC-QuestionnaireResponse-generateHealthCertificate"
@@ -31,7 +31,7 @@ Generate one or more signed DDCC Documents based on a [DDCC QuestionnaireRespons
 * parameter[=].documentation = """The DDCC, including any QR codes, that was created under the [Generate Health Certificate](transactions.html#submit-health-event-expected-actions) expected actions"""
 * parameter[=].type = #Bundle
 
-Instance:       DDCCGenerateHealthFolder
+Instance:       DDCC-QuestionnaireResponse-generateHealthFolder
 InstanceOf:     OperationDefinition
 Usage:          #definition
 * id = "DDCC-QuestionnaireResponse-generateHealthFolder"

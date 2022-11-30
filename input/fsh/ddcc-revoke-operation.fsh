@@ -1,4 +1,4 @@
-Instance:       DDCCRevokeHealthCertificate
+Instance:       DDCC-QuestionnaireResponse-revokeHealthCertificate
 InstanceOf:     OperationDefinition
 Usage:          #definition
 * id = "DDCC-QuestionnaireResponse-revokeHealthCertificate"

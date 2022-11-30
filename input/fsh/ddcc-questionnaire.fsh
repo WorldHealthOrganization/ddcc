@@ -227,7 +227,7 @@ Usage: #definition
 * item[=].required = false
 
 * item[+].linkId = "date"
-* item[=].text = "Date and time of sample collection  "
+* item[=].text = "Date and time of sample collection"
 * item[=].type = #date
 * item[=].required = true
 
