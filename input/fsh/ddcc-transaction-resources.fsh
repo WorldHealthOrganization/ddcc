@@ -78,7 +78,6 @@ Id:             DDCCSubmitHealthEventResponse
 Title:          "DDCC Submit Health Event Response"
 Description:    """ 
 A DDCC Submit Health Event Response](StructureDefinition-DDCCSubmitHealthEventRespose.html) is a transaction reponse bundle containing the operation outcomes for the submission of one or more health certificates under the [Submit Health Event](transactions.html#submit-health-event) transaction.
-
 """
 * ^publisher = "World Health Organization (WHO)"
 * . MS

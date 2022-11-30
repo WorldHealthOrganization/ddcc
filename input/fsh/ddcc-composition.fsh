@@ -3,8 +3,8 @@ Parent:         Composition
 Id:             DDCCComposition
 Title:          "DDCC Composition"
 Description:    """ 
-Describes the logical structure for a Digital Documentation of COVID-19 Certificates 
-(DDCC).  
+Describes the logical structure for a Digital Documentation of COVID-19 
+Certificates (DDCC).
 """
 * ^publisher = "World Health Organization (WHO)"
 * ^version = "DDCC-0.1" 
@@ -45,8 +45,7 @@ Parent:         DDCCComposition
 Id:             DDCCVSComposition
 Title:          "DDCC:VS Composition"
 Description:    """ 
-Describes the logical structure for a Digital Documentation of COVID-19 Certificates - Vaccination Status
-(DDCC:VS).  
+Describes the logical structure for a Digital Documentation of COVID-19 Certificates - Vaccination Status (DDCC:VS).
 """
 * category = DDCC_Composition_Category_CodeSystem#ddcc-vs
 * section ^slicing.discriminator[+].type = #value
@@ -69,8 +68,7 @@ Parent:         DDCCComposition
 Id:             DDCCTRComposition
 Title:          "DDCC:TR Composition"
 Description:    """ 
-Describes the logical structure for a Digital Documentation of COVID-19 Certificates - Test Result
-(DDCC:TR).  
+Describes the logical structure for a Digital Documentation of COVID-19 Certificates - Test Result (DDCC:TR).
 """
 * category = DDCC_Composition_Category_CodeSystem#ddcc-tr
 * section ^slicing.discriminator[+].type = #value
@@ -110,7 +108,6 @@ Id:             DDCCDocument
 Title:          "DDCC Document"
 Description:    """ 
 A [DDCC Document](StructureDefinition-DDCCDocument.html) is a document bundle containing the DDCC.
-
 """
 * ^publisher = "World Health Organization (WHO)"
 * . MS
@@ -145,7 +142,6 @@ Id:             DDCCVSDocument
 Title:          "DDCC:VS Document"
 Description:    """ 
 A [DDCC:VS Document](StructureDefinition-DDCCVSDocument.html) is a document bundle containing the DDCC:VS.
-
 """
 * entry contains ddccImmunization 1..1
     and ddccImmunizationRecommendation 0..1
@@ -158,7 +154,6 @@ Id:             DDCCTRDocument
 Title:          "DDCC:VS Document"
 Description:    """ 
 A [DDCC:VS Document](StructureDefinition-DDCCVSDocument.html) is a document bundle containing the DDCC:VS.
-
 """
 * entry contains ddccObservation 1..1
     and ddccTest 1..1
@@ -179,7 +174,6 @@ Title:          "DDCC DocumentSigned"
 Description:    """ 
 A [DDCC Document Signed](StructureDefinition-DDCCDocumentSigned.html) is a document bundle containing the DDCC
 that has a digital signature.
-
 """
 * signature 1..1 MS
 
@@ -190,7 +184,6 @@ Title:          "DDCC:VS DocumentSigned"
 Description:    """ 
 A [DDCC:VS Document Signed](StructureDefinition-DDCCVSDocumentSigned.html) is a document bundle containing the DDCC:VS
 that has a digital signature.
-
 """
 * signature 1..1 MS
 
@@ -201,7 +194,6 @@ Title:          "DDCC:TR DocumentSigned"
 Description:    """ 
 A [DDCC:TR Document Signed](StructureDefinition-DDCCTRDocumentSigned.html) is a document bundle containing the DDCC:TR
 that has a digital signature.
-
 """
 * signature 1..1 MS
 

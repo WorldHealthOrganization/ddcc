@@ -7,7 +7,6 @@ Description:	"""
 A DDCCPatient should:
 * if the [identifier.assigner](StructureDefinition-DDCCPatient-definitions.html#Patient.identifier] is set then the value of [identifier.assigner](StructureDefinition-DDCCPatient-definitions.html#Patient.identifier.assigner) should be set to reference the [DDCC Organization](StructureDefinition-DDCCOrganization.html) resource associated to the PHA.
 * obeys who-ddcc-patient-1
-
 """
 * identifier 0.. MS
 * identifier.system MS

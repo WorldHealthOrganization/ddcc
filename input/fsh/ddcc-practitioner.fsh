@@ -5,7 +5,6 @@ Title:          "DDCC Practitioner"
 Description:    """ 
 Container for an DDCC Practitioner, which is a Practitioner authorized by the PHA to 
 vaccinate an [DDCC Patient](StructureDefinition-DDCCPatient.html).
-
 """
 * identifier 1.. MS
 * identifier ^slicing.discriminator[+].type = #value
@@ -34,7 +33,6 @@ Association of an [DDCC Practitioner](StructureDefinition-DDCCPractitioner.html)
 managing [DDCC Organization](StructureDefinition-DDCCOrganization.html), indicating 
 that an DDCC Practitioner is authorized by the public health authority (PHA) to 
 vaccinate an [DDCC Patient](StructureDefinition-DDCCPatient.html).
-
 """
 * practitioner only Reference(DDCCPractitioner)
 * organization only Reference(DDCCOrganization)

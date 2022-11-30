@@ -22,7 +22,7 @@ Parent:         sdc-questionnaireresponse
 Id:             DDCCQuestionnaireResponse
 Title:          "DDCC Questionnaire Response"
 Description:    """ 
-Describes the logical structure for a questionnaire response associacted to a [DDCC Questionaire](StructureDefinition-DDCCQuestionnaire.html). 
+Describes the logical structure for a questionnaire response associacted to a [DDCC Questionaire](StructureDefinition-DDCCQuestionnaire.html).
 """
 * ^abstract = true
 
