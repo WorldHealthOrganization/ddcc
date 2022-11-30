@@ -24,6 +24,7 @@ Immunization resource.
 * extension[validFrom] ^label = "Vaccination valid from"
 * vaccineCode 1..1 MS
 * vaccineCode ^label = "Vaccine or prophylaxis"
+/*
 * vaccineCode.coding ^slicing.discriminator[+].type = #exists
 * vaccineCode.coding ^slicing.discriminator[=].path = "system"
 * vaccineCode.coding ^slicing.discriminator[+].type = #exists
@@ -33,6 +34,11 @@ Immunization resource.
 * vaccineCode.coding[ddccVaccine].system 1..1 MS
 * vaccineCode.coding[ddccVaccine].code 1..1 MS
 * vaccineCode.coding[ddccVaccine] from WHO_DDCC_Vaccines_COVID_19 (example)
+*/
+* vaccineCode.coding 1..1 MS
+* vaccineCode.coding.system 1..1 MS
+* vaccineCode.coding.code 1..1 MS
+* vaccineCode from WHO_DDCC_Vaccines_COVID_19 (preferred)
 //  do we need this ?  * vaccineCode.coding[ddccVaccine].system = "urn:EXAMPLE-who-:smart:vaccine-certificate:RC1:coding"
 //  do we need this ?   * vaccineCode.coding[ddccVaccine].code from WHO_DDCC_Vaccines_COVID_19 (example)
 

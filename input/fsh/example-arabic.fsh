@@ -38,7 +38,7 @@ Usage: #example
 * extension[vaccineMarketAuthorization].valueCoding = DDCC_Example_Test_CodeSystem#TEST
 * extension[validFrom].valueDate = "2021-05-30"
 * extension[country].valueCode = urn:iso:std:iso:3166#SAU
-* vaccineCode.coding[ddccVaccine] = $ICD11#XM0CX4
+* vaccineCode = $ICD11#XM0CX4
 * expirationDate = "2021-06-30"
 * lotNumber = "123"
 * patient = Reference(DDCC-Patient-Arabic)
