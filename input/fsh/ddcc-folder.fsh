@@ -1,5 +1,5 @@
 Profile:        DDCCFolder
-Parent:         http://profiles.ihe.net/ITI/MHD/StructureDefinition/IHE.MHD.Minimal.Folder
+Parent:         https://profiles.ihe.net/ITI/MHD/StructureDefinition/IHE.MHD.Minimal.Folder
 Title:          "DDCC Folder"
 Description:    """
 DDCC Folder of the Paper Certificate

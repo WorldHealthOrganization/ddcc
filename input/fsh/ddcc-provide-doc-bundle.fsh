@@ -1,5 +1,5 @@
 Profile:        DDCCSubmissionSet
-Parent:         http://profiles.ihe.net/ITI/MHD/StructureDefinition/IHE.MHD.Minimal.SubmissionSet
+Parent:         https://profiles.ihe.net/ITI/MHD/StructureDefinition/IHE.MHD.Minimal.SubmissionSet
 Title:          "DDCC Submission Set"
 Description:    """
 DDCC Submission Set for ITI-65
@@ -11,7 +11,7 @@ DDCC Submission Set for ITI-65
 * entry.item only Reference(DDCCDocumentReference or DDCCFolder)
 
 Profile:        DDCCProvideDocumentBundle
-Parent:         http://profiles.ihe.net/ITI/MHD/StructureDefinition/IHE.MHD.Minimal.ProvideBundle
+Parent:         https://profiles.ihe.net/ITI/MHD/StructureDefinition/IHE.MHD.Minimal.ProvideBundle
 Title:          "DDCC Provide Document Bundle"
 Description:    """
 DDCC Provide Document Bundle for ITI-65

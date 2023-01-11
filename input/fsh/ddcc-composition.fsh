@@ -200,7 +200,7 @@ that has a digital signature.
 
 
 Profile:        DDCCDocumentReference
-Parent:         http://profiles.ihe.net/ITI/MHD/StructureDefinition/IHE.MHD.Minimal.DocumentReference
+Parent:         https://profiles.ihe.net/ITI/MHD/StructureDefinition/IHE.MHD.Minimal.DocumentReference
 Id:             DDCCDocumentReference
 Title:          "DDCC Document Reference"
 Description:    """ 
