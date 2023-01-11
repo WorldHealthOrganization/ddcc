@@ -10,8 +10,8 @@ actor "Verifier" as VER
 participant "Digital Health\nSolution (DHS)\n(e.g. openSRP or an LIS)" as DHS
 participant "DDCC Verifier\n Application" as VAP
 participant "DDCC Generation\nService (e.g. DDCC\nTransactions Mediator)" as CGS
-participant "Matchbox StructureMap\nService" as MB 
-participant "FHIR Server" as FS 
+participant "Data Transformation/\nExtraction Service" as DTE 
+participant "Document Constructor" as DC 
 
 box "Public Health Authority (PHA)"
 
@@ -41,11 +41,11 @@ note left: Process starts after\na test report was generated.\nSee full list of 
     CGS->CGS: Ensure DHS has node level\nauthentication\nIHE: ATNA
     CGS->CGS: Log transaction / audit trail\nIHE: ATNA (RESTful?)
     group FHIR: Create Bundle:\nDDCC Document
-        CGS->MB: Send input data
-        MB->CGS: Return transaction Bundle\nof FHIR resources
-        CGS->FS: Send transaction Bundle
-        CGS->FS: Create DDCC Document\nComposition/$document
-        FS->CGS: Return DDCC Document
+        CGS->DTE: Send input data
+        DTE->CGS: Return transaction Bundle\nof FHIR resources
+        CGS->DC: Send transaction Bundle
+        CGS->DC: Create DDCC Document\nComposition/$document
+        DC->CGS: Return DDCC Document
         CGS->CGS: Create signed QR code(s)
         CGS->CGS: Sign DDCC Document
     end
