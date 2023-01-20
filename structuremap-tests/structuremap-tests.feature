@@ -1,44 +1,61 @@
 Feature: structure map tests
-# prerequisites: Java, Karate v1.3.1, Matchbox server, run sushi
+# prerequisites: Java >= JDK11, Karate v1.3.1, Matchbox server <v3, run sushi
+# tests are not independent and should not be run in parallel
 
 Background:
-# Matcbox instance URL
-  * url 'https://test.ahdis.ch/matchbox/fhir'
-  # url 'http://localhost:8080/fhir'
+# Matchbox instance URL
+  # url 'https://test.ahdis.ch/matchbox/fhir'
+  * url 'http://localhost:8080/matchbox/fhir'
 
-@precondition
+@ignore
 Scenario: Get capability statement
 Given path 'metadata'
 And header Accept = 'application/fhir+json'
 When method get
-Then status 200  
+Then status 200
 
-@ddcc
+# this is work-around for missing Base structure definition in HAPI FHIR R4 validation profiles
+@preload
+Scenario: Preload Base structure definition
+Given path 'StructureDefinition', 'Base'
+And request read('./StructureDefinition-Base.xml')
+And header Accept = 'application/fhir+xml'
+And header Content-Type = 'application/fhir+xml'
+When method put
+Then assert responseStatus == 200 || responseStatus == 201
+
+@preload
 Scenario: Upload DDCC IG
 Given path 'ImplementationGuide'
 And request '{ "resourceType": "ImplementationGuide", "version": "1.0.0", "name": "fhir.who.ddcc", "url": "http://worldhealthorganization.github.io/ddcc/package.tgz" }'
 And header Accept = 'application/fhir+json'
 And header Content-Type = 'application/fhir+json'
 When method post
-Then status 200
+Then assert responseStatus == 200 || responseStatus == 201
 
-@ddcc
-Scenario: Updating DDCC Core Data Set
-Given path 'StructureDefinition', 'DDCCCoreDataSet'
-And request read('../fsh-generated/resources/StructureDefinition-DDCCCoreDataSet.json')
+@preload
+Scenario Outline: Preload generated structure definitions
+Given path 'StructureDefinition', '<sdid>'
+And request read('../fsh-generated/resources/StructureDefinition-<sdid>.json')
 And header Accept = 'application/fhir+json'
 And header Content-Type = 'application/fhir+json'
 When method put
-Then status 200 || status 201
+Then assert responseStatus == 200 || responseStatus == 201
+  Examples:
+    | sdid |
+    | DDCCCoreDataSet  |
+    | DDCCCoreDataSet.VS  |
+    | DDCCOrganization |
+    | DDCCImmunizationRecommendation |    
+    | DDCCImmunization |    
+    | DDCCPatient |    
+    | DDCCEventBrand |    
+    | DDCCCountryOfEvent |    
+    | DDCCDocumentReferenceQR |    
+    | DDCCComposition |    
+    | DDCCCoreDataSet.VS.PoV |    
+    | DDCCCoreDataSet.VS.CoC |
 
-@ddcc
-Scenario: Updating DDCC Core Data Set VS
-Given path 'StructureDefinition', 'DDCCCoreDataSet.VS'
-And request read('../fsh-generated/resources/StructureDefinition-DDCCCoreDataSet.VS.json')
-And header Accept = 'application/fhir+json'
-And header Content-Type = 'application/fhir+json'
-When method put
-Then status 200 || status 201
 
 @shc
 Scenario: Upload SHC IG
@@ -47,7 +64,7 @@ And request '{ "resourceType": "ImplementationGuide", "version": "0.6.2", "name"
 And header Accept = 'application/fhir+json'
 And header Content-Type = 'application/fhir+json'
 When method post
-Then status 200
+Then assert responseStatus == 200 || responseStatus == 201
 
 @shc
 Scenario: Updating SHC to Core Data Set VS Structure Map
@@ -56,7 +73,7 @@ And request read('../input/maps-src/SHCToCoreDataSetVS.map')
 And header Accept = 'application/fhir+json'
 And header Content-Type = 'text/fhir-mapping'
 When method post
-Then status 200
+Then assert responseStatus == 200 || responseStatus == 201
 
 @shc
 Scenario: Transforming Example SHC Bundle to Core Data Set VS
