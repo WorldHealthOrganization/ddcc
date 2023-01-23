@@ -76,7 +76,7 @@ When method post
 Then assert responseStatus == 200 || responseStatus == 201
 
 @shc
-Scenario: Transforming Example SHC Bundle to Core Data Set VS
+Scenario: Transforming Example SHC Bundle to Bundle of Core Data Set VS
 * param source = 'http://worldhealthorganization.github.io/ddcc/StructureMap/SHCToCoreDataSetVS'
 Given path 'StructureMap', '$transform'
 And request read('fixtures/shc/example-00-a-fhirBundle.json')
@@ -94,3 +94,31 @@ And match response.entry[0].resource.vaccination.brand contains only {system: 'h
 And match response.entry[0].resource.vaccination.lot == '0000001'
 And match response.entry[0].resource.vaccination.date == '2021-01-01'
 And match response.entry[0].resource.vaccination.centre == 'ABC General Hospital'
+
+@shc
+Scenario: Updating SHC to Core Data Set TR Structure Map
+Given path 'StructureMap'
+And request read('../input/maps-src/SHCToCoreDataSetTR.map')
+And header Accept = 'application/fhir+json'
+And header Content-Type = 'text/fhir-mapping'
+When method post
+Then assert responseStatus == 200 || responseStatus == 201
+
+@shc
+Scenario: Transforming Example SHC Bundle to Bundle of Core Data Set TR
+* param source = 'http://worldhealthorganization.github.io/ddcc/StructureMap/SHCToCoreDataSetTR'
+Given path 'StructureMap', '$transform'
+And request read('fixtures/shc/Bundle-example-bundle-lab-test-results-covid.json')
+And header Accept = 'application/fhir+json'
+And header Content-Type = 'application/fhir+json'
+When method post
+Then status 200
+And match response.resourceType == 'Bundle'
+And match response.entry == '#[1]'
+And match response.entry[0].resource.resourceType == 'DDCCCoreDataSet'
+And match response.entry[0].resource.name == 'James T. Anyperson'
+And match response.entry[0].resource.birthDate == '1951-01-20'
+And match response.entry[0].resource.test.pathogen contains only {system: 'http://id.who.int/icd11/mms', code: 'XN109'}
+And match response.entry[0].resource.test.type contains only {system: 'http://loinc.org', code: '94558-4'}
+And match response.entry[0].resource.test.date == '2021-02-17'
+And match response.entry[0].resource.test.result contains only {system: 'http://snomed.info/sct', code: '260373001'}
