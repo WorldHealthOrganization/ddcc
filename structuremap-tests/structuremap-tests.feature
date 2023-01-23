@@ -84,10 +84,13 @@ And header Accept = 'application/fhir+json'
 And header Content-Type = 'application/fhir+json'
 When method post
 Then status 200
-And match response.resourceType == 'DDCCCoreDataSet'
-And match response.name == 'John B. Anyperson'
-And match response.birthDate == '1951-01-20'
-And match response.vaccination.vaccine.coding[0] contains only {system: 'http://hl7.org/fhir/sid/cvx', code: '229'}
-And match response.vaccination.lot == '0000001'
-And match response.vaccination.date == '2022-09-05'
-And match response.vaccination.centre == 'ABC General Hospital'
+And match response.resourceType == 'Bundle'
+And match response.entry == '#[3]'
+And match response.entry[0].resource.resourceType == 'DDCCCoreDataSet'
+And match response.entry[0].resource.name == 'John B. Anyperson'
+And match response.entry[0].resource.birthDate == '1951-01-20'
+And match response.entry[0].resource.vaccination.vaccine contains only {system: 'http://id.who.int/icd11/mms', code: 'XM0GQ8'}
+And match response.entry[0].resource.vaccination.brand contains only {system: 'http://id.who.int/icd11/mms', code: 'XM8NQ0'}
+And match response.entry[0].resource.vaccination.lot == '0000001'
+And match response.entry[0].resource.vaccination.date == '2021-01-01'
+And match response.entry[0].resource.vaccination.centre == 'ABC General Hospital'

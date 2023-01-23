@@ -4,42 +4,65 @@ uses "http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-vaccination
 uses "http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-patient-general-dm" alias SHCPatientDM as source
 uses "http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-vaccination-dm"  alias SHCImmunizationDM as source
 
-uses "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.VS" alias DDCCVS as target
+uses "http://hl7.org/fhir/StructureDefinition/Bundle" alias DDCCBundle as target
+uses "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.VS" alias DDCCVS as produced
 
 group SHCToVS ( 
   source shc : SHCVaccinationBundleDM
-  target ddcc : DDCCVS
+  target ddccBundle : DDCCBundle
 ) {
   shc.entry as patientEntrySHC then {
-    patientEntrySHC.resource : Patient first as patientSHC then {
-      patientSHC then PatientToDDCC(patientSHC, ddcc) "Patient resource";
-      shc.entry as immunizationEntrySHC then {
-        immunizationEntrySHC.resource : Immunization as immunizationSHC -> ddcc.vaccination as vaccination then ImmunizationToDDCC(immunizationSHC,vaccination) "Immunization resource";
-      } "Immunization entry";
-    } "Patient entry";
-  } "map patient";
+    patientEntrySHC.resource : Patient first as patient then {
+      shc.entry as entry then {
+        //entry.resource : Immunization as immunization where vaccineCode.memberOf('http://worldhealthorganization.github.io/ddcc/ValueSet/who-ddcc-allowed-vaccines-covid-19') ->  ddccBundle.entry as outentry,  create('http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.VS') as ddcc then {
+        entry.resource : Immunization as immunization ->  ddccBundle.entry as outentry,  create('http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.VS') as ddcc then {
+          immunization then PatientToDDCC(patient, ddcc) "set patient";
+          immunization -> ddcc.vaccination as vaccination then ImmunizationToDDCC(immunization, vaccination) "set vaccination";
+          immunization -> outentry.resource = ddcc "set outentry";
+        } "immunizations";
+      } "entries";
+    } "get patient";
+  } "find patient";
 }
 
 group PatientToDDCC(
   source patient : SHCPatientDM,
   target tgt : DDCCVS
 ) { 
-  patient.name as name then {
-    name.text as text -> tgt.name = text "set name";
-  } "set full name";
+  patient.name as name then NameToText( name, tgt ) "set name";
   patient.birthDate as birthDate -> tgt.birthDate = birthDate "set birthDate";
+}
+
+group NameToText (
+  source name : HumanName,
+  target ddcc
+) {
+  // annoying because append doesn't work until ddcc.name is set
+  name.given first as given -> ddcc.name = (given.replaceMatches('$', ' ')) "set first name";
+  //name.given not_first as other -> ddcc.name as tName, ddcc.name = append( tName, other ) "set other names";
+  name.given not_first as other -> ddcc.name as tName, (other.replaceMatches('$', ' ')) as spaced, ddcc.name = append( tName, spaced ) "set other names";
+  name.family as family -> ddcc.name as tName, ddcc.name = append( tName, family ) "add family name";
+  name.text as text -> ddcc.name = text "set full name";
 }
 
 group ImmunizationToDDCC(
   source immunization: SHCImmunizationDM
   target vaccination
 ) {
-  immunization.vaccineCode as vaccineCode -> vaccination.vaccine = vaccineCode "set vaccine";
+  immunization.vaccineCode as vaccine then {
+    vaccine.coding as coding where memberOf('http://worldhealthorganization.github.io/ddcc/ValueSet/who-ddcc-vaccines-covid-19') then {
+      coding -> vaccination.vaccine = coding "set coding";
+    } "copy vaccine";
+    vaccine.coding as coding where memberOf('http://worldhealthorganization.github.io/ddcc/ValueSet/who-ddcc-vaccines-covid-19').not() then {
+      coding -> vaccination.vaccine = translate(coding, 'http://worldhealthorganization.github.io/ddcc/ConceptMap/who-ddcc-map-cvx-icd11-vaccines', 'Coding') "translate code";
+    } "translate vaccine coding";
+    vaccine.coding as coding -> vaccination.brand = translate(coding, 'http://worldhealthorganization.github.io/ddcc/ConceptMap/who-ddcc-map-cvx-icd11-brands', 'Coding') "translate brand";
+  } "set vaccine";
   immunization.manufacturer as tman then {
-    tman.identifier as ident -> vaccination.manufacturer as manufacturer then {
-      ident.system as system -> manufacturer.system = system "set system";
-      ident.value as value -> manufacturer.code = value "set value";
-    } "set manufacturer";
+    tman.identifier as identifier -> vaccination.manufacturer as manufacturer then {
+      identifier.system as system -> manufacturer.system = system "set manufacturer system";
+      identifier.value as value -> manufacturer.code = value "set manufacturer value";
+    } "set manufacturer id";
   } "manufacturer";
   immunization.lotNumber as lot -> vaccination.lot = lot "set lot";
   immunization.occurrence as date ->  vaccination.date = date "set date";
