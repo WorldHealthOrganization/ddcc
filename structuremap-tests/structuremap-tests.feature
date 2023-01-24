@@ -68,11 +68,11 @@ Then assert responseStatus == 200 || responseStatus == 201
 
 @shc
 Scenario: Updating SHC to Core Data Set VS Structure Map
-Given path 'StructureMap'
+Given path 'StructureMap', 'SHCToCoreDataSetVS'
 And request read('../input/maps-src/SHCToCoreDataSetVS.map')
 And header Accept = 'application/fhir+json'
 And header Content-Type = 'text/fhir-mapping'
-When method post
+When method put
 Then assert responseStatus == 200 || responseStatus == 201
 
 @shc
@@ -97,11 +97,11 @@ And match response.entry[0].resource.vaccination.centre == 'ABC General Hospital
 
 @shc
 Scenario: Updating SHC to Core Data Set TR Structure Map
-Given path 'StructureMap'
+Given path 'StructureMap', 'SHCToCoreDataSetTR'
 And request read('../input/maps-src/SHCToCoreDataSetTR.map')
 And header Accept = 'application/fhir+json'
 And header Content-Type = 'text/fhir-mapping'
-When method post
+When method put
 Then assert responseStatus == 200 || responseStatus == 201
 
 @shc
@@ -122,3 +122,35 @@ And match response.entry[0].resource.test.pathogen contains only {system: 'http:
 And match response.entry[0].resource.test.type contains only {system: 'http://loinc.org', code: '94558-4'}
 And match response.entry[0].resource.test.date == '2021-02-17'
 And match response.entry[0].resource.test.result contains only {system: 'http://snomed.info/sct', code: '260373001'}
+
+@shc
+@test
+Scenario: Updating CertSHC to Core Data Set Structure Map
+Given path 'StructureMap', 'CertSHCtoCoreDataSet'
+And request read('../input/maps-src/CertSHCtoCoreDataSet.map')
+And header Accept = 'application/fhir+json'
+And header Content-Type = 'text/fhir-mapping'
+When method put
+Then assert responseStatus == 200 || responseStatus == 201
+
+@shc
+Scenario: Transforming Example CertSHC to Bundle of Core Data Set
+* param source = 'http://worldhealthorganization.github.io/ddcc/StructureMap/CertSHCtoCoreDataSet'
+Given path 'StructureMap', '$transform'
+And request read('fixtures/shc/example-00-b-jws-payload-expanded.json')
+And header Accept = 'application/fhir+json'
+And header Content-Type = 'application/json'
+When method post
+Then status 200
+And match response.resourceType == 'Bundle'
+
+@shc
+Scenario: Transforming Example CertSHC to Bundle of Core Data Set
+* param source = 'http://worldhealthorganization.github.io/ddcc/StructureMap/CertSHCtoCoreDataSet'
+Given path 'StructureMap', '$transform'
+And request read('fixtures/shc/bundle-lab-test-results-covid-jws-payload-expanded.json')
+And header Accept = 'application/fhir+json'
+And header Content-Type = 'application/json'
+When method post
+Then status 200
+And match response.resourceType == 'Bundle'

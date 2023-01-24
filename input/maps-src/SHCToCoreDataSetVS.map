@@ -16,7 +16,7 @@ group SHCToVS (
       shc.entry as entry then {
         //entry.resource : Immunization as immunization where vaccineCode.memberOf('http://worldhealthorganization.github.io/ddcc/ValueSet/who-ddcc-allowed-vaccines-covid-19') ->  ddccBundle.entry as outentry,  create('http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.VS') as ddcc then {
         entry.resource : Immunization as immunization ->  ddccBundle.entry as outentry,  create('http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.VS') as ddcc then {
-          immunization then PatientToDDCC(patient, ddcc) "set patient";
+          immunization then PatientToDDCCVS(patient, ddcc) "set patient";
           immunization -> ddcc.vaccination as vaccination then ImmunizationToDDCC(immunization, vaccination) "set vaccination";
           immunization -> outentry.resource = ddcc "set outentry";
         } "immunizations";
@@ -25,7 +25,7 @@ group SHCToVS (
   } "find patient";
 }
 
-group PatientToDDCC(
+group PatientToDDCCVS(
   source patient : SHCPatientDM,
   target tgt : DDCCVS
 ) { 
