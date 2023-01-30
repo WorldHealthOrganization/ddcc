@@ -132,6 +132,7 @@ And match response.entry == '#[3]'
 And match response.entry[0].resource.resourceType == 'DDCCCoreDataSet'
 And match response.entry[0].resource.name == 'John B. Anyperson'
 And match response.entry[0].resource.birthDate == '1951-01-20'
+And match response.entry[0].resource.identifier contains only {system: 'urn:oid:example', value: '12345'}
 And match response.entry[0].resource.vaccination.vaccine contains only {system: 'http://id.who.int/icd11/mms', code: 'XM0GQ8'}
 And match response.entry[0].resource.vaccination.brand contains only {system: 'http://id.who.int/icd11/mms', code: 'XM8NQ0'}
 And match response.entry[0].resource.vaccination.lot == '0000001'
@@ -170,7 +171,7 @@ When method post
 Then status 200
 And match response.resourceType == 'Bundle'
 And match response.entry == '#[3]'
-And match response..entry[0].resource.certificate contains only { period: {start: '#present' }}
+And match response.entry[0].resource.certificate contains { issuer: {reference: 'https://spec.smarthealth.cards/examples/issuer'}, period: {start: '#present' }}
 
 @shc
 @matchbox
@@ -184,7 +185,7 @@ When method post
 Then status 200
 And match response.resourceType == 'Bundle'
 And match response.entry == '#[1]'
-And match response..entry[0].resource.certificate contains only { period: {start: '#present' }}
+And match response.entry[0].resource.certificate contains { issuer: {reference: 'https://spec.smarthealth.cards/examples/issuer'}, period: {start: '#present' }}
 
 @shc
 @validator
@@ -195,6 +196,7 @@ And match response.entry == '#[3]'
 And match response.entry[0].resource.resourceType == 'DDCCCoreDataSet'
 And match response.entry[0].resource.name == 'John B. Anyperson'
 And match response.entry[0].resource.birthDate == '1951-01-20'
+And match response.entry[0].resource.identifier contains only {system: 'urn:oid:example', value: '12345'}
 And match response.entry[0].resource.vaccination.vaccine contains only {system: 'http://id.who.int/icd11/mms', code: 'XM0GQ8'}
 And match response.entry[0].resource.vaccination.brand contains only {system: 'http://id.who.int/icd11/mms', code: 'XM8NQ0'}
 And match response.entry[0].resource.vaccination.lot == '0000001'
@@ -221,7 +223,7 @@ Scenario: Transforming Example CertSHC to Bundle of Core Data Set VS using valid
 Given def response = transform('fixtures/shc/example-00-b-jws-payload-expanded.json','target/example-00-b-jws-payload-expanded.json','http://worldhealthorganization.github.io/ddcc/StructureMap/CertSHCtoCoreDataSet')
 Then match response.resourceType == 'Bundle'
 And match response.entry == '#[3]'
-And match response..entry[0].resource.certificate contains only { period: {start: '#present' }}
+And match response.entry[0].resource.certificate contains { issuer: {reference: 'https://spec.smarthealth.cards/examples/issuer'}, period: {start: '#present' }}
 
 @shc
 @validator
@@ -229,4 +231,4 @@ Scenario: Transforming Example CertSHC to Bundle of Core Data Set TR using valid
 Given def response = transform('fixtures/shc/bundle-lab-test-results-covid-jws-payload-expanded.json','target/bundle-lab-test-results-covid-jws-payload-expanded.json','http://worldhealthorganization.github.io/ddcc/StructureMap/CertSHCtoCoreDataSet')
 Then match response.resourceType == 'Bundle'
 And match response.entry == '#[1]'
-And match response..entry[0].resource.certificate contains only { period: {start: '#present' }}
+And match response.entry[0].resource.certificate contains { issuer: {reference: 'https://spec.smarthealth.cards/examples/issuer'}, period: {start: '#present' }}

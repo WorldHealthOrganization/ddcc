@@ -44,6 +44,9 @@ group CertSHCtoCoreDataSet(
     target ddcc: DDCC)
 {
     src -> ddcc.certificate as cert then {
+        src.iss -> cert.issuer = create('Reference') as issuer then {
+            src.iss as iss -> issuer.reference = iss "set issuer";
+        } "issuer";
         src -> cert.period = create('Period') as period then {
             src then JwtToPeriod(src, period) "set period";
         } "period";
