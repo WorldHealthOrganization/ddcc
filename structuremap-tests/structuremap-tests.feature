@@ -1,5 +1,7 @@
 Feature: structure map tests
-# prerequisites: Java >= JDK11, Karate v1.3.1 (downloaded by run shell script), Matchbox server <v3, run sushi
+# prerequisites: Java >= JDK11, Karate v1.3.1 (downloaded by run shell script)
+# for Matchbox tests: running server <v3, run sushi
+# for validator tests: local validator_cli.jar at least ver 5.6.93, built IG on ../output
 # preload tests are not independent and should not be run in parallel
 
 Background:
@@ -232,3 +234,36 @@ Given def response = transform('fixtures/shc/bundle-lab-test-results-covid-jws-p
 Then match response.resourceType == 'Bundle'
 And match response.entry == '#[1]'
 And match response.entry[0].resource.certificate contains { issuer: {reference: 'https://spec.smarthealth.cards/examples/issuer'}, period: {start: '#present' }}
+
+@dcc
+@preload
+@matchbox
+Scenario: Updating CertDCC to Core Data Set Structure Map
+Given path 'StructureMap', 'CertDCCtoCoreDataSet'
+And request read('../input/maps-src/CertDCCtoCoreDataSet.map')
+And header Accept = 'application/fhir+json'
+And header Content-Type = 'text/fhir-mapping'
+When method put
+Then assert responseStatus == 200 || responseStatus == 201
+
+@dcc
+@matchbox
+Scenario: Transforming Example CertSHC to Core Data Set VS
+* param source = 'http://worldhealthorganization.github.io/ddcc/StructureMap/CertDCCtoCoreDataSet'
+Given path 'StructureMap', '$transform'
+And request read('fixtures/dcc/Italy-Valid-Sample-Certificate-Vaccine-2nd-dose.json')
+And header Accept = 'application/fhir+json'
+And header Content-Type = 'application/json'
+When method post
+Then status 200
+And match response.resourceType == 'Bundle'
+And match response.entry == '#[1]'
+And match response.entry[0].resource.birthDate == '1981-01-01'
+
+@dcc
+@validator
+Scenario: Transforming Example CertDCC to Core Data Set VS using validator
+Given def response = transform('fixtures/dcc/Italy-Valid-Sample-Certificate-Vaccine-2nd-dose.json','target/Italy-Valid-Sample-Certificate-Vaccine-2nd-dose.json','http://worldhealthorganization.github.io/ddcc/StructureMap/CertDCCtoCoreDataSet')
+Then match response.resourceType == 'Bundle'
+And match response.entry == '#[1]'
+And match response.entry[0].resource.birthDate == '1981-01-01'
