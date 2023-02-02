@@ -267,3 +267,86 @@ Given def response = transform('fixtures/dcc/Italy-Valid-Sample-Certificate-Vacc
 Then match response.resourceType == 'Bundle'
 And match response.entry == '#[1]'
 And match response.entry[0].resource.birthDate == '1981-01-01'
+
+# EU DCC -----------------------------------------------------------------------------
+
+@eudcc
+@preload
+@matchbox
+Scenario: Updating EU DCC to Core Data Set Structure Map
+Given path 'StructureMap', 'DCCToCoreDataSet'
+And request read('../input/maps-src/DCCToCoreDataSet.map')
+And header Accept = 'application/fhir+json'
+And header Content-Type = 'text/fhir-mapping'
+When method put
+Then assert responseStatus == 200 || responseStatus == 201
+
+@eudcc
+@matchbox
+Scenario: Transforming Example EU DCC to Bundle of Core Data Set VS
+* param source = 'http://worldhealthorganization.github.io/ddcc/StructureMap/DCCToCoreDataSet'
+Given path 'StructureMap', '$transform'
+And request read('fixtures/eudcc/dcc-valid-vs.json')
+And header Accept = 'application/fhir+json'
+And header Content-Type = 'application/fhir+json'
+When method post
+Then status 200
+And match response.resourceType == 'Bundle'
+And match response.entry == '#[1]'
+And match response.entry[0].resource.resourceType == 'DDCCCoreDataSet'
+And match response.entry[0].resource.name == 'John B. Anyperson'
+And match response.entry[0].resource.birthDate == '1951-01-20'
+And match response.entry[0].resource.vaccination.vaccine contains only {system: 'http://id.who.int/icd11/mms', code: 'XM0GQ8'}
+And match response.entry[0].resource.vaccination.brand contains only {system: 'http://id.who.int/icd11/mms', code: 'XM8NQ0'}
+And match response.entry[0].resource.vaccination.lot == '0000001'
+And match response.entry[0].resource.vaccination.date == '2022-05-13'
+And match response.entry[0].resource.vaccination.centre == 'Ministerio de Salud Pública'
+
+@eudcc
+@matchbox
+Scenario: Transforming Example EU DCC to Bundle of Core Data Set TR
+* param source = 'http://worldhealthorganization.github.io/ddcc/StructureMap/DCCToCoreDataSet'
+Given path 'StructureMap', '$transform'
+And request read('fixtures/eudcc/dcc-valid-tr.json')
+And header Accept = 'application/fhir+json'
+And header Content-Type = 'application/fhir+json'
+When method post
+Then status 200
+And match response.resourceType == 'Bundle'
+And match response.entry == '#[1]'
+And match response.entry[0].resource.resourceType == 'DDCCCoreDataSet'
+And match response.entry[0].resource.name == 'James T. Anyperson'
+And match response.entry[0].resource.birthDate == '1951-01-20'
+And match response.entry[0].resource.test.pathogen contains {system: 'http://id.who.int/icd11/mms', code: 'XN109'}
+And match response.entry[0].resource.test.type contains only {system: 'http://loinc.org', code: '94558-4'}
+And match response.entry[0].resource.test.date == '2022-01-21'
+And match response.entry[0].resource.test.result contains only {system: 'http://snomed.info/sct', code: '260373001'}
+
+@eudcc
+@validator
+Scenario: Transforming Example EU DCC to Bundle of Core Data Set VS using validator
+Given def response = transform('fixtures/eudcc/dcc-valid-vs.json','target/dcc-valid-vs.json','http://worldhealthorganization.github.io/ddcc/StructureMap/CertDCCtoCoreDataSet')
+Then match response.resourceType == 'Bundle'
+And match response.entry == '#[1]'
+And match response.entry[0].resource.resourceType == 'DDCCCoreDataSet'
+And match response.entry[0].resource.name == 'John B. Anyperson'
+And match response.entry[0].resource.birthDate == '1951-01-20'
+And match response.entry[0].resource.vaccination.vaccine contains only {system: 'http://id.who.int/icd11/mms', code: 'XM0GQ8'}
+And match response.entry[0].resource.vaccination.brand contains only {system: 'http://id.who.int/icd11/mms', code: 'XM8NQ0'}
+And match response.entry[0].resource.vaccination.lot == '0000001'
+And match response.entry[0].resource.vaccination.date == '2022-05-13'
+And match response.entry[0].resource.vaccination.centre == 'Ministerio de Salud Pública'
+
+@eudcc
+@validator
+Scenario: Transforming Example EU DCC to Bundle of Core Data Set TR using validator
+Given def response = transform('fixtures/eudcc/dcc-valid-tr.json','target/dcc-valid-tr.json','http://worldhealthorganization.github.io/ddcc/StructureMap/CertDCCtoCoreDataSet')
+Then match response.resourceType == 'Bundle'
+And match response.entry == '#[1]'
+And match response.entry[0].resource.resourceType == 'DDCCCoreDataSet'
+And match response.entry[0].resource.name == 'James T. Anyperson'
+And match response.entry[0].resource.birthDate == '1951-01-20'
+And match response.entry[0].resource.test.pathogen contains {system: 'http://id.who.int/icd11/mms', code: 'XN109'}
+And match response.entry[0].resource.test.type contains only {system: 'http://loinc.org', code: '94558-4'}
+And match response.entry[0].resource.test.date == '2022-01-21'
+And match response.entry[0].resource.test.result contains only {system: 'http://snomed.info/sct', code: '260373001'}
