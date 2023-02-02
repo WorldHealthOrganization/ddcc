@@ -66,18 +66,19 @@ group VtoCoreDataSetVS(
     target vaccination)
 {
     v.tg as tg -> 
-    vaccination.disease as coding,
-    coding.system = "http://snomed.info/sct", 
-    coding.code = tg
-    "set target disease";
+        vaccination.disease as coding,
+        coding.system = "http://snomed.info/sct", 
+        coding.code = tg
+        "set target disease";
     v.vp as vp -> 
         vaccination.vaccine as coding,
-        coding.system = "http://snomed.info/sct", 
+        coding.system = "https://id.uvci.eu/valuesets/vaccine-prophylaxis.json",
         coding.code = vp
         "set vaccine";    
     v.mp as mp -> vaccination.brand = translate(mp, 'http://worldhealthorganization.github.io/ddcc/ConceptMap/who-ddcc-map-eudcc-icd11-vaccines', 'Coding') "translate mp to brand";    
     v.ma as ma -> vaccination.maholder as coding,
-        coding.code = ma "set maholder";    
+        coding.system = "https://id.uvci.eu/valuesets/vaccine-mah-manf.json",
+        coding.code = ma "set maholder";
     v.dt as date -> vaccination.date = date "set date";
     v.dn as dose -> vaccination.dose = dose "set dose";
     v.sd as totalDoses -> vaccination.totalDoses = totalDoses "set totalDoses";
@@ -98,14 +99,18 @@ group TtoCoreDataSetTR(
         coding.code = tg
         "set pathogen";
     t.tt as tt -> test.type as coding,
+        coding.system = "http://loinc.org",
         coding.code = tt "set type";           
     t.nm as nm -> test.brand as coding,
+        coding.system = "https://id.uvci.eu/valuesets/test-manf.json",
         coding.code = nm "set brand";           
     t.ma as ma -> test.manufacturer as coding,
+        coding.system = "https://covid-19-diagnostics.jrc.ec.europa.eu/devices",
         coding.code = ma "set manufacturer";         
     t.sc as date -> test.date = date "set date";  
     t.tr as tr -> 
         test.result as coding,
+        coding.system = "http://snomed.info/sct",
         coding.code = tr
         "set result";     
     t.tc as tc -> 
