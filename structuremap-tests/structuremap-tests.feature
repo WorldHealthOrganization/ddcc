@@ -235,47 +235,14 @@ Then match response.resourceType == 'Bundle'
 And match response.entry == '#[1]'
 And match response.entry[0].resource.certificate contains { issuer: {reference: 'https://spec.smarthealth.cards/examples/issuer'}, period: {start: '#present' }}
 
-@dcc
-@preload
-@matchbox
-Scenario: Updating CertDCC to Core Data Set Structure Map
-Given path 'StructureMap', 'CertDCCtoCoreDataSet'
-And request read('../input/maps-src/CertDCCtoCoreDataSet.map')
-And header Accept = 'application/fhir+json'
-And header Content-Type = 'text/fhir-mapping'
-When method put
-Then assert responseStatus == 200 || responseStatus == 201
-
-@dcc
-@matchbox
-Scenario: Transforming Example CertSHC to Core Data Set VS
-* param source = 'http://worldhealthorganization.github.io/ddcc/StructureMap/CertDCCtoCoreDataSet'
-Given path 'StructureMap', '$transform'
-And request read('fixtures/dcc/Italy-Valid-Sample-Certificate-Vaccine-2nd-dose.json')
-And header Accept = 'application/fhir+json'
-And header Content-Type = 'application/json'
-When method post
-Then status 200
-And match response.resourceType == 'Bundle'
-And match response.entry == '#[1]'
-And match response.entry[0].resource.birthDate == '1981-01-01'
-
-@dcc
-@validator
-Scenario: Transforming Example CertDCC to Core Data Set VS using validator
-Given def response = transform('fixtures/dcc/Italy-Valid-Sample-Certificate-Vaccine-2nd-dose.json','target/Italy-Valid-Sample-Certificate-Vaccine-2nd-dose.json','http://worldhealthorganization.github.io/ddcc/StructureMap/CertDCCtoCoreDataSet')
-Then match response.resourceType == 'Bundle'
-And match response.entry == '#[1]'
-And match response.entry[0].resource.birthDate == '1981-01-01'
-
 # EU DCC -----------------------------------------------------------------------------
 
 @eudcc
 @preload
 @matchbox
 Scenario: Updating EU DCC to Core Data Set Structure Map
-Given path 'StructureMap', 'DCCToCoreDataSet'
-And request read('../input/maps-src/DCCToCoreDataSet.map')
+Given path 'StructureMap', 'CertDCCtoCoreDataSet'
+And request read('../input/maps-src/CertDCCtoCoreDataSet.map')
 And header Accept = 'application/fhir+json'
 And header Content-Type = 'text/fhir-mapping'
 When method put
@@ -284,7 +251,7 @@ Then assert responseStatus == 200 || responseStatus == 201
 @eudcc
 @matchbox
 Scenario: Transforming Example EU DCC to Bundle of Core Data Set VS
-* param source = 'http://worldhealthorganization.github.io/ddcc/StructureMap/DCCToCoreDataSet'
+* param source = 'http://worldhealthorganization.github.io/ddcc/StructureMap/CertDCCtoCoreDataSet'
 Given path 'StructureMap', '$transform'
 And request read('fixtures/eudcc/dcc-valid-vs.json')
 And header Accept = 'application/fhir+json'
@@ -305,7 +272,7 @@ And match response.entry[0].resource.vaccination.centre == 'Ministerio de Salud 
 @eudcc
 @matchbox
 Scenario: Transforming Example EU DCC to Bundle of Core Data Set TR
-* param source = 'http://worldhealthorganization.github.io/ddcc/StructureMap/DCCToCoreDataSet'
+* param source = 'http://worldhealthorganization.github.io/ddcc/StructureMap/CertDCCtoCoreDataSet'
 Given path 'StructureMap', '$transform'
 And request read('fixtures/eudcc/dcc-valid-tr.json')
 And header Accept = 'application/fhir+json'
@@ -315,7 +282,7 @@ Then status 200
 And match response.resourceType == 'Bundle'
 And match response.entry == '#[1]'
 And match response.entry[0].resource.resourceType == 'DDCCCoreDataSet'
-And match response.entry[0].resource.name == 'James T. Anyperson'
+And match response.entry[0].resource.name == 'John B. Anyperson'
 And match response.entry[0].resource.birthDate == '1951-01-20'
 And match response.entry[0].resource.test.pathogen contains {system: 'http://id.who.int/icd11/mms', code: 'XN109'}
 And match response.entry[0].resource.test.type contains only {system: 'http://loinc.org', code: '94558-4'}
@@ -344,7 +311,7 @@ Given def response = transform('fixtures/eudcc/dcc-valid-tr.json','target/dcc-va
 Then match response.resourceType == 'Bundle'
 And match response.entry == '#[1]'
 And match response.entry[0].resource.resourceType == 'DDCCCoreDataSet'
-And match response.entry[0].resource.name == 'James T. Anyperson'
+And match response.entry[0].resource.name == 'John B. Anyperson'
 And match response.entry[0].resource.birthDate == '1951-01-20'
 And match response.entry[0].resource.test.pathogen contains {system: 'http://id.who.int/icd11/mms', code: 'XN109'}
 And match response.entry[0].resource.test.type contains only {system: 'http://loinc.org', code: '94558-4'}
