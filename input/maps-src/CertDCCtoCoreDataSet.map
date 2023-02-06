@@ -56,9 +56,14 @@ group CertDCCtoCoreDataSetCertificate(
 }
 
 group CwtToPeriod(source src: CWTPayload, target tgt : Period) {
-    // requires translation of timestamp to ISO DateTime
-    src.iat as iat -> tgt.start = iat "set period start";
-    src.exp as exp -> tgt.end = exp "set period end";
+    src.iat as iat ->
+        append(iat, " seconds") as epoch,
+        tgt.start = (@1970-01-01T00:00:00.000+00:00 + epoch.toQuantity())
+        "set period start";
+    src.exp as exp ->
+        append(exp, " seconds") as epoch,
+        tgt.end = (@1970-01-01T00:00:00.000+00:00 + epoch.toQuantity())
+        "set period end";
 }
 
 group VtoCoreDataSetVS(

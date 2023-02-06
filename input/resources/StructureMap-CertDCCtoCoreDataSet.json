@@ -2,12 +2,12 @@
   "resourceType": "StructureMap",
   "id": "CertDCCtoCoreDataSet",
   "meta": {
-    "versionId": "20",
-    "lastUpdated": "2023-02-02T17:13:12.318+00:00"
+    "versionId": "28",
+    "lastUpdated": "2023-02-06T19:45:53.101+00:00"
   },
   "text": {
     "status": "generated",
-    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><pre>map &quot;http://worldhealthorganization.github.io/ddcc/StructureMap/CertDCCtoCoreDataSet&quot; = &quot;CertDCCtoCoreDataSet&quot;\r\n\r\n\r\nuses &quot;http://worldhealthorganization.github.io/ddcc/StructureDefinition/CertDCC&quot; alias CWTPayload as source\r\nuses &quot;http://hl7.org/fhir/StructureDefinition/Bundle&quot; alias DDCCBundle as target\r\nuses &quot;http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet&quot; alias DDCC as produced\r\nuses &quot;http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.VS&quot; alias DDCCVS as produced\r\nuses &quot;http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.TR&quot; alias DDCCTR as produced\r\n\r\ngroup CertDCCtoCoreDataSet(source src : CWTPayload, target ddccBundle : DDCCBundle) {\r\n  src.hcert as hcert then {\r\n    hcert.eu_DCC_v1 as dcc then {\r\n      dcc.v as v -&gt;  ddccBundle.entry as outentry,  create('http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.VS') as ddcc then {\r\n        v then DCCtoCoreDataSet(dcc, ddcc) &quot;set DDCC&quot;;\r\n        v -&gt; ddcc.certificate as certificate then CertDCCtoCoreDataSetCertificate(src, dcc, v, certificate) &quot;set certificate&quot;;\r\n        v -&gt; ddcc.vaccination as vaccination then VtoCoreDataSetVS(v, vaccination) &quot;set vaccination&quot;;\r\n        v -&gt; outentry.resource = ddcc &quot;set outentry&quot;;\r\n      };\r\n      dcc.t as t -&gt;  ddccBundle.entry as outentry,  create('http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.TR') as ddcc then {\r\n        t then DCCtoCoreDataSet(dcc, ddcc) &quot;set DDCC&quot;;\r\n        t -&gt; ddcc.certificate as certificate then CertDCCtoCoreDataSetCertificate(src, dcc, t, certificate) &quot;set certificate&quot;;\r\n        t -&gt; ddcc.test as test then TtoCoreDataSetTR(t, test) &quot;set test&quot;;\r\n        t -&gt; outentry.resource = ddcc &quot;set outentry&quot;;\r\n      };\r\n    };\r\n  };\r\n}\r\n\r\ngroup DCCtoCoreDataSet(source dcc, target ddcc : DDCC) {\r\n  dcc.dob as birthDate -&gt; ddcc.birthDate = birthDate &quot;set birthDate&quot;;\r\n  dcc.nam as nam then {\r\n    nam.gn as given -&gt; ddcc.name = (given.replaceMatches('$', ' ')) &quot;set given name&quot;;\r\n    nam.fn as family -&gt;  ddcc.name as tName,  ddcc.name = append(tName, family) &quot;add family name&quot;;\r\n  };\r\n}\r\n\r\ngroup CertDCCtoCoreDataSetCertificate(source src : CWTPayload, source dcc, source g, target certificate) {\r\n  src -&gt; certificate.period = create('Period') as period then CwtToPeriod(src, period) &quot;set period&quot;;\r\n  dcc.ver as ver -&gt; certificate.version = ver &quot;set version&quot;;\r\n  g.ci as ci -&gt;  certificate.hcid as hcid,  hcid.value = ci &quot;set hcid&quot;;\r\n  g.is as is -&gt;  certificate.issuer = create('Reference') as issuer,  issuer.display = is &quot;set issuer&quot;;\r\n}\r\n\r\ngroup CwtToPeriod(source src : CWTPayload, target tgt : Period) {\r\n  // requires translation of timestamp to ISO DateTime\r\n  src.iat as iat -&gt; tgt.start = iat &quot;set period start&quot;;\r\n  src.exp as exp -&gt; tgt.end = exp &quot;set period end&quot;;\r\n}\r\n\r\ngroup VtoCoreDataSetVS(source v, target vaccination) {\r\n  v.tg as tg -&gt;  vaccination.disease as coding,  coding.system = 'http://snomed.info/sct',  coding.code = tg &quot;set target disease&quot;;\r\n  v.vp as vp -&gt;  vaccination.vaccine as coding,  coding.system = 'https://id.uvci.eu/valuesets/vaccine-prophylaxis.json',  coding.code = vp &quot;set vaccine&quot;;\r\n  v.mp as mp -&gt; vaccination.brand = translate(mp, 'http://worldhealthorganization.github.io/ddcc/ConceptMap/who-ddcc-map-eudcc-icd11-vaccines', 'Coding') &quot;translate mp to brand&quot;;\r\n  v.ma as ma -&gt;  vaccination.maholder as coding,  coding.system = 'https://id.uvci.eu/valuesets/vaccine-mah-manf.json',  coding.code = ma &quot;set maholder&quot;;\r\n  v.dt as date -&gt; vaccination.date = date &quot;set date&quot;;\r\n  v.dn as dose -&gt; vaccination.dose = dose &quot;set dose&quot;;\r\n  v.sd as totalDoses -&gt; vaccination.totalDoses = totalDoses &quot;set totalDoses&quot;;\r\n  v.co as co -&gt;  vaccination.country as coding,  coding.code = co,  coding.system = 'urn:iso:std:iso:3166' &quot;set country&quot;;\r\n}\r\n\r\ngroup TtoCoreDataSetTR(source t, target test) {\r\n  t.tg as tg -&gt;  test.pathogen as coding,  coding.system = 'http://snomed.info/sct',  coding.code = tg &quot;set pathogen&quot;;\r\n  t.tt as tt -&gt;  test.type as coding,  coding.system = 'http://loinc.org',  coding.code = tt &quot;set type&quot;;\r\n  t.nm as nm -&gt;  test.brand as coding,  coding.system = 'https://id.uvci.eu/valuesets/test-manf.json',  coding.code = nm &quot;set brand&quot;;\r\n  t.ma as ma -&gt;  test.manufacturer as coding,  coding.system = 'https://covid-19-diagnostics.jrc.ec.europa.eu/devices',  coding.code = ma &quot;set manufacturer&quot;;\r\n  t.sc as date -&gt; test.date = date &quot;set date&quot;;\r\n  t.tr as tr -&gt;  test.result as coding,  coding.system = 'http://snomed.info/sct',  coding.code = tr &quot;set result&quot;;\r\n  t.tc as tc -&gt;  test.centre as coding,  coding.code = tc &quot;set centre&quot;;\r\n  t.co as co -&gt;  test.country as coding,  coding.code = co,  coding.system = 'urn:iso:std:iso:3166' &quot;set country&quot;;\r\n}\r\n\r\n</pre></div>"
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><pre>map &quot;http://worldhealthorganization.github.io/ddcc/StructureMap/CertDCCtoCoreDataSet&quot; = &quot;CertDCCtoCoreDataSet&quot;\r\n\r\n\r\nuses &quot;http://worldhealthorganization.github.io/ddcc/StructureDefinition/CertDCC&quot; alias CWTPayload as source\r\nuses &quot;http://hl7.org/fhir/StructureDefinition/Bundle&quot; alias DDCCBundle as target\r\nuses &quot;http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet&quot; alias DDCC as produced\r\nuses &quot;http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.VS&quot; alias DDCCVS as produced\r\nuses &quot;http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.TR&quot; alias DDCCTR as produced\r\n\r\ngroup CertDCCtoCoreDataSet(source src : CWTPayload, target ddccBundle : DDCCBundle) {\r\n  src.hcert as hcert then {\r\n    hcert.eu_DCC_v1 as dcc then {\r\n      dcc.v as v -&gt;  ddccBundle.entry as outentry,  create('http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.VS') as ddcc then {\r\n        v then DCCtoCoreDataSet(dcc, ddcc) &quot;set DDCC&quot;;\r\n        v -&gt; ddcc.certificate as certificate then CertDCCtoCoreDataSetCertificate(src, dcc, v, certificate) &quot;set certificate&quot;;\r\n        v -&gt; ddcc.vaccination as vaccination then VtoCoreDataSetVS(v, vaccination) &quot;set vaccination&quot;;\r\n        v -&gt; outentry.resource = ddcc &quot;set outentry&quot;;\r\n      };\r\n      dcc.t as t -&gt;  ddccBundle.entry as outentry,  create('http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.TR') as ddcc then {\r\n        t then DCCtoCoreDataSet(dcc, ddcc) &quot;set DDCC&quot;;\r\n        t -&gt; ddcc.certificate as certificate then CertDCCtoCoreDataSetCertificate(src, dcc, t, certificate) &quot;set certificate&quot;;\r\n        t -&gt; ddcc.test as test then TtoCoreDataSetTR(t, test) &quot;set test&quot;;\r\n        t -&gt; outentry.resource = ddcc &quot;set outentry&quot;;\r\n      };\r\n    };\r\n  };\r\n}\r\n\r\ngroup DCCtoCoreDataSet(source dcc, target ddcc : DDCC) {\r\n  dcc.dob as birthDate -&gt; ddcc.birthDate = birthDate &quot;set birthDate&quot;;\r\n  dcc.nam as nam then {\r\n    nam.gn as given -&gt; ddcc.name = (given.replaceMatches('$', ' ')) &quot;set given name&quot;;\r\n    nam.fn as family -&gt;  ddcc.name as tName,  ddcc.name = append(tName, family) &quot;add family name&quot;;\r\n  };\r\n}\r\n\r\ngroup CertDCCtoCoreDataSetCertificate(source src : CWTPayload, source dcc, source g, target certificate) {\r\n  src -&gt; certificate.period = create('Period') as period then CwtToPeriod(src, period) &quot;set period&quot;;\r\n  dcc.ver as ver -&gt; certificate.version = ver &quot;set version&quot;;\r\n  g.ci as ci -&gt;  certificate.hcid as hcid,  hcid.value = ci &quot;set hcid&quot;;\r\n  g.is as is -&gt;  certificate.issuer = create('Reference') as issuer,  issuer.display = is &quot;set issuer&quot;;\r\n}\r\n\r\ngroup CwtToPeriod(source src : CWTPayload, target tgt : Period) {\r\n  src.iat as iat -&gt;  append(iat, ' seconds') as epoch,  tgt.start = (@1970-01-01T00:00:00.000+00:00 + epoch.toQuantity()) &quot;set period start&quot;;\r\n  src.exp as exp -&gt;  append(exp, ' seconds') as epoch,  tgt.end = (@1970-01-01T00:00:00.000+00:00 + epoch.toQuantity()) &quot;set period end&quot;;\r\n}\r\n\r\ngroup VtoCoreDataSetVS(source v, target vaccination) {\r\n  v.tg as tg -&gt;  vaccination.disease as coding,  coding.system = 'http://snomed.info/sct',  coding.code = tg &quot;set target disease&quot;;\r\n  v.vp as vp -&gt;  vaccination.vaccine as coding,  coding.system = 'https://id.uvci.eu/valuesets/vaccine-prophylaxis.json',  coding.code = vp &quot;set vaccine&quot;;\r\n  v.mp as mp -&gt; vaccination.brand = translate(mp, 'http://worldhealthorganization.github.io/ddcc/ConceptMap/who-ddcc-map-eudcc-icd11-vaccines', 'Coding') &quot;translate mp to brand&quot;;\r\n  v.ma as ma -&gt;  vaccination.maholder as coding,  coding.system = 'https://id.uvci.eu/valuesets/vaccine-mah-manf.json',  coding.code = ma &quot;set maholder&quot;;\r\n  v.dt as date -&gt; vaccination.date = date &quot;set date&quot;;\r\n  v.dn as dose -&gt; vaccination.dose = dose &quot;set dose&quot;;\r\n  v.sd as totalDoses -&gt; vaccination.totalDoses = totalDoses &quot;set totalDoses&quot;;\r\n  v.co as co -&gt;  vaccination.country as coding,  coding.code = co,  coding.system = 'urn:iso:std:iso:3166' &quot;set country&quot;;\r\n}\r\n\r\ngroup TtoCoreDataSetTR(source t, target test) {\r\n  t.tg as tg -&gt;  test.pathogen as coding,  coding.system = 'http://snomed.info/sct',  coding.code = tg &quot;set pathogen&quot;;\r\n  t.tt as tt -&gt;  test.type as coding,  coding.system = 'http://loinc.org',  coding.code = tt &quot;set type&quot;;\r\n  t.nm as nm -&gt;  test.brand as coding,  coding.system = 'https://id.uvci.eu/valuesets/test-manf.json',  coding.code = nm &quot;set brand&quot;;\r\n  t.ma as ma -&gt;  test.manufacturer as coding,  coding.system = 'https://covid-19-diagnostics.jrc.ec.europa.eu/devices',  coding.code = ma &quot;set manufacturer&quot;;\r\n  t.sc as date -&gt; test.date = date &quot;set date&quot;;\r\n  t.tr as tr -&gt;  test.result as coding,  coding.system = 'http://snomed.info/sct',  coding.code = tr &quot;set result&quot;;\r\n  t.tc as tc -&gt;  test.centre as coding,  coding.code = tc &quot;set centre&quot;;\r\n  t.co as co -&gt;  test.country as coding,  coding.code = co,  coding.system = 'urn:iso:std:iso:3166' &quot;set country&quot;;\r\n}\r\n\r\n</pre></div>"
   },
   "url": "http://worldhealthorganization.github.io/ddcc/StructureMap/CertDCCtoCoreDataSet",
   "name": "CertDCCtoCoreDataSet",
@@ -500,15 +500,23 @@
         "variable": "iat"
       } ],
       "target": [ {
+        "contextType": "variable",
+        "variable": "epoch",
+        "transform": "append",
+        "parameter": [ {
+          "valueId": "iat"
+        }, {
+          "valueString": " seconds"
+        } ]
+      }, {
         "context": "tgt",
         "contextType": "variable",
         "element": "start",
-        "transform": "copy",
+        "transform": "evaluate",
         "parameter": [ {
-          "valueId": "iat"
+          "valueString": "@1970-01-01T00:00:00.000+00:00 + epoch.toQuantity()"
         } ]
-      } ],
-      "documentation": "requires translation of timestamp to ISO DateTime"
+      } ]
     }, {
       "name": "set period end",
       "source": [ {
@@ -517,12 +525,21 @@
         "variable": "exp"
       } ],
       "target": [ {
+        "contextType": "variable",
+        "variable": "epoch",
+        "transform": "append",
+        "parameter": [ {
+          "valueId": "exp"
+        }, {
+          "valueString": " seconds"
+        } ]
+      }, {
         "context": "tgt",
         "contextType": "variable",
         "element": "end",
-        "transform": "copy",
+        "transform": "evaluate",
         "parameter": [ {
-          "valueId": "exp"
+          "valueString": "@1970-01-01T00:00:00.000+00:00 + epoch.toQuantity()"
         } ]
       } ]
     } ]
