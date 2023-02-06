@@ -11,8 +11,8 @@ group CertDCCtoCoreDataSet(
     source src: CWTPayload, 
     target ddccBundle: DDCCBundle)
 {
-    src.hcert as hcert then {
-        hcert.eu_DCC_v1 as dcc then {
+    src."-260" as hcert then {
+        hcert."1" as dcc then {
             dcc.v as v -> ddccBundle.entry as outentry,  create('http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.VS') as ddcc then {                
                 v then DCCtoCoreDataSet(dcc, ddcc) "set DDCC";
                 v -> ddcc.certificate as certificate then CertDCCtoCoreDataSetCertificate(src, dcc, v, certificate) "set certificate";
@@ -56,11 +56,11 @@ group CertDCCtoCoreDataSetCertificate(
 }
 
 group CwtToPeriod(source src: CWTPayload, target tgt : Period) {
-    src.iat as iat ->
+    src."6" as iat ->
         append(iat, " seconds") as epoch,
         tgt.start = (@1970-01-01T00:00:00.000+00:00 + epoch.toQuantity())
         "set period start";
-    src.exp as exp ->
+    src."4" as exp ->
         append(exp, " seconds") as epoch,
         tgt.end = (@1970-01-01T00:00:00.000+00:00 + epoch.toQuantity())
         "set period end";
