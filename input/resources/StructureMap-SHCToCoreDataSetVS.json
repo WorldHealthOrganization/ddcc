@@ -3,11 +3,11 @@
   "id": "SHCToCoreDataSetVS",
   "meta": {
     "versionId": "5",
-    "lastUpdated": "2021-12-29T00:46:08.706+00:00"
+    "lastUpdated": "2023-01-30T22:16:24.059+00:00"
   },
   "text": {
     "status": "generated",
-    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><pre>map &quot;http://worldhealthorganization.github.io/ddcc/StructureMap/SHCToCoreDataSetVS&quot; = &quot;SHCToCoreDataSetVS&quot;\r\n\r\n\r\nuses &quot;http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-vaccination-bundle-dm&quot; alias SHCVaccinationBundleDM as source\r\nuses &quot;http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-patient-general-dm&quot; alias SHCPatientDM as source\r\nuses &quot;http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-vaccination-dm&quot; alias SHCImmunizationDM as source\r\nuses &quot;http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.VS&quot; alias DDCCVS as target\r\n\r\ngroup SHCToVS(source shc : SHCVaccinationBundleDM, target ddcc : DDCCVS) {\r\n  shc.entry as patientEntrySHC then {\r\n    patientEntrySHC.resource : Patient first as patientSHC then {\r\n      patientSHC then PatientToDDCC(patientSHC, ddcc) &quot;Patient resource&quot;;\r\n      shc.entry as immunizationEntrySHC then {\r\n        immunizationEntrySHC.resource : Immunization as immunizationSHC -&gt; ddcc.vaccination as vaccination then ImmunizationToDDCC(immunizationSHC, vaccination) &quot;Immunization resource&quot;;\r\n      } &quot;Immunization entry&quot;;\r\n    } &quot;Patient entry&quot;;\r\n  } &quot;map patient&quot;;\r\n}\r\n\r\ngroup PatientToDDCC(source patient : SHCPatientDM, target tgt : DDCCVS) {\r\n  patient.name as name then {\r\n    name.text as text -&gt; tgt.name = text &quot;set name&quot;;\r\n  } &quot;set full name&quot;;\r\n  patient.birthDate as birthDate -&gt; tgt.birthDate = birthDate &quot;set birthDate&quot;;\r\n}\r\n\r\ngroup ImmunizationToDDCC(source immunization : SHCImmunizationDM, target vaccination) {\r\n  immunization.vaccineCode as vaccineCode -&gt; vaccination.vaccine = vaccineCode &quot;set vaccine&quot;;\r\n  immunization.manufacturer as tman then {\r\n    tman.identifier as ident -&gt; vaccination.manufacturer as manufacturer then {\r\n      ident.system as system -&gt; manufacturer.system = system &quot;set system&quot;;\r\n      ident.value as value -&gt; manufacturer.code = value &quot;set value&quot;;\r\n    } &quot;set manufacturer&quot;;\r\n  };\r\n  immunization.lotNumber as lot -&gt; vaccination.lot = lot &quot;set lot&quot;;\r\n  immunization.occurrence as date -&gt; vaccination.date = date &quot;set date&quot;;\r\n  immunization.performer as performer then {\r\n    performer.actor as actor then {\r\n      actor.display as centre -&gt; vaccination.centre = centre &quot;set centre&quot;;\r\n    };\r\n  };\r\n}\r\n\r\n</pre></div>"
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><pre>map &quot;http://worldhealthorganization.github.io/ddcc/StructureMap/SHCToCoreDataSetVS&quot; = &quot;SHCToCoreDataSetVS&quot;\r\n\r\n\r\nuses &quot;http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-vaccination-bundle-dm&quot; alias SHCVaccinationBundleDM as source\r\nuses &quot;http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-patient-general-dm&quot; alias SHCPatientDM as source\r\nuses &quot;http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-vaccination-dm&quot; alias SHCImmunizationDM as source\r\nuses &quot;http://hl7.org/fhir/StructureDefinition/Bundle&quot; alias DDCCBundle as target\r\nuses &quot;http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.VS&quot; alias DDCCVS as produced\r\n\r\ngroup SHCToVS(source shc : SHCVaccinationBundleDM, target ddccBundle : DDCCBundle) {\r\n  shc.entry as patientEntrySHC then {\r\n    patientEntrySHC.resource : Patient first as patient then {\r\n      shc.entry as entry then {\r\n        // entry.resource : Immunization as immunization where vaccineCode.memberOf('http://worldhealthorganization.github.io/ddcc/ValueSet/who-ddcc-allowed-vaccines-covid-19') -&gt;  ddccBundle.entry as outentry,  create('http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.VS') as ddcc then {\r\n        entry.resource : Immunization as immunization -&gt;  ddccBundle.entry as outentry,  create('http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.VS') as ddcc then {\r\n          immunization then PatientToDDCCVS(patient, ddcc) &quot;set patient&quot;;\r\n          immunization -&gt; ddcc.vaccination as vaccination then ImmunizationToDDCC(immunization, vaccination) &quot;set vaccination&quot;;\r\n          immunization -&gt; outentry.resource = ddcc &quot;set outentry&quot;;\r\n        } &quot;immunizations&quot;;\r\n      } &quot;entries&quot;;\r\n    } &quot;get patient&quot;;\r\n  } &quot;find patient&quot;;\r\n}\r\n\r\ngroup PatientToDDCCVS(source patient : SHCPatientDM, target tgt : DDCCVS) {\r\n  patient.name as name then NameToText(name, tgt) &quot;set name&quot;;\r\n  patient.birthDate as birthDate -&gt; tgt.birthDate = birthDate &quot;set birthDate&quot;;\r\n  patient.identifier first as identifier -&gt; tgt.identifier = identifier &quot;set identifier&quot;;\r\n}\r\n\r\ngroup NameToText(source name : HumanName, target ddcc) {\r\n  // annoying because append doesn't work until ddcc.name is set\r\n  name.given first as given -&gt; ddcc.name = (given.replaceMatches('$', ' ')) &quot;set first name&quot;;\r\n  // name.given not_first as other -&gt; ddcc.name as tName, ddcc.name = append( tName, other ) &quot;set other names&quot;;\r\n  name.given not_first as other -&gt;  ddcc.name as tName,  (other.replaceMatches('$', ' ')) as spaced,  ddcc.name = append(tName, spaced) &quot;set other names&quot;;\r\n  name.family as family -&gt;  ddcc.name as tName,  ddcc.name = append(tName, family) &quot;add family name&quot;;\r\n  name.text as text -&gt; ddcc.name = text &quot;set full name&quot;;\r\n}\r\n\r\ngroup ImmunizationToDDCC(source immunization : SHCImmunizationDM, target vaccination) {\r\n  immunization.vaccineCode as vaccine then {\r\n    vaccine.coding as coding where memberOf('http://worldhealthorganization.github.io/ddcc/ValueSet/who-ddcc-vaccines-covid-19') then {\r\n      coding -&gt; vaccination.vaccine = coding &quot;set coding&quot;;\r\n    } &quot;copy vaccine&quot;;\r\n    vaccine.coding as coding where memberOf('http://worldhealthorganization.github.io/ddcc/ValueSet/who-ddcc-vaccines-covid-19').not() then {\r\n      coding -&gt; vaccination.vaccine = translate(coding, 'http://worldhealthorganization.github.io/ddcc/ConceptMap/who-ddcc-map-cvx-icd11-vaccines', 'Coding') &quot;translate code&quot;;\r\n    } &quot;translate vaccine coding&quot;;\r\n    vaccine.coding as coding -&gt; vaccination.brand = translate(coding, 'http://worldhealthorganization.github.io/ddcc/ConceptMap/who-ddcc-map-cvx-icd11-brands', 'Coding') &quot;translate brand&quot;;\r\n  } &quot;set vaccine&quot;;\r\n  immunization.manufacturer as tman then {\r\n    tman.identifier as identifier -&gt; vaccination.manufacturer as manufacturer then {\r\n      identifier.system as system -&gt; manufacturer.system = system &quot;set manufacturer system&quot;;\r\n      identifier.value as value -&gt; manufacturer.code = value &quot;set manufacturer value&quot;;\r\n    } &quot;set manufacturer id&quot;;\r\n  };\r\n  immunization.lotNumber as lot -&gt; vaccination.lot = lot &quot;set lot&quot;;\r\n  immunization.occurrence as date -&gt; vaccination.date = date &quot;set date&quot;;\r\n  immunization.performer as performer then {\r\n    performer.actor as actor then {\r\n      actor.display as centre -&gt; vaccination.centre = centre &quot;set centre&quot;;\r\n    };\r\n  };\r\n}\r\n\r\n</pre></div>"
   },
   "url": "http://worldhealthorganization.github.io/ddcc/StructureMap/SHCToCoreDataSetVS",
   "name": "SHCToCoreDataSetVS",
@@ -24,8 +24,12 @@
     "mode": "source",
     "alias": "SHCImmunizationDM"
   }, {
-    "url": "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.VS",
+    "url": "http://hl7.org/fhir/StructureDefinition/Bundle",
     "mode": "target",
+    "alias": "DDCCBundle"
+  }, {
+    "url": "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.VS",
+    "mode": "produced",
     "alias": "DDCCVS"
   } ],
   "group": [ {
@@ -36,66 +40,122 @@
       "type": "SHCVaccinationBundleDM",
       "mode": "source"
     }, {
-      "name": "ddcc",
-      "type": "DDCCVS",
+      "name": "ddccBundle",
+      "type": "DDCCBundle",
       "mode": "target"
     } ],
     "rule": [ {
-      "name": "map patient",
+      "name": "find patient",
       "source": [ {
         "context": "shc",
         "element": "entry",
         "variable": "patientEntrySHC"
       } ],
       "rule": [ {
-        "name": "Patient entry",
+        "name": "get patient",
         "source": [ {
           "context": "patientEntrySHC",
           "type": "Patient",
           "element": "resource",
           "listMode": "first",
-          "variable": "patientSHC"
+          "variable": "patient"
         } ],
         "rule": [ {
-          "name": "Patient resource",
-          "source": [ {
-            "context": "patientSHC"
-          } ],
-          "dependent": [ {
-            "name": "PatientToDDCC",
-            "variable": [ "patientSHC", "ddcc" ]
-          } ]
-        }, {
-          "name": "Immunization entry",
+          "name": "entries",
           "source": [ {
             "context": "shc",
             "element": "entry",
-            "variable": "immunizationEntrySHC"
+            "variable": "entry"
           } ],
           "rule": [ {
-            "name": "Immunization resource",
+            "name": "immunizations",
             "source": [ {
-              "context": "immunizationEntrySHC",
+              "context": "entry",
               "type": "Immunization",
               "element": "resource",
-              "variable": "immunizationSHC"
+              "variable": "immunization"
             } ],
             "target": [ {
-              "context": "ddcc",
+              "context": "ddccBundle",
               "contextType": "variable",
-              "element": "vaccination",
-              "variable": "vaccination"
+              "element": "entry",
+              "variable": "outentry"
+            }, {
+              "contextType": "variable",
+              "variable": "ddcc",
+              "transform": "create",
+              "parameter": [ {
+                "valueString": "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.VS"
+              } ]
             } ],
-            "dependent": [ {
-              "name": "ImmunizationToDDCC",
-              "variable": [ "immunizationSHC", "vaccination" ]
-            } ]
+            "rule": [ {
+              "name": "set patient",
+              "source": [ {
+                "context": "immunization"
+              } ],
+              "dependent": [ {
+                "name": "PatientToDDCCVS",
+                "variable": [ "patient", "ddcc" ],
+                "_variable": [ {
+                  "extension": [ {
+                    "url": "http://hl7.org/fhir/tools/StructureDefinition/original-item-type",
+                    "valueUrl": "id"
+                  } ]
+                }, {
+                  "extension": [ {
+                    "url": "http://hl7.org/fhir/tools/StructureDefinition/original-item-type",
+                    "valueUrl": "id"
+                  } ]
+                } ]
+              } ]
+            }, {
+              "name": "set vaccination",
+              "source": [ {
+                "context": "immunization"
+              } ],
+              "target": [ {
+                "context": "ddcc",
+                "contextType": "variable",
+                "element": "vaccination",
+                "variable": "vaccination"
+              } ],
+              "dependent": [ {
+                "name": "ImmunizationToDDCC",
+                "variable": [ "immunization", "vaccination" ],
+                "_variable": [ {
+                  "extension": [ {
+                    "url": "http://hl7.org/fhir/tools/StructureDefinition/original-item-type",
+                    "valueUrl": "id"
+                  } ]
+                }, {
+                  "extension": [ {
+                    "url": "http://hl7.org/fhir/tools/StructureDefinition/original-item-type",
+                    "valueUrl": "id"
+                  } ]
+                } ]
+              } ]
+            }, {
+              "name": "set outentry",
+              "source": [ {
+                "context": "immunization"
+              } ],
+              "target": [ {
+                "context": "outentry",
+                "contextType": "variable",
+                "element": "resource",
+                "transform": "copy",
+                "parameter": [ {
+                  "valueId": "ddcc"
+                } ]
+              } ]
+            } ],
+            "documentation": "entry.resource : Immunization as immunization where vaccineCode.memberOf('http://worldhealthorganization.github.io/ddcc/ValueSet/who-ddcc-allowed-vaccines-covid-19') ->  ddccBundle.entry as outentry,  create('http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.VS') as ddcc then {"
           } ]
         } ]
       } ]
     } ]
   }, {
-    "name": "PatientToDDCC",
+    "name": "PatientToDDCCVS",
     "typeMode": "none",
     "input": [ {
       "name": "patient",
@@ -107,26 +167,24 @@
       "mode": "target"
     } ],
     "rule": [ {
-      "name": "set full name",
+      "name": "set name",
       "source": [ {
         "context": "patient",
         "element": "name",
         "variable": "name"
       } ],
-      "rule": [ {
-        "name": "set name",
-        "source": [ {
-          "context": "name",
-          "element": "text",
-          "variable": "text"
-        } ],
-        "target": [ {
-          "context": "tgt",
-          "contextType": "variable",
-          "element": "name",
-          "transform": "copy",
-          "parameter": [ {
-            "valueId": "text"
+      "dependent": [ {
+        "name": "NameToText",
+        "variable": [ "name", "tgt" ],
+        "_variable": [ {
+          "extension": [ {
+            "url": "http://hl7.org/fhir/tools/StructureDefinition/original-item-type",
+            "valueUrl": "id"
+          } ]
+        }, {
+          "extension": [ {
+            "url": "http://hl7.org/fhir/tools/StructureDefinition/original-item-type",
+            "valueUrl": "id"
           } ]
         } ]
       } ]
@@ -146,6 +204,124 @@
           "valueId": "birthDate"
         } ]
       } ]
+    }, {
+      "name": "set identifier",
+      "source": [ {
+        "context": "patient",
+        "element": "identifier",
+        "listMode": "first",
+        "variable": "identifier"
+      } ],
+      "target": [ {
+        "context": "tgt",
+        "contextType": "variable",
+        "element": "identifier",
+        "transform": "copy",
+        "parameter": [ {
+          "valueId": "identifier"
+        } ]
+      } ]
+    } ]
+  }, {
+    "name": "NameToText",
+    "typeMode": "none",
+    "input": [ {
+      "name": "name",
+      "type": "HumanName",
+      "mode": "source"
+    }, {
+      "name": "ddcc",
+      "mode": "target"
+    } ],
+    "rule": [ {
+      "name": "set first name",
+      "source": [ {
+        "context": "name",
+        "element": "given",
+        "listMode": "first",
+        "variable": "given"
+      } ],
+      "target": [ {
+        "context": "ddcc",
+        "contextType": "variable",
+        "element": "name",
+        "transform": "evaluate",
+        "parameter": [ {
+          "valueString": "given.replaceMatches('$', ' ')"
+        } ]
+      } ],
+      "documentation": "annoying because append doesn't work until ddcc.name is set"
+    }, {
+      "name": "set other names",
+      "source": [ {
+        "context": "name",
+        "element": "given",
+        "listMode": "not_first",
+        "variable": "other"
+      } ],
+      "target": [ {
+        "context": "ddcc",
+        "contextType": "variable",
+        "element": "name",
+        "variable": "tName"
+      }, {
+        "contextType": "variable",
+        "variable": "spaced",
+        "transform": "evaluate",
+        "parameter": [ {
+          "valueString": "other.replaceMatches('$', ' ')"
+        } ]
+      }, {
+        "context": "ddcc",
+        "contextType": "variable",
+        "element": "name",
+        "transform": "append",
+        "parameter": [ {
+          "valueId": "tName"
+        }, {
+          "valueId": "spaced"
+        } ]
+      } ],
+      "documentation": "name.given not_first as other -> ddcc.name as tName, ddcc.name = append( tName, other ) \"set other names\";"
+    }, {
+      "name": "add family name",
+      "source": [ {
+        "context": "name",
+        "element": "family",
+        "variable": "family"
+      } ],
+      "target": [ {
+        "context": "ddcc",
+        "contextType": "variable",
+        "element": "name",
+        "variable": "tName"
+      }, {
+        "context": "ddcc",
+        "contextType": "variable",
+        "element": "name",
+        "transform": "append",
+        "parameter": [ {
+          "valueId": "tName"
+        }, {
+          "valueId": "family"
+        } ]
+      } ]
+    }, {
+      "name": "set full name",
+      "source": [ {
+        "context": "name",
+        "element": "text",
+        "variable": "text"
+      } ],
+      "target": [ {
+        "context": "ddcc",
+        "contextType": "variable",
+        "element": "name",
+        "transform": "copy",
+        "parameter": [ {
+          "valueId": "text"
+        } ]
+      } ]
     } ]
   }, {
     "name": "ImmunizationToDDCC",
@@ -163,15 +339,77 @@
       "source": [ {
         "context": "immunization",
         "element": "vaccineCode",
-        "variable": "vaccineCode"
+        "variable": "vaccine"
       } ],
-      "target": [ {
-        "context": "vaccination",
-        "contextType": "variable",
-        "element": "vaccine",
-        "transform": "copy",
-        "parameter": [ {
-          "valueId": "vaccineCode"
+      "rule": [ {
+        "name": "copy vaccine",
+        "source": [ {
+          "context": "vaccine",
+          "element": "coding",
+          "variable": "coding",
+          "condition": "memberOf('http://worldhealthorganization.github.io/ddcc/ValueSet/who-ddcc-vaccines-covid-19')"
+        } ],
+        "rule": [ {
+          "name": "set coding",
+          "source": [ {
+            "context": "coding"
+          } ],
+          "target": [ {
+            "context": "vaccination",
+            "contextType": "variable",
+            "element": "vaccine",
+            "transform": "copy",
+            "parameter": [ {
+              "valueId": "coding"
+            } ]
+          } ]
+        } ]
+      }, {
+        "name": "translate vaccine coding",
+        "source": [ {
+          "context": "vaccine",
+          "element": "coding",
+          "variable": "coding",
+          "condition": "memberOf('http://worldhealthorganization.github.io/ddcc/ValueSet/who-ddcc-vaccines-covid-19').not()"
+        } ],
+        "rule": [ {
+          "name": "translate code",
+          "source": [ {
+            "context": "coding"
+          } ],
+          "target": [ {
+            "context": "vaccination",
+            "contextType": "variable",
+            "element": "vaccine",
+            "transform": "translate",
+            "parameter": [ {
+              "valueId": "coding"
+            }, {
+              "valueString": "http://worldhealthorganization.github.io/ddcc/ConceptMap/who-ddcc-map-cvx-icd11-vaccines"
+            }, {
+              "valueString": "Coding"
+            } ]
+          } ]
+        } ]
+      }, {
+        "name": "translate brand",
+        "source": [ {
+          "context": "vaccine",
+          "element": "coding",
+          "variable": "coding"
+        } ],
+        "target": [ {
+          "context": "vaccination",
+          "contextType": "variable",
+          "element": "brand",
+          "transform": "translate",
+          "parameter": [ {
+            "valueId": "coding"
+          }, {
+            "valueString": "http://worldhealthorganization.github.io/ddcc/ConceptMap/who-ddcc-map-cvx-icd11-brands"
+          }, {
+            "valueString": "Coding"
+          } ]
         } ]
       } ]
     }, {
@@ -182,11 +420,11 @@
         "variable": "tman"
       } ],
       "rule": [ {
-        "name": "set manufacturer",
+        "name": "set manufacturer id",
         "source": [ {
           "context": "tman",
           "element": "identifier",
-          "variable": "ident"
+          "variable": "identifier"
         } ],
         "target": [ {
           "context": "vaccination",
@@ -195,9 +433,9 @@
           "variable": "manufacturer"
         } ],
         "rule": [ {
-          "name": "set system",
+          "name": "set manufacturer system",
           "source": [ {
-            "context": "ident",
+            "context": "identifier",
             "element": "system",
             "variable": "system"
           } ],
@@ -211,9 +449,9 @@
             } ]
           } ]
         }, {
-          "name": "set value",
+          "name": "set manufacturer value",
           "source": [ {
-            "context": "ident",
+            "context": "identifier",
             "element": "value",
             "variable": "value"
           } ],

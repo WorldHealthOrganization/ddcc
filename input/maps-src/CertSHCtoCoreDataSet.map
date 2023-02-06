@@ -1,0 +1,69 @@
+map "http://worldhealthorganization.github.io/ddcc/StructureMap/CertSHCtoCoreDataSet" = "CertSHCtoCoreDataSet"
+
+uses "http://worldhealthorganization.github.io/ddcc/StructureDefinition/CertSHC" alias JWTPayload as source
+
+uses "http://hl7.org/fhir/StructureDefinition/Bundle" alias DDCCBundle as target
+uses "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet" alias DDCC as produced
+uses "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.VS" alias DDCCVS as produced
+
+imports "http://worldhealthorganization.github.io/ddcc/StructureMap/SHCToCoreDataSetVS"
+imports "http://worldhealthorganization.github.io/ddcc/StructureMap/SHCToCoreDataSetTR"
+
+group CertSHCtoCoreDataSetBundle(
+    source src: JWTPayload, 
+    target ddccBundle: Bundle)
+{
+    src.vc as vc then {
+        vc.credentialSubject as credentialSubject then {
+            credentialSubject.fhirBundle as fhirBundle then {
+                fhirBundle.entry as patientEntrySHC then {
+                    patientEntrySHC.resource : Patient first as patient then {
+                        fhirBundle.entry as entry then {
+                            entry.resource : Immunization as immunization ->  ddccBundle.entry as outentry,  create('http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.VS') as ddcc then {
+                                immunization then PatientToDDCCVS(patient, ddcc) "set patient";
+                                immunization -> ddcc.vaccination as vaccination then ImmunizationToDDCC(immunization, vaccination) "set vaccination";
+                                immunization then CertSHCtoCoreDataSet(src, ddcc) "set ddcc";
+                                immunization -> outentry.resource = ddcc "set outentry";                                
+                            } "immunizations";
+                            entry.resource : Observation as lab ->  ddccBundle.entry as outentry,  create('http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.TR') as ddcc then {
+                                lab then PatientToDDCCTR(patient, ddcc) "set patient";
+                                lab -> ddcc.test as test then LabToDDCC(lab, test) "set test";
+                                lab then CertSHCtoCoreDataSet(src, ddcc) "set ddcc";
+                                lab -> outentry.resource = ddcc "set outentry";
+                            } "labs";
+                        } "entries";
+                    } "get patient";
+                  } "find patient";
+            } "fhirBundle";
+        } "credentialSubject";
+    } "vc";
+}
+
+group CertSHCtoCoreDataSet(
+    source src: JWTPayload, 
+    target ddcc: DDCC)
+{
+    src -> ddcc.certificate as cert then {
+        src.iss -> cert.issuer = create('Reference') as issuer then {
+            src.iss as iss -> issuer.reference = iss "set issuer";
+        } "issuer";
+        src -> cert.period = create('Period') as period then {
+            src then JwtToPeriod(src, period) "set period";
+        } "period";
+    } "certificate";
+}
+
+group JwtToPeriod(source src: JWTPayload, target tgt : Period) {
+    src.nbf as nbf ->
+        append(nbf, " seconds") as epoch,
+        tgt.start = (@1970-01-01T00:00:00.000+00:00 + epoch.toQuantity())
+        "set period start to notBefore";    
+    src.iat as iat ->
+        append(iat, " seconds") as epoch,
+        tgt.start = (@1970-01-01T00:00:00.000+00:00 + epoch.toQuantity())
+        "set period start to  issuedAt";          
+    src.exp as exp ->
+        append(exp, " seconds") as epoch,
+        tgt.end = (@1970-01-01T00:00:00.000+00:00 + epoch.toQuantity())
+        "set period end";
+}
