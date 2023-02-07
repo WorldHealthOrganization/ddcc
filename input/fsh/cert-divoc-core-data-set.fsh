@@ -1,28 +1,36 @@
 Logical:        CertDIVOC
 Title:          "Certificate - DIVOC Verifiable Credential Logical Model"
-Description:    "Data elements for the DIVOC Core Data Set."
+Description:    "Data elements for the DIVOC Core Data Set.
+
+The official DIVOC documentation appears to be at <https://divoc.digit.org>. However, this does not include a full list of elements included in DIVOC certificates.
+
+There is a JSON-LD context referenced in DIVOC certificate examples (`https://cowin.gov.in/credentials/vaccination/v1`), which would provide some element-level information, but this URL does not resolve. There is a copy of this JSON-LD context at <https://github.com/egovernments/DIVOC/blob/main/vaccination-context/vaccination-context.js>.
+
+It was not possible to find any online documentation regarding DIVOC proof of testing. Information on this was provided by the DIVOC team via email.
+
+Some element descriptions in this logical model provide details that are not in publicly available DIVOC documentation."
 
 * ^url = "http://worldhealthorganization.github.io/ddcc/StructureDefinition/CertDIVOC"
 * ^version = "1"
 * ^abstract = true
 * ^status = #draft
 
-* context 1..* string "Context" "JSON-LD Context URLs"
+* context 1..* string "Context (JSON-LD) - should actually be `@context` but this name isn't supported by FHIR."
 * type 1..* string "Type" "JSON-LD Type"
-* issuer 1..1 string "Issuer identifier" "Issuer identifier URI, generally a DID"
+* issuer 1..1 string "Issuer identifier" "Issuer identifier URI. generally a DID"
 * issuanceDate 1..1 dateTime "issuanceDate" "Date and time when a credential becomes valid"
 * nonTransferable 0..1 boolean "Non Trasnferability" "indicates that a verifiable credential must only be encapsulated into a verifiable presentation whose proof was issued by the credentialSubject"
 * credentialSubject 1..1 BackboneElement "CredentialSubject" "Contains claims about one or morebjects (Patients)"
   * id 0..1 string "id"
   * type 1..* string "type" "Type of credential. Generally 'Person'"
   * uhid 0..1 string "another id"
-  * refId 0..1 string "reference id" 
+  * refId 0..1 string "reference id"
   * name 0..1 string "A name associated with the patient"
-  * gender 0..1 string "Gender (M,F)"
-  * sex 0..1 string "Sex (M,F)"
-  * age 0..1 string "Age (V1)"
-  * dob 0..1 dateTime "The date of birth for the individual (V2)"
-  * nationality 0..1 string "Nationality" 
+  * gender 0..1 string "Gender (`Male` or `Female`; unknown if there are other options)"
+  * sex 0..1 string "Sex (not used in examples; presumably `Male` or `Female`; unknown if there are other options)"
+  * age 0..1 string "Age"
+  * dob 0..1 date "The date of birth for the individual (V2 only)"
+  * nationality 0..1 string "Nationality"
   * address 0..1 BackboneElement "Address"
     * streetAddress 0..1 string "Line 1 of the address"
     * streetAddress2 0..1 string "Line 2 of the address"
@@ -41,8 +49,8 @@ Description:    "Data elements for the DIVOC Core Data Set."
   * vaccine 0..1 string "Vaccine description. Might include vaccine type and brand"
   * manufacturer 0..1 string "Name of the Vaccine Manufacturer"
   * date 0..1 dateTime "Date of immunization"
-  * effectiveStart 0..1 dateTime "Effective immunization start date"
-  * effectiveUntil 0..1 dateTime "Effective immunization end date"
+  * effectiveStart 0..1 date "Effective immunization start date"
+  * effectiveUntil 0..1 date "Effective immunization end date"
   * dose 0..1 positiveInt "Dose Number"
   * totalDoses 0..1 positiveInt "Total doses for this vaccine protocol regimen"
   * verifier 0..1 BackboneElement "Verifier" "Practitioner that oversaw the application"
@@ -61,7 +69,7 @@ Description:    "Data elements for the DIVOC Core Data Set."
   * prophylaxis 0..1 string "Descriptive details of the vaccine type"
 * proof 1..* BackboneElement "Proof" "One or more cryptographic proofs that can be used to detect tampering and verify the authorship of a credential or presentation"
   * type 0..1 string "Type of proof"
-  * created 0..1  string "Signature date and time"
+  * created 0..1  dateTime "Signature date and time"
   * verificationMethod 1..1 string "Resolvable issuer identifier"
   * proofPurpose 0..1 string "Purpose of the signature" "Clearly expresses the purpose for the proof and ensures this information is protected by the signature"
   * jws 1..1 string "Signature"
