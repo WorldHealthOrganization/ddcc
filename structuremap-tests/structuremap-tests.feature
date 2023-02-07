@@ -232,3 +232,52 @@ Given def response = transform('fixtures/shc/bundle-lab-test-results-covid-jws-p
 Then match response.resourceType == 'Bundle'
 And match response.entry == '#[1]'
 And match response.entry[0].resource.certificate contains { issuer: {reference: 'https://spec.smarthealth.cards/examples/issuer'}, period: {start: '#present' }}
+
+# DIVOC ------------------------------------------------------------------------------
+
+@divoc
+@preload
+@matchbox
+Scenario: Updating DIVOC to Core Data Set Structure Map
+Given path 'StructureMap', 'CertDIVOCToCoreDataSet'
+And request read('../input/maps-src/CertDIVOCtoCoreDataSet.map')
+And header Accept = 'application/fhir+json'
+And header Content-Type = 'text/fhir-mapping'
+When method put
+Then assert responseStatus == 200 || responseStatus == 201
+
+@divoc
+@matchbox
+Scenario: Transforming Example DIVOC payload to Bundle of Core Data Set
+* param source = 'http://worldhealthorganization.github.io/ddcc/StructureMap/CertDIVOCtoCoreDataSet'
+Given path 'StructureMap', '$transform'
+And request read('fixtures/divoc/example-divoc-payload-vaccine.json')
+And header Accept = 'application/fhir+json'
+And header Content-Type = 'application/fhir+json'
+When method post
+Then status 200
+And match response.resourceType == 'Bundle'
+And match response.entry == '#[1]'
+And match response.entry[0].resource.resourceType == 'DDCCCoreDataSet'
+And match response.entry[0].resource.name == 'Jill C. Anyperson'
+And match response.entry[0].resource.birthDate == '1985-03-04'
+And match response.entry[0].resource.vaccination.vaccine contains only {system: 'http://id.who.int/icd11/mms', code: 'XM0GQ8'}
+And match response.entry[0].resource.vaccination.brand contains only {system: 'http://id.who.int/icd11/mms', code: 'XM8NQ0'}
+And match response.entry[0].resource.vaccination.lot == 'batch-01'
+And match response.entry[0].resource.vaccination.date == '2021-06-28'
+And match response.entry[0].resource.vaccination.centre == 'MOH Gothatuwa'
+
+@divoc
+@validator
+Scenario: Transforming Example DIVOC payload to Bundle of Core Data Set using validator
+Given def response = transform('fixtures/divoc/example-divoc-payload-vaccine.json','target/example-divoc-payload-vaccine.json','http://worldhealthorganization.github.io/ddcc/StructureMap/CertDIVOCtoCoreDataSet')
+Then match response.resourceType == 'Bundle'
+And match response.entry == '#[1]'
+And match response.entry[0].resource.resourceType == 'DDCCCoreDataSet'
+And match response.entry[0].resource.name == 'Jill C. Anyperson'
+And match response.entry[0].resource.birthDate == '1985-03-04'
+And match response.entry[0].resource.vaccination.vaccine contains only {system: 'http://id.who.int/icd11/mms', code: 'XM0GQ8'}
+And match response.entry[0].resource.vaccination.brand contains only {system: 'http://id.who.int/icd11/mms', code: 'XM8NQ0'}
+And match response.entry[0].resource.vaccination.lot == 'batch-01'
+And match response.entry[0].resource.vaccination.date == '2021-06-28'
+And match response.entry[0].resource.vaccination.centre == 'MOH Gothatuwa'
