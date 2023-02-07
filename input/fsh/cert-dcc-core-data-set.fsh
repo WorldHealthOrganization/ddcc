@@ -1,17 +1,17 @@
 // !!!!!!!!!!!!! Temporarily commented out !!!!!!!!!!!!!!!!
-//
+
 // This FSH is used to create input/resources StructureDefinition-CertDCC.json
 // because SUSHI does not support root-level element names that begin with
 // an integer or `-`, which are necessary for EU DCC.
-//
+
 // Once SUSHI supports this, this FSH file can be updated and used rather than
 // the JSON.
-//
+
 // !!!!!!!!!!!!! Temporarily commented out !!!!!!!!!!!!!!!!
 
 
 
-//
+
 // Logical:         CertDCC-FSH
 // Title:           "Certificate - EU DCC CBOR Web Token Logical Model"
 // Description:     "Data elements for the EU Digital COVID Certificate Core Data Set. Based on the official specification for COVID-19-related payloads <https://health.ec.europa.eu/system/files/2021-06/covid-certificate_json_specification_en_0.pdf> as of 2023-01-31, and Implementing Decision (EU) 2021/1073, Annex 1 <https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32021D1073&from=EN#d1e34-35-1>."
@@ -84,12 +84,12 @@
 
 // // Claim key=6; name=iat
 // // TODO: Replace `iat` with `6` below once allowed by SUSHI
-// * iat 1..1 positiveInt "Issued At (epoch)"
+// * iat 1..1 decimal "Issued At (epoch)"
 
 // // Claim key=4; name=exp
 // // TODO: Replace `exp` with `4` below once allowed by SUSHI
 // // Unclear if this is required or not in the spec.
-// * exp 0..1 positiveInt "Expiration Time (epoch)"
+// * exp 0..1 decimal "Expiration Time (epoch)"
 
 // // Claim key=-260; name=hcert; Defined at https://www.iana.org/assignments/cwt/cwt.xhtml
 // // TODO: Replace `hcert` with `-260` below once allowed by SUSHI
