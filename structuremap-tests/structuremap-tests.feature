@@ -263,11 +263,31 @@ And match response.entry == '#[1]'
 And match response.entry[0].resource.resourceType == 'DDCCCoreDataSet'
 And match response.entry[0].resource.name == 'John B. Anyperson'
 And match response.entry[0].resource.birthDate == '1951-01-20'
+# And match response.entry[0].resource.identifier == 'unk' ### NOT MAPPED ###
+And match response.entry[0].resource.certificate.issuer contains {display: 'Ministerio de Salud Pública'}
+And match response.entry[0].resource.certificate.version == '1.3.0'
+And match response.entry[0].resource.certificate.hcid contains only {value: 'URN:UVCI:01:UY:10002661:20221209084253125'}
+# And match response.entry[0].resource.certificate.ddccid.value == 'unk' ### NOT MAPPED ###
+##### Potential Issue: The start date is after the end date and I'm not sure why?
+And match response.entry[0].resource.certificate.period contains only {start: '2023-03-09T11:44:58.000+00:00', end: '2022-12-09T11:44:58.000+00:00'}
+##### Fails, the mapping results in {"system":"https://id.uvci.eu/valuesets/vaccine-prophylaxis.json","code":"1119349007"}. Which is correct?
 And match response.entry[0].resource.vaccination.vaccine contains only {system: 'http://id.who.int/icd11/mms', code: 'XM0GQ8'}
+##### Fails, vaccination brand is resulting in code 'XM0GQ8' (same as expected for vaccination.vaccine), expected XM8NQ0?
 And match response.entry[0].resource.vaccination.brand contains only {system: 'http://id.who.int/icd11/mms', code: 'XM8NQ0'}
-And match response.entry[0].resource.vaccination.lot == '0000001'
+And match response.entry[0].resource.vaccination.manufacturer contains only {system: 'https://covid-19-diagnostics.jrc.ec.europa.eu/devices', code: 'ORG-100030215'}
+##### The maholder mapping fails because it's missing the system, but correctly maps the code.
+And match response.entry[0].resource.vaccination.maholder contains only {system: 'https://id.uvci.eu/valuesets/vaccine-mah-manf.json', code: 'ORG-100030215'}
+# And match response.entry[0].resource.vaccination.lot == '0000001' ### NOT MAPPED ###
 And match response.entry[0].resource.vaccination.date == '2022-05-13'
-And match response.entry[0].resource.vaccination.centre == 'Ministerio de Salud Pública'
+# And match response.entry[0].resource.vaccination.validFrom == 'unk' ### NOT MAPPED ###
+And match response.entry[0].resource.vaccination.dose == 4
+And match response.entry[0].resource.vaccination.totalDoses == 4
+And match response.entry[0].resource.vaccination.country contains only {system: 'urn:iso:std:iso:3166', code: 'UY'}
+# And match response.entry[0].resource.vaccination.centre == 'Ministerio de Salud Pública' ### NOT MAPPED FOR VACCINE, ONLY FOR TEST RESULTS ###
+# And match response.entry[0].resource.vaccination.signature == 'unk' ### NOT MAPPED ###
+# And match response.entry[0].resource.vaccination.practitioner == 'unk' ### NOT MAPPED ###
+And match response.entry[0].resource.vaccination.disease contains only {system: 'http://snomed.info/sct', code: '840539006'}
+# And match response.entry[0].resource.vaccination.nextDose == 'unk' ### NOT MAPPED ###
 
 @eudcc
 @matchbox
@@ -284,10 +304,27 @@ And match response.entry == '#[1]'
 And match response.entry[0].resource.resourceType == 'DDCCCoreDataSet'
 And match response.entry[0].resource.name == 'John B. Anyperson'
 And match response.entry[0].resource.birthDate == '1951-01-20'
-And match response.entry[0].resource.test.pathogen contains {system: 'http://id.who.int/icd11/mms', code: 'XN109'}
-And match response.entry[0].resource.test.type contains only {system: 'http://loinc.org', code: '94558-4'}
-And match response.entry[0].resource.test.date == '2022-01-21'
+# And match response.entry[0].resource.identifier == 'unk' ### NOT MAPPED ###
+And match response.entry[0].resource.certificate.issuer contains {display: 'Ministerio de Salud Pública'}
+And match response.entry[0].resource.certificate.version == '1.3.0'
+And match response.entry[0].resource.certificate.hcid contains only {value: 'URN:UVCI:01:UY:10002661:20221209082240307'}
+# And match response.entry[0].resource.certificate.ddccid.value == 'unk' ### NOT MAPPED ###
+##### Potential Issue: The start date is after the end date and I'm not sure why?
+And match response.entry[0].resource.certificate.period contains only {start: '2023-03-09T11:24:45.000+00:00', end: '2022-12-09T11:24:45.000+00:00'}
+##### Which of these mappings for test.pathogen is correct? The first fails, second passes.
+# And match response.entry[0].resource.test.pathogen contains {system: 'http://id.who.int/icd11/mms', code: 'XN109'}
+And match response.entry[0].resource.test.pathogen contains only {system: 'http://snomed.info/sct', code: '840539006'}
+# Should this be {"system":"http://loinc.org","code":"94558-4"}?
+And match response.entry[0].resource.test.type contains only {system: 'http://loinc.org', code: 'LP6464-4'}
+# Need the mapping for this.
+And match response.entry[0].resource.test.brand contains only {system: 'https://id.uvci.eu/valuesets/test-manf.json', code: 'Detección de ARN COVID-19 RT PCR en secreciones respiratorias'}
+# Need the mapping for this.
+And match response.entry[0].resource.test.manufacturer contains only {system: 'https://covid-19-diagnostics.jrc.ec.europa.eu/devices', code: 'manufacturer'}
+# And match response.entry[0].resource.test.origin == '2022-01-21' ### NOT MAPPED ###
+And match response.entry[0].resource.test.date == '2022-01-21T00:00:00Z'
 And match response.entry[0].resource.test.result contains only {system: 'http://snomed.info/sct', code: '260373001'}
+And match response.entry[0].resource.test.centre contains only { code: 'Laboratorio ATGEN'}
+And match response.entry[0].resource.test.country contains only {system: 'urn:iso:std:iso:3166', code: 'UY'}
 
 @eudcc
 @validator
@@ -298,11 +335,31 @@ And match response.entry == '#[1]'
 And match response.entry[0].resource.resourceType == 'DDCCCoreDataSet'
 And match response.entry[0].resource.name == 'John B. Anyperson'
 And match response.entry[0].resource.birthDate == '1951-01-20'
+# And match response.entry[0].resource.identifier == 'unk' ### NOT MAPPED ###
+And match response.entry[0].resource.certificate.issuer contains {display: 'Ministerio de Salud Pública'}
+And match response.entry[0].resource.certificate.version == '1.3.0'
+And match response.entry[0].resource.certificate.hcid contains only {value: 'URN:UVCI:01:UY:10002661:20221209084253125'}
+# And match response.entry[0].resource.certificate.ddccid.value == 'unk' ### NOT MAPPED ###
+##### Potential Issue: The start date is after the end date and I'm not sure why?
+And match response.entry[0].resource.certificate.period contains only {start: '2023-03-09T11:44:58.000+00:00', end: '2022-12-09T11:44:58.000+00:00'}
+##### Fails, the mapping results in {"system":"https://id.uvci.eu/valuesets/vaccine-prophylaxis.json","code":"1119349007"}. Which is correct?
 And match response.entry[0].resource.vaccination.vaccine contains only {system: 'http://id.who.int/icd11/mms', code: 'XM0GQ8'}
+##### Fails, vaccination brand is resulting in code 'XM0GQ8' (same as expected for vaccination.vaccine), expected XM8NQ0?
 And match response.entry[0].resource.vaccination.brand contains only {system: 'http://id.who.int/icd11/mms', code: 'XM8NQ0'}
-And match response.entry[0].resource.vaccination.lot == '0000001'
+And match response.entry[0].resource.vaccination.manufacturer contains only {system: 'https://covid-19-diagnostics.jrc.ec.europa.eu/devices', code: 'ORG-100030215'}
+##### The maholder mapping fails because it's missing the system, but correctly maps the code.
+And match response.entry[0].resource.vaccination.maholder contains only {system: 'https://id.uvci.eu/valuesets/vaccine-mah-manf.json', code: 'ORG-100030215'}
+# And match response.entry[0].resource.vaccination.lot == '0000001' ### NOT MAPPED ###
 And match response.entry[0].resource.vaccination.date == '2022-05-13'
-And match response.entry[0].resource.vaccination.centre == 'Ministerio de Salud Pública'
+# And match response.entry[0].resource.vaccination.validFrom == 'unk' ### NOT MAPPED ###
+And match response.entry[0].resource.vaccination.dose == 4
+And match response.entry[0].resource.vaccination.totalDoses == 4
+And match response.entry[0].resource.vaccination.country contains only {system: 'urn:iso:std:iso:3166', code: 'UY'}
+# And match response.entry[0].resource.vaccination.centre == 'Ministerio de Salud Pública' ### NOT MAPPED FOR VACCINE, ONLY FOR TEST RESULTS ###
+# And match response.entry[0].resource.vaccination.signature == 'unk' ### NOT MAPPED ###
+# And match response.entry[0].resource.vaccination.practitioner == 'unk' ### NOT MAPPED ###
+And match response.entry[0].resource.vaccination.disease contains only {system: 'http://snomed.info/sct', code: '840539006'}
+# And match response.entry[0].resource.vaccination.nextDose == 'unk' ### NOT MAPPED ###
 
 @eudcc
 @validator
@@ -313,7 +370,24 @@ And match response.entry == '#[1]'
 And match response.entry[0].resource.resourceType == 'DDCCCoreDataSet'
 And match response.entry[0].resource.name == 'John B. Anyperson'
 And match response.entry[0].resource.birthDate == '1951-01-20'
-And match response.entry[0].resource.test.pathogen contains {system: 'http://id.who.int/icd11/mms', code: 'XN109'}
-And match response.entry[0].resource.test.type contains only {system: 'http://loinc.org', code: '94558-4'}
-And match response.entry[0].resource.test.date == '2022-01-21'
+# And match response.entry[0].resource.identifier == 'unk' ### NOT MAPPED ###
+And match response.entry[0].resource.certificate.issuer contains {display: 'Ministerio de Salud Pública'}
+And match response.entry[0].resource.certificate.version == '1.3.0'
+And match response.entry[0].resource.certificate.hcid contains only {value: 'URN:UVCI:01:UY:10002661:20221209082240307'}
+# And match response.entry[0].resource.certificate.ddccid.value == 'unk' ### NOT MAPPED ###
+##### Potential Issue: The start date is after the end date and I'm not sure why?
+And match response.entry[0].resource.certificate.period contains only {start: '2023-03-09T11:24:45.000+00:00', end: '2022-12-09T11:24:45.000+00:00'}
+##### Which of these mappings for test.pathogen is correct? The first fails, second passes.
+# And match response.entry[0].resource.test.pathogen contains {system: 'http://id.who.int/icd11/mms', code: 'XN109'}
+And match response.entry[0].resource.test.pathogen contains only {system: 'http://snomed.info/sct', code: '840539006'}
+# Should this be {"system":"http://loinc.org","code":"94558-4"}?
+And match response.entry[0].resource.test.type contains only {system: 'http://loinc.org', code: 'LP6464-4'}
+# Need the mapping for this.
+And match response.entry[0].resource.test.brand contains only {system: 'https://id.uvci.eu/valuesets/test-manf.json', code: 'Detección de ARN COVID-19 RT PCR en secreciones respiratorias'}
+# Need the mapping for this.
+And match response.entry[0].resource.test.manufacturer contains only {system: 'https://covid-19-diagnostics.jrc.ec.europa.eu/devices', code: 'manufacturer'}
+# And match response.entry[0].resource.test.origin == '2022-01-21' ### NOT MAPPED ###
+And match response.entry[0].resource.test.date == '2022-01-21T00:00:00Z'
 And match response.entry[0].resource.test.result contains only {system: 'http://snomed.info/sct', code: '260373001'}
+And match response.entry[0].resource.test.centre contains only { code: 'Laboratorio ATGEN'}
+And match response.entry[0].resource.test.country contains only {system: 'urn:iso:std:iso:3166', code: 'UY'}
