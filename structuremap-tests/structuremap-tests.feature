@@ -269,9 +269,15 @@ And match response.entry[0].resource.certificate.version == '1.3.0'
 And match response.entry[0].resource.certificate.hcid contains only {value: 'URN:UVCI:01:UY:10002661:20221209084253125'}
 # And match response.entry[0].resource.certificate.ddccid.value == 'unk' ### NO SOURCE ###
 And match response.entry[0].resource.certificate.period contains only {start: '2022-12-09T11:44:58.000+00:00', end: '2023-03-09T11:44:58.000+00:00'}
-##### Fails, the mapping results in {"system":"https://id.uvci.eu/valuesets/vaccine-prophylaxis.json","code":"1119349007"}. Which is correct?
-And match response.entry[0].resource.vaccination.vaccine contains only {system: 'http://id.who.int/icd11/mms', code: 'XM0GQ8'}
-##### Fails, vaccination brand is resulting in code 'XM0GQ8' (same as expected for vaccination.vaccine), expected XM8NQ0?
+##### Fails, valueset source: [* $icd11#XMOGQ8 "COVID-19 vaccine, RNA based"]
+And match response.entry[0].resource.vaccination.vaccine contains only {system: 'http://id.who.int/icd11/mms', code: 'XMOGQ8'}
+##### Fails, valueset source: [
+#   * group[0].element[0].code = #EU/1/20/1528
+#   * group[=].element[=].display = "Comirnaty"
+#   * group[=].element[=].target.code = #XM8NQ0
+#   * group[=].element[=].target.display = "Comirnaty"
+#   * group[=].element[=].target.equivalence = #equivalent
+# ]
 And match response.entry[0].resource.vaccination.brand contains only {system: 'http://id.who.int/icd11/mms', code: 'XM8NQ0'}
 And match response.entry[0].resource.vaccination.manufacturer contains only {system: 'https://covid-19-diagnostics.jrc.ec.europa.eu/devices', code: 'ORG-100030215'}
 ##### The maholder mapping fails because it's missing the system, but correctly maps the code.
