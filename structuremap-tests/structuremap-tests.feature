@@ -145,7 +145,7 @@ And match response.entry[2].resource.identifier contains only {system: 'urn:oid:
 # And match response.entry[0].resource.certificate.version == '1.3.0' ### NOT MAPPED ###
 # And match response.entry[0].resource.certificate.hcid contains only {value: ''} ### NOT MAPPED ###
 # And match response.entry[0].resource.certificate.ddccid.value == '' ### NOT MAPPED ###
-# And match response.entry[0].resource.certificate.period  ### NOT MAPPED ###
+# And match response.entry[0].resource.certificate.period contains only {start: '', end: ''} ### NOT MAPPED ###
 And match response.entry[0].resource.vaccination.vaccine contains only {system: 'http://id.who.int/icd11/mms', code: 'XM0GQ8'}
 ###### The next 2 fail: The resource entries after the first don't seem to be mapping any vaccine information.
 And match response.entry[1].resource.vaccination.vaccine contains only {system: 'http://id.who.int/icd11/mms', code: 'XM0GQ8'}
@@ -190,10 +190,21 @@ And match response.entry == '#[1]'
 And match response.entry[0].resource.resourceType == 'DDCCCoreDataSet'
 And match response.entry[0].resource.name == 'James T. Anyperson'
 And match response.entry[0].resource.birthDate == '1951-01-20'
+# And match response.entry[0].resource.identifier == '' ### NOT MAPPED ###
+# And match response.entry[0].resource.certificate.issuer contains {display: 'ABC General Hospital'} ### NOT MAPPED ###
+# And match response.entry[0].resource.certificate.version == '1.3.0' ### NOT MAPPED ###
+# And match response.entry[0].resource.certificate.hcid contains only {value: ''} ### NOT MAPPED ###
+# And match response.entry[0].resource.certificate.ddccid.value == '' ### NOT MAPPED ###
+# And match response.entry[0].resource.certificate.period contains only {start: '', end: ''} ### NOT MAPPED ###
 And match response.entry[0].resource.test.pathogen contains {system: 'http://id.who.int/icd11/mms', code: 'XN109'}
 And match response.entry[0].resource.test.type contains only {system: 'http://loinc.org', code: '94558-4'}
+# And match response.entry[0].resource.test.brand contains only {system: '', code: ''} ### NOT MAPPED ###
+# And match response.entry[0].resource.test.manufacturer contains only {system: '', code: ''} ### NOT MAPPED ###
+# And match response.entry[0].resource.test.origin == '' ### NOT MAPPED ###
 And match response.entry[0].resource.test.date == '2021-02-17'
 And match response.entry[0].resource.test.result contains only {system: 'http://snomed.info/sct', code: '260373001'}
+# And match response.entry[0].resource.test.centre contains only { code: 'ABC General Hospital'} ### NOT MAPPED ###
+# And match response.entry[0].resource.test.country contains only {system: 'urn:iso:std:iso:3166', code: ''} ### NO SOURCE ###
 
 @shc
 @matchbox
@@ -284,10 +295,21 @@ And match response.entry == '#[1]'
 And match response.entry[0].resource.resourceType == 'DDCCCoreDataSet'
 And match response.entry[0].resource.name == 'James T. Anyperson'
 And match response.entry[0].resource.birthDate == '1951-01-20'
+# And match response.entry[0].resource.identifier == '' ### NOT MAPPED ###
+# And match response.entry[0].resource.certificate.issuer contains {display: 'ABC General Hospital'} ### NOT MAPPED ###
+# And match response.entry[0].resource.certificate.version == '1.3.0' ### NOT MAPPED ###
+# And match response.entry[0].resource.certificate.hcid contains only {value: ''} ### NOT MAPPED ###
+# And match response.entry[0].resource.certificate.ddccid.value == '' ### NOT MAPPED ###
+# And match response.entry[0].resource.certificate.period contains only {start: '', end: ''} ### NOT MAPPED ###
 And match response.entry[0].resource.test.pathogen contains {system: 'http://id.who.int/icd11/mms', code: 'XN109'}
 And match response.entry[0].resource.test.type contains only {system: 'http://loinc.org', code: '94558-4'}
+# And match response.entry[0].resource.test.brand contains only {system: '', code: ''} ### NOT MAPPED ###
+# And match response.entry[0].resource.test.manufacturer contains only {system: '', code: ''} ### NOT MAPPED ###
+# And match response.entry[0].resource.test.origin == '' ### NOT MAPPED ###
 And match response.entry[0].resource.test.date == '2021-02-17'
 And match response.entry[0].resource.test.result contains only {system: 'http://snomed.info/sct', code: '260373001'}
+# And match response.entry[0].resource.test.centre contains only { code: 'ABC General Hospital'} ### NOT MAPPED ###
+# And match response.entry[0].resource.test.country contains only {system: 'urn:iso:std:iso:3166', code: ''} ### NO SOURCE ###
 
 @shc
 @validator
