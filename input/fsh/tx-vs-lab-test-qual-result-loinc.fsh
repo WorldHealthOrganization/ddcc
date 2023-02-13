@@ -1,0 +1,35 @@
+Alias: $loinc = http://loinc.org
+
+ValueSet: TestResultLoincValueSet
+Id: lab-test-qual-result-loinc
+Title: "LOINC codes identifying test results"
+Description: "This is a one-time snapshot of the LOINC SARS CoV2 lab tests table, retrieved from https://loinc.org/sars-cov-2-and-covid-19/, in February 2023. Contents may need to be updated and readers should consult LOINC for the most updated terminology."
+
+* ^copyright = "TODO: provide copyright information"
+
+* $loinc#95423-0 "Influenza virus A and B and SARS-CoV-2 (COVID-19) identified in Respiratory specimen by NAA with probe detection"
+* $loinc#98846-9 "SARS coronavirus 2 stimulated gamma interferon release by Helper (CD4+) T-cells [Units/volume] corrected for background in Blood by Immunoassay"
+* $loinc#99774-2 "SARS coronavirus 2 stimulated gamma interferon release by T-cells.Nucleocapsid Ag spot count [#] corrected for background in Blood"
+* $loinc#99773-4 "SARS coronavirus 2 stimulated gamma interferon release by T-cells.Spike Ag spot count [#] corrected for background in Blood"
+* $loinc#94661-6 "SARS-CoV-2 (COVID-19) Ab [Interpretation] in Serum or Plasma"
+* $loinc#96896-6 "SARS-CoV-2 (COVID-19) clade [Type] in Specimen by Molecular genetics method"
+* $loinc#94768-9 "SARS-CoV-2 (COVID-19) IgA Ab [Presence] in Serum, Plasma or Blood by Rapid immunoassay"
+* $loinc#96900-6 "SARS-CoV-2 (COVID-19) S gene [Cycle Threshold #] in Oropharyngeal wash by NAA with probe detection"
+* $loinc#94642-6 "SARS-CoV-2 (COVID-19) S gene [Cycle Threshold #] in Respiratory specimen by NAA with probe detection"
+* $loinc#94643-4 "SARS-CoV-2 (COVID-19) S gene [Cycle Threshold #] in Specimen by NAA with probe detection"
+* $loinc#96752-1 "SARS-CoV-2 (COVID-19) S gene mutation [Presence] in Specimen by Molecular genetics method"
+* $loinc#96751-3 "SARS-CoV-2 (COVID-19) S gene mutation detected [Identifier] in Specimen by Molecular genetics method"
+* $loinc#98734-7 "SARS-CoV-2 (COVID-19) S protein RBD neutralizing antibody [Units/volume] in Serum or Plasma by Immunoassay"
+* $loinc#96755-4 "SARS-CoV-2 (COVID-19) variant interpretation in Specimen Narrative"
+* $loinc#99772-6 "SARS-CoV-2 stimulated gamma interferon [Interpretation] in Blood Qualitative"
+* $loinc#95971-8 "SARS-CoV-2 stimulated gamma interferon [Presence] in Blood"
+* $loinc#95972-6 "SARS-CoV-2 stimulated gamma interferon release by T-cells [Units/volume] corrected for background in Blood"
+* $loinc#95973-4 "SARS-CoV-2 stimulated gamma interferon release by T-cells [Units/volume] in Blood"
+* $loinc#94509-7 "SARS-related coronavirus E gene [Cycle Threshold #] in Specimen by NAA with probe detection"
+* $loinc#94758-0 "SARS-related coronavirus E gene [Presence] in Respiratory specimen by NAA with probe detection"
+* $loinc#95823-1 "SARS-related coronavirus E gene [Presence] in Saliva (oral fluid) by NAA with probe detection"
+* $loinc#94315-9 "SARS-related coronavirus E gene [Presence] in Specimen by NAA with probe detection"
+* $loinc#94313-4 "SARS-related coronavirus N gene [Cycle Threshold #] in Specimen by Nucleic acid amplification using CDC primer-probe set N3"
+* $loinc#94647-5 "SARS-related coronavirus RNA [Presence] in Specimen by NAA with probe detection"
+* $loinc#94532-9 "SARS-related coronavirus+MERS coronavirus RNA [Presence] in Respiratory specimen by NAA with probe detection"
+* $loinc#98062-3 "Sequencing study identifier"
