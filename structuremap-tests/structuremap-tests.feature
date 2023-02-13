@@ -151,10 +151,11 @@ And match response.entry[0].resource.vaccination.vaccine contains only {system: 
 And match response.entry[1].resource.vaccination.vaccine contains only {system: 'http://id.who.int/icd11/mms', code: 'XM0GQ8'}
 And match response.entry[2].resource.vaccination.vaccine contains only {system: 'http://id.who.int/icd11/mms', code: 'XM0GQ8'}
 And match response.entry[0].resource.vaccination.brand contains only {system: 'http://id.who.int/icd11/mms', code: 'XM8NQ0'}
-###### The next 2 fail: The resource entries after the first don't seem to be mapping any vaccine brand information.
+###### The next 2 fail: The resource entries after the first don't seem to be mapping any vaccine brand information. However, brand is NOT a required field and is computably uselss.
 And match response.entry[1].resource.vaccination.brand contains only {system: 'http://id.who.int/icd11/mms', code: 'XM8NQ0'}
 And match response.entry[2].resource.vaccination.brand contains only {system: 'http://id.who.int/icd11/mms', code: 'XM8NQ0'}
-###### Fails: vaccination.manufacturer does seem to be mapped in SHCToCoreDataSetVS.map, but it's not showing up in this test. This should be fine since vaccination.vaccine should capture manufacturer details indirectly.
+###### Fails: vaccination.manufacturer does seem to be mapped in SHCToCoreDataSetVS.map, but it's not showing up in this test.
+###### This is fine since only vaccination.vaccine is required and it captures manufacturer details indirectly. Manufacturer is computably useless.
 # And match response.entry[0].resource.vaccination.manufacturer contains only {system: '', code: ''} ### See above comment ###
 # And match response.entry[0].resource.vaccination.maholder ### NOT MAPPED ###
 And match response.entry[0].resource.vaccination.lot == '0000009'
@@ -262,10 +263,11 @@ And match response.entry[0].resource.vaccination.vaccine contains only {system: 
 And match response.entry[1].resource.vaccination.vaccine contains only {system: 'http://id.who.int/icd11/mms', code: 'XM0GQ8'}
 And match response.entry[2].resource.vaccination.vaccine contains only {system: 'http://id.who.int/icd11/mms', code: 'XM0GQ8'}
 And match response.entry[0].resource.vaccination.brand contains only {system: 'http://id.who.int/icd11/mms', code: 'XM8NQ0'}
-###### The next 2 fail: The resource entries after the first don't seem to be mapping any vaccine brand information.
+###### The next 2 fail: The resource entries after the first don't seem to be mapping any vaccine brand information. However, brand is NOT a required field and is computably uselss.
 And match response.entry[1].resource.vaccination.brand contains only {system: 'http://id.who.int/icd11/mms', code: 'XM8NQ0'}
 And match response.entry[2].resource.vaccination.brand contains only {system: 'http://id.who.int/icd11/mms', code: 'XM8NQ0'}
-###### Fails: vaccination.manufacturer does seem to be mapped in SHCToCoreDataSetVS.map, but it's not showing up in this test. This should be fine since vaccination.vaccine should capture manufacturer details indirectly.
+###### Fails: vaccination.manufacturer does seem to be mapped in SHCToCoreDataSetVS.map, but it's not showing up in this test.
+###### This is fine since only vaccination.vaccine is required and it captures manufacturer details indirectly. Manufacturer is computably useless.
 # And match response.entry[0].resource.vaccination.manufacturer contains only {system: '', code: ''} ### See above comment ###
 # And match response.entry[0].resource.vaccination.maholder ### NOT MAPPED ###
 And match response.entry[0].resource.vaccination.lot == '0000009'
