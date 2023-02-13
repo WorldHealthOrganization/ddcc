@@ -65,7 +65,7 @@ Some element descriptions in this logical model provide details that are not in 
       * addressRegion 0..1 string "Sub-unit of country (abbreviations ok)"
       * addressCountry 0..1 string "Country (e.g. may be ISO 3166 2 or 3 letter code)"
       * postalCode 0..1 string "Postal code for area"
-  * icd11Code 0..1 string "ICD11 code of this vaccine type"
+  * icd11Code 0..1 string "ICD-11 code of this vaccine type (no binding information in spec)" "The specification for DIVOC does not provide any information beyond that this is an ICD-11 code, so correspondingly there is no binding to a specific ValueSet in this logical model."
   * prophylaxis 0..1 string "Descriptive details of the vaccine type"
 * proof 1..* BackboneElement "Proof" "One or more cryptographic proofs that can be used to detect tampering and verify the authorship of a credential or presentation"
   * type 0..1 string "Type of proof"
