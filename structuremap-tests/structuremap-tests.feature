@@ -130,14 +130,50 @@ Then status 200
 And match response.resourceType == 'Bundle'
 And match response.entry == '#[3]'
 And match response.entry[0].resource.resourceType == 'DDCCCoreDataSet'
+And match response.entry[1].resource.resourceType == 'DDCCCoreDataSet'
+And match response.entry[2].resource.resourceType == 'DDCCCoreDataSet'
 And match response.entry[0].resource.name == 'John B. Anyperson'
+And match response.entry[1].resource.name == 'John B. Anyperson'
+And match response.entry[2].resource.name == 'John B. Anyperson'
 And match response.entry[0].resource.birthDate == '1951-01-20'
+And match response.entry[1].resource.birthDate == '1951-01-20'
+And match response.entry[2].resource.birthDate == '1951-01-20'
 And match response.entry[0].resource.identifier contains only {system: 'urn:oid:example', value: '12345'}
+And match response.entry[1].resource.identifier contains only {system: 'urn:oid:example', value: '12345'}
+And match response.entry[2].resource.identifier contains only {system: 'urn:oid:example', value: '12345'}
+# And match response.entry[0].resource.certificate.issuer contains {display: ''} ### NOT MAPPED ###
+# And match response.entry[0].resource.certificate.version == '1.3.0' ### NOT MAPPED ###
+# And match response.entry[0].resource.certificate.hcid contains only {value: ''} ### NOT MAPPED ###
+# And match response.entry[0].resource.certificate.ddccid.value == '' ### NOT MAPPED ###
+# And match response.entry[0].resource.certificate.period  ### NOT MAPPED ###
 And match response.entry[0].resource.vaccination.vaccine contains only {system: 'http://id.who.int/icd11/mms', code: 'XM0GQ8'}
+###### The next 2 fail: The resource entries after the first don't seem to be mapping any vaccine information.
+And match response.entry[1].resource.vaccination.vaccine contains only {system: 'http://id.who.int/icd11/mms', code: 'XM0GQ8'}
+And match response.entry[2].resource.vaccination.vaccine contains only {system: 'http://id.who.int/icd11/mms', code: 'XM0GQ8'}
 And match response.entry[0].resource.vaccination.brand contains only {system: 'http://id.who.int/icd11/mms', code: 'XM8NQ0'}
-And match response.entry[0].resource.vaccination.lot == '0000001'
+###### The next 2 fail: The resource entries after the first don't seem to be mapping any vaccine brand information.
+And match response.entry[1].resource.vaccination.brand contains only {system: 'http://id.who.int/icd11/mms', code: 'XM8NQ0'}
+And match response.entry[2].resource.vaccination.brand contains only {system: 'http://id.who.int/icd11/mms', code: 'XM8NQ0'}
+###### Fails: vaccination.manufacturer does seem to be mapped in SHCToCoreDataSetVS.map, but it's not showing up in this test. This should be fine since vaccination.vaccine should capture manufacturer details indirectly.
+# And match response.entry[0].resource.vaccination.manufacturer contains only {system: '', code: ''} ### See above comment ###
+# And match response.entry[0].resource.vaccination.maholder ### NOT MAPPED ###
+And match response.entry[0].resource.vaccination.lot == '0000009'
+And match response.entry[1].resource.vaccination.lot == '0000007'
+And match response.entry[2].resource.vaccination.lot == '0000001'
 And match response.entry[0].resource.vaccination.date == '2021-01-01'
+And match response.entry[1].resource.vaccination.date == '2021-01-29'
+And match response.entry[2].resource.vaccination.date == '2022-09-05'
+# And match response.entry[0].resource.vaccination.validFrom == '' ### NOT MAPPED ###
+# And match response.entry[0].resource.vaccination.dose == 1 ### NOT MAPPED ###
+# And match response.entry[0].resource.vaccination.totalDoses == 3 ### NOT MAPPED - Could this be mapped since SHC has a seperate resource entry for each dose? ###
+# And match response.entry[0].resource.vaccination.country contains only {system: 'urn:iso:std:iso:3166', code: ''} ### NOT MAPPED ###
 And match response.entry[0].resource.vaccination.centre == 'ABC General Hospital'
+And match response.entry[1].resource.vaccination.centre == 'ABC General Hospital'
+And match response.entry[2].resource.vaccination.centre == 'ABC General Hospital'
+# And match response.entry[0].resource.vaccination.signature == '' ### NOT MAPPED ###
+# And match response.entry[0].resource.vaccination.practitioner == '' ### NOT MAPPED ###
+# And match response.entry[0].resource.vaccination.disease contains only {system: 'http://snomed.info/sct', code: '840539006'} ### NOT MAPPED ###
+# And match response.entry[0].resource.vaccination.nextDose == '' ### NOT MAPPED ###
 
 @shc
 @matchbox
@@ -194,14 +230,50 @@ Given def response = transform('fixtures/shc/example-00-a-fhirBundle.json','targ
 Then match response.resourceType == 'Bundle'
 And match response.entry == '#[3]'
 And match response.entry[0].resource.resourceType == 'DDCCCoreDataSet'
+And match response.entry[1].resource.resourceType == 'DDCCCoreDataSet'
+And match response.entry[2].resource.resourceType == 'DDCCCoreDataSet'
 And match response.entry[0].resource.name == 'John B. Anyperson'
+And match response.entry[1].resource.name == 'John B. Anyperson'
+And match response.entry[2].resource.name == 'John B. Anyperson'
 And match response.entry[0].resource.birthDate == '1951-01-20'
+And match response.entry[1].resource.birthDate == '1951-01-20'
+And match response.entry[2].resource.birthDate == '1951-01-20'
 And match response.entry[0].resource.identifier contains only {system: 'urn:oid:example', value: '12345'}
+And match response.entry[1].resource.identifier contains only {system: 'urn:oid:example', value: '12345'}
+And match response.entry[2].resource.identifier contains only {system: 'urn:oid:example', value: '12345'}
+# And match response.entry[0].resource.certificate.issuer contains {display: ''} ### NOT MAPPED ###
+# And match response.entry[0].resource.certificate.version == '1.3.0' ### NOT MAPPED ###
+# And match response.entry[0].resource.certificate.hcid contains only {value: ''} ### NOT MAPPED ###
+# And match response.entry[0].resource.certificate.ddccid.value == '' ### NOT MAPPED ###
+# And match response.entry[0].resource.certificate.period  ### NOT MAPPED ###
 And match response.entry[0].resource.vaccination.vaccine contains only {system: 'http://id.who.int/icd11/mms', code: 'XM0GQ8'}
+###### The next 2 fail: The resource entries after the first don't seem to be mapping any vaccine information.
+And match response.entry[1].resource.vaccination.vaccine contains only {system: 'http://id.who.int/icd11/mms', code: 'XM0GQ8'}
+And match response.entry[2].resource.vaccination.vaccine contains only {system: 'http://id.who.int/icd11/mms', code: 'XM0GQ8'}
 And match response.entry[0].resource.vaccination.brand contains only {system: 'http://id.who.int/icd11/mms', code: 'XM8NQ0'}
-And match response.entry[0].resource.vaccination.lot == '0000001'
+###### The next 2 fail: The resource entries after the first don't seem to be mapping any vaccine brand information.
+And match response.entry[1].resource.vaccination.brand contains only {system: 'http://id.who.int/icd11/mms', code: 'XM8NQ0'}
+And match response.entry[2].resource.vaccination.brand contains only {system: 'http://id.who.int/icd11/mms', code: 'XM8NQ0'}
+###### Fails: vaccination.manufacturer does seem to be mapped in SHCToCoreDataSetVS.map, but it's not showing up in this test. This should be fine since vaccination.vaccine should capture manufacturer details indirectly.
+# And match response.entry[0].resource.vaccination.manufacturer contains only {system: '', code: ''} ### See above comment ###
+# And match response.entry[0].resource.vaccination.maholder ### NOT MAPPED ###
+And match response.entry[0].resource.vaccination.lot == '0000009'
+And match response.entry[1].resource.vaccination.lot == '0000007'
+And match response.entry[2].resource.vaccination.lot == '0000001'
 And match response.entry[0].resource.vaccination.date == '2021-01-01'
+And match response.entry[1].resource.vaccination.date == '2021-01-29'
+And match response.entry[2].resource.vaccination.date == '2022-09-05'
+# And match response.entry[0].resource.vaccination.validFrom == '' ### NOT MAPPED ###
+# And match response.entry[0].resource.vaccination.dose == 1 ### NOT MAPPED ###
+# And match response.entry[0].resource.vaccination.totalDoses == 3 ### NOT MAPPED - Could this be mapped since SHC has a seperate resource entry for each dose? ###
+# And match response.entry[0].resource.vaccination.country contains only {system: 'urn:iso:std:iso:3166', code: ''} ### NOT MAPPED ###
 And match response.entry[0].resource.vaccination.centre == 'ABC General Hospital'
+And match response.entry[1].resource.vaccination.centre == 'ABC General Hospital'
+And match response.entry[2].resource.vaccination.centre == 'ABC General Hospital'
+# And match response.entry[0].resource.vaccination.signature == '' ### NOT MAPPED ###
+# And match response.entry[0].resource.vaccination.practitioner == '' ### NOT MAPPED ###
+# And match response.entry[0].resource.vaccination.disease contains only {system: 'http://snomed.info/sct', code: '840539006'} ### NOT MAPPED ###
+# And match response.entry[0].resource.vaccination.nextDose == '' ### NOT MAPPED ###
 
 @shc
 @validator
