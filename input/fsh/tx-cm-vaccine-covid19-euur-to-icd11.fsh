@@ -45,7 +45,7 @@ Usage: #definition
 * group[=].element[=].display = "CVnCoV"
 * group[=].element[=].target.code = #XMOGQ8
 * group[=].element[=].target.display = "COVID-19 vaccine, RNA based"
-* group[=].element[=].target.equivalence = #source-is-narrower-than-target
+* group[=].element[=].target.equivalence = #wider
 
 * group[=].element[+].code = #NVX-CoV2373
 * group[=].element[=].display = "NVX-CoV2373"
@@ -81,7 +81,7 @@ Usage: #definition
 * group[=].element[=].display = "Inactivated SARS-CoV-2 (Vero Cell)"
 * group[=].element[=].target.code = #XM1NL1
 * group[=].element[=].target.display = "COVID-19 vaccine, inactivated virus"
-* group[=].element[=].target.equivalence = #source-is-narrower-than-target
+* group[=].element[=].target.equivalence = #wider
 
 * group[=].element[+].code = #CoronaVac
 * group[=].element[=].display = "CoronaVac"
@@ -135,7 +135,7 @@ Usage: #definition
 * group[=].element[=].display = "Abdala"
 * group[=].element[=].target.code = #XM5JC5
 * group[=].element[=].target.display = "COVID-19 vaccine, virus protein subunit"
-* group[=].element[=].target.equivalence = #source-is-narrower-than-target
+* group[=].element[=].target.equivalence = #wider
 
 * group[=].element[+].code = #WIBP-CorV
 * group[=].element[=].display = "WIBP-CorV"
@@ -153,25 +153,25 @@ Usage: #definition
 * group[=].element[=].display = "Nuvaxovid"
 * group[=].element[=].target.code = #XM9T65
 * group[=].element[=].target.display = "Novavax COVID-19 vaccine"
-* group[=].element[=].target.equivalence = #source-is-narrower-than-target
+* group[=].element[=].target.equivalence = #wider
 
 * group[=].element[+].code = #Covovax
 * group[=].element[=].display = "Covovax"
 * group[=].element[=].target.code = #XM9T65
 * group[=].element[=].target.display = "Novavax COVID-19 vaccine"
-* group[=].element[=].target.equivalence = #source-is-narrower-than-target
+* group[=].element[=].target.equivalence = #wider
 
 * group[=].element[+].code = #Vidprevtyn
 * group[=].element[=].display = "Vidprevtyn"
 * group[=].element[=].target.code = #XM3СТ4
 * group[=].element[=].target.display = "Recombinant SARS-CoV-2 vaccine"
-* group[=].element[=].target.equivalence = #source-is-narrower-than-target
+* group[=].element[=].target.equivalence = #wider
 
 * group[=].element[+].code = #VLA2001
 * group[=].element[=].display = "VLA2001"
 * group[=].element[=].target.code = #XM1NL1
 * group[=].element[=].target.display = "COVID-19 vaccine, inactivated virus"
-* group[=].element[=].target.equivalence = #source-is-narrower-than-target
+* group[=].element[=].target.equivalence = #wider
 
 * group[=].element[+].code = #EpiVacCorona-N
 * group[=].element[=].display = "EpiVacCorona- N"
@@ -183,37 +183,37 @@ Usage: #definition
 * group[=].element[=].display = "Sputnik M"
 * group[=].element[=].target.code = #XM3СТ4
 * group[=].element[=].target.display = "Recombinant SARS-CoV-2 vaccine"
-* group[=].element[=].target.equivalence = #source-is-narrower-than-target
+* group[=].element[=].target.equivalence = #wider
 
 * group[=].element[+].code = #Covid-19-adsorvida-inativada
 * group[=].element[=].display = "Vacina adsorvida covid-19 (inativada)"
 * group[=].element[=].target.code = #XM1NL1
 * group[=].element[=].target.display = "COVID-19 vaccine, inactivated virus"
-* group[=].element[=].target.equivalence = #source-is-narrower-than-target
+* group[=].element[=].target.equivalence = #wider
 
 * group[=].element[+].code = #NVSI-06-08
 * group[=].element[=].display = "NVSI-06-08"
 * group[=].element[=].target.code = #XM3СТ4
 * group[=].element[=].target.display = "Recombinant SARS-CoV-2 vaccine"
-* group[=].element[=].target.equivalence = #source-is-narrower-than-target
+* group[=].element[=].target.equivalence = #wider
 
 * group[=].element[+].code = #YS-SC2-010
 * group[=].element[=].display = "YS-SC2-010"
 * group[=].element[=].target.code = #XM3СТ4
 * group[=].element[=].target.display = "Recombinant SARS-CoV-2 vaccine"
-* group[=].element[=].target.equivalence = #source-is-narrower-than-target
+* group[=].element[=].target.equivalence = #wider
 
 * group[=].element[+].code = #SCTV01C
 * group[=].element[=].display = "SCTV01C"
 * group[=].element[=].target.code = #XM3СТ4
 * group[=].element[=].target.display = "Recombinant SARS-CoV-2 vaccine"
-* group[=].element[=].target.equivalence = #source-is-narrower-than-target
+* group[=].element[=].target.equivalence = #wider
 
 * group[=].element[+].code = #Covifenz
 * group[=].element[=].display = "Covifenz"
 * group[=].element[=].target.code = #XM3СТ4
 * group[=].element[=].target.display = "Recombinant SARS-CoV-2 vaccine"
-* group[=].element[=].target.equivalence = #source-is-narrower-than-target
+* group[=].element[=].target.equivalence = #wider
 
 * group[=].element[+].code = #AZD2816
 * group[=].element[=].display = "AZD2816"
@@ -237,11 +237,11 @@ Usage: #definition
 * group[=].element[=].display = "COVID-19 Vaccine Valneva"
 * group[=].element[=].target.code = #XM1NL1
 * group[=].element[=].target.display = "COVID-19 vaccine, inactivated virus"
-* group[=].element[=].target.equivalence = #source-is-narrower-than-target
+* group[=].element[=].target.equivalence = #wider
 
 * group[=].element[+].code = #EU/1/21/1580
 * group[=].element[=].display = "VidPrevtyn Beta"
 * group[=].element[=].target.code = #XM3СТ4
 * group[=].element[=].target.display = "Recombinant SARS-CoV-2 vaccine"
-* group[=].element[=].target.equivalence = #source-is-narrower-than-target
+* group[=].element[=].target.equivalence = #wider
 
