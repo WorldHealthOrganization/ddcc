@@ -22,8 +22,8 @@ echo "Accessing $HOST/metadata"
 
 
 #make sure all our structure definitions are loaded up
-#SDS=(    "fsh-generated/resources/StructureDefinition-DDCCOrganization.json"  "fsh-generated/resources/StructureDefinition-DDCCImmunizationRecommendation.json"    "fsh-generated/resources/StructureDefinition-DDCCImmunization.json"    "fsh-generated/resources/StructureDefinition-DDCCPatient.json"    "fsh-generated/resources/StructureDefinition-DDCCEventBrand.json"    "fsh-generated/resources/StructureDefinition-DDCCCountryOfEvent.json"    "fsh-generated/resources/StructureDefinition-DDCCDocumentReferenceQR.json"    "fsh-generated/resources/StructureDefinition-DDCCComposition.json"    "fsh-generated/resources/StructureDefinition-DDCCCoreDataSet.VS.PoV.json"    "fsh-generated/resources/StructureDefinition-DDCCCoreDataSet.VS.CoC.json"    "input/resources/StructureDefinition-HC1.json"    "input/resources/StructureDefinition-v.json"    )
-SDS=()
+SDS=(    "fsh-generated/resources/StructureDefinition-DDCCOrganization.json"  "fsh-generated/resources/StructureDefinition-DDCCImmunizationRecommendation.json"    "fsh-generated/resources/StructureDefinition-DDCCImmunization.json"    "fsh-generated/resources/StructureDefinition-DDCCPatient.json"    "fsh-generated/resources/StructureDefinition-DDCCEventBrand.json"    "fsh-generated/resources/StructureDefinition-DDCCCountryOfEvent.json"    "fsh-generated/resources/StructureDefinition-DDCCDocumentReferenceQR.json"    "fsh-generated/resources/StructureDefinition-DDCCComposition.json"    "fsh-generated/resources/StructureDefinition-DDCCCoreDataSet.VS.PoV.json"    "fsh-generated/resources/StructureDefinition-DDCCCoreDataSet.VS.CoC.json"    "input/resources/StructureDefinition-HC1.json"    "input/resources/StructureDefinition-v.json"    )
+
 
 
 
@@ -40,7 +40,7 @@ done
 
 #transform all fhir mapping language files in a maps-src directory to json structure maps in a maps directory
 RDIR="input"
-FILES=`ls $RDIR/maps-src/CertDCCtoCoreDataSet.map`
+FILES=`ls $RDIR/maps-src/*.map`
 SMAPS=( )
 for FILE in $FILES
 do
