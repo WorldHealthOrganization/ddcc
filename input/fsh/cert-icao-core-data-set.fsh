@@ -1,54 +1,75 @@
 Logical:        CertICAO
 Title:          "Certificate - ICAO Visible Digital Seal Logical Model"
-Description:    "Data elements for the ICAO Visible Digital Seal Core Data Set."
+Description:    "Data elements for the ICAO Visible Digital Seal Core Data Set. Based on <https://www.icao.int/vdsnc-spec> as of 2023-02-02."
 
 * ^url = "http://worldhealthorganization.github.io/ddcc/StructureDefinition/CertICAOVDS"
 * ^version = "1"
 * ^abstract = true
 * ^status = #draft
 
-* data 0..1 BackboneElement "Data"
-  * hdr 0..1 BackboneElement "Header"
-    * iss 0..1 string "Issuer"
-    * t 0..1 string "Type: icao.test icao.vacc"
-    * v 0..1 integer "Version"
-  * msg 0..1 BackboneElement "Message"
-    * pid 0..1 BackboneElement "Patient"
-      * dob 0..1 dateTime "Date of Birth"
-      * i 0..1 string "Identifier (Passport Number, etc)"
-      * n 0..1 string "Name"
-      * sex 0..1 string "Sex Doc 9303-4 Section 4.1.1.1 – Visual Inspection Zone M or F)"
-      * dt 0..1 string "Document Type" "Used types: P – Passport (Doc 9303-4) A – ID Card (Doc 9303-5) C – ID Card (Doc 9303-5) I – ID Card Doc 9303-5) AC - Crew Member Certificate (Doc 9303-5) V – Visa (Doc 9303-7) D – Driving License (ISO18013-1)"
-      * dn 0..1 string "Document Number" 
-      * ai 0..1 string "Additional Identifier"
-    * uvci 0..1 string "EU's UVCI identifier"
-    * ve 0..* BackboneElement "VaccinationEvent"
-      * des 0..1 string  "Prophilaxis // (http://id.who.int/icd/entity/164949870)"
-      * dis 0..1 string  "Diesease or Agent Targeted (ICD-11)"
-      * nam 0..1 string  "Vaccine Brand"
-      * vd 0..* BackboneElement "VaccinationDetails"
-        * adm 0..1 string "Administering Center"
-        * ctr 0..1 string "Country AUS"
-        * dvc 0..1 dateTime "Date of Vaccination"
-        * lot 0..1 string "Lot #"
-        * seq 0..1 positiveInt "Dose Sequence"
-    * ucti 0..1 string "EU's UCTI identifier"
-    * sp 0..1 BackboneElement "ServiceProvider"
-      * spn 0..1 string "Name of the Service Provider"
-      * ctr 0..1 string "Country of the Test"
-      * cd 0..1 BackboneElement "Contact" "Contact Info"
-        * p 0..1 string "phone"
-        * e 0..1 string "email"
-        * a 0..1 string "address"
-    * dat 0..1 BackboneElement "DateTimeTestReport"
-      * sc 0..1 string  "Specimen Collection Time"
-      * ri 0..1 string  "Report Issuance Time"
-    * tr 0..1 BackboneElement "TestResult"
-      * tc 0..1 string  "Test Type (molecular(PCR) molecular(other) antigen antibody)"
-      * r 0..1 string  "Results (positive negative normal abnormal"
-      * m 0..1 string  "Sampling Method nasopharyngeal oropharyngeal saliva blood other"
-    * opt 0..1 string "Optional DataField"
+* data 1..1 BackboneElement "Data"
+  * hdr 1..1 BackboneElement "Header"
+    * t 1..1 string "Type (either `icao.test` for proof of testing, or `icao.vacc` for proof of vaccination)"
+    * v 1..1 integer "Version"
+    * is 1..1 string "IssuingCountry (ISO-3166 three letter code; see element details)" "The three letter code is according to Doc 9303-3, which defines this as ISO-3166 country codes."
+    * is from http://hl7.org/fhir/ValueSet/iso3166-1-3 (required)
+  * msg 1..1 BackboneElement "Message"
+
+    // pid used for both icao.test and icao.vacc
+    * pid 1..1 BackboneElement "PersonalInformation (more info in element description)"
+    * pid ^comment = "`pid.n`, `pid.dob`, `pid.dt`, and `pid.dn` are required for the `icao.test` type.\n\n`pid.n` and either `pid.i` or `pid.dob` are required for the `icao.vacc` type.\n\nCardinalities in the logical model for these elements are set to `0..1` to accommodate the different schemas for the two different credential types."
+      * n 1..1 string "Name (Name of the holder (as specified in Doc 9303-3) MUST be used.)"
+      * dob 0..1 date "Date of Birth (The DOB of the test subject. The [RFC 3339] full date format YYYY-MM- DD MUST be used.)"
+      * dt 0..1 string "ID Document Type of the identity document (see element details)" "The ID Document Type of the identity document MUST be used. Only these values MUST be used:\n\n- `P` – Passport (Doc 9303-4)\n- `A` – ID Card (Doc 9303-5)\n- `C` – ID Card (Doc 9303-5)\n- `I` – ID Card Doc 9303-5)\n- `AC` - Crew Member Certificate (Doc 9303-5)\n- `V` – Visa (Doc 9303-7)\n- `D` – Driving License (ISO 18013-1)"
+      * dn 1..1 string "ID Document Number of the identity document"
+      * i 0..1 string "Travel Document Number"
+      * ai 0..1 string "Other Document Number"
+      * sex 0..1 string "Sex of the test subject (as specified in Doc 9303-4 Section 4.1.1.1 – Visual Inspection Zone)"
+
+
+    // utci, sp, dat, and tr only used for icao.test
+    * ucti 0..1 string "UTCI (Unique Test Certificate Identifier; used for `icao.test` only, not used of `icao.vacc`)"
+
+    * sp 0..1 BackboneElement "ServiceProvider (Required for `icao.test` only, not used of `icao.vacc`)"
+      * spn 1..1 string "Name of testing facility or service provider"
+      * ctr 1..1 string "Country of test (spec does not indicate code system, but presumably this is ISO-3166 like the other country codes in the certificate)"
+      * cd 1..1 BackboneElement "ContactDetails"
+        * p 1..1 string "PhoneNumber"
+        * e 1..1 string "Email"
+        * a 1..1 string "Address"
+
+    * dat 0..1 BackboneElement "DateTimeTestReport (Required for `icao.test` only, not used of `icao.vacc`)"
+      * sc 1..1 dateTime  "SpecimenCollection (RFC3339)"
+      * ri 1..1 dateTime  "ReportIssuance (RFC3339)"
+
+    * tr 0..1 BackboneElement "TestResult (Required for `icao.test` only, not used of `icao.vacc`)"
+      * tc 1..1 string  "TestConducted"
+      * tc from LabTestTypeIcaoValueSet (required)
+      * r 1..1 string  "Results"
+      * r from LabTestResultIcaoValueSet (required)
+      * m 0..1 string  "Sampling method"
+      * m from LabTestSampleOriginIcaoValueSet (required)
+    * opt 0..1 string "Optional data issued at the discretion of the issuing authority"
+
+
+    // uvci and ve only used for icao.vacc
+    * uvci 0..1 string "Unique Vaccination Certificate Identifier (Required for `icao.vacc` only, not used of `icao.test`)"
+
+    * ve 0..* BackboneElement "VaccinationEvent (Required for `icao.vacc` only, not used of `icao.test`)"
+      * des 1..1 string  "Vaccine or Prophylaxis (ICD-11 MMS code descending from http://id.who.int/icd/entity/164949870)"
+      * des from WHO_DDCC_Vaccines_COVID_19 (required)
+      * nam 1..1 string  "Vaccine Brand (medical product name)"
+      * dis 0..1 string  "Disease or agent targeted (ICD-11 code)"
+      * vd 1..* BackboneElement "VaccinationDetails"
+        * dvc 1..1 date "Date of vaccination (see element details)" "Date on which the vaccine was administered. The ISO8601 full date format YYYY-MM-DD MUST be used."
+        * seq 1..1 positiveInt "Dose number (vaccine dose number, integer between 1 and 99)"
+        * ctr 1..1 string "Country of vaccination (ISO-3166 three letter code; see element details)" "The country in which the individual has been vaccinated. A three letter code identifying the issuing state or organization. The three letter code is according to Doc 9303-3, which defines this as ISO-3166 country codes."
+        * ctr from http://hl7.org/fhir/ValueSet/iso3166-1-3 (required)
+        * adm 1..1 string "Administering centre (The name or identifier of the vaccination facility)"
+        * lot 1..1 string "Vaccine batch number"
+        * dvn 0..1 date "Due date of next dose (see element details)" "Date on which the next 10 vaccination should be administered. The ISO8601 full date format YYYY-MM-DD MUST be used."
+
 * sig 0..1 BackboneElement "Signature"
-  * alg 0..1 string "Algorithm"
-  * cer 0..1 string "Certificate in PEM format"
-  * sigvl 0..1 string "Signature as Base64url"
+  * alg 1..1 string "SignatureAlgo"
+  * cer 1..1 string "Certificate (X.509 signer certificate in base64url [RFC 4648])"
+  * sigvl 1..1 string "SignatureValue (Signature value signed over the Data in base64url [RFC 4648])"
