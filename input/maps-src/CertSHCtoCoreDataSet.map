@@ -1,4 +1,5 @@
 map "http://worldhealthorganization.github.io/ddcc/StructureMap/CertSHCtoCoreDataSet" = "CertSHCtoCoreDataSet"
+// Structure map transforming CertSHC logical model to bundle of Core Data Set logical model
 
 uses "http://worldhealthorganization.github.io/ddcc/StructureDefinition/CertSHC" alias JWTPayload as source
 
@@ -54,8 +55,16 @@ group CertSHCtoCoreDataSet(
 }
 
 group JwtToPeriod(source src: JWTPayload, target tgt : Period) {
-    // requires translation of timestamp to ISO DateTime
-    src.nbf as nbf -> tgt.start = nbf "set period start to notBefore";
-    src.iat as iat -> tgt.start = iat "set period start to  issuedAt";
-    src.exp as exp -> tgt.end = exp "set period end";
+    src.nbf as nbf ->
+        append(nbf, " seconds") as epoch,
+        tgt.start = (@1970-01-01T00:00:00.000+00:00 + epoch.toQuantity())
+        "set period start to notBefore";    
+    src.iat as iat ->
+        append(iat, " seconds") as epoch,
+        tgt.start = (@1970-01-01T00:00:00.000+00:00 + epoch.toQuantity())
+        "set period start to  issuedAt";          
+    src.exp as exp ->
+        append(exp, " seconds") as epoch,
+        tgt.end = (@1970-01-01T00:00:00.000+00:00 + epoch.toQuantity())
+        "set period end";
 }
