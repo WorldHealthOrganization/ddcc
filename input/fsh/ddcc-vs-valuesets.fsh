@@ -327,7 +327,7 @@ EU DCC Allowed Vaccine List (COVID-19).
 """
 * ^status = #draft
 * ^date = 2022-09-13
-* include codes from system EU_DCC_CodeSystem
+* include codes from system WHODDCCeuur
 
 
 Instance:       who-ddcc-map-icd11-sct-vaccines
