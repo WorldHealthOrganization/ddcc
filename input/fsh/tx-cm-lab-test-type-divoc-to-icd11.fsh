@@ -3,8 +3,8 @@ Instance: lab-test-type-divoc-to-icd11
 InstanceOf: ConceptMap
 Usage: #definition
 * name = "LabTestTypeDivocToIcd11ConceptMap"
-* title = "Lab Test - Type - COVID-19 - mapping Divoc to Icd11"
-* description = "nan"
+* title = "Lab Test - Type - COVID-19 - Mapping DIVOC to ICD-11"
+* description = "[Lab Test - Type - DIVOC](ValueSet-lab-test-type-divoc.html) mapped to ICD-11"
 * status = #draft
 * date = "2023-02-15"
 // * publisher = "TBD"
@@ -17,33 +17,46 @@ Usage: #definition
 
 * copyright = "TODO: provide copyright information"
 
-* group[0].element[0].code = #RT-PCR
-* group[=].element[=].display = "RT-PCR"
-* group[=].element[=].target.code = #1334426561
-* group[=].element[=].target.display = "Viral nucleic acid amplification test or NAAT"
-* group[=].element[=].target.equivalence = #equivalent
+* group[+]
+  * source = "http://worldhealthorganization.github.io/ddcc/CodeSystem/lab-test-type-divoc"
+  * target = "http://id.who.int/icd/entity"
+  * element[+]
+    * code = #RT-PCR
+    * display = "RT-PCR"
+    * target[+]
+      * code = #1334426561
+      * display = "Viral nucleic acid amplification test or NAAT"
+      * equivalence = #equivalent
 
-* group[=].element[+].code = #"Rapid Antigen Test (RAT)"
-* group[=].element[=].display = "Rapid Antigen Test (RAT)"
-* group[=].element[=].target.code = #2056159157
-* group[=].element[=].target.display = "Rapid immunoassay detecting viral proteins or Ag-RDT"
-* group[=].element[=].target.equivalence = #equivalent
+  * element[+]
+    * code = #"Rapid Antigen Test (RAT)"
+    * display = "Rapid Antigen Test (RAT)"
+    * target[+]
+      * code = #2056159157
+      * display = "Rapid immunoassay detecting viral proteins or Ag-RDT"
+      * equivalence = #equivalent
 
-* group[=].element[+].code = #"Nasopharyngeal Swab"
-* group[=].element[=].display = "Nasopharyngeal Swab"
-* group[=].element[=].target.code = #50872817
-* group[=].element[=].target.display = "Nasopharyngeal swab"
-* group[=].element[=].target.equivalence = #equivalent
+  * element[+]
+    * code = #"Nasopharyngeal Swab"
+    * display = "Nasopharyngeal Swab"
+    * target[+]
+      * code = #50872817
+      * display = "Nasopharyngeal swab"
+      * equivalence = #equivalent
 
-* group[=].element[+].code = #"Throat swab"
-* group[=].element[=].display = "Throat swab"
-* group[=].element[=].target.code = #555916027
-* group[=].element[=].target.display = "Oropharyngeal swab"
-* group[=].element[=].target.equivalence = #wider
+  * element[+]
+    * code = #"Throat swab"
+    * display = "Throat swab"
+    * target[+]
+      * code = #555916027
+      * display = "Oropharyngeal swab"
+      * equivalence = #wider
 
-* group[=].element[+].code = #"Nasal Swab"
-* group[=].element[=].display = "Nasal Swab"
-* group[=].element[=].target.code = #50872817
-* group[=].element[=].target.display = "Nasopharyngeal swab"
-* group[=].element[=].target.equivalence = #wider
+  * element[+]
+    * code = #"Nasal Swab"
+    * display = "Nasal Swab"
+    * target[+]
+      * code = #50872817
+      * display = "Nasopharyngeal swab"
+      * equivalence = #wider
 

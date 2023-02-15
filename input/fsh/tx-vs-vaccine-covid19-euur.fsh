@@ -5,7 +5,8 @@ Id: vaccine-covid19-euur
 Title: "Vaccine - COVID-19 - EU Union Register of Medicinial Products"
 Description: "Union Register of medicinal products for vaccines with EU-wide authorisation. The Union Register is found at <https://ec.europa.eu/health/documents/community-register/html/index_en.htm>. However, the contents of this ValueSet are based on v1.14 (2023-01-25) of the [EU DCC value set guidelines](https://health.ec.europa.eu/system/files/2023-01/eu-dcc-value-sets_en.pdf)."
 
-* ^copyright = "TODO: provide copyright information"
+* ^experimental = true
+// * ^copyright = "TODO: provide copyright information"
 
 * $euur#EU/1/20/1528 "Comirnaty"
 * $euur#EU/1/20/1507 "Spikevax"

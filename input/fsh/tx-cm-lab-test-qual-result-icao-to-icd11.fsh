@@ -3,8 +3,8 @@ Instance: lab-test-qual-result-icao-to-icd11
 InstanceOf: ConceptMap
 Usage: #definition
 * name = "LabTestQualResultIcaoToIcd11ConceptMap"
-* title = "Lab Test - Method - mapping Icao to Icd11"
-* description = "nan"
+* title = "Lab Test - Qualitative Result - Mapping ICAO to ICD-11"
+* description = "[Lab Test - Qualitative Result - ICAO](ValueSet-lab-test-qual-result-icao.html) mapped to ICD-11"
 * status = #draft
 * date = "2023-02-15"
 // * publisher = "TBD"
@@ -15,17 +15,24 @@ Usage: #definition
 // * contact.telecom.value = 
 // * jurisdiction =
 
-* copyright = "nan"
+* copyright = "TODO: provide copyright information"
 
-* group[0].element[0].code = #positive
-* group[=].element[=].display = "Positive"
-* group[=].element[=].target.code = #RA01.0
-* group[=].element[=].target.display = "COVID-19, virus identified"
-* group[=].element[=].target.equivalence = #equivalent
+* group[+]
+  * source = "http://worldhealthorganization.github.io/ddcc/CodeSystem/lab-test-qual-result-icao"
+  * target = "http://id.who.int/icd11/mms"
+  * element[+]
+    * code = #positive
+    * display = "Positive"
+    * target[+]
+      * code = #RA01.0
+      * display = "COVID-19, virus identified"
+      * equivalence = #equivalent
 
-* group[=].element[+].code = #negative
-* group[=].element[=].display = "Negative"
-* group[=].element[=].target.code = #RA01.1
-* group[=].element[=].target.display = "COVID-19, virus not identified"
-* group[=].element[=].target.equivalence = #equivalent
+  * element[+]
+    * code = #negative
+    * display = "Negative"
+    * target[+]
+      * code = #RA01.1
+      * display = "COVID-19, virus not identified"
+      * equivalence = #equivalent
 

@@ -3,9 +3,10 @@ Alias: $divoc-lab-test-origin = http://worldhealthorganization.github.io/ddcc/Co
 ValueSet: LabTestSampleOriginDivocValueSet
 Id: lab-test-sample-origin-divoc
 Title: "Lab Test - Sample Origin - DIVOC"
-Description: "This is a one-time snapshot of the DIVOC lab test sample origin allowed values, retrieved from https://divoc.digit.org/platform/divocs-verifiable-certificate-features/what-information-goes-into-a-qr-code, in February 2023. Contents may need to be updated and readers should consult DIVOC for the most updated terminology."
+Description: "This is a one-time snapshot of the allowed values for lab test sample origins, retrieved in February 2023. Contents may need to be updated and readers should consult the credential's documentation. Some information on DIVOC's test certificate is at https://github.com/egovernments/DIVOC/blob/main/test-certificate-context/test-certificate-context.js. Additional information on DIVOC can be found at <https://divoc.digit.org/platform/divocs-verifiable-certificate-features>"
 
-* ^copyright = "nan"
+* ^experimental = true
+// * ^copyright = "nan"
 
 * $divoc-lab-test-origin#"Nasopharyngeal Swab" "Nasopharyngeal Swab"
 * $divoc-lab-test-origin#"Throat swab" "Throat swab"
