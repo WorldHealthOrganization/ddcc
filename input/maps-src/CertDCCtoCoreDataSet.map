@@ -76,12 +76,17 @@ group VtoCoreDataSetVS(
         coding.system = "http://snomed.info/sct", 
         coding.code = tg
         "set target disease";
-    v.vp as vp -> 
-        vaccination.vaccine as coding,
-        coding.system = "https://id.uvci.eu/valuesets/vaccine-prophylaxis.json",
-        coding.code = vp
-        "set vaccine";    
-    v.mp as mp -> vaccination.brand = translate(mp, 'http://worldhealthorganization.github.io/ddcc/ConceptMap/who-ddcc-map-eudcc-icd11-vaccines', 'Coding') "translate mp to brand";    
+    v.vp as vp -> vaccination.vaccine as coding,
+        coding.system = "https://ec.europa.eu/health/documents/community-register/html/",
+        coding.code = vp "set vaccine";  
+    v.mp as mp then {
+        mp -> vaccination.brand as coding,
+            coding.system = "https://id.uvci.eu/valuesets/vaccine-medicinal-product.json",
+            coding.code = mp "set default brand";  
+        mp -> c('https://ec.europa.eu/health/documents/community-register/html/', mp) as coded then {
+            mp where coded.memberOf("http://worldhealthorganization.github.io/ddcc/ValueSet/vaccine-covid19-euur") -> vaccination.brand = translate(coded, 'http://worldhealthorganization.github.io/ddcc/ConceptMap/vaccine-covid19-euur-to-icd11', 'Coding') "translate COVID19 brand";            
+        }  "coding";
+    } "mp";  
     v.ma as ma -> vaccination.maholder as coding,
         coding.system = "https://id.uvci.eu/valuesets/vaccine-mah-manf.json",
         coding.code = ma "set maholder";
@@ -99,14 +104,22 @@ group TtoCoreDataSetTR(
     source t, 
     target test)
 {
-    t.tg as tg -> 
-        test.pathogen as coding,
-        coding.system = "http://snomed.info/sct", 
-        coding.code = tg
-        "set pathogen";
-    t.tt as tt -> test.type as coding,
-        coding.system = "http://loinc.org",
-        coding.code = tt "set type";           
+    t.tg as tg then {
+        tg -> test.pathogen as coding,
+            coding.system = "http://snomed.info/sct",
+            coding.code = tg "set default pathogen";  
+        tg -> c('http://snomed.info/sct', tg) as coded then {
+            tg where coded.memberOf("http://worldhealthorganization.github.io/ddcc/ValueSet/lab-test-pathogen-covid19-snomed") -> test.pathogen = translate(coded, 'http://worldhealthorganization.github.io/ddcc/ConceptMap/lab-test-pathogen-snomed-to-icd11', 'Coding') "translate COVID19 pathogen";            
+        }  "coding";
+    } "tg"; 
+    t.tt as tt then {
+        tt -> test.type as coding,
+            coding.system = "http://loinc.org",
+            coding.code = tt "set default type";  
+        tt -> c('http://loinc.org', tt) as coded then {
+            tt where coded.memberOf("http://worldhealthorganization.github.io/ddcc/ValueSet/lab-test-type-covid19-loinc") -> test.type = translate(coded, 'http://worldhealthorganization.github.io/ddcc/ConceptMap/lab-test-type-covid19-loinc-to-icd11', 'Coding') "translate COVID19 type";            
+        }  "coding";
+    } "tt";         
     t.nm as nm -> test.brand as coding,
         coding.system = "https://id.uvci.eu/valuesets/test-manf.json",
         coding.code = nm "set brand";           
@@ -114,11 +127,14 @@ group TtoCoreDataSetTR(
         coding.system = "https://covid-19-diagnostics.jrc.ec.europa.eu/devices",
         coding.code = ma "set manufacturer";         
     t.sc as date -> test.date = date "set date";  
-    t.tr as tr -> 
-        test.result as coding,
-        coding.system = "http://snomed.info/sct",
-        coding.code = tr
-        "set result";     
+    t.tr as tr then {
+        tr -> test.result as coding,
+            coding.system = "http://snomed.info/sct",
+            coding.code = tr "set default result";  
+        tr -> c('http://snomed.info/sct', tr) as coded then {
+            tr where coded.memberOf("http://worldhealthorganization.github.io/ddcc/ValueSet/lab-test-qual-result-snomed") -> test.result = translate(coded, 'http://worldhealthorganization.github.io/ddcc/ConceptMap/lab-test-qual-result-snomed-to-icd11', 'Coding') "translate COVID19 result";            
+        }  "coding";
+    } "tr"; 
     t.tc as tc -> 
         test.centre as coding,
         coding.code = tc
