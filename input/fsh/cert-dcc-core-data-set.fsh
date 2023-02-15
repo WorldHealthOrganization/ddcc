@@ -1,13 +1,13 @@
-// !!!!!!!!!!!!! Temporarily commented out !!!!!!!!!!!!!!!!
+// // !!!!!!!!!!!!! Temporarily commented out !!!!!!!!!!!!!!!!
 
-// This FSH is used to create input/resources StructureDefinition-CertDCC.json
-// because SUSHI does not support root-level element names that begin with
-// an integer or `-`, which are necessary for EU DCC.
+// // This FSH is used to create input/resources StructureDefinition-CertDCC.json
+// // because SUSHI does not support root-level element names that begin with
+// // an integer or `-`, which are necessary for EU DCC.
 
-// Once SUSHI supports this, this FSH file can be updated and used rather than
-// the JSON.
+// // Once SUSHI supports this, this FSH file can be updated and used rather than
+// // the JSON.
 
-// !!!!!!!!!!!!! Temporarily commented out !!!!!!!!!!!!!!!!
+// // !!!!!!!!!!!!! Temporarily commented out !!!!!!!!!!!!!!!!
 
 
 
@@ -111,18 +111,31 @@
 //     * dob 0..1 date "Date of birth in YYYY-MM-DD format. Skip if missing. Fill unknown months or days with 'XX'."
 
 //     // Vaccination group -------------------------------------------------------
-//     * v 0..* BackboneElement "Vaccination Group"
+//     * v 0..* BackboneElement "Vaccination Group (see element details)"
 //     * v obeys OnlyOneAllowed
 //     * v ^comment = "According to the spec, \"Vaccination group, if present, MUST contain exactly 1 (one) entry describing exactly one vaccination event. All elements of the vaccination group are mandatory, empty values are not supported.\" It appears this means the maximum cardinality of the `v` element is 1, and all sub-elements have minimum cardinality of 1."
-//       * tg 1..1 string "Disease or agent targeted (SNOMED CT GPS code for COVID-19 or variant)"
-//       * vp 1..1 string "Vaccine or prophylaxis (e.g., 'SARS-CoV-2 mRNA vaccine')"
-//       * mp 1..1 string "Vaccine product (e.g., 'Comirnaty')"
-//       * ma 1..1 string "Vaccine marketing authorisation holder or manufacturer (e.g., 'ORG-100030215' (Biontech Manufacturing GmbH))"
-//       * ma ^comment = "If marketing authorisation holder is not available, this will be the manufacturer."
+//       * tg 1..1 string "Disease or agent targeted (SNOMED CT GPS code for COVID-19 or variant; see element details)" "The selected codes shall refer to COVID-19 or, if more detailed information on the genetic variant of SARS-CoV-2 is needed, to these variants if such detailed information is needed due to epidemiological reasons.
+
+// Example of a code that should be used is the SNOMED CT code `840539006` (COVID-19)."
+//       * vp 1..1 string "Vaccine or prophylaxis (e.g., 'SARS-CoV-2 mRNA vaccine'; SNOMED or ATC; see element details)" "Preferred Code System: SNOMED CT or ATC Classification. Examples of codes that should be used from the preferred code systems are the SNOMED CT code 1119305005 (SARS-CoV-2 antigen vaccine), 1119349007 (SARS-CoV-2 mRNA vaccine) or J07BX03 (covid-19 vaccines). The value set should be extended when new vaccine types are developed and put into use."
+//       * mp 1..1 string "Vaccine product (e.g., 'EU/1/20/1528 (Comirnaty)'; see element details)" "Preferred Code Systems (in the order of preference):
+
+// - Union Register of medicinal products for vaccines with EU-wide authorisation (authorisation numbers) - for example, `EU/1/20/1528` (Comirnaty)
+// - A global vaccine register such as one that could be established by the World Health Organisation
+// - Name of the vaccine medicinal product in other cases. If the name includes whitespaces, these should be replaced by a hyphen (-). For example, `Sputnik-V` (standing for Sputnik V)."
+//       * mp from VaccineCovid19EUUnionRegisterValueSet (preferred)
+//       * ma 1..1 string "Vaccine marketing authorisation holder or manufacturer (e.g., 'ORG-100030215' (Biontech Manufacturing GmbH))" "Preferred Code System:
+
+// - Organisation code from EMA (SPOR system for ISO IDMP)
+// - A global vaccine marketing authorisation holder or manufacturer register, such as one that could be established by the World Health Organisation
+// - Name of the organisation in other cases.
+
+// If the name includes whitespaces, these should be replaced by a hyphen (-).If marketing authorisation holder is not available, this will be the manufacturer."
 //       * dn 1..1 positiveInt "Number in a series of doses"
 //       * sd 1..1 positiveInt "The overall number of doses in the series"
 //       * dt 1..1 date "Date of vaccination, YYYY-MM-DD format"
-//       * co 1..1 string "Country where vaccine was administered"
+//       * co 1..1 string "Country where vaccine was administered (two letter ISo-3166)"
+//       * co from http://hl7.org/fhir/ValueSet/iso3166-1-2 (preferred)
 //       * is 1..1 string "Certificate issuer (organization name)"
 //       * ci 1..1 string "Unique certificate identifier (UVCI)"
 
@@ -131,16 +144,26 @@
 //     * t 0..* BackboneElement "Test Group"
 //     * t obeys OnlyOneAllowed
 //     * t ^comment = "\"Test group, if present, MUST contain exactly 1 (one) entry describing exactly one test result.\""
-//       * tg 1..1 string "Disease or agent targeted (SNOMED CT GPS code for COVID-19 or variant)"
-//       * tt 1..1 string "Type of test (LOINC code)"
+//       * tg 1..1 string "Disease or agent targeted (SNOMED CT GPS code for COVID-19 or variant; see element details)" "The selected codes shall refer to COVID-19 or, if more detailed information on the genetic variant of SARS-CoV-2 is needed, to these variants if such detailed information is needed due to epidemiological reasons.
+
+// Example of a code that should be used is the SNOMED CT code `840539006` (COVID-19)."
+//       * tg from LabTestPathogenCovid19SnomedValueSet (preferred)
+//       * tt 1..1 string "Type of test (LOINC code; see element details)" "The codes in this value set shall refer to the method of the test and shall be selected at least to separate the NAAT tests from RAT tests as expressed in Regulation (EU) 2021/953.
+
+// An example of a code that should be used from the preferred code system is LP217198-3 (Rapid immunoassay)."
+//       * tt from LabTestTypeLoincValueSet (preferred)
 //       * nm 0..1 string "Name of the nucleic acid amplification test (NAAT) used"
 //       * nm ^comment = "From the spec: \"The name should include the name of the test manufacturer and the commercial name of the test, separated by a comma.\" Omit element for RAT test. MUST not be empty."
 //       * ma 0..1 string "Rapid antigen test (RAT) device identifier from the JRC database"
 //       * sc 1..1 dateTime "Date and time when test sample was collected in ISO 8601 format"
-//       * tr 1..1 string "Result of the test (SNOMED CT GPS code)"
+//       * tr 1..1 string "Result of the test (preferred: SNOMED CT GPS code)" "The codes selected shall allow distinguishing between positive and negative test results (detected or not detected). Additional values (like undetermined) may be added if the use cases do require this.
+
+// Examples of codes that should be used from the preferred code system are `260415000` (Not detected) and `260373001` (Detected)."
+//       * tr from LabTestQualitativeResultSnomedValueSet (preferred)
 //       * tc 0..1 string "Testing centre or facility"
 //       * tc ^comment = "Required for NAAT tests. Optional for RAT tests. MUST not be empty (omit instead)."
-//       * co 1..1 string "Country of test"
+//       * co 1..1 string "Country of test (two letter ISo-3166)"
+//       * co from http://hl7.org/fhir/ValueSet/iso3166-1-2 (preferred)
 //       * is 1..1 string "Certificate issuer"
 //       * ci 1..1 string "Unique Certificate Identifier (UVCI)"
 
@@ -151,7 +174,8 @@
 //     * r ^comment = "\"Recovery group, if present, MUST contain exactly 1 (one) entry describing exactly one recovery statement.\""
 //       * tg 1..1 string "Disease or agent targeted (SNOMED CT GPS code for COVID-19 or variant)"
 //       * fr 1..1 date "The date when a sample for the NAAT test producing a positive result was collected, in the format YYYY-MM-DD (complete date without time)."
-//       * co 1..1 string "Country of test"
+//       * co 1..1 string "Country of test (two letter ISo-3166)"
+//       * co from http://hl7.org/fhir/ValueSet/iso3166-1-2 (preferred)
 //       * is 0..1 string "Certificate issuer"
 //       * df 1..1 date "The first date on which the certificate is considered to be valid, in YYYY-MM-DD format (complete date without time)."
 //       * du 1..1 date "The last date on which the certificate is considered to be valid, assigned by the certificate issuer, in YYYY-MM-DD format (complete date without time)."

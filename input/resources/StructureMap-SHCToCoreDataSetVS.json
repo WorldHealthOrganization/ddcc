@@ -2,12 +2,12 @@
   "resourceType": "StructureMap",
   "id": "SHCToCoreDataSetVS",
   "meta": {
-    "versionId": "5",
-    "lastUpdated": "2023-01-30T22:16:24.059+00:00"
+    "versionId": "11",
+    "lastUpdated": "2023-02-15T20:22:07.304+00:00"
   },
   "text": {
     "status": "generated",
-    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><pre>map &quot;http://worldhealthorganization.github.io/ddcc/StructureMap/SHCToCoreDataSetVS&quot; = &quot;SHCToCoreDataSetVS&quot;\r\n\r\n\r\nuses &quot;http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-vaccination-bundle-dm&quot; alias SHCVaccinationBundleDM as source\r\nuses &quot;http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-patient-general-dm&quot; alias SHCPatientDM as source\r\nuses &quot;http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-vaccination-dm&quot; alias SHCImmunizationDM as source\r\nuses &quot;http://hl7.org/fhir/StructureDefinition/Bundle&quot; alias DDCCBundle as target\r\nuses &quot;http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.VS&quot; alias DDCCVS as produced\r\n\r\ngroup SHCToVS(source shc : SHCVaccinationBundleDM, target ddccBundle : DDCCBundle) {\r\n  shc.entry as patientEntrySHC then {\r\n    patientEntrySHC.resource : Patient first as patient then {\r\n      shc.entry as entry then {\r\n        // entry.resource : Immunization as immunization where vaccineCode.memberOf('http://worldhealthorganization.github.io/ddcc/ValueSet/who-ddcc-allowed-vaccines-covid-19') -&gt;  ddccBundle.entry as outentry,  create('http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.VS') as ddcc then {\r\n        entry.resource : Immunization as immunization -&gt;  ddccBundle.entry as outentry,  create('http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.VS') as ddcc then {\r\n          immunization then PatientToDDCCVS(patient, ddcc) &quot;set patient&quot;;\r\n          immunization -&gt; ddcc.vaccination as vaccination then ImmunizationToDDCC(immunization, vaccination) &quot;set vaccination&quot;;\r\n          immunization -&gt; outentry.resource = ddcc &quot;set outentry&quot;;\r\n        } &quot;immunizations&quot;;\r\n      } &quot;entries&quot;;\r\n    } &quot;get patient&quot;;\r\n  } &quot;find patient&quot;;\r\n}\r\n\r\ngroup PatientToDDCCVS(source patient : SHCPatientDM, target tgt : DDCCVS) {\r\n  patient.name as name then NameToText(name, tgt) &quot;set name&quot;;\r\n  patient.birthDate as birthDate -&gt; tgt.birthDate = birthDate &quot;set birthDate&quot;;\r\n  patient.identifier first as identifier -&gt; tgt.identifier = identifier &quot;set identifier&quot;;\r\n}\r\n\r\ngroup NameToText(source name : HumanName, target ddcc) {\r\n  // annoying because append doesn't work until ddcc.name is set\r\n  name.given first as given -&gt; ddcc.name = (given.replaceMatches('$', ' ')) &quot;set first name&quot;;\r\n  // name.given not_first as other -&gt; ddcc.name as tName, ddcc.name = append( tName, other ) &quot;set other names&quot;;\r\n  name.given not_first as other -&gt;  ddcc.name as tName,  (other.replaceMatches('$', ' ')) as spaced,  ddcc.name = append(tName, spaced) &quot;set other names&quot;;\r\n  name.family as family -&gt;  ddcc.name as tName,  ddcc.name = append(tName, family) &quot;add family name&quot;;\r\n  name.text as text -&gt; ddcc.name = text &quot;set full name&quot;;\r\n}\r\n\r\ngroup ImmunizationToDDCC(source immunization : SHCImmunizationDM, target vaccination) {\r\n  immunization.vaccineCode as vaccine then {\r\n    vaccine.coding as coding where memberOf('http://worldhealthorganization.github.io/ddcc/ValueSet/who-ddcc-vaccines-covid-19') then {\r\n      coding -&gt; vaccination.vaccine = coding &quot;set coding&quot;;\r\n    } &quot;copy vaccine&quot;;\r\n    vaccine.coding as coding where memberOf('http://worldhealthorganization.github.io/ddcc/ValueSet/who-ddcc-vaccines-covid-19').not() then {\r\n      coding -&gt; vaccination.vaccine = translate(coding, 'http://worldhealthorganization.github.io/ddcc/ConceptMap/who-ddcc-map-cvx-icd11-vaccines', 'Coding') &quot;translate code&quot;;\r\n    } &quot;translate vaccine coding&quot;;\r\n    vaccine.coding as coding -&gt; vaccination.brand = translate(coding, 'http://worldhealthorganization.github.io/ddcc/ConceptMap/who-ddcc-map-cvx-icd11-brands', 'Coding') &quot;translate brand&quot;;\r\n  } &quot;set vaccine&quot;;\r\n  immunization.manufacturer as tman then {\r\n    tman.identifier as identifier -&gt; vaccination.manufacturer as manufacturer then {\r\n      identifier.system as system -&gt; manufacturer.system = system &quot;set manufacturer system&quot;;\r\n      identifier.value as value -&gt; manufacturer.code = value &quot;set manufacturer value&quot;;\r\n    } &quot;set manufacturer id&quot;;\r\n  };\r\n  immunization.lotNumber as lot -&gt; vaccination.lot = lot &quot;set lot&quot;;\r\n  immunization.occurrence as date -&gt; vaccination.date = date &quot;set date&quot;;\r\n  immunization.performer as performer then {\r\n    performer.actor as actor then {\r\n      actor.display as centre -&gt; vaccination.centre = centre &quot;set centre&quot;;\r\n    };\r\n  };\r\n}\r\n\r\n</pre></div>"
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><pre>map &quot;http://worldhealthorganization.github.io/ddcc/StructureMap/SHCToCoreDataSetVS&quot; = &quot;SHCToCoreDataSetVS&quot;\r\n\r\n\r\nuses &quot;http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-vaccination-bundle-dm&quot; alias SHCVaccinationBundleDM as source\r\nuses &quot;http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-patient-general-dm&quot; alias SHCPatientDM as source\r\nuses &quot;http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-vaccination-dm&quot; alias SHCImmunizationDM as source\r\nuses &quot;http://hl7.org/fhir/StructureDefinition/Bundle&quot; alias DDCCBundle as target\r\nuses &quot;http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.VS&quot; alias DDCCVS as produced\r\n\r\ngroup SHCToVS(source shc : SHCVaccinationBundleDM, target ddccBundle : DDCCBundle) {\r\n  shc.entry as patientEntrySHC then {\r\n    patientEntrySHC.resource : Patient first as patient then {\r\n      shc.entry as entry then {\r\n        // entry.resource : Immunization as immunization where vaccineCode.memberOf('http://worldhealthorganization.github.io/ddcc/ValueSet/who-ddcc-allowed-vaccines-covid-19') -&gt;  ddccBundle.entry as outentry,  create('http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.VS') as ddcc then {\r\n        entry.resource : Immunization as immunization -&gt;  ddccBundle.entry as outentry,  create('http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.VS') as ddcc then {\r\n          immunization then PatientToDDCCVS(patient, ddcc) &quot;set patient&quot;;\r\n          immunization -&gt; ddcc.vaccination as vaccination then ImmunizationToDDCC(immunization, vaccination) &quot;set vaccination&quot;;\r\n          immunization -&gt; outentry.resource = ddcc &quot;set outentry&quot;;\r\n        } &quot;immunizations&quot;;\r\n      } &quot;entries&quot;;\r\n    } &quot;get patient&quot;;\r\n  } &quot;find patient&quot;;\r\n}\r\n\r\ngroup PatientToDDCCVS(source patient : SHCPatientDM, target tgt : DDCCVS) {\r\n  patient.name as name then NameToText(name, tgt) &quot;set name&quot;;\r\n  patient.birthDate as birthDate -&gt; tgt.birthDate = birthDate &quot;set birthDate&quot;;\r\n  patient.identifier first as identifier -&gt; tgt.identifier = identifier &quot;set identifier&quot;;\r\n}\r\n\r\ngroup NameToText(source name : HumanName, target ddcc) {\r\n  // append doesn't work until ddcc.name is set\r\n  name.given first as given -&gt; ddcc.name = (given.replaceMatches('$', ' ')) &quot;set first name&quot;;\r\n  // name.given not_first as other -&gt; ddcc.name as tName, ddcc.name = append( tName, other ) &quot;set other names&quot;;\r\n  name.given not_first as other -&gt;  ddcc.name as tName,  (other.replaceMatches('$', ' ')) as spaced,  ddcc.name = append(tName, spaced) &quot;set other names&quot;;\r\n  name.family as family -&gt;  ddcc.name as tName,  ddcc.name = append(tName, family) &quot;add family name&quot;;\r\n  name.text as text -&gt; ddcc.name = text &quot;set full name&quot;;\r\n}\r\n\r\ngroup ImmunizationToDDCC(source immunization : SHCImmunizationDM, target vaccination) {\r\n  immunization.vaccineCode as vaccine then {\r\n    vaccine.coding as coding then {\r\n      coding -&gt; vaccination.vaccine = coding &quot;set default vaccine&quot;;\r\n      coding -&gt; vaccination.brand = coding &quot;set default brand&quot;;\r\n      coding where coding.memberOf('http://worldhealthorganization.github.io/ddcc/ValueSet/vaccine-covid19-cvx') -&gt; vaccination.vaccine = translate(coding, 'http://worldhealthorganization.github.io/ddcc/ConceptMap/vaccine-covid19-cvx-to-icd11', 'Coding') &quot;translate COVID CVX vaccine&quot;;\r\n      coding where coding.memberOf('http://worldhealthorganization.github.io/ddcc/ValueSet/vaccine-covid19-snomed') -&gt; vaccination.vaccine = translate(coding, 'http://worldhealthorganization.github.io/ddcc/ConceptMap/vaccine-covid19-snomed-to-icd11', 'Coding') &quot;translate COVID SNOMED vaccine&quot;;\r\n    };\r\n  };\r\n  immunization.manufacturer as tman then {\r\n    tman.identifier as identifier -&gt; vaccination.manufacturer as manufacturer then {\r\n      identifier.system as system -&gt; manufacturer.system = system &quot;set manufacturer system&quot;;\r\n      identifier.value as value -&gt; manufacturer.code = value &quot;set manufacturer value&quot;;\r\n    } &quot;set manufacturer id&quot;;\r\n  };\r\n  immunization.lotNumber as lot -&gt; vaccination.lot = lot &quot;set lot&quot;;\r\n  immunization.occurrence as date -&gt; vaccination.date = date &quot;set date&quot;;\r\n  immunization.performer as performer then {\r\n    performer.actor as actor then {\r\n      actor.display as centre -&gt; vaccination.centre = centre &quot;set centre&quot;;\r\n    };\r\n  };\r\n}\r\n\r\n</pre></div>"
   },
   "url": "http://worldhealthorganization.github.io/ddcc/StructureMap/SHCToCoreDataSetVS",
   "name": "SHCToCoreDataSetVS",
@@ -250,7 +250,7 @@
           "valueString": "given.replaceMatches('$', ' ')"
         } ]
       } ],
-      "documentation": "annoying because append doesn't work until ddcc.name is set"
+      "documentation": "append doesn't work until ddcc.name is set"
     }, {
       "name": "set other names",
       "source": [ {
@@ -335,22 +335,21 @@
       "mode": "target"
     } ],
     "rule": [ {
-      "name": "set vaccine",
+      "name": "vaccineCode",
       "source": [ {
         "context": "immunization",
         "element": "vaccineCode",
         "variable": "vaccine"
       } ],
       "rule": [ {
-        "name": "copy vaccine",
+        "name": "coding",
         "source": [ {
           "context": "vaccine",
           "element": "coding",
-          "variable": "coding",
-          "condition": "memberOf('http://worldhealthorganization.github.io/ddcc/ValueSet/who-ddcc-vaccines-covid-19')"
+          "variable": "coding"
         } ],
         "rule": [ {
-          "name": "set coding",
+          "name": "set default vaccine",
           "source": [ {
             "context": "coding"
           } ],
@@ -363,19 +362,25 @@
               "valueId": "coding"
             } ]
           } ]
-        } ]
-      }, {
-        "name": "translate vaccine coding",
-        "source": [ {
-          "context": "vaccine",
-          "element": "coding",
-          "variable": "coding",
-          "condition": "memberOf('http://worldhealthorganization.github.io/ddcc/ValueSet/who-ddcc-vaccines-covid-19').not()"
-        } ],
-        "rule": [ {
-          "name": "translate code",
+        }, {
+          "name": "set default brand",
           "source": [ {
             "context": "coding"
+          } ],
+          "target": [ {
+            "context": "vaccination",
+            "contextType": "variable",
+            "element": "brand",
+            "transform": "copy",
+            "parameter": [ {
+              "valueId": "coding"
+            } ]
+          } ]
+        }, {
+          "name": "translate COVID CVX vaccine",
+          "source": [ {
+            "context": "coding",
+            "condition": "coding.memberOf('http://worldhealthorganization.github.io/ddcc/ValueSet/vaccine-covid19-cvx')"
           } ],
           "target": [ {
             "context": "vaccination",
@@ -385,30 +390,29 @@
             "parameter": [ {
               "valueId": "coding"
             }, {
-              "valueString": "http://worldhealthorganization.github.io/ddcc/ConceptMap/who-ddcc-map-cvx-icd11-vaccines"
+              "valueString": "http://worldhealthorganization.github.io/ddcc/ConceptMap/vaccine-covid19-cvx-to-icd11"
             }, {
               "valueString": "Coding"
             } ]
           } ]
-        } ]
-      }, {
-        "name": "translate brand",
-        "source": [ {
-          "context": "vaccine",
-          "element": "coding",
-          "variable": "coding"
-        } ],
-        "target": [ {
-          "context": "vaccination",
-          "contextType": "variable",
-          "element": "brand",
-          "transform": "translate",
-          "parameter": [ {
-            "valueId": "coding"
-          }, {
-            "valueString": "http://worldhealthorganization.github.io/ddcc/ConceptMap/who-ddcc-map-cvx-icd11-brands"
-          }, {
-            "valueString": "Coding"
+        }, {
+          "name": "translate COVID SNOMED vaccine",
+          "source": [ {
+            "context": "coding",
+            "condition": "coding.memberOf('http://worldhealthorganization.github.io/ddcc/ValueSet/vaccine-covid19-snomed')"
+          } ],
+          "target": [ {
+            "context": "vaccination",
+            "contextType": "variable",
+            "element": "vaccine",
+            "transform": "translate",
+            "parameter": [ {
+              "valueId": "coding"
+            }, {
+              "valueString": "http://worldhealthorganization.github.io/ddcc/ConceptMap/vaccine-covid19-snomed-to-icd11"
+            }, {
+              "valueString": "Coding"
+            } ]
           } ]
         } ]
       } ]
