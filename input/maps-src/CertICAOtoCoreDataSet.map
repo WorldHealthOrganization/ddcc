@@ -1,0 +1,118 @@
+map "http://worldhealthorganization.github.io/ddcc/StructureMap/CertICAOtoCoreDataSet" = "CertICAOtoCoreDataSet"
+// Structure map transforming CertICAO logical model to bundle of Core Data Set logical model
+
+uses "http://worldhealthorganization.github.io/ddcc/StructureDefinition/CertICAOVDS" alias VDS as source
+
+uses "http://hl7.org/fhir/StructureDefinition/Bundle" alias DDCCBundle as target
+uses "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet" alias DDCC as produced
+uses "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.VS" alias DDCCVS as produced
+uses "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.TR" alias DDCCTR as produced
+
+group CertICAOtoCoreDataSet(
+    source src: VDS, 
+    target ddccBundle: DDCCBundle)
+{
+    src.data as data then {
+        data.msg as msg then {
+            msg.ve as ve then {
+                ve.vd as vd -> ddccBundle.entry as outentry,  create('http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.VS') as ddcc then {                
+                    data.hdr as hdr -> ddcc.certificate as certificate then VDStoCoreDataSetCertificate(hdr, msg, certificate) "set certificate";
+                    msg.pid as pid then ExtractPatient(pid, ddcc) "set patient";
+                    vd -> ddcc.vaccination as vaccination then ExtractVaccine(ve, vd, vaccination) "set vaccination";
+                    vd -> outentry.resource = ddcc "set outentry";      
+                } "vd";                
+            } "ve";  
+            msg.tr as tr -> ddccBundle.entry as outentry,  create('http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.TR') as ddcc then {                
+                data.hdr as hdr -> ddcc.certificate as certificate then VDStoCoreDataSetCertificate(hdr, msg, certificate) "set certificate";
+                msg.pid as pid then ExtractPatient(pid, ddcc) "set patient";
+                msg.sp as sp then {
+                    msg.dat as dat -> ddcc.test as test then ExtractTest(sp, dat, tr, test) "set test"; 
+                } "sp";
+                tr -> outentry.resource = ddcc "set outentry";
+            } "tr";
+        } "msg";
+    } "data";
+}
+
+group VDStoCoreDataSetCertificate(
+    source hdr,
+    source msg,
+    target certificate)
+{
+    hdr.v as v -> certificate.version = v "set version";
+    msg.uvci as uvci -> certificate.hcid as hcid,
+        hcid.value = uvci "set hcid from uvci";
+    msg.ucti as ucti -> certificate.hcid as hcid,
+        hcid.value = ucti "set hcid from ucti";        
+    hdr.is as is -> 
+        certificate.issuer = create('Reference') as issuer,
+        issuer.display = is "set issuer";    
+}
+
+group ExtractPatient(source pid, target ddcc: DDCC) {
+    pid.n as name -> ddcc.name = name  "set name";
+    pid.dob as birthDate -> ddcc.birthDate = birthDate "set birthDate";
+    pid.i as priorityIdentifier -> ddcc.identifier as identifier, identifier.value = priorityIdentifier "set priorityIdentifier"; 
+    pid.dn -> ddcc.identifier as identifier then ExtractDocumentTypeNumber(pid, identifier) "set Document Type Number" ; 
+} 
+
+group ExtractDocumentTypeNumber(source src, target identif: Identifier) {
+    src.dn as docNumber -> identif.value = docNumber "set doc number";
+    src.dt as docType where (docType = "P") -> identif.system = "PPN"  "set doc number P";  // P – Passport (Doc 9303-4)
+    src.dt as docType where (docType = "A") -> identif.system = "DL"   "set doc number A";  // A – ID Card (Doc 9303-5)
+    src.dt as docType where (docType = "C") -> identif.system = "DL"   "set doc number C";  // C – ID Card (Doc 9303-5)
+    src.dt as docType where (docType = "I") -> identif.system = "DL"   "set doc number I" ; // I – ID Card Doc 9303-5)
+    src.dt as docType where (docType = "AC") -> identif.system = "EN"  "set doc number AC";  // AC - Crew Member Certificate (Doc 9303-5)
+    src.dt as docType where (docType = "V") -> identif.system = "ACSN" "set doc number V";  // V – Visa (Doc 9303-7)
+    src.dt as docType where (docType = "D") -> identif.system = "DL"   "set doc number D" ; // D – Driving License (ISO18013-1)
+}
+
+group ExtractVaccine(source ve, source vd, target vaccination) {
+    ve.des as des -> 
+        vaccination.vaccine as coding,
+        coding.system = "http://hl7.org/fhir/sid/icd-11", 
+        coding.code = des
+        "set vaccine";
+    ve.nam as nam -> 
+        vaccination.brand as coding, 
+        coding.code = nam
+        "set brand";        
+    ve.dis as dis -> 
+        vaccination.disease as coding,
+        coding.system = "http://hl7.org/fhir/sid/icd-11", 
+        coding.code = dis
+        "set target disease";
+
+    vd.dvc as dvc -> 
+        vaccination.date = dvc
+        "set date";
+    vd.seq as seq -> vaccination.dose = seq "set dose";            
+    vd.ctr as ctr -> 
+        vaccination.country as coding,
+        coding.code = ctr
+        //coding.system = "urn:iso:std:iso:3166" the Doc 9303 country codes seem to be a superset of ISO 3166
+        "set country";
+    vd.lot as lot -> vaccination.lot = lot "set lot";
+}
+
+group ExtractTest(source sp, source dat, source tr, target test) {
+    tr.tc as tc -> test.type as coding,
+        coding.code = tc "set type";     
+    tr.m as m -> 
+        test.result as coding,
+        coding.code = m
+        "set origin";       
+    dat.sc as date -> test.date = date "set date";      
+    tr.r as r -> 
+        test.result as coding,
+        coding.code = r
+        "set result";    
+    sp.spn as spn -> 
+        test.centre as coding,
+        coding.code = spn
+        "set centre";     
+    sp.ctr as ctr -> 
+        test.country as coding,
+        coding.code = ctr
+        "set country";    
+}

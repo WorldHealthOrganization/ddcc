@@ -460,3 +460,86 @@ And match response.entry[0].resource.test.date == '2022-01-21T00:00:00Z'
 And match response.entry[0].resource.test.result contains only {system: 'http://id.who.int/icd11/mms', code: 'RA01.0'}
 And match response.entry[0].resource.test.centre contains only { code: 'Laboratorio ATGEN'}
 And match response.entry[0].resource.test.country contains only {system: 'urn:iso:std:iso:3166', code: 'UY'}
+
+# ICAO -------------------------------------------------------------------------------
+
+@icao
+@preload
+@matchbox
+Scenario: Updating ICAO to Core Data Set Structure Map
+Given path 'StructureMap', 'CertICAOtoCoreDataSet'
+And request read('../input/maps-src/CertICAOtoCoreDataSet.map')
+And header Accept = 'application/fhir+json'
+And header Content-Type = 'text/fhir-mapping'
+When method put
+Then assert responseStatus == 200 || responseStatus == 201
+
+@icao
+@matchbox
+Scenario: Transforming Example CertICAO to Bundle of Core Data Set VS
+* param source = 'http://worldhealthorganization.github.io/ddcc/StructureMap/CertICAOtoCoreDataSet'
+Given path 'StructureMap', '$transform'
+And request read('fixtures/icao/vaccination_example.json')
+And header Accept = 'application/fhir+json'
+And header Content-Type = 'application/json'
+When method post
+Then status 200
+And match response.resourceType == 'Bundle'
+And match response.entry == '#[2]'
+And match response.entry[0].resource.resourceType == 'DDCCCoreDataSet'
+And match response.entry[0].resource.name == 'John B. Anyperson'
+And match response.entry[0].resource.birthDate == '1951-01-20'
+And match response.entry[0].resource.vaccination.vaccine contains only {system: 'http://id.who.int/icd11/mms', code: 'XM68M6'}
+And match response.entry[0].resource.vaccination.brand contains only {system: 'http://id.who.int/icd11/mms', code: 'XM8NQ0'}
+And match response.entry[0].resource.vaccination.lot == '0000001'
+And match response.entry[0].resource.vaccination.date == '2021-01-01'
+And match response.entry[0].resource.vaccination.centre == 'ABC General Hospital'
+
+@icao
+@validator
+Scenario: Transforming Example CertICAO to Bundle of Core Data Set VS using validator
+Given def response = transform('fixtures/icao/vaccination_example.json','target/vaccination_example.json','http://worldhealthorganization.github.io/ddcc/StructureMap/CertICAOtoCoreDataSet')
+Then match response.resourceType == 'Bundle'
+And match response.entry == '#[2]'
+And match response.entry[0].resource.resourceType == 'DDCCCoreDataSet'
+And match response.entry[0].resource.name == 'John B. Anyperson'
+And match response.entry[0].resource.birthDate == '1951-01-20'
+And match response.entry[0].resource.vaccination.vaccine contains only {system: 'http://id.who.int/icd11/mms', code: 'XM68M6'}
+And match response.entry[0].resource.vaccination.brand contains only {system: 'http://id.who.int/icd11/mms', code: 'XM8NQ0'}
+And match response.entry[0].resource.vaccination.lot == '0000001'
+And match response.entry[0].resource.vaccination.date == '2021-01-01'
+And match response.entry[0].resource.vaccination.centre == 'ABC General Hospital'
+
+@icao
+@matchbox
+Scenario: Transforming Example CertICAO to Bundle of Core Data Set TR
+* param source = 'http://worldhealthorganization.github.io/ddcc/StructureMap/CertICAOtoCoreDataSet'
+Given path 'StructureMap', '$transform'
+And request read('fixtures/icao/testing_example.json')
+And header Accept = 'application/fhir+json'
+And header Content-Type = 'application/json'
+When method post
+Then status 200
+And match response.resourceType == 'Bundle'
+And match response.entry == '#[1]'
+And match response.entry[0].resource.resourceType == 'DDCCCoreDataSet'
+And match response.entry[0].resource.name == 'James T. Anyperson'
+And match response.entry[0].resource.birthDate == '1951-01-20'
+And match response.entry[0].resource.test.pathogen contains {system: 'http://id.who.int/icd11/mms', code: 'XN109'}
+And match response.entry[0].resource.test.type contains only {system: 'http://loinc.org', code: '94558-4'}
+And match response.entry[0].resource.test.date == '2021-02-17'
+And match response.entry[0].resource.test.result contains only {system: 'http://snomed.info/sct', code: '260373001'}
+
+@icao
+@validator
+Scenario: Transforming Example CertICAO to Bundle of Core Data Set TR using validator
+Given def response = transform('fixtures/icao/testing_example.json','target/testing_example.json','http://worldhealthorganization.github.io/ddcc/StructureMap/CertICAOtoCoreDataSet')
+Then match response.resourceType == 'Bundle'
+And match response.entry == '#[1]'
+And match response.entry[0].resource.resourceType == 'DDCCCoreDataSet'
+And match response.entry[0].resource.name == 'James T. Anyperson'
+And match response.entry[0].resource.birthDate == '1951-01-20'
+And match response.entry[0].resource.test.pathogen contains {system: 'http://id.who.int/icd11/mms', code: 'XN109'}
+And match response.entry[0].resource.test.type contains only {system: 'http://loinc.org', code: '94558-4'}
+And match response.entry[0].resource.test.date == '2021-02-17'
+And match response.entry[0].resource.test.result contains only {system: 'http://snomed.info/sct', code: '260373001'}

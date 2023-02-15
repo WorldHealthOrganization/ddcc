@@ -1,0 +1,974 @@
+{
+  "resourceType": "StructureMap",
+  "id": "CertICAOtoCoreDataSet",
+  "meta": {
+    "versionId": "9",
+    "lastUpdated": "2023-02-07T16:55:11.500+00:00"
+  },
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><pre>map &quot;http://worldhealthorganization.github.io/ddcc/StructureMap/CertICAOtoCoreDataSet&quot; = &quot;CertICAOtoCoreDataSet&quot;\r\n\r\n// Structure map transforming CertICAO logical model to bundle of Core Data Set logical model\r\n\r\nuses &quot;http://worldhealthorganization.github.io/ddcc/StructureDefinition/CertICAOVDS&quot; alias VDS as source\r\nuses &quot;http://hl7.org/fhir/StructureDefinition/Bundle&quot; alias DDCCBundle as target\r\nuses &quot;http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet&quot; alias DDCC as produced\r\nuses &quot;http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.VS&quot; alias DDCCVS as produced\r\nuses &quot;http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.TR&quot; alias DDCCTR as produced\r\n\r\ngroup CertICAOtoCoreDataSet(source src : VDS, target ddccBundle : DDCCBundle) {\r\n  src.data as data then {\r\n    data.msg as msg then {\r\n      msg.ve as ve then {\r\n        ve.vd as vd -&gt;  ddccBundle.entry as outentry,  create('http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.VS') as ddcc then {\r\n          data.hdr as hdr -&gt; ddcc.certificate as certificate then VDStoCoreDataSetCertificate(hdr, msg, certificate) &quot;set certificate&quot;;\r\n          msg.pid as pid then ExtractPatient(pid, ddcc) &quot;set patient&quot;;\r\n          vd -&gt; ddcc.vaccination as vaccination then ExtractVaccine(ve, vd, vaccination) &quot;set vaccination&quot;;\r\n          vd -&gt; outentry.resource = ddcc &quot;set outentry&quot;;\r\n        };\r\n      };\r\n      msg.tr as tr -&gt;  ddccBundle.entry as outentry,  create('http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.TR') as ddcc then {\r\n        data.hdr as hdr -&gt; ddcc.certificate as certificate then VDStoCoreDataSetCertificate(hdr, msg, certificate) &quot;set certificate&quot;;\r\n        msg.pid as pid then ExtractPatient(pid, ddcc) &quot;set patient&quot;;\r\n        msg.sp as sp then {\r\n          msg.dat as dat -&gt; ddcc.test as test then ExtractTest(sp, dat, tr, test) &quot;set test&quot;;\r\n        };\r\n        tr -&gt; outentry.resource = ddcc &quot;set outentry&quot;;\r\n      };\r\n    };\r\n  };\r\n}\r\n\r\ngroup VDStoCoreDataSetCertificate(source hdr, source msg, target certificate) {\r\n  hdr.v as v -&gt; certificate.version = v &quot;set version&quot;;\r\n  msg.uvci as uvci -&gt;  certificate.hcid as hcid,  hcid.value = uvci &quot;set hcid from uvci&quot;;\r\n  msg.ucti as ucti -&gt;  certificate.hcid as hcid,  hcid.value = ucti &quot;set hcid from ucti&quot;;\r\n  hdr.is as is -&gt;  certificate.issuer = create('Reference') as issuer,  issuer.display = is &quot;set issuer&quot;;\r\n}\r\n\r\ngroup ExtractPatient(source pid, target ddcc : DDCC) {\r\n  pid.n as name -&gt; ddcc.name = name &quot;set name&quot;;\r\n  pid.dob as birthDate -&gt; ddcc.birthDate = birthDate &quot;set birthDate&quot;;\r\n  pid.i as priorityIdentifier -&gt;  ddcc.identifier as identifier,  identifier.value = priorityIdentifier &quot;set priorityIdentifier&quot;;\r\n  pid.dn -&gt; ddcc.identifier as identifier then ExtractDocumentTypeNumber(pid, identifier) &quot;set Document Type Number&quot;;\r\n}\r\n\r\ngroup ExtractDocumentTypeNumber(source src, target identif : Identifier) {\r\n  src.dn as docNumber -&gt; identif.value = docNumber &quot;set doc number&quot;;\r\n  src.dt as docType where (docType = 'P') -&gt; identif.system = 'PPN' &quot;set doc number P&quot;;\r\n  // P – Passport (Doc 9303-4)\r\n  src.dt as docType where (docType = 'A') -&gt; identif.system = 'DL' &quot;set doc number A&quot;;\r\n  // A – ID Card (Doc 9303-5)\r\n  src.dt as docType where (docType = 'C') -&gt; identif.system = 'DL' &quot;set doc number C&quot;;\r\n  // C – ID Card (Doc 9303-5)\r\n  src.dt as docType where (docType = 'I') -&gt; identif.system = 'DL' &quot;set doc number I&quot;;\r\n  // I – ID Card Doc 9303-5)\r\n  src.dt as docType where (docType = 'AC') -&gt; identif.system = 'EN' &quot;set doc number AC&quot;;\r\n  // AC - Crew Member Certificate (Doc 9303-5)\r\n  src.dt as docType where (docType = 'V') -&gt; identif.system = 'ACSN' &quot;set doc number V&quot;;\r\n  // V – Visa (Doc 9303-7)\r\n  src.dt as docType where (docType = 'D') -&gt; identif.system = 'DL' &quot;set doc number D&quot;;\r\n}\r\n\r\ngroup ExtractVaccine(source ve, source vd, target vaccination) {\r\n  ve.des as des -&gt;  vaccination.vaccine as coding,  coding.system = 'http://hl7.org/fhir/sid/icd-11',  coding.code = des &quot;set vaccine&quot;;\r\n  ve.nam as nam -&gt;  vaccination.brand as coding,  coding.code = nam &quot;set brand&quot;;\r\n  ve.dis as dis -&gt;  vaccination.disease as coding,  coding.system = 'http://hl7.org/fhir/sid/icd-11',  coding.code = dis &quot;set target disease&quot;;\r\n  vd.dvc as dvc -&gt; vaccination.date = dvc &quot;set date&quot;;\r\n  vd.seq as seq -&gt; vaccination.dose = seq &quot;set dose&quot;;\r\n  // coding.system = &quot;urn:iso:std:iso:3166&quot; the Doc 9303 country codes seem to be a superset of ISO 3166\r\n  vd.ctr as ctr -&gt;  vaccination.country as coding,  coding.code = ctr &quot;set country&quot;;\r\n  vd.lot as lot -&gt; vaccination.lot = lot &quot;set lot&quot;;\r\n}\r\n\r\ngroup ExtractTest(source sp, source dat, source tr, target test) {\r\n  tr.tc as tc -&gt;  test.type as coding,  coding.code = tc &quot;set type&quot;;\r\n  tr.m as m -&gt;  test.result as coding,  coding.code = m &quot;set origin&quot;;\r\n  dat.sc as date -&gt; test.date = date &quot;set date&quot;;\r\n  tr.r as r -&gt;  test.result as coding,  coding.code = r &quot;set result&quot;;\r\n  sp.spn as spn -&gt;  test.centre as coding,  coding.code = spn &quot;set centre&quot;;\r\n  sp.ctr as ctr -&gt;  test.country as coding,  coding.code = ctr &quot;set country&quot;;\r\n}\r\n\r\n</pre></div>"
+  },
+  "url": "http://worldhealthorganization.github.io/ddcc/StructureMap/CertICAOtoCoreDataSet",
+  "name": "CertICAOtoCoreDataSet",
+  "description": "Structure map transforming CertICAO logical model to bundle of Core Data Set logical model",
+  "structure": [ {
+    "url": "http://worldhealthorganization.github.io/ddcc/StructureDefinition/CertICAOVDS",
+    "mode": "source",
+    "alias": "VDS"
+  }, {
+    "url": "http://hl7.org/fhir/StructureDefinition/Bundle",
+    "mode": "target",
+    "alias": "DDCCBundle"
+  }, {
+    "url": "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet",
+    "mode": "produced",
+    "alias": "DDCC"
+  }, {
+    "url": "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.VS",
+    "mode": "produced",
+    "alias": "DDCCVS"
+  }, {
+    "url": "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.TR",
+    "mode": "produced",
+    "alias": "DDCCTR"
+  } ],
+  "group": [ {
+    "name": "CertICAOtoCoreDataSet",
+    "typeMode": "none",
+    "input": [ {
+      "name": "src",
+      "type": "VDS",
+      "mode": "source"
+    }, {
+      "name": "ddccBundle",
+      "type": "DDCCBundle",
+      "mode": "target"
+    } ],
+    "rule": [ {
+      "name": "data",
+      "source": [ {
+        "context": "src",
+        "element": "data",
+        "variable": "data"
+      } ],
+      "rule": [ {
+        "name": "msg",
+        "source": [ {
+          "context": "data",
+          "element": "msg",
+          "variable": "msg"
+        } ],
+        "rule": [ {
+          "name": "ve",
+          "source": [ {
+            "context": "msg",
+            "element": "ve",
+            "variable": "ve"
+          } ],
+          "rule": [ {
+            "name": "vd",
+            "source": [ {
+              "context": "ve",
+              "element": "vd",
+              "variable": "vd"
+            } ],
+            "target": [ {
+              "context": "ddccBundle",
+              "contextType": "variable",
+              "element": "entry",
+              "variable": "outentry"
+            }, {
+              "contextType": "variable",
+              "variable": "ddcc",
+              "transform": "create",
+              "parameter": [ {
+                "valueString": "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.VS"
+              } ]
+            } ],
+            "rule": [ {
+              "name": "set certificate",
+              "source": [ {
+                "context": "data",
+                "element": "hdr",
+                "variable": "hdr"
+              } ],
+              "target": [ {
+                "context": "ddcc",
+                "contextType": "variable",
+                "element": "certificate",
+                "variable": "certificate"
+              } ],
+              "dependent": [ {
+                "name": "VDStoCoreDataSetCertificate",
+                "variable": [ "hdr", "msg", "certificate" ],
+                "_variable": [ {
+                  "extension": [ {
+                    "url": "http://hl7.org/fhir/tools/StructureDefinition/original-item-type",
+                    "valueUrl": "id"
+                  } ]
+                }, {
+                  "extension": [ {
+                    "url": "http://hl7.org/fhir/tools/StructureDefinition/original-item-type",
+                    "valueUrl": "id"
+                  } ]
+                }, {
+                  "extension": [ {
+                    "url": "http://hl7.org/fhir/tools/StructureDefinition/original-item-type",
+                    "valueUrl": "id"
+                  } ]
+                } ]
+              } ]
+            }, {
+              "name": "set patient",
+              "source": [ {
+                "context": "msg",
+                "element": "pid",
+                "variable": "pid"
+              } ],
+              "dependent": [ {
+                "name": "ExtractPatient",
+                "variable": [ "pid", "ddcc" ],
+                "_variable": [ {
+                  "extension": [ {
+                    "url": "http://hl7.org/fhir/tools/StructureDefinition/original-item-type",
+                    "valueUrl": "id"
+                  } ]
+                }, {
+                  "extension": [ {
+                    "url": "http://hl7.org/fhir/tools/StructureDefinition/original-item-type",
+                    "valueUrl": "id"
+                  } ]
+                } ]
+              } ]
+            }, {
+              "name": "set vaccination",
+              "source": [ {
+                "context": "vd"
+              } ],
+              "target": [ {
+                "context": "ddcc",
+                "contextType": "variable",
+                "element": "vaccination",
+                "variable": "vaccination"
+              } ],
+              "dependent": [ {
+                "name": "ExtractVaccine",
+                "variable": [ "ve", "vd", "vaccination" ],
+                "_variable": [ {
+                  "extension": [ {
+                    "url": "http://hl7.org/fhir/tools/StructureDefinition/original-item-type",
+                    "valueUrl": "id"
+                  } ]
+                }, {
+                  "extension": [ {
+                    "url": "http://hl7.org/fhir/tools/StructureDefinition/original-item-type",
+                    "valueUrl": "id"
+                  } ]
+                }, {
+                  "extension": [ {
+                    "url": "http://hl7.org/fhir/tools/StructureDefinition/original-item-type",
+                    "valueUrl": "id"
+                  } ]
+                } ]
+              } ]
+            }, {
+              "name": "set outentry",
+              "source": [ {
+                "context": "vd"
+              } ],
+              "target": [ {
+                "context": "outentry",
+                "contextType": "variable",
+                "element": "resource",
+                "transform": "copy",
+                "parameter": [ {
+                  "valueId": "ddcc"
+                } ]
+              } ]
+            } ]
+          } ]
+        }, {
+          "name": "tr",
+          "source": [ {
+            "context": "msg",
+            "element": "tr",
+            "variable": "tr"
+          } ],
+          "target": [ {
+            "context": "ddccBundle",
+            "contextType": "variable",
+            "element": "entry",
+            "variable": "outentry"
+          }, {
+            "contextType": "variable",
+            "variable": "ddcc",
+            "transform": "create",
+            "parameter": [ {
+              "valueString": "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.TR"
+            } ]
+          } ],
+          "rule": [ {
+            "name": "set certificate",
+            "source": [ {
+              "context": "data",
+              "element": "hdr",
+              "variable": "hdr"
+            } ],
+            "target": [ {
+              "context": "ddcc",
+              "contextType": "variable",
+              "element": "certificate",
+              "variable": "certificate"
+            } ],
+            "dependent": [ {
+              "name": "VDStoCoreDataSetCertificate",
+              "variable": [ "hdr", "msg", "certificate" ],
+              "_variable": [ {
+                "extension": [ {
+                  "url": "http://hl7.org/fhir/tools/StructureDefinition/original-item-type",
+                  "valueUrl": "id"
+                } ]
+              }, {
+                "extension": [ {
+                  "url": "http://hl7.org/fhir/tools/StructureDefinition/original-item-type",
+                  "valueUrl": "id"
+                } ]
+              }, {
+                "extension": [ {
+                  "url": "http://hl7.org/fhir/tools/StructureDefinition/original-item-type",
+                  "valueUrl": "id"
+                } ]
+              } ]
+            } ]
+          }, {
+            "name": "set patient",
+            "source": [ {
+              "context": "msg",
+              "element": "pid",
+              "variable": "pid"
+            } ],
+            "dependent": [ {
+              "name": "ExtractPatient",
+              "variable": [ "pid", "ddcc" ],
+              "_variable": [ {
+                "extension": [ {
+                  "url": "http://hl7.org/fhir/tools/StructureDefinition/original-item-type",
+                  "valueUrl": "id"
+                } ]
+              }, {
+                "extension": [ {
+                  "url": "http://hl7.org/fhir/tools/StructureDefinition/original-item-type",
+                  "valueUrl": "id"
+                } ]
+              } ]
+            } ]
+          }, {
+            "name": "sp",
+            "source": [ {
+              "context": "msg",
+              "element": "sp",
+              "variable": "sp"
+            } ],
+            "rule": [ {
+              "name": "set test",
+              "source": [ {
+                "context": "msg",
+                "element": "dat",
+                "variable": "dat"
+              } ],
+              "target": [ {
+                "context": "ddcc",
+                "contextType": "variable",
+                "element": "test",
+                "variable": "test"
+              } ],
+              "dependent": [ {
+                "name": "ExtractTest",
+                "variable": [ "sp", "dat", "tr", "test" ],
+                "_variable": [ {
+                  "extension": [ {
+                    "url": "http://hl7.org/fhir/tools/StructureDefinition/original-item-type",
+                    "valueUrl": "id"
+                  } ]
+                }, {
+                  "extension": [ {
+                    "url": "http://hl7.org/fhir/tools/StructureDefinition/original-item-type",
+                    "valueUrl": "id"
+                  } ]
+                }, {
+                  "extension": [ {
+                    "url": "http://hl7.org/fhir/tools/StructureDefinition/original-item-type",
+                    "valueUrl": "id"
+                  } ]
+                }, {
+                  "extension": [ {
+                    "url": "http://hl7.org/fhir/tools/StructureDefinition/original-item-type",
+                    "valueUrl": "id"
+                  } ]
+                } ]
+              } ]
+            } ]
+          }, {
+            "name": "set outentry",
+            "source": [ {
+              "context": "tr"
+            } ],
+            "target": [ {
+              "context": "outentry",
+              "contextType": "variable",
+              "element": "resource",
+              "transform": "copy",
+              "parameter": [ {
+                "valueId": "ddcc"
+              } ]
+            } ]
+          } ]
+        } ]
+      } ]
+    } ]
+  }, {
+    "name": "VDStoCoreDataSetCertificate",
+    "typeMode": "none",
+    "input": [ {
+      "name": "hdr",
+      "mode": "source"
+    }, {
+      "name": "msg",
+      "mode": "source"
+    }, {
+      "name": "certificate",
+      "mode": "target"
+    } ],
+    "rule": [ {
+      "name": "set version",
+      "source": [ {
+        "context": "hdr",
+        "element": "v",
+        "variable": "v"
+      } ],
+      "target": [ {
+        "context": "certificate",
+        "contextType": "variable",
+        "element": "version",
+        "transform": "copy",
+        "parameter": [ {
+          "valueId": "v"
+        } ]
+      } ]
+    }, {
+      "name": "set hcid from uvci",
+      "source": [ {
+        "context": "msg",
+        "element": "uvci",
+        "variable": "uvci"
+      } ],
+      "target": [ {
+        "context": "certificate",
+        "contextType": "variable",
+        "element": "hcid",
+        "variable": "hcid"
+      }, {
+        "context": "hcid",
+        "contextType": "variable",
+        "element": "value",
+        "transform": "copy",
+        "parameter": [ {
+          "valueId": "uvci"
+        } ]
+      } ]
+    }, {
+      "name": "set hcid from ucti",
+      "source": [ {
+        "context": "msg",
+        "element": "ucti",
+        "variable": "ucti"
+      } ],
+      "target": [ {
+        "context": "certificate",
+        "contextType": "variable",
+        "element": "hcid",
+        "variable": "hcid"
+      }, {
+        "context": "hcid",
+        "contextType": "variable",
+        "element": "value",
+        "transform": "copy",
+        "parameter": [ {
+          "valueId": "ucti"
+        } ]
+      } ]
+    }, {
+      "name": "set issuer",
+      "source": [ {
+        "context": "hdr",
+        "element": "is",
+        "variable": "is"
+      } ],
+      "target": [ {
+        "context": "certificate",
+        "contextType": "variable",
+        "element": "issuer",
+        "variable": "issuer",
+        "transform": "create",
+        "parameter": [ {
+          "valueString": "Reference"
+        } ]
+      }, {
+        "context": "issuer",
+        "contextType": "variable",
+        "element": "display",
+        "transform": "copy",
+        "parameter": [ {
+          "valueId": "is"
+        } ]
+      } ]
+    } ]
+  }, {
+    "name": "ExtractPatient",
+    "typeMode": "none",
+    "input": [ {
+      "name": "pid",
+      "mode": "source"
+    }, {
+      "name": "ddcc",
+      "type": "DDCC",
+      "mode": "target"
+    } ],
+    "rule": [ {
+      "name": "set name",
+      "source": [ {
+        "context": "pid",
+        "element": "n",
+        "variable": "name"
+      } ],
+      "target": [ {
+        "context": "ddcc",
+        "contextType": "variable",
+        "element": "name",
+        "transform": "copy",
+        "parameter": [ {
+          "valueId": "name"
+        } ]
+      } ]
+    }, {
+      "name": "set birthDate",
+      "source": [ {
+        "context": "pid",
+        "element": "dob",
+        "variable": "birthDate"
+      } ],
+      "target": [ {
+        "context": "ddcc",
+        "contextType": "variable",
+        "element": "birthDate",
+        "transform": "copy",
+        "parameter": [ {
+          "valueId": "birthDate"
+        } ]
+      } ]
+    }, {
+      "name": "set priorityIdentifier",
+      "source": [ {
+        "context": "pid",
+        "element": "i",
+        "variable": "priorityIdentifier"
+      } ],
+      "target": [ {
+        "context": "ddcc",
+        "contextType": "variable",
+        "element": "identifier",
+        "variable": "identifier"
+      }, {
+        "context": "identifier",
+        "contextType": "variable",
+        "element": "value",
+        "transform": "copy",
+        "parameter": [ {
+          "valueId": "priorityIdentifier"
+        } ]
+      } ]
+    }, {
+      "name": "set Document Type Number",
+      "source": [ {
+        "context": "pid",
+        "element": "dn"
+      } ],
+      "target": [ {
+        "context": "ddcc",
+        "contextType": "variable",
+        "element": "identifier",
+        "variable": "identifier"
+      } ],
+      "dependent": [ {
+        "name": "ExtractDocumentTypeNumber",
+        "variable": [ "pid", "identifier" ],
+        "_variable": [ {
+          "extension": [ {
+            "url": "http://hl7.org/fhir/tools/StructureDefinition/original-item-type",
+            "valueUrl": "id"
+          } ]
+        }, {
+          "extension": [ {
+            "url": "http://hl7.org/fhir/tools/StructureDefinition/original-item-type",
+            "valueUrl": "id"
+          } ]
+        } ]
+      } ]
+    } ]
+  }, {
+    "name": "ExtractDocumentTypeNumber",
+    "typeMode": "none",
+    "input": [ {
+      "name": "src",
+      "mode": "source"
+    }, {
+      "name": "identif",
+      "type": "Identifier",
+      "mode": "target"
+    } ],
+    "rule": [ {
+      "name": "set doc number",
+      "source": [ {
+        "context": "src",
+        "element": "dn",
+        "variable": "docNumber"
+      } ],
+      "target": [ {
+        "context": "identif",
+        "contextType": "variable",
+        "element": "value",
+        "transform": "copy",
+        "parameter": [ {
+          "valueId": "docNumber"
+        } ]
+      } ]
+    }, {
+      "name": "set doc number P",
+      "source": [ {
+        "context": "src",
+        "element": "dt",
+        "variable": "docType",
+        "condition": "(docType = 'P')"
+      } ],
+      "target": [ {
+        "context": "identif",
+        "contextType": "variable",
+        "element": "system",
+        "transform": "copy",
+        "parameter": [ {
+          "valueString": "PPN"
+        } ]
+      } ]
+    }, {
+      "name": "set doc number A",
+      "source": [ {
+        "context": "src",
+        "element": "dt",
+        "variable": "docType",
+        "condition": "(docType = 'A')"
+      } ],
+      "target": [ {
+        "context": "identif",
+        "contextType": "variable",
+        "element": "system",
+        "transform": "copy",
+        "parameter": [ {
+          "valueString": "DL"
+        } ]
+      } ],
+      "documentation": "P – Passport (Doc 9303-4)"
+    }, {
+      "name": "set doc number C",
+      "source": [ {
+        "context": "src",
+        "element": "dt",
+        "variable": "docType",
+        "condition": "(docType = 'C')"
+      } ],
+      "target": [ {
+        "context": "identif",
+        "contextType": "variable",
+        "element": "system",
+        "transform": "copy",
+        "parameter": [ {
+          "valueString": "DL"
+        } ]
+      } ],
+      "documentation": "A – ID Card (Doc 9303-5)"
+    }, {
+      "name": "set doc number I",
+      "source": [ {
+        "context": "src",
+        "element": "dt",
+        "variable": "docType",
+        "condition": "(docType = 'I')"
+      } ],
+      "target": [ {
+        "context": "identif",
+        "contextType": "variable",
+        "element": "system",
+        "transform": "copy",
+        "parameter": [ {
+          "valueString": "DL"
+        } ]
+      } ],
+      "documentation": "C – ID Card (Doc 9303-5)"
+    }, {
+      "name": "set doc number AC",
+      "source": [ {
+        "context": "src",
+        "element": "dt",
+        "variable": "docType",
+        "condition": "(docType = 'AC')"
+      } ],
+      "target": [ {
+        "context": "identif",
+        "contextType": "variable",
+        "element": "system",
+        "transform": "copy",
+        "parameter": [ {
+          "valueString": "EN"
+        } ]
+      } ],
+      "documentation": "I – ID Card Doc 9303-5)"
+    }, {
+      "name": "set doc number V",
+      "source": [ {
+        "context": "src",
+        "element": "dt",
+        "variable": "docType",
+        "condition": "(docType = 'V')"
+      } ],
+      "target": [ {
+        "context": "identif",
+        "contextType": "variable",
+        "element": "system",
+        "transform": "copy",
+        "parameter": [ {
+          "valueString": "ACSN"
+        } ]
+      } ],
+      "documentation": "AC - Crew Member Certificate (Doc 9303-5)"
+    }, {
+      "name": "set doc number D",
+      "source": [ {
+        "context": "src",
+        "element": "dt",
+        "variable": "docType",
+        "condition": "(docType = 'D')"
+      } ],
+      "target": [ {
+        "context": "identif",
+        "contextType": "variable",
+        "element": "system",
+        "transform": "copy",
+        "parameter": [ {
+          "valueString": "DL"
+        } ]
+      } ],
+      "documentation": "V – Visa (Doc 9303-7)"
+    } ]
+  }, {
+    "name": "ExtractVaccine",
+    "typeMode": "none",
+    "input": [ {
+      "name": "ve",
+      "mode": "source"
+    }, {
+      "name": "vd",
+      "mode": "source"
+    }, {
+      "name": "vaccination",
+      "mode": "target"
+    } ],
+    "rule": [ {
+      "name": "set vaccine",
+      "source": [ {
+        "context": "ve",
+        "element": "des",
+        "variable": "des"
+      } ],
+      "target": [ {
+        "context": "vaccination",
+        "contextType": "variable",
+        "element": "vaccine",
+        "variable": "coding"
+      }, {
+        "context": "coding",
+        "contextType": "variable",
+        "element": "system",
+        "transform": "copy",
+        "parameter": [ {
+          "valueString": "http://hl7.org/fhir/sid/icd-11"
+        } ]
+      }, {
+        "context": "coding",
+        "contextType": "variable",
+        "element": "code",
+        "transform": "copy",
+        "parameter": [ {
+          "valueId": "des"
+        } ]
+      } ]
+    }, {
+      "name": "set brand",
+      "source": [ {
+        "context": "ve",
+        "element": "nam",
+        "variable": "nam"
+      } ],
+      "target": [ {
+        "context": "vaccination",
+        "contextType": "variable",
+        "element": "brand",
+        "variable": "coding"
+      }, {
+        "context": "coding",
+        "contextType": "variable",
+        "element": "code",
+        "transform": "copy",
+        "parameter": [ {
+          "valueId": "nam"
+        } ]
+      } ]
+    }, {
+      "name": "set target disease",
+      "source": [ {
+        "context": "ve",
+        "element": "dis",
+        "variable": "dis"
+      } ],
+      "target": [ {
+        "context": "vaccination",
+        "contextType": "variable",
+        "element": "disease",
+        "variable": "coding"
+      }, {
+        "context": "coding",
+        "contextType": "variable",
+        "element": "system",
+        "transform": "copy",
+        "parameter": [ {
+          "valueString": "http://hl7.org/fhir/sid/icd-11"
+        } ]
+      }, {
+        "context": "coding",
+        "contextType": "variable",
+        "element": "code",
+        "transform": "copy",
+        "parameter": [ {
+          "valueId": "dis"
+        } ]
+      } ]
+    }, {
+      "name": "set date",
+      "source": [ {
+        "context": "vd",
+        "element": "dvc",
+        "variable": "dvc"
+      } ],
+      "target": [ {
+        "context": "vaccination",
+        "contextType": "variable",
+        "element": "date",
+        "transform": "copy",
+        "parameter": [ {
+          "valueId": "dvc"
+        } ]
+      } ]
+    }, {
+      "name": "set dose",
+      "source": [ {
+        "context": "vd",
+        "element": "seq",
+        "variable": "seq"
+      } ],
+      "target": [ {
+        "context": "vaccination",
+        "contextType": "variable",
+        "element": "dose",
+        "transform": "copy",
+        "parameter": [ {
+          "valueId": "seq"
+        } ]
+      } ]
+    }, {
+      "name": "set country",
+      "source": [ {
+        "context": "vd",
+        "element": "ctr",
+        "variable": "ctr"
+      } ],
+      "target": [ {
+        "context": "vaccination",
+        "contextType": "variable",
+        "element": "country",
+        "variable": "coding"
+      }, {
+        "context": "coding",
+        "contextType": "variable",
+        "element": "code",
+        "transform": "copy",
+        "parameter": [ {
+          "valueId": "ctr"
+        } ]
+      } ],
+      "documentation": "coding.system = \"urn:iso:std:iso:3166\" the Doc 9303 country codes seem to be a superset of ISO 3166"
+    }, {
+      "name": "set lot",
+      "source": [ {
+        "context": "vd",
+        "element": "lot",
+        "variable": "lot"
+      } ],
+      "target": [ {
+        "context": "vaccination",
+        "contextType": "variable",
+        "element": "lot",
+        "transform": "copy",
+        "parameter": [ {
+          "valueId": "lot"
+        } ]
+      } ]
+    } ]
+  }, {
+    "name": "ExtractTest",
+    "typeMode": "none",
+    "input": [ {
+      "name": "sp",
+      "mode": "source"
+    }, {
+      "name": "dat",
+      "mode": "source"
+    }, {
+      "name": "tr",
+      "mode": "source"
+    }, {
+      "name": "test",
+      "mode": "target"
+    } ],
+    "rule": [ {
+      "name": "set type",
+      "source": [ {
+        "context": "tr",
+        "element": "tc",
+        "variable": "tc"
+      } ],
+      "target": [ {
+        "context": "test",
+        "contextType": "variable",
+        "element": "type",
+        "variable": "coding"
+      }, {
+        "context": "coding",
+        "contextType": "variable",
+        "element": "code",
+        "transform": "copy",
+        "parameter": [ {
+          "valueId": "tc"
+        } ]
+      } ]
+    }, {
+      "name": "set origin",
+      "source": [ {
+        "context": "tr",
+        "element": "m",
+        "variable": "m"
+      } ],
+      "target": [ {
+        "context": "test",
+        "contextType": "variable",
+        "element": "result",
+        "variable": "coding"
+      }, {
+        "context": "coding",
+        "contextType": "variable",
+        "element": "code",
+        "transform": "copy",
+        "parameter": [ {
+          "valueId": "m"
+        } ]
+      } ]
+    }, {
+      "name": "set date",
+      "source": [ {
+        "context": "dat",
+        "element": "sc",
+        "variable": "date"
+      } ],
+      "target": [ {
+        "context": "test",
+        "contextType": "variable",
+        "element": "date",
+        "transform": "copy",
+        "parameter": [ {
+          "valueId": "date"
+        } ]
+      } ]
+    }, {
+      "name": "set result",
+      "source": [ {
+        "context": "tr",
+        "element": "r",
+        "variable": "r"
+      } ],
+      "target": [ {
+        "context": "test",
+        "contextType": "variable",
+        "element": "result",
+        "variable": "coding"
+      }, {
+        "context": "coding",
+        "contextType": "variable",
+        "element": "code",
+        "transform": "copy",
+        "parameter": [ {
+          "valueId": "r"
+        } ]
+      } ]
+    }, {
+      "name": "set centre",
+      "source": [ {
+        "context": "sp",
+        "element": "spn",
+        "variable": "spn"
+      } ],
+      "target": [ {
+        "context": "test",
+        "contextType": "variable",
+        "element": "centre",
+        "variable": "coding"
+      }, {
+        "context": "coding",
+        "contextType": "variable",
+        "element": "code",
+        "transform": "copy",
+        "parameter": [ {
+          "valueId": "spn"
+        } ]
+      } ]
+    }, {
+      "name": "set country",
+      "source": [ {
+        "context": "sp",
+        "element": "ctr",
+        "variable": "ctr"
+      } ],
+      "target": [ {
+        "context": "test",
+        "contextType": "variable",
+        "element": "country",
+        "variable": "coding"
+      }, {
+        "context": "coding",
+        "contextType": "variable",
+        "element": "code",
+        "transform": "copy",
+        "parameter": [ {
+          "valueId": "ctr"
+        } ]
+      } ]
+    } ]
+  } ]
+}
