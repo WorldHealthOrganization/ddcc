@@ -89,18 +89,6 @@ WHO DDCC Brand List (COVID-19) from [ICD 11](https://icd.who.int/browse11)
 * include $ICD11#XM8NQ0 "Comirnaty®"
 * include $ICD11#XM3DT5 "Moderna"
 
-ValueSet:      WHO_DDCC_Allowed_Vaccines_COVID_19
-Id:	           who-ddcc-allowed-vaccines-covid-19
-Title:	       "WHO DDCC Allowed Vaccine List (COVID-19)"
-Description:   """
-WHO DDCC Allowed Vaccine List (COVID-19) for importing from other valuesets.  Any not
-in who-ddcc-vaccines-covid-19 should be included in the ConceptMap so it can be
-translated into an ICD-11 code.
-"""
-* ^status = #draft
-* include codes from valueset WHO_DDCC_Vaccines_COVID_19
-* include $CVX#208
-
 
 
 CodeSystem:     DDCC_ICD11_CodeSystem
