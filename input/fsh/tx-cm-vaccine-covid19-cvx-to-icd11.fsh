@@ -6,7 +6,7 @@ Usage: #definition
 * title = "Vaccine - COVID-19 - mapping Cvx to Icd11"
 * description = "Concept map from CVX to ICD 11 of vaccines. For more information on the concepts, see the source value set, VaccineCovid19CvxValueSet and the target value set, ."
 * status = #draft
-* date = "2023-02-14"
+* date = "2023-02-15"
 // * publisher = "TBD"
 // * url = "https://github.com/ddcc/TBD"
 // * version = "TBD"
@@ -79,13 +79,13 @@ Usage: #definition
 
 * group[=].element[+].code = #225
 * group[=].element[=].display = "COVID-19, D614, recomb, preS dTM, AS03 adjuvant add, PF, 5mcg/0.5mL"
-* group[=].element[=].target.code = #XM3СТ4
+* group[=].element[=].target.code = #XM3CT4
 * group[=].element[=].target.display = "Recombinant SARS-CoV-2 vaccine"
 * group[=].element[=].target.equivalence = #wider
 
 * group[=].element[+].code = #226
 * group[=].element[=].display = "COVID-19, D614, recomb, preS dTM, AS03 adjuvant add, PF, 10mcg/0.5mL"
-* group[=].element[=].target.code = #XM3СТ4
+* group[=].element[=].target.code = #XM3CT4
 * group[=].element[=].target.display = "Recombinant SARS-CoV-2 vaccine"
 * group[=].element[=].target.equivalence = #wider
 

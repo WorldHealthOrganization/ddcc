@@ -6,7 +6,7 @@ Usage: #definition
 * title = "Lab Test - Result - Pathogen - mapping Snomed to Icd11"
 * description = "nan"
 * status = #draft
-* date = "2023-02-14"
+* date = "2023-02-15"
 // * publisher = "TBD"
 // * url = "https://github.com/ddcc/TBD"
 // * version = "TBD"
@@ -133,7 +133,7 @@ Usage: #definition
 
 * group[=].element[+].code = #30151000087105
 * group[=].element[=].display = "COVID-19 COVIFENZ VLP MED"
-* group[=].element[=].target.code = #XM3СТ4
+* group[=].element[=].target.code = #XM3CT4
 * group[=].element[=].target.display = "Recombinant SARS-CoV-2 vaccine"
 * group[=].element[=].target.equivalence = #wider
 
@@ -217,7 +217,7 @@ Usage: #definition
 
 * group[=].element[+].code = #33441000087105
 * group[=].element[=].display = "COVID-19 Medgen-Dynavax-NIAID"
-* group[=].element[=].target.code = #XM3СТ4
+* group[=].element[=].target.code = #XM3CT4
 * group[=].element[=].target.display = "Recombinant SARS-CoV-2 vaccine"
 * group[=].element[=].target.equivalence = #wider
 
@@ -253,7 +253,7 @@ Usage: #definition
 
 * group[=].element[+].code = #34591000087100
 * group[=].element[=].display = "COVID-19 Soberana 02"
-* group[=].element[=].target.code = #XM3PGO
+* group[=].element[=].target.code = #XM3PG0
 * group[=].element[=].target.display = "Soberana-02"
 * group[=].element[=].target.equivalence = #equivalent
 
@@ -601,8 +601,8 @@ Usage: #definition
 
 * group[=].element[+].code = #840533007
 * group[=].element[=].display = "Severe acute respiratory syndrome coronavirus 2 (organism)"
-* group[=].element[=].target.code = #QA08.5
-* group[=].element[=].target.display = "Special screening examination for other viral diseases"
+* group[=].element[=].target.code = #XN109
+* group[=].element[=].target.display = "SARS-CoV-2"
 * group[=].element[=].target.equivalence = #equivalent
 
 * group[=].element[+].code = #10828004

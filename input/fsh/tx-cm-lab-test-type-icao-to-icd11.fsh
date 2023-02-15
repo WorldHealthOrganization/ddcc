@@ -6,7 +6,7 @@ Usage: #definition
 * title = "Lab Test - Type - mapping Icao to Icd11"
 * description = "nan"
 * status = #draft
-* date = "2023-02-14"
+* date = "2023-02-15"
 // * publisher = "TBD"
 // * url = "https://github.com/ddcc/TBD"
 // * version = "TBD"

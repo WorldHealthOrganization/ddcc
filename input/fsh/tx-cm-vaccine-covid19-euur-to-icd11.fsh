@@ -6,7 +6,7 @@ Usage: #definition
 * title = "Vaccine - COVID-19 - mapping Eudcc to Icd11"
 * description = "Concept map from EU-VMP to ICD 11 of vaccines. For more information on the concepts, see the source value set, VaccineCovid19EUUnionRegisterValueSet and the target value set, ."
 * status = #draft
-* date = "2023-02-14"
+* date = "2023-02-15"
 // * publisher = "TBD"
 // * url = "https://github.com/ddcc/TBD"
 // * version = "TBD"
@@ -103,7 +103,7 @@ Usage: #definition
 
 * group[=].element[+].code = #Covid-19-recombinant
 * group[=].element[=].display = "Covid-19 (recombinant)"
-* group[=].element[=].target.code = #XM3СТ4
+* group[=].element[=].target.code = #XM3CT4
 * group[=].element[=].target.display = "Recombinant SARS-CoV-2 vaccine"
 * group[=].element[=].target.equivalence = #equivalent
 
@@ -163,7 +163,7 @@ Usage: #definition
 
 * group[=].element[+].code = #Vidprevtyn
 * group[=].element[=].display = "Vidprevtyn"
-* group[=].element[=].target.code = #XM3СТ4
+* group[=].element[=].target.code = #XM3CT4
 * group[=].element[=].target.display = "Recombinant SARS-CoV-2 vaccine"
 * group[=].element[=].target.equivalence = #wider
 
@@ -181,7 +181,7 @@ Usage: #definition
 
 * group[=].element[+].code = #Sputnik-M
 * group[=].element[=].display = "Sputnik M"
-* group[=].element[=].target.code = #XM3СТ4
+* group[=].element[=].target.code = #XM3CT4
 * group[=].element[=].target.display = "Recombinant SARS-CoV-2 vaccine"
 * group[=].element[=].target.equivalence = #wider
 
@@ -193,25 +193,25 @@ Usage: #definition
 
 * group[=].element[+].code = #NVSI-06-08
 * group[=].element[=].display = "NVSI-06-08"
-* group[=].element[=].target.code = #XM3СТ4
+* group[=].element[=].target.code = #XM3CT4
 * group[=].element[=].target.display = "Recombinant SARS-CoV-2 vaccine"
 * group[=].element[=].target.equivalence = #wider
 
 * group[=].element[+].code = #YS-SC2-010
 * group[=].element[=].display = "YS-SC2-010"
-* group[=].element[=].target.code = #XM3СТ4
+* group[=].element[=].target.code = #XM3CT4
 * group[=].element[=].target.display = "Recombinant SARS-CoV-2 vaccine"
 * group[=].element[=].target.equivalence = #wider
 
 * group[=].element[+].code = #SCTV01C
 * group[=].element[=].display = "SCTV01C"
-* group[=].element[=].target.code = #XM3СТ4
+* group[=].element[=].target.code = #XM3CT4
 * group[=].element[=].target.display = "Recombinant SARS-CoV-2 vaccine"
 * group[=].element[=].target.equivalence = #wider
 
 * group[=].element[+].code = #Covifenz
 * group[=].element[=].display = "Covifenz"
-* group[=].element[=].target.code = #XM3СТ4
+* group[=].element[=].target.code = #XM3CT4
 * group[=].element[=].target.display = "Recombinant SARS-CoV-2 vaccine"
 * group[=].element[=].target.equivalence = #wider
 
@@ -223,13 +223,13 @@ Usage: #definition
 
 * group[=].element[+].code = #Soberana-02
 * group[=].element[=].display = "Soberana 02"
-* group[=].element[=].target.code = #XM3PGO
+* group[=].element[=].target.code = #XM3PG0
 * group[=].element[=].target.display = "Soberana-02"
 * group[=].element[=].target.equivalence = #equivalent
 
 * group[=].element[+].code = #Soberana-Plus
 * group[=].element[=].display = "Soberana Plus"
-* group[=].element[=].target.code = #XMORV9
+* group[=].element[=].target.code = #XM0RV9
 * group[=].element[=].target.display = "Soberana Plus"
 * group[=].element[=].target.equivalence = #equivalent
 
@@ -241,7 +241,7 @@ Usage: #definition
 
 * group[=].element[+].code = #EU/1/21/1580
 * group[=].element[=].display = "VidPrevtyn Beta"
-* group[=].element[=].target.code = #XM3СТ4
+* group[=].element[=].target.code = #XM3CT4
 * group[=].element[=].target.display = "Recombinant SARS-CoV-2 vaccine"
 * group[=].element[=].target.equivalence = #wider
 

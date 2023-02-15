@@ -6,7 +6,7 @@ Usage: #definition
 * title = "Lab Test - Result - mapping Divoc to Icd11"
 * description = "nan"
 * status = #draft
-* date = "2023-02-14"
+* date = "2023-02-15"
 // * publisher = "TBD"
 // * url = "https://github.com/ddcc/TBD"
 // * version = "TBD"
@@ -32,7 +32,7 @@ Usage: #definition
 * group[=].element[+].code = #COVID-19
 * group[=].element[=].display = "Concerns the detection of 
 SARS-CoV-2 infection. "
-* group[=].element[=].target.code = #QA08.5
-* group[=].element[=].target.display = "Special screening examination for other viral diseases"
-* group[=].element[=].target.equivalence = #wider
+* group[=].element[=].target.code = #XN109
+* group[=].element[=].target.display = "SARS-CoV-2"
+* group[=].element[=].target.equivalence = #equivalent
 
