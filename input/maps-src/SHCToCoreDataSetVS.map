@@ -38,7 +38,7 @@ group NameToText (
   source name : HumanName,
   target ddcc
 ) {
-  // annoying because append doesn't work until ddcc.name is set
+  // append doesn't work until ddcc.name is set
   name.given first as given -> ddcc.name = (given.replaceMatches('$', ' ')) "set first name";
   //name.given not_first as other -> ddcc.name as tName, ddcc.name = append( tName, other ) "set other names";
   name.given not_first as other -> ddcc.name as tName, (other.replaceMatches('$', ' ')) as spaced, ddcc.name = append( tName, spaced ) "set other names";
@@ -51,14 +51,13 @@ group ImmunizationToDDCC(
   target vaccination
 ) {
   immunization.vaccineCode as vaccine then {
-    vaccine.coding as coding where memberOf('http://worldhealthorganization.github.io/ddcc/ValueSet/who-ddcc-vaccines-covid-19') then {
-      coding -> vaccination.vaccine = coding "set coding";
-    } "copy vaccine";
-    vaccine.coding as coding where memberOf('http://worldhealthorganization.github.io/ddcc/ValueSet/who-ddcc-vaccines-covid-19').not() then {
-      coding -> vaccination.vaccine = translate(coding, 'http://worldhealthorganization.github.io/ddcc/ConceptMap/who-ddcc-map-cvx-icd11-vaccines', 'Coding') "translate code";
-    } "translate vaccine coding";
-    vaccine.coding as coding -> vaccination.brand = translate(coding, 'http://worldhealthorganization.github.io/ddcc/ConceptMap/who-ddcc-map-cvx-icd11-brands', 'Coding') "translate brand";
-  } "set vaccine";
+    vaccine.coding as coding then {
+      coding -> vaccination.vaccine = coding "set default vaccine";
+      coding -> vaccination.brand = coding "set default brand";
+      coding where coding.memberOf('http://worldhealthorganization.github.io/ddcc/ValueSet/vaccine-covid19-cvx') -> vaccination.vaccine = translate(coding, 'http://worldhealthorganization.github.io/ddcc/ConceptMap/vaccine-covid19-cvx-to-icd11', 'Coding') "translate COVID CVX vaccine";
+      coding where coding.memberOf('http://worldhealthorganization.github.io/ddcc/ValueSet/vaccine-covid19-snomed') -> vaccination.vaccine = translate(coding, 'http://worldhealthorganization.github.io/ddcc/ConceptMap/vaccine-covid19-snomed-to-icd11', 'Coding') "translate COVID SNOMED vaccine";
+    } "coding";
+  } "vaccineCode";
   immunization.manufacturer as tman then {
     tman.identifier as identifier -> vaccination.manufacturer as manufacturer then {
       identifier.system as system -> manufacturer.system = system "set manufacturer system";

@@ -1,11 +1,13 @@
 Feature: structure map tests
-# prerequisites: Java >= JDK11, Karate v1.3.1 (downloaded by run shell script), Matchbox server <v3, run sushi
+# prerequisites: Java >= JDK11, Karate v1.3.1 (downloaded by run shell script)
+# for Matchbox tests: running server <v3, run sushi
+# for validator tests: local validator_cli.jar at least ver 5.6.93, built IG on ../output
 # preload tests are not independent and should not be run in parallel
 
 Background:
 # Matchbox instance URL
 #  * url 'https://test.ahdis.ch/matchbox/fhir'
-  * url 'http://localhost:8080/matchbox/fhir'
+  * url 'http://localhost:8080/matchboxv3/fhir'
   * def transform =
     """
     function(src, output, map) {
@@ -72,6 +74,7 @@ Then assert responseStatus == 200 || responseStatus == 201
     | DDCCCoreDataSet.VS.PoV |    
     | DDCCCoreDataSet.VS.CoC |
 
+# SHC -----------------------------------------------------------------------------
 
 @shc
 @preload
@@ -130,14 +133,48 @@ Then status 200
 And match response.resourceType == 'Bundle'
 And match response.entry == '#[3]'
 And match response.entry[0].resource.resourceType == 'DDCCCoreDataSet'
+And match response.entry[1].resource.resourceType == 'DDCCCoreDataSet'
+And match response.entry[2].resource.resourceType == 'DDCCCoreDataSet'
 And match response.entry[0].resource.name == 'John B. Anyperson'
+And match response.entry[1].resource.name == 'John B. Anyperson'
+And match response.entry[2].resource.name == 'John B. Anyperson'
 And match response.entry[0].resource.birthDate == '1951-01-20'
+And match response.entry[1].resource.birthDate == '1951-01-20'
+And match response.entry[2].resource.birthDate == '1951-01-20'
 And match response.entry[0].resource.identifier contains only {system: 'urn:oid:example', value: '12345'}
-And match response.entry[0].resource.vaccination.vaccine contains only {system: 'http://id.who.int/icd11/mms', code: 'XM0GQ8'}
-And match response.entry[0].resource.vaccination.brand contains only {system: 'http://id.who.int/icd11/mms', code: 'XM8NQ0'}
-And match response.entry[0].resource.vaccination.lot == '0000001'
+And match response.entry[1].resource.identifier contains only {system: 'urn:oid:example', value: '12345'}
+And match response.entry[2].resource.identifier contains only {system: 'urn:oid:example', value: '12345'}
+# And match response.entry[0].resource.certificate.issuer contains {display: ''} ### NOT MAPPED ###
+# And match response.entry[0].resource.certificate.version == '1.3.0' ### NOT MAPPED ###
+# And match response.entry[0].resource.certificate.hcid contains only {value: ''} ### NOT MAPPED ###
+# And match response.entry[0].resource.certificate.ddccid.value == '' ### NOT MAPPED ###
+# And match response.entry[0].resource.certificate.period  ### NOT MAPPED ###
+And match response.entry[0].resource.vaccination.vaccine contains only {system: 'http://id.who.int/icd11/mms', code: 'XM8NQ0'}
+And match response.entry[1].resource.vaccination.vaccine contains only {system: 'http://id.who.int/icd11/mms', code: 'XM3DT5'}
+# The next assertion fails due to false coding.memberOf('http://worldhealthorganization.github.io/ddcc/ValueSet/vaccine-covid19-cvx')
+And match response.entry[2].resource.vaccination.vaccine contains only {system: 'http://id.who.int/icd11/mms', code: 'XM3DT5'}
+And match response.entry[0].resource.vaccination.brand contains only {system: 'http://hl7.org/fhir/sid/cvx', code: '208'}
+And match response.entry[1].resource.vaccination.brand contains only {system: 'http://hl7.org/fhir/sid/cvx', code: '207'}
+And match response.entry[2].resource.vaccination.brand contains only {system: 'http://hl7.org/fhir/sid/cvx', code: '229'}
+And match response.entry[0].resource.vaccination.manufacturer contains only {system: 'http://hl7.org/fhir/sid/mvx', code: 'MOD'}
+# And match response.entry[0].resource.vaccination.maholder ### NOT MAPPED ###
+And match response.entry[0].resource.vaccination.lot == '0000009'
+And match response.entry[1].resource.vaccination.lot == '0000007'
+And match response.entry[2].resource.vaccination.lot == '0000001'
 And match response.entry[0].resource.vaccination.date == '2021-01-01'
+And match response.entry[1].resource.vaccination.date == '2021-01-29'
+And match response.entry[2].resource.vaccination.date == '2022-09-05'
+# And match response.entry[0].resource.vaccination.validFrom == '' ### NOT MAPPED ###
+# And match response.entry[0].resource.vaccination.dose == 1 ### NOT MAPPED ###
+# And match response.entry[0].resource.vaccination.totalDoses == 3 ### NOT MAPPED ###
+# And match response.entry[0].resource.vaccination.country contains only {system: 'urn:iso:std:iso:3166', code: ''} ### NOT MAPPED ###
 And match response.entry[0].resource.vaccination.centre == 'ABC General Hospital'
+And match response.entry[1].resource.vaccination.centre == 'ABC General Hospital'
+And match response.entry[2].resource.vaccination.centre == 'ABC General Hospital'
+# And match response.entry[0].resource.vaccination.signature == '' ### NOT MAPPED ###
+# And match response.entry[0].resource.vaccination.practitioner == '' ### NOT MAPPED ###
+# And match response.entry[0].resource.vaccination.disease contains only {system: 'http://snomed.info/sct', code: '840539006'} ### NOT MAPPED ###
+# And match response.entry[0].resource.vaccination.nextDose == '' ### NOT MAPPED ###
 
 @shc
 @matchbox
@@ -154,10 +191,21 @@ And match response.entry == '#[1]'
 And match response.entry[0].resource.resourceType == 'DDCCCoreDataSet'
 And match response.entry[0].resource.name == 'James T. Anyperson'
 And match response.entry[0].resource.birthDate == '1951-01-20'
+# And match response.entry[0].resource.identifier == '' ### NOT MAPPED ###
+# And match response.entry[0].resource.certificate.issuer contains {display: 'ABC General Hospital'} ### NOT MAPPED ###
+# And match response.entry[0].resource.certificate.version == '1.3.0' ### NOT MAPPED ###
+# And match response.entry[0].resource.certificate.hcid contains only {value: ''} ### NOT MAPPED ###
+# And match response.entry[0].resource.certificate.ddccid.value == '' ### NOT MAPPED ###
+# And match response.entry[0].resource.certificate.period contains only {start: '', end: ''} ### NOT MAPPED ###
 And match response.entry[0].resource.test.pathogen contains {system: 'http://id.who.int/icd11/mms', code: 'XN109'}
-And match response.entry[0].resource.test.type contains only {system: 'http://loinc.org', code: '94558-4'}
+And match response.entry[0].resource.test.type contains only {system: 'http://id.who.int/icd11/mms', code: '2056159157'}
+# And match response.entry[0].resource.test.brand contains only {system: '', code: ''} ### NOT MAPPED ###
+# And match response.entry[0].resource.test.manufacturer contains only {system: '', code: ''} ### NOT MAPPED ###
+# And match response.entry[0].resource.test.origin == '' ### NOT MAPPED ###
 And match response.entry[0].resource.test.date == '2021-02-17'
-And match response.entry[0].resource.test.result contains only {system: 'http://snomed.info/sct', code: '260373001'}
+And match response.entry[0].resource.test.result contains only {system: 'http://id.who.int/icd11/mms', code: 'RA01.0'}
+# And match response.entry[0].resource.test.centre contains only { code: 'ABC General Hospital'} ### NOT MAPPED ###
+# And match response.entry[0].resource.test.country contains only {system: 'urn:iso:std:iso:3166', code: ''} ### NO SOURCE ###
 
 @shc
 @matchbox
@@ -171,7 +219,7 @@ When method post
 Then status 200
 And match response.resourceType == 'Bundle'
 And match response.entry == '#[3]'
-And match response.entry[0].resource.certificate contains { issuer: {reference: 'https://spec.smarthealth.cards/examples/issuer'}, period: {start: '#present' }}
+And match response.entry[0].resource.certificate contains { issuer: {reference: 'https://spec.smarthealth.cards/examples/issuer'}, period: {start: '2022-12-08T16:08:50.000+00:00' }}
 
 @shc
 @matchbox
@@ -185,7 +233,7 @@ When method post
 Then status 200
 And match response.resourceType == 'Bundle'
 And match response.entry == '#[1]'
-And match response.entry[0].resource.certificate contains { issuer: {reference: 'https://spec.smarthealth.cards/examples/issuer'}, period: {start: '#present' }}
+And match response.entry[0].resource.certificate contains { issuer: {reference: 'https://spec.smarthealth.cards/examples/issuer'}, period: {start: '2022-09-11T10:49:40.000+00:00' }}
 
 @shc
 @validator
@@ -194,14 +242,48 @@ Given def response = transform('fixtures/shc/example-00-a-fhirBundle.json','targ
 Then match response.resourceType == 'Bundle'
 And match response.entry == '#[3]'
 And match response.entry[0].resource.resourceType == 'DDCCCoreDataSet'
+And match response.entry[1].resource.resourceType == 'DDCCCoreDataSet'
+And match response.entry[2].resource.resourceType == 'DDCCCoreDataSet'
 And match response.entry[0].resource.name == 'John B. Anyperson'
+And match response.entry[1].resource.name == 'John B. Anyperson'
+And match response.entry[2].resource.name == 'John B. Anyperson'
 And match response.entry[0].resource.birthDate == '1951-01-20'
+And match response.entry[1].resource.birthDate == '1951-01-20'
+And match response.entry[2].resource.birthDate == '1951-01-20'
 And match response.entry[0].resource.identifier contains only {system: 'urn:oid:example', value: '12345'}
-And match response.entry[0].resource.vaccination.vaccine contains only {system: 'http://id.who.int/icd11/mms', code: 'XM0GQ8'}
-And match response.entry[0].resource.vaccination.brand contains only {system: 'http://id.who.int/icd11/mms', code: 'XM8NQ0'}
-And match response.entry[0].resource.vaccination.lot == '0000001'
+And match response.entry[1].resource.identifier contains only {system: 'urn:oid:example', value: '12345'}
+And match response.entry[2].resource.identifier contains only {system: 'urn:oid:example', value: '12345'}
+# And match response.entry[0].resource.certificate.issuer contains {display: ''} ### NOT MAPPED ###
+# And match response.entry[0].resource.certificate.version == '1.3.0' ### NOT MAPPED ###
+# And match response.entry[0].resource.certificate.hcid contains only {value: ''} ### NOT MAPPED ###
+# And match response.entry[0].resource.certificate.ddccid.value == '' ### NOT MAPPED ###
+# And match response.entry[0].resource.certificate.period  ### NOT MAPPED ###
+And match response.entry[0].resource.vaccination.vaccine contains only {system: 'http://id.who.int/icd11/mms', code: 'XM8NQ0'}
+And match response.entry[1].resource.vaccination.vaccine contains only {system: 'http://id.who.int/icd11/mms', code: 'XM3DT5'}
+# The next assertion fails due to false coding.memberOf('http://worldhealthorganization.github.io/ddcc/ValueSet/vaccine-covid19-cvx')
+And match response.entry[2].resource.vaccination.vaccine contains only {system: 'http://id.who.int/icd11/mms', code: 'XM3DT5'}
+And match response.entry[0].resource.vaccination.brand contains only {system: 'http://hl7.org/fhir/sid/cvx', code: '208'}
+And match response.entry[1].resource.vaccination.brand contains only {system: 'http://hl7.org/fhir/sid/cvx', code: '207'}
+And match response.entry[2].resource.vaccination.brand contains only {system: 'http://hl7.org/fhir/sid/cvx', code: '229'}
+And match response.entry[0].resource.vaccination.manufacturer contains only {system: 'http://hl7.org/fhir/sid/mvx', code: 'MOD'}
+# And match response.entry[0].resource.vaccination.maholder ### NOT MAPPED ###
+And match response.entry[0].resource.vaccination.lot == '0000009'
+And match response.entry[1].resource.vaccination.lot == '0000007'
+And match response.entry[2].resource.vaccination.lot == '0000001'
 And match response.entry[0].resource.vaccination.date == '2021-01-01'
+And match response.entry[1].resource.vaccination.date == '2021-01-29'
+And match response.entry[2].resource.vaccination.date == '2022-09-05'
+# And match response.entry[0].resource.vaccination.validFrom == '' ### NOT MAPPED ###
+# And match response.entry[0].resource.vaccination.dose == 1 ### NOT MAPPED ###
+# And match response.entry[0].resource.vaccination.totalDoses == 3 ### NOT MAPPED ###
+# And match response.entry[0].resource.vaccination.country contains only {system: 'urn:iso:std:iso:3166', code: ''} ### NOT MAPPED ###
 And match response.entry[0].resource.vaccination.centre == 'ABC General Hospital'
+And match response.entry[1].resource.vaccination.centre == 'ABC General Hospital'
+And match response.entry[2].resource.vaccination.centre == 'ABC General Hospital'
+# And match response.entry[0].resource.vaccination.signature == '' ### NOT MAPPED ###
+# And match response.entry[0].resource.vaccination.practitioner == '' ### NOT MAPPED ###
+# And match response.entry[0].resource.vaccination.disease contains only {system: 'http://snomed.info/sct', code: '840539006'} ### NOT MAPPED ###
+# And match response.entry[0].resource.vaccination.nextDose == '' ### NOT MAPPED ###
 
 @shc
 @validator
@@ -212,10 +294,21 @@ And match response.entry == '#[1]'
 And match response.entry[0].resource.resourceType == 'DDCCCoreDataSet'
 And match response.entry[0].resource.name == 'James T. Anyperson'
 And match response.entry[0].resource.birthDate == '1951-01-20'
+# And match response.entry[0].resource.identifier == '' ### NOT MAPPED ###
+# And match response.entry[0].resource.certificate.issuer contains {display: 'ABC General Hospital'} ### NOT MAPPED ###
+# And match response.entry[0].resource.certificate.version == '1.3.0' ### NOT MAPPED ###
+# And match response.entry[0].resource.certificate.hcid contains only {value: ''} ### NOT MAPPED ###
+# And match response.entry[0].resource.certificate.ddccid.value == '' ### NOT MAPPED ###
+# And match response.entry[0].resource.certificate.period contains only {start: '', end: ''} ### NOT MAPPED ###
 And match response.entry[0].resource.test.pathogen contains {system: 'http://id.who.int/icd11/mms', code: 'XN109'}
-And match response.entry[0].resource.test.type contains only {system: 'http://loinc.org', code: '94558-4'}
+And match response.entry[0].resource.test.type contains only {system: 'http://id.who.int/icd11/mms', code: '2056159157'}
+# And match response.entry[0].resource.test.brand contains only {system: '', code: ''} ### NOT MAPPED ###
+# And match response.entry[0].resource.test.manufacturer contains only {system: '', code: ''} ### NOT MAPPED ###
+# And match response.entry[0].resource.test.origin == '' ### NOT MAPPED ###
 And match response.entry[0].resource.test.date == '2021-02-17'
-And match response.entry[0].resource.test.result contains only {system: 'http://snomed.info/sct', code: '260373001'}
+And match response.entry[0].resource.test.result contains only {system: 'http://id.who.int/icd11/mms', code: 'RA01.0'}
+# And match response.entry[0].resource.test.centre contains only { code: 'ABC General Hospital'} ### NOT MAPPED ###
+# And match response.entry[0].resource.test.country contains only {system: 'urn:iso:std:iso:3166', code: ''} ### NO SOURCE ###
 
 @shc
 @validator
@@ -223,7 +316,7 @@ Scenario: Transforming Example CertSHC to Bundle of Core Data Set VS using valid
 Given def response = transform('fixtures/shc/example-00-b-jws-payload-expanded.json','target/example-00-b-jws-payload-expanded.json','http://worldhealthorganization.github.io/ddcc/StructureMap/CertSHCtoCoreDataSet')
 Then match response.resourceType == 'Bundle'
 And match response.entry == '#[3]'
-And match response.entry[0].resource.certificate contains { issuer: {reference: 'https://spec.smarthealth.cards/examples/issuer'}, period: {start: '#present' }}
+And match response.entry[0].resource.certificate contains { issuer: {reference: 'https://spec.smarthealth.cards/examples/issuer'}, period: {start: '2022-12-08T16:08:50.000+00:00' }}
 
 @shc
 @validator
@@ -231,7 +324,225 @@ Scenario: Transforming Example CertSHC to Bundle of Core Data Set TR using valid
 Given def response = transform('fixtures/shc/bundle-lab-test-results-covid-jws-payload-expanded.json','target/bundle-lab-test-results-covid-jws-payload-expanded.json','http://worldhealthorganization.github.io/ddcc/StructureMap/CertSHCtoCoreDataSet')
 Then match response.resourceType == 'Bundle'
 And match response.entry == '#[1]'
-And match response.entry[0].resource.certificate contains { issuer: {reference: 'https://spec.smarthealth.cards/examples/issuer'}, period: {start: '#present' }}
+And match response.entry[0].resource.certificate contains { issuer: {reference: 'https://spec.smarthealth.cards/examples/issuer'}, period: {start: '2022-09-11T10:49:40.000+00:00' }}
+
+# EU DCC -----------------------------------------------------------------------------
+
+@eudcc
+@preload
+@matchbox
+Scenario: Updating EU DCC to Core Data Set Structure Map
+Given path 'StructureMap', 'CertDCCtoCoreDataSet'
+And request read('../input/maps-src/CertDCCtoCoreDataSet.map')
+And header Accept = 'application/fhir+json'
+And header Content-Type = 'text/fhir-mapping'
+When method put
+Then assert responseStatus == 200 || responseStatus == 201
+
+@eudcc
+@matchbox
+Scenario: Transforming Example EU DCC to Bundle of Core Data Set VS
+* param source = 'http://worldhealthorganization.github.io/ddcc/StructureMap/CertDCCtoCoreDataSet'
+Given path 'StructureMap', '$transform'
+And request read('fixtures/eudcc/dcc-valid-vs.json')
+And header Accept = 'application/fhir+json'
+And header Content-Type = 'application/fhir+json'
+When method post
+Then status 200
+And match response.resourceType == 'Bundle'
+And match response.entry == '#[1]'
+And match response.entry[0].resource.resourceType == 'DDCCCoreDataSet'
+And match response.entry[0].resource.name == 'John B. Anyperson'
+And match response.entry[0].resource.birthDate == '1951-01-20'
+# And match response.entry[0].resource.identifier == 'unk' ### NO SOURCE ###
+And match response.entry[0].resource.certificate.issuer contains {display: 'Ministerio de Salud Pública'}
+And match response.entry[0].resource.certificate.version == '1.3.0'
+And match response.entry[0].resource.certificate.hcid contains only {value: 'URN:UVCI:01:UY:10002661:20221209084253125'}
+# And match response.entry[0].resource.certificate.ddccid.value == 'unk' ### NO SOURCE ###
+And match response.entry[0].resource.certificate.period contains only {start: '2022-12-09T11:44:58.000+00:00', end: '2023-03-09T11:44:58.000+00:00'}
+And match response.entry[0].resource.vaccination.vaccine contains only {system: 'https://ec.europa.eu/health/documents/community-register/html/', code: '1119349007'}
+And match response.entry[0].resource.vaccination.brand contains only {system: 'http://id.who.int/icd11/mms', code: 'XM8NQ0'}
+And match response.entry[0].resource.vaccination.maholder contains only {system: 'https://id.uvci.eu/valuesets/vaccine-mah-manf.json', code: 'ORG-100030215'}
+# And match response.entry[0].resource.vaccination.lot == '0000001' ### NO SOURCE ###
+And match response.entry[0].resource.vaccination.date == '2022-05-13'
+# And match response.entry[0].resource.vaccination.validFrom == 'unk' ### NO SOURCE ###
+And match response.entry[0].resource.vaccination.dose == 4
+And match response.entry[0].resource.vaccination.totalDoses == 4
+And match response.entry[0].resource.vaccination.country contains only {system: 'urn:iso:std:iso:3166', code: 'UY'}
+# And match response.entry[0].resource.vaccination.centre == 'unk' ### NO SOURCE FOR VACCINE, ONLY FOR TEST RESULTS ###
+# And match response.entry[0].resource.vaccination.signature == 'unk' ### NO SOURCE ###
+# And match response.entry[0].resource.vaccination.practitioner == 'unk' ### NO SOURCE ###
+And match response.entry[0].resource.vaccination.disease contains only {system: 'http://snomed.info/sct', code: '840539006'}
+# And match response.entry[0].resource.vaccination.nextDose == 'unk' ### NO SOURCE ###
+
+@eudcc
+@matchbox
+Scenario: Transforming Example EU DCC to Bundle of Core Data Set TR
+* param source = 'http://worldhealthorganization.github.io/ddcc/StructureMap/CertDCCtoCoreDataSet'
+Given path 'StructureMap', '$transform'
+And request read('fixtures/eudcc/dcc-valid-tr.json')
+And header Accept = 'application/fhir+json'
+And header Content-Type = 'application/fhir+json'
+When method post
+Then status 200
+And match response.resourceType == 'Bundle'
+And match response.entry == '#[1]'
+And match response.entry[0].resource.resourceType == 'DDCCCoreDataSet'
+And match response.entry[0].resource.name == 'John B. Anyperson'
+And match response.entry[0].resource.birthDate == '1951-01-20'
+# And match response.entry[0].resource.identifier == 'unk' ### NO SOURCE ###
+And match response.entry[0].resource.certificate.issuer contains {display: 'Ministerio de Salud Pública'}
+And match response.entry[0].resource.certificate.version == '1.3.0'
+And match response.entry[0].resource.certificate.hcid contains only {value: 'URN:UVCI:01:UY:10002661:20221209082240307'}
+# And match response.entry[0].resource.certificate.ddccid.value == 'unk' ### NO SOURCE ###
+And match response.entry[0].resource.certificate.period contains only {start: '2022-12-09T11:24:45.000+00:00', end: '2023-03-09T11:24:45.000+00:00'}
+And match response.entry[0].resource.test.pathogen contains {system: 'http://id.who.int/icd11/mms', code: 'XN109'}
+And match response.entry[0].resource.test.type contains only {system: 'http://id.who.int/icd11/mms', code: '2056159157'}
+And match response.entry[0].resource.test.brand contains only {system: 'https://id.uvci.eu/valuesets/test-manf.json', code: 'Detección de ARN COVID-19 RT PCR en secreciones respiratorias'}
+And match response.entry[0].resource.test.manufacturer contains only {system: 'https://covid-19-diagnostics.jrc.ec.europa.eu/devices', code: 'manufacturer'}
+# And match response.entry[0].resource.test.origin == 'unk' ### NO SOURCE ###
+And match response.entry[0].resource.test.date == '2022-01-21T00:00:00Z'
+And match response.entry[0].resource.test.result contains only {system: 'http://id.who.int/icd11/mms', code: 'RA01.0'}
+And match response.entry[0].resource.test.centre contains only { code: 'Laboratorio ATGEN'}
+And match response.entry[0].resource.test.country contains only {system: 'urn:iso:std:iso:3166', code: 'UY'}
+
+@eudcc
+@validator
+Scenario: Transforming Example EU DCC to Bundle of Core Data Set VS using validator
+Given def response = transform('fixtures/eudcc/dcc-valid-vs.json','target/dcc-valid-vs.json','http://worldhealthorganization.github.io/ddcc/StructureMap/CertDCCtoCoreDataSet')
+Then match response.resourceType == 'Bundle'
+And match response.entry == '#[1]'
+And match response.entry[0].resource.resourceType == 'DDCCCoreDataSet'
+And match response.entry[0].resource.name == 'John B. Anyperson'
+And match response.entry[0].resource.birthDate == '1951-01-20'
+# And match response.entry[0].resource.identifier == 'unk' ### NO SOURCE ###
+And match response.entry[0].resource.certificate.issuer contains {display: 'Ministerio de Salud Pública'}
+And match response.entry[0].resource.certificate.version == '1.3.0'
+And match response.entry[0].resource.certificate.hcid contains only {value: 'URN:UVCI:01:UY:10002661:20221209084253125'}
+# And match response.entry[0].resource.certificate.ddccid.value == 'unk' ### NO SOURCE ###
+And match response.entry[0].resource.certificate.period contains only {start: '2022-12-09T11:44:58.000+00:00', end: '2023-03-09T11:44:58.000+00:00'}
+And match response.entry[0].resource.vaccination.vaccine contains only {system: 'https://ec.europa.eu/health/documents/community-register/html/', code: '1119349007'}
+And match response.entry[0].resource.vaccination.brand contains only {system: 'http://id.who.int/icd11/mms', code: 'XM8NQ0'}
+And match response.entry[0].resource.vaccination.maholder contains only {system: 'https://id.uvci.eu/valuesets/vaccine-mah-manf.json', code: 'ORG-100030215'}
+# And match response.entry[0].resource.vaccination.lot == '0000001' ### NO SOURCE ###
+And match response.entry[0].resource.vaccination.date == '2022-05-13'
+# And match response.entry[0].resource.vaccination.validFrom == 'unk' ### NO SOURCE ###
+And match response.entry[0].resource.vaccination.dose == 4
+And match response.entry[0].resource.vaccination.totalDoses == 4
+And match response.entry[0].resource.vaccination.country contains only {system: 'urn:iso:std:iso:3166', code: 'UY'}
+# And match response.entry[0].resource.vaccination.centre == 'unk' ### NO SOURCE FOR VACCINE, ONLY FOR TEST RESULTS ###
+# And match response.entry[0].resource.vaccination.signature == 'unk' ### NO SOURCE ###
+# And match response.entry[0].resource.vaccination.practitioner == 'unk' ### NO SOURCE ###
+And match response.entry[0].resource.vaccination.disease contains only {system: 'http://snomed.info/sct', code: '840539006'}
+# And match response.entry[0].resource.vaccination.nextDose == 'unk' ### NO SOURCE ###
+
+@eudcc
+@validator
+Scenario: Transforming Example EU DCC to Bundle of Core Data Set TR using validator
+Given def response = transform('fixtures/eudcc/dcc-valid-tr.json','target/dcc-valid-tr.json','http://worldhealthorganization.github.io/ddcc/StructureMap/CertDCCtoCoreDataSet')
+Then match response.resourceType == 'Bundle'
+And match response.entry == '#[1]'
+And match response.entry[0].resource.resourceType == 'DDCCCoreDataSet'
+And match response.entry[0].resource.name == 'John B. Anyperson'
+And match response.entry[0].resource.birthDate == '1951-01-20'
+# And match response.entry[0].resource.identifier == 'unk' ### NO SOURCE ###
+And match response.entry[0].resource.certificate.issuer contains {display: 'Ministerio de Salud Pública'}
+And match response.entry[0].resource.certificate.version == '1.3.0'
+And match response.entry[0].resource.certificate.hcid contains only {value: 'URN:UVCI:01:UY:10002661:20221209082240307'}
+# And match response.entry[0].resource.certificate.ddccid.value == 'unk' ### NO SOURCE ###
+And match response.entry[0].resource.certificate.period contains only {start: '2022-12-09T11:24:45.000+00:00', end: '2023-03-09T11:24:45.000+00:00'}
+And match response.entry[0].resource.test.pathogen contains {system: 'http://id.who.int/icd11/mms', code: 'XN109'}
+And match response.entry[0].resource.test.type contains only {system: 'http://id.who.int/icd11/mms', code: '2056159157'}
+And match response.entry[0].resource.test.brand contains only {system: 'https://id.uvci.eu/valuesets/test-manf.json', code: 'Detección de ARN COVID-19 RT PCR en secreciones respiratorias'}
+And match response.entry[0].resource.test.manufacturer contains only {system: 'https://covid-19-diagnostics.jrc.ec.europa.eu/devices', code: 'manufacturer'}
+# And match response.entry[0].resource.test.origin == 'unk' ### NO SOURCE ###
+And match response.entry[0].resource.test.date == '2022-01-21T00:00:00Z'
+And match response.entry[0].resource.test.result contains only {system: 'http://id.who.int/icd11/mms', code: 'RA01.0'}
+And match response.entry[0].resource.test.centre contains only { code: 'Laboratorio ATGEN'}
+And match response.entry[0].resource.test.country contains only {system: 'urn:iso:std:iso:3166', code: 'UY'}
+
+# ICAO -------------------------------------------------------------------------------
+
+@icao
+@preload
+@matchbox
+Scenario: Updating ICAO to Core Data Set Structure Map
+Given path 'StructureMap', 'CertICAOtoCoreDataSet'
+And request read('../input/maps-src/CertICAOtoCoreDataSet.map')
+And header Accept = 'application/fhir+json'
+And header Content-Type = 'text/fhir-mapping'
+When method put
+Then assert responseStatus == 200 || responseStatus == 201
+
+@icao
+@matchbox
+Scenario: Transforming Example CertICAO to Bundle of Core Data Set VS
+* param source = 'http://worldhealthorganization.github.io/ddcc/StructureMap/CertICAOtoCoreDataSet'
+Given path 'StructureMap', '$transform'
+And request read('fixtures/icao/vaccination_example.json')
+And header Accept = 'application/fhir+json'
+And header Content-Type = 'application/json'
+When method post
+Then status 200
+And match response.resourceType == 'Bundle'
+And match response.entry == '#[2]'
+And match response.entry[0].resource.resourceType == 'DDCCCoreDataSet'
+And match response.entry[0].resource.name == 'John B. Anyperson'
+And match response.entry[0].resource.birthDate == '1951-01-20'
+And match response.entry[0].resource.vaccination.vaccine contains only {system: 'http://id.who.int/icd11/mms', code: 'XM68M6'}
+And match response.entry[0].resource.vaccination.brand contains only {system: 'http://id.who.int/icd11/mms', code: 'XM8NQ0'}
+And match response.entry[0].resource.vaccination.lot == '0000001'
+And match response.entry[0].resource.vaccination.date == '2021-01-01'
+And match response.entry[0].resource.vaccination.centre == 'ABC General Hospital'
+
+@icao
+@validator
+Scenario: Transforming Example CertICAO to Bundle of Core Data Set VS using validator
+Given def response = transform('fixtures/icao/vaccination_example.json','target/vaccination_example.json','http://worldhealthorganization.github.io/ddcc/StructureMap/CertICAOtoCoreDataSet')
+Then match response.resourceType == 'Bundle'
+And match response.entry == '#[2]'
+And match response.entry[0].resource.resourceType == 'DDCCCoreDataSet'
+And match response.entry[0].resource.name == 'John B. Anyperson'
+And match response.entry[0].resource.birthDate == '1951-01-20'
+And match response.entry[0].resource.vaccination.vaccine contains only {system: 'http://id.who.int/icd11/mms', code: 'XM68M6'}
+And match response.entry[0].resource.vaccination.brand contains only {system: 'http://id.who.int/icd11/mms', code: 'XM8NQ0'}
+And match response.entry[0].resource.vaccination.lot == '0000001'
+And match response.entry[0].resource.vaccination.date == '2021-01-01'
+And match response.entry[0].resource.vaccination.centre == 'ABC General Hospital'
+
+@icao
+@matchbox
+Scenario: Transforming Example CertICAO to Bundle of Core Data Set TR
+* param source = 'http://worldhealthorganization.github.io/ddcc/StructureMap/CertICAOtoCoreDataSet'
+Given path 'StructureMap', '$transform'
+And request read('fixtures/icao/testing_example.json')
+And header Accept = 'application/fhir+json'
+And header Content-Type = 'application/json'
+When method post
+Then status 200
+And match response.resourceType == 'Bundle'
+And match response.entry == '#[1]'
+And match response.entry[0].resource.resourceType == 'DDCCCoreDataSet'
+And match response.entry[0].resource.name == 'James T. Anyperson'
+And match response.entry[0].resource.birthDate == '1951-01-20'
+And match response.entry[0].resource.test.pathogen contains {system: 'http://id.who.int/icd11/mms', code: 'XN109'}
+And match response.entry[0].resource.test.type contains only {system: 'http://loinc.org', code: '94558-4'}
+And match response.entry[0].resource.test.date == '2021-02-17'
+And match response.entry[0].resource.test.result contains only {system: 'http://snomed.info/sct', code: '260373001'}
+
+@icao
+@validator
+Scenario: Transforming Example CertICAO to Bundle of Core Data Set TR using validator
+Given def response = transform('fixtures/icao/testing_example.json','target/testing_example.json','http://worldhealthorganization.github.io/ddcc/StructureMap/CertICAOtoCoreDataSet')
+Then match response.resourceType == 'Bundle'
+And match response.entry == '#[1]'
+And match response.entry[0].resource.resourceType == 'DDCCCoreDataSet'
+And match response.entry[0].resource.name == 'James T. Anyperson'
+And match response.entry[0].resource.birthDate == '1951-01-20'
+And match response.entry[0].resource.test.pathogen contains {system: 'http://id.who.int/icd11/mms', code: 'XN109'}
+And match response.entry[0].resource.test.type contains only {system: 'http://loinc.org', code: '94558-4'}
+And match response.entry[0].resource.test.date == '2021-02-17'
+And match response.entry[0].resource.test.result contains only {system: 'http://snomed.info/sct', code: '260373001'}
 
 # DIVOC ------------------------------------------------------------------------------
 
