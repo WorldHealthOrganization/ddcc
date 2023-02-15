@@ -2,10 +2,11 @@ Alias: $snomed = http://snomed.info/sct
 
 ValueSet: VaccineCovid19SnomedValueSet
 Id: vaccine-covid19-snomed
-Title: "Vaccine - COVID-19 - Snomed"
-Description: "tbd"
+Title: "Vaccine - COVID-19 - SNOMED CT"
+Description: "This is a one-time snapshot of the allowed SNOMED values for vaccines, retrieved in February 2023. Contents may need to be updated and readers should consult the documentation, found here http://hl7.org/fhir/uv/shc-vaccination/2021Sep/ValueSet-vaccine-snomed.html"
 
-* ^copyright = "TODO: provide copyright information"
+* ^experimental = true
+// * ^copyright = "TODO: provide copyright information"
 
 * $snomed#1031000172108 "COVID-19 mRNA vaccine (BNT162b2) of Pfizer-BioNTech"
 * $snomed#10871000172106 "COVID-19 mRNA vaccine (mRNA-1273) of Moderna"

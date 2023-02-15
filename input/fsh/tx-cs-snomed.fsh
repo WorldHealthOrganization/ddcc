@@ -1,7 +1,7 @@
-CodeSystem: WHODDCCsnomed
-Title: "snomed codes used in this IG"
-Description: "All snomed codes from `http://snomed.info/sct` used in this IG. Provided so the FHIR server can perform expansions."
-* ^experimental = false
+CodeSystem: WHO_DDCC_snomed
+Title: "SNOMED codes used in this IG"
+Description: "All SNOMED codes from `http://snomed.info/sct` used in this IG. Provided so the FHIR server can perform expansions."
+* ^experimental = true
 * ^caseSensitive = true
 * ^url = http://snomed.info/sct
 

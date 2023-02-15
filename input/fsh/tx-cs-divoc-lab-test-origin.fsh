@@ -1,7 +1,7 @@
-CodeSystem: WHODDCCdivoc-lab-test-origin
-Title: "divoc-lab-test-origin codes used in this IG"
-Description: "All divoc-lab-test-origin codes from `http://worldhealthorganization.github.io/ddcc/CodeSystem/lab-test-sample-origin-divoc` used in this IG. Provided so the FHIR server can perform expansions."
-* ^experimental = false
+CodeSystem: WHO_DDCC_divoc_lab_test_origin
+Title: "DIVOC lab test origin codes used in this IG"
+Description: "All DIVOC lab test origin codes from its internally defined code system used in this IG. Provided so the FHIR server can perform expansions."
+* ^experimental = true
 * ^caseSensitive = true
 * ^url = http://worldhealthorganization.github.io/ddcc/CodeSystem/lab-test-sample-origin-divoc
 

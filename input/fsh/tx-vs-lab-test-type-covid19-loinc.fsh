@@ -3,9 +3,10 @@ Alias: $loinc = http://loinc.org
 ValueSet: LabTestTypeCovid19LoincValueSet
 Id: lab-test-type-covid19-loinc
 Title: "Lab Test - Type - COVID-19 - LOINC"
-Description: "nan"
+Description: "This is a one-time snapshot of the allowed values for COVID-19 specific lab tests in EUDCC, retrieved in February 2023 from https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=uriserv%3AOJ.L_.2021.230.01.0032.01.ENG. Contents may need to be updated and readers should consult the credential's documentation."
 
-* ^copyright = "nan"
+* ^experimental = true
+// * ^copyright = "nan"
 
 * $loinc#100861-4 "Cells.CD4+CD154+/CD4 cells in Blood --after stimulation with SARS-CoV-2 Nucleocapsid peptide"
 * $loinc#100858-0 "Cells.CD4+CD154+/CD4 cells in Blood --after stimulation with SARS-CoV-2 Spike peptide"
