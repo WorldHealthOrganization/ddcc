@@ -66,29 +66,22 @@ Some element descriptions in this logical model provide details that are not in 
       * addressCountry 0..1 string "Country (e.g. may be ISO 3166 2 or 3 letter code)"
       * addressCountry from http://hl7.org/fhir/ValueSet/iso3166-1-3 (preferred)
       * postalCode 0..1 string "Postal code for area"
-  * icd11Code 0..1 string "ICD-11 code of this vaccine type (no binding information in spec)" "The specification for DIVOC does not provide any information beyond that this is an ICD-11 code, so correspondingly there is no binding to a specific ValueSet in this logical model."
+  * icd11Code 0..1 string "ICD-11 code of this vaccine type (no binding information in spec)" "The specification for DIVOC does not provide any information beyond that this is an ICD-11 code, so correspondingly there is no required binding to a specific ValueSet in this logical model."
+  * icd11Code from WHO_DDCC_Vaccines_COVID_19 (preferred)
   * prophylaxis 0..1 string "Descriptive details of the vaccine type"
 
   // Lab test specific elements
   * testName 0..1 string "Lab test results: Test name"
   * testType 0..1 string "Lab test results: Type of test, either `RT-PCR` or `Rapid Antigen Test (RAT)`"
-  * sampleOrigin 0..1 string "Lab test results: Type of sample that was taken (e.g., `nasal swab`; see element details)" "One of the following, not case sensitive:
-
-- `Nasopharyngeal Swab`
-- `Throat swab`
-- `Bronchoalveolar lavage`
-- `Endotracheal Aspirate`
-- `Nasal Swab`"
-  * disease 0..1 string "Lab test results: Disease or agent targeted (see element details)" "Should be `SARS-COV-19` per the specification but is `COVID-19` in the provided example."
+  * testType from LabTestTypeDivocValueSet (required)
+  * sampleOrigin 0..1 string "Lab test results: Type of sample that was taken (e.g., `nasal swab`"
+  * sampleOrigin from LabTestSampleOriginDivocValueSet (required)
+  * disease 0..1 string "Lab test results: Disease or agent targeted"
+  * disease from LabTestPathogenDivocValueSet (required)
   * sampleCollectionTimestamp 0..1 dateTime "Lab test results: Sample collection date and time; complete date, with time and time zone, following ISO 8601"
   * resultTimestamp 0..1 dateTime "Lab test results: Results date and time; complete date, with time and time zone, following ISO 8601"
-  * result 0..1 string "Lab test results: result of test (see element details)" "One of the following (case insensitive):
-
-- `Negative`
-- `Positive`
-- `inconclusive`
-- `Void`"
-
+  * result 0..1 string "Lab test results: result of test"
+  * result from LabTestQualitativeResultDivocValueSet
 * proof 1..* BackboneElement "Proof" "One or more cryptographic proofs that can be used to detect tampering and verify the authorship of a credential or presentation"
   * type 0..1 string "Type of proof"
   * created 0..1  dateTime "Signature date and time"

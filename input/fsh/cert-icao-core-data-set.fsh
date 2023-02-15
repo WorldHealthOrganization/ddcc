@@ -43,12 +43,12 @@ Description:    "Data elements for the ICAO Visible Digital Seal Core Data Set. 
       * ri 1..1 dateTime  "ReportIssuance (RFC3339)"
 
     * tr 0..1 BackboneElement "TestResult (Required for `icao.test` only, not used of `icao.vacc`)"
-      * tc 1..1 string  "TestConducted (see element details for allowed values)"
-      * tc ^comment = "Allowed values:\n\n- `molecular(PCR)`\n- `molecular(other)\n-antigen`\n- `antibody`"
-      * r 1..1 string  "Results (see element details for allowed values)"
-      * r ^comment = "Allowed values:\n\n- `normal`\n- `abnormal`\n- `positive`\n- `negative`"
-      * m 0..1 string  "Sampling method (see element details for allowed values)"
-      * m ^comment = "Allowed values:\n\n- `nasopharyngeal`\n- `oropharyngeal`\n- `saliva`\n- `blood`\n- `other`"
+      * tc 1..1 string  "TestConducted"
+      * tc from LabTestTypeIcaoValueSet (required)
+      * r 1..1 string  "Results"
+      * r from LabTestResultIcaoValueSet (required)
+      * m 0..1 string  "Sampling method"
+      * m from LabTestSampleOriginIcaoValueSet (required)
     * opt 0..1 string "Optional data issued at the discretion of the issuing authority"
 
 

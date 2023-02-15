@@ -123,6 +123,7 @@
 // - Union Register of medicinal products for vaccines with EU-wide authorisation (authorisation numbers) - for example, `EU/1/20/1528` (Comirnaty)
 // - A global vaccine register such as one that could be established by the World Health Organisation
 // - Name of the vaccine medicinal product in other cases. If the name includes whitespaces, these should be replaced by a hyphen (-). For example, `Sputnik-V` (standing for Sputnik V)."
+//       * mp from VaccineCovid19EUUnionRegisterValueSet (preferred)
 //       * ma 1..1 string "Vaccine marketing authorisation holder or manufacturer (e.g., 'ORG-100030215' (Biontech Manufacturing GmbH))" "Preferred Code System:
 
 // - Organisation code from EMA (SPOR system for ISO IDMP)
@@ -146,16 +147,19 @@
 //       * tg 1..1 string "Disease or agent targeted (SNOMED CT GPS code for COVID-19 or variant; see element details)" "The selected codes shall refer to COVID-19 or, if more detailed information on the genetic variant of SARS-CoV-2 is needed, to these variants if such detailed information is needed due to epidemiological reasons.
 
 // Example of a code that should be used is the SNOMED CT code `840539006` (COVID-19)."
+//       * tg from LabTestPathogenCovid19SnomedValueSet (preferred)
 //       * tt 1..1 string "Type of test (LOINC code; see element details)" "The codes in this value set shall refer to the method of the test and shall be selected at least to separate the NAAT tests from RAT tests as expressed in Regulation (EU) 2021/953.
 
 // An example of a code that should be used from the preferred code system is LP217198-3 (Rapid immunoassay)."
+//       * tt from LabTestTypeLoincValueSet (preferred)
 //       * nm 0..1 string "Name of the nucleic acid amplification test (NAAT) used"
 //       * nm ^comment = "From the spec: \"The name should include the name of the test manufacturer and the commercial name of the test, separated by a comma.\" Omit element for RAT test. MUST not be empty."
 //       * ma 0..1 string "Rapid antigen test (RAT) device identifier from the JRC database"
 //       * sc 1..1 dateTime "Date and time when test sample was collected in ISO 8601 format"
 //       * tr 1..1 string "Result of the test (preferred: SNOMED CT GPS code)" "The codes selected shall allow distinguishing between positive and negative test results (detected or not detected). Additional values (like undetermined) may be added if the use cases do require this.
 
-// Examples of codes that should be used from the preferred code system are `260415000` (Not detected) and `260373001` (Detected)."
+// Examples of codes that should be used from the preferred code system are `260415000` (Not detected) and `260373001` (Detected)."
+//       * tr from LabTestQualitativeResultSnomedValueSet (preferred)
 //       * tc 0..1 string "Testing centre or facility"
 //       * tc ^comment = "Required for NAAT tests. Optional for RAT tests. MUST not be empty (omit instead)."
 //       * co 1..1 string "Country of test (two letter ISo-3166)"
