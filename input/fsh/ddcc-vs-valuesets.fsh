@@ -171,17 +171,12 @@ Description:    "ICD11 codes for DDCC so the FHIR server can perform expansions.
 * #QA02 "Medical observation or evaluation for suspected diseases or conditions, ruled out"
 * #XM1AU2 "Sinopharm WIBP-CorV"
 * #XM1J92 "COVID-19 vaccine, virus like particle"
-* #XM3PGO "Soberana-02"
 * #XM3SK8 "EpiVacCorona-N"
-* #XM3СТ4 "Recombinant SARS-CoV-2 vaccine"
 * #XM9N08 "Razi COV PARS"
 * #XM9P21 "SpikoGen"
 * #XM9T65 "Novavax COVID-19 vaccine"
-* #XMOCX4 "COVID-19 vaccine, replicating viral vector"
-* #XMOGQ8 "COVID-19 vaccine, RNA based"
-* #XMOK39 "Covidful"
-* #XMORV9 "Soberana Plus"
-
+* #XM0K39 "Covidful"
+* #XM0RV9 "Soberana Plus"
 
 
 ValueSet:      WHO_DDCC_Disease_Targeted_COVID_19
