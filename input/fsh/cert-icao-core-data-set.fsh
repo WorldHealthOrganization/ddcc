@@ -11,7 +11,8 @@ Description:    "Data elements for the ICAO Visible Digital Seal Core Data Set. 
   * hdr 1..1 BackboneElement "Header"
     * t 1..1 string "Type (either `icao.test` for proof of testing, or `icao.vacc` for proof of vaccination)"
     * v 1..1 integer "Version"
-    * is 1..1 string "IssuingCountry (Doc 9303-3 three letter country code)"
+    * is 1..1 string "IssuingCountry (ISO-3166 three letter code; see element details)" "The three letter code is according to Doc 9303-3, which defines this as ISO-3166 country codes."
+    * is from http://hl7.org/fhir/ValueSet/iso3166-1-3 (required)
   * msg 1..1 BackboneElement "Message"
 
     // pid used for both icao.test and icao.vacc
@@ -31,7 +32,7 @@ Description:    "Data elements for the ICAO Visible Digital Seal Core Data Set. 
 
     * sp 0..1 BackboneElement "ServiceProvider (Required for `icao.test` only, not used of `icao.vacc`)"
       * spn 1..1 string "Name of testing facility or service provider"
-      * ctr 1..1 string "Country of test"
+      * ctr 1..1 string "Country of test (spec does not indicate code system, but presumably this is ISO-3166 like the other country codes in the certificate)"
       * cd 1..1 BackboneElement "ContactDetails"
         * p 1..1 string "PhoneNumber"
         * e 1..1 string "Email"
@@ -42,12 +43,12 @@ Description:    "Data elements for the ICAO Visible Digital Seal Core Data Set. 
       * ri 1..1 dateTime  "ReportIssuance (RFC3339)"
 
     * tr 0..1 BackboneElement "TestResult (Required for `icao.test` only, not used of `icao.vacc`)"
-      * tc 1..1 string  "TestConducted (see element details for allowed values)"
-      * tc ^comment = "Allowed values:\n\n- `molecular(PCR)`\n- `molecular(other)\n-`antigen`\n- `antibody`"
-      * r 1..1 string  "Results (see element details for allowed values)"
-      * r ^comment = "Allowed values:\n\n- `normal`\n- `abnormal`\n- `positive`\n- `negative`"
-      * m 0..1 string  "Sampling method (see element details for allowed values)"
-      * m ^comment = "Allowed values:\n\n- `nasopharyngeal`\n- `oropharyngeal`\n- `saliva`\n- `blood`\n- `other`"
+      * tc 1..1 string  "TestConducted"
+      * tc from LabTestTypeIcaoValueSet (required)
+      * r 1..1 string  "Results"
+      * r from LabTestResultIcaoValueSet (required)
+      * m 0..1 string  "Sampling method"
+      * m from LabTestSampleOriginIcaoValueSet (required)
     * opt 0..1 string "Optional data issued at the discretion of the issuing authority"
 
 
@@ -55,13 +56,15 @@ Description:    "Data elements for the ICAO Visible Digital Seal Core Data Set. 
     * uvci 0..1 string "Unique Vaccination Certificate Identifier (Required for `icao.vacc` only, not used of `icao.test`)"
 
     * ve 0..* BackboneElement "VaccinationEvent (Required for `icao.vacc` only, not used of `icao.test`)"
-      * des 1..1 string  "Vaccine or Prophylaxis (ICD-11 code descending from http://id.who.int/icd/entity/164949870)"
+      * des 1..1 string  "Vaccine or Prophylaxis (ICD-11 MMS code descending from http://id.who.int/icd/entity/164949870)"
+      * des from WHO_DDCC_Vaccines_COVID_19 (required)
       * nam 1..1 string  "Vaccine Brand (medical product name)"
       * dis 0..1 string  "Disease or agent targeted (ICD-11 code)"
       * vd 1..* BackboneElement "VaccinationDetails"
         * dvc 1..1 date "Date of vaccination (see element details)" "Date on which the vaccine was administered. The ISO8601 full date format YYYY-MM-DD MUST be used."
         * seq 1..1 positiveInt "Dose number (vaccine dose number, integer between 1 and 99)"
-        * ctr 1..1 string "Country of vaccination (see element details)" "The country in which the individual has been vaccinated. A three letter code identifying the issuing state or organization. The three letter code is according to Doc 9303-3."
+        * ctr 1..1 string "Country of vaccination (ISO-3166 three letter code; see element details)" "The country in which the individual has been vaccinated. A three letter code identifying the issuing state or organization. The three letter code is according to Doc 9303-3, which defines this as ISO-3166 country codes."
+        * ctr from http://hl7.org/fhir/ValueSet/iso3166-1-3 (required)
         * adm 1..1 string "Administering centre (The name or identifier of the vaccination facility)"
         * lot 1..1 string "Vaccine batch number"
         * dvn 0..1 date "Due date of next dose (see element details)" "Date on which the next 10 vaccination should be administered. The ISO8601 full date format YYYY-MM-DD MUST be used."
