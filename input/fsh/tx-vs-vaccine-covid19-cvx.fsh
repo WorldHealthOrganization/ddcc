@@ -1,8 +1,8 @@
 Alias: $cvx = http://hl7.org/fhir/sid/cvx
 
-ValueSet: VaccineCvxValueSet
+ValueSet: VaccineCovid19CvxValueSet
 Id: vaccine-covid19-cvx
-Title: "CVX codes identifying COVID-19 vaccines"
+Title: "Vaccine - COVID-19 - Cvx"
 Description: "tbd"
 
 * ^copyright = "TODO: provide copyright information"

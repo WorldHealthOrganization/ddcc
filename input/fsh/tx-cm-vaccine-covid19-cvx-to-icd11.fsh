@@ -2,11 +2,11 @@
 Instance: vaccine-covid19-cvx-to-icd11
 InstanceOf: ConceptMap
 Usage: #definition
-* name = "VaccineCvxToLoincConceptMap"
-* title = "CVX to ICD11 concept mapping of COVID19 vaccines"
-* description = "A mapping from CVX to ICD11 of COVID19 vaccines. This mapping is unidirectional."
+* name = "VaccineCovid19CvxToIcd11ConceptMap"
+* title = "Vaccine - COVID-19 - mapping Cvx to Icd11"
+* description = "Concept map from CVX to ICD 11 of vaccines. For more information on the concepts, see the source value set, VaccineCovid19CvxValueSet and the target value set, ."
 * status = #draft
-* date = "2023-02-13"
+* date = "2023-02-14"
 // * publisher = "TBD"
 // * url = "https://github.com/ddcc/TBD"
 // * version = "TBD"

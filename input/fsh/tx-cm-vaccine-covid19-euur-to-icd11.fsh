@@ -2,11 +2,11 @@
 Instance: vaccine-covid19-euur-to-icd11
 InstanceOf: ConceptMap
 Usage: #definition
-* name = "VaccineEudccToIcd11ConceptMap"
-* title = "EUDCC to ICD11 concept mapping of COVID19 vaccines"
-* description = "A mapping from EUDCC to ICD11 of COVID19 vaccines. This mapping is unidirectional."
+* name = "VaccineCovid19EuurToIcd11ConceptMap"
+* title = "Vaccine - COVID-19 - mapping Eudcc to Icd11"
+* description = "Concept map from EU-VMP to ICD 11 of vaccines. For more information on the concepts, see the source value set, VaccineCovid19EUUnionRegisterValueSet and the target value set, ."
 * status = #draft
-* date = "2023-02-13"
+* date = "2023-02-14"
 // * publisher = "TBD"
 // * url = "https://github.com/ddcc/TBD"
 // * version = "TBD"
@@ -43,7 +43,7 @@ Usage: #definition
 
 * group[=].element[+].code = #CVnCoV
 * group[=].element[=].display = "CVnCoV"
-* group[=].element[=].target.code = #XMOGQ8
+* group[=].element[=].target.code = #XM0GQ8
 * group[=].element[=].target.display = "COVID-19 vaccine, RNA based"
 * group[=].element[=].target.equivalence = #wider
 

@@ -1,8 +1,8 @@
 Alias: $snomed = http://snomed.info/sct
 
-ValueSet: VaccineSnomedValueSet
+ValueSet: VaccineCovid19SnomedValueSet
 Id: vaccine-covid19-snomed
-Title: "SNOMED CT codes identifying COVID-19 vaccines"
+Title: "Vaccine - COVID-19 - Snomed"
 Description: "tbd"
 
 * ^copyright = "TODO: provide copyright information"

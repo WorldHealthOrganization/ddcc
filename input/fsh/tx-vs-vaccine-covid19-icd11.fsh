@@ -1,8 +1,8 @@
 Alias: $icd11-mms = http://id.who.int/icd11/mms
 
-ValueSet: VaccineIcd11ValueSet
+ValueSet: VaccineCovid19Icd11ValueSet
 Id: vaccine-covid19-icd11
-Title: "ICD11 codes identifying COVID-19 vaccines"
+Title: "Vaccine - COVID-19 - Icd11"
 Description: "tbd"
 
 * ^copyright = "TODO: provide copyright information"
@@ -41,6 +41,6 @@ Description: "tbd"
 * $icd11-mms#XM1J92 "COVID-19 vaccine, virus like particle"
 * $icd11-mms#XM6AT1 "COVID-19 vaccine, DNA based"
 * $icd11-mms#XM52P3 "ZvCov-D"
-* $icd11-mms#XMOGQ8 "COVID-19 vaccine, RNA based"
+* $icd11-mms#XM0GQ8 "COVID-19 vaccine, RNA based"
 * $icd11-mms#XM8NQ0 "Comirnaty"
 * $icd11-mms#XM3DT5 "COVID-19 Vaccine Moderna"

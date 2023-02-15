@@ -1,9 +1,9 @@
 
-Instance: vaccine-covid19-snomed-to-icd11
+Instance: lab-test-pathogen-snomed-to-icd11
 InstanceOf: ConceptMap
 Usage: #definition
-* name = "VaccineCovid19SnomedToIcd11ConceptMap"
-* title = "Vaccine - COVID-19 - mapping Snomed to Icd11"
+* name = "LabTestPathogenSnomedToIcd11ConceptMap"
+* title = "Lab Test - Result - Pathogen - mapping Snomed to Icd11"
 * description = "nan"
 * status = #draft
 * date = "2023-02-14"

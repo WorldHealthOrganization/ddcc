@@ -1,13 +1,13 @@
-Alias: $icao-lab-test-qual-result = http://worldhealthorganization.github.io/ddcc/CodeSystem/icao-lab-test-qual-result
+Alias: $icao-lab-test-result = http://worldhealthorganization.github.io/ddcc/CodeSystem/lab-test-qual-result-icao
 
-ValueSet: TestResultIcaoValueSet
+ValueSet: LabTestResultIcaoValueSet
 Id: lab-test-qual-result-icao
-Title: "ICAO codes identifying test results"
-Description: "This is a one-time snapshot of the VDS-NC-r value set, retrieved from https://www.icao.int/vdsnc-spec, page 16, in January 2023. Contents may need to be updated and readers should consult the original source, https://www.icao.int/vdsnc-spec."
+Title: "Lab Test - Qualitative Result - ICAO"
+Description: "nan"
 
-* ^copyright = "TODO: provide copyright information"
+* ^copyright = "nan"
 
-* $icao-lab-test-qual-result#normal "Normal"
-* $icao-lab-test-qual-result#abnormal "Abnormal"
-* $icao-lab-test-qual-result#positive "Positive"
-* $icao-lab-test-qual-result#negative "Negative"
+* $icao-lab-test-result#normal "Normal"
+* $icao-lab-test-result#abnormal "Abnormal"
+* $icao-lab-test-result#positive "Positive"
+* $icao-lab-test-result#negative "Negative"
