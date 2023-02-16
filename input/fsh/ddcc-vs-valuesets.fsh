@@ -19,12 +19,12 @@ WHO Vaccine List (COVID-19) from [ICD 11](https://icd.who.int/browse11)
 * include $ICD11#XM68M6 "COVID-19 vaccine"
 
 * include $ICD11#XM1NL1 "COVID-19 vaccine, inactivated virus"
-* include $ICD11#XM7HT3 "CoronaVac®"  
-* include $ICD11#XM8866 "BBIBP-CorV"  
+* include $ICD11#XM7HT3 "CoronaVac®"
+* include $ICD11#XM8866 "BBIBP-CorV"
 * include $ICD11#XM9TQ1 "KCONVAC"
 * include $ICD11#XM1G90 "Covaxin"
 * include $ICD11#XM85P5 "Covi-Vac"
-* include $ICD11#XM9FQ7 "Hayat-Vax"  
+* include $ICD11#XM9FQ7 "Hayat-Vax"
 * include $ICD11#XM97N6 "QazVac"
 * include $ICD11#XM2YG8 "COVIran Barakat"
 * include $ICD11#XM3U61 "Inactivated SARS-CoV-2 vaccine"
@@ -53,7 +53,7 @@ WHO Vaccine List (COVID-19) from [ICD 11](https://icd.who.int/browse11)
 * include $ICD11#XM52P3 "ZyCov-D"
 
 * include $ICD11#XM0GQ8 "COVID-19 vaccine, RNA based"
-* include $ICD11#XM8NQ0 "Comirnaty®" 
+* include $ICD11#XM8NQ0 "Comirnaty®"
 * include $ICD11#XM3DT5 "COVID-19 Vaccine Moderna"
 
 ValueSet:      WHO_DDCC_Brands_COVID_19
@@ -64,12 +64,12 @@ WHO DDCC Brand List (COVID-19) from [ICD 11](https://icd.who.int/browse11)
 """
 * ^status = #draft
 
-* include $ICD11#XM7HT3 "CoronaVac®"  
-* include $ICD11#XM8866 "BBIBP-CorV"  
+* include $ICD11#XM7HT3 "CoronaVac®"
+* include $ICD11#XM8866 "BBIBP-CorV"
 * include $ICD11#XM9TQ1 "KCONVAC"
 * include $ICD11#XM1G90 "Covaxin"
 * include $ICD11#XM85P5 "Covi-Vac"
-* include $ICD11#XM9FQ7 "Hayat-Vax"  
+* include $ICD11#XM9FQ7 "Hayat-Vax"
 * include $ICD11#XM97N6 "QazVac"
 * include $ICD11#XM2YG8 "COVIran Barakat"
 
@@ -86,20 +86,8 @@ WHO DDCC Brand List (COVID-19) from [ICD 11](https://icd.who.int/browse11)
 
 * include $ICD11#XM52P3 "ZyCov-D"
 
-* include $ICD11#XM8NQ0 "Comirnaty®" 
-* include $ICD11#XM3DT5 "Moderna"  
-
-ValueSet:      WHO_DDCC_Allowed_Vaccines_COVID_19
-Id:	           who-ddcc-allowed-vaccines-covid-19
-Title:	       "WHO DDCC Allowed Vaccine List (COVID-19)"
-Description:   """
-WHO DDCC Allowed Vaccine List (COVID-19) for importing from other valuesets.  Any not
-in who-ddcc-vaccines-covid-19 should be included in the ConceptMap so it can be
-translated into an ICD-11 code.
-"""
-* ^status = #draft
-* include codes from valueset WHO_DDCC_Vaccines_COVID_19
-* include $CVX#208
+* include $ICD11#XM8NQ0 "Comirnaty®"
+* include $ICD11#XM3DT5 "Moderna"
 
 
 
@@ -112,15 +100,15 @@ Description:    "ICD11 codes for DDCC so the FHIR server can perform expansions.
 * ^url = $ICD11
 * #RA01   "COVID-19 Disease"
 
-* #XM68M6 "COVID-19 vaccine"
+* #XM68M6 "COVID-19 vaccines"
 
 * #XM1NL1 "COVID-19 vaccine, inactivated virus"
-* #XM7HT3 "CoronaVac®"  
-* #XM8866 "BBIBP-CorV"  
+* #XM7HT3 "CoronaVac®"
+* #XM8866 "BBIBP-CorV"
 * #XM9TQ1 "KCONVAC"
 * #XM1G90 "Covaxin"
 * #XM85P5 "Covi-Vac"
-* #XM9FQ7 "Hayat-Vax"  
+* #XM9FQ7 "Hayat-Vax"
 * #XM97N6 "QazVac"
 * #XM2YG8 "COVIran Barakat"
 * #XM3U61 "Inactivated SARS-CoV-2 vaccine"
@@ -143,14 +131,12 @@ Description:    "ICD11 codes for DDCC so the FHIR server can perform expansions.
 * #XM4EC8 "MVC-COV1901"
 * #XM6SZ8 "EpiVacCorona"
 
-* #XM1J92 "COVID-19 vaccine, virus like particle (VLP)"
-
 * #XM6AT1 "COVID-19 vaccine, DNA based"
 * #XM52P3 "ZyCov-D"
 
 * #XM0GQ8 "COVID-19 vaccine, RNA based"
-* #XM8NQ0 "Comirnaty®" 
-* #XM3DT5 "COVID-19 Vaccine Moderna"  
+* #XM8NQ0 "Comirnaty®"
+* #XM3DT5 "COVID-19 Vaccine Moderna"
 
 * #XN109 "SARS-CoV-2"
 * #XN0HL "SARS-CoV-2 Alpha"
@@ -165,9 +151,21 @@ Description:    "ICD11 codes for DDCC so the FHIR server can perform expansions.
 * #XN9L8 "SARS-CoV-2 Kappa"
 * #XN6AM "SARS-CoV-2 Lambda"
 * #XN39J "SARS-CoV-2 Mu"
-* #XN161 "SARS-CoV-2 Omicron"	
-* #RA01.0 "Detected"
-* #QA02 "Not Detected"
+* #XN161 "SARS-CoV-2 Omicron"
+
+* #MG71 "Abnormal laboratory results, not elsewhere classified"
+* #RA01.0 "COVID-19, virus identified"
+* #RA01.1 "COVID-19, virus not identified"
+* #QA02 "Medical observation or evaluation for suspected diseases or conditions, ruled out"
+* #XM1AU2 "Sinopharm WIBP-CorV"
+* #XM1J92 "COVID-19 vaccine, virus like particle"
+* #XM3SK8 "EpiVacCorona-N"
+* #XM9N08 "Razi COV PARS"
+* #XM9P21 "SpikoGen"
+* #XM9T65 "Novavax COVID-19 vaccine"
+* #XM0K39 "Covidful"
+* #XM0RV9 "Soberana Plus"
+
 
 ValueSet:      WHO_DDCC_Disease_Targeted_COVID_19
 Id:	       who-ddcc-disease-targeted-covid-19
@@ -321,52 +319,6 @@ Description:    "ICAO vaccines codes for DDCC so the FHIR server can perform exp
 * include codes from system ICAOV1_CodeSystem
 
 
-CodeSystem:     EU_DCC_CodeSystem
-Id:             vaccines-covid-19-names
-Title:          "Covid-19 Vaccine Codes for EU DCC"
-Description:    "EU DCC codes for Covid-19 vaccines so the FHIR server can perform expansions."
-* ^experimental = false
-* ^caseSensitive = true
-* ^url = $EUDCC
-* ^date = 2022-09-13
-* #EU/1/20/1528 "Comirnaty"
-* #EU/1/20/1507 "Spikevax"
-* #EU/1/21/1529 "Vaxzevria"
-* #EU/1/20/1525 "Jcovden"
-* #CVnCoV "CVnCoV"
-* #NVX-CoV2373 "NVX-CoV2373 (deprecated)"
-* #Sputnik-V "Sputnik-V"
-* #Convidecia "Convidecia"
-* #EpiVacCorona "EpiVacCorona"
-* #BBIBP-CorV "BBIBP-CorV"
-* #Inactivated-SARS-CoV-2-Vero-Cell "Inactivated SARS-CoV-2 (Vero Cell) (deprecated)"
-* #CoronaVac "CoronaVac"
-* #Covaxin "Covaxin"
-* #Covishield "Covishield"
-* #Covid-19-recombinant "Covid-19 (recombinant)"
-* #R-COVI "R-COVI"
-* #CoviVac "CoviVac"
-* #Sputnik-Light "Sputnik Light"
-* #Hayat-Vax "Hayat-Vax"
-* #Abdala "Abdala"
-* #WIBP-CorV "WIBP-CorV"
-* #MVC-COV1901 "MVC COVID-19 vaccine"
-* #EU/1/21/1618 "Nuvaxovid"
-* #Covovax "Covovax"
-* #Vidprevtyn "Vidprevtyn"
-* #VLA2001 "VLA2001 (deprecated)"
-* #EpiVacCorona-N "EpiVacCorona-N"
-* #Sputnik-M "Sputnik M"
-* #Covid-19-adsorvida-inativada "Vacina adsorvida covid-19 (inativada)"
-* #NVSI-06-08 "NVSI-06-08"
-* #YS-SC2-010 "YS-SC2-010"
-* #SCTV01C "SCTV01C"
-* #Covifenz "Covifenz"
-* #AZD2816 "AZD2816"
-* #Soberana-02 "Soberana 02"
-* #Soberana-Plus "Soberana Plus"
-* #EU/1/21/1624 "COVID-19 Vaccine Valneva"
-
 ValueSet:      EU_DCC_ValueSet
 Id:	           vaccines-covid-19-names
 Title:	       "EU DCC Allowed Vaccine List (COVID-19)"
@@ -375,7 +327,7 @@ EU DCC Allowed Vaccine List (COVID-19).
 """
 * ^status = #draft
 * ^date = 2022-09-13
-* include codes from system EU_DCC_CodeSystem
+* include codes from system WHO_DDCC_euur
 
 
 Instance:       who-ddcc-map-icd11-sct-vaccines
@@ -545,21 +497,21 @@ Usage:          #definition
       * code = #XM9QW8
       * equivalence = #equivalent
 
-  * element[+]    
+  * element[+]
     * code = #DIVOC005
     * target[+]
       * code = #XM0GQ8
       * equivalence = #wider
 
   * element[+]
-    * code = #DIVOC006  
+    * code = #DIVOC006
     * target[+]
       * code = #XM0CX4
       * equivalence = #wider
 
-  * element[+]    
+  * element[+]
     * code = #DIVOC007
-    
+
     * target[+]
       * code = #XM0GQ8
       * equivalence = #wider
@@ -644,7 +596,7 @@ Usage:          #definition
       * comment = "EU codes are brands and ICD11 is the generic type."
     * target[+]
       * code = #Convidecia
-      * equivalence = #narrower    
+      * equivalence = #narrower
       * comment = "EU codes are brands and ICD11 is the generic type."
   * element[+]
     * code = #XM0CX4
@@ -691,48 +643,48 @@ Usage:          #definition
   * target = $ICD11
 
   * element[+]
-    * code = #Covaxin    
+    * code = #Covaxin
     * target[+]
       * code = #XM1NL1
       * equivalence = #wider
 
-  * element[+]   
+  * element[+]
     * code = #Covishield
     * target[+]
       * code = #XM9QW8
       * equivalence = #wider
-      
+
   * element[+]
     * code = #Sputnik-V
     * target[+]
       * code = #XM9QW8
       * equivalence = #wider
 
-  * element[+] 
+  * element[+]
     * code = #EU/1/20/1528
     * target[+]
       * code = #XM0GQ8
       * equivalence = #wider
-      
+
   * element[+]
-    * code = #EU/1/20/1525  
+    * code = #EU/1/20/1525
     * target[+]
       * code = #XM0CX4
       * equivalence = #equivalent
 
-  * element[+]   
-    * code = #EU/1/20/1507  
+  * element[+]
+    * code = #EU/1/20/1507
     * target[+]
       * code = #XM0GQ8
       * equivalence = #wider
 
   * element[+]
-    * code = #EU/1/21/1529  
+    * code = #EU/1/21/1529
     * target[+]
       * code = #XM9QW8
       * equivalence = #wider
 
-  * element[+]    
+  * element[+]
     * code = #CoronaVac
     * target[+]
       * code = #XM1NL1
@@ -743,7 +695,7 @@ Usage:          #definition
     * target[+]
       * code = #XM1NL1
       * equivalence = #wider
-      
+
   * element[+]
     * code = #Convidecia
     * target[+]
@@ -754,7 +706,7 @@ Usage:          #definition
     * code = #NVX-CoV2373
     * target[+]
       * code = #XM5JC5
-      * equivalence = #equivalent   
+      * equivalence = #equivalent
 
 Instance:       who-ddcc-map-icd11-icao-vaccines
 InstanceOf:     ConceptMap
@@ -1819,4 +1771,3 @@ Usage:          #definition
     * target[+]
       * code = #U07.1
       * equivalence = #equivalent
-

@@ -1,0 +1,82 @@
+map "http://worldhealthorganization.github.io/ddcc/StructureMap/CertDIVOCtoCoreDataSet" = "CertDIVOCtoCoreDataSet"
+// Structure map transforming CertDIVOC logical model to bundle of Core Data Set logical model
+
+uses "http://worldhealthorganization.github.io/ddcc/StructureDefinition/CertDIVOC" alias DIVOC as source
+
+uses "http://hl7.org/fhir/StructureDefinition/Bundle" alias DDCCBundle as target
+uses "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet" alias DDCC as produced
+uses "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.VS" alias DDCCVS as produced
+uses "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.TR" alias DDCCTR as produced
+
+group CertDIVOCtoCoreDataSetBundle(
+    source src: DIVOC, 
+    target ddccBundle: DDCCBundle)
+{
+    src.type as type then {
+        type where type = 'ProofOfVaccinationCredential' then {
+            src.evidence as evidence -> ddccBundle.entry as outentry,  create('http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.VS') as ddcc then {
+                src.credentialSubject as credentialSubject then CredentialSubjecttoCoreDataSet(credentialSubject, ddcc) "set patient";
+                src -> ddcc.certificate as certificate then CertDIVOCtoCoreDataSetCertificate(src, evidence, certificate) "set certificate";
+                evidence -> ddcc.vaccination as vaccination then EvidencetoCoreDataSetVS(evidence, vaccination) "set vaccination"; 
+                evidence -> outentry.resource = ddcc "set outentry";
+            } "evidence";
+        } "ProofOfVaccinationCredential";
+    } "type";
+}
+
+group CredentialSubjecttoCoreDataSet(
+    source credentialSubject,
+    target ddcc: DDCC)
+{
+    credentialSubject.name as name -> ddcc.name = name "set name";
+    credentialSubject.dob as birthDate -> ddcc.birthDate = birthDate "set birthDate";
+    credentialSubject.identifier as id -> ddcc.identifier as identifier, identifier.value = id "set identifier";
+}
+
+group CertDIVOCtoCoreDataSetCertificate(
+    source src: DIVOC,
+    source evidence,
+    target certificate)
+{
+    evidence.certificateId as certificateId -> certificate.hcid as hcid,
+        hcid.value = certificateId "set hcid";
+    src.context as context then {
+        context where (context.contains('cowin.gov.in')) -> certificate.version = context "set version";
+    } "context";
+    evidence -> certificate.period = create('Period') as period then {
+        evidence.effectiveStart as effectiveStart -> period.start = effectiveStart "set period start";
+        evidence.effectiveUntil as effectiveUntil -> period.end = effectiveUntil "set period end";
+    } "period";                 
+    src.issuer as issuer -> 
+        certificate.issuer = create('Reference') as issuer,
+        issuer.display = issuer "set issuer";
+}
+
+group EvidencetoCoreDataSetVS(
+    source evidence, 
+    target vaccination)
+{
+    evidence.icd11Code as icd11Code -> 
+        vaccination.vaccine as coding,
+        coding.system = "http://id.who.int/icd11/mms",
+        coding.code = icd11Code
+        "set vaccine";
+    evidence.vaccine as vaccine -> vaccination.brand as coding,
+        coding.code = vaccine "set brand";
+    evidence.manufacturer as manufacturer -> vaccination.manufacturer as coding,
+        coding.code = manufacturer "set manufacturer";
+    evidence.batch as batch -> vaccination.lot = batch "set lot";
+    evidence.date as date -> vaccination.date = date "set date";
+    evidence.dose as dose -> vaccination.dose = dose "set dose";
+    evidence.totalDoses as totalDoses -> vaccination.totalDoses = totalDoses "set totalDoses";
+    evidence.facility as facility then {
+        facility.addressCountry as addressCountry -> 
+            vaccination.country as coding,
+            coding.code = co        
+            "set country";        
+        facility.name as name -> vaccination.centre = name "set centre";        
+    } "facility";
+    evidence.verifier as verifier then {
+        verifier.name as name -> vaccination.practitioner as practitioner, practitioner.value = name "set practitioner";
+    } "verifier";
+}

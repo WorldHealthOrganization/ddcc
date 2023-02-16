@@ -38,7 +38,7 @@ group NameToText (
   source name : HumanName,
   target ddcc
 ) {
-  // annoying because append doesn't work until ddcc.name is set
+  // append doesn't work until ddcc.name is set
   name.given first as given -> ddcc.name = (given.replaceMatches('$', ' ')) "set first name";
   //name.given not_first as other -> ddcc.name as tName, ddcc.name = append( tName, other ) "set other names";
   name.given not_first as other -> ddcc.name as tName, (other.replaceMatches('$', ' ')) as spaced, ddcc.name = append( tName, spaced ) "set other names";
@@ -50,15 +50,21 @@ group LabToDDCC(
   source lab: SHCLabDM
   target test
 ) {
-  lab -> test.pathogen = c('http://id.who.int/icd11/mms', 'XN109') "set pathogen";
   lab.code as code then {
-    code.coding first as type -> test.type = type "set type";
+    code.coding first as labType then {
+      labType -> test.type = labType "set default type";
+      labType where labType.memberOf('http://worldhealthorganization.github.io/ddcc/ValueSet/lab-test-type-covid19-loinc') -> test.type = translate(labType, 'http://worldhealthorganization.github.io/ddcc/ConceptMap/lab-test-type-covid19-loinc-to-icd11', 'Coding') "translate loinc type";  
+      labType where labType.memberOf('http://worldhealthorganization.github.io/ddcc/ValueSet/lab-test-type-covid19-loinc') -> test.pathogen = c('http://id.who.int/icd11/mms', 'XN109') "set pathogen to COVID";
+    } "coding";
   } "code";
   lab.effectiveDateTime as date ->  test.date = date "set date";
   lab.valueCodeableConcept as value then {
-    value.coding first as result ->  test.result = result "set result";
+    value.coding first as result then {
+      result -> test.result = result "set default result";
+      result where result.memberOf('http://worldhealthorganization.github.io/ddcc/ValueSet/lab-test-qual-result-snomed') -> test.result = translate(result, 'http://worldhealthorganization.github.io/ddcc/ConceptMap/lab-test-qual-result-snomed-to-icd11', ) "translate snomed result";
+    } "coding";
   } "valueCodeableConcept";
+
   // no target for result valueQuantity (for Ab titers) or valueString (for unmapped text)
-  // missing/incomplete type and result mappings
   // pathogen and country are required, no source in SHC
 }
