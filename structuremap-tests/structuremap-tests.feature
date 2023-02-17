@@ -610,8 +610,8 @@ And match response.entry[0].resource.birthDate == '1985-03-04'
 And match response.entry[0].resource.certificate.hcid contains only {"value":"448086902"}
 # And match response.entry[0].resource.certificate.ddccid.value == '448086902' ### NO SOURCE ###
 And match response.entry[0].resource.certificate.period contains only {start: '2021-04-21', end: '2022-04-21'}
-###### fails, vaccination.vaccine is not mapped.
-# And match response.entry[0].resource.vaccination.vaccine contains only {system: 'http://id.who.int/icd11/mms', code: 'XM0GQ8'}
+###### fails, no vaccination.vaccine resource is mapping at all.
+And match response.entry[0].resource.vaccination.vaccine contains only {system: 'http://id.who.int/icd11/mms', code: 'XM0GQ8'}
 And match response.entry[0].resource.vaccination.brand contains only {"code": "Pfizer"}
 # And match response.entry[0].resource.vaccination.maholder contains only {system: 'https://id.uvci.eu/valuesets/vaccine-mah-manf.json', code: 'ORG-100030215'}
 And match response.entry[0].resource.vaccination.lot == 'batch-01'
@@ -620,7 +620,7 @@ And match response.entry[0].resource.vaccination.date == '2021-06-28T05:30:28.18
 And match response.entry[0].resource.vaccination.dose == 1
 And match response.entry[0].resource.vaccination.totalDoses == 2
 ##### fails, vaccination.country is not mapping.
-# And match response.entry[0].resource.vaccination.country contains only {system: 'urn:iso:std:iso:3166', code: 'IN'}
+And match response.entry[0].resource.vaccination.country contains only {system: 'urn:iso:std:iso:3166', code: 'IN'}
 And match response.entry[0].resource.vaccination.centre == 'MOH Gothatuwa'
 # And match response.entry[0].resource.vaccination.signature == 'unk' ### NO SOURCE ###
 # And match response.entry[0].resource.vaccination.practitioner == 'unk' ### NO SOURCE ###
