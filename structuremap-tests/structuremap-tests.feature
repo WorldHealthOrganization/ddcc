@@ -490,10 +490,11 @@ And match response.entry[0].resource.resourceType == 'DDCCCoreDataSet'
 And match response.entry[0].resource.name == 'John B. Anyperson'
 And match response.entry[0].resource.birthDate == '1951-01-20'
 And match response.entry[0].resource.vaccination.vaccine contains only {system: 'http://id.who.int/icd11/mms', code: 'XM68M6'}
-And match response.entry[0].resource.vaccination.brand contains only {system: 'http://id.who.int/icd11/mms', code: 'XM8NQ0'}
-And match response.entry[0].resource.vaccination.lot == '0000001'
+And match response.entry[0].resource.vaccination.brand contains only {code: 'Comirnaty'}
+And match response.entry[0].resource.vaccination.lot == 'VC35679'
 And match response.entry[0].resource.vaccination.date == '2021-01-01'
-And match response.entry[0].resource.vaccination.centre == 'ABC General Hospital'
+And match response.entry[0].resource.vaccination.dose == 1
+And match response.entry[0].resource.vaccination.country contains only {system: 'urn:iso:std:iso:3166', code: 'JPN'}
 
 @icao
 @validator
@@ -505,10 +506,11 @@ And match response.entry[0].resource.resourceType == 'DDCCCoreDataSet'
 And match response.entry[0].resource.name == 'John B. Anyperson'
 And match response.entry[0].resource.birthDate == '1951-01-20'
 And match response.entry[0].resource.vaccination.vaccine contains only {system: 'http://id.who.int/icd11/mms', code: 'XM68M6'}
-And match response.entry[0].resource.vaccination.brand contains only {system: 'http://id.who.int/icd11/mms', code: 'XM8NQ0'}
-And match response.entry[0].resource.vaccination.lot == '0000001'
+And match response.entry[0].resource.vaccination.brand contains only {code: 'Comirnaty'}
+And match response.entry[0].resource.vaccination.lot == 'VC35679'
 And match response.entry[0].resource.vaccination.date == '2021-01-01'
-And match response.entry[0].resource.vaccination.centre == 'ABC General Hospital'
+And match response.entry[0].resource.vaccination.dose == 1
+And match response.entry[0].resource.vaccination.country contains only {system: 'urn:iso:std:iso:3166', code: 'JPN'}
 
 @icao
 @matchbox
@@ -526,9 +528,9 @@ And match response.entry[0].resource.resourceType == 'DDCCCoreDataSet'
 And match response.entry[0].resource.name == 'James T. Anyperson'
 And match response.entry[0].resource.birthDate == '1951-01-20'
 And match response.entry[0].resource.test.pathogen contains {system: 'http://id.who.int/icd11/mms', code: 'XN109'}
-And match response.entry[0].resource.test.type contains only {system: 'http://loinc.org', code: '94558-4'}
-And match response.entry[0].resource.test.date == '2021-02-17'
-And match response.entry[0].resource.test.result contains only {system: 'http://snomed.info/sct', code: '260373001'}
+And match response.entry[0].resource.test.type contains only {system: 'http://id.who.int/icd/entity', code: '1334426561'}
+And match response.entry[0].resource.test.date == '2021-02-15T12:00:00+08:00'
+And match response.entry[0].resource.test.result contains only {system: 'http://id.who.int/icd11/mms', code: 'RA01.1'}
 
 @icao
 @validator
@@ -540,9 +542,9 @@ And match response.entry[0].resource.resourceType == 'DDCCCoreDataSet'
 And match response.entry[0].resource.name == 'James T. Anyperson'
 And match response.entry[0].resource.birthDate == '1951-01-20'
 And match response.entry[0].resource.test.pathogen contains {system: 'http://id.who.int/icd11/mms', code: 'XN109'}
-And match response.entry[0].resource.test.type contains only {system: 'http://loinc.org', code: '94558-4'}
-And match response.entry[0].resource.test.date == '2021-02-17'
-And match response.entry[0].resource.test.result contains only {system: 'http://snomed.info/sct', code: '260373001'}
+And match response.entry[0].resource.test.type contains only {system: 'http://id.who.int/icd/entity', code: '1334426561'}
+And match response.entry[0].resource.test.date == '2021-02-15T12:00:00+08:00'
+And match response.entry[0].resource.test.result contains only {system: 'http://id.who.int/icd11/mms', code: 'RA01.1'}
 
 # DIVOC ------------------------------------------------------------------------------
 
