@@ -36,35 +36,3 @@ Usage: #definition
       * display = "Rapid immunoassay detecting viral proteins or Ag-RDT"
       * equivalence = #narrower
 
-  * element[+]
-    * code = #nasopharyngeal
-    * display = "Sampling method: nasopharyngeal"
-    * target[+]
-      * code = #50872817
-      * display = "Nasopharyngeal swab"
-      * equivalence = #equivalent
-
-  * element[+]
-    * code = #oropharyngeal
-    * display = "Sampling method: oropharyngeal"
-    * target[+]
-      * code = #555916027
-      * display = "Oropharyngeal swab"
-      * equivalence = #equivalent
-
-  * element[+]
-    * code = #saliva
-    * display = "Sampling method: saliva"
-    * target[+]
-      * code = #1162766848
-      * display = "Saliva specimen"
-      * equivalence = #equivalent
-
-  * element[+]
-    * code = #blood
-    * display = "Sampling method: blood"
-    * target[+]
-      * code = #1695591348
-      * display = "Blood specimen"
-      * equivalence = #equivalent
-
