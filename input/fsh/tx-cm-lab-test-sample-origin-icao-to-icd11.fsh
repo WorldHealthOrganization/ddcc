@@ -6,7 +6,7 @@ Usage: #definition
 * title = "Lab Test - Sample Origin - Mapping ICAO to ICD-11"
 * description = "[Lab Test - Sample Origin - ICAO](ValueSet-lab-test-sample-origin-icao.html) mapped to ICD-11"
 * status = #draft
-* date = "2023-02-15"
+* date = "2023-02-20"
 // * publisher = "TBD"
 // * url = "https://github.com/ddcc/TBD"
 // * version = "TBD"
@@ -20,22 +20,6 @@ Usage: #definition
 * group[+]
   * source = "http://worldhealthorganization.github.io/ddcc/CodeSystem/lab-test-sample-origin-icao"
   * target = "http://id.who.int/icd/entity"
-  * element[+]
-    * code = #molecular(PCR)
-    * display = "Molecular (PCR)"
-    * target[+]
-      * code = #1334426561
-      * display = "Viral nucleic acid amplification test or NAAT"
-      * equivalence = #equivalent
-
-  * element[+]
-    * code = #molecular(other)
-    * display = "Molecular (Other)"
-    * target[+]
-      * code = #2056159157
-      * display = "Rapid immunoassay detecting viral proteins or Ag-RDT"
-      * equivalence = #narrower
-
   * element[+]
     * code = #nasopharyngeal
     * display = "Sampling method: nasopharyngeal"

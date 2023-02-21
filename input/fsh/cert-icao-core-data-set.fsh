@@ -28,7 +28,7 @@ Description:    "Data elements for the ICAO Visible Digital Seal Core Data Set. 
 
 
     // utci, sp, dat, and tr only used for icao.test
-    * ucti 0..1 string "UTCI (Unique Test Certificate Identifier; used for `icao.test` only, not used of `icao.vacc`)"
+    * utci 0..1 string "UTCI (Unique Test Certificate Identifier; used for `icao.test` only, not used of `icao.vacc`)"
 
     * sp 0..1 BackboneElement "ServiceProvider (Required for `icao.test` only, not used of `icao.vacc`)"
       * spn 1..1 string "Name of testing facility or service provider"
