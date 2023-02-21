@@ -42,8 +42,8 @@ group VDStoCoreDataSetCertificate(
     hdr.v as v -> certificate.version = v "set version";
     msg.uvci as uvci -> certificate.hcid as hcid,
         hcid.value = uvci "set hcid from uvci";
-    msg.ucti as ucti -> certificate.hcid as hcid,
-        hcid.value = ucti "set hcid from ucti";        
+    msg.utci as utci -> certificate.hcid as hcid,
+        hcid.value = utci "set hcid from utci";        
     hdr.is as is -> 
         certificate.issuer = create('Reference') as issuer,
         issuer.display = is "set issuer";    
@@ -86,10 +86,12 @@ group ExtractVaccine(source ve, source vd, target vaccination) {
     vd.dvc as dvc -> 
         vaccination.date = dvc
         "set date";
-    vd.seq as seq -> vaccination.dose = seq "set dose";            
+    vd.seq as seq -> vaccination.dose = seq "set dose";      
+    vd.dvn as dvn -> vaccination.nextDose = dvn "set nextDose";            
     vd.ctr as ctr -> vaccination.country as coding then {
         ctr then ExtractCountry(ctr, coding) "set country";
     } "ctr";        
+    vd.adm as adm -> vaccination.centre = adm "set centre";     
     vd.lot as lot -> vaccination.lot = lot "set lot";
 }
 
