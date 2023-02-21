@@ -9,3 +9,7 @@ Description: "All DIVOC lab test result codes from its internally defined code s
 * #Positive "Positive"
 * #Inconclusive "Inconclusive"
 * #Void "Void"
+* #negative "Negative"
+* #positive "Positive"
+* #inconclusive "Inconclusive"
+* #void "Void"

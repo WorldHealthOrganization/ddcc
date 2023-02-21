@@ -10,3 +10,5 @@ Description: "This is a one-time snapshot of the allowed values for lab test typ
 
 * $divoc-lab-test-type#RT-PCR "RT-PCR"
 * $divoc-lab-test-type#"Rapid Antigen Test (RAT)" "Rapid Antigen Test (RAT)"
+* $divoc-lab-test-type#rt-pcr "RT-PCR"
+* $divoc-lab-test-type#"rapid antigen test (rat)" "Rapid Antigen Test (RAT)"

@@ -6,3 +6,4 @@ Description: "All DIVOC lab test pathogen codes from its internally defined code
 * ^url = http://worldhealthorganization.github.io/ddcc/CodeSystem/lab-test-pathogen-divoc
 
 * #COVID-19 "Concerns the detection of SARS-CoV-2 infection."
+* #covid-19 "Concerns the detection of SARS-CoV-2 infection."
