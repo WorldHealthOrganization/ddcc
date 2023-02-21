@@ -13,3 +13,8 @@ Description: "This is a one-time snapshot of the allowed values for lab test sam
 * $divoc-lab-test-origin#"Bronchoalveolar lavage" "Bronchoalveolar lavage"
 * $divoc-lab-test-origin#"Endotracheal Aspirate" "Endotracheal Aspirate"
 * $divoc-lab-test-origin#"Nasal Swab" "Nasal Swab"
+* $divoc-lab-test-origin#"nasopharyngeal swab" "Nasopharyngeal Swab"
+* $divoc-lab-test-origin#"throat swab" "Throat swab"
+* $divoc-lab-test-origin#"bronchoalveolar lavage" "Bronchoalveolar lavage"
+* $divoc-lab-test-origin#"endotracheal aspirate" "Endotracheal Aspirate"
+* $divoc-lab-test-origin#"nasal swab" "Nasal Swab"
