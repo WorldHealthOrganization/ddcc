@@ -6,7 +6,7 @@ Usage: #definition
 * title = "Lab Test - Result - Mapping DIVOC to ICD-11"
 * description = "[Lab Test - Qualitative Result - DIVOC](ValueSet-lab-test-qual-result-divoc.html) mapped to ICD-11"
 * status = #draft
-* date = "2023-02-15"
+* date = "2023-02-21"
 // * publisher = "TBD"
 // * url = "https://github.com/ddcc/TBD"
 // * version = "TBD"
@@ -37,10 +37,18 @@ Usage: #definition
       * equivalence = #equivalent
 
   * element[+]
-    * code = #COVID-19
-    * display = "Concerns the detection of SARS-CoV-2 infection."
+    * code = #negative
+    * display = "Negative"
     * target[+]
-      * code = #XN109
-      * display = "SARS-CoV-2"
+      * code = #RA01.1
+      * display = "COVID-19, virus not identified"
+      * equivalence = #equivalent
+
+  * element[+]
+    * code = #positive
+    * display = "Positive"
+    * target[+]
+      * code = #RA01.0
+      * display = "COVID-19, virus identified"
       * equivalence = #equivalent
 

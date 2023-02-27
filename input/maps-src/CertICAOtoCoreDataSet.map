@@ -42,8 +42,8 @@ group VDStoCoreDataSetCertificate(
     hdr.v as v -> certificate.version = v "set version";
     msg.uvci as uvci -> certificate.hcid as hcid,
         hcid.value = uvci "set hcid from uvci";
-    msg.ucti as ucti -> certificate.hcid as hcid,
-        hcid.value = ucti "set hcid from ucti";        
+    msg.utci as utci -> certificate.hcid as hcid,
+        hcid.value = utci "set hcid from utci";        
     hdr.is as is -> 
         certificate.issuer = create('Reference') as issuer,
         issuer.display = is "set issuer";    
@@ -70,49 +70,73 @@ group ExtractDocumentTypeNumber(source src, target identif: Identifier) {
 group ExtractVaccine(source ve, source vd, target vaccination) {
     ve.des as des -> 
         vaccination.vaccine as coding,
-        coding.system = "http://hl7.org/fhir/sid/icd-11", 
+        coding.system = "http://id.who.int/icd11/mms", 
         coding.code = des
         "set vaccine";
     ve.nam as nam -> 
         vaccination.brand as coding, 
-        coding.code = nam
+        coding.code = nam // brand code system is "As defined by member state"
         "set brand";        
     ve.dis as dis -> 
         vaccination.disease as coding,
-        coding.system = "http://hl7.org/fhir/sid/icd-11", 
+        coding.system = "http://id.who.int/icd11/mms", 
         coding.code = dis
         "set target disease";
 
     vd.dvc as dvc -> 
         vaccination.date = dvc
         "set date";
-    vd.seq as seq -> vaccination.dose = seq "set dose";            
-    vd.ctr as ctr -> 
-        vaccination.country as coding,
-        coding.code = ctr
-        //coding.system = "urn:iso:std:iso:3166" the Doc 9303 country codes seem to be a superset of ISO 3166
-        "set country";
+    vd.seq as seq -> vaccination.dose = seq "set dose";      
+    vd.dvn as dvn -> vaccination.nextDose = dvn "set nextDose";            
+    vd.ctr as ctr -> vaccination.country as coding then {
+        ctr then ExtractCountry(ctr, coding) "set country";
+    } "ctr";        
+    vd.adm as adm -> vaccination.centre = adm "set centre";     
     vd.lot as lot -> vaccination.lot = lot "set lot";
 }
 
-group ExtractTest(source sp, source dat, source tr, target test) {
-    tr.tc as tc -> test.type as coding,
-        coding.code = tc "set type";     
-    tr.m as m -> 
-        test.result as coding,
-        coding.code = m
-        "set origin";       
-    dat.sc as date -> test.date = date "set date";      
-    tr.r as r -> 
-        test.result as coding,
-        coding.code = r
-        "set result";    
+group ExtractTest(source sp, source dat, source tr, target test) { 
+    tr -> test.pathogen as coding,
+        coding.system = "http://id.who.int/icd11/mms",
+        coding.code = "XN109" "set pathogen";      
+    tr.tc as tc then {
+        tc -> test.type as coding,            
+            coding.code = tc "set default type";  
+        tc -> c('http://worldhealthorganization.github.io/ddcc/CodeSystem/lab-test-type-icao', tc) as coded then {
+            tc where coded.memberOf("http://worldhealthorganization.github.io/ddcc/ValueSet/lab-test-type-icao") -> test.type = translate(coded, 'http://worldhealthorganization.github.io/ddcc/ConceptMap/lab-test-type-icao-to-icd11', 'Coding') "translate ICAO type";            
+        }  "coding";
+    } "tc"; 
+    tr.m as m then {
+        m -> test.origin as coding,            
+            coding.code = m "set default origin";  
+        m -> c('http://worldhealthorganization.github.io/ddcc/CodeSystem/lab-test-sample-origin-icao', m) as coded then {
+            m where coded.memberOf("http://worldhealthorganization.github.io/ddcc/ValueSet/lab-test-sample-origin-icao") -> test.origin = translate(coded, 'http://worldhealthorganization.github.io/ddcc/ConceptMap/lab-test-sample-origin-icao-to-icd11', 'Coding') "translate ICAO origin";            
+        }  "coding";
+    } "m";         
+    dat.sc as date -> test.date = date "set date";
+    tr.r as r then {
+        r -> test.result as coding,            
+            coding.code = r "set default result";  
+        r -> c('http://worldhealthorganization.github.io/ddcc/CodeSystem/lab-test-qual-result-icao', r) as coded then {
+            r where coded.memberOf("http://worldhealthorganization.github.io/ddcc/ValueSet/lab-test-qual-result-icao") -> test.result = translate(coded, 'http://worldhealthorganization.github.io/ddcc/ConceptMap/lab-test-qual-result-icao-to-icd11', 'Coding') "translate ICAO result";            
+        }  "coding";
+    } "r";            
     sp.spn as spn -> 
         test.centre as coding,
         coding.code = spn
-        "set centre";     
-    sp.ctr as ctr -> 
-        test.country as coding,
-        coding.code = ctr
-        "set country";    
+        "set centre"; 
+    sp.ctr as ctr -> test.country as coding then {
+        ctr then ExtractCountry(ctr, coding) "set country";
+    } "ctr";           
+}
+
+group ExtractCountry(source country, target coding) {
+    // ICAO Doc 9303-1 country codes are a superset of ISO 3166 3 letter codes
+    country -> coding.code = country "set default country";
+    country -> c('urn:iso:std:iso:3166', country) as coded then {
+        country where coded.memberOf("http://hl7.org/fhir/ValueSet/iso3166-1-3") ->
+            coding.code = country,
+            coding.system = "urn:iso:std:iso:3166"
+            "set country with system";
+    } "coded";
 }

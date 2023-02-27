@@ -6,7 +6,7 @@ Usage: #definition
 * title = "Lab Test – Type - Mapping LOINC to ICD-11"
 * description = "[Lab Test - Type - COVID-19 - LOINC](ValueSet-lab-test-type-covid19-loinc.html) mapped to ICD-11"
 * status = #draft
-* date = "2023-02-15"
+* date = "2023-02-20"
 // * publisher = "TBD"
 // * url = "https://github.com/ddcc/TBD"
 // * version = "TBD"
@@ -20,22 +20,6 @@ Usage: #definition
 * group[+]
   * source = "http://loinc.org"
   * target = "http://id.who.int/icd11/mms"
-  * element[+]
-    * code = #LP6464-4
-    * display = "Nucliec acid amplification with probe detection"
-    * target[+]
-      * code = #1334426561
-      * display = "Viral nucleic acid amplification test or NAAT"
-      * equivalence = #equivalent
-
-  * element[+]
-    * code = #LP217198-3
-    * display = "Rapid immunoassay"
-    * target[+]
-      * code = #2056159157
-      * display = "Rapid immunoassay detecting viral proteins or Ag-RDT"
-      * equivalence = #equivalent
-
   * element[+]
     * code = #95942-9
     * display = "Influenza virus A and B and SARS-CoV+SARS-CoV-2 (COVID-19) Ag panel - Upper respiratory specimen by Rapid immunoassay"

@@ -6,7 +6,7 @@ Usage: #definition
 * title = "Lab Test - Type - COVID-19 - Mapping DIVOC to ICD-11"
 * description = "[Lab Test - Type - DIVOC](ValueSet-lab-test-type-divoc.html) mapped to ICD-11"
 * status = #draft
-* date = "2023-02-15"
+* date = "2023-02-21"
 // * publisher = "TBD"
 // * url = "https://github.com/ddcc/TBD"
 // * version = "TBD"
@@ -37,26 +37,18 @@ Usage: #definition
       * equivalence = #equivalent
 
   * element[+]
-    * code = #"Nasopharyngeal Swab"
-    * display = "Nasopharyngeal Swab"
+    * code = #rt-pcr
+    * display = "RT-PCR"
     * target[+]
-      * code = #50872817
-      * display = "Nasopharyngeal swab"
+      * code = #1334426561
+      * display = "Viral nucleic acid amplification test or NAAT"
       * equivalence = #equivalent
 
   * element[+]
-    * code = #"Throat swab"
-    * display = "Throat swab"
+    * code = #"rapid antigen test (rat)"
+    * display = "Rapid Antigen Test (RAT)"
     * target[+]
-      * code = #555916027
-      * display = "Oropharyngeal swab"
-      * equivalence = #wider
-
-  * element[+]
-    * code = #"Nasal Swab"
-    * display = "Nasal Swab"
-    * target[+]
-      * code = #50872817
-      * display = "Nasopharyngeal swab"
-      * equivalence = #wider
+      * code = #2056159157
+      * display = "Rapid immunoassay detecting viral proteins or Ag-RDT"
+      * equivalence = #equivalent
 

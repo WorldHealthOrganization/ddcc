@@ -10,3 +10,8 @@ Description: "All DIVOC lab test origin codes from its internally defined code s
 * #"Bronchoalveolar lavage" "Bronchoalveolar lavage"
 * #"Endotracheal Aspirate" "Endotracheal Aspirate"
 * #"Nasal Swab" "Nasal Swab"
+* #"nasopharyngeal swab" "Nasopharyngeal Swab"
+* #"throat swab" "Throat swab"
+* #"bronchoalveolar lavage" "Bronchoalveolar lavage"
+* #"endotracheal aspirate" "Endotracheal Aspirate"
+* #"nasal swab" "Nasal Swab"

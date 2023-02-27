@@ -7,3 +7,5 @@ Description: "All DIVOC lab test type codes from its internally defined code sys
 
 * #RT-PCR "RT-PCR"
 * #"Rapid Antigen Test (RAT)" "Rapid Antigen Test (RAT)"
+* #rt-pcr "RT-PCR"
+* #"rapid antigen test (rat)" "Rapid Antigen Test (RAT)"

@@ -9,3 +9,4 @@ Description: "This is a one-time snapshot of the allowed values for pathogens, r
 // * ^copyright = "TODO: provide copyright information"
 
 * $divoc-lab-test-pathogen#COVID-19 "Concerns the detection of SARS-CoV-2 infection."
+* $divoc-lab-test-pathogen#covid-19 "Concerns the detection of SARS-CoV-2 infection."
