@@ -7,13 +7,7 @@ Usage: #definition
 * description = "[Lab Test - Qualitative Result - DIVOC](ValueSet-lab-test-qual-result-divoc.html) mapped to ICD-11"
 * status = #draft
 * date = "2023-02-21"
-// * publisher = "TBD"
-// * url = "https://github.com/ddcc/TBD"
-// * version = "TBD"
-// * contact.name = "TBD"
-// * contact.telecom.system = 
-// * contact.telecom.value = 
-// * jurisdiction =
+
 
 * copyright = "TODO: provide copyright information"
 
@@ -51,4 +45,3 @@ Usage: #definition
       * code = #RA01.0
       * display = "COVID-19, virus identified"
       * equivalence = #equivalent
-

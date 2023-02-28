@@ -7,13 +7,7 @@ Usage: #definition
 * description = "[Vaccine - COVID-19 - EU Union Register of Medicinial Products](ValueSet-vaccine-covid19-euur.html) mapped to ICD-11"
 * status = #draft
 * date = "2023-02-15"
-// * publisher = "TBD"
-// * url = "https://github.com/ddcc/TBD"
-// * version = "TBD"
-// * contact.name = "TBD"
-// * contact.telecom.system = 
-// * contact.telecom.value = 
-// * jurisdiction =
+
 
 * copyright = "TODO: provide copyright information"
 
@@ -323,4 +317,3 @@ Usage: #definition
       * code = #XM3CT4
       * display = "Recombinant SARS-CoV-2 vaccine"
       * equivalence = #wider
-

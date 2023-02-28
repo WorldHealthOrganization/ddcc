@@ -7,13 +7,7 @@ Usage: #definition
 * description = "[Lab Test - Type - COVID-19 - LOINC](ValueSet-lab-test-type-covid19-loinc.html) mapped to ICD-11"
 * status = #draft
 * date = "2023-02-20"
-// * publisher = "TBD"
-// * url = "https://github.com/ddcc/TBD"
-// * version = "TBD"
-// * contact.name = "TBD"
-// * contact.telecom.system = 
-// * contact.telecom.value = 
-// * jurisdiction =
+
 
 * copyright = "TODO: provide copyright information"
 
@@ -859,4 +853,3 @@ Usage: #definition
       * code = #1334426561
       * display = "Viral nucleic acid amplification test or NAAT"
       * equivalence = #wider
-

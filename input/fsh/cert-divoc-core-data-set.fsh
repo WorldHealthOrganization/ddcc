@@ -1,14 +1,6 @@
 Logical:        CertDIVOC
 Title:          "Certificate - DIVOC Verifiable Credential Logical Model"
-Description:    "Data elements for the DIVOC Core Data Set.
-
-The official DIVOC documentation appears to be at <https://divoc.digit.org>. However, this does not include a full list of elements included in DIVOC certificates.
-
-There is a JSON-LD context referenced in DIVOC certificate examples (`https://cowin.gov.in/credentials/vaccination/v1`), which would provide some element-level information, but this URL does not resolve. There is a copy of this JSON-LD context at <https://github.com/egovernments/DIVOC/blob/main/vaccination-context/vaccination-context.js>.
-
-It was not possible to find any online documentation regarding DIVOC proof of testing. Information on this was provided by the DIVOC team via email.
-
-Some element descriptions in this logical model provide details that are not in publicly available DIVOC documentation."
+Description:    "Data elements for the DIVOC Core Data Set."
 
 * ^url = "http://worldhealthorganization.github.io/ddcc/StructureDefinition/CertDIVOC"
 * ^version = "1"

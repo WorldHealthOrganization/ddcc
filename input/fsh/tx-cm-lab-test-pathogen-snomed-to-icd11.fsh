@@ -7,13 +7,7 @@ Usage: #definition
 * description = "[Lab Test - Pathogen - COVID-19 - SNOMED CT](ValueSet-lab-test-pathogen-covid19-snomed.html) mapped to ICD-11"
 * status = #draft
 * date = "2023-02-20"
-// * publisher = "TBD"
-// * url = "https://github.com/ddcc/TBD"
-// * version = "TBD"
-// * contact.name = "TBD"
-// * contact.telecom.system = 
-// * contact.telecom.value = 
-// * jurisdiction =
+
 
 * copyright = "TODO: provide copyright information"
 
@@ -27,4 +21,3 @@ Usage: #definition
       * code = #XN109
       * display = "SARS-CoV-2"
       * equivalence = #equivalent
-
