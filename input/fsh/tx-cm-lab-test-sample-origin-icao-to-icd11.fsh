@@ -7,13 +7,7 @@ Usage: #definition
 * description = "[Lab Test - Sample Origin - ICAO](ValueSet-lab-test-sample-origin-icao.html) mapped to ICD-11"
 * status = #draft
 * date = "2023-02-20"
-// * publisher = "TBD"
-// * url = "https://github.com/ddcc/TBD"
-// * version = "TBD"
-// * contact.name = "TBD"
-// * contact.telecom.system = 
-// * contact.telecom.value = 
-// * jurisdiction =
+
 
 * copyright = "TODO: provide copyright information"
 
@@ -51,4 +45,3 @@ Usage: #definition
       * code = #1695591348
       * display = "Blood specimen"
       * equivalence = #equivalent
-

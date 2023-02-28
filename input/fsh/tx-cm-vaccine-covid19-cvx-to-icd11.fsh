@@ -7,13 +7,7 @@ Usage: #definition
 * description = "[Vaccine - COVID-19 - CVX](ValueSet-vaccine-covid19-cvx.html) mapped to ICD-11"
 * status = #draft
 * date = "2023-02-15"
-// * publisher = "TBD"
-// * url = "https://github.com/ddcc/TBD"
-// * version = "TBD"
-// * contact.name = "TBD"
-// * contact.telecom.system = 
-// * contact.telecom.value = 
-// * jurisdiction =
+
 
 * copyright = "TODO: provide copyright information"
 
@@ -339,4 +333,3 @@ Usage: #definition
       * code = #XM8NQ0
       * display = "Comirnaty"
       * equivalence = #equivalent
-

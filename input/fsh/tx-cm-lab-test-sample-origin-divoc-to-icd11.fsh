@@ -7,13 +7,7 @@ Usage: #definition
 * description = "[Lab Test - Sample Origin - DIVOC](ValueSet-lab-test-sample-origin-divoc.html) mapped to ICD-11"
 * status = #draft
 * date = "2023-02-21"
-// * publisher = "TBD"
-// * url = "https://github.com/ddcc/TBD"
-// * version = "TBD"
-// * contact.name = "TBD"
-// * contact.telecom.system = 
-// * contact.telecom.value = 
-// * jurisdiction =
+
 
 * copyright = "TODO: provide copyright information"
 
@@ -67,4 +61,3 @@ Usage: #definition
       * code = #50872817
       * display = "Nasopharyngeal swab"
       * equivalence = #wider
-

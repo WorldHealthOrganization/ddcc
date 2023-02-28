@@ -7,13 +7,7 @@ Usage: #definition
 * description = "[Lab Test - Qualitative Result - ICAO](ValueSet-lab-test-qual-result-icao.html) mapped to ICD-11"
 * status = #draft
 * date = "2023-02-15"
-// * publisher = "TBD"
-// * url = "https://github.com/ddcc/TBD"
-// * version = "TBD"
-// * contact.name = "TBD"
-// * contact.telecom.system = 
-// * contact.telecom.value = 
-// * jurisdiction =
+
 
 * copyright = "TODO: provide copyright information"
 
@@ -35,4 +29,3 @@ Usage: #definition
       * code = #RA01.1
       * display = "COVID-19, virus not identified"
       * equivalence = #equivalent
-

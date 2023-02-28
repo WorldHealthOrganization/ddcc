@@ -7,13 +7,7 @@ Usage: #definition
 * description = "[Lab Test - Pathogen - DIVOC](ValueSet-lab-test-pathogen-divoc.html) mapped to ICD-11"
 * status = #draft
 * date = "2023-02-21"
-// * publisher = "TBD"
-// * url = "https://github.com/ddcc/TBD"
-// * version = "TBD"
-// * contact.name = "TBD"
-// * contact.telecom.system = 
-// * contact.telecom.value = 
-// * jurisdiction =
+
 
 * copyright = "TODO: provide copyright information"
 
@@ -35,4 +29,3 @@ Usage: #definition
       * code = #XN109
       * display = "SARS-CoV-2"
       * equivalence = #equivalent
-

@@ -7,13 +7,7 @@ Usage: #definition
 * description = "[Vaccine - COVID-19 - SNOMED CT](ValueSet-vaccine-covid19-snomed.html) mapped to ICD-11"
 * status = #draft
 * date = "2023-02-20"
-// * publisher = "TBD"
-// * url = "https://github.com/ddcc/TBD"
-// * version = "TBD"
-// * contact.name = "TBD"
-// * contact.telecom.system = 
-// * contact.telecom.value = 
-// * jurisdiction =
+
 
 * copyright = "TODO: provide copyright information"
 
@@ -795,4 +789,3 @@ Usage: #definition
       * code = #XM6QV1
       * display = "COVID-19 Vaccine Janssen"
       * equivalence = #wider
-

@@ -7,13 +7,7 @@ Usage: #definition
 * description = "[Lab Test - Type - Generic - LOINC](ValueSet-lab-test-type-loinc.html) mapped to ICD-11"
 * status = #draft
 * date = "2023-02-20"
-// * publisher = "TBD"
-// * url = "https://github.com/ddcc/TBD"
-// * version = "TBD"
-// * contact.name = "TBD"
-// * contact.telecom.system = 
-// * contact.telecom.value = 
-// * jurisdiction =
+
 
 * copyright = "TODO: provide copyright information"
 
@@ -35,4 +29,3 @@ Usage: #definition
       * code = #2056159157
       * display = "Rapid immunoassay detecting viral proteins or Ag-RDT"
       * equivalence = #equivalent
-
