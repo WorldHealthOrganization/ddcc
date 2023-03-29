@@ -3,7 +3,7 @@ Title: "EUUR codes used in this IG"
 Description: "All EUUR codes from `https://ec.europa.eu/health/documents/community-register/html/` used in this IG. Provided so the FHIR server can perform expansions."
 * ^experimental = true
 * ^caseSensitive = true
-* ^url = https://ec.europa.eu/health/documents/community-register/html/
+* ^url = "https://ec.europa.eu/health/documents/community-register/html/"
 
 * #EU/1/20/1528 "Comirnaty"
 * #EU/1/20/1507 "Spikevax"

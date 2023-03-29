@@ -3,7 +3,7 @@ Title: "SNOMED codes used in this IG"
 Description: "All SNOMED codes from `http://snomed.info/sct` used in this IG. Provided so the FHIR server can perform expansions."
 * ^experimental = true
 * ^caseSensitive = true
-* ^url = http://snomed.info/sct
+* ^url = "http://snomed.info/sct"
 
 * #1031000172108 "COVID-19 mRNA vaccine (BNT162b2) of Pfizer-BioNTech"
 * #10871000172106 "COVID-19 mRNA vaccine (mRNA-1273) of Moderna"
