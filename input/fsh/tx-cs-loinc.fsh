@@ -3,7 +3,7 @@ Title: "LOINC codes used in this IG"
 Description: "All LOINC codes from `http://loinc.org` used in this IG. Provided so the FHIR server can perform expansions."
 * ^experimental = true
 * ^caseSensitive = true
-* ^url = http://loinc.org
+* ^url = "http://loinc.org"
 
 * #LP6464-4 "Nucliec acid amplification with probe detection"
 * #LP217198-3 "Rapid immunoassay"

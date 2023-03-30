@@ -3,7 +3,7 @@ Title: "CVX codes used in this IG"
 Description: "All CVX codes from `http://hl7.org/fhir/sid/cvx` used in this IG. Provided so the FHIR server can perform expansions."
 * ^experimental = true
 * ^caseSensitive = true
-* ^url = http://hl7.org/fhir/sid/cvx
+* ^url = "http://hl7.org/fhir/sid/cvx"
 
 * #207 "COVID-19, mRNA, LNP-S, PF, 100 mcg/0.5mL dose or 50 mcg/0.25mL dose"
 * #208 "COVID-19, mRNA, LNP-S, PF, 30 mcg/0.3 mL dose"
