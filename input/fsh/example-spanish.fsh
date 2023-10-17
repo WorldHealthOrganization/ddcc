@@ -15,6 +15,11 @@ Usage: #example
 // Description: ""
 * name = "Hospital del Gobierno"
 
+Instance: DDCC-Organization-XCL
+InstanceOf: DDCCOrganization
+* name = "Chile (Demonstration)"
+* identifier = urn:iso:std:iso:3166#CL
+
 Instance: DDCC-ImmunizationRecommendation-Spanish
 InstanceOf: DDCCImmunizationRecommendation
 Usage: #example
