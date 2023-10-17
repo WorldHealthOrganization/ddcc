@@ -18,7 +18,8 @@ Usage: #example
 Instance: DDCC-Organization-XCL
 InstanceOf: DDCCOrganization
 * name = "Chile (Demonstration)"
-* identifier = urn:iso:std:iso:3166#CL
+* identifier.system = "urn:iso:std:iso:3166"
+* identifier.value = "CL"
 
 Instance: DDCC-ImmunizationRecommendation-Spanish
 InstanceOf: DDCCImmunizationRecommendation
