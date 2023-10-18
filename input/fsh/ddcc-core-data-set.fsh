@@ -22,7 +22,7 @@ Description:    "Data elements for the DDCC Core Data Set."
   * ddccid 0..1 SU Identifier "DDCC Identifier"
   * version 1..1 SU string "Certificate schema version" "Certificate schema version"
   * period 0..1 Period "Certificate Validity Period" "Certificate validity period."
-    * start 0..1 dateTIme "Certificate valid from" "Start date of certificate validity."
+    * start 0..1 dateTime "Certificate valid from" "Start date of certificate validity."
     * end 0..1 dateTime "Certificate valid until" "End date of certificate validity."
 
 Mapping:        DDCCCoreDataSetToComposition
