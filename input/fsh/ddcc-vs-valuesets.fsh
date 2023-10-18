@@ -98,6 +98,14 @@ Description:    "ICD11 codes for DDCC so the FHIR server can perform expansions.
 * ^experimental = false
 * ^caseSensitive = true
 * ^url = $ICD11
+
+* #1334426561 "Viral nucleic acid amplification test or NAAT"
+* #2056159157 "Rapid immunoassay detecting viral proteins or Ag-RDT"
+* #JAM.AH.XF  "Nasopharyngeal swab"
+* #KAR.AH.XF "Oropharyngeal swab"
+* #JAE.AH.XF "Swab from nasal sinus"
+* #KAZ.AH.XD "Saliva specimen"
+* #DIA.AH.XA "Blood specimen"
 * #RA01   "COVID-19 Disease"
 
 * #XM68M6 "COVID-19 vaccines"
