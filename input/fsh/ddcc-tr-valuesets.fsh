@@ -1,7 +1,7 @@
 Alias: $ICD9CM = http://hl7.org/fhir/sid/icd-9-cm
 Alias: $ICD10 = http://hl7.org/fhir/sid/icd-10
 Alias: $ICD11 = http://id.who.int/icd11/mms
-Alias: $ICHI = http://id.who.int/icd/entity
+Alias: $ICHI = http://id.who.int/icd11/mms
 Alias: $LOINC = http://loinc.org
 Alias: SCT = http://snomed.info/sct
 
@@ -47,12 +47,12 @@ WHO Speciman Sample Origin List (COVID-19)
 """
 
 * ^status = #draft
-* include $ICHI#50872817	  "Nasopharyngeal swab"
-* include $ICHI#555916027	  "Oropharyngeal swab"
+* include $ICHI#JAM.AH.XF	  "Nasopharyngeal swab"
+* include $ICHI#KAR.AH.XF	  "Oropharyngeal swab"
 // * include $ICHI#555916027	  "Pharyngeal swab"
-* include $ICHI#608172011	  "Swab from nasal sinus"
-* include $ICHI#1162766848	"Saliva specimen"
-* include $ICHI#1695591348	"Blood specimen"
+* include $ICHI#JAE.AH.XF	  "Swab from nasal sinus"
+* include $ICHI#KAZ.AH.XD	"Saliva specimen"
+* include $ICHI#DIA.AH.XA "Blood specimen"
 // * include $ICHI#1695591348	"Plasma specimen"
 // * include $ICHI#1695591348	"Serum specimen"
 // * include $ICHI#1695591348	"Acellular blood (serum or plasma) specimen"
@@ -218,55 +218,55 @@ Usage:          #definition
   * target = SCT
 
   * element[+]
-    * code = #50872817 
+    * code = #JAM.AH.XF
     * target[+]
       * code = #258500001
       * equivalence = #equivalent
 
   * element[+]
-    * code = #555916027 
+    * code = #KAR.AH.XF
     * target[+]
       * code = #461911000124106
       * equivalence = #wider
 
   * element[+]
-    * code = #555916027 
+    * code = #KAR.AH.XF
     * target[+]
       * code = #472881004
       * equivalence = #wider
 
   * element[+]
-    * code = #608172011 
+    * code = #JAE.AH.XF
     * target[+]
       * code = #472901003
       * equivalence = #equivalent
 
   * element[+]
-    * code = #1162766848 
+    * code = #KAZ.AH.XD
     * target[+]
       * code = #119342007
       * equivalence = #equivalent
 
   * element[+]
-    * code = #1695591348 
+    * code = #DIA.AH.XA
     * target[+]
       * code = #119297000
       * equivalence = #wider
 
   * element[+]
-    * code = #1695591348 
+    * code = #DIA.AH.XA
     * target[+]
       * code = #119361006
       * equivalence = #wider
 
   * element[+]
-    * code = #1695591348 
+    * code = #DIA.AH.XA
     * target[+]
       * code = #119364003
       * equivalence = #wider
 
   * element[+]
-    * code = #1695591348 
+    * code = #DIA.AH.XA
     * target[+]
       * code = #122592007
       * equivalence = #wider
@@ -292,55 +292,55 @@ Usage:          #definition
   * element[+]
     * code = #258500001
     * target[+]
-      * code = #50872817 
+      * code = #JAM.AH.XF
       * equivalence = #equivalent
 
   * element[+]
     * code = #461911000124106
     * target[+]
-      * code = #555916027 
+      * code = #KAR.AH.XF
       * equivalence = #equivalent
 
   * element[+]
     * code = #472881004
     * target[+]
-      * code = #555916027 
+      * code = #KAR.AH.XF
       * equivalence = #equivalent
 
   * element[+]
     * code = #472901003
     * target[+]
-      * code = #608172011 
+      * code = #JAE.AH.XF
       * equivalence = #equivalent
 
   * element[+]
     * code = #119342007
     * target[+]
-      * code = #1162766848 
+      * code = #KAZ.AH.XD 
       * equivalence = #equivalent
 
   * element[+]
     * code = #119297000
     * target[+]
-      * code = #1695591348 
+      * code = #DIA.AH.XA
       * equivalence = #equivalent
 
   * element[+]
     * code = #119361006
     * target[+]
-      * code = #1695591348 
+      * code = #DIA.AH.XA
       * equivalence = #equivalent
 
   * element[+]
     * code = #119364003
     * target[+]
-      * code = #1695591348 
+      * code = #DIA.AH.XA
       * equivalence = #equivalent
 
   * element[+]
     * code = #122592007
     * target[+]
-      * code = #1695591348 
+      * code = #DIA.AH.XA
       * equivalence = #equivalent
 
 

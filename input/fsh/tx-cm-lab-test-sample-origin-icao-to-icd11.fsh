@@ -19,36 +19,36 @@ Usage: #definition
 
 * group[+]
   * source = "http://worldhealthorganization.github.io/ddcc/CodeSystem/lab-test-sample-origin-icao"
-  * target = "http://id.who.int/icd/entity"
+  * target = "http://id.who.int/icd/release/11/mms"
   * element[+]
     * code = #nasopharyngeal
     * display = "Sampling method: nasopharyngeal"
     * target[+]
-      * code = #50872817
-      * display = "Nasopharyngeal swab"
+      * code = #JAM.AH.XF
+      * display = "Specimen collection from nasopharynx"
       * equivalence = #equivalent
 
   * element[+]
     * code = #oropharyngeal
     * display = "Sampling method: oropharyngeal"
     * target[+]
-      * code = #555916027
-      * display = "Oropharyngeal swab"
+      * code = #KAR.AH.XF 
+      * display = "Specimen collection from oropharynx"
       * equivalence = #equivalent
 
   * element[+]
     * code = #saliva
     * display = "Sampling method: saliva"
     * target[+]
-      * code = #1162766848
-      * display = "Saliva specimen"
+      * code = #KAZ.AH.XD
+      * display = "Specimen collection of saliva"
       * equivalence = #equivalent
 
   * element[+]
     * code = #blood
     * display = "Sampling method: blood"
     * target[+]
-      * code = #1695591348
-      * display = "Blood specimen"
+      * code = #DIA.AH.XA
+      * display = "Specimen collection of blood"
       * equivalence = #equivalent
 

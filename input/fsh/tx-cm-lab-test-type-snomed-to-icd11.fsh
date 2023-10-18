@@ -19,7 +19,7 @@ Usage: #definition
 
 * group[+]
   * source = "http://loinc.org"
-  * target = "http://id.who.int/icd/entity"
+  * target = "http://id.who.int/icd/release/11/mms"
   * element[+]
     * code = #LP6464-4
     * display = "Nucliec acid amplification with probe detection"

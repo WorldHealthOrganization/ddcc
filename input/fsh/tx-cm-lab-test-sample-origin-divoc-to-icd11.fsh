@@ -19,12 +19,12 @@ Usage: #definition
 
 * group[+]
   * source = "http://worldhealthorganization.github.io/ddcc/CodeSystem/lab-test-sample-origin-divoc"
-  * target = "http://id.who.int/icd/entity"
+  * target = "http://id.who.int/icd/release/11/mms"
   * element[+]
     * code = #"Nasopharyngeal Swab"
     * display = "Nasopharyngeal Swab"
     * target[+]
-      * code = #50872817
+      * code = #JAM.AH.XF 
       * display = "Nasopharyngeal swab"
       * equivalence = #equivalent
 
@@ -32,7 +32,7 @@ Usage: #definition
     * code = #"Throat swab"
     * display = "Throat swab"
     * target[+]
-      * code = #555916027
+      * code = #KAR.AH.XF
       * display = "Oropharyngeal swab"
       * equivalence = #wider
 
@@ -40,7 +40,7 @@ Usage: #definition
     * code = #"Nasal Swab"
     * display = "Nasal Swab"
     * target[+]
-      * code = #50872817
+      * code = #JAM.AH.XF
       * display = "Nasopharyngeal swab"
       * equivalence = #wider
 
@@ -48,7 +48,7 @@ Usage: #definition
     * code = #"nasopharyngeal swab"
     * display = "Nasopharyngeal Swab"
     * target[+]
-      * code = #50872817
+      * code = #JAM.AH.XF
       * display = "Nasopharyngeal swab"
       * equivalence = #equivalent
 
@@ -56,7 +56,7 @@ Usage: #definition
     * code = #"throat swab"
     * display = "Throat swab"
     * target[+]
-      * code = #555916027
+      * code = #KAR.AH.XF
       * display = "Oropharyngeal swab"
       * equivalence = #wider
 
@@ -64,7 +64,7 @@ Usage: #definition
     * code = #"nasal swab"
     * display = "Nasal Swab"
     * target[+]
-      * code = #50872817
+      * code = #JAM.AH.XF
       * display = "Nasopharyngeal swab"
       * equivalence = #wider
 

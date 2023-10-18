@@ -19,7 +19,7 @@ Usage: #definition
 
 * group[+]
   * source = "http://worldhealthorganization.github.io/ddcc/CodeSystem/lab-test-type-divoc"
-  * target = "http://id.who.int/icd/entity"
+  * target = "http://id.who.int/icd/release/11/mms"
   * element[+]
     * code = #RT-PCR
     * display = "RT-PCR"
