@@ -16,7 +16,7 @@ Logical:         HCertDCC
 Title:           "Payload for Certificate - EU DCC CBOR Web Token Logical Model"
 Description:     "Data elements for the EU Digital COVID Certificate Core Data Set. Based on the official specification for COVID-19-related payloads <https://health.ec.europa.eu/system/files/2021-06/covid-certificate_json_specification_en_0.pdf> as of 2023-01-31, and Implementing Decision (EU) 2021/1073, Annex 1 <https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32021D1073&from=EN#d1e34-35-1>."
 
-* ^url = "http://worldhealthorganization.github.io/ddcc/StructureDefinition/CertDCC-FSH"
+* ^url = "http://worldhealthorganization.github.io/ddcc/StructureDefinition/HCertDCC"
 * ^version = "1"
 * ^abstract = true
 * ^status = #draft
@@ -77,7 +77,7 @@ The example EU-DCC credentials we have use epoch times for iat and exp.
 */
 
 
-// Claim key=1; name=eu_dgc_v1
+
 // TODO: Replace `eu_DCC_v1` with `1` once allowed by SUSHI
 * 1 1..1 BackboneElement "EU Digital COVID Certificate v1"
    // https://health.ec.europa.eu/system/files/2021-06/covid-certificate_json_specification_en_0.pdf - page 5
