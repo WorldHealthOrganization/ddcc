@@ -235,39 +235,5 @@ Title:          "WHO Digital Documentation of COVID Certificates"
 
 
 
-Logical:        DDCC_CWT
-Title:          "DDCC CBOR Web Token (CWT) Claim"
-Description:    "Data elements for the DDCC Core Data Set as CWT"
 
-* ^url = "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCC_CWT"
-* ^version = "RC2"
-* ^abstract = true
-* ^status = #draft
-
-* 1 0..1 Coding "Issuer Code" "Issuer"
-* 3 0..1 string "Key ID used to verify the signature of the certificate" "Key ID"
-
-
-
-Logical:        DDCC_CWT_VS
-Parent: 	DDCC_CWT
-Title:          "DDCC CBOR Web Token (CWT) Claim for VS"
-Description:    "Data elements for the DDCC Core Data Set as CWT for Vaccination."
-
-* ^url = "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCC_CWT_VS"
-* ^version = "RC2"
-* ^status = #draft
-
-* -255 1..1 DDCCCoreDataSet_VS "Vaccination Core Data Set claim" "Vaccination claim"
-
-Logical:        DDCC_CWT_TR
-Parent: 	DDCC_CWT
-Title:          "DDCC CBOR Web Token (CWT) Claim for TR"
-Description:    "Data elements for the DDCC Core Data Set as CWT for Test Results."
-
-* ^url = "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCC_CWT_TR"
-* ^version = "RC2"
-* ^status = #draft
-
-* -254 1..1 DDCCCoreDataSet_TR "Test Result Core Data Set claim" "Test Result claim"
 
