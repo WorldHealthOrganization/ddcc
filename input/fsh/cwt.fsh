@@ -4,7 +4,7 @@ Logical:        COSE_Header
 Title:          "COSE Headers"
 Description:    "Data elements for COSE Headers https://www.iana.org/assignments/cose/cose.xhtml#header-parameters"
 
-* ^url = "http://worldhealthorganization.github.io/ddcc/StructureDefinition/COSE_Header"
+* ^url = "http://smart.who.int/ddcc/StructureDefinition/COSE_Header"
 * ^version = "RC2"
 * ^status = #draft
 
@@ -17,7 +17,7 @@ Logical:        HCert
 Title:          "Health Certificate"
 Description:    "Data elements for the DDCC Core Data Set as CWT for Vaccination."
 
-* ^url = "http://worldhealthorganization.github.io/ddcc/StructureDefinition/HCert"
+* ^url = "http://smart.who.int/ddcc/StructureDefinition/HCert"
 * ^version = "RC2"
 * ^status = #draft
 * 1 0..1 HCertDCC "EU DCC"  "EU DCC"
@@ -30,7 +30,7 @@ Logical:       CWT_Payload
 Title:	       "CWT Payload (Common)"
 Description:   "Common feilds in DDCC CWT Payload https://www.iana.org/assignments/cwt/cwt.xhtml"
 
-* ^url = "http://worldhealthorganization.github.io/ddcc/StructureDefinition/CWT_Payload"
+* ^url = "http://smart.who.int/ddcc/StructureDefinition/CWT_Payload"
 * ^version = "RC2"
 * ^status = #draft
 
@@ -44,7 +44,7 @@ Logical:        CWT
 Title:          "CBOR Web Token (CWT) Claim"
 Description:    "Data elements for CWT"
 
-* ^url = "http://worldhealthorganization.github.io/ddcc/StructureDefinition/CWT"
+* ^url = "http://smart.who.int/ddcc/StructureDefinition/CWT"
 * ^version = "RC2"
 * ^abstract = true
 * ^status = #draft

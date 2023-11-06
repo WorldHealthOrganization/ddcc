@@ -1,9 +1,9 @@
-map "http://worldhealthorganization.github.io/ddcc/StructureMap/IPSToCoreDataSetVS" = "IPSToCoreDataSetVS"
+map "http://smart.who.int/ddcc/StructureMap/IPSToCoreDataSetVS" = "IPSToCoreDataSetVS"
 
 uses "http://hl7.org/fhir/StructureDefinition/Bundle" alias IPS as source
 uses "http://hl7.org/fhir/StructureDefinition/Bundle" alias DDCCBundle as target
 
-uses "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.VS.PoV" alias DDCC as produced
+uses "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.VS.PoV" alias DDCC as produced
 
 
 group IPSToCoreDataSetVS ( 
@@ -21,9 +21,9 @@ group IPSToCoreDataSetVS (
               findpatient.resource as patient then {
                 ips.entry as entry then {
                   entry.resource : Immunization as immunization 
-                    where vaccineCode.memberOf("http://worldhealthorganization.github.io/ddcc/ValueSet/who-ddcc-allowed-vaccines-covid-19") -> 
+                    where vaccineCode.memberOf("http://smart.who.int/ddcc/ValueSet/who-ddcc-allowed-vaccines-covid-19") -> 
                     ddccBundle.entry as outentry, 
-                    create ("http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.VS.PoV") as ddcc
+                    create ("http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.VS.PoV") as ddcc
                   then {
                     immunization then PatientToDDCC( patient, ddcc ) "set patient info";
             
@@ -53,11 +53,11 @@ group ImmunizationToVaccination(
 ) {
 
   immunization.vaccineCode as vaccine  then {
-    vaccine.coding as coding where memberOf("http://worldhealthorganization.github.io/ddcc/ValueSet/who-ddcc-vaccines-covid-19") 
+    vaccine.coding as coding where memberOf("http://smart.who.int/ddcc/ValueSet/who-ddcc-vaccines-covid-19") 
     then {
       coding -> vaccination.vaccine = coding "set coding";    
     } "copy vaccine";
-    vaccine.coding as coding where memberOf("http://worldhealthorganization.github.io/ddcc/ValueSet/who-ddcc-vaccines-covid-19").not() 
+    vaccine.coding as coding where memberOf("http://smart.who.int/ddcc/ValueSet/who-ddcc-vaccines-covid-19").not() 
     then {
       coding -> vaccination.vaccine = translate(coding, 'who-ddcc-map-cvx-icd11-vaccines', 'Coding') "translate code";
     } "translate vaccine coding";
@@ -122,9 +122,9 @@ group IPSToVaccination(
   target vaccination
 ) {
 
-	ips.entry as entry -> create("http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCPatient") as params then {
+	ips.entry as entry -> create("http://smart.who.int/ddcc/StructureDefinition/DDCCPatient") as params then {
     entry.resource : Immunization as immunization -> create('http://hl7.org/fhir/StructureDefinition/Parameters') as params
-      //where vaccineCode.memberOf("http://worldhealthorganization.github.io/ddcc/ValueSet/who-ddcc-vaccines-covid-19") 
+      //where vaccineCode.memberOf("http://smart.who.int/ddcc/ValueSet/who-ddcc-vaccines-covid-19") 
       //where vaccineCode.coding.exists(code='208')
       //check translate(vaccineCode.coding, 'who-ddcc-map-cvx-icd11-vaccines', 'code')
     then {

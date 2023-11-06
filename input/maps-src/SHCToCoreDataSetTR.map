@@ -1,11 +1,11 @@
-map "http://worldhealthorganization.github.io/ddcc/StructureMap/SHCToCoreDataSetTR" = "SHCToCoreDataSetTR"
+map "http://smart.who.int/ddcc/StructureMap/SHCToCoreDataSetTR" = "SHCToCoreDataSetTR"
 
 uses "http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-infectious-disease-laboratory-bundle-dm" alias SHCLabBundleDM as source
 uses "http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-patient-general-dm" alias SHCPatientDM as source
 uses "http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-infectious-disease-laboratory-result-observation-dm"  alias SHCLabDM as source
 
 uses "http://hl7.org/fhir/StructureDefinition/Bundle" alias DDCCBundle as target
-uses "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.TR" alias DDCCTR as produced
+uses "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.TR" alias DDCCTR as produced
 
 group SHCToTR ( 
   source shc : SHCLabBundleDM
@@ -14,8 +14,8 @@ group SHCToTR (
   shc.entry as patientEntrySHC then {
     patientEntrySHC.resource : Patient first as patient then {
       shc.entry as entry then {
-        //entry.resource : Immunization as immunization where vaccineCode.memberOf('http://worldhealthorganization.github.io/ddcc/ValueSet/who-ddcc-allowed-vaccines-covid-19') ->  ddccBundle.entry as outentry,  create('http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.VS') as ddcc then {
-        entry.resource : Observation as lab ->  ddccBundle.entry as outentry,  create('http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.TR') as ddcc then {
+        //entry.resource : Immunization as immunization where vaccineCode.memberOf('http://smart.who.int/ddcc/ValueSet/who-ddcc-allowed-vaccines-covid-19') ->  ddccBundle.entry as outentry,  create('http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.VS') as ddcc then {
+        entry.resource : Observation as lab ->  ddccBundle.entry as outentry,  create('http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.TR') as ddcc then {
           lab then PatientToDDCCTR(patient, ddcc) "set patient";
           lab -> ddcc.test as test then LabToDDCC(lab, test) "set test";
           lab -> outentry.resource = ddcc "set outentry";
@@ -53,15 +53,15 @@ group LabToDDCC(
   lab.code as code then {
     code.coding first as labType then {
       labType -> test.type = labType "set default type";
-      labType where labType.memberOf('http://worldhealthorganization.github.io/ddcc/ValueSet/lab-test-type-covid19-loinc') -> test.type = translate(labType, 'http://worldhealthorganization.github.io/ddcc/ConceptMap/lab-test-type-covid19-loinc-to-icd11', 'Coding') "translate loinc type";  
-      labType where labType.memberOf('http://worldhealthorganization.github.io/ddcc/ValueSet/lab-test-type-covid19-loinc') -> test.pathogen = c('http://id.who.int/icd11/mms', 'XN109') "set pathogen to COVID";
+      labType where labType.memberOf('http://smart.who.int/ddcc/ValueSet/lab-test-type-covid19-loinc') -> test.type = translate(labType, 'http://smart.who.int/ddcc/ConceptMap/lab-test-type-covid19-loinc-to-icd11', 'Coding') "translate loinc type";  
+      labType where labType.memberOf('http://smart.who.int/ddcc/ValueSet/lab-test-type-covid19-loinc') -> test.pathogen = c('http://id.who.int/icd11/mms', 'XN109') "set pathogen to COVID";
     } "coding";
   } "code";
   lab.effectiveDateTime as date ->  test.date = date "set date";
   lab.valueCodeableConcept as value then {
     value.coding first as result then {
       result -> test.result = result "set default result";
-      result where result.memberOf('http://worldhealthorganization.github.io/ddcc/ValueSet/lab-test-qual-result-snomed') -> test.result = translate(result, 'http://worldhealthorganization.github.io/ddcc/ConceptMap/lab-test-qual-result-snomed-to-icd11', ) "translate snomed result";
+      result where result.memberOf('http://smart.who.int/ddcc/ValueSet/lab-test-qual-result-snomed') -> test.result = translate(result, 'http://smart.who.int/ddcc/ConceptMap/lab-test-qual-result-snomed-to-icd11', ) "translate snomed result";
     } "coding";
   } "valueCodeableConcept";
 

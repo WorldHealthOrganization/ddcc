@@ -1,4 +1,4 @@
-Alias: $icao-lab-test-origin = http://worldhealthorganization.github.io/ddcc/CodeSystem/lab-test-sample-origin-icao
+Alias: $icao-lab-test-origin = http://smart.who.int/ddcc/CodeSystem/lab-test-sample-origin-icao
 
 ValueSet: LabTestSampleOriginIcaoValueSet
 Id: lab-test-sample-origin-icao

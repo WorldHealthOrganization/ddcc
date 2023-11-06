@@ -2,7 +2,7 @@ Logical:        CertICAO
 Title:          "Certificate - ICAO Visible Digital Seal Logical Model"
 Description:    "Data elements for the ICAO Visible Digital Seal Core Data Set. Based on <https://www.icao.int/vdsnc-spec> as of 2023-02-02."
 
-* ^url = "http://worldhealthorganization.github.io/ddcc/StructureDefinition/CertICAOVDS"
+* ^url = "http://smart.who.int/ddcc/StructureDefinition/CertICAOVDS"
 * ^version = "1"
 * ^abstract = true
 * ^status = #draft

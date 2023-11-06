@@ -8,7 +8,7 @@ This ImplementationGuide is published in the following locations:
 
 
 Continuous Build:  __https://github.com/WorldHealthOrganization/ddcc__  
-Canonical / permanent URL: __https://WorldHealthOrganization.github.io/ddcc__  
+Canonical / permanent URL: __https://smart.who.int/ddcc__  
 
 <br> </br>
 

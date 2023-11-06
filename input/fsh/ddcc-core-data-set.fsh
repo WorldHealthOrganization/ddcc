@@ -7,7 +7,7 @@ Logical:        DDCCCoreDataSet
 Title:          "DDCC Core Data Set Logical Model"
 Description:    "Data elements for the DDCC Core Data Set."
 
-* ^url = "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet"
+* ^url = "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet"
 * ^version = "RC2"
 * ^abstract = true
 * ^status = #draft
@@ -27,7 +27,7 @@ Description:    "Data elements for the DDCC Core Data Set."
 
 Mapping:        DDCCCoreDataSetToComposition
 Source:         DDCCCoreDataSet
-Target:         "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCComposition"
+Target:         "http://smart.who.int/ddcc/StructureDefinition/DDCCComposition"
 Id:             ddcc-composition
 Title:          "WHO Digital Documentation of COVID Certificates"
 
@@ -36,7 +36,7 @@ Title:          "WHO Digital Documentation of COVID Certificates"
 
 Mapping:        DDCCCoreDataSetToPatient
 Source:         DDCCCoreDataSet
-Target:         "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCPatient"
+Target:         "http://smart.who.int/ddcc/StructureDefinition/DDCCPatient"
 Id:             ddcc-patient
 Title:          "WHO Digital Documentation of COVID Certificates"
 
@@ -50,7 +50,7 @@ Parent:         DDCCCoreDataSet
 Title:          "DDCC Core Data Set Logical Model for Vaccination Status"
 Description:    "Data elements for the DDCC Core Data Set for Vaccination Status.
 "
-* ^url = "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.VS"
+* ^url = "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.VS"
 * ^version = "RC2"
 * ^abstract = true
 * ^status = #draft
@@ -70,7 +70,7 @@ Description:    "Data elements for the DDCC Core Data Set for Vaccination Status
   * totalDoses 0..1 positiveInt "Total doses" "Total expected doses as defined by Member State care plan and immunization programme policies."
   * country 1..1 SU Coding "Country of vaccination" "The country in which the individual has been vaccinated."
     * ^mapping.identity = "ddcc"
-    * ^mapping.map = "Immunization.extension.where(url='https://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCountryOfVaccination')"
+    * ^mapping.map = "Immunization.extension.where(url='https://smart.who.int/ddcc/StructureDefinition/DDCCCountryOfVaccination')"
   * country from http://hl7.org/fhir/ValueSet/iso3166-1-3 (preferred)
   * centre 0..1 string "Administering centre" "The name or identifier of the vaccination facility responsible for providing the vaccination."   
   * signature 0..1 Signature "Signature of health worker" "REQUIRED for PAPER vaccination certificates ONLY. The health worker who provided the vaccination or the supervising clinician's hand-written signature."
@@ -82,21 +82,21 @@ Description:    "Data elements for the DDCC Core Data Set for Vaccination Status
 
 Mapping:        DDCCCoreDataSetVSToImmunization
 Source:         DDCCCoreDataSet_VS
-Target:         "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCImmunization"
+Target:         "http://smart.who.int/ddcc/StructureDefinition/DDCCImmunization"
 Id:             ddcc-immunization
 Title:          "WHO Digital Documentation of COVID Certificates"
 
 * vaccination
   * vaccine -> "Immunization.vaccineCode"
-  * brand -> "Immunization.extension[https://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCEventBrand]"
+  * brand -> "Immunization.extension[https://smart.who.int/ddcc/StructureDefinition/DDCCEventBrand]"
   * manufacturer -> "Immunization.manufacturer"
-  * maholder -> "Immunization.extension[https://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCVaccineMarketAuthorization]"
+  * maholder -> "Immunization.extension[https://smart.who.int/ddcc/StructureDefinition/DDCCVaccineMarketAuthorization]"
   * lot -> "Immunization.lotNumber"
   * date -> "Immunization.occurrence"
-  * validFrom -> "Immunization.extension[https://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCVaccineValidFrom]"
+  * validFrom -> "Immunization.extension[https://smart.who.int/ddcc/StructureDefinition/DDCCVaccineValidFrom]"
   * dose -> "Immunization.protocolApplied.doseNumber"
   * totalDoses -> "Immunization.protocolApplied.seriesDoses"
-  * country -> "Immunization.extension[https://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCountryOfEvent]"
+  * country -> "Immunization.extension[https://smart.who.int/ddcc/StructureDefinition/DDCCCountryOfEvent]"
   * centre -> "Immunization.location"
   * practitioner -> "Immunization.performer.actor"
   * disease -> "Immunization.protocolApplied.targetDisease"
@@ -105,7 +105,7 @@ Title:          "WHO Digital Documentation of COVID Certificates"
 
 Mapping:        DDCCCoreDataSetVSToImmunizationRecommendation
 Source:         DDCCCoreDataSet_VS
-Target:         "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCImmunizationRecommendation"
+Target:         "http://smart.who.int/ddcc/StructureDefinition/DDCCImmunizationRecommendation"
 Id:             ddcc-immunization-recommendation
 Title:          "WHO Digital Documentation of COVID Certificates"
 
@@ -118,7 +118,7 @@ Parent:         DDCCCoreDataSet_VS
 Title:          "DDCC Core Data Set Logical Model - Vaccination Status - Proof of Vaccination"
 Description:    "Data elements for the DDCC Core Data Set - Vaccination Status - Proof of Vaccination."
 
-* ^url = "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.VS.PoV"
+* ^url = "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.VS.PoV"
 * ^version = "RC2"
 * ^abstract = false
 * ^status = #draft
@@ -132,7 +132,7 @@ Parent:         DDCCCoreDataSet_VS
 Title:          "DDCC Core Data Set Logical Model - Vaccination Status - Continuity of Care"
 Description:    "Data elements for the DDCC Core Data Set - Vaccination Status - Continuity of Care."
 
-* ^url = "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.VS.CoC"
+* ^url = "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.VS.CoC"
 * ^version = "RC2"
 * ^abstract = false
 * ^status = #draft
@@ -144,7 +144,7 @@ Description:    "Data elements for the DDCC Core Data Set - Vaccination Status -
 
 Mapping:        DDCCCoreDataSetVSCoCToPatient
 Source:         DDCCCoreDataSet_VS_CoC
-Target:         "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCPatient"
+Target:         "http://smart.who.int/ddcc/StructureDefinition/DDCCPatient"
 Id:             ddcc-vs-coc-immunization-recommendation
 Title:          "WHO Digital Documentation of COVID Certificates"
 
@@ -156,7 +156,7 @@ Parent:         DDCCCoreDataSet
 Title:          "DDCC Core Data Set Logical Model for Test Result"
 Description:    "Data elements for the DDCC Core Data Set for Test Result."
 
-* ^url = "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.TR"
+* ^url = "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.TR"
 * ^version = "RC2"
 * ^abstract = true
 * ^status = #draft
@@ -180,7 +180,7 @@ Description:    "Data elements for the DDCC Core Data Set for Test Result."
 
 Mapping:        DDCCCoreDataSetTRToObservation
 Source:         DDCCCoreDataSet_TR
-Target:         "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCObservation"
+Target:         "http://smart.who.int/ddcc/StructureDefinition/DDCCObservation"
 Id:             ddcc-observation
 Title:          "WHO Digital Documentation of COVID Certificates"
 
@@ -192,7 +192,7 @@ Title:          "WHO Digital Documentation of COVID Certificates"
 
 Mapping:        DDCCCoreDataSetTRToSpecimen
 Source:         DDCCCoreDataSet_TR
-Target:         "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCSpecimen"
+Target:         "http://smart.who.int/ddcc/StructureDefinition/DDCCSpecimen"
 Id:             ddcc-specimen
 Title:          "WHO Digital Documentation of COVID Certificates"
 
@@ -202,7 +202,7 @@ Title:          "WHO Digital Documentation of COVID Certificates"
 
 Mapping:        DDCCCoreDataSetTRToTest
 Source:         DDCCCoreDataSet_TR
-Target:         "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCTest"
+Target:         "http://smart.who.int/ddcc/StructureDefinition/DDCCTest"
 Id:             ddcc-test
 Title:          "WHO Digital Documentation of COVID Certificates"
 
@@ -214,7 +214,7 @@ Title:          "WHO Digital Documentation of COVID Certificates"
 
 Mapping:        DDCCCoreDataSetTRToDignosticReport
 Source:         DDCCCoreDataSet_TR
-Target:         "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCDiagnosticReport"
+Target:         "http://smart.who.int/ddcc/StructureDefinition/DDCCDiagnosticReport"
 Id:             ddcc-diagnostic-report
 Title:          "WHO Digital Documentation of COVID Certificates"
 
@@ -224,14 +224,14 @@ Title:          "WHO Digital Documentation of COVID Certificates"
 
 Mapping:        DDCCCoreDataSetTRToProcedure
 Source:         DDCCCoreDataSet_TR
-Target:         "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCProcedure"
+Target:         "http://smart.who.int/ddcc/StructureDefinition/DDCCProcedure"
 Id:             ddcc-procedure
 Title:          "WHO Digital Documentation of COVID Certificates"
 
 * test
   * date -> "Procedure.performed"
   * centre -> "Procedure.location"
-  * country -> "Procedure.extension[https://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCountryOfEvent]"
+  * country -> "Procedure.extension[https://smart.who.int/ddcc/StructureDefinition/DDCCCountryOfEvent]"
 
 
 

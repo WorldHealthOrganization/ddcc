@@ -7,13 +7,13 @@
   },
   "text": {
     "status": "generated",
-    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><pre>map &quot;http://worldhealthorganization.github.io/ddcc/StructureMap/CertDIVOCtoCoreDataSet&quot; = &quot;CertDIVOCtoCoreDataSet&quot;\r\n\r\n// Structure map transforming CertDIVOC logical model to bundle of Core Data Set logical model\r\n\r\nuses &quot;http://worldhealthorganization.github.io/ddcc/StructureDefinition/CertDIVOC&quot; alias DIVOC as source\r\nuses &quot;http://hl7.org/fhir/StructureDefinition/Bundle&quot; alias DDCCBundle as target\r\nuses &quot;http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet&quot; alias DDCC as produced\r\nuses &quot;http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.VS&quot; alias DDCCVS as produced\r\nuses &quot;http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.TR&quot; alias DDCCTR as produced\r\n\r\ngroup CertDIVOCtoCoreDataSetBundle(source src : DIVOC, target ddccBundle : DDCCBundle) {\r\n  src.type as type then {\r\n    type where type = 'ProofOfVaccinationCredential' then {\r\n      src.evidence as evidence -&gt;  ddccBundle.entry as outentry,  create('http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.VS') as ddcc then {\r\n        src.credentialSubject as credentialSubject then CredentialSubjecttoCoreDataSet(credentialSubject, ddcc) &quot;set patient&quot;;\r\n        src -&gt; ddcc.certificate as certificate then CertDIVOCtoCoreDataSetCertificate(src, evidence, certificate) &quot;set certificate&quot;;\r\n        evidence -&gt; ddcc.vaccination as vaccination then EvidencetoCoreDataSetVS(evidence, vaccination) &quot;set vaccination&quot;;\r\n        evidence -&gt; outentry.resource = ddcc &quot;set outentry&quot;;\r\n      };\r\n    } &quot;ProofOfVaccinationCredential&quot;;\r\n    type where type = 'ProofOfTestCertificateCredential' then {\r\n      src.evidence as evidence -&gt;  ddccBundle.entry as outentry,  create('http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.TR') as ddcc then {\r\n        src.credentialSubject as credentialSubject then CredentialSubjecttoCoreDataSet(credentialSubject, ddcc) &quot;set patient&quot;;\r\n        src -&gt; ddcc.certificate as certificate then CertDIVOCtoCoreDataSetCertificate(src, evidence, certificate) &quot;set certificate&quot;;\r\n        evidence -&gt; ddcc.test as test then EvidencetoCoreDataSetTR(evidence, test) &quot;set test&quot;;\r\n        evidence -&gt; outentry.resource = ddcc &quot;set outentry&quot;;\r\n      };\r\n    } &quot;ProofOfTestCertificateCredential&quot;;\r\n  };\r\n}\r\n\r\ngroup CredentialSubjecttoCoreDataSet(source credentialSubject, target ddcc : DDCC) {\r\n  credentialSubject.name as name -&gt; ddcc.name = name &quot;set name&quot;;\r\n  credentialSubject.dob as birthDate -&gt; ddcc.birthDate = birthDate &quot;set birthDate&quot;;\r\n  credentialSubject.id as id -&gt;  create('Identifier') as identifier,  identifier.value = id then {\r\n    id -&gt; ddcc.identifier = identifier &quot;set identifier&quot;;\r\n  } &quot;identifier&quot;;\r\n}\r\n\r\ngroup CertDIVOCtoCoreDataSetCertificate(source src : DIVOC, source evidence, target certificate) {\r\n  evidence.certificateId as certificateId -&gt;  certificate.hcid as hcid,  hcid.value = certificateId &quot;set hcid&quot;;\r\n  src.context as context then {\r\n    context where (context.contains('cowin.gov.in')) -&gt; certificate.version = context &quot;set version&quot;;\r\n  };\r\n  evidence -&gt; certificate.period = create('Period') as period then {\r\n    evidence.effectiveStart as effectiveStart -&gt; period.start = effectiveStart &quot;set period start&quot;;\r\n    evidence.effectiveUntil as effectiveUntil -&gt; period.end = effectiveUntil &quot;set period end&quot;;\r\n  } &quot;period&quot;;\r\n  src.issuer as issuer -&gt;  certificate.issuer = create('Reference') as issuer,  issuer.display = issuer &quot;set issuer&quot;;\r\n}\r\n\r\ngroup EvidencetoCoreDataSetVS(source evidence, target vaccination) {\r\n  evidence.icd11Code as icd11Code -&gt;  vaccination.vaccine as coding,  coding.system = 'http://id.who.int/icd11/mms',  coding.code = icd11Code &quot;set vaccine&quot;;\r\n  evidence.vaccine as vaccine -&gt;  vaccination.brand as coding,  coding.code = vaccine &quot;set brand&quot;;\r\n  evidence.manufacturer as manufacturer -&gt;  vaccination.manufacturer as coding,  coding.code = manufacturer &quot;set manufacturer&quot;;\r\n  evidence.batch as batch -&gt; vaccination.lot = batch &quot;set lot&quot;;\r\n  evidence.date as date -&gt; vaccination.date = date &quot;set date&quot;;\r\n  evidence.dose as dose -&gt; vaccination.dose = dose &quot;set dose&quot;;\r\n  evidence.totalDoses as totalDoses -&gt; vaccination.totalDoses = totalDoses &quot;set totalDoses&quot;;\r\n  evidence.facility as facility then {\r\n    facility.address as address then {\r\n      address.addressCountry as addressCountry -&gt;  vaccination.country as coding,  coding.system = 'urn:iso:std:iso:3166',  coding.code = addressCountry &quot;set country&quot;;\r\n    };\r\n    facility.name as name -&gt; vaccination.centre = name &quot;set centre&quot;;\r\n  };\r\n  evidence.verifier as verifier then {\r\n    verifier.name as name -&gt;  vaccination.practitioner as practitioner,  practitioner.value = name &quot;set practitioner&quot;;\r\n  };\r\n}\r\n\r\ngroup EvidencetoCoreDataSetTR(source evidence, target test) {\r\n  evidence.disease as disease then {\r\n    disease where disease = 'COVID-19' -&gt;  test.pathogen as coding,  coding.system = 'http://id.who.int/icd11/mms',  coding.code = 'XN109' &quot;set COVID-19 pathogen&quot;;\r\n    disease where (disease = 'COVID-19').not() -&gt;  test.pathogen as coding,  coding.code = disease &quot;set other pathogen&quot;;\r\n  };\r\n  evidence.testType as testType then {\r\n    testType -&gt;  test.type as coding,  coding.code = testType &quot;set default type&quot;;\r\n    testType -&gt; c('http://worldhealthorganization.github.io/ddcc/CodeSystem/lab-test-type-divoc', testType) as coded then {\r\n      testType where coded.memberOf('http://worldhealthorganization.github.io/ddcc/ValueSet/lab-test-type-divoc') -&gt; test.type = translate(coded, 'http://worldhealthorganization.github.io/ddcc/ConceptMap/lab-test-type-divoc-to-icd11', 'Coding') &quot;translate DIVOC type&quot;;\r\n    } &quot;coding&quot;;\r\n  };\r\n  evidence.sampleOrigin as sampleOrigin then {\r\n    sampleOrigin -&gt;  test.origin as coding,  coding.code = sampleOrigin &quot;set default origin&quot;;\r\n    sampleOrigin -&gt; c('http://worldhealthorganization.github.io/ddcc/CodeSystem/lab-test-sample-origin-divoc', sampleOrigin) as coded then {\r\n      sampleOrigin where coded.memberOf('http://worldhealthorganization.github.io/ddcc/ValueSet/lab-test-sample-origin-divoc') -&gt; test.origin = translate(coded, 'http://worldhealthorganization.github.io/ddcc/ConceptMap/lab-test-sample-origin-divoc-to-icd11', 'Coding') &quot;translate DIVOC origin&quot;;\r\n    } &quot;coding&quot;;\r\n  };\r\n  evidence.result as result then {\r\n    result -&gt;  test.result as coding,  coding.code = result &quot;set default result&quot;;\r\n    result -&gt; c('http://worldhealthorganization.github.io/ddcc/CodeSystem/lab-test-qual-result-divoc', result) as coded then {\r\n      result where coded.memberOf('http://worldhealthorganization.github.io/ddcc/ValueSet/lab-test-qual-result-divoc') -&gt; test.result = translate(coded, 'http://worldhealthorganization.github.io/ddcc/ConceptMap/lab-test-qual-result-divoc-to-icd11', 'Coding') &quot;translate DIVOC result&quot;;\r\n    } &quot;coded&quot;;\r\n  };\r\n  evidence.sampleCollectionTimestamp as date -&gt; test.date = date &quot;set date&quot;;\r\n  evidence.testName as testName -&gt;  test.brand as coding,  coding.code = testName &quot;set brand&quot;;\r\n  evidence.manufacturer as manufacturer -&gt;  test.manufacturer as coding,  coding.code = manufacturer &quot;set manufacturer&quot;;\r\n  evidence.facility as facility then {\r\n    facility.address as address then {\r\n      address.addressCountry as addressCountry -&gt;  test.country as coding,  coding.system = 'urn:iso:std:iso:3166',  coding.code = addressCountry &quot;set country&quot;;\r\n    };\r\n    facility.name as name -&gt;  test.centre as coding,  coding.code = name &quot;set centre&quot;;\r\n  };\r\n}\r\n\r\n</pre></div>"
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><pre>map &quot;http://smart.who.int/ddcc/StructureMap/CertDIVOCtoCoreDataSet&quot; = &quot;CertDIVOCtoCoreDataSet&quot;\r\n\r\n// Structure map transforming CertDIVOC logical model to bundle of Core Data Set logical model\r\n\r\nuses &quot;http://smart.who.int/ddcc/StructureDefinition/CertDIVOC&quot; alias DIVOC as source\r\nuses &quot;http://hl7.org/fhir/StructureDefinition/Bundle&quot; alias DDCCBundle as target\r\nuses &quot;http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet&quot; alias DDCC as produced\r\nuses &quot;http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.VS&quot; alias DDCCVS as produced\r\nuses &quot;http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.TR&quot; alias DDCCTR as produced\r\n\r\ngroup CertDIVOCtoCoreDataSetBundle(source src : DIVOC, target ddccBundle : DDCCBundle) {\r\n  src.type as type then {\r\n    type where type = 'ProofOfVaccinationCredential' then {\r\n      src.evidence as evidence -&gt;  ddccBundle.entry as outentry,  create('http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.VS') as ddcc then {\r\n        src.credentialSubject as credentialSubject then CredentialSubjecttoCoreDataSet(credentialSubject, ddcc) &quot;set patient&quot;;\r\n        src -&gt; ddcc.certificate as certificate then CertDIVOCtoCoreDataSetCertificate(src, evidence, certificate) &quot;set certificate&quot;;\r\n        evidence -&gt; ddcc.vaccination as vaccination then EvidencetoCoreDataSetVS(evidence, vaccination) &quot;set vaccination&quot;;\r\n        evidence -&gt; outentry.resource = ddcc &quot;set outentry&quot;;\r\n      };\r\n    } &quot;ProofOfVaccinationCredential&quot;;\r\n    type where type = 'ProofOfTestCertificateCredential' then {\r\n      src.evidence as evidence -&gt;  ddccBundle.entry as outentry,  create('http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.TR') as ddcc then {\r\n        src.credentialSubject as credentialSubject then CredentialSubjecttoCoreDataSet(credentialSubject, ddcc) &quot;set patient&quot;;\r\n        src -&gt; ddcc.certificate as certificate then CertDIVOCtoCoreDataSetCertificate(src, evidence, certificate) &quot;set certificate&quot;;\r\n        evidence -&gt; ddcc.test as test then EvidencetoCoreDataSetTR(evidence, test) &quot;set test&quot;;\r\n        evidence -&gt; outentry.resource = ddcc &quot;set outentry&quot;;\r\n      };\r\n    } &quot;ProofOfTestCertificateCredential&quot;;\r\n  };\r\n}\r\n\r\ngroup CredentialSubjecttoCoreDataSet(source credentialSubject, target ddcc : DDCC) {\r\n  credentialSubject.name as name -&gt; ddcc.name = name &quot;set name&quot;;\r\n  credentialSubject.dob as birthDate -&gt; ddcc.birthDate = birthDate &quot;set birthDate&quot;;\r\n  credentialSubject.id as id -&gt;  create('Identifier') as identifier,  identifier.value = id then {\r\n    id -&gt; ddcc.identifier = identifier &quot;set identifier&quot;;\r\n  } &quot;identifier&quot;;\r\n}\r\n\r\ngroup CertDIVOCtoCoreDataSetCertificate(source src : DIVOC, source evidence, target certificate) {\r\n  evidence.certificateId as certificateId -&gt;  certificate.hcid as hcid,  hcid.value = certificateId &quot;set hcid&quot;;\r\n  src.context as context then {\r\n    context where (context.contains('cowin.gov.in')) -&gt; certificate.version = context &quot;set version&quot;;\r\n  };\r\n  evidence -&gt; certificate.period = create('Period') as period then {\r\n    evidence.effectiveStart as effectiveStart -&gt; period.start = effectiveStart &quot;set period start&quot;;\r\n    evidence.effectiveUntil as effectiveUntil -&gt; period.end = effectiveUntil &quot;set period end&quot;;\r\n  } &quot;period&quot;;\r\n  src.issuer as issuer -&gt;  certificate.issuer = create('Reference') as issuer,  issuer.display = issuer &quot;set issuer&quot;;\r\n}\r\n\r\ngroup EvidencetoCoreDataSetVS(source evidence, target vaccination) {\r\n  evidence.icd11Code as icd11Code -&gt;  vaccination.vaccine as coding,  coding.system = 'http://id.who.int/icd11/mms',  coding.code = icd11Code &quot;set vaccine&quot;;\r\n  evidence.vaccine as vaccine -&gt;  vaccination.brand as coding,  coding.code = vaccine &quot;set brand&quot;;\r\n  evidence.manufacturer as manufacturer -&gt;  vaccination.manufacturer as coding,  coding.code = manufacturer &quot;set manufacturer&quot;;\r\n  evidence.batch as batch -&gt; vaccination.lot = batch &quot;set lot&quot;;\r\n  evidence.date as date -&gt; vaccination.date = date &quot;set date&quot;;\r\n  evidence.dose as dose -&gt; vaccination.dose = dose &quot;set dose&quot;;\r\n  evidence.totalDoses as totalDoses -&gt; vaccination.totalDoses = totalDoses &quot;set totalDoses&quot;;\r\n  evidence.facility as facility then {\r\n    facility.address as address then {\r\n      address.addressCountry as addressCountry -&gt;  vaccination.country as coding,  coding.system = 'urn:iso:std:iso:3166',  coding.code = addressCountry &quot;set country&quot;;\r\n    };\r\n    facility.name as name -&gt; vaccination.centre = name &quot;set centre&quot;;\r\n  };\r\n  evidence.verifier as verifier then {\r\n    verifier.name as name -&gt;  vaccination.practitioner as practitioner,  practitioner.value = name &quot;set practitioner&quot;;\r\n  };\r\n}\r\n\r\ngroup EvidencetoCoreDataSetTR(source evidence, target test) {\r\n  evidence.disease as disease then {\r\n    disease where disease = 'COVID-19' -&gt;  test.pathogen as coding,  coding.system = 'http://id.who.int/icd11/mms',  coding.code = 'XN109' &quot;set COVID-19 pathogen&quot;;\r\n    disease where (disease = 'COVID-19').not() -&gt;  test.pathogen as coding,  coding.code = disease &quot;set other pathogen&quot;;\r\n  };\r\n  evidence.testType as testType then {\r\n    testType -&gt;  test.type as coding,  coding.code = testType &quot;set default type&quot;;\r\n    testType -&gt; c('http://smart.who.int/ddcc/CodeSystem/lab-test-type-divoc', testType) as coded then {\r\n      testType where coded.memberOf('http://smart.who.int/ddcc/ValueSet/lab-test-type-divoc') -&gt; test.type = translate(coded, 'http://smart.who.int/ddcc/ConceptMap/lab-test-type-divoc-to-icd11', 'Coding') &quot;translate DIVOC type&quot;;\r\n    } &quot;coding&quot;;\r\n  };\r\n  evidence.sampleOrigin as sampleOrigin then {\r\n    sampleOrigin -&gt;  test.origin as coding,  coding.code = sampleOrigin &quot;set default origin&quot;;\r\n    sampleOrigin -&gt; c('http://smart.who.int/ddcc/CodeSystem/lab-test-sample-origin-divoc', sampleOrigin) as coded then {\r\n      sampleOrigin where coded.memberOf('http://smart.who.int/ddcc/ValueSet/lab-test-sample-origin-divoc') -&gt; test.origin = translate(coded, 'http://smart.who.int/ddcc/ConceptMap/lab-test-sample-origin-divoc-to-icd11', 'Coding') &quot;translate DIVOC origin&quot;;\r\n    } &quot;coding&quot;;\r\n  };\r\n  evidence.result as result then {\r\n    result -&gt;  test.result as coding,  coding.code = result &quot;set default result&quot;;\r\n    result -&gt; c('http://smart.who.int/ddcc/CodeSystem/lab-test-qual-result-divoc', result) as coded then {\r\n      result where coded.memberOf('http://smart.who.int/ddcc/ValueSet/lab-test-qual-result-divoc') -&gt; test.result = translate(coded, 'http://smart.who.int/ddcc/ConceptMap/lab-test-qual-result-divoc-to-icd11', 'Coding') &quot;translate DIVOC result&quot;;\r\n    } &quot;coded&quot;;\r\n  };\r\n  evidence.sampleCollectionTimestamp as date -&gt; test.date = date &quot;set date&quot;;\r\n  evidence.testName as testName -&gt;  test.brand as coding,  coding.code = testName &quot;set brand&quot;;\r\n  evidence.manufacturer as manufacturer -&gt;  test.manufacturer as coding,  coding.code = manufacturer &quot;set manufacturer&quot;;\r\n  evidence.facility as facility then {\r\n    facility.address as address then {\r\n      address.addressCountry as addressCountry -&gt;  test.country as coding,  coding.system = 'urn:iso:std:iso:3166',  coding.code = addressCountry &quot;set country&quot;;\r\n    };\r\n    facility.name as name -&gt;  test.centre as coding,  coding.code = name &quot;set centre&quot;;\r\n  };\r\n}\r\n\r\n</pre></div>"
   },
-  "url": "http://worldhealthorganization.github.io/ddcc/StructureMap/CertDIVOCtoCoreDataSet",
+  "url": "http://smart.who.int/ddcc/StructureMap/CertDIVOCtoCoreDataSet",
   "name": "CertDIVOCtoCoreDataSet",
   "description": "Structure map transforming CertDIVOC logical model to bundle of Core Data Set logical model",
   "structure": [ {
-    "url": "http://worldhealthorganization.github.io/ddcc/StructureDefinition/CertDIVOC",
+    "url": "http://smart.who.int/ddcc/StructureDefinition/CertDIVOC",
     "mode": "source",
     "alias": "DIVOC"
   }, {
@@ -21,15 +21,15 @@
     "mode": "target",
     "alias": "DDCCBundle"
   }, {
-    "url": "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet",
+    "url": "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet",
     "mode": "produced",
     "alias": "DDCC"
   }, {
-    "url": "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.VS",
+    "url": "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.VS",
     "mode": "produced",
     "alias": "DDCCVS"
   }, {
-    "url": "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.TR",
+    "url": "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.TR",
     "mode": "produced",
     "alias": "DDCCTR"
   } ],
@@ -75,7 +75,7 @@
             "variable": "ddcc",
             "transform": "create",
             "parameter": [ {
-              "valueString": "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.VS"
+              "valueString": "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.VS"
             } ]
           } ],
           "rule": [ {
@@ -196,7 +196,7 @@
             "variable": "ddcc",
             "transform": "create",
             "parameter": [ {
-              "valueString": "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.TR"
+              "valueString": "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.TR"
             } ]
           } ],
           "rule": [ {
@@ -848,7 +848,7 @@
           "variable": "coded",
           "transform": "c",
           "parameter": [ {
-            "valueString": "http://worldhealthorganization.github.io/ddcc/CodeSystem/lab-test-type-divoc"
+            "valueString": "http://smart.who.int/ddcc/CodeSystem/lab-test-type-divoc"
           }, {
             "valueId": "testType"
           } ]
@@ -857,7 +857,7 @@
           "name": "translate DIVOC type",
           "source": [ {
             "context": "testType",
-            "condition": "coded.memberOf('http://worldhealthorganization.github.io/ddcc/ValueSet/lab-test-type-divoc')"
+            "condition": "coded.memberOf('http://smart.who.int/ddcc/ValueSet/lab-test-type-divoc')"
           } ],
           "target": [ {
             "context": "test",
@@ -867,7 +867,7 @@
             "parameter": [ {
               "valueId": "coded"
             }, {
-              "valueString": "http://worldhealthorganization.github.io/ddcc/ConceptMap/lab-test-type-divoc-to-icd11"
+              "valueString": "http://smart.who.int/ddcc/ConceptMap/lab-test-type-divoc-to-icd11"
             }, {
               "valueString": "Coding"
             } ]
@@ -910,7 +910,7 @@
           "variable": "coded",
           "transform": "c",
           "parameter": [ {
-            "valueString": "http://worldhealthorganization.github.io/ddcc/CodeSystem/lab-test-sample-origin-divoc"
+            "valueString": "http://smart.who.int/ddcc/CodeSystem/lab-test-sample-origin-divoc"
           }, {
             "valueId": "sampleOrigin"
           } ]
@@ -919,7 +919,7 @@
           "name": "translate DIVOC origin",
           "source": [ {
             "context": "sampleOrigin",
-            "condition": "coded.memberOf('http://worldhealthorganization.github.io/ddcc/ValueSet/lab-test-sample-origin-divoc')"
+            "condition": "coded.memberOf('http://smart.who.int/ddcc/ValueSet/lab-test-sample-origin-divoc')"
           } ],
           "target": [ {
             "context": "test",
@@ -929,7 +929,7 @@
             "parameter": [ {
               "valueId": "coded"
             }, {
-              "valueString": "http://worldhealthorganization.github.io/ddcc/ConceptMap/lab-test-sample-origin-divoc-to-icd11"
+              "valueString": "http://smart.who.int/ddcc/ConceptMap/lab-test-sample-origin-divoc-to-icd11"
             }, {
               "valueString": "Coding"
             } ]
@@ -972,7 +972,7 @@
           "variable": "coded",
           "transform": "c",
           "parameter": [ {
-            "valueString": "http://worldhealthorganization.github.io/ddcc/CodeSystem/lab-test-qual-result-divoc"
+            "valueString": "http://smart.who.int/ddcc/CodeSystem/lab-test-qual-result-divoc"
           }, {
             "valueId": "result"
           } ]
@@ -981,7 +981,7 @@
           "name": "translate DIVOC result",
           "source": [ {
             "context": "result",
-            "condition": "coded.memberOf('http://worldhealthorganization.github.io/ddcc/ValueSet/lab-test-qual-result-divoc')"
+            "condition": "coded.memberOf('http://smart.who.int/ddcc/ValueSet/lab-test-qual-result-divoc')"
           } ],
           "target": [ {
             "context": "test",
@@ -991,7 +991,7 @@
             "parameter": [ {
               "valueId": "coded"
             }, {
-              "valueString": "http://worldhealthorganization.github.io/ddcc/ConceptMap/lab-test-qual-result-divoc-to-icd11"
+              "valueString": "http://smart.who.int/ddcc/ConceptMap/lab-test-qual-result-divoc-to-icd11"
             }, {
               "valueString": "Coding"
             } ]

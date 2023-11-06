@@ -1,4 +1,4 @@
-Alias: $divoc-lab-test-type = http://worldhealthorganization.github.io/ddcc/CodeSystem/lab-test-type-divoc
+Alias: $divoc-lab-test-type = http://smart.who.int/ddcc/CodeSystem/lab-test-type-divoc
 
 ValueSet: LabTestTypeDivocValueSet
 Id: lab-test-type-divoc

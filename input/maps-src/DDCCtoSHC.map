@@ -1,12 +1,12 @@
-map "http://worldhealthorganization.github.io/ddcc/StructureMap/DDCCtoSHC" = "DDCCtoSHC"
+map "http://smart.who.int/ddcc/StructureMap/DDCCtoSHC" = "DDCCtoSHC"
 
-uses "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCDocument"  alias DDCCDocument as source
-uses "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCPatient"  alias DDCCPatient as source
-uses "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCComposition" alias DDCCComposition as source
-uses "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCOrganization" alias DDCCOrganization as source
-uses 'http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCountryOfVaccination' alias DDCCCountryOfVaccination as source
-uses "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCVaccineBrand" alias DDCCVaccineBrand as source
-uses "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCImmunization" alias DDCCImmunization as source
+uses "http://smart.who.int/ddcc/StructureDefinition/DDCCDocument"  alias DDCCDocument as source
+uses "http://smart.who.int/ddcc/StructureDefinition/DDCCPatient"  alias DDCCPatient as source
+uses "http://smart.who.int/ddcc/StructureDefinition/DDCCComposition" alias DDCCComposition as source
+uses "http://smart.who.int/ddcc/StructureDefinition/DDCCOrganization" alias DDCCOrganization as source
+uses 'http://smart.who.int/ddcc/StructureDefinition/DDCCCountryOfVaccination' alias DDCCCountryOfVaccination as source
+uses "http://smart.who.int/ddcc/StructureDefinition/DDCCVaccineBrand" alias DDCCVaccineBrand as source
+uses "http://smart.who.int/ddcc/StructureDefinition/DDCCImmunization" alias DDCCImmunization as source
 
 uses "http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-vaccination-bundle-dm" alias SHCVaccinationBundleDM as target
 uses "http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-patient-general-dm" alias SHCPatientDM as produced
@@ -72,14 +72,14 @@ group DDCCImmunizationtoSHC(
     immunization.patient as patient -> immunizationSHC.patient as patientSHC, patientSHC.reference = "resource:0" "Patient";
     immunization.occurrence as occurrenceDateTime -> immunizationSHC.occurrence = occurrenceDateTime "Occurrence DateTime";
     immunization.extension as ext then {
-        ext first as maholder where ext.url = 'http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCVaccineMarketAuthorization' then {
+        ext first as maholder where ext.url = 'http://smart.who.int/ddcc/StructureDefinition/DDCCVaccineMarketAuthorization' then {
             maholder.valueCoding as coding -> immunizationSHC.manufacturer as tman, tman.identifier as tident then {
                 coding.system as system -> tident.system = system "system";
                 coding.code as code -> tident.value = code "value";
             } "Manufacturer";
         } "DDCCVaccineMarketAuthorization";
     } "Extension";
-    immunization as src where extension.where(url = 'http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCVaccineMarketAuthorization').first().valueCoding.exists().not() then {
+    immunization as src where extension.where(url = 'http://smart.who.int/ddcc/StructureDefinition/DDCCVaccineMarketAuthorization').first().valueCoding.exists().not() then {
         src.manufacturer as manufacturer then {
             manufacturer.identifier as identifier -> immunizationSHC.manufacturer as tman, tman.identifier as tident then {
                 identifier.system as system -> tident.system = system "system";

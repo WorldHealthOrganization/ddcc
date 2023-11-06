@@ -18,7 +18,7 @@ Usage: #definition
 * copyright = "TODO: provide copyright information"
 
 * group[+]
-  * source = "http://worldhealthorganization.github.io/ddcc/CodeSystem/lab-test-type-divoc"
+  * source = "http://smart.who.int/ddcc/CodeSystem/lab-test-type-divoc"
   * target = "http://id.who.int/icd/release/11/mms"
   * element[+]
     * code = #RT-PCR

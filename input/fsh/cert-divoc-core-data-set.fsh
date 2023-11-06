@@ -10,7 +10,7 @@ It was not possible to find any online documentation regarding DIVOC proof of te
 
 Some element descriptions in this logical model provide details that are not in publicly available DIVOC documentation."
 
-* ^url = "http://worldhealthorganization.github.io/ddcc/StructureDefinition/CertDIVOC"
+* ^url = "http://smart.who.int/ddcc/StructureDefinition/CertDIVOC"
 * ^version = "1"
 * ^abstract = true
 * ^status = #draft

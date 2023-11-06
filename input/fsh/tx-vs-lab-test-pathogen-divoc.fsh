@@ -1,4 +1,4 @@
-Alias: $divoc-lab-test-pathogen = http://worldhealthorganization.github.io/ddcc/CodeSystem/lab-test-pathogen-divoc
+Alias: $divoc-lab-test-pathogen = http://smart.who.int/ddcc/CodeSystem/lab-test-pathogen-divoc
 
 ValueSet: LabTestPathogenDivocValueSet
 Id: lab-test-pathogen-divoc

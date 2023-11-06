@@ -1,4 +1,4 @@
-Alias: $divoc-lab-test-origin = http://worldhealthorganization.github.io/ddcc/CodeSystem/lab-test-sample-origin-divoc
+Alias: $divoc-lab-test-origin = http://smart.who.int/ddcc/CodeSystem/lab-test-sample-origin-divoc
 
 ValueSet: LabTestSampleOriginDivocValueSet
 Id: lab-test-sample-origin-divoc

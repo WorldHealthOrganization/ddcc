@@ -18,7 +18,7 @@ Usage: #definition
 * copyright = "TODO: provide copyright information"
 
 * group[+]
-  * source = "http://worldhealthorganization.github.io/ddcc/CodeSystem/lab-test-type-icao"
+  * source = "http://smart.who.int/ddcc/CodeSystem/lab-test-type-icao"
   * target = "http://id.who.int/icd11/mms"
   * element[+]
     * code = #molecular(PCR)

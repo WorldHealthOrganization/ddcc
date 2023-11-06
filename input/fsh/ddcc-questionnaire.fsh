@@ -1,9 +1,9 @@
 Alias: $ICD11 = http://id.who.int/icd11/mms
-Alias: $DDCCVSQuestionnaireURL = http://worldhealthorganization.github.io/ddcc/DDCCVSCoreDataSetQuestionnaire
-Alias: $DDCCTRQuestionnaireURL = http://worldhealthorganization.github.io/ddcc/DDCCTRCoreDataSetQuestionnaire
+Alias: $DDCCVSQuestionnaireURL = http://smart.who.int/ddcc/DDCCVSCoreDataSetQuestionnaire
+Alias: $DDCCTRQuestionnaireURL = http://smart.who.int/ddcc/DDCCTRCoreDataSetQuestionnaire
 Alias: $targetStructureMap = http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-targetStructureMap
-Alias: $QRVSMapURL = http://worldhealthorganization.github.io/ddcc/StructureMap/QRespToVSCoreDataSet
-Alias: $QRTRMapURL = http://worldhealthorganization.github.io/ddcc/StructureMap/QRespToTRCoreDataSet
+Alias: $QRVSMapURL = http://smart.who.int/ddcc/StructureMap/QRespToVSCoreDataSet
+Alias: $QRTRMapURL = http://smart.who.int/ddcc/StructureMap/QRespToTRCoreDataSet
 
 
 Profile:        DDCCQuestionnaire
@@ -66,7 +66,7 @@ Usage: #definition
 * item[+].linkId = "vaccine"
 * item[=].text = "Vaccine or prophylaxis"
 * item[=].type = #choice
-* item[=].answerValueSet = "http://worldhealthorganization.github.io/ddcc/ValueSet/who-ddcc-vaccines-covid-19"
+* item[=].answerValueSet = "http://smart.who.int/ddcc/ValueSet/who-ddcc-vaccines-covid-19"
 * item[=].required = true
 
 * item[+].linkId = "brand"
@@ -128,7 +128,7 @@ Usage: #definition
 * item[+].linkId = "disease"
 * item[=].text = "Disease or agent targeted"
 * item[=].type = #choice
-* item[=].answerValueSet = "http://worldhealthorganization.github.io/ddcc/ValueSet/who-ddcc-disease-targeted-covid-19"
+* item[=].answerValueSet = "http://smart.who.int/ddcc/ValueSet/who-ddcc-disease-targeted-covid-19"
 * item[=].required = false
 
 * item[+].linkId = "due_date"
@@ -201,13 +201,13 @@ Usage: #definition
 * item[+].linkId = "pathogen"
 * item[=].text = "Pathogen targeted"
 * item[=].type = #choice
-* item[=].answerValueSet = "http://worldhealthorganization.github.io/ddcc/ValueSet/who-ddcc-agent-targeted-covid-19"
+* item[=].answerValueSet = "http://smart.who.int/ddcc/ValueSet/who-ddcc-agent-targeted-covid-19"
 * item[=].required = true
 
 * item[+].linkId = "type"
 * item[=].text = "Type of test"
 * item[=].type = #choice
-* item[=].answerValueSet = "http://worldhealthorganization.github.io/ddcc/ValueSet/who-ddcc-type-of-test-covid-19"
+* item[=].answerValueSet = "http://smart.who.int/ddcc/ValueSet/who-ddcc-type-of-test-covid-19"
 * item[=].required = true
 
 * item[+].linkId = "brand"
@@ -223,7 +223,7 @@ Usage: #definition
 * item[+].linkId = "origin"
 * item[=].text = "Specimen Sample Origin"
 * item[=].type = #choice
-* item[=].answerValueSet = "http://worldhealthorganization.github.io/ddcc/ValueSet/who-ddcc-sample-origin-covid-19"
+* item[=].answerValueSet = "http://smart.who.int/ddcc/ValueSet/who-ddcc-sample-origin-covid-19"
 * item[=].required = false
 
 * item[+].linkId = "date"
@@ -234,7 +234,7 @@ Usage: #definition
 * item[+].linkId = "result"
 * item[=].text = "Test result"
 * item[=].type = #choice
-* item[=].answerValueSet = "http://worldhealthorganization.github.io/ddcc/ValueSet/who-ddcc-test-result-covid-19"
+* item[=].answerValueSet = "http://smart.who.int/ddcc/ValueSet/who-ddcc-test-result-covid-19"
 * item[=].required = true
 
 * item[+].linkId = "vaccine_valid"

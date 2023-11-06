@@ -1,12 +1,12 @@
-map "http://worldhealthorganization.github.io/ddcc/StructureMap/CertDIVOCtoCoreDataSet" = "CertDIVOCtoCoreDataSet"
+map "http://smart.who.int/ddcc/StructureMap/CertDIVOCtoCoreDataSet" = "CertDIVOCtoCoreDataSet"
 // Structure map transforming CertDIVOC logical model to bundle of Core Data Set logical model
 
-uses "http://worldhealthorganization.github.io/ddcc/StructureDefinition/CertDIVOC" alias DIVOC as source
+uses "http://smart.who.int/ddcc/StructureDefinition/CertDIVOC" alias DIVOC as source
 
 uses "http://hl7.org/fhir/StructureDefinition/Bundle" alias DDCCBundle as target
-uses "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet" alias DDCC as produced
-uses "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.VS" alias DDCCVS as produced
-uses "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.TR" alias DDCCTR as produced
+uses "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet" alias DDCC as produced
+uses "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.VS" alias DDCCVS as produced
+uses "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.TR" alias DDCCTR as produced
 
 group CertDIVOCtoCoreDataSetBundle(
     source src: DIVOC, 
@@ -14,7 +14,7 @@ group CertDIVOCtoCoreDataSetBundle(
 {
     src.type as type then {
         type where type = 'ProofOfVaccinationCredential' then {
-            src.evidence as evidence -> ddccBundle.entry as outentry,  create('http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.VS') as ddcc then {
+            src.evidence as evidence -> ddccBundle.entry as outentry,  create('http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.VS') as ddcc then {
                 src.credentialSubject as credentialSubject then CredentialSubjecttoCoreDataSet(credentialSubject, ddcc) "set patient";
                 src -> ddcc.certificate as certificate then CertDIVOCtoCoreDataSetCertificate(src, evidence, certificate) "set certificate";
                 evidence -> ddcc.vaccination as vaccination then EvidencetoCoreDataSetVS(evidence, vaccination) "set vaccination"; 
@@ -22,7 +22,7 @@ group CertDIVOCtoCoreDataSetBundle(
             } "evidence";
         } "ProofOfVaccinationCredential";
         type where type = 'ProofOfTestCertificateCredential' then {
-            src.evidence as evidence -> ddccBundle.entry as outentry,  create('http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.TR') as ddcc then {
+            src.evidence as evidence -> ddccBundle.entry as outentry,  create('http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.TR') as ddcc then {
                 src.credentialSubject as credentialSubject then CredentialSubjecttoCoreDataSet(credentialSubject, ddcc) "set patient";
                 src -> ddcc.certificate as certificate then CertDIVOCtoCoreDataSetCertificate(src, evidence, certificate) "set certificate";
                 evidence -> ddcc.test as test then EvidencetoCoreDataSetTR(evidence, test) "set test"; 
@@ -110,22 +110,22 @@ group EvidencetoCoreDataSetTR(
     evidence.testType as testType then {
         testType -> test.type as coding,            
             coding.code = testType "set default type";  
-        testType -> c('http://worldhealthorganization.github.io/ddcc/CodeSystem/lab-test-type-divoc', testType) as coded then {
-            testType where coded.memberOf("http://worldhealthorganization.github.io/ddcc/ValueSet/lab-test-type-divoc") -> test.type = translate(coded, 'http://worldhealthorganization.github.io/ddcc/ConceptMap/lab-test-type-divoc-to-icd11', 'Coding') "translate DIVOC type";            
+        testType -> c('http://smart.who.int/ddcc/CodeSystem/lab-test-type-divoc', testType) as coded then {
+            testType where coded.memberOf("http://smart.who.int/ddcc/ValueSet/lab-test-type-divoc") -> test.type = translate(coded, 'http://smart.who.int/ddcc/ConceptMap/lab-test-type-divoc-to-icd11', 'Coding') "translate DIVOC type";            
         }  "coding";
     } "testType"; 
     evidence.sampleOrigin as sampleOrigin then {
         sampleOrigin -> test.origin as coding,            
             coding.code = sampleOrigin "set default origin";  
-        sampleOrigin -> c('http://worldhealthorganization.github.io/ddcc/CodeSystem/lab-test-sample-origin-divoc', sampleOrigin) as coded then {
-            sampleOrigin where coded.memberOf("http://worldhealthorganization.github.io/ddcc/ValueSet/lab-test-sample-origin-divoc") -> test.origin = translate(coded, 'http://worldhealthorganization.github.io/ddcc/ConceptMap/lab-test-sample-origin-divoc-to-icd11', 'Coding') "translate DIVOC origin";            
+        sampleOrigin -> c('http://smart.who.int/ddcc/CodeSystem/lab-test-sample-origin-divoc', sampleOrigin) as coded then {
+            sampleOrigin where coded.memberOf("http://smart.who.int/ddcc/ValueSet/lab-test-sample-origin-divoc") -> test.origin = translate(coded, 'http://smart.who.int/ddcc/ConceptMap/lab-test-sample-origin-divoc-to-icd11', 'Coding') "translate DIVOC origin";            
         }  "coding";
     } "sampleOrigin";         
     evidence.result as result then {
         result -> test.result as coding,            
             coding.code = result "set default result";  
-        result -> c('http://worldhealthorganization.github.io/ddcc/CodeSystem/lab-test-qual-result-divoc', result) as coded then {
-            result where coded.memberOf("http://worldhealthorganization.github.io/ddcc/ValueSet/lab-test-qual-result-divoc") -> test.result = translate(coded, 'http://worldhealthorganization.github.io/ddcc/ConceptMap/lab-test-qual-result-divoc-to-icd11', 'Coding') "translate DIVOC result";            
+        result -> c('http://smart.who.int/ddcc/CodeSystem/lab-test-qual-result-divoc', result) as coded then {
+            result where coded.memberOf("http://smart.who.int/ddcc/ValueSet/lab-test-qual-result-divoc") -> test.result = translate(coded, 'http://smart.who.int/ddcc/ConceptMap/lab-test-qual-result-divoc-to-icd11', 'Coding') "translate DIVOC result";            
         }  "coded";
     } "result";        
     evidence.sampleCollectionTimestamp as date -> test.date = date "set date";    

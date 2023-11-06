@@ -1,12 +1,12 @@
-map "http://worldhealthorganization.github.io/ddcc/StructureMap/CertDCCtoCoreDataSet" = "CertDCCtoCoreDataSet"
+map "http://smart.who.int/ddcc/StructureMap/CertDCCtoCoreDataSet" = "CertDCCtoCoreDataSet"
 // Structure map transforming CertDCC logical model to bundle of Core Data Set logical model
 
-uses "http://worldhealthorganization.github.io/ddcc/StructureDefinition/CertDCC" alias CWTPayload as source
+uses "http://smart.who.int/ddcc/StructureDefinition/CertDCC" alias CWTPayload as source
 
 uses "http://hl7.org/fhir/StructureDefinition/Bundle" alias DDCCBundle as target
-uses "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet" alias DDCC as produced
-uses "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.VS" alias DDCCVS as produced
-uses "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.TR" alias DDCCTR as produced
+uses "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet" alias DDCC as produced
+uses "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.VS" alias DDCCVS as produced
+uses "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.TR" alias DDCCTR as produced
 
 group CertDCCtoCoreDataSet(
     source src: CWTPayload, 
@@ -14,13 +14,13 @@ group CertDCCtoCoreDataSet(
 {
     src."-260" as hcert then {
         hcert."1" as dcc then {
-            dcc.v as v -> ddccBundle.entry as outentry,  create('http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.VS') as ddcc then {                
+            dcc.v as v -> ddccBundle.entry as outentry,  create('http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.VS') as ddcc then {                
                 v then DCCtoCoreDataSet(dcc, ddcc) "set DDCC";
                 v -> ddcc.certificate as certificate then CertDCCtoCoreDataSetCertificate(src, dcc, v, certificate) "set certificate";
                 v -> ddcc.vaccination as vaccination then VtoCoreDataSetVS(v, vaccination) "set vaccination";
                 v -> outentry.resource = ddcc "set outentry";  
             } "v";
-            dcc.t as t -> ddccBundle.entry as outentry,  create('http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.TR') as ddcc then {
+            dcc.t as t -> ddccBundle.entry as outentry,  create('http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.TR') as ddcc then {
                 t then DCCtoCoreDataSet(dcc, ddcc) "set DDCC";
                 t -> ddcc.certificate as certificate then CertDCCtoCoreDataSetCertificate(src, dcc, t, certificate) "set certificate";
                 t -> ddcc.test as test then TtoCoreDataSetTR(t, test) "set test";
@@ -84,7 +84,7 @@ group VtoCoreDataSetVS(
             coding.system = "https://id.uvci.eu/valuesets/vaccine-medicinal-product.json",
             coding.code = mp "set default brand";  
         mp -> c('https://ec.europa.eu/health/documents/community-register/html/', mp) as coded then {
-            mp where coded.memberOf("http://worldhealthorganization.github.io/ddcc/ValueSet/vaccine-covid19-euur") -> vaccination.brand = translate(coded, 'http://worldhealthorganization.github.io/ddcc/ConceptMap/vaccine-covid19-euur-to-icd11', 'Coding') "translate COVID19 brand";            
+            mp where coded.memberOf("http://smart.who.int/ddcc/ValueSet/vaccine-covid19-euur") -> vaccination.brand = translate(coded, 'http://smart.who.int/ddcc/ConceptMap/vaccine-covid19-euur-to-icd11', 'Coding') "translate COVID19 brand";            
         }  "coding";
     } "mp";  
     v.ma as ma -> vaccination.maholder as coding,
@@ -109,7 +109,7 @@ group TtoCoreDataSetTR(
             coding.system = "http://snomed.info/sct",
             coding.code = tg "set default pathogen";  
         tg -> c('http://snomed.info/sct', tg) as coded then {
-            tg where coded.memberOf("http://worldhealthorganization.github.io/ddcc/ValueSet/lab-test-pathogen-covid19-snomed") -> test.pathogen = translate(coded, 'http://worldhealthorganization.github.io/ddcc/ConceptMap/lab-test-pathogen-snomed-to-icd11', 'Coding') "translate COVID19 pathogen";            
+            tg where coded.memberOf("http://smart.who.int/ddcc/ValueSet/lab-test-pathogen-covid19-snomed") -> test.pathogen = translate(coded, 'http://smart.who.int/ddcc/ConceptMap/lab-test-pathogen-snomed-to-icd11', 'Coding') "translate COVID19 pathogen";            
         }  "coding";
     } "tg"; 
     t.tt as tt then {
@@ -117,7 +117,7 @@ group TtoCoreDataSetTR(
             coding.system = "http://loinc.org",
             coding.code = tt "set default type";  
         tt -> c('http://loinc.org', tt) as coded then {
-            tt where coded.memberOf("http://worldhealthorganization.github.io/ddcc/ValueSet/lab-test-type-covid19-loinc") -> test.type = translate(coded, 'http://worldhealthorganization.github.io/ddcc/ConceptMap/lab-test-type-covid19-loinc-to-icd11', 'Coding') "translate COVID19 type";            
+            tt where coded.memberOf("http://smart.who.int/ddcc/ValueSet/lab-test-type-covid19-loinc") -> test.type = translate(coded, 'http://smart.who.int/ddcc/ConceptMap/lab-test-type-covid19-loinc-to-icd11', 'Coding') "translate COVID19 type";            
         }  "coding";
     } "tt";         
     t.nm as nm -> test.brand as coding,
@@ -132,7 +132,7 @@ group TtoCoreDataSetTR(
             coding.system = "http://snomed.info/sct",
             coding.code = tr "set default result";  
         tr -> c('http://snomed.info/sct', tr) as coded then {
-            tr where coded.memberOf("http://worldhealthorganization.github.io/ddcc/ValueSet/lab-test-qual-result-snomed") -> test.result = translate(coded, 'http://worldhealthorganization.github.io/ddcc/ConceptMap/lab-test-qual-result-snomed-to-icd11', 'Coding') "translate COVID19 result";            
+            tr where coded.memberOf("http://smart.who.int/ddcc/ValueSet/lab-test-qual-result-snomed") -> test.result = translate(coded, 'http://smart.who.int/ddcc/ConceptMap/lab-test-qual-result-snomed-to-icd11', 'Coding') "translate COVID19 result";            
         }  "coding";
     } "tr"; 
     t.tc as tc -> 

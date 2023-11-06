@@ -1,11 +1,11 @@
-map "http://worldhealthorganization.github.io/ddcc/StructureMap/SHCToCoreDataSetVS" = "SHCToCoreDataSetVS"
+map "http://smart.who.int/ddcc/StructureMap/SHCToCoreDataSetVS" = "SHCToCoreDataSetVS"
 
 uses "http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-vaccination-bundle-dm" alias SHCVaccinationBundleDM as source
 uses "http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-patient-general-dm" alias SHCPatientDM as source
 uses "http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-vaccination-dm"  alias SHCImmunizationDM as source
 
 uses "http://hl7.org/fhir/StructureDefinition/Bundle" alias DDCCBundle as target
-uses "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.VS" alias DDCCVS as produced
+uses "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.VS" alias DDCCVS as produced
 
 group SHCToVS ( 
   source shc : SHCVaccinationBundleDM
@@ -14,8 +14,8 @@ group SHCToVS (
   shc.entry as patientEntrySHC then {
     patientEntrySHC.resource : Patient first as patient then {
       shc.entry as entry then {
-        //entry.resource : Immunization as immunization where vaccineCode.memberOf('http://worldhealthorganization.github.io/ddcc/ValueSet/who-ddcc-allowed-vaccines-covid-19') ->  ddccBundle.entry as outentry,  create('http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.VS') as ddcc then {
-        entry.resource : Immunization as immunization ->  ddccBundle.entry as outentry,  create('http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.VS') as ddcc then {
+        //entry.resource : Immunization as immunization where vaccineCode.memberOf('http://smart.who.int/ddcc/ValueSet/who-ddcc-allowed-vaccines-covid-19') ->  ddccBundle.entry as outentry,  create('http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.VS') as ddcc then {
+        entry.resource : Immunization as immunization ->  ddccBundle.entry as outentry,  create('http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.VS') as ddcc then {
           immunization then PatientToDDCCVS(patient, ddcc) "set patient";
           immunization -> ddcc.vaccination as vaccination then ImmunizationToDDCC(immunization, vaccination) "set vaccination";
           immunization -> outentry.resource = ddcc "set outentry";
@@ -54,8 +54,8 @@ group ImmunizationToDDCC(
     vaccine.coding as coding then {
       coding -> vaccination.vaccine = coding "set default vaccine";
       coding -> vaccination.brand = coding "set default brand";
-      coding where coding.memberOf('http://worldhealthorganization.github.io/ddcc/ValueSet/vaccine-covid19-cvx') -> vaccination.vaccine = translate(coding, 'http://worldhealthorganization.github.io/ddcc/ConceptMap/vaccine-covid19-cvx-to-icd11', 'Coding') "translate COVID CVX vaccine";
-      coding where coding.memberOf('http://worldhealthorganization.github.io/ddcc/ValueSet/vaccine-covid19-snomed') -> vaccination.vaccine = translate(coding, 'http://worldhealthorganization.github.io/ddcc/ConceptMap/vaccine-covid19-snomed-to-icd11', 'Coding') "translate COVID SNOMED vaccine";
+      coding where coding.memberOf('http://smart.who.int/ddcc/ValueSet/vaccine-covid19-cvx') -> vaccination.vaccine = translate(coding, 'http://smart.who.int/ddcc/ConceptMap/vaccine-covid19-cvx-to-icd11', 'Coding') "translate COVID CVX vaccine";
+      coding where coding.memberOf('http://smart.who.int/ddcc/ValueSet/vaccine-covid19-snomed') -> vaccination.vaccine = translate(coding, 'http://smart.who.int/ddcc/ConceptMap/vaccine-covid19-snomed-to-icd11', 'Coding') "translate COVID SNOMED vaccine";
     } "coding";
   } "vaccineCode";
   immunization.manufacturer as tman then {

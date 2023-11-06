@@ -1,4 +1,4 @@
-Alias: $divoc-lab-test-result = http://worldhealthorganization.github.io/ddcc/CodeSystem/lab-test-qual-result-divoc
+Alias: $divoc-lab-test-result = http://smart.who.int/ddcc/CodeSystem/lab-test-qual-result-divoc
 
 ValueSet: LabTestQualitativeResultDivocValueSet
 Id: lab-test-qual-result-divoc

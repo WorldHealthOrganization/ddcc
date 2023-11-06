@@ -1,11 +1,11 @@
-map "http://worldhealthorganization.github.io/ddcc/StructureMap/CoreDataSetLibrary" = "CoreDataSetLibrary"
+map "http://smart.who.int/ddcc/StructureMap/CoreDataSetLibrary" = "CoreDataSetLibrary"
 
-uses "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.VS" alias DDCCVS as source
+uses "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.VS" alias DDCCVS as source
 uses "http://hl7.org/fhir/StructureDefinition/Patient" alias Patient as target
 
-uses "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCPatient" alias DDCCPatient as produced
-uses "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCDocumentReferenceQR" alias DDCCDocRefQR as produced
-uses "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCComposition" alias DDCCComposition as produced
+uses "http://smart.who.int/ddcc/StructureDefinition/DDCCPatient" alias DDCCPatient as produced
+uses "http://smart.who.int/ddcc/StructureDefinition/DDCCDocumentReferenceQR" alias DDCCDocRefQR as produced
+uses "http://smart.who.int/ddcc/StructureDefinition/DDCCComposition" alias DDCCComposition as produced
 
 
 group DDCCToPatient(
@@ -33,19 +33,19 @@ group DDCCToDocumentReference(
   src -> ref.content as content then {
     src -> content.attachment as attachment, attachment.contentType = "application/json" "set contentType";
     src -> content.format as format,
-      format.system = "http://worldhealthorganization.github.io/ddcc/CodeSystem/DDCC-QR-Format-CodeSystem",
+      format.system = "http://smart.who.int/ddcc/CodeSystem/DDCC-QR-Format-CodeSystem",
       format.code = "serialized" "set format code";
   } "set serialized content";
   src -> ref.content as content then {
     src -> content.attachment as attachment, attachment.contentType = "image/png" "set contentType";
     src -> content.format as format,
-      format.system = "http://worldhealthorganization.github.io/ddcc/CodeSystem/DDCC-QR-Format-CodeSystem",
+      format.system = "http://smart.who.int/ddcc/CodeSystem/DDCC-QR-Format-CodeSystem",
       format.code = "image" "set format code";
   } "set image content";
   src -> ref.content as content then {
     src -> content.attachment as attachment, attachment.contentType = "application/pdf" "set contentType";
     src -> content.format as format,
-      format.system = "http://worldhealthorganization.github.io/ddcc/CodeSystem/DDCC-QR-Format-CodeSystem",
+      format.system = "http://smart.who.int/ddcc/CodeSystem/DDCC-QR-Format-CodeSystem",
       format.code = "pdf" "set format code";
   } "set pdf content";
 }

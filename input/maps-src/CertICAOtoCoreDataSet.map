@@ -1,12 +1,12 @@
-map "http://worldhealthorganization.github.io/ddcc/StructureMap/CertICAOtoCoreDataSet" = "CertICAOtoCoreDataSet"
+map "http://smart.who.int/ddcc/StructureMap/CertICAOtoCoreDataSet" = "CertICAOtoCoreDataSet"
 // Structure map transforming CertICAO logical model to bundle of Core Data Set logical model
 
-uses "http://worldhealthorganization.github.io/ddcc/StructureDefinition/CertICAOVDS" alias VDS as source
+uses "http://smart.who.int/ddcc/StructureDefinition/CertICAOVDS" alias VDS as source
 
 uses "http://hl7.org/fhir/StructureDefinition/Bundle" alias DDCCBundle as target
-uses "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet" alias DDCC as produced
-uses "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.VS" alias DDCCVS as produced
-uses "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.TR" alias DDCCTR as produced
+uses "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet" alias DDCC as produced
+uses "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.VS" alias DDCCVS as produced
+uses "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.TR" alias DDCCTR as produced
 
 group CertICAOtoCoreDataSet(
     source src: VDS, 
@@ -15,14 +15,14 @@ group CertICAOtoCoreDataSet(
     src.data as data then {
         data.msg as msg then {
             msg.ve as ve then {
-                ve.vd as vd -> ddccBundle.entry as outentry,  create('http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.VS') as ddcc then {                
+                ve.vd as vd -> ddccBundle.entry as outentry,  create('http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.VS') as ddcc then {                
                     data.hdr as hdr -> ddcc.certificate as certificate then VDStoCoreDataSetCertificate(hdr, msg, certificate) "set certificate";
                     msg.pid as pid then ExtractPatient(pid, ddcc) "set patient";
                     vd -> ddcc.vaccination as vaccination then ExtractVaccine(ve, vd, vaccination) "set vaccination";
                     vd -> outentry.resource = ddcc "set outentry";      
                 } "vd";                
             } "ve";  
-            msg.tr as tr -> ddccBundle.entry as outentry,  create('http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.TR') as ddcc then {                
+            msg.tr as tr -> ddccBundle.entry as outentry,  create('http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.TR') as ddcc then {                
                 data.hdr as hdr -> ddcc.certificate as certificate then VDStoCoreDataSetCertificate(hdr, msg, certificate) "set certificate";
                 msg.pid as pid then ExtractPatient(pid, ddcc) "set patient";
                 msg.sp as sp then {
@@ -102,23 +102,23 @@ group ExtractTest(source sp, source dat, source tr, target test) {
     tr.tc as tc then {
         tc -> test.type as coding,            
             coding.code = tc "set default type";  
-        tc -> c('http://worldhealthorganization.github.io/ddcc/CodeSystem/lab-test-type-icao', tc) as coded then {
-            tc where coded.memberOf("http://worldhealthorganization.github.io/ddcc/ValueSet/lab-test-type-icao") -> test.type = translate(coded, 'http://worldhealthorganization.github.io/ddcc/ConceptMap/lab-test-type-icao-to-icd11', 'Coding') "translate ICAO type";            
+        tc -> c('http://smart.who.int/ddcc/CodeSystem/lab-test-type-icao', tc) as coded then {
+            tc where coded.memberOf("http://smart.who.int/ddcc/ValueSet/lab-test-type-icao") -> test.type = translate(coded, 'http://smart.who.int/ddcc/ConceptMap/lab-test-type-icao-to-icd11', 'Coding') "translate ICAO type";            
         }  "coding";
     } "tc"; 
     tr.m as m then {
         m -> test.origin as coding,            
             coding.code = m "set default origin";  
-        m -> c('http://worldhealthorganization.github.io/ddcc/CodeSystem/lab-test-sample-origin-icao', m) as coded then {
-            m where coded.memberOf("http://worldhealthorganization.github.io/ddcc/ValueSet/lab-test-sample-origin-icao") -> test.origin = translate(coded, 'http://worldhealthorganization.github.io/ddcc/ConceptMap/lab-test-sample-origin-icao-to-icd11', 'Coding') "translate ICAO origin";            
+        m -> c('http://smart.who.int/ddcc/CodeSystem/lab-test-sample-origin-icao', m) as coded then {
+            m where coded.memberOf("http://smart.who.int/ddcc/ValueSet/lab-test-sample-origin-icao") -> test.origin = translate(coded, 'http://smart.who.int/ddcc/ConceptMap/lab-test-sample-origin-icao-to-icd11', 'Coding') "translate ICAO origin";            
         }  "coding";
     } "m";         
     dat.sc as date -> test.date = date "set date";
     tr.r as r then {
         r -> test.result as coding,            
             coding.code = r "set default result";  
-        r -> c('http://worldhealthorganization.github.io/ddcc/CodeSystem/lab-test-qual-result-icao', r) as coded then {
-            r where coded.memberOf("http://worldhealthorganization.github.io/ddcc/ValueSet/lab-test-qual-result-icao") -> test.result = translate(coded, 'http://worldhealthorganization.github.io/ddcc/ConceptMap/lab-test-qual-result-icao-to-icd11', 'Coding') "translate ICAO result";            
+        r -> c('http://smart.who.int/ddcc/CodeSystem/lab-test-qual-result-icao', r) as coded then {
+            r where coded.memberOf("http://smart.who.int/ddcc/ValueSet/lab-test-qual-result-icao") -> test.result = translate(coded, 'http://smart.who.int/ddcc/ConceptMap/lab-test-qual-result-icao-to-icd11', 'Coding') "translate ICAO result";            
         }  "coding";
     } "r";            
     sp.spn as spn -> 

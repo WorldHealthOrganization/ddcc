@@ -1,4 +1,4 @@
-Alias: $icao-lab-test-type = http://worldhealthorganization.github.io/ddcc/CodeSystem/lab-test-type-icao
+Alias: $icao-lab-test-type = http://smart.who.int/ddcc/CodeSystem/lab-test-type-icao
 
 ValueSet: LabTestTypeIcaoValueSet
 Id: lab-test-type-icao

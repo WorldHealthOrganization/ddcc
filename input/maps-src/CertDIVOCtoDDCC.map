@@ -1,6 +1,6 @@
-map "http://worldhealthorganization.github.io/ddcc/StructureMap/CertDIVOCtoDDCC" = "DIVOCtoDDCC"
+map "http://smart.who.int/ddcc/StructureMap/CertDIVOCtoDDCC" = "DIVOCtoDDCC"
 
-uses "http://worldhealthorganization.github.io/ddcc/StructureDefinition/CertDIVOC"               alias W3CVC as source
+uses "http://smart.who.int/ddcc/StructureDefinition/CertDIVOC"               alias W3CVC as source
 uses "http://hl7.org/fhir/ig/divoc/StructureDefinition/CredentialSubject"   alias CredentialSubject as source
 uses "http://hl7.org/fhir/ig/divoc/StructureDefinition/Proof"               alias Proof as source
 uses "http://hl7.org/fhir/ig/divoc/StructureDefinition/Address"             alias Address as source
@@ -107,7 +107,7 @@ group ExtractVaccine(source ev: Evidence, source oid, source mid, target immuniz
     ev.vaccine as mp -> 
         immunization.extension as ext, 
         ext.value = create('Coding') as coding,
-        ext.url = "https://WorldHealthOrganization.github.io/ddcc/StructureDefinition/DDCCVaccineBrand",
+        ext.url = "https://smart.who.int/ddcc/StructureDefinition/DDCCVaccineBrand",
         coding.display = mp
         "set brand";
 
@@ -116,7 +116,7 @@ group ExtractVaccine(source ev: Evidence, source oid, source mid, target immuniz
             address.addressCountry as contry -> 
                 immunization.extension as ext, 
                 ext.value = create('Coding') as coding,
-                ext.url = "https://WorldHealthOrganization.github.io/ddcc/StructureDefinition/DDCCCountryOfVaccination",
+                ext.url = "https://smart.who.int/ddcc/StructureDefinition/DDCCCountryOfVaccination",
                 coding.code = contry,
                 coding.system = "urn:iso:std:iso:3166"
                 "set country";
@@ -126,7 +126,7 @@ group ExtractVaccine(source ev: Evidence, source oid, source mid, target immuniz
     ev.effectiveUntil as validFrom -> 
         immunization.extension as ext, 
         ext.value = validFrom,
-        ext.url = "https://WorldHealthOrganization.github.io/ddcc/StructureDefinition/DDCCVaccineValidFrom"
+        ext.url = "https://smart.who.int/ddcc/StructureDefinition/DDCCVaccineValidFrom"
         "ev.effectiveUntil rule";
 
     oid -> immunization.manufacturer as manuf, manuf.reference = append("Organization/", oid) "set manuf"; 
