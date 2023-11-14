@@ -1,0 +1,883 @@
+{
+  "library" : {
+    "type" : "Library",
+    "identifier" : {
+      "type" : "VersionedIdentifier",
+      "id" : "DDCCPass",
+      "version" : "1.0.0"
+    },
+    "schemaIdentifier" : {
+      "type" : "VersionedIdentifier",
+      "id" : "urn:hl7-org:elm",
+      "version" : "r1"
+    },
+    "usings" : {
+      "type" : "Library$Usings",
+      "def" : [ {
+        "type" : "UsingDef",
+        "localIdentifier" : "System",
+        "uri" : "urn:hl7-org:elm-types:r1"
+      }, {
+        "type" : "UsingDef",
+        "annotation" : [ {
+          "type" : "Annotation",
+          "s" : {
+            "s" : [ {
+              "name" : "{urn:hl7-org:cql-annotations:r1}s",
+              "declaredType" : "org.hl7.cql_annotations.r1.Narrative",
+              "scope" : "javax.xml.bind.JAXBElement$GlobalScope",
+              "value" : {
+                "s" : [ "// The version of FHIR we are using\n", "using " ]
+              },
+              "nil" : false,
+              "globalScope" : true,
+              "typeSubstituted" : false
+            }, {
+              "name" : "{urn:hl7-org:cql-annotations:r1}s",
+              "declaredType" : "org.hl7.cql_annotations.r1.Narrative",
+              "scope" : "javax.xml.bind.JAXBElement$GlobalScope",
+              "value" : {
+                "s" : [ {
+                  "name" : "{urn:hl7-org:cql-annotations:r1}s",
+                  "declaredType" : "org.hl7.cql_annotations.r1.Narrative",
+                  "scope" : "javax.xml.bind.JAXBElement$GlobalScope",
+                  "value" : {
+                    "s" : [ "FHIR" ]
+                  },
+                  "nil" : false,
+                  "globalScope" : true,
+                  "typeSubstituted" : false
+                } ]
+              },
+              "nil" : false,
+              "globalScope" : true,
+              "typeSubstituted" : false
+            }, {
+              "name" : "{urn:hl7-org:cql-annotations:r1}s",
+              "declaredType" : "org.hl7.cql_annotations.r1.Narrative",
+              "scope" : "javax.xml.bind.JAXBElement$GlobalScope",
+              "value" : {
+                "s" : [ " version ", "'4.0.1'" ]
+              },
+              "nil" : false,
+              "globalScope" : true,
+              "typeSubstituted" : false
+            } ],
+            "r" : "1"
+          }
+        } ],
+        "localId" : "1",
+        "locator" : "5:1-5:26",
+        "localIdentifier" : "FHIR",
+        "uri" : "http://hl7.org/fhir",
+        "version" : "4.0.1"
+      } ]
+    },
+    "contexts" : {
+      "type" : "Library$Contexts",
+      "def" : [ {
+        "type" : "ContextDef",
+        "locator" : "8:1-8:15",
+        "name" : "Patient"
+      } ]
+    },
+    "statements" : {
+      "type" : "Library$Statements",
+      "def" : [ {
+        "type" : "ExpressionDef",
+        "expression" : {
+          "type" : "SingletonFrom",
+          "operand" : {
+            "type" : "Retrieve",
+            "locator" : "8:1-8:15",
+            "dataType" : "{http://hl7.org/fhir}Patient",
+            "templateId" : "http://hl7.org/fhir/StructureDefinition/Patient"
+          }
+        },
+        "locator" : "8:1-8:15",
+        "name" : "Patient",
+        "context" : "Patient"
+      }, {
+        "type" : "ExpressionDef",
+        "expression" : {
+          "type" : "Query",
+          "source" : [ {
+            "type" : "AliasedQuerySource",
+            "expression" : {
+              "type" : "Retrieve",
+              "localId" : "2",
+              "locator" : "16:3-16:16",
+              "dataType" : "{http://hl7.org/fhir}Immunization",
+              "templateId" : "http://hl7.org/fhir/StructureDefinition/Immunization"
+            },
+            "localId" : "3",
+            "locator" : "16:3-16:18",
+            "alias" : "I"
+          } ],
+          "relationship" : [ ],
+          "where" : {
+            "type" : "Equal",
+            "operand" : [ {
+              "type" : "Query",
+              "source" : [ {
+                "type" : "AliasedQuerySource",
+                "expression" : {
+                  "type" : "Query",
+                  "source" : [ {
+                    "type" : "AliasedQuerySource",
+                    "expression" : {
+                      "type" : "Property",
+                      "localId" : "5",
+                      "locator" : "17:13-17:29",
+                      "path" : "protocolApplied",
+                      "scope" : "I"
+                    },
+                    "alias" : "$this"
+                  } ],
+                  "where" : {
+                    "type" : "Not",
+                    "operand" : {
+                      "type" : "IsNull",
+                      "operand" : {
+                        "type" : "Property",
+                        "source" : {
+                          "type" : "AliasRef",
+                          "name" : "$this"
+                        },
+                        "path" : "doseNumber"
+                      }
+                    }
+                  },
+                  "return" : {
+                    "type" : "ReturnClause",
+                    "expression" : {
+                      "type" : "Property",
+                      "source" : {
+                        "type" : "AliasRef",
+                        "name" : "$this"
+                      },
+                      "path" : "doseNumber"
+                    },
+                    "distinct" : false
+                  },
+                  "localId" : "6",
+                  "locator" : "17:13-17:40"
+                },
+                "alias" : "$this"
+              } ],
+              "where" : {
+                "type" : "Not",
+                "operand" : {
+                  "type" : "IsNull",
+                  "operand" : {
+                    "type" : "Property",
+                    "source" : {
+                      "type" : "AliasRef",
+                      "name" : "$this"
+                    },
+                    "path" : "value"
+                  }
+                }
+              },
+              "return" : {
+                "type" : "ReturnClause",
+                "expression" : {
+                  "type" : "Property",
+                  "source" : {
+                    "type" : "AliasRef",
+                    "name" : "$this"
+                  },
+                  "path" : "value"
+                },
+                "distinct" : false
+              },
+              "localId" : "7",
+              "locator" : "17:13-17:46"
+            }, {
+              "type" : "Query",
+              "source" : [ {
+                "type" : "AliasedQuerySource",
+                "expression" : {
+                  "type" : "Query",
+                  "source" : [ {
+                    "type" : "AliasedQuerySource",
+                    "expression" : {
+                      "type" : "Property",
+                      "localId" : "9",
+                      "locator" : "17:50-17:66",
+                      "path" : "protocolApplied",
+                      "scope" : "I"
+                    },
+                    "alias" : "$this"
+                  } ],
+                  "where" : {
+                    "type" : "Not",
+                    "operand" : {
+                      "type" : "IsNull",
+                      "operand" : {
+                        "type" : "Property",
+                        "source" : {
+                          "type" : "AliasRef",
+                          "name" : "$this"
+                        },
+                        "path" : "seriesDoses"
+                      }
+                    }
+                  },
+                  "return" : {
+                    "type" : "ReturnClause",
+                    "expression" : {
+                      "type" : "Property",
+                      "source" : {
+                        "type" : "AliasRef",
+                        "name" : "$this"
+                      },
+                      "path" : "seriesDoses"
+                    },
+                    "distinct" : false
+                  },
+                  "localId" : "10",
+                  "locator" : "17:50-17:78"
+                },
+                "alias" : "$this"
+              } ],
+              "where" : {
+                "type" : "Not",
+                "operand" : {
+                  "type" : "IsNull",
+                  "operand" : {
+                    "type" : "Property",
+                    "source" : {
+                      "type" : "AliasRef",
+                      "name" : "$this"
+                    },
+                    "path" : "value"
+                  }
+                }
+              },
+              "return" : {
+                "type" : "ReturnClause",
+                "expression" : {
+                  "type" : "Property",
+                  "source" : {
+                    "type" : "AliasRef",
+                    "name" : "$this"
+                  },
+                  "path" : "value"
+                },
+                "distinct" : false
+              },
+              "localId" : "11",
+              "locator" : "17:50-17:84"
+            } ],
+            "localId" : "12",
+            "locator" : "17:5-17:86"
+          },
+          "localId" : "13",
+          "locator" : "16:3-17:86"
+        },
+        "annotation" : [ {
+          "type" : "Annotation",
+          "s" : {
+            "s" : [ {
+              "name" : "{urn:hl7-org:cql-annotations:r1}s",
+              "declaredType" : "org.hl7.cql_annotations.r1.Narrative",
+              "scope" : "javax.xml.bind.JAXBElement$GlobalScope",
+              "value" : {
+                "s" : [ "// Define a list of completed immunizations for which the dose number is the same as the series dose\n// Immunization resources are queried from those that reference the Patient we are executing against\n", "define ", "\"Completed Immunizations\"", ":\n  " ]
+              },
+              "nil" : false,
+              "globalScope" : true,
+              "typeSubstituted" : false
+            }, {
+              "name" : "{urn:hl7-org:cql-annotations:r1}s",
+              "declaredType" : "org.hl7.cql_annotations.r1.Narrative",
+              "scope" : "javax.xml.bind.JAXBElement$GlobalScope",
+              "value" : {
+                "s" : [ {
+                  "name" : "{urn:hl7-org:cql-annotations:r1}s",
+                  "declaredType" : "org.hl7.cql_annotations.r1.Narrative",
+                  "scope" : "javax.xml.bind.JAXBElement$GlobalScope",
+                  "value" : {
+                    "s" : [ {
+                      "name" : "{urn:hl7-org:cql-annotations:r1}s",
+                      "declaredType" : "org.hl7.cql_annotations.r1.Narrative",
+                      "scope" : "javax.xml.bind.JAXBElement$GlobalScope",
+                      "value" : {
+                        "s" : [ {
+                          "name" : "{urn:hl7-org:cql-annotations:r1}s",
+                          "declaredType" : "org.hl7.cql_annotations.r1.Narrative",
+                          "scope" : "javax.xml.bind.JAXBElement$GlobalScope",
+                          "value" : {
+                            "s" : [ {
+                              "name" : "{urn:hl7-org:cql-annotations:r1}s",
+                              "declaredType" : "org.hl7.cql_annotations.r1.Narrative",
+                              "scope" : "javax.xml.bind.JAXBElement$GlobalScope",
+                              "value" : {
+                                "s" : [ {
+                                  "name" : "{urn:hl7-org:cql-annotations:r1}s",
+                                  "declaredType" : "org.hl7.cql_annotations.r1.Narrative",
+                                  "scope" : "javax.xml.bind.JAXBElement$GlobalScope",
+                                  "value" : {
+                                    "s" : [ "[", "Immunization", "]" ]
+                                  },
+                                  "nil" : false,
+                                  "globalScope" : true,
+                                  "typeSubstituted" : false
+                                } ],
+                                "r" : "2"
+                              },
+                              "nil" : false,
+                              "globalScope" : true,
+                              "typeSubstituted" : false
+                            } ],
+                            "r" : "2"
+                          },
+                          "nil" : false,
+                          "globalScope" : true,
+                          "typeSubstituted" : false
+                        }, {
+                          "name" : "{urn:hl7-org:cql-annotations:r1}s",
+                          "declaredType" : "org.hl7.cql_annotations.r1.Narrative",
+                          "scope" : "javax.xml.bind.JAXBElement$GlobalScope",
+                          "value" : {
+                            "s" : [ " ", "I" ]
+                          },
+                          "nil" : false,
+                          "globalScope" : true,
+                          "typeSubstituted" : false
+                        } ],
+                        "r" : "3"
+                      },
+                      "nil" : false,
+                      "globalScope" : true,
+                      "typeSubstituted" : false
+                    } ]
+                  },
+                  "nil" : false,
+                  "globalScope" : true,
+                  "typeSubstituted" : false
+                }, {
+                  "name" : "{urn:hl7-org:cql-annotations:r1}s",
+                  "declaredType" : "org.hl7.cql_annotations.r1.Narrative",
+                  "scope" : "javax.xml.bind.JAXBElement$GlobalScope",
+                  "value" : {
+                    "s" : [ "\n    " ]
+                  },
+                  "nil" : false,
+                  "globalScope" : true,
+                  "typeSubstituted" : false
+                }, {
+                  "name" : "{urn:hl7-org:cql-annotations:r1}s",
+                  "declaredType" : "org.hl7.cql_annotations.r1.Narrative",
+                  "scope" : "javax.xml.bind.JAXBElement$GlobalScope",
+                  "value" : {
+                    "s" : [ {
+                      "name" : "{urn:hl7-org:cql-annotations:r1}s",
+                      "declaredType" : "org.hl7.cql_annotations.r1.Narrative",
+                      "scope" : "javax.xml.bind.JAXBElement$GlobalScope",
+                      "value" : {
+                        "s" : [ "where " ]
+                      },
+                      "nil" : false,
+                      "globalScope" : true,
+                      "typeSubstituted" : false
+                    }, {
+                      "name" : "{urn:hl7-org:cql-annotations:r1}s",
+                      "declaredType" : "org.hl7.cql_annotations.r1.Narrative",
+                      "scope" : "javax.xml.bind.JAXBElement$GlobalScope",
+                      "value" : {
+                        "s" : [ {
+                          "name" : "{urn:hl7-org:cql-annotations:r1}s",
+                          "declaredType" : "org.hl7.cql_annotations.r1.Narrative",
+                          "scope" : "javax.xml.bind.JAXBElement$GlobalScope",
+                          "value" : {
+                            "s" : [ "( " ]
+                          },
+                          "nil" : false,
+                          "globalScope" : true,
+                          "typeSubstituted" : false
+                        }, {
+                          "name" : "{urn:hl7-org:cql-annotations:r1}s",
+                          "declaredType" : "org.hl7.cql_annotations.r1.Narrative",
+                          "scope" : "javax.xml.bind.JAXBElement$GlobalScope",
+                          "value" : {
+                            "s" : [ {
+                              "name" : "{urn:hl7-org:cql-annotations:r1}s",
+                              "declaredType" : "org.hl7.cql_annotations.r1.Narrative",
+                              "scope" : "javax.xml.bind.JAXBElement$GlobalScope",
+                              "value" : {
+                                "s" : [ {
+                                  "name" : "{urn:hl7-org:cql-annotations:r1}s",
+                                  "declaredType" : "org.hl7.cql_annotations.r1.Narrative",
+                                  "scope" : "javax.xml.bind.JAXBElement$GlobalScope",
+                                  "value" : {
+                                    "s" : [ {
+                                      "name" : "{urn:hl7-org:cql-annotations:r1}s",
+                                      "declaredType" : "org.hl7.cql_annotations.r1.Narrative",
+                                      "scope" : "javax.xml.bind.JAXBElement$GlobalScope",
+                                      "value" : {
+                                        "s" : [ {
+                                          "name" : "{urn:hl7-org:cql-annotations:r1}s",
+                                          "declaredType" : "org.hl7.cql_annotations.r1.Narrative",
+                                          "scope" : "javax.xml.bind.JAXBElement$GlobalScope",
+                                          "value" : {
+                                            "s" : [ {
+                                              "name" : "{urn:hl7-org:cql-annotations:r1}s",
+                                              "declaredType" : "org.hl7.cql_annotations.r1.Narrative",
+                                              "scope" : "javax.xml.bind.JAXBElement$GlobalScope",
+                                              "value" : {
+                                                "s" : [ "I" ]
+                                              },
+                                              "nil" : false,
+                                              "globalScope" : true,
+                                              "typeSubstituted" : false
+                                            } ],
+                                            "r" : "4"
+                                          },
+                                          "nil" : false,
+                                          "globalScope" : true,
+                                          "typeSubstituted" : false
+                                        }, {
+                                          "name" : "{urn:hl7-org:cql-annotations:r1}s",
+                                          "declaredType" : "org.hl7.cql_annotations.r1.Narrative",
+                                          "scope" : "javax.xml.bind.JAXBElement$GlobalScope",
+                                          "value" : {
+                                            "s" : [ "." ]
+                                          },
+                                          "nil" : false,
+                                          "globalScope" : true,
+                                          "typeSubstituted" : false
+                                        }, {
+                                          "name" : "{urn:hl7-org:cql-annotations:r1}s",
+                                          "declaredType" : "org.hl7.cql_annotations.r1.Narrative",
+                                          "scope" : "javax.xml.bind.JAXBElement$GlobalScope",
+                                          "value" : {
+                                            "s" : [ {
+                                              "name" : "{urn:hl7-org:cql-annotations:r1}s",
+                                              "declaredType" : "org.hl7.cql_annotations.r1.Narrative",
+                                              "scope" : "javax.xml.bind.JAXBElement$GlobalScope",
+                                              "value" : {
+                                                "s" : [ "protocolApplied" ]
+                                              },
+                                              "nil" : false,
+                                              "globalScope" : true,
+                                              "typeSubstituted" : false
+                                            } ],
+                                            "r" : "5"
+                                          },
+                                          "nil" : false,
+                                          "globalScope" : true,
+                                          "typeSubstituted" : false
+                                        } ],
+                                        "r" : "5"
+                                      },
+                                      "nil" : false,
+                                      "globalScope" : true,
+                                      "typeSubstituted" : false
+                                    }, {
+                                      "name" : "{urn:hl7-org:cql-annotations:r1}s",
+                                      "declaredType" : "org.hl7.cql_annotations.r1.Narrative",
+                                      "scope" : "javax.xml.bind.JAXBElement$GlobalScope",
+                                      "value" : {
+                                        "s" : [ "." ]
+                                      },
+                                      "nil" : false,
+                                      "globalScope" : true,
+                                      "typeSubstituted" : false
+                                    }, {
+                                      "name" : "{urn:hl7-org:cql-annotations:r1}s",
+                                      "declaredType" : "org.hl7.cql_annotations.r1.Narrative",
+                                      "scope" : "javax.xml.bind.JAXBElement$GlobalScope",
+                                      "value" : {
+                                        "s" : [ {
+                                          "name" : "{urn:hl7-org:cql-annotations:r1}s",
+                                          "declaredType" : "org.hl7.cql_annotations.r1.Narrative",
+                                          "scope" : "javax.xml.bind.JAXBElement$GlobalScope",
+                                          "value" : {
+                                            "s" : [ "doseNumber" ]
+                                          },
+                                          "nil" : false,
+                                          "globalScope" : true,
+                                          "typeSubstituted" : false
+                                        } ],
+                                        "r" : "6"
+                                      },
+                                      "nil" : false,
+                                      "globalScope" : true,
+                                      "typeSubstituted" : false
+                                    } ],
+                                    "r" : "6"
+                                  },
+                                  "nil" : false,
+                                  "globalScope" : true,
+                                  "typeSubstituted" : false
+                                }, {
+                                  "name" : "{urn:hl7-org:cql-annotations:r1}s",
+                                  "declaredType" : "org.hl7.cql_annotations.r1.Narrative",
+                                  "scope" : "javax.xml.bind.JAXBElement$GlobalScope",
+                                  "value" : {
+                                    "s" : [ "." ]
+                                  },
+                                  "nil" : false,
+                                  "globalScope" : true,
+                                  "typeSubstituted" : false
+                                }, {
+                                  "name" : "{urn:hl7-org:cql-annotations:r1}s",
+                                  "declaredType" : "org.hl7.cql_annotations.r1.Narrative",
+                                  "scope" : "javax.xml.bind.JAXBElement$GlobalScope",
+                                  "value" : {
+                                    "s" : [ {
+                                      "name" : "{urn:hl7-org:cql-annotations:r1}s",
+                                      "declaredType" : "org.hl7.cql_annotations.r1.Narrative",
+                                      "scope" : "javax.xml.bind.JAXBElement$GlobalScope",
+                                      "value" : {
+                                        "s" : [ "value" ]
+                                      },
+                                      "nil" : false,
+                                      "globalScope" : true,
+                                      "typeSubstituted" : false
+                                    } ],
+                                    "r" : "7"
+                                  },
+                                  "nil" : false,
+                                  "globalScope" : true,
+                                  "typeSubstituted" : false
+                                } ],
+                                "r" : "7"
+                              },
+                              "nil" : false,
+                              "globalScope" : true,
+                              "typeSubstituted" : false
+                            }, {
+                              "name" : "{urn:hl7-org:cql-annotations:r1}s",
+                              "declaredType" : "org.hl7.cql_annotations.r1.Narrative",
+                              "scope" : "javax.xml.bind.JAXBElement$GlobalScope",
+                              "value" : {
+                                "s" : [ " ", "=", " " ]
+                              },
+                              "nil" : false,
+                              "globalScope" : true,
+                              "typeSubstituted" : false
+                            }, {
+                              "name" : "{urn:hl7-org:cql-annotations:r1}s",
+                              "declaredType" : "org.hl7.cql_annotations.r1.Narrative",
+                              "scope" : "javax.xml.bind.JAXBElement$GlobalScope",
+                              "value" : {
+                                "s" : [ {
+                                  "name" : "{urn:hl7-org:cql-annotations:r1}s",
+                                  "declaredType" : "org.hl7.cql_annotations.r1.Narrative",
+                                  "scope" : "javax.xml.bind.JAXBElement$GlobalScope",
+                                  "value" : {
+                                    "s" : [ {
+                                      "name" : "{urn:hl7-org:cql-annotations:r1}s",
+                                      "declaredType" : "org.hl7.cql_annotations.r1.Narrative",
+                                      "scope" : "javax.xml.bind.JAXBElement$GlobalScope",
+                                      "value" : {
+                                        "s" : [ {
+                                          "name" : "{urn:hl7-org:cql-annotations:r1}s",
+                                          "declaredType" : "org.hl7.cql_annotations.r1.Narrative",
+                                          "scope" : "javax.xml.bind.JAXBElement$GlobalScope",
+                                          "value" : {
+                                            "s" : [ {
+                                              "name" : "{urn:hl7-org:cql-annotations:r1}s",
+                                              "declaredType" : "org.hl7.cql_annotations.r1.Narrative",
+                                              "scope" : "javax.xml.bind.JAXBElement$GlobalScope",
+                                              "value" : {
+                                                "s" : [ "I" ]
+                                              },
+                                              "nil" : false,
+                                              "globalScope" : true,
+                                              "typeSubstituted" : false
+                                            } ],
+                                            "r" : "8"
+                                          },
+                                          "nil" : false,
+                                          "globalScope" : true,
+                                          "typeSubstituted" : false
+                                        }, {
+                                          "name" : "{urn:hl7-org:cql-annotations:r1}s",
+                                          "declaredType" : "org.hl7.cql_annotations.r1.Narrative",
+                                          "scope" : "javax.xml.bind.JAXBElement$GlobalScope",
+                                          "value" : {
+                                            "s" : [ "." ]
+                                          },
+                                          "nil" : false,
+                                          "globalScope" : true,
+                                          "typeSubstituted" : false
+                                        }, {
+                                          "name" : "{urn:hl7-org:cql-annotations:r1}s",
+                                          "declaredType" : "org.hl7.cql_annotations.r1.Narrative",
+                                          "scope" : "javax.xml.bind.JAXBElement$GlobalScope",
+                                          "value" : {
+                                            "s" : [ {
+                                              "name" : "{urn:hl7-org:cql-annotations:r1}s",
+                                              "declaredType" : "org.hl7.cql_annotations.r1.Narrative",
+                                              "scope" : "javax.xml.bind.JAXBElement$GlobalScope",
+                                              "value" : {
+                                                "s" : [ "protocolApplied" ]
+                                              },
+                                              "nil" : false,
+                                              "globalScope" : true,
+                                              "typeSubstituted" : false
+                                            } ],
+                                            "r" : "9"
+                                          },
+                                          "nil" : false,
+                                          "globalScope" : true,
+                                          "typeSubstituted" : false
+                                        } ],
+                                        "r" : "9"
+                                      },
+                                      "nil" : false,
+                                      "globalScope" : true,
+                                      "typeSubstituted" : false
+                                    }, {
+                                      "name" : "{urn:hl7-org:cql-annotations:r1}s",
+                                      "declaredType" : "org.hl7.cql_annotations.r1.Narrative",
+                                      "scope" : "javax.xml.bind.JAXBElement$GlobalScope",
+                                      "value" : {
+                                        "s" : [ "." ]
+                                      },
+                                      "nil" : false,
+                                      "globalScope" : true,
+                                      "typeSubstituted" : false
+                                    }, {
+                                      "name" : "{urn:hl7-org:cql-annotations:r1}s",
+                                      "declaredType" : "org.hl7.cql_annotations.r1.Narrative",
+                                      "scope" : "javax.xml.bind.JAXBElement$GlobalScope",
+                                      "value" : {
+                                        "s" : [ {
+                                          "name" : "{urn:hl7-org:cql-annotations:r1}s",
+                                          "declaredType" : "org.hl7.cql_annotations.r1.Narrative",
+                                          "scope" : "javax.xml.bind.JAXBElement$GlobalScope",
+                                          "value" : {
+                                            "s" : [ "seriesDoses" ]
+                                          },
+                                          "nil" : false,
+                                          "globalScope" : true,
+                                          "typeSubstituted" : false
+                                        } ],
+                                        "r" : "10"
+                                      },
+                                      "nil" : false,
+                                      "globalScope" : true,
+                                      "typeSubstituted" : false
+                                    } ],
+                                    "r" : "10"
+                                  },
+                                  "nil" : false,
+                                  "globalScope" : true,
+                                  "typeSubstituted" : false
+                                }, {
+                                  "name" : "{urn:hl7-org:cql-annotations:r1}s",
+                                  "declaredType" : "org.hl7.cql_annotations.r1.Narrative",
+                                  "scope" : "javax.xml.bind.JAXBElement$GlobalScope",
+                                  "value" : {
+                                    "s" : [ "." ]
+                                  },
+                                  "nil" : false,
+                                  "globalScope" : true,
+                                  "typeSubstituted" : false
+                                }, {
+                                  "name" : "{urn:hl7-org:cql-annotations:r1}s",
+                                  "declaredType" : "org.hl7.cql_annotations.r1.Narrative",
+                                  "scope" : "javax.xml.bind.JAXBElement$GlobalScope",
+                                  "value" : {
+                                    "s" : [ {
+                                      "name" : "{urn:hl7-org:cql-annotations:r1}s",
+                                      "declaredType" : "org.hl7.cql_annotations.r1.Narrative",
+                                      "scope" : "javax.xml.bind.JAXBElement$GlobalScope",
+                                      "value" : {
+                                        "s" : [ "value" ]
+                                      },
+                                      "nil" : false,
+                                      "globalScope" : true,
+                                      "typeSubstituted" : false
+                                    } ],
+                                    "r" : "11"
+                                  },
+                                  "nil" : false,
+                                  "globalScope" : true,
+                                  "typeSubstituted" : false
+                                } ],
+                                "r" : "11"
+                              },
+                              "nil" : false,
+                              "globalScope" : true,
+                              "typeSubstituted" : false
+                            } ],
+                            "r" : "12"
+                          },
+                          "nil" : false,
+                          "globalScope" : true,
+                          "typeSubstituted" : false
+                        }, {
+                          "name" : "{urn:hl7-org:cql-annotations:r1}s",
+                          "declaredType" : "org.hl7.cql_annotations.r1.Narrative",
+                          "scope" : "javax.xml.bind.JAXBElement$GlobalScope",
+                          "value" : {
+                            "s" : [ " )" ]
+                          },
+                          "nil" : false,
+                          "globalScope" : true,
+                          "typeSubstituted" : false
+                        } ],
+                        "r" : "12"
+                      },
+                      "nil" : false,
+                      "globalScope" : true,
+                      "typeSubstituted" : false
+                    } ],
+                    "r" : "12"
+                  },
+                  "nil" : false,
+                  "globalScope" : true,
+                  "typeSubstituted" : false
+                } ],
+                "r" : "13"
+              },
+              "nil" : false,
+              "globalScope" : true,
+              "typeSubstituted" : false
+            } ],
+            "r" : "14"
+          }
+        } ],
+        "localId" : "14",
+        "locator" : "15:1-17:86",
+        "name" : "Completed Immunizations",
+        "context" : "Patient",
+        "accessLevel" : "Public"
+      }, {
+        "type" : "ExpressionDef",
+        "expression" : {
+          "type" : "Exists",
+          "operand" : {
+            "type" : "ExpressionRef",
+            "localId" : "15",
+            "locator" : "11:41-11:67",
+            "name" : "Completed Immunizations"
+          },
+          "localId" : "16",
+          "locator" : "11:34-11:67"
+        },
+        "annotation" : [ {
+          "type" : "Annotation",
+          "s" : {
+            "s" : [ {
+              "name" : "{urn:hl7-org:cql-annotations:r1}s",
+              "declaredType" : "org.hl7.cql_annotations.r1.Narrative",
+              "scope" : "javax.xml.bind.JAXBElement$GlobalScope",
+              "value" : {
+                "s" : [ "// Define boolean valued business rule to check if there is an immunization that was completed\n", "define ", "\"Completed Immunization\"", ": " ]
+              },
+              "nil" : false,
+              "globalScope" : true,
+              "typeSubstituted" : false
+            }, {
+              "name" : "{urn:hl7-org:cql-annotations:r1}s",
+              "declaredType" : "org.hl7.cql_annotations.r1.Narrative",
+              "scope" : "javax.xml.bind.JAXBElement$GlobalScope",
+              "value" : {
+                "s" : [ {
+                  "name" : "{urn:hl7-org:cql-annotations:r1}s",
+                  "declaredType" : "org.hl7.cql_annotations.r1.Narrative",
+                  "scope" : "javax.xml.bind.JAXBElement$GlobalScope",
+                  "value" : {
+                    "s" : [ "exists " ]
+                  },
+                  "nil" : false,
+                  "globalScope" : true,
+                  "typeSubstituted" : false
+                }, {
+                  "name" : "{urn:hl7-org:cql-annotations:r1}s",
+                  "declaredType" : "org.hl7.cql_annotations.r1.Narrative",
+                  "scope" : "javax.xml.bind.JAXBElement$GlobalScope",
+                  "value" : {
+                    "s" : [ {
+                      "name" : "{urn:hl7-org:cql-annotations:r1}s",
+                      "declaredType" : "org.hl7.cql_annotations.r1.Narrative",
+                      "scope" : "javax.xml.bind.JAXBElement$GlobalScope",
+                      "value" : {
+                        "s" : [ "(" ]
+                      },
+                      "nil" : false,
+                      "globalScope" : true,
+                      "typeSubstituted" : false
+                    }, {
+                      "name" : "{urn:hl7-org:cql-annotations:r1}s",
+                      "declaredType" : "org.hl7.cql_annotations.r1.Narrative",
+                      "scope" : "javax.xml.bind.JAXBElement$GlobalScope",
+                      "value" : {
+                        "s" : [ {
+                          "name" : "{urn:hl7-org:cql-annotations:r1}s",
+                          "declaredType" : "org.hl7.cql_annotations.r1.Narrative",
+                          "scope" : "javax.xml.bind.JAXBElement$GlobalScope",
+                          "value" : {
+                            "s" : [ "\"Completed Immunizations\"" ]
+                          },
+                          "nil" : false,
+                          "globalScope" : true,
+                          "typeSubstituted" : false
+                        } ],
+                        "r" : "15"
+                      },
+                      "nil" : false,
+                      "globalScope" : true,
+                      "typeSubstituted" : false
+                    }, {
+                      "name" : "{urn:hl7-org:cql-annotations:r1}s",
+                      "declaredType" : "org.hl7.cql_annotations.r1.Narrative",
+                      "scope" : "javax.xml.bind.JAXBElement$GlobalScope",
+                      "value" : {
+                        "s" : [ ")" ]
+                      },
+                      "nil" : false,
+                      "globalScope" : true,
+                      "typeSubstituted" : false
+                    } ],
+                    "r" : "15"
+                  },
+                  "nil" : false,
+                  "globalScope" : true,
+                  "typeSubstituted" : false
+                } ],
+                "r" : "16"
+              },
+              "nil" : false,
+              "globalScope" : true,
+              "typeSubstituted" : false
+            } ],
+            "r" : "17"
+          }
+        } ],
+        "localId" : "17",
+        "locator" : "11:1-11:67",
+        "name" : "Completed Immunization",
+        "context" : "Patient",
+        "accessLevel" : "Public"
+      } ]
+    },
+    "annotation" : [ {
+      "type" : "CqlToElmInfo",
+      "translatorOptions" : "EnableAnnotations,EnableLocators,DisableListDemotion,DisableListPromotion"
+    }, {
+      "type" : "Annotation",
+      "s" : {
+        "s" : [ {
+          "name" : "{urn:hl7-org:cql-annotations:r1}s",
+          "declaredType" : "org.hl7.cql_annotations.r1.Narrative",
+          "scope" : "javax.xml.bind.JAXBElement$GlobalScope",
+          "value" : {
+            "s" : [ "// Declare the name and version of the Library of functions\n", "library DDCCPass version '1.0.0'" ]
+          },
+          "nil" : false,
+          "globalScope" : true,
+          "typeSubstituted" : false
+        } ],
+        "r" : "14"
+      }
+    } ]
+  }
+}
