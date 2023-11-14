@@ -20,7 +20,7 @@ Description:    "Data elements for the DDCC Core Data Set as CWT for Vaccination
 * ^url = "http://smart.who.int/ddcc/StructureDefinition/HCert"
 * ^version = "RC2"
 * ^status = #draft
-* 1 0..1 HCertDCC "EU DCC"  "EU DCC"
+* 1 0..1 HCertDCC "HCERT"  "HCERT"
 * 2 0..1 DDCCCoreDataSet_VS "Vaccination Core Data Set claim" "DDCC Vaccination claim"
 * 3 0..1 DDCCCoreDataSet_TR "Vaccination Core Data Set claim" "DDCC Test Result claim"
 
