@@ -13,6 +13,15 @@ Description:    "Data elements for COSE Headers https://www.iana.org/assignments
 
 
 
+Logical: 	SmartHealthLink
+Title: 		"Smart Health Link"
+Description:	"Smart Health Link URI"
+
+* ^url = "http://smart.who.int/ddcc/StructureDefinition/SmartHealthLink"
+* ^version = "RC2"
+* ^status = #draft
+* u 1..1 string "URI" "URI of the Smart Health Link.  Should look like 'shlink:/eyJ1cmwiOiJodHRwczovL2Vo....' "
+
 Logical:        HCert
 Title:          "Health Certificate"
 Description:    "Data elements for the DDCC Core Data Set as CWT for Vaccination."
@@ -22,7 +31,9 @@ Description:    "Data elements for the DDCC Core Data Set as CWT for Vaccination
 * ^status = #draft
 * 1 0..1 HCertDCC "HCERT"  "HCERT"
 * 2 0..1 DDCCCoreDataSet_VS "Vaccination Core Data Set claim" "DDCC Vaccination claim"
-* 3 0..1 DDCCCoreDataSet_TR "Vaccination Core Data Set claim" "DDCC Test Result claim"
+* 3 0..1 DDCCCoreDataSet_TR "Test Result Core Data Set claim" "DDCC Test Result claim"
+// * 4 0..1 RACSEL_DDVCCoreDataSet "RACSEL Vaccination Certficate Data Set claim" "RACSEL Vaccination Certificate"
+* 5 0..1 SmartHealthLink "SMART Health Link claim" "SMART Health Link"
 
 
 
