@@ -30,9 +30,9 @@ Description:    "Data elements for the DDCC Core Data Set as CWT for Vaccination
 * ^version = "RC2"
 * ^status = #draft
 * 1 0..1 HCertDCC "HCERT"  "HCERT"
-* 2 0..1 DDCCCoreDataSet_VS "Vaccination Core Data Set claim" "DDCC Vaccination claim"
-* 3 0..1 DDCCCoreDataSet_TR "Test Result Core Data Set claim" "DDCC Test Result claim"
-// * 4 0..1 RACSEL_DDVCCoreDataSet "RACSEL Vaccination Certficate Data Set claim" "RACSEL Vaccination Certificate"
+// * 2 0..1 RACSEL_DDVC "RACSEL Vaccination Certficate Data Set claim" "RACSEL Vaccination Certificate"
+* 3 0..1 DDCCCoreDataSet_VS "Vaccination Core Data Set claim" "DDCC Vaccination claim"
+* 4 0..1 DDCCCoreDataSet_TR "Test Result Core Data Set claim" "DDCC Test Result claim"
 * 5 0..1 SmartHealthLink "SMART Health Link claim" "SMART Health Link"
 
 
