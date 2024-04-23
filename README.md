@@ -17,4 +17,3 @@ Issues and change requests are managed here:
 
 Issues:  __https://github.com/WorldHealthOrganization/ddcc/issues__  
     or the Kanban board: __https://github.com/WorldHealthOrganization/ddcc/projects/1__
-
