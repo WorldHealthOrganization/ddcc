@@ -140,7 +140,7 @@ Description:    "Data elements for the DDCC Core Data Set - Vaccination Status -
 
 * sex 0..1 SU code "Sex" "Documentation of a specific instance of sex information for the vaccinated person."
 * sex from http://hl7.org/fhir/ValueSet/administrative-gender (required)
-* vaccination.centre 1..1 string "Administering centre" "The name or identifier of the vaccination facility responsible for providing the vaccination."
+* vaccination.centre 1..1 
 
 Mapping:        DDCCCoreDataSetVSCoCToPatient
 Source:         DDCCCoreDataSet_VS_CoC
