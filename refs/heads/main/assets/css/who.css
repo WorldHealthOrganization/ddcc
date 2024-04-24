@@ -189,10 +189,25 @@ em {
 
 
 
+.dropdown-menu>li {
+  position: relative;
+}
 
-
-
-
+.dropdown-menu>li>ul {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: 0;
+  display: none;
+  position: absolute;
+  z-index: 1;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-top: none;
+  padding: 0;
+  list-style: none;
+  white-space: nowrap;
+}
 
 /* Styles for dropdown menu to support one more dropdown level */
 
@@ -472,8 +487,10 @@ body {
 
 
 div.markdown-toc {
-  float: right; /* or 'float: right;' depending on where you want the TOC to appear */
-  /*margin-right: 20px;*/ /* This adds space between the TOC and the text wrapping around it */
+  float: right;
+  /* or 'float: right;' depending on where you want the TOC to appear */
+  /*margin-right: 20px;*/
+  /* This adds space between the TOC and the text wrapping around it */
   /* background-color: unset; */
   padding: 3px;
   border: 2px solid var(--toc-box-border);
@@ -493,7 +510,8 @@ div.markdown-toc {
   border-top: 1px solid var(--toc-box-border);
   line-height: 1.5;
   margin-bottom: -4px;
-  margin-top: -4px; /* Overlap borders between items */  
+  margin-top: -4px;
+  /* Overlap borders between items */
   padding: 7px;
   list-style-type: none;
 }
@@ -504,26 +522,9 @@ div.markdown-toc {
 }
 
 
-
-
-
-
-#segment-footer > .container {
+#segment-footer>.container {
   background-color: var(--footer-container-bg-color) !important;
   color: var(--footer-text-color) !important;
-}
-
-#ig-status {
-  flex-grow: 1;
-  /* Grow to take the available space */
-  display: flex;
-  /* Use flex to allow child elements to center */
-  justify-content: center;
-  /* Center children horizontally */
-  align-items: center;
-  /* Center children vertically */
-  text-align: center;
-  /* Center text */
 }
 
 /* Ensure the navbar doesn't collapse into the space */
@@ -531,10 +532,44 @@ div.markdown-toc {
   flex: 1 100%;
 }
 
-/* You may want to adjust the logo image size and alignment */
-
-#segment-breadcrumb > div
-#segment-navbar >.container,
-#segment-content > div {
+#segment-breadcrumb>div #segment-navbar>.container,
+#segment-content>div {
   padding: 0 25px;
+}
+
+#ig-status {
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  /* Needed for layering */
+}
+
+#ig-status p {
+  background-color: white;
+  /* White background for the text */
+  padding: 10px 17px;
+  /* Add some padding around the text */
+  border-radius: 5px;
+  /* Optional: for rounded corners */
+  position: relative;
+  /* Ensure it's above the watermark */
+  z-index: 2;
+  /* Higher z-index to be on top */
+}
+
+
+#ig-status.ig-status-draft {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='150px' height='150px'><rect width='800%' height='100%' fill='transparent' /><text transform='translate(30, 50) rotate(-35)' fill='rgba(245,45,45,0.5)' font-family='Arial' font-weight='bold' font-size='20'>DRAFT</text></svg>");
+  background-size: calc(50% / 5) 100px;
+  background-repeat: repeat-x;
+}
+
+
+#ig-status.ig-status-retired {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='150px' height='150px'><rect width='800%' height='100%' fill='transparent' /><text transform='translate(30, 60) rotate(-35)' fill='rgba(245,45,45,0.5)' font-family='Arial' font-weight='bold' font-size='20'>RETIRED</text></svg>");
+  background-size: calc(50% / 5) 100px;
+  background-repeat: repeat-x;
 }
