@@ -1,0 +1,295 @@
+
+map "http://smart.who.int/ddcc/StructureMap/ResourcesToVSCoreDataSet" = "ResourcesToVSCoreDataSet"
+
+uses "http://hl7.org/fhir/StructureDefinition/Bundle" alias Bundle as source
+uses "http://hl7.org/fhir/StructureDefinition/HumanName" alias HumanName as target
+
+uses "http://smart.who.int/ddcc/StructureDefinition/DDCCPatient"  alias DDCCPatient as source
+uses "http://smart.who.int/ddcc/StructureDefinition/DDCCImmunization" alias DDCCImmunization as source
+uses "http://smart.who.int/ddcc/StructureDefinition/DDCCImmunizationRecommendation" alias DDCCImmunizationRecommendation as source
+uses "http://smart.who.int/ddcc/StructureDefinition/DDCCVSComposition" alias DDCCVSComposition as source
+
+uses "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.VS.PoV" alias DDCCPoV as target
+
+
+group ResourcesToCoreDataSet ( 
+  source bundle : Bundle,
+  target ddcc : DDCCPoV 
+) {
+
+
+  bundle -> ddcc.vaccination as vaccination, ddcc.certificate as certificate then {
+    bundle.link first as link -> certificate.hcid as hcid then {
+      // There's got to be a better way to do this
+      link.url as url -> hcid.value = (url.replaceMatches('[Uu][Rr][Nn]:[Hh][Cc][Ii][Dd]:', '')) "set hcid value"; 
+    } "set hcid";
+    bundle.id as id -> certificate.ddccid as ddccid, ddccid.value = id "set ddcc id value";
+    bundle.entry as entry then {
+      entry.resource : Patient first as patient then PatientToDDCCVS ( patient, ddcc ) "set patient details";
+      entry.resource : Immunization first as immunization then ImmunizationToDDCCVS( immunization, vaccination, certificate ) "set immunization";
+      entry.resource : ImmunizationRecommendation first as immRec then ImmRecToDDCCVS( immRec, vaccination ) "set immunization recommendation";
+      entry.resource : Composition first as composition then CompositionToDDCCVS( composition, certificate ) "set composition";
+
+    } "set header from patient";
+  } "setup ddcc";
+  /*
+    // 	     entry.resource : DDCCPatient as patient
+                 entry.resource : Patient as patient
+           then  Decode-Patient-To-QR(patient,qr) "Patient";
+      };
+*/
+      /*
+  bundle as src then QRespToHeader( src, ddcc ) "set header content";
+  bundle as src -> ddcc.vaccination as vaccination then QRespToVaccination( src, vaccination ) "set vaccination content";
+  bundle as src -> ddcc.certificate as certificate then QRespToCertificate( src, certificate ) "set certificate content";
+*/
+  
+/*
+  then {
+    a as item where linkId = 'name' -> ddcc.name = item "set name";
+
+  } "items";
+*/
+}
+
+group CompositionToDDCCVS( 
+  source composition: DDCCVSComposition,
+  target certificate
+) {
+  composition -> certificate.version = "RC2" "set version";
+  composition.event first as event then {
+    event.period as period -> certificate.period as tPeriod then {
+      period.start as start -> tPeriod.start = start "set period start";
+      period.end as end -> tPeriod.end = end "set period end";
+    } "set period";
+  } "set certificate period";
+}
+
+group PatientToDDCCVS (
+  source patient : DDCCPatient,
+  target ddcc : DDCCPoV
+) {
+  patient.name as name then NameToText( name, ddcc ) "set name";
+  patient.birthDate as bday -> ddcc.birthDate = bday "set birth date";
+  patient.id as id -> ddcc.identifier as identifier, identifier.value = id "set identifier from id";
+  // this will override what was set from id if it exists
+  patient.identifier first as sId -> ddcc.identifier as identifier then {
+    sId.value as id -> identifier.value = id "set identifier value"; 
+  } "set identifier from identifier";
+  patient.gender as gender -> ddcc.sex = gender "set sex";
+}
+
+group NameToText (
+  source name : HumanName,
+  target ddcc
+) {
+  // annoying because append doesn't work until ddcc.name is set
+  name.given first as given -> ddcc.name = (given.replaceMatches('$', ' ')) "set first name";
+  //name.given not_first as other -> ddcc.name as tName, ddcc.name = append( tName, other ) "set other names";
+  name.given not_first as other -> ddcc.name as tName, (other.replaceMatches('$', ' ')) as spaced, ddcc.name = append( tName, spaced ) "set other names";
+  name.family as family -> ddcc.name as tName, ddcc.name = append( tName, family ) "add family name";
+  name.text as text -> ddcc.name = text "set full name";
+}
+
+group ImmunizationToDDCCVS (
+  source immunization : DDCCImmunization,
+  target vaccination,
+  target certificate 
+) {
+  immunization.vaccineCode as code then {
+    code.coding first as coding -> vaccination.vaccine = coding "set vaccine";
+  } "set vaccine code";
+  immunization.extension as ext then {
+    ext first as brand where ext.url = 'http://smart.who.int/ddcc/StructureDefinition/DDCCVaccineBrand' then {
+      brand.valueCoding as coding -> vaccination.brand = coding "set brand code";
+    } "set brand";
+    ext first as maholder where ext.url = 'http://smart.who.int/ddcc/StructureDefinition/DDCCVaccineMarketAuthorization' then {
+      maholder.valueCoding as coding -> vaccination.maholder = coding "set maholder code";
+    } "set maholder";
+    ext first as valid where ext.url = 'http://smart.who.int/ddcc/StructureDefinition/DDCCVaccineValidFrom' then {
+      valid.valueDateTime as date -> vaccination.validFrom = date "set validFrom date";
+    } "set validFrom";
+    ext first as country where ext.url = 'http://smart.who.int/ddcc/StructureDefinition/DDCCCountryOfVaccination' then {
+      country.valueCode as code -> 
+        vaccination.country as vCountry, 
+        vCountry.system = "urn:iso:std:iso:3166", 
+        vCountry.code = code "set country code";
+    } "set country";
+  } "set extensions";
+  immunization.manufacturer as manufacturer then {
+    manufacturer.identifier as identifier -> vaccination.manufacturer as vMan then {
+      identifier.system as system -> vMan.system = system "set manufacturer system";
+      identifier.value as value -> vMan.code = value "set manufactutuer code";
+    } "set manufacturer id";
+  } "set manufacturer";
+  immunization.lotNumber as lot -> vaccination.lot = lot "set lot number";
+  immunization.occurrence as date -> vaccination.date = date "set date";
+  immunization.protocolApplied first as protocol then {
+    protocol.doseNumber as dose -> vaccination.dose = dose "set dose";
+    protocol.seriesDoses as totalDoses -> vaccination.totalDoses = totalDoses "set totalDoses";
+    protocol.targetDisease first as disease then {
+      disease.coding first as coding -> vaccination.disease = coding "set disease coding";
+    } "set disease";
+
+    protocol.authority as authority -> certificate.issuer as issuer then {
+      authority.reference as reference -> issuer.identifier as identifier then {
+        reference -> identifier.value = reference "set reference";
+      } "set issuer from reference";
+      authority.identifier as identifier -> issuer.identifier = identifier "set issuer identifier";
+    } "set issuer";
+
+  } "set protocol applied";
+  immunization.location as location then {
+    location.reference as reference -> vaccination.centre = reference "set vaccination centre from reference";
+    location.display as centre -> vaccination.centre = centre "set vaccination centre";
+  } "set vaccination centre location";
+  immunization.performer first as performer then {
+    performer.actor as actor then {
+      actor.identifier as identifier -> vaccination.practitioner = identifier "set practitioner";
+    } "set actor";
+  } "set performer";
+}
+
+group ImmRecToDDCCVS (
+  source immRec : DDCCImmunizationRecommendation,
+  target vaccination
+) {
+  immRec.recommendation as rec then {
+    rec.dateCriterion first as due_date then {
+      due_date.value as date -> vaccination.nextDose = date "set due date";
+    } "get date criterion";
+  } "get recommendation";
+}
+/*
+group QRespToHeader (
+  source qr,
+  target ddcc
+) {
+  qr.item as item then {
+
+    item.answer first as answer where item.linkId = 'name' then {
+      answer.valueString as content -> ddcc.name = content  "set name";
+    } "first answser for name";
+
+    item.answer first as answer where item.linkId = 'birthDate' then {
+      answer.valueDate as content -> ddcc.birthDate = content "set birthDate";
+    } "first answer for birthDate";
+
+    item.answer first as answer where item.linkId = 'identifier' -> ddcc.identifier as identifier then {
+      answer.valueString as content -> identifier.value = content "set identifier";
+    } "first answer for identifier";
+
+    item.answer first as answer where item.linkId = 'sex' then {
+      answer.valueCoding as coding then {
+       coding.code as content -> ddcc.sex = content "set sex";
+      } "process coding";
+    } "first answer for sex";
+
+  } "header items";
+}
+
+group QRespToVaccination( 
+  source qr,
+  target vaccination
+) {
+  qr.item as item then {
+
+    item.answer first as answer where item.linkId = 'vaccine' then {
+      answer.valueCoding as content -> vaccination.vaccine = content "set vaccine";
+    } "first answer for vaccine";
+
+    item.answer first as answer where item.linkId = 'brand' then {
+      answer.valueCoding as content -> vaccination.brand = content "set brand";
+    } "first answer for brand";
+
+    item.answer first as answer where item.linkId = 'manufacturer' then {
+      answer.valueCoding as content -> vaccination.manufacturer = content "set manufacturer";
+    } "first answer for manufacturer";
+
+    item.answer first as answer where item.linkId = 'ma_holder' then {
+      answer.valueCoding as content -> vaccination.maholder = content "set maholder";
+    } "first answer for maholder";
+
+    item.answer first as answer where item.linkId = 'lot' then {
+      answer.valueString as content -> vaccination.lot = content  "set lot";
+    } "first answser for lot";
+
+    item.answer first as answer where item.linkId = 'date' then {
+      answer.valueDate as content -> vaccination.date = content "set date";
+    } "first answer for date";
+
+    item.answer first as answer where item.linkId = 'vaccine_valid' then {
+      answer.valueDate as content -> vaccination.validFrom = content "set validFrom";
+    } "first answer for validFrom";
+
+    item.answer first as answer where item.linkId = 'dose' then {
+      answer.valueInteger as content -> vaccination.dose = content "set dose";
+    } "first answer for dose";
+
+    item.answer first as answer where item.linkId = 'total_doses' then {
+      answer.valueInteger as content -> vaccination.totalDoses = content "set totalDoses";
+    } "first answer for totalDoses";
+
+    item.answer first as answer where item.linkId = 'country' then {
+      answer.valueCoding as content -> vaccination.country = content "set country";
+    } "first answer for country";
+
+    item.answer first as answer where item.linkId = 'centre' then {
+      answer.valueString as content -> vaccination.centre = content  "set centre";
+    } "first answser for centre";
+
+    item.answer first as answer where item.linkId = 'hw' -> vaccination.practitioner as identifier then {
+      answer.valueString as content -> identifier.value = content  "set practitioner";
+    } "first answser for practitioner";
+
+    item.answer first as answer where item.linkId = 'disease' then {
+      answer.valueCoding as content -> vaccination.disease = content "set disease";
+    } "first answer for disease";
+
+    item.answer first as answer where item.linkId = 'due_date' then {
+      answer.valueDate as content -> vaccination.nextDose = content "set nextDose";
+    } "first answer for nextDose";
+
+  } "vaccination items";
+
+  qr as src -> vaccination.period as period then QRespToVaccinePeriod( src, period ) "set vaccination period";
+
+}
+
+group QRespToVaccinePeriod (
+  source qr,
+  target period
+) {
+  qr.item as item then {
+
+    item.answer first as answer where item.linkId = 'valid_from' then {
+      answer.valueDate as content -> period.start = content "set valid_from";
+    } "first answer for valid_from";
+
+    item.answer first as answer where item.linkId = 'valid_until' then {
+      answer.valueDate as content -> period.end = content "set valid_until";
+    } "first answer for valid_until";
+
+  } "vaccination validity items";
+}
+
+group QRespToCertificate( 
+  source qr,
+  target certificate
+) {
+  qr.item as item then {
+
+    item.answer first as answer where item.linkId = 'pha' -> certificate.issuer as issuer then {
+      answer.valueString as content -> issuer.identifier as identifier then {
+        content as value -> identifier.value = value "set issuer identifier";
+      } "set issuer";
+    } "first answser for hcid";
+    
+
+    item.answer first as answer where item.linkId = 'hcid' -> certificate.hcid as hcid then {
+      answer.valueString as content -> hcid.value = content, certificate.version = "RC2" "set hcid and version";
+    } "first answser for hcid";
+
+  } "certificate items";
+}
+*/
