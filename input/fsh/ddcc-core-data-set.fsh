@@ -54,7 +54,7 @@ Description:    "Data elements for the DDCC Core Data Set for Vaccination Status
 * ^version = "RC2"
 * ^abstract = true
 * ^status = #draft
-* ^type = "DDCCCoreDataSet"
+* ^type = "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet"
 
 * vaccination 1..1 SU BackboneElement "Vaccination Event" "A vaccination event."
 * vaccination obeys who-ddcc-data-1
@@ -122,7 +122,7 @@ Description:    "Data elements for the DDCC Core Data Set - Vaccination Status -
 * ^version = "RC2"
 * ^abstract = false
 * ^status = #draft
-* ^type = "DDCCCoreDataSet"
+* ^type = "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet"
 
 
 Logical:        DDCCCoreDataSet_VS_CoC
@@ -136,7 +136,7 @@ Description:    "Data elements for the DDCC Core Data Set - Vaccination Status -
 * ^version = "RC2"
 * ^abstract = false
 * ^status = #draft
-* ^type = "DDCCCoreDataSet"
+* ^type = "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet"
 
 * sex 0..1 SU code "Sex" "Documentation of a specific instance of sex information for the vaccinated person."
 * sex from http://hl7.org/fhir/ValueSet/administrative-gender (required)
@@ -160,7 +160,7 @@ Description:    "Data elements for the DDCC Core Data Set for Test Result."
 * ^version = "RC2"
 * ^abstract = true
 * ^status = #draft
-* ^type = "DDCCCoreDataSet"
+* ^type = "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet"
 
 * test 1..1 SU BackboneElement "Test Event" "A test event."
   * pathogen 1..1 SU Coding "Pathogen targeted" "Name of the pathogen being tested for (such as SARS-CoV-2). "
