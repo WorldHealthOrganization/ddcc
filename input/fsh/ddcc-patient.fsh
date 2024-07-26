@@ -24,5 +24,5 @@ A DDCCPatient should:
 * name[ddccName].use = #official
 * gender 0..1 
 * gender ^label = "Sex"
-* birthDate 0..1 MS
+* birthDate 1..1 MS //rr edit 26-07
 * birthDate ^label = "Date of birth"
