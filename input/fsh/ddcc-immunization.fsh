@@ -1,5 +1,5 @@
 Profile:        DDCCImmunization
-Parent:         http://hl7.org/fhir/uv/ips/StructureDefinition/Immunization-pre-uv-ips
+Parent:         http://hl7.org/fhir/uv/ips/StructureDefinition/Immunization-uv-ips
 //Parent:         Immunization
 Id:             DDCCImmunization
 Title:          "DDCC Immunization"
