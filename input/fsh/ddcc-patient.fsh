@@ -1,6 +1,6 @@
 Profile:      DDCCPatient
 //Parent:       Patient
-Parent:       http://hl7.org/fhir/uv/ips/StructureDefinition/Patient-pre-uv-ips //this forces gender.  not good.
+Parent:       http://hl7.org/fhir/uv/ips/StructureDefinition/Patient-uv-ips //this forces gender.  not good.
 Id:           DDCCPatient
 Title:        "DDCC Patient"
 Description:	"""
