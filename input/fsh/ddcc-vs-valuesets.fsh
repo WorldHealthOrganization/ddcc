@@ -94,7 +94,7 @@ Title:          "DDCC Codes for ICD11"
 Description:    "ICD11 codes for DDCC so the FHIR server can perform expansions."
 * ^experimental = false
 * ^caseSensitive = true
-* ^url = $ICD11
+//* ^url = $ICD11
 
 * #1334426561 "Viral nucleic acid amplification test or NAAT"
 * #2056159157 "Rapid immunoassay detecting viral proteins or Ag-RDT"
@@ -186,7 +186,7 @@ Title:          "COVID-19 Vaccine Codes for DIVOC"
 Description:    "COVID-19 Vaccine codes for DIVOC so the FHIR server can perform expansions."
 * ^experimental = false
 * ^caseSensitive = true
-* ^url = $DIVOC
+//* ^url = $DIVOC
 
 * #DIVOC001 "Zycov-D"
 * #DIVOC002 "Covaxin"
@@ -213,7 +213,7 @@ Title:          "DDCC Codes for ICAO Vaccines"
 Description:    "ICAO vaccines codes for DDCC so the FHIR server can perform expansions."
 * ^experimental = false
 * ^caseSensitive = true
-* ^url = $ICAOV1
+//* ^url = $ICAOV1
 * #ICAO001 "Comirnaty"
 * #ICAO002 "Tozinameran"
 * #ICAO003 "Pfizer-BioNTech COVID-19 vaccine BNT162b2"

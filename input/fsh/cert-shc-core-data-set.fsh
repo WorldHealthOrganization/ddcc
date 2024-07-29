@@ -2,7 +2,7 @@ Logical:         CertSHC
 Title:           "Certificate - Smart Health Card's JSon Web Token Logical Model"
 Description:     "Data elements for the Smart Health Cards Core Data Set."
 
-* ^url = "http://smart.who.int/ddcc/StructureDefinition/CertSHC"
+//* ^url = "http://smart.who.int/ddcc/StructureDefinition/CertSHC"
 * ^version = "1"
 * ^abstract = true
 * ^status = #draft

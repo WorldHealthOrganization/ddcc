@@ -7,7 +7,7 @@ Logical:        DDCCCoreDataSet
 Title:          "DDCC Core Data Set Logical Model"
 Description:    "Data elements for the DDCC Core Data Set."
 
-* ^url = "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet"
+//* ^url = "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet"
 * ^version = "RC2"
 * ^abstract = true
 * ^status = #draft
@@ -49,7 +49,7 @@ Parent:         DDCCCoreDataSet
 Title:          "DDCC Core Data Set Logical Model for Vaccination Status"
 Description:    "Data elements for the DDCC Core Data Set for Vaccination Status.
 "
-* ^url = "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSetVS"
+//* ^url = "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSetVS"
 * ^version = "RC2"
 * ^abstract = true
 * ^status = #draft
@@ -116,7 +116,7 @@ Parent:         DDCCCoreDataSetVS
 Title:          "DDCC Core Data Set Logical Model - Vaccination Status - Proof of Vaccination"
 Description:    "Data elements for the DDCC Core Data Set - Vaccination Status - Proof of Vaccination."
 
-* ^url = "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSetVSPoV"
+//* ^url = "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSetVSPoV"
 * ^version = "RC2"
 * ^abstract = false
 * ^status = #draft
@@ -129,7 +129,7 @@ Parent:         DDCCCoreDataSetVS
 Title:          "DDCC Core Data Set Logical Model - Vaccination Status - Continuity of Care"
 Description:    "Data elements for the DDCC Core Data Set - Vaccination Status - Continuity of Care."
 
-* ^url = "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSetVSCoC"
+//* ^url = "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSetVSCoC"
 * ^version = "RC2"
 * ^abstract = false
 * ^status = #draft
@@ -152,7 +152,7 @@ Parent:         DDCCCoreDataSet
 Title:          "DDCC Core Data Set Logical Model for Test Result"
 Description:    "Data elements for the DDCC Core Data Set for Test Result."
 
-* ^url = "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSetTR"
+//* ^url = "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSetTR"
 * ^version = "RC2"
 * ^abstract = true
 * ^status = #draft
