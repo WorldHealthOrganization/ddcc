@@ -179,8 +179,8 @@ Instance:     DDCCVSTXSHEParametersFrench
 InstanceOf:   DDCCGenerateHealthCertificateParameters
 Usage:        #inline
 
-* parameter[+].name = "response"
-* parameter[=].resource = DDCCVSQuestionnaireResponseFrench
+* parameter[ddccResponse].name = "response"
+* parameter[ddccResponse].resource = DDCCVSQuestionnaireResponseFrench
 
 
 Instance:     DDCCTXSHEbundleexampleFrench
@@ -188,7 +188,7 @@ InstanceOf:   DDCCSubmitHealthEventRequest
 Usage:        #example
 
 * type = #batch
-* entry[+].fullUrl = "http://www.example.org/fhir/Parameters/DDCCVSTXSHEParametersFrench"
-* entry[=].resource = DDCCVSTXSHEParametersFrench
-* entry[=].request.method = #POST
-* entry[=].request.url = "QuestionnaireResponse/$generateHealthCertificate"
+* entry[ddccParameters].fullUrl = "http://www.example.org/fhir/Parameters/DDCCVSTXSHEParametersFrench"
+* entry[ddccParameters].resource = DDCCVSTXSHEParametersFrench
+* entry[ddccParameters].request.method = #POST
+* entry[ddccParameters].request.url = "QuestionnaireResponse/$generateHealthCertificate"
