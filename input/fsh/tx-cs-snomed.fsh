@@ -1,4 +1,4 @@
-CodeSystem: WHO_DDCC_snomed
+CodeSystem: WHODDCCsnomed
 Title: "SNOMED codes used in this IG"
 Description: "All SNOMED codes from `http://snomed.info/sct` used in this IG. Provided so the FHIR server can perform expansions."
 * ^experimental = true

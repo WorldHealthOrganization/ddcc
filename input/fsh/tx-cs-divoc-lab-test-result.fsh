@@ -1,9 +1,9 @@
-CodeSystem: WHO_DDCC_divoc_lab_test_result
+CodeSystem: WHODDCCdivoclabtestresult
 Title: "DIVOC lab test result codes used in this IG"
 Description: "All DIVOC lab test result codes from its internally defined code system used in this IG. Provided so the FHIR server can perform expansions."
 * ^experimental = true
 * ^caseSensitive = true
-* ^url = "http://smart.who.int/ddcc/CodeSystem/lab-test-qual-result-divoc"
+* ^url = "http://smart.who.int/ddcc/CodeSystem/WHODDCCdivoclabtestresult"
 
 * #Negative "Negative"
 * #Positive "Positive"

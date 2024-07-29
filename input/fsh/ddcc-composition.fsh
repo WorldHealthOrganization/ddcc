@@ -47,7 +47,7 @@ Title:          "DDCC:VS Composition"
 Description:    """ 
 Describes the logical structure for a Digital Documentation of COVID-19 Certificates - Vaccination Status (DDCC:VS).
 """
-* category = DDCC_Composition_Category_CodeSystem#ddcc-vs
+* category = DDCCCompositionCategoryCodeSystem#ddcc-vs
 * section ^slicing.discriminator[+].type = #value
 * section ^slicing.discriminator[=].path = "code"
 * section ^slicing.discriminator[+].type = #type
@@ -70,7 +70,7 @@ Title:          "DDCC:TR Composition"
 Description:    """ 
 Describes the logical structure for a Digital Documentation of COVID-19 Certificates - Test Result (DDCC:TR).
 """
-* category = DDCC_Composition_Category_CodeSystem#ddcc-tr
+* category = DDCCCompositionCategoryCodeSystem#ddcc-tr
 * section ^slicing.discriminator[+].type = #value
 * section ^slicing.discriminator[=].path = "code"
 * section ^slicing.discriminator[+].type = #type
@@ -87,8 +87,7 @@ Describes the logical structure for a Digital Documentation of COVID-19 Certific
 	
 
 
-CodeSystem:     DDCC_Composition_Category_CodeSystem
-Id:             DDCC-Composition-Category-CodeSystem
+CodeSystem:     DDCCCompositionCategoryCodeSystem
 Title:          "DDCC Composition Category Codes"
 Description:    "Possible categories available for composition."
 * ^experimental = false
@@ -96,11 +95,10 @@ Description:    "Possible categories available for composition."
 * #ddcc-vs      "DDCC:VS"
 * #ddcc-tr      "DDCC:TR"
 
-ValueSet:       DDCC_Composition_Category_ValueSet
-Id:             DDCC-Composition-Category-ValueSet
+ValueSet:       DDCCCompositionCategoryValueSet
 Title:          "DDCC Composition Category Codes"
 Description: 	"Categorization of DDCC Composition"
-* include codes from system DDCC_Composition_Category_CodeSystem
+* include codes from system DDCCCompositionCategoryCodeSystem
 
 Profile:        DDCCDocument
 Parent:         Bundle
@@ -219,18 +217,16 @@ The content attachment url will point to a DDCC Document.
 
 /*
 
-CodeSystem:     DDCC_SectionCode_CodeSystem
-Id:             DDCC-SectionCode-CodeSystem
+CodeSystem:     DDCCSectionCodeCodeSystem
 Title:          "DDCC QR SectionCode Usage Codes"
 Description:    "Section Codes for DDCC"
 * #vaccination  "DDCC: Vaccination Status"
 * #test         "DDCC: SARS-CoV-2 Test"
 * #recovery     "DDCC: Recovery Status"
 
-ValueSet:       DDCC_SectionCode_ValueSet
-Id:             DDCC-SectionCode-ValueSet
+ValueSet:       DDCCSectionCodeValueSet
 Description:   "Content section codes for DDCC."
-* include codes from system DDCC_SectionCode_CodeSystem
+* include codes from system DDCCSectionCodeCodeSystem
 
 */
 

@@ -5,7 +5,7 @@ uses "http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-patient-gen
 uses "http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-vaccination-dm"  alias SHCImmunizationDM as source
 
 uses "http://hl7.org/fhir/StructureDefinition/Bundle" alias DDCCBundle as target
-uses "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.VS" alias DDCCVS as produced
+uses "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet-VS" alias DDCCVS as produced
 
 group SHCToVS ( 
   source shc : SHCVaccinationBundleDM
@@ -14,8 +14,8 @@ group SHCToVS (
   shc.entry as patientEntrySHC then {
     patientEntrySHC.resource : Patient first as patient then {
       shc.entry as entry then {
-        //entry.resource : Immunization as immunization where vaccineCode.memberOf('http://smart.who.int/ddcc/ValueSet/who-ddcc-allowed-vaccines-covid-19') ->  ddccBundle.entry as outentry,  create('http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.VS') as ddcc then {
-        entry.resource : Immunization as immunization ->  ddccBundle.entry as outentry,  create('http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.VS') as ddcc then {
+        //entry.resource : Immunization as immunization where vaccineCode.memberOf('http://smart.who.int/ddcc/ValueSet/who-ddcc-allowed-vaccines-covid-19') ->  ddccBundle.entry as outentry,  create('http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet-VS') as ddcc then {
+        entry.resource : Immunization as immunization ->  ddccBundle.entry as outentry,  create('http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet-VS') as ddcc then {
           immunization then PatientToDDCCVS(patient, ddcc) "set patient";
           immunization -> ddcc.vaccination as vaccination then ImmunizationToDDCC(immunization, vaccination) "set vaccination";
           immunization -> outentry.resource = ddcc "set outentry";

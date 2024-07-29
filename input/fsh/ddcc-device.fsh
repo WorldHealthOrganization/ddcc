@@ -13,15 +13,15 @@ Device resource.
 * patient 1..1 MS
 //* patient only Reference(DDCCPatient)
 * type 1..1 MS
-* type from WHO_DDCC_Type_of_Test_COVID_19
+* type from WHODDCCTypeofTestCOVID19
 * property ^slicing.discriminator.type = #value
 * property ^slicing.discriminator.path = "type"
 * property ^slicing.rules = #open
 * property contains pathogen 1..1 and brand 0..1
-* property[pathogen].type = DDCC_Device_Property_CodeSystem#pathogen
+* property[pathogen].type = DDCCDevicePropertyCodeSystem#pathogen
 * property[pathogen].valueCode 1..1
-* property[pathogen].valueCode from WHO_DDCC_Agent_Targeted_COVID_19
+* property[pathogen].valueCode from WHODDCCAgentTargetedCOVID19
 * property[pathogen].valueQuantity 0..0
-* property[brand].type = DDCC_Device_Property_CodeSystem#brand
+* property[brand].type = DDCCDevicePropertyCodeSystem#brand
 * property[brand].valueCode 1..1 
 * property[brand].valueQuantity 0..0

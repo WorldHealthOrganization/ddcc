@@ -13,7 +13,7 @@ DDCC Folder of the Paper Certificate
 * extension[designationType] contains ddccDesignation 1..1
 * extension[designationType][ddccDesignation].valueCodeableConcept 1..1
 * extension[designationType][ddccDesignation].valueCodeableConcept.coding 1..1
-* extension[designationType][ddccDesignation].valueCodeableConcept.coding = DDCC_Folder_DesignationType_Codesystem#ddcc
+* extension[designationType][ddccDesignation].valueCodeableConcept.coding = DDCCFolderDesignationTypeCodesystem#ddcc
 
 * subject 1..1 MS
 * subject.reference 1..1 MS
@@ -22,16 +22,14 @@ DDCC Folder of the Paper Certificate
 
 
 
-CodeSystem:     DDCC_Folder_DesignationType_Codesystem
-Id:             DDCC-Folder-DesignationType
+CodeSystem:     DDCCFolderDesignationTypeCodesystem
 Title:          "DDCC Designation Types for Folder"
 Description:    "DDCC Designation Types to use for DDCC Folders."
 * ^experimental = false
 * ^caseSensitive = true
 * #ddcc         "DDCC"
 
-ValueSet:       DDCC_Folder_DesignationType_ValueSet
-Id:             DDCC-Folder-DesignationType
+ValueSet:       DDCCFolderDesignationTypeValueSet
 Title:          "DDCC DesignationTypes for Folder"
 Description: 	"DDCC Designation Types ValueSet for DDCC Folders."
-* include codes from system DDCC_Folder_DesignationType_Codesystem
+* include codes from system DDCCFolderDesignationTypeCodesystem

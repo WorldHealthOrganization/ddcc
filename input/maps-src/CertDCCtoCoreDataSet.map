@@ -5,8 +5,8 @@ uses "http://smart.who.int/ddcc/StructureDefinition/CertDCC" alias CWTPayload as
 
 uses "http://hl7.org/fhir/StructureDefinition/Bundle" alias DDCCBundle as target
 uses "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet" alias DDCC as produced
-uses "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.VS" alias DDCCVS as produced
-uses "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.TR" alias DDCCTR as produced
+uses "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet-VS" alias DDCCVS as produced
+uses "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet-TR" alias DDCCTR as produced
 
 group CertDCCtoCoreDataSet(
     source src: CWTPayload, 
@@ -14,13 +14,13 @@ group CertDCCtoCoreDataSet(
 {
     src."-260" as hcert then {
         hcert."1" as dcc then {
-            dcc.v as v -> ddccBundle.entry as outentry,  create('http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.VS') as ddcc then {                
+            dcc.v as v -> ddccBundle.entry as outentry,  create('http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet-VS') as ddcc then {                
                 v then DCCtoCoreDataSet(dcc, ddcc) "set DDCC";
                 v -> ddcc.certificate as certificate then CertDCCtoCoreDataSetCertificate(src, dcc, v, certificate) "set certificate";
                 v -> ddcc.vaccination as vaccination then VtoCoreDataSetVS(v, vaccination) "set vaccination";
                 v -> outentry.resource = ddcc "set outentry";  
             } "v";
-            dcc.t as t -> ddccBundle.entry as outentry,  create('http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.TR') as ddcc then {
+            dcc.t as t -> ddccBundle.entry as outentry,  create('http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet-TR') as ddcc then {
                 t then DCCtoCoreDataSet(dcc, ddcc) "set DDCC";
                 t -> ddcc.certificate as certificate then CertDCCtoCoreDataSetCertificate(src, dcc, t, certificate) "set certificate";
                 t -> ddcc.test as test then TtoCoreDataSetTR(t, test) "set test";

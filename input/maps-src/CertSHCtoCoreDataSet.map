@@ -5,7 +5,7 @@ uses "http://smart.who.int/ddcc/StructureDefinition/CertSHC" alias JWTPayload as
 
 uses "http://hl7.org/fhir/StructureDefinition/Bundle" alias DDCCBundle as target
 uses "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet" alias DDCC as produced
-uses "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.VS" alias DDCCVS as produced
+uses "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet-VS" alias DDCCVS as produced
 
 imports "http://smart.who.int/ddcc/StructureMap/SHCToCoreDataSetVS"
 imports "http://smart.who.int/ddcc/StructureMap/SHCToCoreDataSetTR"
@@ -20,13 +20,13 @@ group CertSHCtoCoreDataSetBundle(
                 fhirBundle.entry as patientEntrySHC then {
                     patientEntrySHC.resource : Patient first as patient then {
                         fhirBundle.entry as entry then {
-                            entry.resource : Immunization as immunization ->  ddccBundle.entry as outentry,  create('http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.VS') as ddcc then {
+                            entry.resource : Immunization as immunization ->  ddccBundle.entry as outentry,  create('http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet-VS') as ddcc then {
                                 immunization then PatientToDDCCVS(patient, ddcc) "set patient";
                                 immunization -> ddcc.vaccination as vaccination then ImmunizationToDDCC(immunization, vaccination) "set vaccination";
                                 immunization then CertSHCtoCoreDataSet(src, ddcc) "set ddcc";
                                 immunization -> outentry.resource = ddcc "set outentry";                                
                             } "immunizations";
-                            entry.resource : Observation as lab ->  ddccBundle.entry as outentry,  create('http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.TR') as ddcc then {
+                            entry.resource : Observation as lab ->  ddccBundle.entry as outentry,  create('http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet-TR') as ddcc then {
                                 lab then PatientToDDCCTR(patient, ddcc) "set patient";
                                 lab -> ddcc.test as test then LabToDDCC(lab, test) "set test";
                                 lab then CertSHCtoCoreDataSet(src, ddcc) "set ddcc";

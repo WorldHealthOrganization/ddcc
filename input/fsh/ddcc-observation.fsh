@@ -22,4 +22,4 @@ Observation resource.
 * value[x] only CodeableConcept
 * value[x] ^label = "Test result"
 * method 0..1 MS
-* method from  WHO_DDCC_Sample_Origin_COVID_19
+* method from  WHODDCCSampleOriginCOVID19

@@ -57,7 +57,7 @@ Description:    "Data elements for the ICAO Visible Digital Seal Core Data Set. 
 
     * ve 0..* BackboneElement "VaccinationEvent (Required for `icao.vacc` only, not used of `icao.test`)"
       * des 1..1 string  "Vaccine or Prophylaxis (ICD-11 MMS code descending from http://id.who.int/icd/entity/164949870)"
-      * des from WHO_DDCC_Vaccines_COVID_19 (required)
+      * des from WHODDCCVaccinesCOVID19 (required)
       * nam 1..1 string  "Vaccine Brand (medical product name)"
       * dis 0..1 string  "Disease or agent targeted (ICD-11 code)"
       * vd 1..* BackboneElement "VaccinationDetails"

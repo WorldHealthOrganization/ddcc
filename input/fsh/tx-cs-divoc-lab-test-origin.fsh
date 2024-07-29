@@ -1,9 +1,9 @@
-CodeSystem: WHO_DDCC_divoc_lab_test_origin
+CodeSystem: WHODDCCdivoclabtestorigin
 Title: "DIVOC lab test origin codes used in this IG"
 Description: "All DIVOC lab test origin codes from its internally defined code system used in this IG. Provided so the FHIR server can perform expansions."
 * ^experimental = true
 * ^caseSensitive = true
-* ^url = "http://smart.who.int/ddcc/CodeSystem/lab-test-sample-origin-divoc"
+* ^url = "http://smart.who.int/ddcc/CodeSystem/WHODDCCdivoclabtestorigin"
 
 * #"Nasopharyngeal Swab" "Nasopharyngeal Swab"
 * #"Throat swab" "Throat swab"

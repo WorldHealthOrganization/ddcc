@@ -44,13 +44,12 @@ Title:          "WHO Digital Documentation of COVID Certificates"
 * birthDate -> "Patient.birthDate"
 * identifier -> "Patient.identifier"
 
-Logical:        DDCCCoreDataSet_VS
-Id:             DDCCCoreDataSet.VS
+Logical:        DDCCCoreDataSetVS
 Parent:         DDCCCoreDataSet
 Title:          "DDCC Core Data Set Logical Model for Vaccination Status"
 Description:    "Data elements for the DDCC Core Data Set for Vaccination Status.
 "
-* ^url = "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.VS"
+* ^url = "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSetVS"
 * ^version = "RC2"
 * ^abstract = true
 * ^status = #draft
@@ -59,7 +58,7 @@ Description:    "Data elements for the DDCC Core Data Set for Vaccination Status
 * vaccination 1..1 SU BackboneElement "Vaccination Event" "A vaccination event."
 * vaccination obeys who-ddcc-data-1
   * vaccine 1..1 SU Coding "Vaccine or prophylaxis" "Generic description of the vaccine or vaccine sub-type. e.g. COVID-19 mRNA vaccine, HPV vaccine."
-  * vaccine from WHO_DDCC_Vaccines_COVID_19 (preferred)
+  * vaccine from WHODDCCVaccinesCOVID19 (preferred)
   * brand 1..1 SU Coding "Vaccine brand" "The brand or trade name used to refer to the vaccine received."
   * manufacturer 0..1 SU Coding "Vaccine manufacturer" "Name of the manufacturer of the vaccine received. e.g. Serum institute of India, AstraZeneca. If vaccine manufacturer is unknown, market authorization holder is REQUIRED."
   * maholder 0..1 SU Coding "Vaccine market authorization holder" "Name of the market authorization holder of the vaccine received. If market authorization holder is unknown, vaccine manufacturer is REQUIRED."
@@ -76,12 +75,12 @@ Description:    "Data elements for the DDCC Core Data Set for Vaccination Status
   * signature 0..1 Signature "Signature of health worker" "REQUIRED for PAPER vaccination certificates ONLY. The health worker who provided the vaccination or the supervising clinician's hand-written signature."
   * practitioner 0..1 Identifier "Health worker identifier" "OPTIONAL for DIGITAL and PAPER vaccination certificates. The unique identifier for the health worker as determined by the member state. There can be more than one unique identifier used. (e.g. system generated ID, health profession number, cryptographic signature, or any other form of health worker unique identifier). This can be used in lieu of a paper-based signature." 
   * disease 0..1 Coding "Disease or agent targeted" "Name of disease vaccinated against (such as COVID-19)."
-  * disease from WHO_DDCC_Disease_Targeted_COVID_19 (preferred)
+  * disease from WHODDCCDiseaseTargetedCOVID19 (preferred)
   * nextDose 0..1 date "Due date of next dose" "Date on which the next vaccination should be administered, if a next dose is REQUIRED."
 
 
 Mapping:        DDCCCoreDataSetVSToImmunization
-Source:         DDCCCoreDataSet_VS
+Source:         DDCCCoreDataSetVS
 Target:         "http://smart.who.int/ddcc/StructureDefinition/DDCCImmunization"
 Id:             ddcc-immunization
 Title:          "WHO Digital Documentation of COVID Certificates"
@@ -104,35 +103,33 @@ Title:          "WHO Digital Documentation of COVID Certificates"
   * issuer -> "Immunization.protocolApplied.authority.identifier"
 
 Mapping:        DDCCCoreDataSetVSToImmunizationRecommendation
-Source:         DDCCCoreDataSet_VS
+Source:         DDCCCoreDataSetVS
 Target:         "http://smart.who.int/ddcc/StructureDefinition/DDCCImmunizationRecommendation"
 Id:             ddcc-immunization-recommendation
 Title:          "WHO Digital Documentation of COVID Certificates"
 
 * vaccination.nextDose -> "ImmunizationRecommendation.dateCriterion.value"
 
-Logical:        DDCCCoreDataSet_VS_PoV
-Id:             DDCCCoreDataSet.VS.PoV
+Logical:        DDCCCoreDataSetVSPoV
 //Parent:		Element
-Parent:         DDCCCoreDataSet_VS
+Parent:         DDCCCoreDataSetVS
 Title:          "DDCC Core Data Set Logical Model - Vaccination Status - Proof of Vaccination"
 Description:    "Data elements for the DDCC Core Data Set - Vaccination Status - Proof of Vaccination."
 
-* ^url = "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.VS.PoV"
+* ^url = "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSetVSPoV"
 * ^version = "RC2"
 * ^abstract = false
 * ^status = #draft
 * ^type = "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet"
 
 
-Logical:        DDCCCoreDataSet_VS_CoC
-Id:             DDCCCoreDataSet.VS.CoC
+Logical:        DDCCCoreDataSetVSCoC
 //Parent:		Element
-Parent:         DDCCCoreDataSet_VS
+Parent:         DDCCCoreDataSetVS
 Title:          "DDCC Core Data Set Logical Model - Vaccination Status - Continuity of Care"
 Description:    "Data elements for the DDCC Core Data Set - Vaccination Status - Continuity of Care."
 
-* ^url = "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.VS.CoC"
+* ^url = "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSetVSCoC"
 * ^version = "RC2"
 * ^abstract = false
 * ^status = #draft
@@ -143,20 +140,19 @@ Description:    "Data elements for the DDCC Core Data Set - Vaccination Status -
 * vaccination.centre 1..1 
 
 Mapping:        DDCCCoreDataSetVSCoCToPatient
-Source:         DDCCCoreDataSet_VS_CoC
+Source:         DDCCCoreDataSetVSCoC
 Target:         "http://smart.who.int/ddcc/StructureDefinition/DDCCPatient"
 Id:             ddcc-vs-coc-immunization-recommendation
 Title:          "WHO Digital Documentation of COVID Certificates"
 
 * sex -> "Patient.gender"
 
-Logical:        DDCCCoreDataSet_TR
-Id:             DDCCCoreDataSet.TR
+Logical:        DDCCCoreDataSetTR
 Parent:         DDCCCoreDataSet
 Title:          "DDCC Core Data Set Logical Model for Test Result"
 Description:    "Data elements for the DDCC Core Data Set for Test Result."
 
-* ^url = "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.TR"
+* ^url = "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSetTR"
 * ^version = "RC2"
 * ^abstract = true
 * ^status = #draft
@@ -164,22 +160,22 @@ Description:    "Data elements for the DDCC Core Data Set for Test Result."
 
 * test 1..1 SU BackboneElement "Test Event" "A test event."
   * pathogen 1..1 SU Coding "Pathogen targeted" "Name of the pathogen being tested for (such as SARS-CoV-2). "
-  * pathogen from WHO_DDCC_Agent_Targeted_COVID_19 (preferred)
+  * pathogen from WHODDCCAgentTargetedCOVID19 (preferred)
   * type 1..1 SU Coding "Type of test" "Name of the type of test that was conducted e.g. NAAT."
-  * type from WHO_DDCC_Type_of_Test_COVID_19 (preferred)
+  * type from WHODDCCTypeofTestCOVID19 (preferred)
   * brand 0..1 SU Coding "Test brand" "The brand or trade name used to refer to the test conducted."
   * manufacturer 0..1 SU Coding "Test manufacturer" "Name of the manufacturer of the test conducted."
   * origin 0..1 SU Coding "Specimen Sample Origin" "The type of sample that was taken  e.g. Nasopharyngeal swab or Saliva specimen."
-  * origin from WHO_DDCC_Sample_Origin_COVID_19 (preferred)
+  * origin from WHODDCCSampleOriginCOVID19 (preferred)
   * date 1..1 SU dateTime "Date and time of sample collection" "Date and time when sample was collected."
   * result 0..1 Coding "Test result" "Detected or Not detected presence of SARS-CoV-2 infection."
-  * result from WHO_DDCC_Test_Result_COVID_19 (preferred)
+  * result from WHODDCCTestResultCOVID19 (preferred)
   * centre 0..1 Coding "Test centre or facility name" "A codable name or identifier of the facility responsible for conducting the test."
   * country 1..1 SU Coding "Test centre country" "The country in which the individual has been tested."
   * country from http://hl7.org/fhir/ValueSet/iso3166-1-3 (preferred) 
 
 Mapping:        DDCCCoreDataSetTRToObservation
-Source:         DDCCCoreDataSet_TR
+Source:         DDCCCoreDataSetTR
 Target:         "http://smart.who.int/ddcc/StructureDefinition/DDCCObservation"
 Id:             ddcc-observation
 Title:          "WHO Digital Documentation of COVID Certificates"
@@ -191,7 +187,7 @@ Title:          "WHO Digital Documentation of COVID Certificates"
   * result -> "Observation.value"
 
 Mapping:        DDCCCoreDataSetTRToSpecimen
-Source:         DDCCCoreDataSet_TR
+Source:         DDCCCoreDataSetTR
 Target:         "http://smart.who.int/ddcc/StructureDefinition/DDCCSpecimen"
 Id:             ddcc-specimen
 Title:          "WHO Digital Documentation of COVID Certificates"
@@ -201,7 +197,7 @@ Title:          "WHO Digital Documentation of COVID Certificates"
   * date -> "Specimen.collection.collected"
 
 Mapping:        DDCCCoreDataSetTRToTest
-Source:         DDCCCoreDataSet_TR
+Source:         DDCCCoreDataSetTR
 Target:         "http://smart.who.int/ddcc/StructureDefinition/DDCCTest"
 Id:             ddcc-test
 Title:          "WHO Digital Documentation of COVID Certificates"
@@ -213,7 +209,7 @@ Title:          "WHO Digital Documentation of COVID Certificates"
   * brand -> "Device.property.valueCode"
 
 Mapping:        DDCCCoreDataSetTRToDignosticReport
-Source:         DDCCCoreDataSet_TR
+Source:         DDCCCoreDataSetTR
 Target:         "http://smart.who.int/ddcc/StructureDefinition/DDCCDiagnosticReport"
 Id:             ddcc-diagnostic-report
 Title:          "WHO Digital Documentation of COVID Certificates"
@@ -223,7 +219,7 @@ Title:          "WHO Digital Documentation of COVID Certificates"
   * date -> "DiagnosticReport.effective"
 
 Mapping:        DDCCCoreDataSetTRToProcedure
-Source:         DDCCCoreDataSet_TR
+Source:         DDCCCoreDataSetTR
 Target:         "http://smart.who.int/ddcc/StructureDefinition/DDCCProcedure"
 Id:             ddcc-procedure
 Title:          "WHO Digital Documentation of COVID Certificates"

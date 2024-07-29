@@ -11,7 +11,7 @@ DiagnosticReport resource.
 
 * status = #final (exactly)
 * code 1..1 MS
-* code from WHO_DDCC_Type_of_Test_COVID_19
+* code from WHODDCCTypeofTestCOVID19
 * subject 1..1 MS
 //* subject only Reference(DDCCPatient)
 * effective[x] 1..1 MS

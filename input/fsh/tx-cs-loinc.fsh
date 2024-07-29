@@ -1,4 +1,4 @@
-CodeSystem: WHO_DDCC_loinc
+CodeSystem: WHODDCCloinc
 Title: "LOINC codes used in this IG"
 Description: "All LOINC codes from `http://loinc.org` used in this IG. Provided so the FHIR server can perform expansions."
 * ^experimental = true

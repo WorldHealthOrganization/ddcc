@@ -1,4 +1,4 @@
-Instance:     DDCC-Patient-Russian
+Instance:     DDCCPatientRussian
 InstanceOf:   DDCCPatient
 Usage:        #example
 // Title: ""
@@ -8,64 +8,64 @@ Usage:        #example
 * birthDate = "2003-03-03"
 
 
-Instance: DDCC-Organization-Russian
+Instance: DDCCOrganizationRussian
 InstanceOf: DDCCOrganization
 Usage: #example
 // Title: ""
 // Description: ""
 * name = "Государственная больница"
 
-Instance: DDCC-ImmunizationRecommendation-Russian
+Instance: DDCCImmunizationRecommendationRussian
 InstanceOf: DDCCImmunizationRecommendation
 Usage: #example
 // Title: ""
 // Description: ""
 * date = "2021-05-06"
-* patient = Reference(DDCC-Patient-Russian)
+* patient = Reference(DDCCPatientRussian)
 * recommendation.vaccineCode.coding[ddccVaccine] = $ICD11#XM9QW8
 * recommendation.dateCriterion.value = "2021-05-20"
 * recommendation.dateCriterion.code = http://loinc.org#30980-7
 * recommendation.forecastStatus = http://terminology.hl7.org/CodeSystem/immunization-recommendation-status#due
-* recommendation.supportingImmunization = Reference(DDCC-Immunization-Russian)
+* recommendation.supportingImmunization = Reference(DDCCImmunizationRussian)
 
-Instance: DDCC-Immunization-Russian
+Instance: DDCCImmunizationRussian
 InstanceOf: DDCCImmunization
 Usage: #example
 // Title: ""
 // Description: ""
 * status = #completed
 * extension[vaccineBrand].valueCoding = $ICD11#XM5QM6
-* extension[vaccineMarketAuthorization].valueCoding = DDCC_Example_Test_CodeSystem#TEST
+* extension[vaccineMarketAuthorization].valueCoding = DDCCExampleTestCodeSystem#TEST
 * extension[validFrom].valueDate = "2021-05-30"
 * extension[country].valueCode = urn:iso:std:iso:3166#RUS
 * vaccineCode = $ICD11#XM9QW8
 * expirationDate = "2021-06-30"
 * lotNumber = "123"
-* patient = Reference(DDCC-Patient-Russian)
+* patient = Reference(DDCCPatientRussian)
 * location.display = "Сайт вакцинации"
 * occurrenceDateTime =  "2021-05-06"
-* performer.actor = Reference(DDCC-Organization-Russian)
-* protocolApplied[protocolAppliedAuthority].authority = Reference(DDCC-Organization-Russian)
+* performer.actor = Reference(DDCCOrganizationRussian)
+* protocolApplied[protocolAppliedAuthority].authority = Reference(DDCCOrganizationRussian)
 * protocolApplied[protocolAppliedAuthority].targetDisease = $ICD11#RA01
 * protocolApplied[protocolAppliedAuthority].doseNumberPositiveInt = 1
 * protocolApplied[protocolAppliedAuthority].seriesDosesPositiveInt = 2
 
 
-Instance:     DDCC-Composition-Example-Russian
+Instance:     DDCCCompositionExampleRussian
 InstanceOf:   DDCCVSComposition
 Usage: #example
 * identifier[+].system = "urn:EXAMPLE-who-:ddcc:composition:ids"
 * identifier[=].value = "999123456123456123456"
 * identifier[=].use = #official
 * status = #final
-* subject = Reference(DDCC-Patient-Russian)
+* subject = Reference(DDCCPatientRussian)
 * date = "2020-05-06"
-* author = Reference(DDCC-Organization-Russian)
-* attester.party = Reference(DDCC-Organization-Russian)
+* author = Reference(DDCCOrganizationRussian)
+* attester.party = Reference(DDCCOrganizationRussian)
 * section[vaccination].code = $LOINC#11369-6
-* section[vaccination].focus = Reference(DDCC-Immunization-Russian)
-* section[vaccination].entry[+] = Reference(DDCC-Immunization-Russian)
-* section[vaccination].entry[+] = Reference(DDCC-ImmunizationRecommendation-Russian)
+* section[vaccination].focus = Reference(DDCCImmunizationRussian)
+* section[vaccination].entry[+] = Reference(DDCCImmunizationRussian)
+* section[vaccination].entry[+] = Reference(DDCCImmunizationRecommendationRussian)
 
 
 
@@ -81,30 +81,30 @@ Usage: #example
 * link[+].relation = "publication"
 * link[=].url = "urn:HCID:1234567890"
 
-* entry[ddccComposition].fullUrl = "http://www.example.org/fhir/Composition/DDCC-Composition-Example-Russian"
-* entry[ddccComposition].resource = DDCC-Composition-Example-Russian
+* entry[ddccComposition].fullUrl = "http://www.example.org/fhir/Composition/DDCCCompositionExampleRussian"
+* entry[ddccComposition].resource = DDCCCompositionExampleRussian
 
-* entry[ddccPatient].fullUrl = "http://www.example.org/fhir/Patient/DDCC-Patient-Russian"
-* entry[ddccPatient].resource = DDCC-Patient-Russian
+* entry[ddccPatient].fullUrl = "http://www.example.org/fhir/Patient/DDCCPatientRussian"
+* entry[ddccPatient].resource = DDCCPatientRussian
 
-* entry[ddccOrganization].fullUrl = "http://www.example.org/fhir/Organization/DDCC-Organization-Russian"
-* entry[ddccOrganization].resource = DDCC-Organization-Russian
+* entry[ddccOrganization].fullUrl = "http://www.example.org/fhir/Organization/DDCCOrganizationRussian"
+* entry[ddccOrganization].resource = DDCCOrganizationRussian
 
-* entry[ddccImmunization].fullUrl = "http://www.example.org/fhir/Immunization/DDCC-Immunization-Russian"
-* entry[ddccImmunization].resource = DDCC-Immunization-Russian
+* entry[ddccImmunization].fullUrl = "http://www.example.org/fhir/Immunization/DDCCImmunizationRussian"
+* entry[ddccImmunization].resource = DDCCImmunizationRussian
 
-* entry[ddccImmunizationRecommendation].fullUrl = "http://www.example.org/fhir/ImmunizationRecommendation/DDCC-ImmunizationRecommendation-Russian"
-* entry[ddccImmunizationRecommendation].resource = DDCC-ImmunizationRecommendation-Russian
+* entry[ddccImmunizationRecommendation].fullUrl = "http://www.example.org/fhir/ImmunizationRecommendation/DDCCImmunizationRecommendationRussian"
+* entry[ddccImmunizationRecommendation].resource = DDCCImmunizationRecommendationRussian
 
 
-Instance:     DDCC-VS-QuestionnaireResponse-Russian
+Instance:     DDCCVSQuestionnaireResponseRussian
 InstanceOf:   DDCCQuestionnaireResponse
 Usage:        #example
 
 * questionnaire = $DDCCVSQuestionnaireURL
 * status = #completed
 
-* subject = Reference(DDCC-Patient-Russian)
+* subject = Reference(DDCCPatientRussian)
 * authored = "2021-04-01"
 
 * item[+].linkId = "name"
@@ -126,10 +126,10 @@ Usage:        #example
 * item[=].answer.valueCoding = $ICD11#XM5QM6
 
 * item[+].linkId = "manufacturer"
-* item[=].answer.valueCoding = DDCC_Example_Test_CodeSystem#TEST
+* item[=].answer.valueCoding = DDCCExampleTestCodeSystem#TEST
 
 * item[+].linkId = "ma_holder"
-* item[=].answer.valueCoding = DDCC_Example_Test_CodeSystem#TEST
+* item[=].answer.valueCoding = DDCCExampleTestCodeSystem#TEST
 
 * item[+].linkId = "lot"
 * item[=].answer.valueString = "ER8732"
@@ -174,20 +174,20 @@ Usage:        #example
 * item[=].answer.valueDate = "2022-04-05"
 
 
-Instance:     DDCC-VS-TX-SHE-Parameters-Russian
+Instance:     DDCCVSTXSHEParametersRussian
 InstanceOf:   DDCCGenerateHealthCertificateParameters
 Usage:        #inline
 
 * parameter[+].name = "response"
-* parameter[=].resource = DDCC-VS-QuestionnaireResponse-Russian
+* parameter[=].resource = DDCCVSQuestionnaireResponseRussian
 
 
-Instance:     DDCC-TX-SHE-bundle-example-Russian
+Instance:     DDCCTXSHEbundleexampleRussian
 InstanceOf:   DDCCSubmitHealthEventRequest
 Usage:        #example
 
 * type = #batch
-* entry[+].fullUrl = "http://www.example.org/fhir/Parameters/DDCC-VS-TX-SHE-Parameters-Russian"
-* entry[=].resource = DDCC-VS-TX-SHE-Parameters-Russian
+* entry[+].fullUrl = "http://www.example.org/fhir/Parameters/DDCCVSTXSHEParametersRussian"
+* entry[=].resource = DDCCVSTXSHEParametersRussian
 * entry[=].request.method = #POST
 * entry[=].request.url = "QuestionnaireResponse/$generateHealthCertificate"

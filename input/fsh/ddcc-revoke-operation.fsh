@@ -1,7 +1,7 @@
-Instance:       DDCC-QuestionnaireResponse-revokeHealthCertificate
+Instance:       DDCCQuestionnaireResponserevokeHealthCertificate
 InstanceOf:     OperationDefinition
 Usage:          #definition
-* id = "DDCC-QuestionnaireResponse-revokeHealthCertificate"
+* id = "DDCCQuestionnaireResponserevokeHealthCertificate"
 * name = "QuestionnaireResponse_Revoke_Health_Certificate"
 * title = "OperationDefinition for revoking a health certificate (DDCC)."
 * status = #draft

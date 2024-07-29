@@ -5,8 +5,8 @@ uses "http://smart.who.int/ddcc/StructureDefinition/CertDIVOC" alias DIVOC as so
 
 uses "http://hl7.org/fhir/StructureDefinition/Bundle" alias DDCCBundle as target
 uses "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet" alias DDCC as produced
-uses "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.VS" alias DDCCVS as produced
-uses "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.TR" alias DDCCTR as produced
+uses "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet-VS" alias DDCCVS as produced
+uses "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet-TR" alias DDCCTR as produced
 
 group CertDIVOCtoCoreDataSetBundle(
     source src: DIVOC, 
@@ -14,7 +14,7 @@ group CertDIVOCtoCoreDataSetBundle(
 {
     src.type as type then {
         type where type = 'ProofOfVaccinationCredential' then {
-            src.evidence as evidence -> ddccBundle.entry as outentry,  create('http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.VS') as ddcc then {
+            src.evidence as evidence -> ddccBundle.entry as outentry,  create('http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet-VS') as ddcc then {
                 src.credentialSubject as credentialSubject then CredentialSubjecttoCoreDataSet(credentialSubject, ddcc) "set patient";
                 src -> ddcc.certificate as certificate then CertDIVOCtoCoreDataSetCertificate(src, evidence, certificate) "set certificate";
                 evidence -> ddcc.vaccination as vaccination then EvidencetoCoreDataSetVS(evidence, vaccination) "set vaccination"; 
@@ -22,7 +22,7 @@ group CertDIVOCtoCoreDataSetBundle(
             } "evidence";
         } "ProofOfVaccinationCredential";
         type where type = 'ProofOfTestCertificateCredential' then {
-            src.evidence as evidence -> ddccBundle.entry as outentry,  create('http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.TR') as ddcc then {
+            src.evidence as evidence -> ddccBundle.entry as outentry,  create('http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet-TR') as ddcc then {
                 src.credentialSubject as credentialSubject then CredentialSubjecttoCoreDataSet(credentialSubject, ddcc) "set patient";
                 src -> ddcc.certificate as certificate then CertDIVOCtoCoreDataSetCertificate(src, evidence, certificate) "set certificate";
                 evidence -> ddcc.test as test then EvidencetoCoreDataSetTR(evidence, test) "set test"; 

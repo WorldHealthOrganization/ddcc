@@ -14,4 +14,4 @@ Specimen resource.
 * collection 1..1 MS
 * collection.collectedDateTime 1..1 MS
 * type 1..1 MS
-* type from  WHO_DDCC_Sample_Origin_COVID_19
+* type from  WHODDCCSampleOriginCOVID19

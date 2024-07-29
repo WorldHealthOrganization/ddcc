@@ -67,7 +67,7 @@ Some element descriptions in this logical model provide details that are not in 
       * addressCountry from http://hl7.org/fhir/ValueSet/iso3166-1-3 (preferred)
       * postalCode 0..1 string "Postal code for area"
   * icd11Code 0..1 string "ICD-11 code of this vaccine type (no binding information in spec)" "The specification for DIVOC does not provide any information beyond that this is an ICD-11 code, so correspondingly there is no required binding to a specific ValueSet in this logical model."
-  * icd11Code from WHO_DDCC_Vaccines_COVID_19 (preferred)
+  * icd11Code from WHODDCCVaccinesCOVID19 (preferred)
   * prophylaxis 0..1 string "Descriptive details of the vaccine type"
 
   // Lab test specific elements

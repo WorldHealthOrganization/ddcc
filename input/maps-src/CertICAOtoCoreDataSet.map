@@ -5,8 +5,8 @@ uses "http://smart.who.int/ddcc/StructureDefinition/CertICAOVDS" alias VDS as so
 
 uses "http://hl7.org/fhir/StructureDefinition/Bundle" alias DDCCBundle as target
 uses "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet" alias DDCC as produced
-uses "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.VS" alias DDCCVS as produced
-uses "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.TR" alias DDCCTR as produced
+uses "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet-VS" alias DDCCVS as produced
+uses "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet-TR" alias DDCCTR as produced
 
 group CertICAOtoCoreDataSet(
     source src: VDS, 
@@ -15,14 +15,14 @@ group CertICAOtoCoreDataSet(
     src.data as data then {
         data.msg as msg then {
             msg.ve as ve then {
-                ve.vd as vd -> ddccBundle.entry as outentry,  create('http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.VS') as ddcc then {                
+                ve.vd as vd -> ddccBundle.entry as outentry,  create('http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet-VS') as ddcc then {                
                     data.hdr as hdr -> ddcc.certificate as certificate then VDStoCoreDataSetCertificate(hdr, msg, certificate) "set certificate";
                     msg.pid as pid then ExtractPatient(pid, ddcc) "set patient";
                     vd -> ddcc.vaccination as vaccination then ExtractVaccine(ve, vd, vaccination) "set vaccination";
                     vd -> outentry.resource = ddcc "set outentry";      
                 } "vd";                
             } "ve";  
-            msg.tr as tr -> ddccBundle.entry as outentry,  create('http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.TR') as ddcc then {                
+            msg.tr as tr -> ddccBundle.entry as outentry,  create('http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet-TR') as ddcc then {                
                 data.hdr as hdr -> ddcc.certificate as certificate then VDStoCoreDataSetCertificate(hdr, msg, certificate) "set certificate";
                 msg.pid as pid then ExtractPatient(pid, ddcc) "set patient";
                 msg.sp as sp then {

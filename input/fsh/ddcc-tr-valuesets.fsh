@@ -5,8 +5,7 @@ Alias: $ICHI = http://id.who.int/icd11/mms
 Alias: $LOINC = http://loinc.org
 Alias: SCT = http://snomed.info/sct
 
-ValueSet:      WHO_DDCC_Agent_Targeted_COVID_19
-Id:	           who-ddcc-agent-targeted-covid-19
+ValueSet:      WHODDCCAgentTargetedCOVID19
 Title:	       "WHO Agent Targeted (COVID-19)"
 Description:   """
 WHO Agent Targeted List (COVID-19) from [ICD 11](https://icd.who.int/browse11)
@@ -28,8 +27,7 @@ WHO Agent Targeted List (COVID-19) from [ICD 11](https://icd.who.int/browse11)
 * include $ICD11#XN161 "SARS-CoV-2 Omicron"	
 
 
-ValueSet:     WHO_DDCC_Type_of_Test_COVID_19
-Id:           who-ddcc-type-of-test-covid-19
+ValueSet:     WHODDCCTypeofTestCOVID19
 Title:        "WHO Type of Covid-19 Test"
 Description:  """
 WHO Type of COVID-19 Test
@@ -39,8 +37,7 @@ WHO Type of COVID-19 Test
 * include $ICHI#1334426561 "Viral nucleic acid amplification test or NAAT"
 * include $ICHI#2056159157 "Rapid immunoassay detecting viral proteins or Ag-RDT"
 
-ValueSet:     WHO_DDCC_Sample_Origin_COVID_19
-Id:           who-ddcc-sample-origin-covid-19
+ValueSet:     WHODDCCSampleOriginCOVID19
 Title:        "WHO Speciman Sample Origin (COVID-19)"
 Description:  """
 WHO Speciman Sample Origin List (COVID-19)
@@ -57,7 +54,7 @@ WHO Speciman Sample Origin List (COVID-19)
 // * include $ICHI#1695591348	"Serum specimen"
 // * include $ICHI#1695591348	"Acellular blood (serum or plasma) specimen"
 
-ValueSet:     WHO_DDCC_Test_Result_COVID_19
+ValueSet:     WHODDCCTestResultCOVID19
 Id:           who-ddcc-test-result-covid-19
 Title:        "WHO Test Result (COVID-19)"
 Description:  """
@@ -67,8 +64,7 @@ WHO COVID-19 Test Result from [ICD 11](https://icd.who.int/browse11)
 * include $ICD11#RA01.0 "Detected"
 * include $ICD11#QA02 "Not Detected"
 
-CodeSystem:     DDCC_Device_Property_CodeSystem
-Id:             DDCC-Device-Property-CodeSystem
+CodeSystem:     DDCCDevicePropertyCodeSystem
 Title:          "DDCC Device Property Codes"
 Description:    "Possible properties available for devices."
 * ^experimental = false
@@ -76,11 +72,10 @@ Description:    "Possible properties available for devices."
 * #pathogen     "Pathogen Targeted"
 * #brand        "Test Brand"
 
-ValueSet:       DDCC_Device_Property_ValueSet
-Id:             DDCC-Device-Property-ValueSet
+ValueSet:       DDCCDevicePropertyValueSet
 Title:          "DDCC Device Property Codes"
 Description: 	"Properties of DDCC devices"
-* include codes from system DDCC_Device_Property_CodeSystem
+* include codes from system DDCCDevicePropertyCodeSystem
 
 Instance:       who-ddcc-map-loinc-sct-type-of-test
 InstanceOf:     ConceptMap

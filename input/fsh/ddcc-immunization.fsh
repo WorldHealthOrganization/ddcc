@@ -33,14 +33,14 @@ Immunization resource.
 * vaccineCode.coding contains ddccVaccine 1..1 MS
 * vaccineCode.coding[ddccVaccine].system 1..1 MS
 * vaccineCode.coding[ddccVaccine].code 1..1 MS
-* vaccineCode.coding[ddccVaccine] from WHO_DDCC_Vaccines_COVID_19 (example)
+* vaccineCode.coding[ddccVaccine] from WHODDCCVaccinesCOVID19 (example)
 */
 * vaccineCode.coding 1..1 MS
 * vaccineCode.coding.system 1..1 MS
 * vaccineCode.coding.code 1..1 MS
-* vaccineCode from WHO_DDCC_Vaccines_COVID_19 (preferred)
+* vaccineCode from WHODDCCVaccinesCOVID19 (preferred)
 //  do we need this ?  * vaccineCode.coding[ddccVaccine].system = "urn:EXAMPLE-who-:smart:vaccine-certificate:RC1:coding"
-//  do we need this ?   * vaccineCode.coding[ddccVaccine].code from WHO_DDCC_Vaccines_COVID_19 (example)
+//  do we need this ?   * vaccineCode.coding[ddccVaccine].code from WHODDCCVaccinesCOVID19 (example)
 
 * location 1..1 MS
 * location ^label = "Administering centre"
@@ -61,7 +61,7 @@ Immunization resource.
 * protocolApplied ^slicing.rules = #open
 * protocolApplied contains protocolAppliedAuthority 1.. MS
 * protocolApplied[protocolAppliedAuthority].authority only Reference(DDCCOrganization)
-* protocolApplied[protocolAppliedAuthority].targetDisease from WHO_DDCC_Disease_Targeted_COVID_19 (preferred)
+* protocolApplied[protocolAppliedAuthority].targetDisease from WHODDCCDiseaseTargetedCOVID19 (preferred)
 * protocolApplied[protocolAppliedAuthority].targetDisease ^label = "Disease or agent targeted"
 * protocolApplied[protocolAppliedAuthority].doseNumber[x] 1..1 MS
 * protocolApplied[protocolAppliedAuthority].doseNumber[x] only positiveInt
@@ -93,10 +93,10 @@ a patient should return for a booster shot.
 * recommendation.vaccineCode.coding contains ddccVaccine 1..1 MS
 * recommendation.vaccineCode.coding[ddccVaccine].system 1..1 MS
 * recommendation.vaccineCode.coding[ddccVaccine].code 1..1 MS
-* recommendation.vaccineCode.coding[ddccVaccine] from WHO_DDCC_Vaccines_COVID_19 (example)
+* recommendation.vaccineCode.coding[ddccVaccine] from WHODDCCVaccinesCOVID19 (example)
 // do we need this? * recommendation.vaccineCode.coding[ddccVaccine].system = "urn:EXAMPLE-who-:smart:vaccine-certificate:RC1:coding"
-// do we need this? * recommendation.vaccineCode.coding[ddccVaccine].code from WHO_DDCC_Vaccines_COVID_19 (example)
-* recommendation.targetDisease from WHO_DDCC_Disease_Targeted_COVID_19 (example)
+// do we need this? * recommendation.vaccineCode.coding[ddccVaccine].code from WHODDCCVaccinesCOVID19 (example)
+* recommendation.targetDisease from WHODDCCDiseaseTargetedCOVID19 (example)
 * recommendation.forecastStatus = http://terminology.hl7.org/CodeSystem/immunization-recommendation-status#due
 * recommendation.dateCriterion 1..1 MS
 * recommendation.dateCriterion.code = http://loinc.org#30980-7

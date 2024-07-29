@@ -1,4 +1,4 @@
-CodeSystem: WHO_DDCC_cvx
+CodeSystem: WHODDCCcvx
 Title: "CVX codes used in this IG"
 Description: "All CVX codes from `http://hl7.org/fhir/sid/cvx` used in this IG. Provided so the FHIR server can perform expansions."
 * ^experimental = true

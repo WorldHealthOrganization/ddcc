@@ -9,8 +9,7 @@ Alias: $EUDCC = https://ec.europa.eu/health/documents/community-register/html/
 Alias: $ICAOV1 = http://smart.who.int/ddcc/ICAOV1
 
 
-ValueSet:      WHO_DDCC_Vaccines_COVID_19
-Id:	           who-ddcc-vaccines-covid-19
+ValueSet:      WHODDCCVaccinesCOVID19
 Title:	       "WHO Vaccine List (COVID-19)"
 Description:   """
 WHO Vaccine List (COVID-19) from [ICD 11](https://icd.who.int/browse11)
@@ -56,8 +55,7 @@ WHO Vaccine List (COVID-19) from [ICD 11](https://icd.who.int/browse11)
 * include $ICD11#XM8NQ0 "Comirnaty®"
 * include $ICD11#XM3DT5 "COVID-19 Vaccine Moderna"
 
-ValueSet:      WHO_DDCC_Brands_COVID_19
-Id:	           who-ddcc-brands-covid-19
+ValueSet:      WHODDCCBrandsCOVID19
 Title:	       "WHO DDCC Brand List (COVID-19)"
 Description:   """
 WHO DDCC Brand List (COVID-19) from [ICD 11](https://icd.who.int/browse11)
@@ -91,8 +89,7 @@ WHO DDCC Brand List (COVID-19) from [ICD 11](https://icd.who.int/browse11)
 
 
 
-CodeSystem:     DDCC_ICD11_CodeSystem
-Id:             DDCC-ICD11-CodeSystem
+CodeSystem:     DDCCICD11CodeSystem
 Title:          "DDCC Codes for ICD11"
 Description:    "ICD11 codes for DDCC so the FHIR server can perform expansions."
 * ^experimental = false
@@ -175,8 +172,7 @@ Description:    "ICD11 codes for DDCC so the FHIR server can perform expansions.
 * #XM0RV9 "Soberana Plus"
 
 
-ValueSet:      WHO_DDCC_Disease_Targeted_COVID_19
-Id:	       who-ddcc-disease-targeted-covid-19
+ValueSet:      WHODDCCDiseaseTargetedCOVID19
 Title:	       "WHO Disease or Agent Targeted (COVID-19)"
 Description:   """
 WHO Disease or Agent Targeted List (COVID-19) from [ICD 11](https://icd.who.int/browse11)
@@ -185,8 +181,7 @@ WHO Disease or Agent Targeted List (COVID-19) from [ICD 11](https://icd.who.int/
 * include $ICD11#RA01 "COVID-19"
 
 
-CodeSystem:     DIVOC_CodeSystem
-Id:             DIVOC-CodeSystem
+CodeSystem:     DIVOCCodeSystem
 Title:          "COVID-19 Vaccine Codes for DIVOC"
 Description:    "COVID-19 Vaccine codes for DIVOC so the FHIR server can perform expansions."
 * ^experimental = false
@@ -207,15 +202,13 @@ Description:    "COVID-19 Vaccine codes for DIVOC so the FHIR server can perform
 * #DIVOC012 "Corbevax"
 * #DIVOC013 "Novavax/Covovax NVX - CoV2373"
 
-ValueSet:       DIVOC_ValueSet
-Id:             DIVOC-ValueSet
+ValueSet:       DIVOCValueSet
 Title:          "COVID-19 Vaccine Codes for DIVOC"
 Description:    "COVID-19 Vaccine codes for DIVOC so the FHIR server can perform expansions."
 * ^status = #draft
-* include codes from system DIVOC_CodeSystem
+* include codes from system DIVOCCodeSystem
 
-CodeSystem:     ICAOV1_CodeSystem
-Id:             ICAOVaccineListV1
+CodeSystem:     ICAOV1CodeSystem
 Title:          "DDCC Codes for ICAO Vaccines"
 Description:    "ICAO vaccines codes for DDCC so the FHIR server can perform expansions."
 * ^experimental = false
@@ -319,23 +312,21 @@ Description:    "ICAO vaccines codes for DDCC so the FHIR server can perform exp
 * #ICAO096 "WIBP-CorV"
 * #ICAO097 "Wuhan CNBG-Inactivated"
 
-ValueSet:     ICAOV1_ValueSet
-Id:             ICAOVaccineListV1
+ValueSet:     ICAOV1ValueSet
 Title:          "DDCC Codes for ICAO Vaccines"
 Description:    "ICAO vaccines codes for DDCC so the FHIR server can perform expansions."
 * ^status = #draft
-* include codes from system ICAOV1_CodeSystem
+* include codes from system ICAOV1CodeSystem
 
 
-ValueSet:      EU_DCC_ValueSet
-Id:	           vaccines-covid-19-names
+ValueSet:      EUDCCValueSet
 Title:	       "EU DCC Allowed Vaccine List (COVID-19)"
 Description:   """
 EU DCC Allowed Vaccine List (COVID-19).
 """
 * ^status = #draft
 * ^date = 2022-09-13
-* include codes from system WHO_DDCC_euur
+* include codes from system WHODDCCeuur
 
 
 Instance:       who-ddcc-map-icd11-sct-vaccines

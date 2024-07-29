@@ -1,6 +1,6 @@
 map "http://smart.who.int/ddcc/StructureMap/CoreDataSetVSLibrary" = "CoreDataSetVSLibrary"
 
-uses "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.VS" alias DDCCVS as source
+uses "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet-VS" alias DDCCVS as source
 uses "http://hl7.org/fhir/StructureDefinition/Bundle" alias AddBundle as target
 uses "http://hl7.org/fhir/StructureDefinition/Patient" alias Patient as target
 
@@ -43,7 +43,7 @@ group VSToAddBundle (
       then {
         ddcc then DDCCToComposition( ddcc, comp, compid, pid ) "setup composition";
         ddcc -> comp.category as category, category.coding as coding,
-          coding.system = "http://smart.who.int/ddcc/CodeSystem/DDCC-Composition-Category-CodeSystem", 
+          coding.system = "http://smart.who.int/ddcc/CodeSystem/DDCCCompositionCategoryCodeSystem", 
           coding.code = "ddcc-vs" "set category";
         ddcc -> comp.title = "International Certificate of Vaccination or Prophylaxis" "set title";
         ddcc -> comp.section as section then {
@@ -87,7 +87,7 @@ group VSToAddBundle (
         ddcc -> 
           qr.category as category, 
           category.coding as coding, 
-          coding.system = "http://smart.who.int/ddcc/CodeSystem/DDCC-QR-Category-Usage-CodeSystem", 
+          coding.system = "http://smart.who.int/ddcc/CodeSystem/DDCCQRCategoryUsageCodeSystem", 
           coding.code = "who" "set category";
         ddcc -> qr.description = "WHO QR code for COVID 19 Vaccine Certificate" "set description";
         ddcc -> entry.resource = qr "set WHO QR";
@@ -105,7 +105,7 @@ group VSToAddBundle (
         ddcc -> 
           qr.category as category, 
           category.coding as coding, 
-          coding.system = "http://smart.who.int/ddcc/CodeSystem/DDCC-QR-Category-Usage-CodeSystem", 
+          coding.system = "http://smart.who.int/ddcc/CodeSystem/DDCCQRCategoryUsageCodeSystem", 
           coding.code = "dcc" "set category";
         ddcc -> qr.description = "DCC QR code for COVID 19 Vaccine Certificate" "set description";
         ddcc -> entry.resource = qr "set DCC QR";

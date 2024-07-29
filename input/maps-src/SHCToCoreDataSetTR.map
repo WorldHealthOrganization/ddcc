@@ -5,7 +5,7 @@ uses "http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-patient-gen
 uses "http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-infectious-disease-laboratory-result-observation-dm"  alias SHCLabDM as source
 
 uses "http://hl7.org/fhir/StructureDefinition/Bundle" alias DDCCBundle as target
-uses "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.TR" alias DDCCTR as produced
+uses "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet-TR" alias DDCCTR as produced
 
 group SHCToTR ( 
   source shc : SHCLabBundleDM
@@ -14,8 +14,8 @@ group SHCToTR (
   shc.entry as patientEntrySHC then {
     patientEntrySHC.resource : Patient first as patient then {
       shc.entry as entry then {
-        //entry.resource : Immunization as immunization where vaccineCode.memberOf('http://smart.who.int/ddcc/ValueSet/who-ddcc-allowed-vaccines-covid-19') ->  ddccBundle.entry as outentry,  create('http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.VS') as ddcc then {
-        entry.resource : Observation as lab ->  ddccBundle.entry as outentry,  create('http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.TR') as ddcc then {
+        //entry.resource : Immunization as immunization where vaccineCode.memberOf('http://smart.who.int/ddcc/ValueSet/who-ddcc-allowed-vaccines-covid-19') ->  ddccBundle.entry as outentry,  create('http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet-VS') as ddcc then {
+        entry.resource : Observation as lab ->  ddccBundle.entry as outentry,  create('http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet-TR') as ddcc then {
           lab then PatientToDDCCTR(patient, ddcc) "set patient";
           lab -> ddcc.test as test then LabToDDCC(lab, test) "set test";
           lab -> outentry.resource = ddcc "set outentry";
