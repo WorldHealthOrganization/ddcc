@@ -1,7 +1,6 @@
 Alias: $icd11-mms = http://id.who.int/icd11/mms
 
 ValueSet: VaccineCovid19Icd11ValueSet
-Id: vaccine-covid19-icd11
 Title: "Vaccine - COVID-19 - Icd11"
 Description: "tbd"
 

@@ -1,7 +1,6 @@
 Alias: $cvx = http://hl7.org/fhir/sid/cvx
 
 ValueSet: VaccineCovid19CvxValueSet
-Id: vaccine-covid19-cvx
 Title: "Vaccine - COVID-19 - CVX"
 Description: "This is a one-time snapshot of the allowed CVX codes for vaccines, retrieved in February 2023. Contents may need to be updated and readers should consult the credential documentation, found here http://hl7.org/fhir/uv/shc-vaccination/2021Sep/ValueSet-vaccine-cvx.html. More information on the CVX value set can be found here, <https://www2a.cdc.gov/vaccines/iis/iisstandards/vaccines.asp?rpt=cvx>"
 

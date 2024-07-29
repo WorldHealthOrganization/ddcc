@@ -1,4 +1,4 @@
-Alias: $icao-lab-test-origin = http://smart.who.int/ddcc/CodeSystem/lab-test-sample-origin-icao
+Alias: $icao-lab-test-origin = http://smart.who.int/ddcc/CodeSystem/LabTestSampleOriginIcaoValueSet
 
 ValueSet: LabTestSampleOriginIcaoValueSet
 Id: lab-test-sample-origin-icao

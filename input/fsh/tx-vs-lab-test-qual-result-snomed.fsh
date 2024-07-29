@@ -1,7 +1,6 @@
 Alias: $snomed = http://snomed.info/sct
 
 ValueSet: LabTestQualitativeResultSnomedValueSet
-Id: lab-test-qual-result-snomed
 Title: "Lab Test - Qualitative Result - SNOMED CT"
 Description: "This is a one-time snapshot of the allowed values for lab test results in EUDCC and SMART Health Cards, retrieved in February 2023 from https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=uriserv%3AOJ.L_.2021.230.01.0032.01.ENG and <http://build.fhir.org/ig/HL7/fhir-shc-vaccination-ig/ValueSet-vaccine-snomed.html> respectively. Contents may need to be updated and readers should consult the original documentation."
 

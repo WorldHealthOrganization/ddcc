@@ -1,7 +1,6 @@
 Alias: $snomed = http://snomed.info/sct
 
 ValueSet: VaccineCovid19SnomedValueSet
-Id: vaccine-covid19-snomed
 Title: "Vaccine - COVID-19 - SNOMED CT"
 Description: "This is a one-time snapshot of the allowed SNOMED values for vaccines, retrieved in February 2023. Contents may need to be updated and readers should consult the documentation, found here http://hl7.org/fhir/uv/shc-vaccination/2021Sep/ValueSet-vaccine-snomed.html"
 
