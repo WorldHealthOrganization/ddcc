@@ -3,8 +3,8 @@ InstanceOf:   DDCCPatient
 Usage:        #example
 // Title: ""
 // Description: ""
-* name[+].text = "أولوس أجيريوس"
-* name[=].use = #official
+* name[ddccName].text = "أولوس أجيريوس"
+* name[ddccName].use = #official
 * birthDate = "2003-03-03"
 
 
