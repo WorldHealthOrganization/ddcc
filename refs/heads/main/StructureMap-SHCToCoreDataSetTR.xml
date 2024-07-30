@@ -2,74 +2,72 @@
 
 <StructureMap xmlns="http://hl7.org/fhir">
   <id value="SHCToCoreDataSetTR"/>
-  <meta>
-    <versionId value="9"/>
-    <lastUpdated value="2023-02-15T19:50:41.165+00:00"/>
-  </meta>
   <text>
-    <status value="generated"/><div xmlns="http://www.w3.org/1999/xhtml"><pre>map &quot;http://smart.who.int/ddcc/StructureMap/SHCToCoreDataSetTR&quot; = &quot;SHCToCoreDataSetTR&quot;
+    <status value="generated"/><div xmlns="http://www.w3.org/1999/xhtml"><p class="res-header-id"><b>Generated Narrative: StructureMap SHCToCoreDataSetTR</b></p><a name="SHCToCoreDataSetTR"> </a><a name="hcSHCToCoreDataSetTR"> </a><a name="SHCToCoreDataSetTR-en-US"> </a><pre class="fml">
+<b>map</b><span style="color: navy"> &quot;</span>http://smart.who.int/ddcc/StructureMap/SHCToCoreDataSetTR<span style="color: navy">&quot; = &quot;</span>SHCToCoreDataSetTR<span style="color: navy">&quot;
 
+</span><b>uses</b><span style="color: navy"> &quot;</span>http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-infectious-disease-laboratory-bundle-dm<span style="color: navy">&quot; </span><b>alias </b>SHCLabBundleDM <b>as </b><b>source</b>
+<b>uses</b><span style="color: navy"> &quot;</span>http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-patient-general-dm<span style="color: navy">&quot; </span><b>alias </b>SHCPatientDM <b>as </b><b>source</b>
+<b>uses</b><span style="color: navy"> &quot;</span>http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-infectious-disease-laboratory-result-observation-dm<span style="color: navy">&quot; </span><b>alias </b>SHCLabDM <b>as </b><b>source</b>
+<b>uses</b><span style="color: navy"> &quot;</span><a href="http://hl7.org/fhir/R4B/bundle.html" title="Bundle">http://hl7.org/fhir/StructureDefinition/Bundle</a><span style="color: navy">&quot; </span><b>alias </b>DDCCBundle <b>as </b><b>target</b>
+<b>uses</b><span style="color: navy"> &quot;</span><a href="StructureDefinition-DDCCCoreDataSetTR.html" title="DDCC Core Data Set Logical Model for Test Result">http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSetTR</a><span style="color: navy">&quot; </span><b>alias </b>DDCCTR <b>as </b><b>target</b>
 
-uses &quot;http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-infectious-disease-laboratory-bundle-dm&quot; alias SHCLabBundleDM as source
-uses &quot;http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-patient-general-dm&quot; alias SHCPatientDM as source
-uses &quot;http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-infectious-disease-laboratory-result-observation-dm&quot; alias SHCLabDM as source
-uses &quot;http://hl7.org/fhir/StructureDefinition/Bundle&quot; alias DDCCBundle as target
-uses &quot;http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.TR&quot; alias DDCCTR as produced
+<b>group </b>SHCToTR<span style="color: navy">(</span><b>source</b> <span style="color: maroon">shc</span><span style="color: navy"> : </span>SHCLabBundleDM, <b>target</b> <span style="color: maroon">ddccBundle</span><span style="color: navy"> : </span>DDCCBundle<span style="color: navy">)</span><span style="color: navy"> {
+</span>  shc.entry<b> as </b><span style="color: maroon">patientEntrySHC</span><b> then</b><span style="color: navy"> {
+</span>    patientEntrySHC.resource<span style="color: navy"> : </span>Patient first<b> as </b><span style="color: maroon">patient</span><b> then</b><span style="color: navy"> {
+</span>      shc.entry<b> as </b><span style="color: maroon">entry</span><b> then</b><span style="color: navy"> {
+</span>        <span style="color: navy">// </span><span style="color: green">entry.resource : Immunization as immunization where vaccineCode.memberOf('http://smart.who.int/ddcc/ValueSet/who-ddcc-allowed-vaccines-covid-19') -&gt;  ddccBundle.entry as outentry,  create('http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSetVS') as ddcc then {</span>
+        entry.resource<span style="color: navy"> : </span>Observation<b> as </b><span style="color: maroon">lab</span><span style="color: navy"><b> -&gt; </b></span> ddccBundle.entry<b> as </b><span style="color: maroon">outentry</span><span style="color: navy">, </span> <b>create</b><span style="color: navy">(</span><span style="color: blue">'http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSetTR'</span><span style="color: navy">)</span><b> as </b><span style="color: maroon">ddcc</span><b> then</b><span style="color: navy"> {
+</span>          lab<b> then </b>PatientToDDCCTR<span style="color: navy">(</span><span style="color: maroon">patient</span><span style="color: navy">, </span><span style="color: maroon">ddcc</span><span style="color: navy">)</span> <i>&quot;set patient&quot;</i><span style="color: navy">;</span>
+          lab<span style="color: navy"><b> -&gt; </b></span>ddcc.test<b> as </b><span style="color: maroon">test</span><b> then </b>LabToDDCC<span style="color: navy">(</span><span style="color: maroon">lab</span><span style="color: navy">, </span><span style="color: maroon">test</span><span style="color: navy">)</span> <i>&quot;set test&quot;</i><span style="color: navy">;</span>
+          lab<span style="color: navy"><b> -&gt; </b></span>outentry.resource = <span style="color: maroon">ddcc</span> <i>&quot;set outentry&quot;</i><span style="color: navy">;</span>
+        <span style="color: navy">}</span> <i>&quot;labs&quot;</i><span style="color: navy">;</span>
+      <span style="color: navy">}</span> <i>&quot;entries&quot;</i><span style="color: navy">;</span>
+    <span style="color: navy">}</span> <i>&quot;get patient&quot;</i><span style="color: navy">;</span>
+  <span style="color: navy">}</span> <i>&quot;find patient&quot;</i><span style="color: navy">;</span>
+<span style="color: navy">}
 
-group SHCToTR(source shc : SHCLabBundleDM, target ddccBundle : DDCCBundle) {
-  shc.entry as patientEntrySHC then {
-    patientEntrySHC.resource : Patient first as patient then {
-      shc.entry as entry then {
-        // entry.resource : Immunization as immunization where vaccineCode.memberOf('http://smart.who.int/ddcc/ValueSet/who-ddcc-allowed-vaccines-covid-19') -&gt;  ddccBundle.entry as outentry,  create('http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.VS') as ddcc then {
-        entry.resource : Observation as lab -&gt;  ddccBundle.entry as outentry,  create('http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.TR') as ddcc then {
-          lab then PatientToDDCCTR(patient, ddcc) &quot;set patient&quot;;
-          lab -&gt; ddcc.test as test then LabToDDCC(lab, test) &quot;set test&quot;;
-          lab -&gt; outentry.resource = ddcc &quot;set outentry&quot;;
-        } &quot;labs&quot;;
-      } &quot;entries&quot;;
-    } &quot;get patient&quot;;
-  } &quot;find patient&quot;;
-}
+</span><b>group </b>PatientToDDCCTR<span style="color: navy">(</span><b>source</b> <span style="color: maroon">patient</span><span style="color: navy"> : </span>SHCPatientDM, <b>target</b> <span style="color: maroon">tgt</span><span style="color: navy"> : </span>DDCCTR<span style="color: navy">)</span><span style="color: navy"> {
+</span>  patient.name<b> as </b><span style="color: maroon">name</span><b> then </b>NameToText<span style="color: navy">(</span><span style="color: maroon">name</span><span style="color: navy">, </span><span style="color: maroon">tgt</span><span style="color: navy">)</span> <i>&quot;set name&quot;</i><span style="color: navy">;</span>
+  patient.birthDate<b> as </b><span style="color: maroon">birthDate</span><span style="color: navy"><b> -&gt; </b></span>tgt.birthDate = <span style="color: maroon">birthDate</span> <i>&quot;set birthDate&quot;</i><span style="color: navy">;</span>
+  patient.identifier first<b> as </b><span style="color: maroon">identifier</span><span style="color: navy"><b> -&gt; </b></span>tgt.identifier = <span style="color: maroon">identifier</span> <i>&quot;set identifier&quot;</i><span style="color: navy">;</span>
+<span style="color: navy">}
 
-group PatientToDDCCTR(source patient : SHCPatientDM, target tgt : DDCCTR) {
-  patient.name as name then NameToText(name, tgt) &quot;set name&quot;;
-  patient.birthDate as birthDate -&gt; tgt.birthDate = birthDate &quot;set birthDate&quot;;
-  patient.identifier first as identifier -&gt; tgt.identifier = identifier &quot;set identifier&quot;;
-}
+</span><b>group </b>NameToText<span style="color: navy">(</span><b>source</b> <span style="color: maroon">name</span><span style="color: navy"> : </span>HumanName, <b>target</b> <span style="color: maroon">ddcc</span><span style="color: navy">)</span><span style="color: navy"> {
+</span>  <span style="color: navy">// </span><span style="color: green">append doesn't work until ddcc.name is set</span>
+  name.given first<b> as </b><span style="color: maroon">given</span><span style="color: navy"><b> -&gt; </b></span>ddcc.name = <span style="color: navy">(</span>given.replaceMatches('$', ' ')<span style="color: navy">)</span> <i>&quot;set first name&quot;</i><span style="color: navy">;</span>
+  <span style="color: #b36b00" title="This element was not defined prior to R5">// name.given not_first as other -&gt; ddcc.name as tName, ddcc.name = append( tName, other ) &quot;set other names&quot;;</span>
+  name.given not_first<b> as </b><span style="color: maroon">other</span><span style="color: navy"><b> -&gt; </b></span> ddcc.name<b> as </b><span style="color: maroon">tName</span><span style="color: navy">, </span> <span style="color: navy">(</span>other.replaceMatches('$', ' ')<span style="color: navy">)</span><b> as </b><span style="color: maroon">spaced</span><span style="color: navy">, </span> ddcc.name = <b>append</b><span style="color: navy">(</span><span style="color: maroon">tName</span><span style="color: navy">, </span><span style="color: maroon">spaced</span><span style="color: navy">)</span> <i>&quot;set other names&quot;</i><span style="color: navy">;</span>
+  name.family<b> as </b><span style="color: maroon">family</span><span style="color: navy"><b> -&gt; </b></span> ddcc.name<b> as </b><span style="color: maroon">tName</span><span style="color: navy">, </span> ddcc.name = <b>append</b><span style="color: navy">(</span><span style="color: maroon">tName</span><span style="color: navy">, </span><span style="color: maroon">family</span><span style="color: navy">)</span> <i>&quot;add family name&quot;</i><span style="color: navy">;</span>
+  name.text<b> as </b><span style="color: maroon">text</span><span style="color: navy"><b> -&gt; </b></span>ddcc.name = <span style="color: maroon">text</span> <i>&quot;set full name&quot;</i><span style="color: navy">;</span>
+<span style="color: navy">}
 
-group NameToText(source name : HumanName, target ddcc) {
-  // append doesn't work until ddcc.name is set
-  name.given first as given -&gt; ddcc.name = (given.replaceMatches('$', ' ')) &quot;set first name&quot;;
-  // name.given not_first as other -&gt; ddcc.name as tName, ddcc.name = append( tName, other ) &quot;set other names&quot;;
-  name.given not_first as other -&gt;  ddcc.name as tName,  (other.replaceMatches('$', ' ')) as spaced,  ddcc.name = append(tName, spaced) &quot;set other names&quot;;
-  name.family as family -&gt;  ddcc.name as tName,  ddcc.name = append(tName, family) &quot;add family name&quot;;
-  name.text as text -&gt; ddcc.name = text &quot;set full name&quot;;
-}
+</span><b>group </b>LabToDDCC<span style="color: navy">(</span><b>source</b> <span style="color: maroon">lab</span><span style="color: navy"> : </span>SHCLabDM, <b>target</b> <span style="color: maroon">test</span><span style="color: navy">)</span><span style="color: navy"> {
+</span>  lab.code<b> as </b><span style="color: maroon">code</span><b> then</b><span style="color: navy"> {
+</span>    code.coding first<b> as </b><span style="color: maroon">labType</span><b> then</b><span style="color: navy"> {
+</span>      labType<span style="color: navy"><b> -&gt; </b></span>test.type = <span style="color: maroon">labType</span> <i>&quot;set default type&quot;</i><span style="color: navy">;</span>
+      labType<b> where </b>labType.memberOf('http://smart.who.int/ddcc/ValueSet/lab-test-type-covid19-loinc')<span style="color: navy"><b> -&gt; </b></span>test.type = <b>translate</b><span style="color: navy">(</span><span style="color: maroon">labType</span><span style="color: navy">, </span><span style="color: blue">'http://smart.who.int/ddcc/ConceptMap/lab-test-type-covid19-loinc-to-icd11'</span><span style="color: navy">, </span><span style="color: blue">'Coding'</span><span style="color: navy">)</span> <i>&quot;translate loinc type&quot;</i><span style="color: navy">;</span>
+      labType<b> where </b>labType.memberOf('http://smart.who.int/ddcc/ValueSet/lab-test-type-covid19-loinc')<span style="color: navy"><b> -&gt; </b></span>test.pathogen = <b>c</b><span style="color: navy">(</span><span style="color: blue">'http://id.who.int/icd11/mms'</span><span style="color: navy">, </span><span style="color: blue">'XN109'</span><span style="color: navy">)</span> <i>&quot;set pathogen to COVID&quot;</i><span style="color: navy">;</span>
+    <span style="color: navy">}</span><span style="color: navy">;</span>
+  <span style="color: navy">}</span><span style="color: navy">;</span>
+  lab.effectiveDateTime<b> as </b><span style="color: maroon">date</span><span style="color: navy"><b> -&gt; </b></span>test.date = <span style="color: maroon">date</span> <i>&quot;set date&quot;</i><span style="color: navy">;</span>
+  lab.valueCodeableConcept<b> as </b><span style="color: maroon">value</span><b> then</b><span style="color: navy"> {
+</span>    value.coding first<b> as </b><span style="color: maroon">result</span><b> then</b><span style="color: navy"> {
+</span>      result<span style="color: navy"><b> -&gt; </b></span>test.result = <span style="color: maroon">result</span> <i>&quot;set default result&quot;</i><span style="color: navy">;</span>
+      result<b> where </b>result.memberOf('http://smart.who.int/ddcc/ValueSet/lab-test-qual-result-snomed')<span style="color: navy"><b> -&gt; </b></span>test.result = <b>translate</b><span style="color: navy">(</span><span style="color: maroon">result</span><span style="color: navy">, </span><span style="color: blue">'http://smart.who.int/ddcc/ConceptMap/lab-test-qual-result-snomed-to-icd11'</span><span style="color: navy">)</span> <i>&quot;translate snomed result&quot;</i><span style="color: navy">;</span>
+    <span style="color: navy">}</span><span style="color: navy">;</span>
+  <span style="color: navy">}</span><span style="color: navy">;</span>
+<span style="color: navy">// </span><span style="color: green">no target for result valueQuantity (for Ab titers) or valueString (for unmapped text)</span>
+<span style="color: navy">// </span><span style="color: green">pathogen and country are required, no source in SHC</span>
+<span style="color: navy">}
 
-group LabToDDCC(source lab : SHCLabDM, target test) {
-  lab.code as code then {
-    code.coding first as labType then {
-      labType -&gt; test.type = labType &quot;set default type&quot;;
-      labType where labType.memberOf('http://smart.who.int/ddcc/ValueSet/lab-test-type-covid19-loinc') -&gt; test.type = translate(labType, 'http://smart.who.int/ddcc/ConceptMap/lab-test-type-covid19-loinc-to-icd11', 'Coding') &quot;translate loinc type&quot;;
-      labType where labType.memberOf('http://smart.who.int/ddcc/ValueSet/lab-test-type-covid19-loinc') -&gt; test.pathogen = c('http://id.who.int/icd11/mms', 'XN109') &quot;set pathogen to COVID&quot;;
-    };
-  };
-  lab.effectiveDateTime as date -&gt; test.date = date &quot;set date&quot;;
-  lab.valueCodeableConcept as value then {
-    value.coding first as result then {
-      result -&gt; test.result = result &quot;set default result&quot;;
-      result where result.memberOf('http://smart.who.int/ddcc/ValueSet/lab-test-qual-result-snomed') -&gt; test.result = translate(result, 'http://smart.who.int/ddcc/ConceptMap/lab-test-qual-result-snomed-to-icd11') &quot;translate snomed result&quot;;
-    };
-  };
-}
-
-</pre></div>
+</span></pre></div>
   </text>
   <url value="http://smart.who.int/ddcc/StructureMap/SHCToCoreDataSetTR"/>
   <version value="1.0.0"/>
   <name value="SHCToCoreDataSetTR"/>
   <status value="draft"/>
-  <date value="2024-04-24T00:11:34+00:00"/>
+  <date value="2024-07-30T07:55:09+00:00"/>
   <publisher value="WHO"/>
   <contact>
     <name value="WHO"/>
@@ -105,8 +103,8 @@ group LabToDDCC(source lab : SHCLabDM, target test) {
     <alias value="DDCCBundle"/>
   </structure>
   <structure>
-    <url value="http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.TR"/>
-    <mode value="produced"/>
+    <url value="http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSetTR"/>
+    <mode value="target"/>
     <alias value="DDCCTR"/>
   </structure>
   <group>
@@ -164,7 +162,7 @@ group LabToDDCC(source lab : SHCLabDM, target test) {
               <variable value="ddcc"/>
               <transform value="create"/>
               <parameter>
-                <valueString value="http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.TR"/>
+                <valueString value="http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSetTR"/>
               </parameter>
             </target>
             <rule>
@@ -210,7 +208,6 @@ group LabToDDCC(source lab : SHCLabDM, target test) {
                 </parameter>
               </target>
             </rule>
-            <documentation value="entry.resource : Immunization as immunization where vaccineCode.memberOf('http://smart.who.int/ddcc/ValueSet/who-ddcc-allowed-vaccines-covid-19') -&gt;  ddccBundle.entry as outentry,  create('http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.VS') as ddcc then {"/>
           </rule>
         </rule>
       </rule>
@@ -307,7 +304,6 @@ group LabToDDCC(source lab : SHCLabDM, target test) {
           <valueString value="given.replaceMatches('$', ' ')"/>
         </parameter>
       </target>
-      <documentation value="append doesn't work until ddcc.name is set"/>
     </rule>
     <rule>
       <name value="set other names"/>
@@ -343,7 +339,6 @@ group LabToDDCC(source lab : SHCLabDM, target test) {
           <valueId value="spaced"/>
         </parameter>
       </target>
-      <documentation value="name.given not_first as other -&gt; ddcc.name as tName, ddcc.name = append( tName, other ) &quot;set other names&quot;;"/>
     </rule>
     <rule>
       <name value="add family name"/>

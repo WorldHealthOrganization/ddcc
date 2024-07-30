@@ -22,6 +22,7 @@
     <link rel="stylesheet" href="assets/css/who.css"/>
     <link rel="stylesheet" href="assets/css/lforms.min.css"/>
 
+
     <script src="fhir-table-scripts.js" type="text/javascript"> </script>
 
       <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -41,8 +42,8 @@
 
 	  <script src="assets/js/prism.js"></script>
 
-    <style type="text/css">h2{--heading-prefix:"22.26"}
-    h3,h4,h5,h6{--heading-prefix:"22.26"}</style>
+    <style type="text/css">h2{--heading-prefix:"22.29"}
+    h3,h4,h5,h6{--heading-prefix:"22.29"}</style>
     <div id="segment-header" class="segment">    <!-- segment-header -->
 
       <div id="segment-navbar" class="segment">    <!-- segment-navbar -->
@@ -58,7 +59,7 @@
                 <span class="icon-bar"> </span>
                 <span class="icon-bar"> </span>
               </button>
-              <a href="http://hl7.org/fhir/R4/index.html" class="navbar-brand hidden">FHIR</a>
+              <a href="http://hl7.org/fhir/R4B/index.html" class="navbar-brand hidden">FHIR</a>
               <div class="nav-collapse collapse navbar-inverse-collapse">
                 <ul class="nav navbar-nav">
 	
@@ -267,7 +268,7 @@
         
           Draft
           
-            as of 2024-04-24
+            as of 2024-07-30
           
         
       </td>
@@ -283,7 +284,23 @@
 
 
 
-  <a name="rim"> </a><h3>Mappings for RIM Mapping (<a href="http://hl7.org/comparison-v3.html">http://hl7.org/v3</a>)</h3><table class="grid">
+  <a name="Folder-Mapping"> </a><h3>Mappings for XDS and MHD Mapping (XDS)</h3><table class="grid">
+ <tr><td colspan="3"><b>DDCCFolder</b></td></tr>
+ <tr><td>List</td><td>XDS Folder: Used in the context of the IHE MHD ImplementationGuide</td> </tr>
+ <tr><td>&nbsp;&nbsp;&nbsp;meta</td><td></td> </tr>
+ <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;profile</td><td>Folder.limitedMetadata</td> </tr>
+ <tr><td>&nbsp;&nbsp;&nbsp;identifier</td><td>Folder.entryUUID and Folder.uniqueId</td> </tr>
+ <tr><td>&nbsp;&nbsp;&nbsp;status</td><td>Folder.availabilityStatus</td> </tr>
+ <tr><td>&nbsp;&nbsp;&nbsp;mode</td><td>shall be 'working'</td> </tr>
+ <tr><td>&nbsp;&nbsp;&nbsp;title</td><td>Folder.title</td> </tr>
+ <tr><td>&nbsp;&nbsp;&nbsp;code</td><td>shall be 'folder'</td> </tr>
+ <tr><td>&nbsp;&nbsp;&nbsp;subject</td><td>Folder.patientId</td> </tr>
+ <tr><td>&nbsp;&nbsp;&nbsp;date</td><td>Folder.lastUpdateTime</td> </tr>
+ <tr><td>&nbsp;&nbsp;&nbsp;note</td><td>Folder.comments</td> </tr>
+ <tr><td>&nbsp;&nbsp;&nbsp;entry</td><td></td> </tr>
+ <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;item</td><td>references to DocumentReference(s)</td> </tr>
+</table>
+<a name="rim"> </a><h3>Mappings for RIM Mapping (<a href="http://hl7.org/comparison-v3.html">http://hl7.org/v3</a>)</h3><table class="grid">
  <tr><td colspan="3"><b>DDCCFolder</b></td></tr>
  <tr><td>List</td><td>Entity. Role, or Act, Act[classCode&lt;ORG,moodCode=EVN]</td> </tr>
  <tr><td>&nbsp;&nbsp;&nbsp;meta</td><td></td> </tr>
@@ -297,11 +314,9 @@
  <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;id</td><td>n/a</td> </tr>
  <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;extension</td><td>n/a</td> </tr>
  <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;url</td><td>N/A</td> </tr>
- <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;value[x] (valueCodeableConcept)</td><td>N/A</td> </tr>
+ <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;value[x]</td><td>N/A</td> </tr>
  <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;id</td><td>n/a</td> </tr>
  <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;extension</td><td>n/a</td> </tr>
- <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;coding</td><td>union(., ./translation)</td> </tr>
- <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text</td><td>./originalText[mediaType/code="text/plain"]/data</td> </tr>
  <tr><td>&nbsp;&nbsp;&nbsp;identifier</td><td>.id</td> </tr>
  <tr><td>&nbsp;&nbsp;&nbsp;identifier (uniqueId)</td><td>n/a, II - The Identifier class is a little looser than the v3 type II because it allows URIs as well as registered OIDs or GUIDs.  Also maps to Role[classCode=IDENT]</td> </tr>
  <tr><td>&nbsp;&nbsp;&nbsp;identifier (entryUUID)</td><td>n/a, II - The Identifier class is a little looser than the v3 type II because it allows URIs as well as registered OIDs or GUIDs.  Also maps to Role[classCode=IDENT]</td> </tr>
@@ -334,23 +349,6 @@
  <tr><td>&nbsp;&nbsp;&nbsp;subject</td><td>FiveWs.subject[x], FiveWs.subject</td> </tr>
  <tr><td>&nbsp;&nbsp;&nbsp;date</td><td>FiveWs.recorded</td> </tr>
 </table>
-<a name="Folder-Mapping"> </a><h3>Mappings for XDS and MHD Mapping (XDS)</h3><table class="grid">
- <tr><td colspan="3"><b>DDCCFolder</b></td></tr>
- <tr><td>List</td><td>XDS Folder</td><td><p>Used in the context of the IHE MHD ImplementationGuide</p>
-</td> </tr>
- <tr><td>&nbsp;&nbsp;&nbsp;meta</td><td></td><td></td> </tr>
- <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;profile</td><td>Folder.limitedMetadata</td><td></td> </tr>
- <tr><td>&nbsp;&nbsp;&nbsp;identifier</td><td>Folder.entryUUID and Folder.uniqueId</td><td></td> </tr>
- <tr><td>&nbsp;&nbsp;&nbsp;status</td><td>Folder.availabilityStatus</td><td></td> </tr>
- <tr><td>&nbsp;&nbsp;&nbsp;mode</td><td>shall be 'working'</td><td></td> </tr>
- <tr><td>&nbsp;&nbsp;&nbsp;title</td><td>Folder.title</td><td></td> </tr>
- <tr><td>&nbsp;&nbsp;&nbsp;code</td><td>shall be 'folder'</td><td></td> </tr>
- <tr><td>&nbsp;&nbsp;&nbsp;subject</td><td>Folder.patientId</td><td></td> </tr>
- <tr><td>&nbsp;&nbsp;&nbsp;date</td><td>Folder.lastUpdateTime</td><td></td> </tr>
- <tr><td>&nbsp;&nbsp;&nbsp;note</td><td>Folder.comments</td><td></td> </tr>
- <tr><td>&nbsp;&nbsp;&nbsp;entry</td><td></td><td></td> </tr>
- <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;item</td><td>references to DocumentReference(s)</td><td></td> </tr>
-</table>
 
 
     <!-- insert notes if present -->
@@ -377,9 +375,9 @@
 
       <div class="inner-wrapper">
         <p>
-          IG &copy; 2021+ <a style="color:var(--footer-hyperlink-text-color)" href="http://who.int">WHO</a>.  Package who.ddcc#1.0.0 based on <a style="color: var(--footer-hyperlink-text-color)" href="http://hl7.org/fhir/R4/">FHIR 4.0.1</a>. Generated <span title="Wed, Apr 24, 2024 00:11+0000">2024-04-24</span>
+          IG &copy; 2021+ <a style="color:var(--footer-hyperlink-text-color)" href="http://who.int">WHO</a>.  Package who.ddcc#1.0.0 based on <a style="color: var(--footer-hyperlink-text-color)" href="http://hl7.org/fhir/R4B/">FHIR 4.3.0</a>. Generated <span title="Tue, Jul 30, 2024 07:55+0000">2024-07-30</span>
           <br/>
-          <span style="color: var(--footer-highlight-text-color)"><a name="l942">​</a>
+          <span style="color: var(--footer-highlight-text-color)"><a name="l912">​</a>
                       Links: <a style="color: var(--footer-hyperlink-text-color)" href="toc.html">Table of Contents</a> |
                  <a style="color: var(--footer-hyperlink-text-color)" href="qa.html">QA Report</a>
                   | <a style="color: var(--footer-hyperlink-text-color)" href="https://github.com/worldhealthorganization/ddcc/projects/1" target="_blank">Issues</a>

@@ -2,74 +2,71 @@
 
 <StructureMap xmlns="http://hl7.org/fhir">
   <id value="CertSHCtoCoreDataSet"/>
-  <meta>
-    <versionId value="6"/>
-    <lastUpdated value="2023-02-07T17:09:07.618+00:00"/>
-  </meta>
   <text>
-    <status value="generated"/><div xmlns="http://www.w3.org/1999/xhtml"><pre>map &quot;http://smart.who.int/ddcc/StructureMap/CertSHCtoCoreDataSet&quot; = &quot;CertSHCtoCoreDataSet&quot;
+    <status value="generated"/><div xmlns="http://www.w3.org/1999/xhtml"><p class="res-header-id"><b>Generated Narrative: StructureMap CertSHCtoCoreDataSet</b></p><a name="CertSHCtoCoreDataSet"> </a><a name="hcCertSHCtoCoreDataSet"> </a><a name="CertSHCtoCoreDataSet-en-US"> </a><pre class="fml">
+<b>map</b><span style="color: navy"> &quot;</span>http://smart.who.int/ddcc/StructureMap/CertSHCtoCoreDataSet<span style="color: navy">&quot; = &quot;</span>CertSHCtoCoreDataSet<span style="color: navy">&quot;
 
-// Structure map transforming CertSHC logical model to bundle of Core Data Set logical model
+</span><span style="color: navy">// </span><span style="color: green">Structure map transforming CertSHC logical model to bundle of Core Data Set logical model</span>
 
-uses &quot;http://smart.who.int/ddcc/StructureDefinition/CertSHC&quot; alias JWTPayload as source
-uses &quot;http://hl7.org/fhir/StructureDefinition/Bundle&quot; alias DDCCBundle as target
-uses &quot;http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet&quot; alias DDCC as produced
-uses &quot;http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.VS&quot; alias DDCCVS as produced
+<b>uses</b><span style="color: navy"> &quot;</span><a href="StructureDefinition-CertSHC.html" title="Certificate - Smart Health Card's JSon Web Token Logical Model">http://smart.who.int/ddcc/StructureDefinition/CertSHC</a><span style="color: navy">&quot; </span><b>alias </b>JWTPayload <b>as </b><b>source</b>
+<b>uses</b><span style="color: navy"> &quot;</span><a href="http://hl7.org/fhir/R4B/bundle.html" title="Bundle">http://hl7.org/fhir/StructureDefinition/Bundle</a><span style="color: navy">&quot; </span><b>alias </b>DDCCBundle <b>as </b><b>target</b>
+<b>uses</b><span style="color: navy"> &quot;</span><a href="StructureDefinition-DDCCCoreDataSet.html" title="DDCC Core Data Set Logical Model">http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet</a><span style="color: navy">&quot; </span><b>alias </b>DDCC <b>as </b><b>target</b>
+<b>uses</b><span style="color: navy"> &quot;</span><a href="StructureDefinition-DDCCCoreDataSetVS.html" title="DDCC Core Data Set Logical Model for Vaccination Status">http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSetVS</a><span style="color: navy">&quot; </span><b>alias </b>DDCCVS <b>as </b><b>target</b>
 
-imports &quot;http://smart.who.int/ddcc/StructureMap/SHCToCoreDataSetVS&quot;
-imports &quot;http://smart.who.int/ddcc/StructureMap/SHCToCoreDataSetTR&quot;
+<b>imports</b><span style="color: navy"> &quot;</span><a href="StructureMap-SHCToCoreDataSetVS.html" title="SHCToCoreDataSetVS">http://smart.who.int/ddcc/StructureMap/SHCToCoreDataSetVS</a><span style="color: navy">&quot;
+</span><b>imports</b><span style="color: navy"> &quot;</span><a href="StructureMap-SHCToCoreDataSetTR.html" title="SHCToCoreDataSetTR">http://smart.who.int/ddcc/StructureMap/SHCToCoreDataSetTR</a><span style="color: navy">&quot;
+</span>
+<b>group </b>CertSHCtoCoreDataSetBundle<span style="color: navy">(</span><b>source</b> <span style="color: maroon">src</span><span style="color: navy"> : </span>JWTPayload, <b>target</b> <span style="color: maroon">ddccBundle</span><span style="color: navy"> : </span>Bundle<span style="color: navy">)</span><span style="color: navy"> {
+</span>  src.vc<b> as </b><span style="color: maroon">vc</span><b> then</b><span style="color: navy"> {
+</span>    vc.credentialSubject<b> as </b><span style="color: maroon">credentialSubject</span><b> then</b><span style="color: navy"> {
+</span>      credentialSubject.fhirBundle<b> as </b><span style="color: maroon">fhirBundle</span><b> then</b><span style="color: navy"> {
+</span>        fhirBundle.entry<b> as </b><span style="color: maroon">patientEntrySHC</span><b> then</b><span style="color: navy"> {
+</span>          patientEntrySHC.resource<span style="color: navy"> : </span>Patient first<b> as </b><span style="color: maroon">patient</span><b> then</b><span style="color: navy"> {
+</span>            fhirBundle.entry<b> as </b><span style="color: maroon">entry</span><b> then</b><span style="color: navy"> {
+</span>              entry.resource<span style="color: navy"> : </span>Immunization<b> as </b><span style="color: maroon">immunization</span><span style="color: navy"><b> -&gt; </b></span> ddccBundle.entry<b> as </b><span style="color: maroon">outentry</span><span style="color: navy">, </span> <b>create</b><span style="color: navy">(</span><span style="color: blue">'http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSetVS'</span><span style="color: navy">)</span><b> as </b><span style="color: maroon">ddcc</span><b> then</b><span style="color: navy"> {
+</span>                immunization<b> then </b>PatientToDDCCVS<span style="color: navy">(</span><span style="color: maroon">patient</span><span style="color: navy">, </span><span style="color: maroon">ddcc</span><span style="color: navy">)</span> <i>&quot;set patient&quot;</i><span style="color: navy">;</span>
+                immunization<span style="color: navy"><b> -&gt; </b></span>ddcc.vaccination<b> as </b><span style="color: maroon">vaccination</span><b> then </b>ImmunizationToDDCC<span style="color: navy">(</span><span style="color: maroon">immunization</span><span style="color: navy">, </span><span style="color: maroon">vaccination</span><span style="color: navy">)</span> <i>&quot;set vaccination&quot;</i><span style="color: navy">;</span>
+                immunization<b> then </b>CertSHCtoCoreDataSet<span style="color: navy">(</span><span style="color: maroon">src</span><span style="color: navy">, </span><span style="color: maroon">ddcc</span><span style="color: navy">)</span> <i>&quot;set ddcc&quot;</i><span style="color: navy">;</span>
+                immunization<span style="color: navy"><b> -&gt; </b></span>outentry.resource = <span style="color: maroon">ddcc</span> <i>&quot;set outentry&quot;</i><span style="color: navy">;</span>
+              <span style="color: navy">}</span> <i>&quot;immunizations&quot;</i><span style="color: navy">;</span>
+              entry.resource<span style="color: navy"> : </span>Observation<b> as </b><span style="color: maroon">lab</span><span style="color: navy"><b> -&gt; </b></span> ddccBundle.entry<b> as </b><span style="color: maroon">outentry</span><span style="color: navy">, </span> <b>create</b><span style="color: navy">(</span><span style="color: blue">'http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSetTR'</span><span style="color: navy">)</span><b> as </b><span style="color: maroon">ddcc</span><b> then</b><span style="color: navy"> {
+</span>                lab<b> then </b>PatientToDDCCTR<span style="color: navy">(</span><span style="color: maroon">patient</span><span style="color: navy">, </span><span style="color: maroon">ddcc</span><span style="color: navy">)</span> <i>&quot;set patient&quot;</i><span style="color: navy">;</span>
+                lab<span style="color: navy"><b> -&gt; </b></span>ddcc.test<b> as </b><span style="color: maroon">test</span><b> then </b>LabToDDCC<span style="color: navy">(</span><span style="color: maroon">lab</span><span style="color: navy">, </span><span style="color: maroon">test</span><span style="color: navy">)</span> <i>&quot;set test&quot;</i><span style="color: navy">;</span>
+                lab<b> then </b>CertSHCtoCoreDataSet<span style="color: navy">(</span><span style="color: maroon">src</span><span style="color: navy">, </span><span style="color: maroon">ddcc</span><span style="color: navy">)</span> <i>&quot;set ddcc&quot;</i><span style="color: navy">;</span>
+                lab<span style="color: navy"><b> -&gt; </b></span>outentry.resource = <span style="color: maroon">ddcc</span> <i>&quot;set outentry&quot;</i><span style="color: navy">;</span>
+              <span style="color: navy">}</span> <i>&quot;labs&quot;</i><span style="color: navy">;</span>
+            <span style="color: navy">}</span> <i>&quot;entries&quot;</i><span style="color: navy">;</span>
+          <span style="color: navy">}</span> <i>&quot;get patient&quot;</i><span style="color: navy">;</span>
+        <span style="color: navy">}</span> <i>&quot;find patient&quot;</i><span style="color: navy">;</span>
+      <span style="color: navy">}</span><span style="color: navy">;</span>
+    <span style="color: navy">}</span><span style="color: navy">;</span>
+  <span style="color: navy">}</span><span style="color: navy">;</span>
+<span style="color: navy">}
 
-group CertSHCtoCoreDataSetBundle(source src : JWTPayload, target ddccBundle : Bundle) {
-  src.vc as vc then {
-    vc.credentialSubject as credentialSubject then {
-      credentialSubject.fhirBundle as fhirBundle then {
-        fhirBundle.entry as patientEntrySHC then {
-          patientEntrySHC.resource : Patient first as patient then {
-            fhirBundle.entry as entry then {
-              entry.resource : Immunization as immunization -&gt;  ddccBundle.entry as outentry,  create('http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.VS') as ddcc then {
-                immunization then PatientToDDCCVS(patient, ddcc) &quot;set patient&quot;;
-                immunization -&gt; ddcc.vaccination as vaccination then ImmunizationToDDCC(immunization, vaccination) &quot;set vaccination&quot;;
-                immunization then CertSHCtoCoreDataSet(src, ddcc) &quot;set ddcc&quot;;
-                immunization -&gt; outentry.resource = ddcc &quot;set outentry&quot;;
-              } &quot;immunizations&quot;;
-              entry.resource : Observation as lab -&gt;  ddccBundle.entry as outentry,  create('http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.TR') as ddcc then {
-                lab then PatientToDDCCTR(patient, ddcc) &quot;set patient&quot;;
-                lab -&gt; ddcc.test as test then LabToDDCC(lab, test) &quot;set test&quot;;
-                lab then CertSHCtoCoreDataSet(src, ddcc) &quot;set ddcc&quot;;
-                lab -&gt; outentry.resource = ddcc &quot;set outentry&quot;;
-              } &quot;labs&quot;;
-            } &quot;entries&quot;;
-          } &quot;get patient&quot;;
-        } &quot;find patient&quot;;
-      };
-    };
-  };
-}
+</span><b>group </b>CertSHCtoCoreDataSet<span style="color: navy">(</span><b>source</b> <span style="color: maroon">src</span><span style="color: navy"> : </span>JWTPayload, <b>target</b> <span style="color: maroon">ddcc</span><span style="color: navy"> : </span>DDCC<span style="color: navy">)</span><span style="color: navy"> {
+</span>  src<span style="color: navy"><b> -&gt; </b></span>ddcc.certificate<b> as </b><span style="color: maroon">cert</span><b> then</b><span style="color: navy"> {
+</span>    src.iss<span style="color: navy"><b> -&gt; </b></span>cert.issuer = <b>create</b><span style="color: navy">(</span><span style="color: blue">'Reference'</span><span style="color: navy">)</span><b> as </b><span style="color: maroon">issuer</span><b> then</b><span style="color: navy"> {
+</span>      src.iss<b> as </b><span style="color: maroon">iss</span><span style="color: navy"><b> -&gt; </b></span>issuer.reference = <span style="color: maroon">iss</span> <i>&quot;set issuer&quot;</i><span style="color: navy">;</span>
+    <span style="color: navy">}</span> <i>&quot;issuer&quot;</i><span style="color: navy">;</span>
+    src<span style="color: navy"><b> -&gt; </b></span>cert.period = <b>create</b><span style="color: navy">(</span><span style="color: blue">'Period'</span><span style="color: navy">)</span><b> as </b><span style="color: maroon">period</span><b> then</b><span style="color: navy"> {
+</span>      src<b> then </b>JwtToPeriod<span style="color: navy">(</span><span style="color: maroon">src</span><span style="color: navy">, </span><span style="color: maroon">period</span><span style="color: navy">)</span> <i>&quot;set period&quot;</i><span style="color: navy">;</span>
+    <span style="color: navy">}</span> <i>&quot;period&quot;</i><span style="color: navy">;</span>
+  <span style="color: navy">}</span> <i>&quot;certificate&quot;</i><span style="color: navy">;</span>
+<span style="color: navy">}
 
-group CertSHCtoCoreDataSet(source src : JWTPayload, target ddcc : DDCC) {
-  src -&gt; ddcc.certificate as cert then {
-    src.iss -&gt; cert.issuer = create('Reference') as issuer then {
-      src.iss as iss -&gt; issuer.reference = iss &quot;set issuer&quot;;
-    } &quot;issuer&quot;;
-    src -&gt; cert.period = create('Period') as period then {
-      src then JwtToPeriod(src, period) &quot;set period&quot;;
-    } &quot;period&quot;;
-  } &quot;certificate&quot;;
-}
+</span><b>group </b>JwtToPeriod<span style="color: navy">(</span><b>source</b> <span style="color: maroon">src</span><span style="color: navy"> : </span>JWTPayload, <b>target</b> <span style="color: maroon">tgt</span><span style="color: navy"> : </span>Period<span style="color: navy">)</span><span style="color: navy"> {
+</span>  src.nbf<b> as </b><span style="color: maroon">nbf</span><span style="color: navy"><b> -&gt; </b></span> <b>append</b><span style="color: navy">(</span><span style="color: maroon">nbf</span><span style="color: navy">, </span><span style="color: blue">' seconds'</span><span style="color: navy">)</span><b> as </b><span style="color: maroon">epoch</span><span style="color: navy">, </span> tgt.start = <span style="color: navy">(</span>@1970-01-01T00:00:00.000+00:00 + epoch.toQuantity()<span style="color: navy">)</span> <i>&quot;set period start to notBefore&quot;</i><span style="color: navy">;</span>
+  src.iat<b> as </b><span style="color: maroon">iat</span><span style="color: navy"><b> -&gt; </b></span> <b>append</b><span style="color: navy">(</span><span style="color: maroon">iat</span><span style="color: navy">, </span><span style="color: blue">' seconds'</span><span style="color: navy">)</span><b> as </b><span style="color: maroon">epoch</span><span style="color: navy">, </span> tgt.start = <span style="color: navy">(</span>@1970-01-01T00:00:00.000+00:00 + epoch.toQuantity()<span style="color: navy">)</span> <i>&quot;set period start to  issuedAt&quot;</i><span style="color: navy">;</span>
+  src.exp<b> as </b><span style="color: maroon">exp</span><span style="color: navy"><b> -&gt; </b></span> <b>append</b><span style="color: navy">(</span><span style="color: maroon">exp</span><span style="color: navy">, </span><span style="color: blue">' seconds'</span><span style="color: navy">)</span><b> as </b><span style="color: maroon">epoch</span><span style="color: navy">, </span> tgt.end = <span style="color: navy">(</span>@1970-01-01T00:00:00.000+00:00 + epoch.toQuantity()<span style="color: navy">)</span> <i>&quot;set period end&quot;</i><span style="color: navy">;</span>
+<span style="color: navy">}
 
-group JwtToPeriod(source src : JWTPayload, target tgt : Period) {
-  src.nbf as nbf -&gt;  append(nbf, ' seconds') as epoch,  tgt.start = (@1970-01-01T00:00:00.000+00:00 + epoch.toQuantity()) &quot;set period start to notBefore&quot;;
-  src.iat as iat -&gt;  append(iat, ' seconds') as epoch,  tgt.start = (@1970-01-01T00:00:00.000+00:00 + epoch.toQuantity()) &quot;set period start to  issuedAt&quot;;
-  src.exp as exp -&gt;  append(exp, ' seconds') as epoch,  tgt.end = (@1970-01-01T00:00:00.000+00:00 + epoch.toQuantity()) &quot;set period end&quot;;
-}
-
-</pre></div>
+</span></pre></div>
   </text>
   <url value="http://smart.who.int/ddcc/StructureMap/CertSHCtoCoreDataSet"/>
   <version value="1.0.0"/>
   <name value="CertSHCtoCoreDataSet"/>
   <status value="draft"/>
-  <date value="2024-04-24T00:11:34+00:00"/>
+  <date value="2024-07-30T07:55:09+00:00"/>
   <publisher value="WHO"/>
   <contact>
     <name value="WHO"/>
@@ -97,12 +94,12 @@ group JwtToPeriod(source src : JWTPayload, target tgt : Period) {
   </structure>
   <structure>
     <url value="http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet"/>
-    <mode value="produced"/>
+    <mode value="target"/>
     <alias value="DDCC"/>
   </structure>
   <structure>
-    <url value="http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.VS"/>
-    <mode value="produced"/>
+    <url value="http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSetVS"/>
+    <mode value="target"/>
     <alias value="DDCCVS"/>
   </structure>
   <import value="http://smart.who.int/ddcc/StructureMap/SHCToCoreDataSetVS"/>
@@ -183,7 +180,7 @@ group JwtToPeriod(source src : JWTPayload, target tgt : Period) {
                     <variable value="ddcc"/>
                     <transform value="create"/>
                     <parameter>
-                      <valueString value="http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.VS"/>
+                      <valueString value="http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSetVS"/>
                     </parameter>
                   </target>
                   <rule>
@@ -260,7 +257,7 @@ group JwtToPeriod(source src : JWTPayload, target tgt : Period) {
                     <variable value="ddcc"/>
                     <transform value="create"/>
                     <parameter>
-                      <valueString value="http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.TR"/>
+                      <valueString value="http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSetTR"/>
                     </parameter>
                   </target>
                   <rule>

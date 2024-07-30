@@ -22,6 +22,7 @@
     <link rel="stylesheet" href="assets/css/who.css"/>
     <link rel="stylesheet" href="assets/css/lforms.min.css"/>
 
+
     <script src="fhir-table-scripts.js" type="text/javascript"> </script>
 
       <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -41,8 +42,8 @@
 
 	  <script src="assets/js/prism.js"></script>
 
-    <style type="text/css">h2{--heading-prefix:"22.23"}
-    h3,h4,h5,h6{--heading-prefix:"22.23"}</style>
+    <style type="text/css">h2{--heading-prefix:"22.26"}
+    h3,h4,h5,h6{--heading-prefix:"22.26"}</style>
     <div id="segment-header" class="segment">    <!-- segment-header -->
 
       <div id="segment-navbar" class="segment">    <!-- segment-navbar -->
@@ -58,7 +59,7 @@
                 <span class="icon-bar"> </span>
                 <span class="icon-bar"> </span>
               </button>
-              <a href="http://hl7.org/fhir/R4/index.html" class="navbar-brand hidden">FHIR</a>
+              <a href="http://hl7.org/fhir/R4B/index.html" class="navbar-brand hidden">FHIR</a>
               <div class="nav-collapse collapse navbar-inverse-collapse">
                 <ul class="nav navbar-nav">
 	
@@ -267,7 +268,7 @@
         
           Draft
           
-            as of 2024-04-24
+            as of 2024-07-30
           
         
       </td>
@@ -283,7 +284,49 @@
 
 
 
-  <a name="workflow"> </a><h3>Mappings for Workflow Pattern (<a href="http://hl7.org/fhir/workflow.html">http://hl7.org/fhir/workflow</a>)</h3><table class="grid">
+  <a name="DocumentEntry-Mapping"> </a><h3>Mappings for XDS and MHD Mapping (XDS)</h3><table class="grid">
+ <tr><td colspan="3"><b>DDCCDocumentReference</b></td></tr>
+ <tr><td>DocumentReference</td><td>XDS DocumentEntry: Used in the context of the IHE MHD ImplementationGuide</td> </tr>
+ <tr><td>&nbsp;&nbsp;&nbsp;meta</td><td></td> </tr>
+ <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;profile</td><td>DocumentEntry.limitedMetadata</td> </tr>
+ <tr><td>&nbsp;&nbsp;&nbsp;masterIdentifier</td><td>DocumentEntry.uniqueId</td> </tr>
+ <tr><td>&nbsp;&nbsp;&nbsp;identifier</td><td>DocumentEntry.entryUUID</td> </tr>
+ <tr><td>&nbsp;&nbsp;&nbsp;status</td><td>DocumentEntry.availabilityStatus</td> </tr>
+ <tr><td>&nbsp;&nbsp;&nbsp;type</td><td>DocumentEntry.typeCode</td> </tr>
+ <tr><td>&nbsp;&nbsp;&nbsp;category</td><td>DocumentEntry.classCode</td> </tr>
+ <tr><td>&nbsp;&nbsp;&nbsp;subject</td><td>DocumentEntry.patientId</td> </tr>
+ <tr><td>&nbsp;&nbsp;&nbsp;author</td><td>DocumentEntry.author</td> </tr>
+ <tr><td>&nbsp;&nbsp;&nbsp;authenticator</td><td>DocumentEntry.legalAuthenticator</td> </tr>
+ <tr><td>&nbsp;&nbsp;&nbsp;custodian</td><td>not mapped</td> </tr>
+ <tr><td>&nbsp;&nbsp;&nbsp;relatesTo</td><td>DocumentEntry Associations</td> </tr>
+ <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;code</td><td>DocumentEntry Associations.type</td> </tr>
+ <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;target</td><td>DocumentEntry Associations.reference</td> </tr>
+ <tr><td>&nbsp;&nbsp;&nbsp;description</td><td>DocumentEntry.comments</td> </tr>
+ <tr><td>&nbsp;&nbsp;&nbsp;securityLabel</td><td>DocumentEntry.confidentialityCode</td> </tr>
+ <tr><td>&nbsp;&nbsp;&nbsp;content</td><td></td> </tr>
+ <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;attachment</td><td></td> </tr>
+ <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;contentType</td><td>DocumentEntry.mimeType</td> </tr>
+ <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;language</td><td>DocumentEntry.languageCode</td> </tr>
+ <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;url</td><td>DocumentEntry.repositoryUniqueId or DocuemntEntry.URI</td> </tr>
+ <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;size</td><td>DocumentEntry.size</td> </tr>
+ <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;hash</td><td>DocumentEntry.hash</td> </tr>
+ <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;title</td><td>DocumentEntry.title</td> </tr>
+ <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;creation</td><td>DocumentEntry.creationTime</td> </tr>
+ <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;format</td><td>DocumentEntry.formatCode</td> </tr>
+ <tr><td>&nbsp;&nbsp;&nbsp;context</td><td></td> </tr>
+ <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;encounter</td><td>DocumentEntry.referenceIdList with CXi encoding for urn:ihe:iti:xds:2015:encounterId</td> </tr>
+ <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;event</td><td>DocumentEntry.eventCodeList</td> </tr>
+ <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;period</td><td></td> </tr>
+ <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;start</td><td>DocumetEntry.serviceStartTime</td> </tr>
+ <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;end</td><td>DocumentEntry.serviceStopTime</td> </tr>
+ <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;facilityType</td><td>DocumentEntry.healthcareFacilityTypeCode</td> </tr>
+ <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;practiceSetting</td><td>DocumentEntry.practiceSettingCode</td> </tr>
+ <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sourcePatientInfo</td><td></td> </tr>
+ <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;reference</td><td>DocumentEntry.sourcePatientInfo</td> </tr>
+ <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;identifier</td><td>DocumentEntry.sourcePatientId</td> </tr>
+ <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;related</td><td>DocumentEntry.referenceIdList using CXi encoding for type when possible</td> </tr>
+</table>
+<a name="workflow"> </a><h3>Mappings for Workflow Pattern (<a href="http://hl7.org/fhir/workflow.html">http://hl7.org/fhir/workflow</a>)</h3><table class="grid">
  <tr><td colspan="3"><b>DDCCDocumentReference</b></td></tr>
  <tr><td>DocumentReference</td><td>Event</td> </tr>
  <tr><td>&nbsp;&nbsp;&nbsp;identifier</td><td>Event.identifier</td> </tr>
@@ -482,49 +525,6 @@ serviceEvent/effectiveTime/high/
  <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sourcePatientInfo</td><td>DocumentEntry.sourcePatientInfo, DocumentEntry.sourcePatientId</td> </tr>
  <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;related</td><td>DocumentEntry.referenceIdList</td> </tr>
 </table>
-<a name="DocumentEntry-Mapping"> </a><h3>Mappings for XDS and MHD Mapping (XDS)</h3><table class="grid">
- <tr><td colspan="3"><b>DDCCDocumentReference</b></td></tr>
- <tr><td>DocumentReference</td><td>XDS DocumentEntry</td><td><p>Used in the context of the IHE MHD ImplementationGuide</p>
-</td> </tr>
- <tr><td>&nbsp;&nbsp;&nbsp;meta</td><td></td><td></td> </tr>
- <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;profile</td><td>DocumentEntry.limitedMetadata</td><td></td> </tr>
- <tr><td>&nbsp;&nbsp;&nbsp;masterIdentifier</td><td>DocumentEntry.uniqueId</td><td></td> </tr>
- <tr><td>&nbsp;&nbsp;&nbsp;identifier</td><td>DocumentEntry.entryUUID</td><td></td> </tr>
- <tr><td>&nbsp;&nbsp;&nbsp;status</td><td>DocumentEntry.availabilityStatus</td><td></td> </tr>
- <tr><td>&nbsp;&nbsp;&nbsp;type</td><td>DocumentEntry.typeCode</td><td></td> </tr>
- <tr><td>&nbsp;&nbsp;&nbsp;category</td><td>DocumentEntry.classCode</td><td></td> </tr>
- <tr><td>&nbsp;&nbsp;&nbsp;subject</td><td>DocumentEntry.patientId</td><td></td> </tr>
- <tr><td>&nbsp;&nbsp;&nbsp;author</td><td>DocumentEntry.author</td><td></td> </tr>
- <tr><td>&nbsp;&nbsp;&nbsp;authenticator</td><td>DocumentEntry.legalAuthenticator</td><td></td> </tr>
- <tr><td>&nbsp;&nbsp;&nbsp;custodian</td><td>not mapped</td><td></td> </tr>
- <tr><td>&nbsp;&nbsp;&nbsp;relatesTo</td><td>DocumentEntry Associations</td><td></td> </tr>
- <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;code</td><td>DocumentEntry Associations.type</td><td></td> </tr>
- <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;target</td><td>DocumentEntry Associations.reference</td><td></td> </tr>
- <tr><td>&nbsp;&nbsp;&nbsp;description</td><td>DocumentEntry.comments</td><td></td> </tr>
- <tr><td>&nbsp;&nbsp;&nbsp;securityLabel</td><td>DocumentEntry.confidentialityCode</td><td></td> </tr>
- <tr><td>&nbsp;&nbsp;&nbsp;content</td><td></td><td></td> </tr>
- <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;attachment</td><td></td><td></td> </tr>
- <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;contentType</td><td>DocumentEntry.mimeType</td><td></td> </tr>
- <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;language</td><td>DocumentEntry.languageCode</td><td></td> </tr>
- <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;url</td><td>DocumentEntry.repositoryUniqueId or DocuemntEntry.URI</td><td></td> </tr>
- <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;size</td><td>DocumentEntry.size</td><td></td> </tr>
- <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;hash</td><td>DocumentEntry.hash</td><td></td> </tr>
- <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;title</td><td>DocumentEntry.title</td><td></td> </tr>
- <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;creation</td><td>DocumentEntry.creationTime</td><td></td> </tr>
- <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;format</td><td>DocumentEntry.formatCode</td><td></td> </tr>
- <tr><td>&nbsp;&nbsp;&nbsp;context</td><td></td><td></td> </tr>
- <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;encounter</td><td>DocumentEntry.referenceIdList with CXi encoding for urn:ihe:iti:xds:2015:encounterId</td><td></td> </tr>
- <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;event</td><td>DocumentEntry.eventCodeList</td><td></td> </tr>
- <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;period</td><td></td><td></td> </tr>
- <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;start</td><td>DocumetEntry.serviceStartTime</td><td></td> </tr>
- <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;end</td><td>DocumentEntry.serviceStopTime</td><td></td> </tr>
- <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;facilityType</td><td>DocumentEntry.healthcareFacilityTypeCode</td><td></td> </tr>
- <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;practiceSetting</td><td>DocumentEntry.practiceSettingCode</td><td></td> </tr>
- <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sourcePatientInfo</td><td></td><td></td> </tr>
- <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;reference</td><td>DocumentEntry.sourcePatientInfo</td><td></td> </tr>
- <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;identifier</td><td>DocumentEntry.sourcePatientId</td><td></td> </tr>
- <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;related</td><td>DocumentEntry.referenceIdList using CXi encoding for type when possible</td><td></td> </tr>
-</table>
 
 
     <!-- insert notes if present -->
@@ -551,9 +551,9 @@ serviceEvent/effectiveTime/high/
 
       <div class="inner-wrapper">
         <p>
-          IG &copy; 2021+ <a style="color:var(--footer-hyperlink-text-color)" href="http://who.int">WHO</a>.  Package who.ddcc#1.0.0 based on <a style="color: var(--footer-hyperlink-text-color)" href="http://hl7.org/fhir/R4/">FHIR 4.0.1</a>. Generated <span title="Wed, Apr 24, 2024 00:11+0000">2024-04-24</span>
+          IG &copy; 2021+ <a style="color:var(--footer-hyperlink-text-color)" href="http://who.int">WHO</a>.  Package who.ddcc#1.0.0 based on <a style="color: var(--footer-hyperlink-text-color)" href="http://hl7.org/fhir/R4B/">FHIR 4.3.0</a>. Generated <span title="Tue, Jul 30, 2024 07:55+0000">2024-07-30</span>
           <br/>
-          <span style="color: var(--footer-highlight-text-color)"><a name="l2081">​</a>
+          <span style="color: var(--footer-highlight-text-color)"><a name="l2039">​</a>
                       Links: <a style="color: var(--footer-hyperlink-text-color)" href="toc.html">Table of Contents</a> |
                  <a style="color: var(--footer-hyperlink-text-color)" href="qa.html">QA Report</a>
                   | <a style="color: var(--footer-hyperlink-text-color)" href="https://github.com/worldhealthorganization/ddcc/projects/1" target="_blank">Issues</a>

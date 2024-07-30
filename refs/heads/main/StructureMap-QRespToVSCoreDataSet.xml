@@ -2,121 +2,117 @@
 
 <StructureMap xmlns="http://hl7.org/fhir">
   <id value="QRespToVSCoreDataSet"/>
-  <meta>
-    <versionId value="1"/>
-    <lastUpdated value="2022-03-01T19:17:58.292+00:00"/>
-  </meta>
   <text>
-    <status value="generated"/><div xmlns="http://www.w3.org/1999/xhtml"><pre>map &quot;http://smart.who.int/ddcc/StructureMap/QRespToVSCoreDataSet&quot; = &quot;QRespToVSCoreDataSet&quot;
+    <status value="generated"/><div xmlns="http://www.w3.org/1999/xhtml"><p class="res-header-id"><b>Generated Narrative: StructureMap QRespToVSCoreDataSet</b></p><a name="QRespToVSCoreDataSet"> </a><a name="hcQRespToVSCoreDataSet"> </a><a name="QRespToVSCoreDataSet-en-US"> </a><pre class="fml">
+<b>map</b><span style="color: navy"> &quot;</span>http://smart.who.int/ddcc/StructureMap/QRespToVSCoreDataSet<span style="color: navy">&quot; = &quot;</span>QRespToVSCoreDataSet<span style="color: navy">&quot;
 
+</span><b>uses</b><span style="color: navy"> &quot;</span><a href="http://hl7.org/fhir/R4B/questionnaireresponse.html" title="QuestionnaireResponse">http://hl7.org/fhir/StructureDefinition/QuestionnaireResponse</a><span style="color: navy">&quot; </span><b>alias </b>QResp <b>as </b><b>source</b>
+<b>uses</b><span style="color: navy"> &quot;</span><a href="StructureDefinition-DDCCCoreDataSetVSCoC.html" title="DDCC Core Data Set Logical Model - Vaccination Status - Continuity of Care">http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSetVSCoC</a><span style="color: navy">&quot; </span><b>alias </b>DDCC <b>as </b><b>target</b>
 
-uses &quot;http://hl7.org/fhir/StructureDefinition/QuestionnaireResponse&quot; alias QResp as source
-uses &quot;http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.VS.CoC&quot; alias DDCC as target
+<b>group </b>QRespToCoreDataSet<span style="color: navy">(</span><b>source</b> <span style="color: maroon">qr</span><span style="color: navy"> : </span>QResp, <b>target</b> <span style="color: maroon">ddcc</span><span style="color: navy"> : </span>DDCC<span style="color: navy">)</span><span style="color: navy"> {
+</span>  qr<b> as </b><span style="color: maroon">src</span><b> then </b>QRespToHeader<span style="color: navy">(</span><span style="color: maroon">src</span><span style="color: navy">, </span><span style="color: maroon">ddcc</span><span style="color: navy">)</span> <i>&quot;set header content&quot;</i><span style="color: navy">;</span>
+  qr<b> as </b><span style="color: maroon">src</span><span style="color: navy"><b> -&gt; </b></span>ddcc.vaccination<b> as </b><span style="color: maroon">vaccination</span><b> then </b>QRespToVaccination<span style="color: navy">(</span><span style="color: maroon">src</span><span style="color: navy">, </span><span style="color: maroon">vaccination</span><span style="color: navy">)</span> <i>&quot;set vaccination content&quot;</i><span style="color: navy">;</span>
+  qr<b> as </b><span style="color: maroon">src</span><span style="color: navy"><b> -&gt; </b></span>ddcc.certificate<b> as </b><span style="color: maroon">certificate</span><b> then </b>QRespToCertificate<span style="color: navy">(</span><span style="color: maroon">src</span><span style="color: navy">, </span><span style="color: maroon">certificate</span><span style="color: navy">)</span> <i>&quot;set certificate content&quot;</i><span style="color: navy">;</span>
+<span style="color: navy">}
 
-group QRespToCoreDataSet(source qr : QResp, target ddcc : DDCC) {
-  qr as src then QRespToHeader(src, ddcc) &quot;set header content&quot;;
-  qr as src -&gt; ddcc.vaccination as vaccination then QRespToVaccination(src, vaccination) &quot;set vaccination content&quot;;
-  qr as src -&gt; ddcc.certificate as certificate then QRespToCertificate(src, certificate) &quot;set certificate content&quot;;
-}
+</span><b>group </b>QRespToHeader<span style="color: navy">(</span><b>source</b> <span style="color: maroon">qr</span>, <b>target</b> <span style="color: maroon">ddcc</span><span style="color: navy">)</span><span style="color: navy"> {
+</span>  qr.item<b> as </b><span style="color: maroon">item</span><b> then</b><span style="color: navy"> {
+</span>    item.answer first<b> as </b><span style="color: maroon">answer</span><b> where </b>item.linkId = 'name'<b> then</b><span style="color: navy"> {
+</span>      answer.valueString<b> as </b><span style="color: maroon">content</span><span style="color: navy"><b> -&gt; </b></span>ddcc.name = <span style="color: maroon">content</span> <i>&quot;set name&quot;</i><span style="color: navy">;</span>
+    <span style="color: navy">}</span> <i>&quot;first answser for name&quot;</i><span style="color: navy">;</span>
+    item.answer first<b> as </b><span style="color: maroon">answer</span><b> where </b>item.linkId = 'birthDate'<b> then</b><span style="color: navy"> {
+</span>      answer.valueDate<b> as </b><span style="color: maroon">content</span><span style="color: navy"><b> -&gt; </b></span>ddcc.birthDate = <span style="color: maroon">content</span> <i>&quot;set birthDate&quot;</i><span style="color: navy">;</span>
+    <span style="color: navy">}</span> <i>&quot;first answer for birthDate&quot;</i><span style="color: navy">;</span>
+    item.answer first<b> as </b><span style="color: maroon">answer</span><b> where </b>item.linkId = 'identifier'<span style="color: navy"><b> -&gt; </b></span>ddcc.identifier<b> as </b><span style="color: maroon">identifier</span><b> then</b><span style="color: navy"> {
+</span>      answer.valueString<b> as </b><span style="color: maroon">content</span><span style="color: navy"><b> -&gt; </b></span>identifier.value = <span style="color: maroon">content</span> <i>&quot;set identifier&quot;</i><span style="color: navy">;</span>
+    <span style="color: navy">}</span> <i>&quot;first answer for identifier&quot;</i><span style="color: navy">;</span>
+    item.answer first<b> as </b><span style="color: maroon">answer</span><b> where </b>item.linkId = 'sex'<b> then</b><span style="color: navy"> {
+</span>      answer.valueCoding<b> as </b><span style="color: maroon">coding</span><b> then</b><span style="color: navy"> {
+</span>        coding.code<b> as </b><span style="color: maroon">content</span><span style="color: navy"><b> -&gt; </b></span>ddcc.sex = <span style="color: maroon">content</span> <i>&quot;set sex&quot;</i><span style="color: navy">;</span>
+      <span style="color: navy">}</span> <i>&quot;process coding&quot;</i><span style="color: navy">;</span>
+    <span style="color: navy">}</span> <i>&quot;first answer for sex&quot;</i><span style="color: navy">;</span>
+  <span style="color: navy">}</span> <i>&quot;header items&quot;</i><span style="color: navy">;</span>
+<span style="color: navy">}
 
-group QRespToHeader(source qr, target ddcc) {
-  qr.item as item then {
-    item.answer first as answer where item.linkId = 'name' then {
-      answer.valueString as content -&gt; ddcc.name = content &quot;set name&quot;;
-    } &quot;first answser for name&quot;;
-    item.answer first as answer where item.linkId = 'birthDate' then {
-      answer.valueDate as content -&gt; ddcc.birthDate = content &quot;set birthDate&quot;;
-    } &quot;first answer for birthDate&quot;;
-    item.answer first as answer where item.linkId = 'identifier' -&gt; ddcc.identifier as identifier then {
-      answer.valueString as content -&gt; identifier.value = content &quot;set identifier&quot;;
-    } &quot;first answer for identifier&quot;;
-    item.answer first as answer where item.linkId = 'sex' then {
-      answer.valueCoding as coding then {
-        coding.code as content -&gt; ddcc.sex = content &quot;set sex&quot;;
-      } &quot;process coding&quot;;
-    } &quot;first answer for sex&quot;;
-  } &quot;header items&quot;;
-}
+</span><b>group </b>QRespToVaccination<span style="color: navy">(</span><b>source</b> <span style="color: maroon">qr</span>, <b>target</b> <span style="color: maroon">vaccination</span><span style="color: navy">)</span><span style="color: navy"> {
+</span>  qr.item<b> as </b><span style="color: maroon">item</span><b> then</b><span style="color: navy"> {
+</span>    item.answer first<b> as </b><span style="color: maroon">answer</span><b> where </b>item.linkId = 'vaccine'<b> then</b><span style="color: navy"> {
+</span>      answer.valueCoding<b> as </b><span style="color: maroon">content</span><span style="color: navy"><b> -&gt; </b></span>vaccination.vaccine = <span style="color: maroon">content</span> <i>&quot;set vaccine&quot;</i><span style="color: navy">;</span>
+    <span style="color: navy">}</span> <i>&quot;first answer for vaccine&quot;</i><span style="color: navy">;</span>
+    item.answer first<b> as </b><span style="color: maroon">answer</span><b> where </b>item.linkId = 'brand'<b> then</b><span style="color: navy"> {
+</span>      answer.valueCoding<b> as </b><span style="color: maroon">content</span><span style="color: navy"><b> -&gt; </b></span>vaccination.brand = <span style="color: maroon">content</span> <i>&quot;set brand&quot;</i><span style="color: navy">;</span>
+    <span style="color: navy">}</span> <i>&quot;first answer for brand&quot;</i><span style="color: navy">;</span>
+    item.answer first<b> as </b><span style="color: maroon">answer</span><b> where </b>item.linkId = 'manufacturer'<b> then</b><span style="color: navy"> {
+</span>      answer.valueCoding<b> as </b><span style="color: maroon">content</span><span style="color: navy"><b> -&gt; </b></span>vaccination.manufacturer = <span style="color: maroon">content</span> <i>&quot;set manufacturer&quot;</i><span style="color: navy">;</span>
+    <span style="color: navy">}</span> <i>&quot;first answer for manufacturer&quot;</i><span style="color: navy">;</span>
+    item.answer first<b> as </b><span style="color: maroon">answer</span><b> where </b>item.linkId = 'ma_holder'<b> then</b><span style="color: navy"> {
+</span>      answer.valueCoding<b> as </b><span style="color: maroon">content</span><span style="color: navy"><b> -&gt; </b></span>vaccination.maholder = <span style="color: maroon">content</span> <i>&quot;set maholder&quot;</i><span style="color: navy">;</span>
+    <span style="color: navy">}</span> <i>&quot;first answer for maholder&quot;</i><span style="color: navy">;</span>
+    item.answer first<b> as </b><span style="color: maroon">answer</span><b> where </b>item.linkId = 'lot'<b> then</b><span style="color: navy"> {
+</span>      answer.valueString<b> as </b><span style="color: maroon">content</span><span style="color: navy"><b> -&gt; </b></span>vaccination.lot = <span style="color: maroon">content</span> <i>&quot;set lot&quot;</i><span style="color: navy">;</span>
+    <span style="color: navy">}</span> <i>&quot;first answser for lot&quot;</i><span style="color: navy">;</span>
+    item.answer first<b> as </b><span style="color: maroon">answer</span><b> where </b>item.linkId = 'date'<b> then</b><span style="color: navy"> {
+</span>      answer.valueDate<b> as </b><span style="color: maroon">content</span><span style="color: navy"><b> -&gt; </b></span>vaccination.date = <span style="color: maroon">content</span> <i>&quot;set date&quot;</i><span style="color: navy">;</span>
+    <span style="color: navy">}</span> <i>&quot;first answer for date&quot;</i><span style="color: navy">;</span>
+    item.answer first<b> as </b><span style="color: maroon">answer</span><b> where </b>item.linkId = 'vaccine_valid'<b> then</b><span style="color: navy"> {
+</span>      answer.valueDate<b> as </b><span style="color: maroon">content</span><span style="color: navy"><b> -&gt; </b></span>vaccination.validFrom = <span style="color: maroon">content</span> <i>&quot;set validFrom&quot;</i><span style="color: navy">;</span>
+    <span style="color: navy">}</span> <i>&quot;first answer for validFrom&quot;</i><span style="color: navy">;</span>
+    item.answer first<b> as </b><span style="color: maroon">answer</span><b> where </b>item.linkId = 'dose'<b> then</b><span style="color: navy"> {
+</span>      answer.valueInteger<b> as </b><span style="color: maroon">content</span><span style="color: navy"><b> -&gt; </b></span>vaccination.dose = <span style="color: maroon">content</span> <i>&quot;set dose&quot;</i><span style="color: navy">;</span>
+    <span style="color: navy">}</span> <i>&quot;first answer for dose&quot;</i><span style="color: navy">;</span>
+    item.answer first<b> as </b><span style="color: maroon">answer</span><b> where </b>item.linkId = 'total_doses'<b> then</b><span style="color: navy"> {
+</span>      answer.valueInteger<b> as </b><span style="color: maroon">content</span><span style="color: navy"><b> -&gt; </b></span>vaccination.totalDoses = <span style="color: maroon">content</span> <i>&quot;set totalDoses&quot;</i><span style="color: navy">;</span>
+    <span style="color: navy">}</span> <i>&quot;first answer for totalDoses&quot;</i><span style="color: navy">;</span>
+    item.answer first<b> as </b><span style="color: maroon">answer</span><b> where </b>item.linkId = 'country'<b> then</b><span style="color: navy"> {
+</span>      answer.valueCoding<b> as </b><span style="color: maroon">content</span><span style="color: navy"><b> -&gt; </b></span>vaccination.country = <span style="color: maroon">content</span> <i>&quot;set country&quot;</i><span style="color: navy">;</span>
+    <span style="color: navy">}</span> <i>&quot;first answer for country&quot;</i><span style="color: navy">;</span>
+    item.answer first<b> as </b><span style="color: maroon">answer</span><b> where </b>item.linkId = 'centre'<b> then</b><span style="color: navy"> {
+</span>      answer.valueString<b> as </b><span style="color: maroon">content</span><span style="color: navy"><b> -&gt; </b></span>vaccination.centre = <span style="color: maroon">content</span> <i>&quot;set centre&quot;</i><span style="color: navy">;</span>
+    <span style="color: navy">}</span> <i>&quot;first answser for centre&quot;</i><span style="color: navy">;</span>
+    item.answer first<b> as </b><span style="color: maroon">answer</span><b> where </b>item.linkId = 'hw'<span style="color: navy"><b> -&gt; </b></span>vaccination.practitioner<b> as </b><span style="color: maroon">identifier</span><b> then</b><span style="color: navy"> {
+</span>      answer.valueString<b> as </b><span style="color: maroon">content</span><span style="color: navy"><b> -&gt; </b></span>identifier.value = <span style="color: maroon">content</span> <i>&quot;set practitioner&quot;</i><span style="color: navy">;</span>
+    <span style="color: navy">}</span> <i>&quot;first answser for practitioner&quot;</i><span style="color: navy">;</span>
+    item.answer first<b> as </b><span style="color: maroon">answer</span><b> where </b>item.linkId = 'disease'<b> then</b><span style="color: navy"> {
+</span>      answer.valueCoding<b> as </b><span style="color: maroon">content</span><span style="color: navy"><b> -&gt; </b></span>vaccination.disease = <span style="color: maroon">content</span> <i>&quot;set disease&quot;</i><span style="color: navy">;</span>
+    <span style="color: navy">}</span> <i>&quot;first answer for disease&quot;</i><span style="color: navy">;</span>
+    item.answer first<b> as </b><span style="color: maroon">answer</span><b> where </b>item.linkId = 'due_date'<b> then</b><span style="color: navy"> {
+</span>      answer.valueDate<b> as </b><span style="color: maroon">content</span><span style="color: navy"><b> -&gt; </b></span>vaccination.nextDose = <span style="color: maroon">content</span> <i>&quot;set nextDose&quot;</i><span style="color: navy">;</span>
+    <span style="color: navy">}</span> <i>&quot;first answer for nextDose&quot;</i><span style="color: navy">;</span>
+  <span style="color: navy">}</span> <i>&quot;vaccination items&quot;</i><span style="color: navy">;</span>
+<span style="color: navy">}
 
-group QRespToVaccination(source qr, target vaccination) {
-  qr.item as item then {
-    item.answer first as answer where item.linkId = 'vaccine' then {
-      answer.valueCoding as content -&gt; vaccination.vaccine = content &quot;set vaccine&quot;;
-    } &quot;first answer for vaccine&quot;;
-    item.answer first as answer where item.linkId = 'brand' then {
-      answer.valueCoding as content -&gt; vaccination.brand = content &quot;set brand&quot;;
-    } &quot;first answer for brand&quot;;
-    item.answer first as answer where item.linkId = 'manufacturer' then {
-      answer.valueCoding as content -&gt; vaccination.manufacturer = content &quot;set manufacturer&quot;;
-    } &quot;first answer for manufacturer&quot;;
-    item.answer first as answer where item.linkId = 'ma_holder' then {
-      answer.valueCoding as content -&gt; vaccination.maholder = content &quot;set maholder&quot;;
-    } &quot;first answer for maholder&quot;;
-    item.answer first as answer where item.linkId = 'lot' then {
-      answer.valueString as content -&gt; vaccination.lot = content &quot;set lot&quot;;
-    } &quot;first answser for lot&quot;;
-    item.answer first as answer where item.linkId = 'date' then {
-      answer.valueDate as content -&gt; vaccination.date = content &quot;set date&quot;;
-    } &quot;first answer for date&quot;;
-    item.answer first as answer where item.linkId = 'vaccine_valid' then {
-      answer.valueDate as content -&gt; vaccination.validFrom = content &quot;set validFrom&quot;;
-    } &quot;first answer for validFrom&quot;;
-    item.answer first as answer where item.linkId = 'dose' then {
-      answer.valueInteger as content -&gt; vaccination.dose = content &quot;set dose&quot;;
-    } &quot;first answer for dose&quot;;
-    item.answer first as answer where item.linkId = 'total_doses' then {
-      answer.valueInteger as content -&gt; vaccination.totalDoses = content &quot;set totalDoses&quot;;
-    } &quot;first answer for totalDoses&quot;;
-    item.answer first as answer where item.linkId = 'country' then {
-      answer.valueCoding as content -&gt; vaccination.country = content &quot;set country&quot;;
-    } &quot;first answer for country&quot;;
-    item.answer first as answer where item.linkId = 'centre' then {
-      answer.valueString as content -&gt; vaccination.centre = content &quot;set centre&quot;;
-    } &quot;first answser for centre&quot;;
-    item.answer first as answer where item.linkId = 'hw' -&gt; vaccination.practitioner as identifier then {
-      answer.valueString as content -&gt; identifier.value = content &quot;set practitioner&quot;;
-    } &quot;first answser for practitioner&quot;;
-    item.answer first as answer where item.linkId = 'disease' then {
-      answer.valueCoding as content -&gt; vaccination.disease = content &quot;set disease&quot;;
-    } &quot;first answer for disease&quot;;
-    item.answer first as answer where item.linkId = 'due_date' then {
-      answer.valueDate as content -&gt; vaccination.nextDose = content &quot;set nextDose&quot;;
-    } &quot;first answer for nextDose&quot;;
-  } &quot;vaccination items&quot;;
-}
+</span><b>group </b>QRespToPeriod<span style="color: navy">(</span><b>source</b> <span style="color: maroon">qr</span>, <b>target</b> <span style="color: maroon">period</span><span style="color: navy">)</span><span style="color: navy"> {
+</span>  qr.item<b> as </b><span style="color: maroon">item</span><b> then</b><span style="color: navy"> {
+</span>    item.answer first<b> as </b><span style="color: maroon">answer</span><b> where </b>item.linkId = 'valid_from'<b> then</b><span style="color: navy"> {
+</span>      answer.valueDate<b> as </b><span style="color: maroon">content</span><span style="color: navy"><b> -&gt; </b></span>period.start = <span style="color: maroon">content</span> <i>&quot;set valid_from&quot;</i><span style="color: navy">;</span>
+    <span style="color: navy">}</span> <i>&quot;first answer for valid_from&quot;</i><span style="color: navy">;</span>
+    item.answer first<b> as </b><span style="color: maroon">answer</span><b> where </b>item.linkId = 'valid_until'<b> then</b><span style="color: navy"> {
+</span>      answer.valueDate<b> as </b><span style="color: maroon">content</span><span style="color: navy"><b> -&gt; </b></span>period.end = <span style="color: maroon">content</span> <i>&quot;set valid_until&quot;</i><span style="color: navy">;</span>
+    <span style="color: navy">}</span> <i>&quot;first answer for valid_until&quot;</i><span style="color: navy">;</span>
+  <span style="color: navy">}</span> <i>&quot;vaccination validity items&quot;</i><span style="color: navy">;</span>
+<span style="color: navy">}
 
-group QRespToPeriod(source qr, target period) {
-  qr.item as item then {
-    item.answer first as answer where item.linkId = 'valid_from' then {
-      answer.valueDate as content -&gt; period.start = content &quot;set valid_from&quot;;
-    } &quot;first answer for valid_from&quot;;
-    item.answer first as answer where item.linkId = 'valid_until' then {
-      answer.valueDate as content -&gt; period.end = content &quot;set valid_until&quot;;
-    } &quot;first answer for valid_until&quot;;
-  } &quot;vaccination validity items&quot;;
-}
+</span><b>group </b>QRespToCertificate<span style="color: navy">(</span><b>source</b> <span style="color: maroon">qr</span>, <b>target</b> <span style="color: maroon">certificate</span><span style="color: navy">)</span><span style="color: navy"> {
+</span>  qr.item<b> as </b><span style="color: maroon">item</span><b> then</b><span style="color: navy"> {
+</span>    item.answer first<b> as </b><span style="color: maroon">answer</span><b> where </b>item.linkId = 'pha'<span style="color: navy"><b> -&gt; </b></span>certificate.issuer<b> as </b><span style="color: maroon">issuer</span><b> then</b><span style="color: navy"> {
+</span>      answer.valueString<b> as </b><span style="color: maroon">content</span><span style="color: navy"><b> -&gt; </b></span>issuer.identifier<b> as </b><span style="color: maroon">identifier</span><b> then</b><span style="color: navy"> {
+</span>        content<b> as </b><span style="color: maroon">value</span><span style="color: navy"><b> -&gt; </b></span>identifier.value = <span style="color: maroon">value</span> <i>&quot;set issuer identifier&quot;</i><span style="color: navy">;</span>
+      <span style="color: navy">}</span> <i>&quot;set issuer&quot;</i><span style="color: navy">;</span>
+    <span style="color: navy">}</span> <i>&quot;first answser for hcid&quot;</i><span style="color: navy">;</span>
+    item.answer first<b> as </b><span style="color: maroon">answer</span><b> where </b>item.linkId = 'hcid'<span style="color: navy"><b> -&gt; </b></span>certificate.hcid<b> as </b><span style="color: maroon">hcid</span><b> then</b><span style="color: navy"> {
+</span>      answer.valueString<b> as </b><span style="color: maroon">content</span><span style="color: navy"><b> -&gt; </b></span> hcid.value = <span style="color: maroon">content</span><span style="color: navy">, </span> certificate.version = <span style="color: blue">'RC2'</span> <i>&quot;set hcid and version&quot;</i><span style="color: navy">;</span>
+    <span style="color: navy">}</span> <i>&quot;first answser for hcid&quot;</i><span style="color: navy">;</span>
+  <span style="color: navy">}</span> <i>&quot;certificate items&quot;</i><span style="color: navy">;</span>
+  qr<b> as </b><span style="color: maroon">src</span><span style="color: navy"><b> -&gt; </b></span>certificate.period<b> as </b><span style="color: maroon">period</span><b> then </b>QRespToPeriod<span style="color: navy">(</span><span style="color: maroon">src</span><span style="color: navy">, </span><span style="color: maroon">period</span><span style="color: navy">)</span> <i>&quot;set vaccination period&quot;</i><span style="color: navy">;</span>
+<span style="color: navy">}
 
-group QRespToCertificate(source qr, target certificate) {
-  qr.item as item then {
-    item.answer first as answer where item.linkId = 'pha' -&gt; certificate.issuer as issuer then {
-      answer.valueString as content -&gt; issuer.identifier as identifier then {
-        content as value -&gt; identifier.value = value &quot;set issuer identifier&quot;;
-      } &quot;set issuer&quot;;
-    } &quot;first answser for hcid&quot;;
-    item.answer first as answer where item.linkId = 'hcid' -&gt; certificate.hcid as hcid then {
-      answer.valueString as content -&gt;  hcid.value = content,  certificate.version = 'RC2' &quot;set hcid and version&quot;;
-    } &quot;first answser for hcid&quot;;
-  } &quot;certificate items&quot;;
-  qr as src -&gt; certificate.period as period then QRespToPeriod(src, period) &quot;set vaccination period&quot;;
-}
-
-</pre></div>
+</span></pre></div>
   </text>
   <url value="http://smart.who.int/ddcc/StructureMap/QRespToVSCoreDataSet"/>
   <version value="1.0.0"/>
   <name value="QRespToVSCoreDataSet"/>
   <status value="draft"/>
-  <date value="2024-04-24T00:11:34+00:00"/>
+  <date value="2024-07-30T07:55:09+00:00"/>
   <publisher value="WHO"/>
   <contact>
     <name value="WHO"/>
@@ -137,7 +133,7 @@ group QRespToCertificate(source qr, target certificate) {
     <alias value="QResp"/>
   </structure>
   <structure>
-    <url value="http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.VS.CoC"/>
+    <url value="http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSetVSCoC"/>
     <mode value="target"/>
     <alias value="DDCC"/>
   </structure>

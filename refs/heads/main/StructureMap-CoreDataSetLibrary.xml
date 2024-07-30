@@ -2,70 +2,66 @@
 
 <StructureMap xmlns="http://hl7.org/fhir">
   <id value="CoreDataSetLibrary"/>
-  <meta>
-    <versionId value="1"/>
-    <lastUpdated value="2022-03-01T19:17:52.081+00:00"/>
-  </meta>
   <text>
-    <status value="generated"/><div xmlns="http://www.w3.org/1999/xhtml"><pre>map &quot;http://smart.who.int/ddcc/StructureMap/CoreDataSetLibrary&quot; = &quot;CoreDataSetLibrary&quot;
+    <status value="generated"/><div xmlns="http://www.w3.org/1999/xhtml"><p class="res-header-id"><b>Generated Narrative: StructureMap CoreDataSetLibrary</b></p><a name="CoreDataSetLibrary"> </a><a name="hcCoreDataSetLibrary"> </a><a name="CoreDataSetLibrary-en-US"> </a><pre class="fml">
+<b>map</b><span style="color: navy"> &quot;</span>http://smart.who.int/ddcc/StructureMap/CoreDataSetLibrary<span style="color: navy">&quot; = &quot;</span>CoreDataSetLibrary<span style="color: navy">&quot;
 
+</span><b>uses</b><span style="color: navy"> &quot;</span><a href="StructureDefinition-DDCCCoreDataSetVS.html" title="DDCC Core Data Set Logical Model for Vaccination Status">http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSetVS</a><span style="color: navy">&quot; </span><b>alias </b>DDCCVS <b>as </b><b>source</b>
+<b>uses</b><span style="color: navy"> &quot;</span><a href="http://hl7.org/fhir/R4B/patient.html" title="Patient">http://hl7.org/fhir/StructureDefinition/Patient</a><span style="color: navy">&quot; </span><b>alias </b>Patient <b>as </b><b>target</b>
+<b>uses</b><span style="color: navy"> &quot;</span><a href="StructureDefinition-DDCCPatient.html" title="DDCC Patient">http://smart.who.int/ddcc/StructureDefinition/DDCCPatient</a><span style="color: navy">&quot; </span><b>alias </b>DDCCPatient <b>as </b><b>target</b>
+<b>uses</b><span style="color: navy"> &quot;</span><a href="StructureDefinition-DDCCDocumentReferenceQR.html" title="DDCC DocumentReference return for QR">http://smart.who.int/ddcc/StructureDefinition/DDCCDocumentReferenceQR</a><span style="color: navy">&quot; </span><b>alias </b>DDCCDocRefQR <b>as </b><b>target</b>
+<b>uses</b><span style="color: navy"> &quot;</span><a href="StructureDefinition-DDCCComposition.html" title="DDCC Composition">http://smart.who.int/ddcc/StructureDefinition/DDCCComposition</a><span style="color: navy">&quot; </span><b>alias </b>DDCCComposition <b>as </b><b>target</b>
 
-uses &quot;http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.VS&quot; alias DDCCVS as source
-uses &quot;http://hl7.org/fhir/StructureDefinition/Patient&quot; alias Patient as target
-uses &quot;http://smart.who.int/ddcc/StructureDefinition/DDCCPatient&quot; alias DDCCPatient as produced
-uses &quot;http://smart.who.int/ddcc/StructureDefinition/DDCCDocumentReferenceQR&quot; alias DDCCDocRefQR as produced
-uses &quot;http://smart.who.int/ddcc/StructureDefinition/DDCCComposition&quot; alias DDCCComposition as produced
+<b>group </b>DDCCToPatient<span style="color: navy">(</span><b>source</b> <span style="color: maroon">src</span><span style="color: navy"> : </span>DDCCVS, <b>target</b> <span style="color: maroon">patient</span><span style="color: navy"> : </span>DDCCPatient, <b>source</b> <span style="color: maroon">pid</span><span style="color: navy">)</span><span style="color: navy"> {
+</span>  pid<span style="color: navy"><b> -&gt; </b></span>patient.id = <span style="color: maroon">pid</span> <i>&quot;set id&quot;</i><span style="color: navy">;</span>
+  src.name<b> as </b><span style="color: maroon">name</span><span style="color: navy"><b> -&gt; </b></span>patient.name<b> as </b><span style="color: maroon">tName</span><b> then</b><span style="color: navy"> {
+</span>    name<span style="color: navy"><b> -&gt; </b></span>tName.text = <span style="color: maroon">name</span> <i>&quot;set name&quot;</i><span style="color: navy">;</span>
+  <span style="color: navy">}</span> <i>&quot;set full name&quot;</i><span style="color: navy">;</span>
+  src.birthDate<b> as </b><span style="color: maroon">birthDate</span><span style="color: navy"><b> -&gt; </b></span>patient.birthDate = <span style="color: maroon">birthDate</span> <i>&quot;set birthDate&quot;</i><span style="color: navy">;</span>
+  src.identifier<b> as </b><span style="color: maroon">identifier</span><span style="color: navy"><b> -&gt; </b></span>patient.identifier = <span style="color: maroon">identifier</span> <i>&quot;set identifier&quot;</i><span style="color: navy">;</span>
+<span style="color: navy">}
 
-group DDCCToPatient(source src : DDCCVS, target patient : DDCCPatient, source pid) {
-  pid -&gt; patient.id = pid &quot;set id&quot;;
-  src.name as name -&gt; patient.name as tName then {
-    name -&gt; tName.text = name &quot;set name&quot;;
-  } &quot;set full name&quot;;
-  src.birthDate as birthDate -&gt; patient.birthDate = birthDate &quot;set birthDate&quot;;
-  src.identifier as identifier -&gt; patient.identifier = identifier &quot;set identifier&quot;;
-}
+</span><b>group </b>DDCCToDocumentReference<span style="color: navy">(</span><b>source</b> <span style="color: maroon">src</span><span style="color: navy"> : </span>DDCCVS, <b>target</b> <span style="color: maroon">ref</span><span style="color: navy"> : </span>DDCCDocRefQR, <b>source</b> <span style="color: maroon">id</span>, <b>source</b> <span style="color: maroon">pid</span><span style="color: navy">)</span><span style="color: navy"> {
+</span>  id<span style="color: navy"><b> -&gt; </b></span>ref.id = <span style="color: maroon">id</span> <i>&quot;set id&quot;</i><span style="color: navy">;</span>
+  src<span style="color: navy"><b> -&gt; </b></span>ref.status = <span style="color: blue">'current'</span> <i>&quot;set status&quot;</i><span style="color: navy">;</span>
+  src<span style="color: navy"><b> -&gt; </b></span> ref.subject<b> as </b><span style="color: maroon">patient</span><span style="color: navy">, </span> patient.reference = <b>append</b><span style="color: navy">(</span><span style="color: blue">'Patient/'</span><span style="color: navy">, </span><span style="color: maroon">pid</span><span style="color: navy">)</span> <i>&quot;set patient&quot;</i><span style="color: navy">;</span>
+  src<span style="color: navy"><b> -&gt; </b></span>ref.content<b> as </b><span style="color: maroon">content</span><b> then</b><span style="color: navy"> {
+</span>    src<span style="color: navy"><b> -&gt; </b></span> content.attachment<b> as </b><span style="color: maroon">attachment</span><span style="color: navy">, </span> attachment.contentType = <span style="color: blue">'application/json'</span> <i>&quot;set contentType&quot;</i><span style="color: navy">;</span>
+    src<span style="color: navy"><b> -&gt; </b></span> content.format<b> as </b><span style="color: maroon">format</span><span style="color: navy">, </span> format.system = <span style="color: blue">'http://smart.who.int/ddcc/CodeSystem/DDCCQRFormatCodeSystem'</span><span style="color: navy">, </span> format.code = <span style="color: blue">'serialized'</span> <i>&quot;set format code&quot;</i><span style="color: navy">;</span>
+  <span style="color: navy">}</span> <i>&quot;set serialized content&quot;</i><span style="color: navy">;</span>
+  src<span style="color: navy"><b> -&gt; </b></span>ref.content<b> as </b><span style="color: maroon">content</span><b> then</b><span style="color: navy"> {
+</span>    src<span style="color: navy"><b> -&gt; </b></span> content.attachment<b> as </b><span style="color: maroon">attachment</span><span style="color: navy">, </span> attachment.contentType = <span style="color: blue">'image/png'</span> <i>&quot;set contentType&quot;</i><span style="color: navy">;</span>
+    src<span style="color: navy"><b> -&gt; </b></span> content.format<b> as </b><span style="color: maroon">format</span><span style="color: navy">, </span> format.system = <span style="color: blue">'http://smart.who.int/ddcc/CodeSystem/DDCCQRFormatCodeSystem'</span><span style="color: navy">, </span> format.code = <span style="color: blue">'image'</span> <i>&quot;set format code&quot;</i><span style="color: navy">;</span>
+  <span style="color: navy">}</span> <i>&quot;set image content&quot;</i><span style="color: navy">;</span>
+  src<span style="color: navy"><b> -&gt; </b></span>ref.content<b> as </b><span style="color: maroon">content</span><b> then</b><span style="color: navy"> {
+</span>    src<span style="color: navy"><b> -&gt; </b></span> content.attachment<b> as </b><span style="color: maroon">attachment</span><span style="color: navy">, </span> attachment.contentType = <span style="color: blue">'application/pdf'</span> <i>&quot;set contentType&quot;</i><span style="color: navy">;</span>
+    src<span style="color: navy"><b> -&gt; </b></span> content.format<b> as </b><span style="color: maroon">format</span><span style="color: navy">, </span> format.system = <span style="color: blue">'http://smart.who.int/ddcc/CodeSystem/DDCCQRFormatCodeSystem'</span><span style="color: navy">, </span> format.code = <span style="color: blue">'pdf'</span> <i>&quot;set format code&quot;</i><span style="color: navy">;</span>
+  <span style="color: navy">}</span> <i>&quot;set pdf content&quot;</i><span style="color: navy">;</span>
+<span style="color: navy">}
 
-group DDCCToDocumentReference(source src : DDCCVS, target ref : DDCCDocRefQR, source id, source pid) {
-  id -&gt; ref.id = id &quot;set id&quot;;
-  src -&gt; ref.status = 'current' &quot;set status&quot;;
-  src -&gt;  ref.subject as patient,  patient.reference = append('Patient/', pid) &quot;set patient&quot;;
-  src -&gt; ref.content as content then {
-    src -&gt;  content.attachment as attachment,  attachment.contentType = 'application/json' &quot;set contentType&quot;;
-    src -&gt;  content.format as format,  format.system = 'http://smart.who.int/ddcc/CodeSystem/DDCC-QR-Format-CodeSystem',  format.code = 'serialized' &quot;set format code&quot;;
-  } &quot;set serialized content&quot;;
-  src -&gt; ref.content as content then {
-    src -&gt;  content.attachment as attachment,  attachment.contentType = 'image/png' &quot;set contentType&quot;;
-    src -&gt;  content.format as format,  format.system = 'http://smart.who.int/ddcc/CodeSystem/DDCC-QR-Format-CodeSystem',  format.code = 'image' &quot;set format code&quot;;
-  } &quot;set image content&quot;;
-  src -&gt; ref.content as content then {
-    src -&gt;  content.attachment as attachment,  attachment.contentType = 'application/pdf' &quot;set contentType&quot;;
-    src -&gt;  content.format as format,  format.system = 'http://smart.who.int/ddcc/CodeSystem/DDCC-QR-Format-CodeSystem',  format.code = 'pdf' &quot;set format code&quot;;
-  } &quot;set pdf content&quot;;
-}
+</span><b>group </b>DDCCToComposition<span style="color: navy">(</span><b>source</b> <span style="color: maroon">src</span><span style="color: navy"> : </span>DDCCVS, <b>target</b> <span style="color: maroon">comp</span><span style="color: navy"> : </span>DDCCComposition, <b>source</b> <span style="color: maroon">id</span>, <b>source</b> <span style="color: maroon">pid</span><span style="color: navy">)</span><span style="color: navy"> {
+</span>  id<span style="color: navy"><b> -&gt; </b></span>comp.id = <span style="color: maroon">id</span> <i>&quot;set id&quot;</i><span style="color: navy">;</span>
+  src<span style="color: navy"><b> -&gt; </b></span> comp.subject<b> as </b><span style="color: maroon">patient</span><span style="color: navy">, </span> patient.reference = <b>append</b><span style="color: navy">(</span><span style="color: blue">'Patient/'</span><span style="color: navy">, </span><span style="color: maroon">pid</span><span style="color: navy">)</span> <i>&quot;set patient&quot;</i><span style="color: navy">;</span>
+  src<span style="color: navy"><b> -&gt; </b></span> comp.type<b> as </b><span style="color: maroon">type</span><span style="color: navy">, </span> type.coding<b> as </b><span style="color: maroon">coding</span><b> then</b><span style="color: navy"> {
+</span>    src<span style="color: navy"><b> -&gt; </b></span> coding.system = <span style="color: blue">'http://loinc.org'</span><span style="color: navy">, </span> coding.code = <span style="color: blue">'82593-5'</span> <i>&quot;set type coding&quot;</i><span style="color: navy">;</span>
+  <span style="color: navy">}</span> <i>&quot;set type&quot;</i><span style="color: navy">;</span>
+  src.certificate<b> as </b><span style="color: maroon">certificate</span><span style="color: navy"><b> -&gt; </b></span> comp.author<b> as </b><span style="color: maroon">author</span><span style="color: navy">, </span> comp.event<b> as </b><span style="color: maroon">event</span><b> then</b><span style="color: navy"> {
+</span>    certificate.period<b> as </b><span style="color: maroon">period</span><span style="color: navy"><b> -&gt; </b></span>event.period = <span style="color: maroon">period</span> <i>&quot;set event period&quot;</i><span style="color: navy">;</span>
+    certificate.issuer<b> as </b><span style="color: maroon">issuer</span><span style="color: navy"><b> -&gt; </b></span>author.type = <span style="color: blue">'Organization'</span><b> then</b><span style="color: navy"> {
+</span>      issuer.identifier<b> as </b><span style="color: maroon">pha</span><span style="color: navy"><b> -&gt; </b></span>author.identifier<b> as </b><span style="color: maroon">identifier</span><b> then</b><span style="color: navy"> {
+</span>        pha.value<b> as </b><span style="color: maroon">value</span><span style="color: navy"><b> -&gt; </b></span>identifier.value = <span style="color: maroon">value</span> <i>&quot;set pha&quot;</i><span style="color: navy">;</span>
+      <span style="color: navy">}</span> <i>&quot;set author identifier&quot;</i><span style="color: navy">;</span>
+    <span style="color: navy">}</span> <i>&quot;set author ref&quot;</i><span style="color: navy">;</span>
+  <span style="color: navy">}</span> <i>&quot;set certificate&quot;</i><span style="color: navy">;</span>
+<span style="color: navy">}
 
-group DDCCToComposition(source src : DDCCVS, target comp : DDCCComposition, source id, source pid) {
-  id -&gt; comp.id = id &quot;set id&quot;;
-  src -&gt;  comp.subject as patient,  patient.reference = append('Patient/', pid) &quot;set patient&quot;;
-  src -&gt;  comp.type as type,  type.coding as coding then {
-    src -&gt;  coding.system = 'http://loinc.org',  coding.code = '82593-5' &quot;set type coding&quot;;
-  } &quot;set type&quot;;
-  src.certificate as certificate -&gt;  comp.author as author,  comp.event as event then {
-    certificate.period as period -&gt; event.period = period &quot;set event period&quot;;
-    certificate.issuer as issuer -&gt; author.type = 'Organization' then {
-      issuer.identifier as pha -&gt; author.identifier as identifier then {
-        pha.value as value -&gt; identifier.value = value &quot;set pha&quot;;
-      } &quot;set author identifier&quot;;
-    } &quot;set author ref&quot;;
-  } &quot;set certificate&quot;;
-}
-
-</pre></div>
+</span></pre></div>
   </text>
   <url value="http://smart.who.int/ddcc/StructureMap/CoreDataSetLibrary"/>
   <version value="1.0.0"/>
   <name value="CoreDataSetLibrary"/>
   <status value="draft"/>
-  <date value="2024-04-24T00:11:34+00:00"/>
+  <date value="2024-07-30T07:55:09+00:00"/>
   <publisher value="WHO"/>
   <contact>
     <name value="WHO"/>
@@ -81,7 +77,7 @@ group DDCCToComposition(source src : DDCCVS, target comp : DDCCComposition, sour
     </coding>
   </jurisdiction>
   <structure>
-    <url value="http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.VS"/>
+    <url value="http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSetVS"/>
     <mode value="source"/>
     <alias value="DDCCVS"/>
   </structure>
@@ -92,17 +88,17 @@ group DDCCToComposition(source src : DDCCVS, target comp : DDCCComposition, sour
   </structure>
   <structure>
     <url value="http://smart.who.int/ddcc/StructureDefinition/DDCCPatient"/>
-    <mode value="produced"/>
+    <mode value="target"/>
     <alias value="DDCCPatient"/>
   </structure>
   <structure>
     <url value="http://smart.who.int/ddcc/StructureDefinition/DDCCDocumentReferenceQR"/>
-    <mode value="produced"/>
+    <mode value="target"/>
     <alias value="DDCCDocRefQR"/>
   </structure>
   <structure>
     <url value="http://smart.who.int/ddcc/StructureDefinition/DDCCComposition"/>
-    <mode value="produced"/>
+    <mode value="target"/>
     <alias value="DDCCComposition"/>
   </structure>
   <group>
@@ -325,7 +321,7 @@ group DDCCToComposition(source src : DDCCVS, target comp : DDCCComposition, sour
           <element value="system"/>
           <transform value="copy"/>
           <parameter>
-            <valueString value="http://smart.who.int/ddcc/CodeSystem/DDCC-QR-Format-CodeSystem"/>
+            <valueString value="http://smart.who.int/ddcc/CodeSystem/DDCCQRFormatCodeSystem"/>
           </parameter>
         </target>
         <target>
@@ -388,7 +384,7 @@ group DDCCToComposition(source src : DDCCVS, target comp : DDCCComposition, sour
           <element value="system"/>
           <transform value="copy"/>
           <parameter>
-            <valueString value="http://smart.who.int/ddcc/CodeSystem/DDCC-QR-Format-CodeSystem"/>
+            <valueString value="http://smart.who.int/ddcc/CodeSystem/DDCCQRFormatCodeSystem"/>
           </parameter>
         </target>
         <target>
@@ -451,7 +447,7 @@ group DDCCToComposition(source src : DDCCVS, target comp : DDCCComposition, sour
           <element value="system"/>
           <transform value="copy"/>
           <parameter>
-            <valueString value="http://smart.who.int/ddcc/CodeSystem/DDCC-QR-Format-CodeSystem"/>
+            <valueString value="http://smart.who.int/ddcc/CodeSystem/DDCCQRFormatCodeSystem"/>
           </parameter>
         </target>
         <target>
