@@ -2,133 +2,132 @@
 
 <StructureMap xmlns="http://hl7.org/fhir">
   <id value="ResourcesToVSCoreDataSet"/>
-  <meta>
-    <versionId value="1"/>
-    <lastUpdated value="2022-03-01T19:17:58.969+00:00"/>
-  </meta>
   <text>
-    <status value="generated"/><div xmlns="http://www.w3.org/1999/xhtml"><pre>map &quot;http://smart.who.int/ddcc/StructureMap/ResourcesToVSCoreDataSet&quot; = &quot;ResourcesToVSCoreDataSet&quot;
+    <status value="generated"/><div xmlns="http://www.w3.org/1999/xhtml"><p class="res-header-id"><b>Generated Narrative: StructureMap ResourcesToVSCoreDataSet</b></p><a name="ResourcesToVSCoreDataSet"> </a><a name="hcResourcesToVSCoreDataSet"> </a><a name="ResourcesToVSCoreDataSet-en-US"> </a><pre class="fml">
+<b>map</b><span style="color: navy"> &quot;</span>http://smart.who.int/ddcc/StructureMap/ResourcesToVSCoreDataSet<span style="color: navy">&quot; = &quot;</span>ResourcesToVSCoreDataSet<span style="color: navy">&quot;
 
+</span><b>uses</b><span style="color: navy"> &quot;</span><a href="http://hl7.org/fhir/R4B/bundle.html" title="Bundle">http://hl7.org/fhir/StructureDefinition/Bundle</a><span style="color: navy">&quot; </span><b>alias </b>Bundle <b>as </b><b>source</b>
+<b>uses</b><span style="color: navy"> &quot;</span><a href="http://hl7.org/fhir/R4B/datatypes.html#HumanName" title="HumanName">http://hl7.org/fhir/StructureDefinition/HumanName</a><span style="color: navy">&quot; </span><b>alias </b>HumanName <b>as </b><b>target</b>
+<b>uses</b><span style="color: navy"> &quot;</span><a href="StructureDefinition-DDCCPatient.html" title="DDCC Patient">http://smart.who.int/ddcc/StructureDefinition/DDCCPatient</a><span style="color: navy">&quot; </span><b>alias </b>DDCCPatient <b>as </b><b>source</b>
+<b>uses</b><span style="color: navy"> &quot;</span><a href="StructureDefinition-DDCCImmunization.html" title="DDCC Immunization">http://smart.who.int/ddcc/StructureDefinition/DDCCImmunization</a><span style="color: navy">&quot; </span><b>alias </b>DDCCImmunization <b>as </b><b>source</b>
+<b>uses</b><span style="color: navy"> &quot;</span><a href="StructureDefinition-DDCCImmunizationRecommendation.html" title="DDCC Immunization Recommendation">http://smart.who.int/ddcc/StructureDefinition/DDCCImmunizationRecommendation</a><span style="color: navy">&quot; </span><b>alias </b>DDCCImmunizationRecommendation <b>as </b><b>source</b>
+<b>uses</b><span style="color: navy"> &quot;</span><a href="StructureDefinition-DDCCVSComposition.html" title="DDCC:VS Composition">http://smart.who.int/ddcc/StructureDefinition/DDCCVSComposition</a><span style="color: navy">&quot; </span><b>alias </b>DDCCVSComposition <b>as </b><b>source</b>
+<b>uses</b><span style="color: navy"> &quot;</span><a href="StructureDefinition-DDCCCoreDataSetVSPoV.html" title="DDCC Core Data Set Logical Model - Vaccination Status - Proof of Vaccination">http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSetVSPoV</a><span style="color: navy">&quot; </span><b>alias </b>DDCCPoV <b>as </b><b>target</b>
 
-uses &quot;http://hl7.org/fhir/StructureDefinition/Bundle&quot; alias Bundle as source
-uses &quot;http://hl7.org/fhir/StructureDefinition/HumanName&quot; alias HumanName as produced
-uses &quot;http://smart.who.int/ddcc/StructureDefinition/DDCCPatient&quot; alias DDCCPatient as source
-uses &quot;http://smart.who.int/ddcc/StructureDefinition/DDCCImmunization&quot; alias DDCCImmunization as source
-uses &quot;http://smart.who.int/ddcc/StructureDefinition/DDCCImmunizationRecommendation&quot; alias DDCCImmunizationRecommendation as source
-uses &quot;http://smart.who.int/ddcc/StructureDefinition/DDCCVSComposition&quot; alias DDCCVSComposition as source
-uses &quot;http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.VS.PoV&quot; alias DDCCPoV as target
+<b>group </b>ResourcesToCoreDataSet<span style="color: navy">(</span><b>source</b> <span style="color: maroon">bundle</span><span style="color: navy"> : </span>Bundle, <b>target</b> <span style="color: maroon">ddcc</span><span style="color: navy"> : </span>DDCCPoV<span style="color: navy">)</span><span style="color: navy"> {
+</span>  bundle<span style="color: navy"><b> -&gt; </b></span> ddcc.vaccination<b> as </b><span style="color: maroon">vaccination</span><span style="color: navy">, </span> ddcc.certificate<b> as </b><span style="color: maroon">certificate</span><b> then</b><span style="color: navy"> {
+</span>    bundle.link first<b> as </b><span style="color: maroon">link</span><span style="color: navy"><b> -&gt; </b></span>certificate.hcid<b> as </b><span style="color: maroon">hcid</span><b> then</b><span style="color: navy"> {
+</span>      <span style="color: navy">// </span><span style="color: green">There's got to be a better way to do this</span>
+      link.url<b> as </b><span style="color: maroon">url</span><span style="color: navy"><b> -&gt; </b></span>hcid.value = <span style="color: navy">(</span>url.replaceMatches('[Uu][Rr][Nn]:[Hh][Cc][Ii][Dd]:', '')<span style="color: navy">)</span> <i>&quot;set hcid value&quot;</i><span style="color: navy">;</span>
+    <span style="color: navy">}</span> <i>&quot;set hcid&quot;</i><span style="color: navy">;</span>
+    bundle.id<b> as </b><span style="color: maroon">id</span><span style="color: navy"><b> -&gt; </b></span> certificate.ddccid<b> as </b><span style="color: maroon">ddccid</span><span style="color: navy">, </span> ddccid.value = <span style="color: maroon">id</span> <i>&quot;set ddcc id value&quot;</i><span style="color: navy">;</span>
+    bundle.entry<b> as </b><span style="color: maroon">entry</span><b> then</b><span style="color: navy"> {
+</span>      entry.resource<span style="color: navy"> : </span>Patient first<b> as </b><span style="color: maroon">patient</span><b> then </b>PatientToDDCCVS<span style="color: navy">(</span><span style="color: maroon">patient</span><span style="color: navy">, </span><span style="color: maroon">ddcc</span><span style="color: navy">)</span> <i>&quot;set patient details&quot;</i><span style="color: navy">;</span>
+      entry.resource<span style="color: navy"> : </span>Immunization first<b> as </b><span style="color: maroon">immunization</span><b> then </b>ImmunizationToDDCCVS<span style="color: navy">(</span><span style="color: maroon">immunization</span><span style="color: navy">, </span><span style="color: maroon">vaccination</span><span style="color: navy">, </span><span style="color: maroon">certificate</span><span style="color: navy">)</span> <i>&quot;set immunization&quot;</i><span style="color: navy">;</span>
+      entry.resource<span style="color: navy"> : </span>ImmunizationRecommendation first<b> as </b><span style="color: maroon">immRec</span><b> then </b>ImmRecToDDCCVS<span style="color: navy">(</span><span style="color: maroon">immRec</span><span style="color: navy">, </span><span style="color: maroon">vaccination</span><span style="color: navy">)</span> <i>&quot;set immunization recommendation&quot;</i><span style="color: navy">;</span>
+      entry.resource<span style="color: navy"> : </span>Composition first<b> as </b><span style="color: maroon">composition</span><b> then </b>CompositionToDDCCVS<span style="color: navy">(</span><span style="color: maroon">composition</span><span style="color: navy">, </span><span style="color: maroon">certificate</span><span style="color: navy">)</span> <i>&quot;set composition&quot;</i><span style="color: navy">;</span>
+    <span style="color: navy">}</span> <i>&quot;set header from patient&quot;</i><span style="color: navy">;</span>
+  <span style="color: navy">}</span> <i>&quot;setup ddcc&quot;</i><span style="color: navy">;</span>
+<span style="color: navy">// </span><span style="color: green">// 	     entry.resource : DDCCPatient as patient                  entry.resource : Patient as patient            then  Decode-Patient-To-QR(patient,qr) &quot;Patient&quot;;       };</span>
+<span style="color: navy">// </span><span style="color: green">bundle as src then QRespToHeader( src, ddcc ) &quot;set header content&quot;;   bundle as src -&gt; ddcc.vaccination as vaccination then QRespToVaccination( src, vaccination ) &quot;set vaccination content&quot;;   bundle as src -&gt; ddcc.certificate as certificate then QRespToCertificate( src, certificate ) &quot;set certificate content&quot;;</span>
+<span style="color: navy">// </span><span style="color: green">then {     a as item where linkId = 'name' -&gt; ddcc.name = item &quot;set name&quot;;    } &quot;items&quot;;</span>
+<span style="color: navy">}
 
-group ResourcesToCoreDataSet(source bundle : Bundle, target ddcc : DDCCPoV) {
-  bundle -&gt;  ddcc.vaccination as vaccination,  ddcc.certificate as certificate then {
-    bundle.link first as link -&gt; certificate.hcid as hcid then {
-      // There's got to be a better way to do this
-      link.url as url -&gt; hcid.value = (url.replaceMatches('[Uu][Rr][Nn]:[Hh][Cc][Ii][Dd]:', '')) &quot;set hcid value&quot;;
-    } &quot;set hcid&quot;;
-    bundle.id as id -&gt;  certificate.ddccid as ddccid,  ddccid.value = id &quot;set ddcc id value&quot;;
-    bundle.entry as entry then {
-      entry.resource : Patient first as patient then PatientToDDCCVS(patient, ddcc) &quot;set patient details&quot;;
-      entry.resource : Immunization first as immunization then ImmunizationToDDCCVS(immunization, vaccination, certificate) &quot;set immunization&quot;;
-      entry.resource : ImmunizationRecommendation first as immRec then ImmRecToDDCCVS(immRec, vaccination) &quot;set immunization recommendation&quot;;
-      entry.resource : Composition first as composition then CompositionToDDCCVS(composition, certificate) &quot;set composition&quot;;
-    } &quot;set header from patient&quot;;
-  } &quot;setup ddcc&quot;;
-}
+</span><b>group </b>CompositionToDDCCVS<span style="color: navy">(</span><b>source</b> <span style="color: maroon">composition</span><span style="color: navy"> : </span>DDCCVSComposition, <b>target</b> <span style="color: maroon">certificate</span><span style="color: navy">)</span><span style="color: navy"> {
+</span>  composition<span style="color: navy"><b> -&gt; </b></span>certificate.version = <span style="color: blue">'RC2'</span> <i>&quot;set version&quot;</i><span style="color: navy">;</span>
+  composition.event first<b> as </b><span style="color: maroon">event</span><b> then</b><span style="color: navy"> {
+</span>    event.period<b> as </b><span style="color: maroon">period</span><span style="color: navy"><b> -&gt; </b></span>certificate.period<b> as </b><span style="color: maroon">tPeriod</span><b> then</b><span style="color: navy"> {
+</span>      period.start<b> as </b><span style="color: maroon">start</span><span style="color: navy"><b> -&gt; </b></span>tPeriod.start = <span style="color: maroon">start</span> <i>&quot;set period start&quot;</i><span style="color: navy">;</span>
+      period.end<b> as </b><span style="color: maroon">end</span><span style="color: navy"><b> -&gt; </b></span>tPeriod.end = <span style="color: maroon">end</span> <i>&quot;set period end&quot;</i><span style="color: navy">;</span>
+    <span style="color: navy">}</span> <i>&quot;set period&quot;</i><span style="color: navy">;</span>
+  <span style="color: navy">}</span> <i>&quot;set certificate period&quot;</i><span style="color: navy">;</span>
+<span style="color: navy">}
 
-group CompositionToDDCCVS(source composition : DDCCVSComposition, target certificate) {
-  composition -&gt; certificate.version = 'RC2' &quot;set version&quot;;
-  composition.event first as event then {
-    event.period as period -&gt; certificate.period as tPeriod then {
-      period.start as start -&gt; tPeriod.start = start &quot;set period start&quot;;
-      period.end as end -&gt; tPeriod.end = end &quot;set period end&quot;;
-    } &quot;set period&quot;;
-  } &quot;set certificate period&quot;;
-}
+</span><b>group </b>PatientToDDCCVS<span style="color: navy">(</span><b>source</b> <span style="color: maroon">patient</span><span style="color: navy"> : </span>DDCCPatient, <b>target</b> <span style="color: maroon">ddcc</span><span style="color: navy"> : </span>DDCCPoV<span style="color: navy">)</span><span style="color: navy"> {
+</span>  patient.name<b> as </b><span style="color: maroon">name</span><b> then </b>NameToText<span style="color: navy">(</span><span style="color: maroon">name</span><span style="color: navy">, </span><span style="color: maroon">ddcc</span><span style="color: navy">)</span> <i>&quot;set name&quot;</i><span style="color: navy">;</span>
+  patient.birthDate<b> as </b><span style="color: maroon">bday</span><span style="color: navy"><b> -&gt; </b></span>ddcc.birthDate = <span style="color: maroon">bday</span> <i>&quot;set birth date&quot;</i><span style="color: navy">;</span>
+  patient.id<b> as </b><span style="color: maroon">id</span><span style="color: navy"><b> -&gt; </b></span> ddcc.identifier<b> as </b><span style="color: maroon">identifier</span><span style="color: navy">, </span> identifier.value = <span style="color: maroon">id</span> <i>&quot;set identifier from id&quot;</i><span style="color: navy">;</span>
+  <span style="color: navy">// </span><span style="color: green">this will override what was set from id if it exists</span>
+  patient.identifier first<b> as </b><span style="color: maroon">sId</span><span style="color: navy"><b> -&gt; </b></span>ddcc.identifier<b> as </b><span style="color: maroon">identifier</span><b> then</b><span style="color: navy"> {
+</span>    sId.value<b> as </b><span style="color: maroon">id</span><span style="color: navy"><b> -&gt; </b></span>identifier.value = <span style="color: maroon">id</span> <i>&quot;set identifier value&quot;</i><span style="color: navy">;</span>
+  <span style="color: navy">}</span> <i>&quot;set identifier from identifier&quot;</i><span style="color: navy">;</span>
+  patient.gender<b> as </b><span style="color: maroon">gender</span><span style="color: navy"><b> -&gt; </b></span>ddcc.sex = <span style="color: maroon">gender</span> <i>&quot;set sex&quot;</i><span style="color: navy">;</span>
+<span style="color: navy">}
 
-group PatientToDDCCVS(source patient : DDCCPatient, target ddcc : DDCCPoV) {
-  patient.name as name then NameToText(name, ddcc) &quot;set name&quot;;
-  patient.birthDate as bday -&gt; ddcc.birthDate = bday &quot;set birth date&quot;;
-  patient.id as id -&gt;  ddcc.identifier as identifier,  identifier.value = id &quot;set identifier from id&quot;;
-  // this will override what was set from id if it exists
-  patient.identifier first as sId -&gt; ddcc.identifier as identifier then {
-    sId.value as id -&gt; identifier.value = id &quot;set identifier value&quot;;
-  } &quot;set identifier from identifier&quot;;
-  patient.gender as gender -&gt; ddcc.sex = gender &quot;set sex&quot;;
-}
+</span><b>group </b>NameToText<span style="color: navy">(</span><b>source</b> <span style="color: maroon">name</span><span style="color: navy"> : </span>HumanName, <b>target</b> <span style="color: maroon">ddcc</span><span style="color: navy">)</span><span style="color: navy"> {
+</span>  <span style="color: navy">// </span><span style="color: green">annoying because append doesn't work until ddcc.name is set</span>
+  name.given first<b> as </b><span style="color: maroon">given</span><span style="color: navy"><b> -&gt; </b></span>ddcc.name = <span style="color: navy">(</span>given.replaceMatches('$', ' ')<span style="color: navy">)</span> <i>&quot;set first name&quot;</i><span style="color: navy">;</span>
+  <span style="color: #b36b00" title="This element was not defined prior to R5">// name.given not_first as other -&gt; ddcc.name as tName, ddcc.name = append( tName, other ) &quot;set other names&quot;;</span>
+  name.given not_first<b> as </b><span style="color: maroon">other</span><span style="color: navy"><b> -&gt; </b></span> ddcc.name<b> as </b><span style="color: maroon">tName</span><span style="color: navy">, </span> <span style="color: navy">(</span>other.replaceMatches('$', ' ')<span style="color: navy">)</span><b> as </b><span style="color: maroon">spaced</span><span style="color: navy">, </span> ddcc.name = <b>append</b><span style="color: navy">(</span><span style="color: maroon">tName</span><span style="color: navy">, </span><span style="color: maroon">spaced</span><span style="color: navy">)</span> <i>&quot;set other names&quot;</i><span style="color: navy">;</span>
+  name.family<b> as </b><span style="color: maroon">family</span><span style="color: navy"><b> -&gt; </b></span> ddcc.name<b> as </b><span style="color: maroon">tName</span><span style="color: navy">, </span> ddcc.name = <b>append</b><span style="color: navy">(</span><span style="color: maroon">tName</span><span style="color: navy">, </span><span style="color: maroon">family</span><span style="color: navy">)</span> <i>&quot;add family name&quot;</i><span style="color: navy">;</span>
+  name.text<b> as </b><span style="color: maroon">text</span><span style="color: navy"><b> -&gt; </b></span>ddcc.name = <span style="color: maroon">text</span> <i>&quot;set full name&quot;</i><span style="color: navy">;</span>
+<span style="color: navy">}
 
-group NameToText(source name : HumanName, target ddcc) {
-  // annoying because append doesn't work until ddcc.name is set
-  name.given first as given -&gt; ddcc.name = (given.replaceMatches('$', ' ')) &quot;set first name&quot;;
-  // name.given not_first as other -&gt; ddcc.name as tName, ddcc.name = append( tName, other ) &quot;set other names&quot;;
-  name.given not_first as other -&gt;  ddcc.name as tName,  (other.replaceMatches('$', ' ')) as spaced,  ddcc.name = append(tName, spaced) &quot;set other names&quot;;
-  name.family as family -&gt;  ddcc.name as tName,  ddcc.name = append(tName, family) &quot;add family name&quot;;
-  name.text as text -&gt; ddcc.name = text &quot;set full name&quot;;
-}
+</span><b>group </b>ImmunizationToDDCCVS<span style="color: navy">(</span><b>source</b> <span style="color: maroon">immunization</span><span style="color: navy"> : </span>DDCCImmunization, <b>target</b> <span style="color: maroon">vaccination</span>, <b>target</b> <span style="color: maroon">certificate</span><span style="color: navy">)</span><span style="color: navy"> {
+</span>  immunization.vaccineCode<b> as </b><span style="color: maroon">code</span><b> then</b><span style="color: navy"> {
+</span>    code.coding first<b> as </b><span style="color: maroon">coding</span><span style="color: navy"><b> -&gt; </b></span>vaccination.vaccine = <span style="color: maroon">coding</span> <i>&quot;set vaccine&quot;</i><span style="color: navy">;</span>
+  <span style="color: navy">}</span> <i>&quot;set vaccine code&quot;</i><span style="color: navy">;</span>
+  immunization.extension<b> as </b><span style="color: maroon">ext</span><b> then</b><span style="color: navy"> {
+</span>    ext first<b> as </b><span style="color: maroon">brand</span><b> where </b>ext.url = 'http://smart.who.int/ddcc/StructureDefinition/DDCCVaccineBrand'<b> then</b><span style="color: navy"> {
+</span>      brand.valueCoding<b> as </b><span style="color: maroon">coding</span><span style="color: navy"><b> -&gt; </b></span>vaccination.brand = <span style="color: maroon">coding</span> <i>&quot;set brand code&quot;</i><span style="color: navy">;</span>
+    <span style="color: navy">}</span> <i>&quot;set brand&quot;</i><span style="color: navy">;</span>
+    ext first<b> as </b><span style="color: maroon">maholder</span><b> where </b>ext.url = 'http://smart.who.int/ddcc/StructureDefinition/DDCCVaccineMarketAuthorization'<b> then</b><span style="color: navy"> {
+</span>      maholder.valueCoding<b> as </b><span style="color: maroon">coding</span><span style="color: navy"><b> -&gt; </b></span>vaccination.maholder = <span style="color: maroon">coding</span> <i>&quot;set maholder code&quot;</i><span style="color: navy">;</span>
+    <span style="color: navy">}</span> <i>&quot;set maholder&quot;</i><span style="color: navy">;</span>
+    ext first<b> as </b><span style="color: maroon">valid</span><b> where </b>ext.url = 'http://smart.who.int/ddcc/StructureDefinition/DDCCVaccineValidFrom'<b> then</b><span style="color: navy"> {
+</span>      valid.valueDateTime<b> as </b><span style="color: maroon">date</span><span style="color: navy"><b> -&gt; </b></span>vaccination.validFrom = <span style="color: maroon">date</span> <i>&quot;set validFrom date&quot;</i><span style="color: navy">;</span>
+    <span style="color: navy">}</span> <i>&quot;set validFrom&quot;</i><span style="color: navy">;</span>
+    ext first<b> as </b><span style="color: maroon">country</span><b> where </b>ext.url = 'http://smart.who.int/ddcc/StructureDefinition/DDCCCountryOfVaccination'<b> then</b><span style="color: navy"> {
+</span>      country.valueCode<b> as </b><span style="color: maroon">code</span><span style="color: navy"><b> -&gt; </b></span> vaccination.country<b> as </b><span style="color: maroon">vCountry</span><span style="color: navy">, </span> vCountry.system = <span style="color: blue">'urn:iso:std:iso:3166'</span><span style="color: navy">, </span> vCountry.code = <span style="color: maroon">code</span> <i>&quot;set country code&quot;</i><span style="color: navy">;</span>
+    <span style="color: navy">}</span> <i>&quot;set country&quot;</i><span style="color: navy">;</span>
+  <span style="color: navy">}</span> <i>&quot;set extensions&quot;</i><span style="color: navy">;</span>
+  immunization.manufacturer<b> as </b><span style="color: maroon">manufacturer</span><b> then</b><span style="color: navy"> {
+</span>    manufacturer.identifier<b> as </b><span style="color: maroon">identifier</span><span style="color: navy"><b> -&gt; </b></span>vaccination.manufacturer<b> as </b><span style="color: maroon">vMan</span><b> then</b><span style="color: navy"> {
+</span>      identifier.system<b> as </b><span style="color: maroon">system</span><span style="color: navy"><b> -&gt; </b></span>vMan.system = <span style="color: maroon">system</span> <i>&quot;set manufacturer system&quot;</i><span style="color: navy">;</span>
+      identifier.value<b> as </b><span style="color: maroon">value</span><span style="color: navy"><b> -&gt; </b></span>vMan.code = <span style="color: maroon">value</span> <i>&quot;set manufactutuer code&quot;</i><span style="color: navy">;</span>
+    <span style="color: navy">}</span> <i>&quot;set manufacturer id&quot;</i><span style="color: navy">;</span>
+  <span style="color: navy">}</span> <i>&quot;set manufacturer&quot;</i><span style="color: navy">;</span>
+  immunization.lotNumber<b> as </b><span style="color: maroon">lot</span><span style="color: navy"><b> -&gt; </b></span>vaccination.lot = <span style="color: maroon">lot</span> <i>&quot;set lot number&quot;</i><span style="color: navy">;</span>
+  immunization.occurrence<b> as </b><span style="color: maroon">date</span><span style="color: navy"><b> -&gt; </b></span>vaccination.date = <span style="color: maroon">date</span> <i>&quot;set date&quot;</i><span style="color: navy">;</span>
+  immunization.protocolApplied first<b> as </b><span style="color: maroon">protocol</span><b> then</b><span style="color: navy"> {
+</span>    protocol.doseNumber<b> as </b><span style="color: maroon">dose</span><span style="color: navy"><b> -&gt; </b></span>vaccination.dose = <span style="color: maroon">dose</span> <i>&quot;set dose&quot;</i><span style="color: navy">;</span>
+    protocol.seriesDoses<b> as </b><span style="color: maroon">totalDoses</span><span style="color: navy"><b> -&gt; </b></span>vaccination.totalDoses = <span style="color: maroon">totalDoses</span> <i>&quot;set totalDoses&quot;</i><span style="color: navy">;</span>
+    protocol.targetDisease first<b> as </b><span style="color: maroon">disease</span><b> then</b><span style="color: navy"> {
+</span>      disease.coding first<b> as </b><span style="color: maroon">coding</span><span style="color: navy"><b> -&gt; </b></span>vaccination.disease = <span style="color: maroon">coding</span> <i>&quot;set disease coding&quot;</i><span style="color: navy">;</span>
+    <span style="color: navy">}</span> <i>&quot;set disease&quot;</i><span style="color: navy">;</span>
+    protocol.authority<b> as </b><span style="color: maroon">authority</span><span style="color: navy"><b> -&gt; </b></span>certificate.issuer<b> as </b><span style="color: maroon">issuer</span><b> then</b><span style="color: navy"> {
+</span>      authority.reference<b> as </b><span style="color: maroon">reference</span><span style="color: navy"><b> -&gt; </b></span>issuer.identifier<b> as </b><span style="color: maroon">identifier</span><b> then</b><span style="color: navy"> {
+</span>        reference<span style="color: navy"><b> -&gt; </b></span>identifier.value = <span style="color: maroon">reference</span> <i>&quot;set reference&quot;</i><span style="color: navy">;</span>
+      <span style="color: navy">}</span> <i>&quot;set issuer from reference&quot;</i><span style="color: navy">;</span>
+      authority.identifier<b> as </b><span style="color: maroon">identifier</span><span style="color: navy"><b> -&gt; </b></span>issuer.identifier = <span style="color: maroon">identifier</span> <i>&quot;set issuer identifier&quot;</i><span style="color: navy">;</span>
+    <span style="color: navy">}</span> <i>&quot;set issuer&quot;</i><span style="color: navy">;</span>
+  <span style="color: navy">}</span> <i>&quot;set protocol applied&quot;</i><span style="color: navy">;</span>
+  immunization.location<b> as </b><span style="color: maroon">location</span><b> then</b><span style="color: navy"> {
+</span>    location.reference<b> as </b><span style="color: maroon">reference</span><span style="color: navy"><b> -&gt; </b></span>vaccination.centre = <span style="color: maroon">reference</span> <i>&quot;set vaccination centre from reference&quot;</i><span style="color: navy">;</span>
+    location.display<b> as </b><span style="color: maroon">centre</span><span style="color: navy"><b> -&gt; </b></span>vaccination.centre = <span style="color: maroon">centre</span> <i>&quot;set vaccination centre&quot;</i><span style="color: navy">;</span>
+  <span style="color: navy">}</span> <i>&quot;set vaccination centre location&quot;</i><span style="color: navy">;</span>
+  immunization.performer first<b> as </b><span style="color: maroon">performer</span><b> then</b><span style="color: navy"> {
+</span>    performer.actor<b> as </b><span style="color: maroon">actor</span><b> then</b><span style="color: navy"> {
+</span>      actor.identifier<b> as </b><span style="color: maroon">identifier</span><span style="color: navy"><b> -&gt; </b></span>vaccination.practitioner = <span style="color: maroon">identifier</span> <i>&quot;set practitioner&quot;</i><span style="color: navy">;</span>
+    <span style="color: navy">}</span> <i>&quot;set actor&quot;</i><span style="color: navy">;</span>
+  <span style="color: navy">}</span> <i>&quot;set performer&quot;</i><span style="color: navy">;</span>
+<span style="color: navy">}
 
-group ImmunizationToDDCCVS(source immunization : DDCCImmunization, target vaccination, target certificate) {
-  immunization.vaccineCode as code then {
-    code.coding first as coding -&gt; vaccination.vaccine = coding &quot;set vaccine&quot;;
-  } &quot;set vaccine code&quot;;
-  immunization.extension as ext then {
-    ext first as brand where ext.url = 'http://smart.who.int/ddcc/StructureDefinition/DDCCVaccineBrand' then {
-      brand.valueCoding as coding -&gt; vaccination.brand = coding &quot;set brand code&quot;;
-    } &quot;set brand&quot;;
-    ext first as maholder where ext.url = 'http://smart.who.int/ddcc/StructureDefinition/DDCCVaccineMarketAuthorization' then {
-      maholder.valueCoding as coding -&gt; vaccination.maholder = coding &quot;set maholder code&quot;;
-    } &quot;set maholder&quot;;
-    ext first as valid where ext.url = 'http://smart.who.int/ddcc/StructureDefinition/DDCCVaccineValidFrom' then {
-      valid.valueDateTime as date -&gt; vaccination.validFrom = date &quot;set validFrom date&quot;;
-    } &quot;set validFrom&quot;;
-    ext first as country where ext.url = 'http://smart.who.int/ddcc/StructureDefinition/DDCCCountryOfVaccination' then {
-      country.valueCode as code -&gt;  vaccination.country as vCountry,  vCountry.system = 'urn:iso:std:iso:3166',  vCountry.code = code &quot;set country code&quot;;
-    } &quot;set country&quot;;
-  } &quot;set extensions&quot;;
-  immunization.manufacturer as manufacturer then {
-    manufacturer.identifier as identifier -&gt; vaccination.manufacturer as vMan then {
-      identifier.system as system -&gt; vMan.system = system &quot;set manufacturer system&quot;;
-      identifier.value as value -&gt; vMan.code = value &quot;set manufactutuer code&quot;;
-    } &quot;set manufacturer id&quot;;
-  } &quot;set manufacturer&quot;;
-  immunization.lotNumber as lot -&gt; vaccination.lot = lot &quot;set lot number&quot;;
-  immunization.occurrence as date -&gt; vaccination.date = date &quot;set date&quot;;
-  immunization.protocolApplied first as protocol then {
-    protocol.doseNumber as dose -&gt; vaccination.dose = dose &quot;set dose&quot;;
-    protocol.seriesDoses as totalDoses -&gt; vaccination.totalDoses = totalDoses &quot;set totalDoses&quot;;
-    protocol.targetDisease first as disease then {
-      disease.coding first as coding -&gt; vaccination.disease = coding &quot;set disease coding&quot;;
-    } &quot;set disease&quot;;
-    protocol.authority as authority -&gt; certificate.issuer as issuer then {
-      authority.reference as reference -&gt; issuer.identifier as identifier then {
-        reference -&gt; identifier.value = reference &quot;set reference&quot;;
-      } &quot;set issuer from reference&quot;;
-      authority.identifier as identifier -&gt; issuer.identifier = identifier &quot;set issuer identifier&quot;;
-    } &quot;set issuer&quot;;
-  } &quot;set protocol applied&quot;;
-  immunization.location as location then {
-    location.reference as reference -&gt; vaccination.centre = reference &quot;set vaccination centre from reference&quot;;
-    location.display as centre -&gt; vaccination.centre = centre &quot;set vaccination centre&quot;;
-  } &quot;set vaccination centre location&quot;;
-  immunization.performer first as performer then {
-    performer.actor as actor then {
-      actor.identifier as identifier -&gt; vaccination.practitioner = identifier &quot;set practitioner&quot;;
-    } &quot;set actor&quot;;
-  } &quot;set performer&quot;;
-}
+</span><b>group </b>ImmRecToDDCCVS<span style="color: navy">(</span><b>source</b> <span style="color: maroon">immRec</span><span style="color: navy"> : </span>DDCCImmunizationRecommendation, <b>target</b> <span style="color: maroon">vaccination</span><span style="color: navy">)</span><span style="color: navy"> {
+</span>  immRec.recommendation<b> as </b><span style="color: maroon">rec</span><b> then</b><span style="color: navy"> {
+</span>    rec.dateCriterion first<b> as </b><span style="color: maroon">due_date</span><b> then</b><span style="color: navy"> {
+</span>      due_date.value<b> as </b><span style="color: maroon">date</span><span style="color: navy"><b> -&gt; </b></span>vaccination.nextDose = <span style="color: maroon">date</span> <i>&quot;set due date&quot;</i><span style="color: navy">;</span>
+    <span style="color: navy">}</span> <i>&quot;get date criterion&quot;</i><span style="color: navy">;</span>
+  <span style="color: navy">}</span> <i>&quot;get recommendation&quot;</i><span style="color: navy">;</span>
+<span style="color: navy">}
 
-group ImmRecToDDCCVS(source immRec : DDCCImmunizationRecommendation, target vaccination) {
-  immRec.recommendation as rec then {
-    rec.dateCriterion first as due_date then {
-      due_date.value as date -&gt; vaccination.nextDose = date &quot;set due date&quot;;
-    } &quot;get date criterion&quot;;
-  } &quot;get recommendation&quot;;
-}
-
-</pre></div>
+</span></pre></div>
   </text>
   <url value="http://smart.who.int/ddcc/StructureMap/ResourcesToVSCoreDataSet"/>
   <version value="1.0.0"/>
   <name value="ResourcesToVSCoreDataSet"/>
   <status value="draft"/>
-  <date value="2024-04-24T00:11:34+00:00"/>
+  <date value="2024-07-30T07:55:09+00:00"/>
   <publisher value="WHO"/>
   <contact>
     <name value="WHO"/>
@@ -150,7 +149,7 @@ group ImmRecToDDCCVS(source immRec : DDCCImmunizationRecommendation, target vacc
   </structure>
   <structure>
     <url value="http://hl7.org/fhir/StructureDefinition/HumanName"/>
-    <mode value="produced"/>
+    <mode value="target"/>
     <alias value="HumanName"/>
   </structure>
   <structure>
@@ -174,7 +173,7 @@ group ImmRecToDDCCVS(source immRec : DDCCImmunizationRecommendation, target vacc
     <alias value="DDCCVSComposition"/>
   </structure>
   <structure>
-    <url value="http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.VS.PoV"/>
+    <url value="http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSetVSPoV"/>
     <mode value="target"/>
     <alias value="DDCCPoV"/>
   </structure>
@@ -238,7 +237,6 @@ group ImmRecToDDCCVS(source immRec : DDCCImmunizationRecommendation, target vacc
               <valueString value="url.replaceMatches('[Uu][Rr][Nn]:[Hh][Cc][Ii][Dd]:', '')"/>
             </parameter>
           </target>
-          <documentation value="There's got to be a better way to do this"/>
         </rule>
       </rule>
       <rule>
@@ -517,7 +515,6 @@ group ImmRecToDDCCVS(source immRec : DDCCImmunizationRecommendation, target vacc
           </parameter>
         </target>
       </rule>
-      <documentation value="this will override what was set from id if it exists"/>
     </rule>
     <rule>
       <name value="set sex"/>
@@ -566,7 +563,6 @@ group ImmRecToDDCCVS(source immRec : DDCCImmunizationRecommendation, target vacc
           <valueString value="given.replaceMatches('$', ' ')"/>
         </parameter>
       </target>
-      <documentation value="annoying because append doesn't work until ddcc.name is set"/>
     </rule>
     <rule>
       <name value="set other names"/>
@@ -602,7 +598,6 @@ group ImmRecToDDCCVS(source immRec : DDCCImmunizationRecommendation, target vacc
           <valueId value="spaced"/>
         </parameter>
       </target>
-      <documentation value="name.given not_first as other -&gt; ddcc.name as tName, ddcc.name = append( tName, other ) &quot;set other names&quot;;"/>
     </rule>
     <rule>
       <name value="add family name"/>
