@@ -1,0 +1,33 @@
+name: Release build
+
+on:
+  release:
+    types: [created]
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    outputs:
+      file_exists: ${{ steps.checkfile.outputs.exists }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.release.tag_name }}
+
+      - name: Check for publication-request.json
+        id: checkfile
+        run: |
+          if [[ -f "publication-request.json" ]]; then
+            echo "::set-output name=exists::true"
+          else
+            echo "::set-output name=exists::false"
+          fi
+
+  trigger:
+    needs: check
+    if: needs.check.outputs.file_exists == 'true'
+    uses: WorldHealthOrganization/smart-html/.github/workflows/release.yml@main
+#    with:
+#      tag_name: ${{ github.event.release.tag_name }}
