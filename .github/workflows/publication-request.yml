@@ -1,0 +1,226 @@
+name: Build IG and Create Publication Request JSON
+
+on:
+  issues:
+    types: [opened, edited]
+
+jobs:
+  # Job 1: Call the reusable workflow for building the IG
+  call_build:
+    uses: WorldHealthOrganization/smart-base/.github/workflows/ghbuild.yml@main
+
+  # Job 2: Upload qa.json as an artifact
+  upload_artifacts:
+    runs-on: ubuntu-latest
+    needs: call_build  # This ensures the IG build completes before uploading artifacts
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Download qa.json artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: qa-json-artifact
+
+      # List files in the output directory to confirm qa.json is there
+      - name: List output directory contents
+        run: ls -Rla .
+
+      # Check if qa.json exists in the output folder
+      - name: Check if qa.json exists
+        run: |
+          if [ -f "qa.json" ]; then
+            echo "qa.json file exists, proceeding with upload."
+            echo "::set-output name=qa-found::true"
+          else
+            echo "Error: qa.json file not found!"
+            echo "::set-output name=qa-found::false"
+            exit 1  # Exit if qa.json is not found
+          fi
+
+      # Upload qa.json as an artifact if it exists
+      - name: Upload qa.json artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: qa-json-artifact
+          path: qa.json  # Path to the qa.json file located in the output directory
+
+  # Job 3: Process qa.json (Create publication-request.json)
+  process_qa_json:
+    if: contains(github.event.issue.labels.*.name, 'publication-request')
+    runs-on: ubuntu-latest
+    needs: upload_artifacts  # Ensure the artifact upload completes before this job
+
+    steps:
+      - name: Download qa.json artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: qa-json-artifact
+
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Download qa.json artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: qa-json-artifact
+
+      # Capture GitHub event payload in an environment variable and log it
+      - name: Set GitHub event payload to environment variable
+        env:
+          GITHUB_EVENT_PAYLOAD: ${{ toJson(github.event) }}
+        run: |
+          echo "Logging GitHub event payload..."
+          echo "$GITHUB_EVENT_PAYLOAD"
+          
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      # Extract data from issue.body using sed
+      - name: Extract form data
+        run: |
+          # Store the issue body content in a variable
+          BODY="${{ github.event.issue.body }}"
+          MODE=$(echo "$BODY" | sed -n '/^### Release Mode/{n;:a;/^\s*$/!{p;q};n;ba}')
+          STATUS=$(echo "$BODY" | sed -n '/^### Release Status/{n;:a;/^\s*$/!{p;q};n;ba}')
+          SEQUENCE=$(echo "$BODY" | sed -n '/^### Sequence Name/{n;:a;/^\s*$/!{p;q};n;ba}')
+          DESCRIPTION=$(echo "$BODY" | sed -n '/^### Description of the Release/{n;:a;/^\s*$/!{p;q};n;ba}')
+          CHANGES=$(echo "$BODY" | sed -n '/^### Link to Changes/{n;:a;/^\s*$/!{p;q};n;ba}')
+          FIRST_RELEASE=$(echo "$BODY" | grep -q "Yes, this is the first release" && echo "true" || echo "false")
+          TITLE=$(echo "$BODY" | sed -n '/^### Title (for first release only)/{n;:a;/^\s*$/!{p;q};n;ba}')
+          CATEGORY=$(echo "$BODY" | sed -n '/^### Category (for first release only)/{n;:a;/^\s*$/!{p;q};n;ba}')
+          INTRODUCTION=$(echo "$BODY" | sed -n '/^### Introduction (for first release only)/{n;:a;/^\s*$/!{p;q};n;ba}')
+
+          # Output the extracted values
+          echo "Mode: $MODE"
+          echo "Status: $STATUS"
+          echo "Sequence: $SEQUENCE"
+          echo "Description: $DESCRIPTION"
+          echo "Changes: $CHANGES"
+          echo "First Release: $FIRST_RELEASE"
+          echo "Title: $TITLE"
+          echo "Category: $CATEGORY"
+          echo "Introduction: $INTRODUCTION"
+
+          # Export these values as environment variables for future steps
+          echo "MODE=$MODE" >> $GITHUB_ENV
+          echo "STATUS=$STATUS" >> $GITHUB_ENV
+          echo "SEQUENCE=$SEQUENCE" >> $GITHUB_ENV
+          echo "DESCRIPTION=$DESCRIPTION" >> $GITHUB_ENV
+          echo "CHANGES=$CHANGES" >> $GITHUB_ENV
+          echo "FIRST_RELEASE=$FIRST_RELEASE" >> $GITHUB_ENV
+          echo "TITLE=$TITLE" >> $GITHUB_ENV
+          echo "CATEGORY=$CATEGORY" >> $GITHUB_ENV
+          echo "INTRODUCTION=$INTRODUCTION" >> $GITHUB_ENV
+
+      # Extract values from qa.json
+      - name: Extract values from qa.json
+        run: |
+          PACKAGE_ID=$(jq -r '.["package-id"]' ./qa.json)
+          TITLE=$(jq -r '.["title"]' ./qa.json)
+          VERSION=$(jq -r '.["ig-ver"]' ./qa.json)
+          STATUS=$(jq -r '.["status"]' ./qa.json)
+          URL=$(jq -r '.["url"]' ./qa.json)
+          # Construct the path: URL before "/ImplementationGuide" and append version
+          PATH_VALUE="${URL%/ImplementationGuide}/$VERSION/"
+          echo "PACKAGE_ID=$PACKAGE_ID" >> $GITHUB_ENV
+          echo "TITLE=$TITLE" >> $GITHUB_ENV
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo "STATUS=$STATUS" >> $GITHUB_ENV
+          echo "PATH_VALUE=$PATH_VALUE" >> $GITHUB_ENV
+
+      # Generate ci-build URL
+      - name: Generate ci-build URL
+        run: |
+          REPO_NAME="${{ github.repository }}"
+          CI_BUILD_URL="http://worldhealthorganization.github.io/$REPO_NAME"
+          echo "CI_BUILD_URL=$CI_BUILD_URL" >> $GITHUB_ENV
+
+
+      # Stash untracked files (to avoid conflicts)
+      - name: Stash untracked files
+        run: git stash --include-untracked
+
+      # Pull and rebase from release-candidate branch, skipping auto-commits
+      - name: Pull and rebase from release-candidate branch
+        run: |
+          git fetch origin
+          git rebase origin/release-candidate --no-commit || true
+
+      # Reset changes to the .yml file (ignore changes)
+      - name: Ignore changes to publication-request.yml
+        run: |
+          git checkout --ours .github/workflows/publication-request.yml || true
+          git reset HEAD .github/workflows/publication-request.yml
+
+      # Automatically skip the commit that caused conflict if necessary
+      - name: Skip conflicting commit
+        run: |
+          git rebase --skip || true
+
+      # Checkout release-candidate branch
+      - name: Checkout release-candidate branch
+        run: git checkout release-candidate
+
+      # Apply stashed changes (including publication-request.json)
+      - name: Apply stashed changes
+        run: git stash pop || true
+
+      # Create publication-request.json in the root folder
+      - name: Create publication-request.json
+        run: |
+          cat <<EOF > ./publication-request.json
+          {
+            "package-id": "${{ env.PACKAGE_ID }}",
+            "title": "${{ env.TITLE }}",
+            "version": "${{ env.VERSION }}",
+            "path": "${{ env.PATH_VALUE }}",
+            "status": "${{ env.STATUS }}",
+            "mode": "${{ env.MODE }}",
+            "sequence": "${{ env.SEQUENCE }}",
+            "desc": "${{ env.DESCRIPTION }}",
+            "changes": "${{ env.CHANGES }}",
+            "first": "${{ env.FIRST_RELEASE }}",
+            "category": "${{ env.CATEGORY }}",
+            "introduction": "${{ env.INTRODUCTION }}",
+            "ci-build": "${{ env.CI_BUILD_URL }}"
+          }
+          EOF
+          echo "publication-request.json created in the root directory."
+
+      # Configure Git user identity
+      - name: Configure Git user
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "GitHub Actions Bot"
+
+      # Add and commit only the publication-request.json file
+      - name: Commit and Push JSON to release-candidate branch
+        run: |
+          git add ./publication-request.json
+          git commit -m "Created publication-request.json from issue #${{ github.event.issue.number }}"
+
+
+      # Post a comment in the issue with a link and content of the publication-request.json
+      - name: Post a comment to the issue
+        run: |
+          JSON_CONTENT=$(cat ./publication-request.json | jq -Rs .)
+          ISSUE_NUMBER=${{ github.event.issue.number }}
+          COMMENT_BODY="publication-request.json created in the branch [release-candidate](https://github.com/${{ github.repository }}/blob/release-candidate/publication-request.json) with this content: \n\n\`\`\`json\n$JSON_CONTENT\n\`\`\`"
+          curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+          -H "Content-Type: application/json" \
+          --data "{\"body\":\"$COMMENT_BODY\"}" \
+          "https://api.github.com/repos/${{ github.repository }}/issues/${ISSUE_NUMBER}/comments" || exit 1
+          
+
+      # Add the "Build OK" label to the issue
+      - name: Add "Build OK" label
+        run: |
+          ISSUE_NUMBER=${{ github.event.issue.number }}
+          curl -s -X POST \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            --data '{"labels":["Build OK"]}' \
+            "https://api.github.com/repos/${{ github.repository }}/issues/${ISSUE_NUMBER}/labels"          

@@ -1,0 +1,37 @@
+name: Create Release and Call Workflow on Issue Close
+
+on:
+  issues:
+    types: [closed]
+
+jobs:
+  create_release_and_tag:
+    if: contains(github.event.issue.labels.*.name, 'Build OK') && contains(github.event.issue.labels.*.name, 'publication-request')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      # Read the version from publication-request.json in the release-candidate branch
+      - name: Get version from publication-request.json
+        run: |
+          git fetch origin release-candidate
+          git checkout release-candidate
+          VERSION=$(jq -r '.version' publication-request.json)
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+
+      # Create a release and tag with the version
+      - name: Create release and tag
+        uses: actions/create-release@v1
+        with:
+          tag_name: "v${{ env.VERSION }}"
+          release_name: "v${{ env.VERSION }}"
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # Job to trigger the reusable workflow
+  trigger_remote_workflow:
+    needs: create_release_and_tag
+    uses: WorldHealthOrganization/smart-html/.github/workflows/release.yml@main
