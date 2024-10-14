@@ -169,12 +169,16 @@ jobs:
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "GitHub Actions Bot"
 
-      # Add and commit only the publication-request.json file
-      - name: Commit and Push JSON to release-candidate branch
+      # Check if there are changes and commit only the publication-request.json file
+      - name: Check for changes
         run: |
-          git add ./publication-request.json
-          git commit -m "Created publication-request.json from issue #${{ github.event.issue.number }}"
-          git push origin release-candidate
+          if [[ -z $(git status --porcelain) ]]; then
+            echo "No changes to commit."
+          else
+            git add ./publication-request.json
+            git commit -m "Created publication-request.json from issue #${{ github.event.issue.number }} [skip workflow]"
+            git push origin release-candidate
+          fi
 
       # Post a comment in the issue with a link and content of the publication-request.json
       - name: Post a comment to the issue
