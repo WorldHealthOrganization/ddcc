@@ -170,12 +170,12 @@ jobs:
           git config --local user.name "GitHub Actions Bot"
 
       # Check if there are changes and commit only the publication-request.json file
-      - name: Check for changes
+      - name: Check and commit changes
         run: |
-          if [[ -z $(git status --porcelain) ]]; then
+          git add ./publication-request.json
+          if git diff-index --quiet HEAD; then
             echo "No changes to commit."
           else
-            git add ./publication-request.json
             git commit -m "Created publication-request.json from issue #${{ github.event.issue.number }} [skip workflow]"
             git push origin release-candidate
           fi
