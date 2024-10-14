@@ -37,7 +37,6 @@ jobs:
             echo "::set-output name=qa-found::false"
             exit 1  # Exit if qa.json is not found
           fi
-
       # Upload qa.json as an artifact if it exists
       - name: Upload qa.json artifact
         uses: actions/upload-artifact@v3
@@ -52,14 +51,24 @@ jobs:
     needs: upload_artifacts  # Ensure the artifact upload completes before this job
 
     steps:
-      - name: Download qa.json artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: qa-json-artifact
-
       - name: Checkout repository
         uses: actions/checkout@v2
 
+      # Fetch all branches from the remote
+      - name: Fetch all branches
+        run: git fetch --all
+
+      # Create and checkout release-candidate branch if it doesn't exist
+      - name: Create and checkout release-candidate if it doesn't exist
+        run: |
+          if git rev-parse --verify origin/release-candidate; then
+            git checkout release-candidate
+          else
+            git checkout -b release-candidate
+            git push origin release-candidate
+          fi
+
+      # Download qa.json artifact
       - name: Download qa.json artifact
         uses: actions/download-artifact@v3
         with:
@@ -81,7 +90,6 @@ jobs:
       # Extract data from issue.body using sed
       - name: Extract form data
         run: |
-          # Store the issue body content in a variable
           BODY="${{ github.event.issue.body }}"
           MODE=$(echo "$BODY" | sed -n '/^### Release Mode/{n;:a;/^\s*$/!{p;q};n;ba}')
           STATUS=$(echo "$BODY" | sed -n '/^### Release Status/{n;:a;/^\s*$/!{p;q};n;ba}')
@@ -92,8 +100,6 @@ jobs:
           TITLE=$(echo "$BODY" | sed -n '/^### Title (for first release only)/{n;:a;/^\s*$/!{p;q};n;ba}')
           CATEGORY=$(echo "$BODY" | sed -n '/^### Category (for first release only)/{n;:a;/^\s*$/!{p;q};n;ba}')
           INTRODUCTION=$(echo "$BODY" | sed -n '/^### Introduction (for first release only)/{n;:a;/^\s*$/!{p;q};n;ba}')
-
-          # Output the extracted values
           echo "Mode: $MODE"
           echo "Status: $STATUS"
           echo "Sequence: $SEQUENCE"
@@ -103,8 +109,6 @@ jobs:
           echo "Title: $TITLE"
           echo "Category: $CATEGORY"
           echo "Introduction: $INTRODUCTION"
-
-          # Export these values as environment variables for future steps
           echo "MODE=$MODE" >> $GITHUB_ENV
           echo "STATUS=$STATUS" >> $GITHUB_ENV
           echo "SEQUENCE=$SEQUENCE" >> $GITHUB_ENV
@@ -123,7 +127,6 @@ jobs:
           VERSION=$(jq -r '.["ig-ver"]' ./qa.json)
           STATUS=$(jq -r '.["status"]' ./qa.json)
           URL=$(jq -r '.["url"]' ./qa.json)
-          # Construct the path: URL before "/ImplementationGuide" and append version
           PATH_VALUE="${URL%/ImplementationGuide}/$VERSION/"
           echo "PACKAGE_ID=$PACKAGE_ID" >> $GITHUB_ENV
           echo "TITLE=$TITLE" >> $GITHUB_ENV
@@ -137,36 +140,6 @@ jobs:
           REPO_NAME="${{ github.repository }}"
           CI_BUILD_URL="http://worldhealthorganization.github.io/$REPO_NAME"
           echo "CI_BUILD_URL=$CI_BUILD_URL" >> $GITHUB_ENV
-
-
-      # Stash untracked files (to avoid conflicts)
-      - name: Stash untracked files
-        run: git stash --include-untracked
-
-      # Pull and rebase from release-candidate branch, skipping auto-commits
-      - name: Pull and rebase from release-candidate branch
-        run: |
-          git fetch origin
-          git rebase origin/release-candidate --no-commit || true
-
-      # Reset changes to the .yml file (ignore changes)
-      - name: Ignore changes to publication-request.yml
-        run: |
-          git checkout --ours .github/workflows/publication-request.yml || true
-          git reset HEAD .github/workflows/publication-request.yml
-
-      # Automatically skip the commit that caused conflict if necessary
-      - name: Skip conflicting commit
-        run: |
-          git rebase --skip || true
-
-      # Checkout release-candidate branch
-      - name: Checkout release-candidate branch
-        run: git checkout release-candidate
-
-      # Apply stashed changes (including publication-request.json)
-      - name: Apply stashed changes
-        run: git stash pop || true
 
       # Create publication-request.json in the root folder
       - name: Create publication-request.json
@@ -201,7 +174,7 @@ jobs:
         run: |
           git add ./publication-request.json
           git commit -m "Created publication-request.json from issue #${{ github.event.issue.number }}"
-
+          git push origin release-candidate
 
       # Post a comment in the issue with a link and content of the publication-request.json
       - name: Post a comment to the issue
@@ -213,7 +186,6 @@ jobs:
           -H "Content-Type: application/json" \
           --data "{\"body\":\"$COMMENT_BODY\"}" \
           "https://api.github.com/repos/${{ github.repository }}/issues/${ISSUE_NUMBER}/comments" || exit 1
-          
 
       # Add the "Build OK" label to the issue
       - name: Add "Build OK" label
@@ -223,4 +195,4 @@ jobs:
             -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
             -H "Content-Type: application/json" \
             --data '{"labels":["Build OK"]}' \
-            "https://api.github.com/repos/${{ github.repository }}/issues/${ISSUE_NUMBER}/labels"          
+            "https://api.github.com/repos/${{ github.repository }}/issues/${ISSUE_NUMBER}/labels"
