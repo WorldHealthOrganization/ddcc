@@ -9,10 +9,11 @@ jobs:
     if: contains(github.event.issue.labels.*.name, 'Build OK') && contains(github.event.issue.labels.*.name, 'publication-request')
     runs-on: ubuntu-latest
     steps:
+      # Checkout repository
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      # Read the version from publication-request.json in the release-candidate branch
+      # Fetch release-candidate branch and read version from publication-request.json
       - name: Get version from publication-request.json
         run: |
           git fetch origin release-candidate
@@ -34,4 +35,19 @@ jobs:
   # Job to trigger the reusable workflow
   trigger_remote_workflow:
     needs: create_release_and_tag
-    uses: WorldHealthOrganization/smart-html/.github/workflows/release.yml@main
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout the branch to determine the current branch name
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      # Get the current branch name
+      - name: Get current branch
+        id: get_branch
+        run: echo "BRANCH=$(git branch --show-current)" >> $GITHUB_ENV
+
+      # Trigger the remote reusable workflow and pass the current branch
+      - name: Trigger remote workflow
+        uses: WorldHealthOrganization/smart-html/.github/workflows/release.yml@main
+        with:
+          branch: ${{ env.BRANCH }}  # Pass the current branch to the remote workflow
