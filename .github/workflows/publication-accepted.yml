@@ -35,19 +35,6 @@ jobs:
   # Job to trigger the reusable workflow
   trigger_remote_workflow:
     needs: create_release_and_tag
-    runs-on: ubuntu-latest
-    steps:
-      # Checkout the branch to determine the current branch name
-      - name: Checkout repository
-        uses: actions/checkout@v2
+    uses: WorldHealthOrganization/smart-html/.github/workflows/release.yml@main
 
-      # Get the current branch name
-      - name: Get current branch
-        id: get_branch
-        run: echo "BRANCH=$(git branch --show-current)" >> $GITHUB_ENV
 
-      # Trigger the remote reusable workflow and pass the current branch
-      - name: Trigger remote workflow
-        uses: WorldHealthOrganization/smart-html/.github/workflows/release.yml@main
-        with:
-          branch: ${{ env.BRANCH }}  # Pass the current branch to the remote workflow
