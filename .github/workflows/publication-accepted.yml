@@ -21,6 +21,9 @@ jobs:
           VERSION=$(jq -r '.version' publication-request.json)
           echo "VERSION=$VERSION" >> $GITHUB_ENV
 
+      - name: Get current branch
+        run: echo "BRANCH=$(git rev-parse --abbrev-ref HEAD)" >> $GITHUB_ENV
+
       # Create a release and tag with the version
       - name: Create release and tag
         uses: actions/create-release@v1
@@ -32,10 +35,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-  # Job to trigger the reusable workflow
-  trigger_remote_workflow:
-    needs: create_release_and_tag
-    uses: WorldHealthOrganization/smart-html/.github/workflows/release.yml@main
-    with:
-      branch: ${{ env.BRANCH }}  # Pass the current branch to the remote workflow
+      # Trigger the remote reusable workflow and pass the current branch
+      - name: Trigger remote workflow
+        uses: WorldHealthOrganization/smart-html/.github/workflows/release.yml@main
+        with:
+          branch: ${{ env.BRANCH }}  # Pass the current branch to the remote workflow
 
