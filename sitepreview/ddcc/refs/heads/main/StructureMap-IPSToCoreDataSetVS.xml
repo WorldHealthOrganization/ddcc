@@ -1,0 +1,748 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<StructureMap xmlns="http://hl7.org/fhir">
+  <id value="IPSToCoreDataSetVS"/>
+  <text>
+    <status value="generated"/><div xmlns="http://www.w3.org/1999/xhtml"><pre>map &quot;http://smart.who.int/ddcc/StructureMap/IPSToCoreDataSetVS&quot; = &quot;IPSToCoreDataSetVS&quot;
+
+
+uses &quot;http://hl7.org/fhir/StructureDefinition/Bundle&quot; alias IPS as source
+uses &quot;http://hl7.org/fhir/StructureDefinition/Bundle&quot; alias DDCCBundle as target
+uses &quot;http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.VS.PoV&quot; alias DDCC as produced
+
+group IPSToCoreDataSetVS(source ips : IPS, target ddccBundle : DDCCBundle) {
+  ips.id as id -&gt; ddccBundle.id = id &quot;set id&quot;;
+  ips.entry first as compentry then {
+    compentry.resource : Composition as composition then {
+      composition.subject as subject then {
+        subject.reference as patientid then {
+          ips.entry as findpatient where resource.is(Patient) and (resource.id = patientid.replaceMatches('.*Patient/(?&lt;id&gt;[A-Za-z0-9\\-\\.]{1,64})$', '${id}')) then {
+            findpatient.resource as patient then {
+              ips.entry as entry then {
+                entry.resource : Immunization as immunization where vaccineCode.memberOf('http://smart.who.int/ddcc/ValueSet/who-ddcc-allowed-vaccines-covid-19') -&gt;  ddccBundle.entry as outentry,  create('http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.VS.PoV') as ddcc then {
+                  immunization then PatientToDDCC(patient, ddcc) &quot;set patient info&quot;;
+                  immunization -&gt; ddcc.vaccination as vaccination then ImmunizationToVaccination(immunization, vaccination) &quot;set vaccination&quot;;
+                  immunization -&gt; ddcc.certificate as certificate then IPSToCertificate(composition, certificate, immunization) &quot;set certificate&quot;;
+                  immunization -&gt; outentry.resource = ddcc &quot;set outentry&quot;;
+                } &quot;immunizations&quot;;
+              } &quot;entries&quot;;
+            } &quot;get patient&quot;;
+          } &quot;find patient&quot;;
+        } &quot;get subject reference&quot;;
+      } &quot;get subject&quot;;
+    } &quot;get composition&quot;;
+  } &quot;get first entry&quot;;
+}
+
+group ImmunizationToVaccination(source immunization, target vaccination) {
+  immunization.vaccineCode as vaccine then {
+    vaccine.coding as coding where memberOf('http://smart.who.int/ddcc/ValueSet/who-ddcc-vaccines-covid-19') then {
+      coding -&gt; vaccination.vaccine = coding &quot;set coding&quot;;
+    } &quot;copy vaccine&quot;;
+    vaccine.coding as coding where memberOf('http://smart.who.int/ddcc/ValueSet/who-ddcc-vaccines-covid-19').not() then {
+      coding -&gt; vaccination.vaccine = translate(coding, 'who-ddcc-map-cvx-icd11-vaccines', 'Coding') &quot;translate code&quot;;
+    } &quot;translate vaccine coding&quot;;
+    vaccine.coding as coding -&gt; vaccination.brand = translate(coding, 'who-ddcc-map-cvx-icd11-brands', 'Coding') &quot;translate brand&quot;;
+  } &quot;set vaccine&quot;;
+  immunization -&gt; vaccination.country = c('urn:iso:std:iso:3166', 'USA') &quot;set country&quot;;
+  immunization.lotNumber as lot -&gt; vaccination.lot = lot &quot;set lot&quot;;
+  immunization.occurrence as occurrence -&gt; vaccination.date = occurrence &quot;set date&quot;;
+  immunization.manufacturer as manufacturer then {
+    manufacturer.identifier as identifier -&gt; vaccination.manufacturer as vMan then {
+      identifier.system as system -&gt; vMan.system = system &quot;set manufacturer system&quot;;
+      identifier.value as value -&gt; vMan.code = value &quot;set manufactutuer code&quot;;
+    } &quot;set manufacturer id&quot;;
+  } &quot;set manufacturer&quot;;
+}
+
+group IPSToCertificate(source composition, target certificate, source immunization) {
+  immunization.id as id -&gt;  certificate.ddccid as ddccid,  ddccid.value = id &quot;set ddccid&quot;;
+  composition.id as id -&gt;  certificate.hcid as hcid,  hcid.value = id &quot;set hcid&quot;;
+  composition.author first as author -&gt; certificate.issuer = author &quot;set issuer&quot;;
+}
+
+group PatientToDDCC(source patient, target ddcc) {
+  patient.name as name then NameToText(name, ddcc) &quot;set name&quot;;
+  patient.birthDate as birthDate -&gt; ddcc.birthDate = birthDate &quot;set birthdate&quot;;
+  // patient.gender as gender -&gt; ddcc.sex = gender &quot;set sex&quot;;
+  patient.identifier first as identifier -&gt; ddcc.identifier = identifier &quot;set identifier&quot;;
+}
+
+group NameToText(source name : HumanName, target ddcc) {
+  // annoying because append doesn't work until ddcc.name is set
+  name.given first as given -&gt; ddcc.name = (given.replaceMatches('$', ' ')) &quot;set first name&quot;;
+  // name.given not_first as other -&gt; ddcc.name as tName, ddcc.name = append( tName, other ) &quot;set other names&quot;;
+  name.given not_first as other -&gt;  ddcc.name as tName,  (other.replaceMatches('$', ' ')) as spaced,  ddcc.name = append(tName, spaced) &quot;set other names&quot;;
+  name.family as family -&gt;  ddcc.name as tName,  ddcc.name = append(tName, family) &quot;add family name&quot;;
+  name.text as text -&gt; ddcc.name = text &quot;set full name&quot;;
+}
+
+</pre></div>
+  </text>
+  <url value="http://smart.who.int/ddcc/StructureMap/IPSToCoreDataSetVS"/>
+  <version value="1.0.0"/>
+  <name value="IPSToCoreDataSetVS"/>
+  <status value="draft"/>
+  <date value="2023-11-06T04:25:12+00:00"/>
+  <publisher value="WHO"/>
+  <contact>
+    <name value="WHO"/>
+    <telecom>
+      <system value="url"/>
+      <value value="http://who.int"/>
+    </telecom>
+  </contact>
+  <jurisdiction>
+    <coding>
+      <system value="http://unstats.un.org/unsd/methods/m49/m49.htm"/>
+      <code value="001"/>
+    </coding>
+  </jurisdiction>
+  <structure>
+    <url value="http://hl7.org/fhir/StructureDefinition/Bundle"/>
+    <mode value="source"/>
+    <alias value="IPS"/>
+  </structure>
+  <structure>
+    <url value="http://hl7.org/fhir/StructureDefinition/Bundle"/>
+    <mode value="target"/>
+    <alias value="DDCCBundle"/>
+  </structure>
+  <structure>
+    <url value="http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.VS.PoV"/>
+    <mode value="produced"/>
+    <alias value="DDCC"/>
+  </structure>
+  <group>
+    <name value="IPSToCoreDataSetVS"/>
+    <typeMode value="none"/>
+    <input>
+      <name value="ips"/>
+      <type value="IPS"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="ddccBundle"/>
+      <type value="DDCCBundle"/>
+      <mode value="target"/>
+    </input>
+    <rule>
+      <name value="set id"/>
+      <source>
+        <context value="ips"/>
+        <element value="id"/>
+        <variable value="id"/>
+      </source>
+      <target>
+        <context value="ddccBundle"/>
+        <contextType value="variable"/>
+        <element value="id"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="id"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="get first entry"/>
+      <source>
+        <context value="ips"/>
+        <element value="entry"/>
+        <listMode value="first"/>
+        <variable value="compentry"/>
+      </source>
+      <rule>
+        <name value="get composition"/>
+        <source>
+          <context value="compentry"/>
+          <type value="Composition"/>
+          <element value="resource"/>
+          <variable value="composition"/>
+        </source>
+        <rule>
+          <name value="get subject"/>
+          <source>
+            <context value="composition"/>
+            <element value="subject"/>
+            <variable value="subject"/>
+          </source>
+          <rule>
+            <name value="get subject reference"/>
+            <source>
+              <context value="subject"/>
+              <element value="reference"/>
+              <variable value="patientid"/>
+            </source>
+            <rule>
+              <name value="find patient"/>
+              <source>
+                <context value="ips"/>
+                <element value="entry"/>
+                <variable value="findpatient"/>
+                <condition value="resource.is(Patient) and (resource.id = patientid.replaceMatches('.*Patient/(?&lt;id&gt;[A-Za-z0-9\\-\\.]{1,64})$', '${id}'))"/>
+              </source>
+              <rule>
+                <name value="get patient"/>
+                <source>
+                  <context value="findpatient"/>
+                  <element value="resource"/>
+                  <variable value="patient"/>
+                </source>
+                <rule>
+                  <name value="entries"/>
+                  <source>
+                    <context value="ips"/>
+                    <element value="entry"/>
+                    <variable value="entry"/>
+                  </source>
+                  <rule>
+                    <name value="immunizations"/>
+                    <source>
+                      <context value="entry"/>
+                      <type value="Immunization"/>
+                      <element value="resource"/>
+                      <variable value="immunization"/>
+                      <condition value="vaccineCode.memberOf('http://smart.who.int/ddcc/ValueSet/who-ddcc-allowed-vaccines-covid-19')"/>
+                    </source>
+                    <target>
+                      <context value="ddccBundle"/>
+                      <contextType value="variable"/>
+                      <element value="entry"/>
+                      <variable value="outentry"/>
+                    </target>
+                    <target>
+                      <contextType value="variable"/>
+                      <variable value="ddcc"/>
+                      <transform value="create"/>
+                      <parameter>
+                        <valueString value="http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.VS.PoV"/>
+                      </parameter>
+                    </target>
+                    <rule>
+                      <name value="set patient info"/>
+                      <source>
+                        <context value="immunization"/>
+                      </source>
+                      <dependent>
+                        <name value="PatientToDDCC"/>
+                        <variable value="patient"/>
+                        <variable value="ddcc"/>
+                      </dependent>
+                    </rule>
+                    <rule>
+                      <name value="set vaccination"/>
+                      <source>
+                        <context value="immunization"/>
+                      </source>
+                      <target>
+                        <context value="ddcc"/>
+                        <contextType value="variable"/>
+                        <element value="vaccination"/>
+                        <variable value="vaccination"/>
+                      </target>
+                      <dependent>
+                        <name value="ImmunizationToVaccination"/>
+                        <variable value="immunization"/>
+                        <variable value="vaccination"/>
+                      </dependent>
+                    </rule>
+                    <rule>
+                      <name value="set certificate"/>
+                      <source>
+                        <context value="immunization"/>
+                      </source>
+                      <target>
+                        <context value="ddcc"/>
+                        <contextType value="variable"/>
+                        <element value="certificate"/>
+                        <variable value="certificate"/>
+                      </target>
+                      <dependent>
+                        <name value="IPSToCertificate"/>
+                        <variable value="composition"/>
+                        <variable value="certificate"/>
+                        <variable value="immunization"/>
+                      </dependent>
+                    </rule>
+                    <rule>
+                      <name value="set outentry"/>
+                      <source>
+                        <context value="immunization"/>
+                      </source>
+                      <target>
+                        <context value="outentry"/>
+                        <contextType value="variable"/>
+                        <element value="resource"/>
+                        <transform value="copy"/>
+                        <parameter>
+                          <valueId value="ddcc"/>
+                        </parameter>
+                      </target>
+                    </rule>
+                  </rule>
+                </rule>
+              </rule>
+            </rule>
+          </rule>
+        </rule>
+      </rule>
+    </rule>
+  </group>
+  <group>
+    <name value="ImmunizationToVaccination"/>
+    <typeMode value="none"/>
+    <input>
+      <name value="immunization"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="vaccination"/>
+      <mode value="target"/>
+    </input>
+    <rule>
+      <name value="set vaccine"/>
+      <source>
+        <context value="immunization"/>
+        <element value="vaccineCode"/>
+        <variable value="vaccine"/>
+      </source>
+      <rule>
+        <name value="copy vaccine"/>
+        <source>
+          <context value="vaccine"/>
+          <element value="coding"/>
+          <variable value="coding"/>
+          <condition value="memberOf('http://smart.who.int/ddcc/ValueSet/who-ddcc-vaccines-covid-19')"/>
+        </source>
+        <rule>
+          <name value="set coding"/>
+          <source>
+            <context value="coding"/>
+          </source>
+          <target>
+            <context value="vaccination"/>
+            <contextType value="variable"/>
+            <element value="vaccine"/>
+            <transform value="copy"/>
+            <parameter>
+              <valueId value="coding"/>
+            </parameter>
+          </target>
+        </rule>
+      </rule>
+      <rule>
+        <name value="translate vaccine coding"/>
+        <source>
+          <context value="vaccine"/>
+          <element value="coding"/>
+          <variable value="coding"/>
+          <condition value="memberOf('http://smart.who.int/ddcc/ValueSet/who-ddcc-vaccines-covid-19').not()"/>
+        </source>
+        <rule>
+          <name value="translate code"/>
+          <source>
+            <context value="coding"/>
+          </source>
+          <target>
+            <context value="vaccination"/>
+            <contextType value="variable"/>
+            <element value="vaccine"/>
+            <transform value="translate"/>
+            <parameter>
+              <valueId value="coding"/>
+            </parameter>
+            <parameter>
+              <valueString value="who-ddcc-map-cvx-icd11-vaccines"/>
+            </parameter>
+            <parameter>
+              <valueString value="Coding"/>
+            </parameter>
+          </target>
+        </rule>
+      </rule>
+      <rule>
+        <name value="translate brand"/>
+        <source>
+          <context value="vaccine"/>
+          <element value="coding"/>
+          <variable value="coding"/>
+        </source>
+        <target>
+          <context value="vaccination"/>
+          <contextType value="variable"/>
+          <element value="brand"/>
+          <transform value="translate"/>
+          <parameter>
+            <valueId value="coding"/>
+          </parameter>
+          <parameter>
+            <valueString value="who-ddcc-map-cvx-icd11-brands"/>
+          </parameter>
+          <parameter>
+            <valueString value="Coding"/>
+          </parameter>
+        </target>
+      </rule>
+    </rule>
+    <rule>
+      <name value="set country"/>
+      <source>
+        <context value="immunization"/>
+      </source>
+      <target>
+        <context value="vaccination"/>
+        <contextType value="variable"/>
+        <element value="country"/>
+        <transform value="c"/>
+        <parameter>
+          <valueString value="urn:iso:std:iso:3166"/>
+        </parameter>
+        <parameter>
+          <valueString value="USA"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="set lot"/>
+      <source>
+        <context value="immunization"/>
+        <element value="lotNumber"/>
+        <variable value="lot"/>
+      </source>
+      <target>
+        <context value="vaccination"/>
+        <contextType value="variable"/>
+        <element value="lot"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="lot"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="set date"/>
+      <source>
+        <context value="immunization"/>
+        <element value="occurrence"/>
+        <variable value="occurrence"/>
+      </source>
+      <target>
+        <context value="vaccination"/>
+        <contextType value="variable"/>
+        <element value="date"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="occurrence"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="set manufacturer"/>
+      <source>
+        <context value="immunization"/>
+        <element value="manufacturer"/>
+        <variable value="manufacturer"/>
+      </source>
+      <rule>
+        <name value="set manufacturer id"/>
+        <source>
+          <context value="manufacturer"/>
+          <element value="identifier"/>
+          <variable value="identifier"/>
+        </source>
+        <target>
+          <context value="vaccination"/>
+          <contextType value="variable"/>
+          <element value="manufacturer"/>
+          <variable value="vMan"/>
+        </target>
+        <rule>
+          <name value="set manufacturer system"/>
+          <source>
+            <context value="identifier"/>
+            <element value="system"/>
+            <variable value="system"/>
+          </source>
+          <target>
+            <context value="vMan"/>
+            <contextType value="variable"/>
+            <element value="system"/>
+            <transform value="copy"/>
+            <parameter>
+              <valueId value="system"/>
+            </parameter>
+          </target>
+        </rule>
+        <rule>
+          <name value="set manufactutuer code"/>
+          <source>
+            <context value="identifier"/>
+            <element value="value"/>
+            <variable value="value"/>
+          </source>
+          <target>
+            <context value="vMan"/>
+            <contextType value="variable"/>
+            <element value="code"/>
+            <transform value="copy"/>
+            <parameter>
+              <valueId value="value"/>
+            </parameter>
+          </target>
+        </rule>
+      </rule>
+    </rule>
+  </group>
+  <group>
+    <name value="IPSToCertificate"/>
+    <typeMode value="none"/>
+    <input>
+      <name value="composition"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="certificate"/>
+      <mode value="target"/>
+    </input>
+    <input>
+      <name value="immunization"/>
+      <mode value="source"/>
+    </input>
+    <rule>
+      <name value="set ddccid"/>
+      <source>
+        <context value="immunization"/>
+        <element value="id"/>
+        <variable value="id"/>
+      </source>
+      <target>
+        <context value="certificate"/>
+        <contextType value="variable"/>
+        <element value="ddccid"/>
+        <variable value="ddccid"/>
+      </target>
+      <target>
+        <context value="ddccid"/>
+        <contextType value="variable"/>
+        <element value="value"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="id"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="set hcid"/>
+      <source>
+        <context value="composition"/>
+        <element value="id"/>
+        <variable value="id"/>
+      </source>
+      <target>
+        <context value="certificate"/>
+        <contextType value="variable"/>
+        <element value="hcid"/>
+        <variable value="hcid"/>
+      </target>
+      <target>
+        <context value="hcid"/>
+        <contextType value="variable"/>
+        <element value="value"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="id"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="set issuer"/>
+      <source>
+        <context value="composition"/>
+        <element value="author"/>
+        <listMode value="first"/>
+        <variable value="author"/>
+      </source>
+      <target>
+        <context value="certificate"/>
+        <contextType value="variable"/>
+        <element value="issuer"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="author"/>
+        </parameter>
+      </target>
+    </rule>
+  </group>
+  <group>
+    <name value="PatientToDDCC"/>
+    <typeMode value="none"/>
+    <input>
+      <name value="patient"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="ddcc"/>
+      <mode value="target"/>
+    </input>
+    <rule>
+      <name value="set name"/>
+      <source>
+        <context value="patient"/>
+        <element value="name"/>
+        <variable value="name"/>
+      </source>
+      <dependent>
+        <name value="NameToText"/>
+        <variable value="name"/>
+        <variable value="ddcc"/>
+      </dependent>
+    </rule>
+    <rule>
+      <name value="set birthdate"/>
+      <source>
+        <context value="patient"/>
+        <element value="birthDate"/>
+        <variable value="birthDate"/>
+      </source>
+      <target>
+        <context value="ddcc"/>
+        <contextType value="variable"/>
+        <element value="birthDate"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="birthDate"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="set identifier"/>
+      <source>
+        <context value="patient"/>
+        <element value="identifier"/>
+        <listMode value="first"/>
+        <variable value="identifier"/>
+      </source>
+      <target>
+        <context value="ddcc"/>
+        <contextType value="variable"/>
+        <element value="identifier"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="identifier"/>
+        </parameter>
+      </target>
+      <documentation value="patient.gender as gender -&gt; ddcc.sex = gender &quot;set sex&quot;;"/>
+    </rule>
+  </group>
+  <group>
+    <name value="NameToText"/>
+    <typeMode value="none"/>
+    <input>
+      <name value="name"/>
+      <type value="HumanName"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="ddcc"/>
+      <mode value="target"/>
+    </input>
+    <rule>
+      <name value="set first name"/>
+      <source>
+        <context value="name"/>
+        <element value="given"/>
+        <listMode value="first"/>
+        <variable value="given"/>
+      </source>
+      <target>
+        <context value="ddcc"/>
+        <contextType value="variable"/>
+        <element value="name"/>
+        <transform value="evaluate"/>
+        <parameter>
+          <valueString value="given.replaceMatches('$', ' ')"/>
+        </parameter>
+      </target>
+      <documentation value="annoying because append doesn't work until ddcc.name is set"/>
+    </rule>
+    <rule>
+      <name value="set other names"/>
+      <source>
+        <context value="name"/>
+        <element value="given"/>
+        <listMode value="not_first"/>
+        <variable value="other"/>
+      </source>
+      <target>
+        <context value="ddcc"/>
+        <contextType value="variable"/>
+        <element value="name"/>
+        <variable value="tName"/>
+      </target>
+      <target>
+        <contextType value="variable"/>
+        <variable value="spaced"/>
+        <transform value="evaluate"/>
+        <parameter>
+          <valueString value="other.replaceMatches('$', ' ')"/>
+        </parameter>
+      </target>
+      <target>
+        <context value="ddcc"/>
+        <contextType value="variable"/>
+        <element value="name"/>
+        <transform value="append"/>
+        <parameter>
+          <valueId value="tName"/>
+        </parameter>
+        <parameter>
+          <valueId value="spaced"/>
+        </parameter>
+      </target>
+      <documentation value="name.given not_first as other -&gt; ddcc.name as tName, ddcc.name = append( tName, other ) &quot;set other names&quot;;"/>
+    </rule>
+    <rule>
+      <name value="add family name"/>
+      <source>
+        <context value="name"/>
+        <element value="family"/>
+        <variable value="family"/>
+      </source>
+      <target>
+        <context value="ddcc"/>
+        <contextType value="variable"/>
+        <element value="name"/>
+        <variable value="tName"/>
+      </target>
+      <target>
+        <context value="ddcc"/>
+        <contextType value="variable"/>
+        <element value="name"/>
+        <transform value="append"/>
+        <parameter>
+          <valueId value="tName"/>
+        </parameter>
+        <parameter>
+          <valueId value="family"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="set full name"/>
+      <source>
+        <context value="name"/>
+        <element value="text"/>
+        <variable value="text"/>
+      </source>
+      <target>
+        <context value="ddcc"/>
+        <contextType value="variable"/>
+        <element value="name"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="text"/>
+        </parameter>
+      </target>
+    </rule>
+  </group>
+</StructureMap>

@@ -1,0 +1,2055 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<StructureMap xmlns="http://hl7.org/fhir">
+  <id value="CoreDataSetVSLibrary"/>
+  <text>
+    <status value="generated"/><div xmlns="http://www.w3.org/1999/xhtml"><p class="res-header-id"><b>Generated Narrative: StructureMap CoreDataSetVSLibrary</b></p><a name="CoreDataSetVSLibrary"> </a><a name="hcCoreDataSetVSLibrary"> </a><a name="CoreDataSetVSLibrary-en-US"> </a><pre class="fml">
+<b>map</b><span style="color: navy"> &quot;</span>http://smart.who.int/ddcc/StructureMap/CoreDataSetVSLibrary<span style="color: navy">&quot; = &quot;</span>CoreDataSetVSLibrary<span style="color: navy">&quot;
+
+</span><b>uses</b><span style="color: navy"> &quot;</span><a href="StructureDefinition-DDCCCoreDataSetVS.html" title="DDCC Core Data Set Logical Model for Vaccination Status">http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSetVS</a><span style="color: navy">&quot; </span><b>alias </b>DDCCVS <b>as </b><b>source</b>
+<b>uses</b><span style="color: navy"> &quot;</span><a href="http://hl7.org/fhir/R4/bundle.html" title="Bundle">http://hl7.org/fhir/StructureDefinition/Bundle</a><span style="color: navy">&quot; </span><b>alias </b>AddBundle <b>as </b><b>target</b>
+<b>uses</b><span style="color: navy"> &quot;</span><a href="http://hl7.org/fhir/R4/patient.html" title="Patient">http://hl7.org/fhir/StructureDefinition/Patient</a><span style="color: navy">&quot; </span><b>alias </b>Patient <b>as </b><b>target</b>
+<b>uses</b><span style="color: navy"> &quot;</span><a href="StructureDefinition-DDCCPatient.html" title="DDCC Patient">http://smart.who.int/ddcc/StructureDefinition/DDCCPatient</a><span style="color: navy">&quot; </span><b>alias </b>DDCCPatient <b>as </b><b>target</b>
+<b>uses</b><span style="color: navy"> &quot;</span><a href="StructureDefinition-DDCCDocumentReferenceQR.html" title="DDCC DocumentReference return for QR">http://smart.who.int/ddcc/StructureDefinition/DDCCDocumentReferenceQR</a><span style="color: navy">&quot; </span><b>alias </b>DDCCDocRefQR <b>as </b><b>target</b>
+<b>uses</b><span style="color: navy"> &quot;</span><a href="StructureDefinition-DDCCVSComposition.html" title="DDCC:VS Composition">http://smart.who.int/ddcc/StructureDefinition/DDCCVSComposition</a><span style="color: navy">&quot; </span><b>alias </b>DDCCVSComposition <b>as </b><b>target</b>
+<b>uses</b><span style="color: navy"> &quot;</span><a href="StructureDefinition-DDCCImmunization.html" title="DDCC Immunization">http://smart.who.int/ddcc/StructureDefinition/DDCCImmunization</a><span style="color: navy">&quot; </span><b>alias </b>DDCCImmunization <b>as </b><b>target</b>
+<b>uses</b><span style="color: navy"> &quot;</span><a href="StructureDefinition-DDCCImmunizationRecommendation.html" title="DDCC Immunization Recommendation">http://smart.who.int/ddcc/StructureDefinition/DDCCImmunizationRecommendation</a><span style="color: navy">&quot; </span><b>alias </b>DDCCImmRec <b>as </b><b>target</b>
+
+<b>imports</b><span style="color: navy"> &quot;</span><a href="StructureMap-CoreDataSetLibrary.html" title="CoreDataSetLibrary">http://smart.who.int/ddcc/StructureMap/CoreDataSetLibrary</a><span style="color: navy">&quot;
+</span>
+<b>group </b>VSToAddBundle<span style="color: navy">(</span><b>source</b> <span style="color: maroon">ddcc</span><span style="color: navy"> : </span>DDCCVS, <b>target</b> <span style="color: maroon">bundle</span><span style="color: navy"> : </span>AddBundle<span style="color: navy">)</span><span style="color: navy"> {
+</span>  ddcc<span style="color: navy"><b> -&gt; </b></span>bundle.type = <span style="color: blue">'transaction'</span> <i>&quot;set bundle type&quot;</i><span style="color: navy">;</span>
+  ddcc<span style="color: navy"><b> -&gt; </b></span> <b>uuid</b><span style="color: navy">(</span><span style="color: navy">)</span><b> as </b><span style="color: maroon">pid</span><span style="color: navy">, </span> <b>uuid</b><span style="color: navy">(</span><span style="color: navy">)</span><b> as </b><span style="color: maroon">compid</span><span style="color: navy">, </span> <b>uuid</b><span style="color: navy">(</span><span style="color: navy">)</span><b> as </b><span style="color: maroon">iid</span><span style="color: navy">, </span> <b>uuid</b><span style="color: navy">(</span><span style="color: navy">)</span><b> as </b><span style="color: maroon">irid</span><span style="color: navy">, </span> <b>uuid</b><span style="color: navy">(</span><span style="color: navy">)</span><b> as </b><span style="color: maroon">qrwhoid</span><span style="color: navy">, </span> <b>uuid</b><span style="color: navy">(</span><span style="color: navy">)</span><b> as </b><span style="color: maroon">qrdccid</span><b> then</b><span style="color: navy"> {
+</span>    ddcc<span style="color: navy"><b> -&gt; </b></span> bundle.entry<b> as </b><span style="color: maroon">entry</span><span style="color: navy">, </span> entry.fullUrl = <b>append</b><span style="color: navy">(</span><span style="color: blue">'urn:uuid:'</span><span style="color: navy">, </span><span style="color: maroon">pid</span><span style="color: navy">)</span><span style="color: navy">, </span> entry.request<b> as </b><span style="color: maroon">request</span><span style="color: navy">, </span> request.method = <span style="color: blue">'PUT'</span><span style="color: navy">, </span> request.url = <b>append</b><span style="color: navy">(</span><span style="color: blue">'Patient/'</span><span style="color: navy">, </span><span style="color: maroon">pid</span><span style="color: navy">)</span><span style="color: navy">, </span> <b>create</b><span style="color: navy">(</span><span style="color: blue">'http://smart.who.int/ddcc/StructureDefinition/DDCCPatient'</span><span style="color: navy">)</span><b> as </b><span style="color: maroon">patient</span><b> then</b><span style="color: navy"> {
+</span>      ddcc<b> then </b>DDCCToPatient<span style="color: navy">(</span><span style="color: maroon">ddcc</span><span style="color: navy">, </span><span style="color: maroon">patient</span><span style="color: navy">, </span><span style="color: maroon">pid</span><span style="color: navy">)</span> <i>&quot;setup patient&quot;</i><span style="color: navy">;</span>
+      ddcc<span style="color: navy"><b> -&gt; </b></span>entry.resource = <span style="color: maroon">patient</span> <i>&quot;set patient resource&quot;</i><span style="color: navy">;</span>
+    <span style="color: navy">}</span> <i>&quot;create patient resource&quot;</i><span style="color: navy">;</span>
+    ddcc<span style="color: navy"><b> -&gt; </b></span> bundle.entry<b> as </b><span style="color: maroon">entry</span><span style="color: navy">, </span> entry.fullUrl = <b>append</b><span style="color: navy">(</span><span style="color: blue">'urn:uuid:'</span><span style="color: navy">, </span><span style="color: maroon">compid</span><span style="color: navy">)</span><span style="color: navy">, </span> entry.request<b> as </b><span style="color: maroon">request</span><span style="color: navy">, </span> request.method = <span style="color: blue">'PUT'</span><span style="color: navy">, </span> request.url = <b>append</b><span style="color: navy">(</span><span style="color: blue">'Composition/'</span><span style="color: navy">, </span><span style="color: maroon">compid</span><span style="color: navy">)</span><span style="color: navy">, </span> <b>create</b><span style="color: navy">(</span><span style="color: blue">'http://smart.who.int/ddcc/StructureDefinition/DDCCVSComposition'</span><span style="color: navy">)</span><b> as </b><span style="color: maroon">comp</span><b> then</b><span style="color: navy"> {
+</span>      ddcc<b> then </b>DDCCToComposition<span style="color: navy">(</span><span style="color: maroon">ddcc</span><span style="color: navy">, </span><span style="color: maroon">comp</span><span style="color: navy">, </span><span style="color: maroon">compid</span><span style="color: navy">, </span><span style="color: maroon">pid</span><span style="color: navy">)</span> <i>&quot;setup composition&quot;</i><span style="color: navy">;</span>
+      ddcc<span style="color: navy"><b> -&gt; </b></span> comp.category<b> as </b><span style="color: maroon">category</span><span style="color: navy">, </span> category.coding<b> as </b><span style="color: maroon">coding</span><span style="color: navy">, </span> coding.system = <span style="color: blue">'http://smart.who.int/ddcc/CodeSystem/DDCCCompositionCategoryCodeSystem'</span><span style="color: navy">, </span> coding.code = <span style="color: blue">'ddcc-vs'</span> <i>&quot;set category&quot;</i><span style="color: navy">;</span>
+      ddcc<span style="color: navy"><b> -&gt; </b></span>comp.title = <span style="color: blue">'International Certificate of Vaccination or Prophylaxis'</span> <i>&quot;set title&quot;</i><span style="color: navy">;</span>
+      ddcc<span style="color: navy"><b> -&gt; </b></span>comp.section<b> as </b><span style="color: maroon">section</span><b> then</b><span style="color: navy"> {
+</span>        ddcc<span style="color: navy"><b> -&gt; </b></span> section.code<b> as </b><span style="color: maroon">code</span><span style="color: navy">, </span> code.coding<b> as </b><span style="color: maroon">coding</span><span style="color: navy">, </span> coding.system = <span style="color: blue">'http://loinc.org'</span><span style="color: navy">, </span> coding.code = <span style="color: blue">'11369-6'</span> <i>&quot;set code&quot;</i><span style="color: navy">;</span>
+        ddcc.certificate<b> as </b><span style="color: maroon">certificate</span><b> then</b><span style="color: navy"> {
+</span>          certificate.issuer<b> as </b><span style="color: maroon">issuer</span><span style="color: navy"><b> -&gt; </b></span>section.author = <span style="color: maroon">issuer</span> <i>&quot;set author&quot;</i><span style="color: navy">;</span>
+        <span style="color: navy">}</span> <i>&quot;set certificate&quot;</i><span style="color: navy">;</span>
+        <span style="color: #b36b00" title="This element was not defined prior to R5">// ddcc.certificate as certificate -&gt; section.author as author then {             certificate.issuer as issuer then {               issuer.identifier as pha -&gt; author.identifier as identifier, author.type = &quot;Organization&quot; then {                 pha.value as value -&gt; identifier.value = value &quot;set pha&quot;;               } &quot;set author identifier&quot;;             } &quot;set author ref&quot;;                        } &quot;set author&quot;;</span>
+        ddcc<span style="color: navy"><b> -&gt; </b></span> section.focus<b> as </b><span style="color: maroon">focus</span><span style="color: navy">, </span> focus.reference = <b>append</b><span style="color: navy">(</span><span style="color: blue">'Immunization/'</span><span style="color: navy">, </span><span style="color: maroon">iid</span><span style="color: navy">)</span> <i>&quot;set focus&quot;</i><span style="color: navy">;</span>
+        ddcc<span style="color: navy"><b> -&gt; </b></span> section.entry<b> as </b><span style="color: maroon">entry</span><span style="color: navy">, </span> entry.reference = <b>append</b><span style="color: navy">(</span><span style="color: blue">'Immunization/'</span><span style="color: navy">, </span><span style="color: maroon">iid</span><span style="color: navy">)</span> <i>&quot;add Immunization entry&quot;</i><span style="color: navy">;</span>
+        ddcc<span style="color: navy"><b> -&gt; </b></span> section.entry<b> as </b><span style="color: maroon">entry</span><span style="color: navy">, </span> entry.reference = <b>append</b><span style="color: navy">(</span><span style="color: blue">'ImmunizationRecommendation/'</span><span style="color: navy">, </span><span style="color: maroon">irid</span><span style="color: navy">)</span> <i>&quot;add ImmunizationRecommendation entry&quot;</i><span style="color: navy">;</span>
+        ddcc<span style="color: navy"><b> -&gt; </b></span> section.entry<b> as </b><span style="color: maroon">entry</span><span style="color: navy">, </span> entry.reference = <b>append</b><span style="color: navy">(</span><span style="color: blue">'DocumentReference/'</span><span style="color: navy">, </span><span style="color: maroon">qrwhoid</span><span style="color: navy">)</span> <i>&quot;add WHO QR entry&quot;</i><span style="color: navy">;</span>
+        ddcc<span style="color: navy"><b> -&gt; </b></span> section.entry<b> as </b><span style="color: maroon">entry</span><span style="color: navy">, </span> entry.reference = <b>append</b><span style="color: navy">(</span><span style="color: blue">'DocumentReference/'</span><span style="color: navy">, </span><span style="color: maroon">qrdccid</span><span style="color: navy">)</span> <i>&quot;add DCC QR entry&quot;</i><span style="color: navy">;</span>
+      <span style="color: navy">}</span> <i>&quot;set section&quot;</i><span style="color: navy">;</span>
+      ddcc<span style="color: navy"><b> -&gt; </b></span>entry.resource = <span style="color: maroon">comp</span> <i>&quot;set composition resource&quot;</i><span style="color: navy">;</span>
+    <span style="color: navy">}</span> <i>&quot;create composition resource&quot;</i><span style="color: navy">;</span>
+    ddcc<span style="color: navy"><b> -&gt; </b></span> bundle.entry<b> as </b><span style="color: maroon">entry</span><span style="color: navy">, </span> entry.fullUrl = <b>append</b><span style="color: navy">(</span><span style="color: blue">'urn:uuid:'</span><span style="color: navy">, </span><span style="color: maroon">qrwhoid</span><span style="color: navy">)</span><span style="color: navy">, </span> entry.request<b> as </b><span style="color: maroon">request</span><span style="color: navy">, </span> request.method = <span style="color: blue">'PUT'</span><span style="color: navy">, </span> request.url = <b>append</b><span style="color: navy">(</span><span style="color: blue">'DocumentReference/'</span><span style="color: navy">, </span><span style="color: maroon">qrwhoid</span><span style="color: navy">)</span><span style="color: navy">, </span> <b>create</b><span style="color: navy">(</span><span style="color: blue">'http://smart.who.int/ddcc/StructureDefinition/DDCCDocumentReferenceQR'</span><span style="color: navy">)</span><b> as </b><span style="color: maroon">qr</span><b> then</b><span style="color: navy"> {
+</span>      ddcc<b> then </b>DDCCToDocumentReference<span style="color: navy">(</span><span style="color: maroon">ddcc</span><span style="color: navy">, </span><span style="color: maroon">qr</span><span style="color: navy">, </span><span style="color: maroon">qrwhoid</span><span style="color: navy">, </span><span style="color: maroon">pid</span><span style="color: navy">)</span> <i>&quot;setup WHO DocRef&quot;</i><span style="color: navy">;</span>
+      ddcc<span style="color: navy"><b> -&gt; </b></span> qr.category<b> as </b><span style="color: maroon">category</span><span style="color: navy">, </span> category.coding<b> as </b><span style="color: maroon">coding</span><span style="color: navy">, </span> coding.system = <span style="color: blue">'http://smart.who.int/ddcc/CodeSystem/DDCCQRCategoryUsageCodeSystem'</span><span style="color: navy">, </span> coding.code = <span style="color: blue">'who'</span> <i>&quot;set category&quot;</i><span style="color: navy">;</span>
+      ddcc<span style="color: navy"><b> -&gt; </b></span>qr.description = <span style="color: blue">'WHO QR code for COVID 19 Vaccine Certificate'</span> <i>&quot;set description&quot;</i><span style="color: navy">;</span>
+      ddcc<span style="color: navy"><b> -&gt; </b></span>entry.resource = <span style="color: maroon">qr</span> <i>&quot;set WHO QR&quot;</i><span style="color: navy">;</span>
+    <span style="color: navy">}</span> <i>&quot;create WHO QR Doc Ref&quot;</i><span style="color: navy">;</span>
+    ddcc<span style="color: navy"><b> -&gt; </b></span> bundle.entry<b> as </b><span style="color: maroon">entry</span><span style="color: navy">, </span> entry.fullUrl = <b>append</b><span style="color: navy">(</span><span style="color: blue">'urn:uuid:'</span><span style="color: navy">, </span><span style="color: maroon">qrdccid</span><span style="color: navy">)</span><span style="color: navy">, </span> entry.request<b> as </b><span style="color: maroon">request</span><span style="color: navy">, </span> request.method = <span style="color: blue">'PUT'</span><span style="color: navy">, </span> request.url = <b>append</b><span style="color: navy">(</span><span style="color: blue">'DocumentReference/'</span><span style="color: navy">, </span><span style="color: maroon">qrdccid</span><span style="color: navy">)</span><span style="color: navy">, </span> <b>create</b><span style="color: navy">(</span><span style="color: blue">'http://smart.who.int/ddcc/StructureDefinition/DDCCDocumentReferenceQR'</span><span style="color: navy">)</span><b> as </b><span style="color: maroon">qr</span><b> then</b><span style="color: navy"> {
+</span>      ddcc<b> then </b>DDCCToDocumentReference<span style="color: navy">(</span><span style="color: maroon">ddcc</span><span style="color: navy">, </span><span style="color: maroon">qr</span><span style="color: navy">, </span><span style="color: maroon">qrdccid</span><span style="color: navy">, </span><span style="color: maroon">pid</span><span style="color: navy">)</span> <i>&quot;setup DCC DocRef&quot;</i><span style="color: navy">;</span>
+      ddcc<span style="color: navy"><b> -&gt; </b></span> qr.category<b> as </b><span style="color: maroon">category</span><span style="color: navy">, </span> category.coding<b> as </b><span style="color: maroon">coding</span><span style="color: navy">, </span> coding.system = <span style="color: blue">'http://smart.who.int/ddcc/CodeSystem/DDCCQRCategoryUsageCodeSystem'</span><span style="color: navy">, </span> coding.code = <span style="color: blue">'dcc'</span> <i>&quot;set category&quot;</i><span style="color: navy">;</span>
+      ddcc<span style="color: navy"><b> -&gt; </b></span>qr.description = <span style="color: blue">'DCC QR code for COVID 19 Vaccine Certificate'</span> <i>&quot;set description&quot;</i><span style="color: navy">;</span>
+      ddcc<span style="color: navy"><b> -&gt; </b></span>entry.resource = <span style="color: maroon">qr</span> <i>&quot;set DCC QR&quot;</i><span style="color: navy">;</span>
+    <span style="color: navy">}</span> <i>&quot;create DCC QR Doc Ref&quot;</i><span style="color: navy">;</span>
+    ddcc.vaccination first<b> as </b><span style="color: maroon">vaccination</span><span style="color: navy"><b> -&gt; </b></span> bundle.entry<b> as </b><span style="color: maroon">entry</span><span style="color: navy">, </span> entry.fullUrl = <b>append</b><span style="color: navy">(</span><span style="color: blue">'urn:uuid:'</span><span style="color: navy">, </span><span style="color: maroon">iid</span><span style="color: navy">)</span><span style="color: navy">, </span> entry.request<b> as </b><span style="color: maroon">request</span><span style="color: navy">, </span> request.method = <span style="color: blue">'PUT'</span><span style="color: navy">, </span> request.url = <b>append</b><span style="color: navy">(</span><span style="color: blue">'Immunization/'</span><span style="color: navy">, </span><span style="color: maroon">iid</span><span style="color: navy">)</span><span style="color: navy">, </span> <b>create</b><span style="color: navy">(</span><span style="color: blue">'http://smart.who.int/ddcc/StructureDefinition/DDCCImmunization'</span><span style="color: navy">)</span><b> as </b><span style="color: maroon">immunization</span><b> then</b><span style="color: navy"> {
+</span>      ddcc.certificate<b> as </b><span style="color: maroon">certificate</span><b> then </b>DDCCToImmunization<span style="color: navy">(</span><span style="color: maroon">vaccination</span><span style="color: navy">, </span><span style="color: maroon">immunization</span><span style="color: navy">, </span><span style="color: maroon">certificate</span><span style="color: navy">, </span><span style="color: maroon">iid</span><span style="color: navy">, </span><span style="color: maroon">pid</span><span style="color: navy">)</span> <i>&quot;setup immunization&quot;</i><span style="color: navy">;</span>
+      ddcc<span style="color: navy"><b> -&gt; </b></span>entry.resource = <span style="color: maroon">immunization</span> <i>&quot;set immunization resource&quot;</i><span style="color: navy">;</span>
+    <span style="color: navy">}</span> <i>&quot;create immunization resource&quot;</i><span style="color: navy">;</span>
+    ddcc.vaccination first<b> as </b><span style="color: maroon">vaccination</span><span style="color: navy"><b> -&gt; </b></span> bundle.entry<b> as </b><span style="color: maroon">entry</span><span style="color: navy">, </span> entry.fullUrl = <b>append</b><span style="color: navy">(</span><span style="color: blue">'urn:uuid:'</span><span style="color: navy">, </span><span style="color: maroon">irid</span><span style="color: navy">)</span><span style="color: navy">, </span> entry.request<b> as </b><span style="color: maroon">request</span><span style="color: navy">, </span> request.method = <span style="color: blue">'PUT'</span><span style="color: navy">, </span> request.url = <b>append</b><span style="color: navy">(</span><span style="color: blue">'ImmunizationRecommendation/'</span><span style="color: navy">, </span><span style="color: maroon">irid</span><span style="color: navy">)</span><span style="color: navy">, </span> <b>create</b><span style="color: navy">(</span><span style="color: blue">'http://smart.who.int/ddcc/StructureDefinition/DDCCImmunizationRecommendation'</span><span style="color: navy">)</span><b> as </b><span style="color: maroon">immrec</span><b> then</b><span style="color: navy"> {
+</span>      vaccination<b> then </b>DDCCToImmRec<span style="color: navy">(</span><span style="color: maroon">vaccination</span><span style="color: navy">, </span><span style="color: maroon">immrec</span><span style="color: navy">, </span><span style="color: maroon">irid</span><span style="color: navy">, </span><span style="color: maroon">iid</span><span style="color: navy">, </span><span style="color: maroon">pid</span><span style="color: navy">)</span> <i>&quot;setup immunization recommendation&quot;</i><span style="color: navy">;</span>
+      ddcc<span style="color: navy"><b> -&gt; </b></span>entry.resource = <span style="color: maroon">immrec</span> <i>&quot;set immunization recommendation resource&quot;</i><span style="color: navy">;</span>
+    <span style="color: navy">}</span> <i>&quot;create immunization recommendation resource&quot;</i><span style="color: navy">;</span>
+  <span style="color: navy">}</span> <i>&quot;set uuids&quot;</i><span style="color: navy">;</span>
+<span style="color: navy">}
+
+</span><b>group </b>DDCCToImmunization<span style="color: navy">(</span><b>source</b> <span style="color: maroon">src</span>, <b>target</b> <span style="color: maroon">immunization</span><span style="color: navy"> : </span>DDCCImmunization, <b>source</b> <span style="color: maroon">certificate</span>, <b>source</b> <span style="color: maroon">iid</span>, <b>source</b> <span style="color: maroon">pid</span><span style="color: navy">)</span><span style="color: navy"> {
+</span>  iid<span style="color: navy"><b> -&gt; </b></span>immunization.id = <span style="color: maroon">iid</span> <i>&quot;set id&quot;</i><span style="color: navy">;</span>
+  src.brand<b> as </b><span style="color: maroon">brand</span><span style="color: navy"><b> -&gt; </b></span>immunization.extension<b> as </b><span style="color: maroon">ext</span><b> then</b><span style="color: navy"> {
+</span>    brand<span style="color: navy"><b> -&gt; </b></span> ext.url = <span style="color: blue">'http://smart.who.int/ddcc/StructureDefinition/DDCCVaccineBrand'</span><span style="color: navy">, </span> ext.value = <span style="color: maroon">brand</span> <i>&quot;set brand extension values&quot;</i><span style="color: navy">;</span>
+  <span style="color: navy">}</span> <i>&quot;set brand extension&quot;</i><span style="color: navy">;</span>
+  src.maholder<b> as </b><span style="color: maroon">maholder</span><span style="color: navy"><b> -&gt; </b></span>immunization.extension<b> as </b><span style="color: maroon">ext</span><b> then</b><span style="color: navy"> {
+</span>    maholder<span style="color: navy"><b> -&gt; </b></span> ext.url = <span style="color: blue">'http://smart.who.int/ddcc/StructureDefinition/DDCCVaccineMarketAuthorization'</span><span style="color: navy">, </span> ext.value = <span style="color: maroon">maholder</span> <i>&quot;set MA Holder extension values&quot;</i><span style="color: navy">;</span>
+  <span style="color: navy">}</span> <i>&quot;set maholder extension&quot;</i><span style="color: navy">;</span>
+  src.country<b> as </b><span style="color: maroon">country</span><span style="color: navy"><b> -&gt; </b></span>immunization.extension<b> as </b><span style="color: maroon">ext</span><b> then</b><span style="color: navy"> {
+</span>    country.code<b> as </b><span style="color: maroon">code</span><span style="color: navy"><b> -&gt; </b></span> ext.url = <span style="color: blue">'http://smart.who.int/ddcc/StructureDefinition/DDCCCountryOfVaccination'</span><span style="color: navy">, </span> ext.value = <span style="color: maroon">code</span> <i>&quot;set country extension values&quot;</i><span style="color: navy">;</span>
+  <span style="color: navy">}</span> <i>&quot;set country extension&quot;</i><span style="color: navy">;</span>
+  src.validFrom<b> as </b><span style="color: maroon">validFrom</span><span style="color: navy"><b> -&gt; </b></span>immunization.extension<b> as </b><span style="color: maroon">ext</span><b> then</b><span style="color: navy"> {
+</span>    validFrom<span style="color: navy"><b> -&gt; </b></span> ext.url = <span style="color: blue">'http://smart.who.int/ddcc/StructureDefinition/DDCCVaccineValidFrom'</span><span style="color: navy">, </span> ext.value = <span style="color: maroon">validFrom</span> <i>&quot;set valid from extension values&quot;</i><span style="color: navy">;</span>
+  <span style="color: navy">}</span> <i>&quot;set vaccine valid extension&quot;</i><span style="color: navy">;</span>
+  src<span style="color: navy"><b> -&gt; </b></span>immunization.status = <span style="color: blue">'completed'</span> <i>&quot;set status&quot;</i><span style="color: navy">;</span>
+  src.vaccine<b> as </b><span style="color: maroon">vaccine</span><span style="color: navy"><b> -&gt; </b></span> immunization.vaccineCode<b> as </b><span style="color: maroon">vacCode</span><span style="color: navy">, </span> vacCode.coding = <span style="color: maroon">vaccine</span> <i>&quot;set vaccine&quot;</i><span style="color: navy">;</span>
+  src<span style="color: navy"><b> -&gt; </b></span> immunization.patient<b> as </b><span style="color: maroon">patient</span><span style="color: navy">, </span> patient.reference = <b>append</b><span style="color: navy">(</span><span style="color: blue">'Patient/'</span><span style="color: navy">, </span><span style="color: maroon">pid</span><span style="color: navy">)</span> <i>&quot;set patient&quot;</i><span style="color: navy">;</span>
+  src.manufacturer<b> as </b><span style="color: maroon">manufacturer</span><span style="color: navy"><b> -&gt; </b></span> immunization.manufacturer<b> as </b><span style="color: maroon">tman</span><span style="color: navy">, </span> tman.identifier<b> as </b><span style="color: maroon">ident</span><b> then</b><span style="color: navy"> {
+</span>    manufacturer.system<b> as </b><span style="color: maroon">system</span><span style="color: navy"><b> -&gt; </b></span>ident.system = <span style="color: maroon">system</span> <i>&quot;set system&quot;</i><span style="color: navy">;</span>
+    manufacturer.code<b> as </b><span style="color: maroon">code</span><span style="color: navy"><b> -&gt; </b></span>ident.value = <span style="color: maroon">code</span> <i>&quot;set value&quot;</i><span style="color: navy">;</span>
+  <span style="color: navy">}</span> <i>&quot;set manufacturer identifier&quot;</i><span style="color: navy">;</span>
+  src.lot<b> as </b><span style="color: maroon">lot</span><span style="color: navy"><b> -&gt; </b></span>immunization.lotNumber = <span style="color: maroon">lot</span> <i>&quot;set lot number&quot;</i><span style="color: navy">;</span>
+  src.date<b> as </b><span style="color: maroon">date</span><span style="color: navy"><b> -&gt; </b></span>immunization.occurrence = <span style="color: maroon">date</span> <i>&quot;set occurrence date&quot;</i><span style="color: navy">;</span>
+  src.centre<b> as </b><span style="color: maroon">centre</span><span style="color: navy"><b> -&gt; </b></span>immunization.location<b> as </b><span style="color: maroon">location</span><b> then</b><span style="color: navy"> {
+</span>    centre<span style="color: navy"><b> -&gt; </b></span>location.display = <span style="color: maroon">centre</span> <i>&quot;set location display&quot;</i><span style="color: navy">;</span>
+  <span style="color: navy">}</span> <i>&quot;set location&quot;</i><span style="color: navy">;</span>
+  src.practitioner<b> as </b><span style="color: maroon">practitioner</span><span style="color: navy"><b> -&gt; </b></span>immunization.performer<b> as </b><span style="color: maroon">performer</span><b> then</b><span style="color: navy"> {
+</span>    practitioner.value<b> as </b><span style="color: maroon">hw</span><span style="color: navy"><b> -&gt; </b></span>performer.actor<b> as </b><span style="color: maroon">actor</span><b> then</b><span style="color: navy"> {
+</span>      hw<span style="color: navy"><b> -&gt; </b></span> actor.type = <span style="color: blue">'Practitioner'</span><span style="color: navy">, </span> actor.identifier<b> as </b><span style="color: maroon">identifier</span><b> then</b><span style="color: navy"> {
+</span>        hw<span style="color: navy"><b> -&gt; </b></span>identifier.value = <span style="color: maroon">hw</span> <i>&quot;set hw identifier&quot;</i><span style="color: navy">;</span>
+      <span style="color: navy">}</span> <i>&quot;set actor&quot;</i><span style="color: navy">;</span>
+    <span style="color: navy">}</span> <i>&quot;set performer&quot;</i><span style="color: navy">;</span>
+  <span style="color: navy">}</span> <i>&quot;set practitioner&quot;</i><span style="color: navy">;</span>
+  src<span style="color: navy"><b> -&gt; </b></span>immunization.protocolApplied<b> as </b><span style="color: maroon">protocol</span><b> then</b><span style="color: navy"> {
+</span>    src<span style="color: navy"><b> -&gt; </b></span>protocol.authority<b> as </b><span style="color: maroon">authority</span><b> then</b><span style="color: navy"> {
+</span>      certificate.issuer<b> as </b><span style="color: maroon">issuer</span><span style="color: navy"><b> -&gt; </b></span>authority.type = <span style="color: blue">'Organization'</span><b> then</b><span style="color: navy"> {
+</span>        issuer.identifier<b> as </b><span style="color: maroon">pha</span><span style="color: navy"><b> -&gt; </b></span>authority.identifier<b> as </b><span style="color: maroon">identifier</span><b> then</b><span style="color: navy"> {
+</span>          pha.value<b> as </b><span style="color: maroon">value</span><span style="color: navy"><b> -&gt; </b></span>identifier.value = <span style="color: maroon">value</span> <i>&quot;set pha&quot;</i><span style="color: navy">;</span>
+        <span style="color: navy">}</span> <i>&quot;set issuer identifier&quot;</i><span style="color: navy">;</span>
+      <span style="color: navy">}</span> <i>&quot;set issuer&quot;</i><span style="color: navy">;</span>
+    <span style="color: navy">}</span> <i>&quot;set authority&quot;</i><span style="color: navy">;</span>
+    src.disease<b> as </b><span style="color: maroon">disease</span><span style="color: navy"><b> -&gt; </b></span>protocol.targetDisease<b> as </b><span style="color: maroon">tdisease</span><b> then</b><span style="color: navy"> {
+</span>      disease<span style="color: navy"><b> -&gt; </b></span>tdisease.coding = <span style="color: maroon">disease</span> <i>&quot;set target disease code&quot;</i><span style="color: navy">;</span>
+    <span style="color: navy">}</span> <i>&quot;set target disease&quot;</i><span style="color: navy">;</span>
+    src.dose<b> as </b><span style="color: maroon">dose</span><span style="color: navy"><b> -&gt; </b></span>protocol.doseNumber = <span style="color: maroon">dose</span> <i>&quot;set dose number&quot;</i><span style="color: navy">;</span>
+    src.totalDoses<b> as </b><span style="color: maroon">totalDoses</span><span style="color: navy"><b> -&gt; </b></span>protocol.seriesDoses = <span style="color: maroon">totalDoses</span> <i>&quot;set total doses&quot;</i><span style="color: navy">;</span>
+  <span style="color: navy">}</span> <i>&quot;set protocolApplied&quot;</i><span style="color: navy">;</span>
+<span style="color: navy">}
+
+</span><b>group </b>DDCCToImmRec<span style="color: navy">(</span><b>source</b> <span style="color: maroon">src</span>, <b>target</b> <span style="color: maroon">immrec</span><span style="color: navy"> : </span>DDCCImmunizationRecommendation, <b>source</b> <span style="color: maroon">irid</span>, <b>source</b> <span style="color: maroon">iid</span>, <b>source</b> <span style="color: maroon">pid</span><span style="color: navy">)</span><span style="color: navy"> {
+</span>  src.date<b> as </b><span style="color: maroon">date</span><span style="color: navy"><b> -&gt; </b></span>immrec.date = <span style="color: maroon">date</span> <i>&quot;set date&quot;</i><span style="color: navy">;</span>
+  src<span style="color: navy"><b> -&gt; </b></span> immrec.patient<b> as </b><span style="color: maroon">patient</span><span style="color: navy">, </span> patient.reference = <b>append</b><span style="color: navy">(</span><span style="color: blue">'Patient/'</span><span style="color: navy">, </span><span style="color: maroon">pid</span><span style="color: navy">)</span> <i>&quot;set patient&quot;</i><span style="color: navy">;</span>
+  src<span style="color: navy"><b> -&gt; </b></span>immrec.recommendation<b> as </b><span style="color: maroon">rec</span><b> then</b><span style="color: navy"> {
+</span>    src.vaccine<b> as </b><span style="color: maroon">vaccine</span><span style="color: navy"><b> -&gt; </b></span>rec.vaccineCode<b> as </b><span style="color: maroon">vaccineCode</span><b> then</b><span style="color: navy"> {
+</span>      vaccine<span style="color: navy"><b> -&gt; </b></span>vaccineCode.coding = <span style="color: maroon">vaccine</span> <i>&quot;set vaccine code coding&quot;</i><span style="color: navy">;</span>
+    <span style="color: navy">}</span> <i>&quot;set vaccine code&quot;</i><span style="color: navy">;</span>
+    src.disease<b> as </b><span style="color: maroon">disease</span><span style="color: navy"><b> -&gt; </b></span>rec.targetDisease<b> as </b><span style="color: maroon">targetDisease</span><b> then</b><span style="color: navy"> {
+</span>      disease<span style="color: navy"><b> -&gt; </b></span>targetDisease.coding = <span style="color: maroon">disease</span> <i>&quot;set target disease coding&quot;</i><span style="color: navy">;</span>
+    <span style="color: navy">}</span> <i>&quot;set target disease&quot;</i><span style="color: navy">;</span>
+    src<span style="color: navy"><b> -&gt; </b></span>rec.forecastStatus<b> as </b><span style="color: maroon">forecast</span><b> then</b><span style="color: navy"> {
+</span>      src<span style="color: navy"><b> -&gt; </b></span>forecast.coding<b> as </b><span style="color: maroon">coding</span><b> then</b><span style="color: navy"> {
+</span>        src<span style="color: navy"><b> -&gt; </b></span>coding.system = <span style="color: blue">'http://terminology.hl7.org/2.1.0/CodeSystem-immunization-recommendation-status.html'</span> <i>&quot;set forecast system&quot;</i><span style="color: navy">;</span>
+        src<span style="color: navy"><b> -&gt; </b></span>coding.code = <span style="color: blue">'due'</span> <i>&quot;set forecast code&quot;</i><span style="color: navy">;</span>
+      <span style="color: navy">}</span> <i>&quot;set forecast status coding&quot;</i><span style="color: navy">;</span>
+    <span style="color: navy">}</span> <i>&quot;set forecast status&quot;</i><span style="color: navy">;</span>
+    src<span style="color: navy"><b> -&gt; </b></span>rec.dateCriterion<b> as </b><span style="color: maroon">due_date</span><b> then</b><span style="color: navy"> {
+</span>      src<span style="color: navy"><b> -&gt; </b></span>due_date.code<b> as </b><span style="color: maroon">code</span><b> then</b><span style="color: navy"> {
+</span>        src<span style="color: navy"><b> -&gt; </b></span>code.coding<b> as </b><span style="color: maroon">coding</span><b> then</b><span style="color: navy"> {
+</span>          src<span style="color: navy"><b> -&gt; </b></span>coding.system = <span style="color: blue">'http://loinc.org'</span> <i>&quot;set due date code system&quot;</i><span style="color: navy">;</span>
+          src<span style="color: navy"><b> -&gt; </b></span>coding.code = <span style="color: blue">'30980-7'</span> <i>&quot;set due date code code&quot;</i><span style="color: navy">;</span>
+        <span style="color: navy">}</span> <i>&quot;set due date code coding&quot;</i><span style="color: navy">;</span>
+      <span style="color: navy">}</span> <i>&quot;set due date code&quot;</i><span style="color: navy">;</span>
+      src.nextDose<b> as </b><span style="color: maroon">nextDose</span><span style="color: navy"><b> -&gt; </b></span>due_date.value = <span style="color: maroon">nextDose</span> <i>&quot;set due date value&quot;</i><span style="color: navy">;</span>
+    <span style="color: navy">}</span> <i>&quot;set date criterion&quot;</i><span style="color: navy">;</span>
+    src.dose<b> as </b><span style="color: maroon">dose</span><span style="color: navy"><b> -&gt; </b></span>rec.doseNumber = <span style="color: navy">(</span>dose.toInteger() + 1<span style="color: navy">)</span> <i>&quot;set dose number&quot;</i><span style="color: navy">;</span>
+    src.totalDoses<b> as </b><span style="color: maroon">totalDoses</span><span style="color: navy"><b> -&gt; </b></span>rec.seriesDoses = <span style="color: maroon">totalDoses</span> <i>&quot;set total doses&quot;</i><span style="color: navy">;</span>
+    src<span style="color: navy"><b> -&gt; </b></span> rec.supportingImmunization<b> as </b><span style="color: maroon">imm</span><span style="color: navy">, </span> imm.reference = <b>append</b><span style="color: navy">(</span><span style="color: blue">'Immunization/'</span><span style="color: navy">, </span><span style="color: maroon">iid</span><span style="color: navy">)</span> <i>&quot;set supporting immunization&quot;</i><span style="color: navy">;</span>
+  <span style="color: navy">}</span> <i>&quot;set recommendation&quot;</i><span style="color: navy">;</span>
+<span style="color: navy">}
+
+</span></pre></div>
+  </text>
+  <url value="http://smart.who.int/ddcc/StructureMap/CoreDataSetVSLibrary"/>
+  <version value="1.0.0"/>
+  <name value="CoreDataSetVSLibrary"/>
+  <status value="draft"/>
+  <date value="2024-10-15T13:40:08+00:00"/>
+  <publisher value="WHO"/>
+  <contact>
+    <name value="WHO"/>
+    <telecom>
+      <system value="url"/>
+      <value value="http://who.int"/>
+    </telecom>
+  </contact>
+  <jurisdiction>
+    <coding>
+      <system value="http://unstats.un.org/unsd/methods/m49/m49.htm"/>
+      <code value="001"/>
+    </coding>
+  </jurisdiction>
+  <structure>
+    <url value="http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSetVS"/>
+    <mode value="source"/>
+    <alias value="DDCCVS"/>
+  </structure>
+  <structure>
+    <url value="http://hl7.org/fhir/StructureDefinition/Bundle"/>
+    <mode value="target"/>
+    <alias value="AddBundle"/>
+  </structure>
+  <structure>
+    <url value="http://hl7.org/fhir/StructureDefinition/Patient"/>
+    <mode value="target"/>
+    <alias value="Patient"/>
+  </structure>
+  <structure>
+    <url value="http://smart.who.int/ddcc/StructureDefinition/DDCCPatient"/>
+    <mode value="target"/>
+    <alias value="DDCCPatient"/>
+  </structure>
+  <structure>
+    <url value="http://smart.who.int/ddcc/StructureDefinition/DDCCDocumentReferenceQR"/>
+    <mode value="target"/>
+    <alias value="DDCCDocRefQR"/>
+  </structure>
+  <structure>
+    <url value="http://smart.who.int/ddcc/StructureDefinition/DDCCVSComposition"/>
+    <mode value="target"/>
+    <alias value="DDCCVSComposition"/>
+  </structure>
+  <structure>
+    <url value="http://smart.who.int/ddcc/StructureDefinition/DDCCImmunization"/>
+    <mode value="target"/>
+    <alias value="DDCCImmunization"/>
+  </structure>
+  <structure>
+    <url value="http://smart.who.int/ddcc/StructureDefinition/DDCCImmunizationRecommendation"/>
+    <mode value="target"/>
+    <alias value="DDCCImmRec"/>
+  </structure>
+  <import value="http://smart.who.int/ddcc/StructureMap/CoreDataSetLibrary"/>
+  <group>
+    <name value="VSToAddBundle"/>
+    <typeMode value="none"/>
+    <input>
+      <name value="ddcc"/>
+      <type value="DDCCVS"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="bundle"/>
+      <type value="AddBundle"/>
+      <mode value="target"/>
+    </input>
+    <rule>
+      <name value="set bundle type"/>
+      <source>
+        <context value="ddcc"/>
+      </source>
+      <target>
+        <context value="bundle"/>
+        <contextType value="variable"/>
+        <element value="type"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueString value="transaction"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="set uuids"/>
+      <source>
+        <context value="ddcc"/>
+      </source>
+      <target>
+        <contextType value="variable"/>
+        <variable value="pid"/>
+        <transform value="uuid"/>
+      </target>
+      <target>
+        <contextType value="variable"/>
+        <variable value="compid"/>
+        <transform value="uuid"/>
+      </target>
+      <target>
+        <contextType value="variable"/>
+        <variable value="iid"/>
+        <transform value="uuid"/>
+      </target>
+      <target>
+        <contextType value="variable"/>
+        <variable value="irid"/>
+        <transform value="uuid"/>
+      </target>
+      <target>
+        <contextType value="variable"/>
+        <variable value="qrwhoid"/>
+        <transform value="uuid"/>
+      </target>
+      <target>
+        <contextType value="variable"/>
+        <variable value="qrdccid"/>
+        <transform value="uuid"/>
+      </target>
+      <rule>
+        <name value="create patient resource"/>
+        <source>
+          <context value="ddcc"/>
+        </source>
+        <target>
+          <context value="bundle"/>
+          <contextType value="variable"/>
+          <element value="entry"/>
+          <variable value="entry"/>
+        </target>
+        <target>
+          <context value="entry"/>
+          <contextType value="variable"/>
+          <element value="fullUrl"/>
+          <transform value="append"/>
+          <parameter>
+            <valueString value="urn:uuid:"/>
+          </parameter>
+          <parameter>
+            <valueId value="pid"/>
+          </parameter>
+        </target>
+        <target>
+          <context value="entry"/>
+          <contextType value="variable"/>
+          <element value="request"/>
+          <variable value="request"/>
+        </target>
+        <target>
+          <context value="request"/>
+          <contextType value="variable"/>
+          <element value="method"/>
+          <transform value="copy"/>
+          <parameter>
+            <valueString value="PUT"/>
+          </parameter>
+        </target>
+        <target>
+          <context value="request"/>
+          <contextType value="variable"/>
+          <element value="url"/>
+          <transform value="append"/>
+          <parameter>
+            <valueString value="Patient/"/>
+          </parameter>
+          <parameter>
+            <valueId value="pid"/>
+          </parameter>
+        </target>
+        <target>
+          <contextType value="variable"/>
+          <variable value="patient"/>
+          <transform value="create"/>
+          <parameter>
+            <valueString value="http://smart.who.int/ddcc/StructureDefinition/DDCCPatient"/>
+          </parameter>
+        </target>
+        <rule>
+          <name value="setup patient"/>
+          <source>
+            <context value="ddcc"/>
+          </source>
+          <dependent>
+            <name value="DDCCToPatient"/>
+            <variable value="ddcc"/>
+            <variable value="patient"/>
+            <variable value="pid"/>
+          </dependent>
+        </rule>
+        <rule>
+          <name value="set patient resource"/>
+          <source>
+            <context value="ddcc"/>
+          </source>
+          <target>
+            <context value="entry"/>
+            <contextType value="variable"/>
+            <element value="resource"/>
+            <transform value="copy"/>
+            <parameter>
+              <valueId value="patient"/>
+            </parameter>
+          </target>
+        </rule>
+      </rule>
+      <rule>
+        <name value="create composition resource"/>
+        <source>
+          <context value="ddcc"/>
+        </source>
+        <target>
+          <context value="bundle"/>
+          <contextType value="variable"/>
+          <element value="entry"/>
+          <variable value="entry"/>
+        </target>
+        <target>
+          <context value="entry"/>
+          <contextType value="variable"/>
+          <element value="fullUrl"/>
+          <transform value="append"/>
+          <parameter>
+            <valueString value="urn:uuid:"/>
+          </parameter>
+          <parameter>
+            <valueId value="compid"/>
+          </parameter>
+        </target>
+        <target>
+          <context value="entry"/>
+          <contextType value="variable"/>
+          <element value="request"/>
+          <variable value="request"/>
+        </target>
+        <target>
+          <context value="request"/>
+          <contextType value="variable"/>
+          <element value="method"/>
+          <transform value="copy"/>
+          <parameter>
+            <valueString value="PUT"/>
+          </parameter>
+        </target>
+        <target>
+          <context value="request"/>
+          <contextType value="variable"/>
+          <element value="url"/>
+          <transform value="append"/>
+          <parameter>
+            <valueString value="Composition/"/>
+          </parameter>
+          <parameter>
+            <valueId value="compid"/>
+          </parameter>
+        </target>
+        <target>
+          <contextType value="variable"/>
+          <variable value="comp"/>
+          <transform value="create"/>
+          <parameter>
+            <valueString value="http://smart.who.int/ddcc/StructureDefinition/DDCCVSComposition"/>
+          </parameter>
+        </target>
+        <rule>
+          <name value="setup composition"/>
+          <source>
+            <context value="ddcc"/>
+          </source>
+          <dependent>
+            <name value="DDCCToComposition"/>
+            <variable value="ddcc"/>
+            <variable value="comp"/>
+            <variable value="compid"/>
+            <variable value="pid"/>
+          </dependent>
+        </rule>
+        <rule>
+          <name value="set category"/>
+          <source>
+            <context value="ddcc"/>
+          </source>
+          <target>
+            <context value="comp"/>
+            <contextType value="variable"/>
+            <element value="category"/>
+            <variable value="category"/>
+          </target>
+          <target>
+            <context value="category"/>
+            <contextType value="variable"/>
+            <element value="coding"/>
+            <variable value="coding"/>
+          </target>
+          <target>
+            <context value="coding"/>
+            <contextType value="variable"/>
+            <element value="system"/>
+            <transform value="copy"/>
+            <parameter>
+              <valueString value="http://smart.who.int/ddcc/CodeSystem/DDCCCompositionCategoryCodeSystem"/>
+            </parameter>
+          </target>
+          <target>
+            <context value="coding"/>
+            <contextType value="variable"/>
+            <element value="code"/>
+            <transform value="copy"/>
+            <parameter>
+              <valueString value="ddcc-vs"/>
+            </parameter>
+          </target>
+        </rule>
+        <rule>
+          <name value="set title"/>
+          <source>
+            <context value="ddcc"/>
+          </source>
+          <target>
+            <context value="comp"/>
+            <contextType value="variable"/>
+            <element value="title"/>
+            <transform value="copy"/>
+            <parameter>
+              <valueString value="International Certificate of Vaccination or Prophylaxis"/>
+            </parameter>
+          </target>
+        </rule>
+        <rule>
+          <name value="set section"/>
+          <source>
+            <context value="ddcc"/>
+          </source>
+          <target>
+            <context value="comp"/>
+            <contextType value="variable"/>
+            <element value="section"/>
+            <variable value="section"/>
+          </target>
+          <rule>
+            <name value="set code"/>
+            <source>
+              <context value="ddcc"/>
+            </source>
+            <target>
+              <context value="section"/>
+              <contextType value="variable"/>
+              <element value="code"/>
+              <variable value="code"/>
+            </target>
+            <target>
+              <context value="code"/>
+              <contextType value="variable"/>
+              <element value="coding"/>
+              <variable value="coding"/>
+            </target>
+            <target>
+              <context value="coding"/>
+              <contextType value="variable"/>
+              <element value="system"/>
+              <transform value="copy"/>
+              <parameter>
+                <valueString value="http://loinc.org"/>
+              </parameter>
+            </target>
+            <target>
+              <context value="coding"/>
+              <contextType value="variable"/>
+              <element value="code"/>
+              <transform value="copy"/>
+              <parameter>
+                <valueString value="11369-6"/>
+              </parameter>
+            </target>
+          </rule>
+          <rule>
+            <name value="set certificate"/>
+            <source>
+              <context value="ddcc"/>
+              <element value="certificate"/>
+              <variable value="certificate"/>
+            </source>
+            <rule>
+              <name value="set author"/>
+              <source>
+                <context value="certificate"/>
+                <element value="issuer"/>
+                <variable value="issuer"/>
+              </source>
+              <target>
+                <context value="section"/>
+                <contextType value="variable"/>
+                <element value="author"/>
+                <transform value="copy"/>
+                <parameter>
+                  <valueId value="issuer"/>
+                </parameter>
+              </target>
+            </rule>
+          </rule>
+          <rule>
+            <name value="set focus"/>
+            <source>
+              <context value="ddcc"/>
+            </source>
+            <target>
+              <context value="section"/>
+              <contextType value="variable"/>
+              <element value="focus"/>
+              <variable value="focus"/>
+            </target>
+            <target>
+              <context value="focus"/>
+              <contextType value="variable"/>
+              <element value="reference"/>
+              <transform value="append"/>
+              <parameter>
+                <valueString value="Immunization/"/>
+              </parameter>
+              <parameter>
+                <valueId value="iid"/>
+              </parameter>
+            </target>
+          </rule>
+          <rule>
+            <name value="add Immunization entry"/>
+            <source>
+              <context value="ddcc"/>
+            </source>
+            <target>
+              <context value="section"/>
+              <contextType value="variable"/>
+              <element value="entry"/>
+              <variable value="entry"/>
+            </target>
+            <target>
+              <context value="entry"/>
+              <contextType value="variable"/>
+              <element value="reference"/>
+              <transform value="append"/>
+              <parameter>
+                <valueString value="Immunization/"/>
+              </parameter>
+              <parameter>
+                <valueId value="iid"/>
+              </parameter>
+            </target>
+          </rule>
+          <rule>
+            <name value="add ImmunizationRecommendation entry"/>
+            <source>
+              <context value="ddcc"/>
+            </source>
+            <target>
+              <context value="section"/>
+              <contextType value="variable"/>
+              <element value="entry"/>
+              <variable value="entry"/>
+            </target>
+            <target>
+              <context value="entry"/>
+              <contextType value="variable"/>
+              <element value="reference"/>
+              <transform value="append"/>
+              <parameter>
+                <valueString value="ImmunizationRecommendation/"/>
+              </parameter>
+              <parameter>
+                <valueId value="irid"/>
+              </parameter>
+            </target>
+          </rule>
+          <rule>
+            <name value="add WHO QR entry"/>
+            <source>
+              <context value="ddcc"/>
+            </source>
+            <target>
+              <context value="section"/>
+              <contextType value="variable"/>
+              <element value="entry"/>
+              <variable value="entry"/>
+            </target>
+            <target>
+              <context value="entry"/>
+              <contextType value="variable"/>
+              <element value="reference"/>
+              <transform value="append"/>
+              <parameter>
+                <valueString value="DocumentReference/"/>
+              </parameter>
+              <parameter>
+                <valueId value="qrwhoid"/>
+              </parameter>
+            </target>
+          </rule>
+          <rule>
+            <name value="add DCC QR entry"/>
+            <source>
+              <context value="ddcc"/>
+            </source>
+            <target>
+              <context value="section"/>
+              <contextType value="variable"/>
+              <element value="entry"/>
+              <variable value="entry"/>
+            </target>
+            <target>
+              <context value="entry"/>
+              <contextType value="variable"/>
+              <element value="reference"/>
+              <transform value="append"/>
+              <parameter>
+                <valueString value="DocumentReference/"/>
+              </parameter>
+              <parameter>
+                <valueId value="qrdccid"/>
+              </parameter>
+            </target>
+          </rule>
+        </rule>
+        <rule>
+          <name value="set composition resource"/>
+          <source>
+            <context value="ddcc"/>
+          </source>
+          <target>
+            <context value="entry"/>
+            <contextType value="variable"/>
+            <element value="resource"/>
+            <transform value="copy"/>
+            <parameter>
+              <valueId value="comp"/>
+            </parameter>
+          </target>
+        </rule>
+      </rule>
+      <rule>
+        <name value="create WHO QR Doc Ref"/>
+        <source>
+          <context value="ddcc"/>
+        </source>
+        <target>
+          <context value="bundle"/>
+          <contextType value="variable"/>
+          <element value="entry"/>
+          <variable value="entry"/>
+        </target>
+        <target>
+          <context value="entry"/>
+          <contextType value="variable"/>
+          <element value="fullUrl"/>
+          <transform value="append"/>
+          <parameter>
+            <valueString value="urn:uuid:"/>
+          </parameter>
+          <parameter>
+            <valueId value="qrwhoid"/>
+          </parameter>
+        </target>
+        <target>
+          <context value="entry"/>
+          <contextType value="variable"/>
+          <element value="request"/>
+          <variable value="request"/>
+        </target>
+        <target>
+          <context value="request"/>
+          <contextType value="variable"/>
+          <element value="method"/>
+          <transform value="copy"/>
+          <parameter>
+            <valueString value="PUT"/>
+          </parameter>
+        </target>
+        <target>
+          <context value="request"/>
+          <contextType value="variable"/>
+          <element value="url"/>
+          <transform value="append"/>
+          <parameter>
+            <valueString value="DocumentReference/"/>
+          </parameter>
+          <parameter>
+            <valueId value="qrwhoid"/>
+          </parameter>
+        </target>
+        <target>
+          <contextType value="variable"/>
+          <variable value="qr"/>
+          <transform value="create"/>
+          <parameter>
+            <valueString value="http://smart.who.int/ddcc/StructureDefinition/DDCCDocumentReferenceQR"/>
+          </parameter>
+        </target>
+        <rule>
+          <name value="setup WHO DocRef"/>
+          <source>
+            <context value="ddcc"/>
+          </source>
+          <dependent>
+            <name value="DDCCToDocumentReference"/>
+            <variable value="ddcc"/>
+            <variable value="qr"/>
+            <variable value="qrwhoid"/>
+            <variable value="pid"/>
+          </dependent>
+        </rule>
+        <rule>
+          <name value="set category"/>
+          <source>
+            <context value="ddcc"/>
+          </source>
+          <target>
+            <context value="qr"/>
+            <contextType value="variable"/>
+            <element value="category"/>
+            <variable value="category"/>
+          </target>
+          <target>
+            <context value="category"/>
+            <contextType value="variable"/>
+            <element value="coding"/>
+            <variable value="coding"/>
+          </target>
+          <target>
+            <context value="coding"/>
+            <contextType value="variable"/>
+            <element value="system"/>
+            <transform value="copy"/>
+            <parameter>
+              <valueString value="http://smart.who.int/ddcc/CodeSystem/DDCCQRCategoryUsageCodeSystem"/>
+            </parameter>
+          </target>
+          <target>
+            <context value="coding"/>
+            <contextType value="variable"/>
+            <element value="code"/>
+            <transform value="copy"/>
+            <parameter>
+              <valueString value="who"/>
+            </parameter>
+          </target>
+        </rule>
+        <rule>
+          <name value="set description"/>
+          <source>
+            <context value="ddcc"/>
+          </source>
+          <target>
+            <context value="qr"/>
+            <contextType value="variable"/>
+            <element value="description"/>
+            <transform value="copy"/>
+            <parameter>
+              <valueString value="WHO QR code for COVID 19 Vaccine Certificate"/>
+            </parameter>
+          </target>
+        </rule>
+        <rule>
+          <name value="set WHO QR"/>
+          <source>
+            <context value="ddcc"/>
+          </source>
+          <target>
+            <context value="entry"/>
+            <contextType value="variable"/>
+            <element value="resource"/>
+            <transform value="copy"/>
+            <parameter>
+              <valueId value="qr"/>
+            </parameter>
+          </target>
+        </rule>
+      </rule>
+      <rule>
+        <name value="create DCC QR Doc Ref"/>
+        <source>
+          <context value="ddcc"/>
+        </source>
+        <target>
+          <context value="bundle"/>
+          <contextType value="variable"/>
+          <element value="entry"/>
+          <variable value="entry"/>
+        </target>
+        <target>
+          <context value="entry"/>
+          <contextType value="variable"/>
+          <element value="fullUrl"/>
+          <transform value="append"/>
+          <parameter>
+            <valueString value="urn:uuid:"/>
+          </parameter>
+          <parameter>
+            <valueId value="qrdccid"/>
+          </parameter>
+        </target>
+        <target>
+          <context value="entry"/>
+          <contextType value="variable"/>
+          <element value="request"/>
+          <variable value="request"/>
+        </target>
+        <target>
+          <context value="request"/>
+          <contextType value="variable"/>
+          <element value="method"/>
+          <transform value="copy"/>
+          <parameter>
+            <valueString value="PUT"/>
+          </parameter>
+        </target>
+        <target>
+          <context value="request"/>
+          <contextType value="variable"/>
+          <element value="url"/>
+          <transform value="append"/>
+          <parameter>
+            <valueString value="DocumentReference/"/>
+          </parameter>
+          <parameter>
+            <valueId value="qrdccid"/>
+          </parameter>
+        </target>
+        <target>
+          <contextType value="variable"/>
+          <variable value="qr"/>
+          <transform value="create"/>
+          <parameter>
+            <valueString value="http://smart.who.int/ddcc/StructureDefinition/DDCCDocumentReferenceQR"/>
+          </parameter>
+        </target>
+        <rule>
+          <name value="setup DCC DocRef"/>
+          <source>
+            <context value="ddcc"/>
+          </source>
+          <dependent>
+            <name value="DDCCToDocumentReference"/>
+            <variable value="ddcc"/>
+            <variable value="qr"/>
+            <variable value="qrdccid"/>
+            <variable value="pid"/>
+          </dependent>
+        </rule>
+        <rule>
+          <name value="set category"/>
+          <source>
+            <context value="ddcc"/>
+          </source>
+          <target>
+            <context value="qr"/>
+            <contextType value="variable"/>
+            <element value="category"/>
+            <variable value="category"/>
+          </target>
+          <target>
+            <context value="category"/>
+            <contextType value="variable"/>
+            <element value="coding"/>
+            <variable value="coding"/>
+          </target>
+          <target>
+            <context value="coding"/>
+            <contextType value="variable"/>
+            <element value="system"/>
+            <transform value="copy"/>
+            <parameter>
+              <valueString value="http://smart.who.int/ddcc/CodeSystem/DDCCQRCategoryUsageCodeSystem"/>
+            </parameter>
+          </target>
+          <target>
+            <context value="coding"/>
+            <contextType value="variable"/>
+            <element value="code"/>
+            <transform value="copy"/>
+            <parameter>
+              <valueString value="dcc"/>
+            </parameter>
+          </target>
+        </rule>
+        <rule>
+          <name value="set description"/>
+          <source>
+            <context value="ddcc"/>
+          </source>
+          <target>
+            <context value="qr"/>
+            <contextType value="variable"/>
+            <element value="description"/>
+            <transform value="copy"/>
+            <parameter>
+              <valueString value="DCC QR code for COVID 19 Vaccine Certificate"/>
+            </parameter>
+          </target>
+        </rule>
+        <rule>
+          <name value="set DCC QR"/>
+          <source>
+            <context value="ddcc"/>
+          </source>
+          <target>
+            <context value="entry"/>
+            <contextType value="variable"/>
+            <element value="resource"/>
+            <transform value="copy"/>
+            <parameter>
+              <valueId value="qr"/>
+            </parameter>
+          </target>
+        </rule>
+      </rule>
+      <rule>
+        <name value="create immunization resource"/>
+        <source>
+          <context value="ddcc"/>
+          <element value="vaccination"/>
+          <listMode value="first"/>
+          <variable value="vaccination"/>
+        </source>
+        <target>
+          <context value="bundle"/>
+          <contextType value="variable"/>
+          <element value="entry"/>
+          <variable value="entry"/>
+        </target>
+        <target>
+          <context value="entry"/>
+          <contextType value="variable"/>
+          <element value="fullUrl"/>
+          <transform value="append"/>
+          <parameter>
+            <valueString value="urn:uuid:"/>
+          </parameter>
+          <parameter>
+            <valueId value="iid"/>
+          </parameter>
+        </target>
+        <target>
+          <context value="entry"/>
+          <contextType value="variable"/>
+          <element value="request"/>
+          <variable value="request"/>
+        </target>
+        <target>
+          <context value="request"/>
+          <contextType value="variable"/>
+          <element value="method"/>
+          <transform value="copy"/>
+          <parameter>
+            <valueString value="PUT"/>
+          </parameter>
+        </target>
+        <target>
+          <context value="request"/>
+          <contextType value="variable"/>
+          <element value="url"/>
+          <transform value="append"/>
+          <parameter>
+            <valueString value="Immunization/"/>
+          </parameter>
+          <parameter>
+            <valueId value="iid"/>
+          </parameter>
+        </target>
+        <target>
+          <contextType value="variable"/>
+          <variable value="immunization"/>
+          <transform value="create"/>
+          <parameter>
+            <valueString value="http://smart.who.int/ddcc/StructureDefinition/DDCCImmunization"/>
+          </parameter>
+        </target>
+        <rule>
+          <name value="setup immunization"/>
+          <source>
+            <context value="ddcc"/>
+            <element value="certificate"/>
+            <variable value="certificate"/>
+          </source>
+          <dependent>
+            <name value="DDCCToImmunization"/>
+            <variable value="vaccination"/>
+            <variable value="immunization"/>
+            <variable value="certificate"/>
+            <variable value="iid"/>
+            <variable value="pid"/>
+          </dependent>
+        </rule>
+        <rule>
+          <name value="set immunization resource"/>
+          <source>
+            <context value="ddcc"/>
+          </source>
+          <target>
+            <context value="entry"/>
+            <contextType value="variable"/>
+            <element value="resource"/>
+            <transform value="copy"/>
+            <parameter>
+              <valueId value="immunization"/>
+            </parameter>
+          </target>
+        </rule>
+      </rule>
+      <rule>
+        <name value="create immunization recommendation resource"/>
+        <source>
+          <context value="ddcc"/>
+          <element value="vaccination"/>
+          <listMode value="first"/>
+          <variable value="vaccination"/>
+        </source>
+        <target>
+          <context value="bundle"/>
+          <contextType value="variable"/>
+          <element value="entry"/>
+          <variable value="entry"/>
+        </target>
+        <target>
+          <context value="entry"/>
+          <contextType value="variable"/>
+          <element value="fullUrl"/>
+          <transform value="append"/>
+          <parameter>
+            <valueString value="urn:uuid:"/>
+          </parameter>
+          <parameter>
+            <valueId value="irid"/>
+          </parameter>
+        </target>
+        <target>
+          <context value="entry"/>
+          <contextType value="variable"/>
+          <element value="request"/>
+          <variable value="request"/>
+        </target>
+        <target>
+          <context value="request"/>
+          <contextType value="variable"/>
+          <element value="method"/>
+          <transform value="copy"/>
+          <parameter>
+            <valueString value="PUT"/>
+          </parameter>
+        </target>
+        <target>
+          <context value="request"/>
+          <contextType value="variable"/>
+          <element value="url"/>
+          <transform value="append"/>
+          <parameter>
+            <valueString value="ImmunizationRecommendation/"/>
+          </parameter>
+          <parameter>
+            <valueId value="irid"/>
+          </parameter>
+        </target>
+        <target>
+          <contextType value="variable"/>
+          <variable value="immrec"/>
+          <transform value="create"/>
+          <parameter>
+            <valueString value="http://smart.who.int/ddcc/StructureDefinition/DDCCImmunizationRecommendation"/>
+          </parameter>
+        </target>
+        <rule>
+          <name value="setup immunization recommendation"/>
+          <source>
+            <context value="vaccination"/>
+          </source>
+          <dependent>
+            <name value="DDCCToImmRec"/>
+            <variable value="vaccination"/>
+            <variable value="immrec"/>
+            <variable value="irid"/>
+            <variable value="iid"/>
+            <variable value="pid"/>
+          </dependent>
+        </rule>
+        <rule>
+          <name value="set immunization recommendation resource"/>
+          <source>
+            <context value="ddcc"/>
+          </source>
+          <target>
+            <context value="entry"/>
+            <contextType value="variable"/>
+            <element value="resource"/>
+            <transform value="copy"/>
+            <parameter>
+              <valueId value="immrec"/>
+            </parameter>
+          </target>
+        </rule>
+      </rule>
+    </rule>
+  </group>
+  <group>
+    <name value="DDCCToImmunization"/>
+    <typeMode value="none"/>
+    <input>
+      <name value="src"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="immunization"/>
+      <type value="DDCCImmunization"/>
+      <mode value="target"/>
+    </input>
+    <input>
+      <name value="certificate"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="iid"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="pid"/>
+      <mode value="source"/>
+    </input>
+    <rule>
+      <name value="set id"/>
+      <source>
+        <context value="iid"/>
+      </source>
+      <target>
+        <context value="immunization"/>
+        <contextType value="variable"/>
+        <element value="id"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="iid"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="set brand extension"/>
+      <source>
+        <context value="src"/>
+        <element value="brand"/>
+        <variable value="brand"/>
+      </source>
+      <target>
+        <context value="immunization"/>
+        <contextType value="variable"/>
+        <element value="extension"/>
+        <variable value="ext"/>
+      </target>
+      <rule>
+        <name value="set brand extension values"/>
+        <source>
+          <context value="brand"/>
+        </source>
+        <target>
+          <context value="ext"/>
+          <contextType value="variable"/>
+          <element value="url"/>
+          <transform value="copy"/>
+          <parameter>
+            <valueString value="http://smart.who.int/ddcc/StructureDefinition/DDCCVaccineBrand"/>
+          </parameter>
+        </target>
+        <target>
+          <context value="ext"/>
+          <contextType value="variable"/>
+          <element value="value"/>
+          <transform value="copy"/>
+          <parameter>
+            <valueId value="brand"/>
+          </parameter>
+        </target>
+      </rule>
+    </rule>
+    <rule>
+      <name value="set maholder extension"/>
+      <source>
+        <context value="src"/>
+        <element value="maholder"/>
+        <variable value="maholder"/>
+      </source>
+      <target>
+        <context value="immunization"/>
+        <contextType value="variable"/>
+        <element value="extension"/>
+        <variable value="ext"/>
+      </target>
+      <rule>
+        <name value="set MA Holder extension values"/>
+        <source>
+          <context value="maholder"/>
+        </source>
+        <target>
+          <context value="ext"/>
+          <contextType value="variable"/>
+          <element value="url"/>
+          <transform value="copy"/>
+          <parameter>
+            <valueString value="http://smart.who.int/ddcc/StructureDefinition/DDCCVaccineMarketAuthorization"/>
+          </parameter>
+        </target>
+        <target>
+          <context value="ext"/>
+          <contextType value="variable"/>
+          <element value="value"/>
+          <transform value="copy"/>
+          <parameter>
+            <valueId value="maholder"/>
+          </parameter>
+        </target>
+      </rule>
+    </rule>
+    <rule>
+      <name value="set country extension"/>
+      <source>
+        <context value="src"/>
+        <element value="country"/>
+        <variable value="country"/>
+      </source>
+      <target>
+        <context value="immunization"/>
+        <contextType value="variable"/>
+        <element value="extension"/>
+        <variable value="ext"/>
+      </target>
+      <rule>
+        <name value="set country extension values"/>
+        <source>
+          <context value="country"/>
+          <element value="code"/>
+          <variable value="code"/>
+        </source>
+        <target>
+          <context value="ext"/>
+          <contextType value="variable"/>
+          <element value="url"/>
+          <transform value="copy"/>
+          <parameter>
+            <valueString value="http://smart.who.int/ddcc/StructureDefinition/DDCCCountryOfVaccination"/>
+          </parameter>
+        </target>
+        <target>
+          <context value="ext"/>
+          <contextType value="variable"/>
+          <element value="value"/>
+          <transform value="copy"/>
+          <parameter>
+            <valueId value="code"/>
+          </parameter>
+        </target>
+      </rule>
+    </rule>
+    <rule>
+      <name value="set vaccine valid extension"/>
+      <source>
+        <context value="src"/>
+        <element value="validFrom"/>
+        <variable value="validFrom"/>
+      </source>
+      <target>
+        <context value="immunization"/>
+        <contextType value="variable"/>
+        <element value="extension"/>
+        <variable value="ext"/>
+      </target>
+      <rule>
+        <name value="set valid from extension values"/>
+        <source>
+          <context value="validFrom"/>
+        </source>
+        <target>
+          <context value="ext"/>
+          <contextType value="variable"/>
+          <element value="url"/>
+          <transform value="copy"/>
+          <parameter>
+            <valueString value="http://smart.who.int/ddcc/StructureDefinition/DDCCVaccineValidFrom"/>
+          </parameter>
+        </target>
+        <target>
+          <context value="ext"/>
+          <contextType value="variable"/>
+          <element value="value"/>
+          <transform value="copy"/>
+          <parameter>
+            <valueId value="validFrom"/>
+          </parameter>
+        </target>
+      </rule>
+    </rule>
+    <rule>
+      <name value="set status"/>
+      <source>
+        <context value="src"/>
+      </source>
+      <target>
+        <context value="immunization"/>
+        <contextType value="variable"/>
+        <element value="status"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueString value="completed"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="set vaccine"/>
+      <source>
+        <context value="src"/>
+        <element value="vaccine"/>
+        <variable value="vaccine"/>
+      </source>
+      <target>
+        <context value="immunization"/>
+        <contextType value="variable"/>
+        <element value="vaccineCode"/>
+        <variable value="vacCode"/>
+      </target>
+      <target>
+        <context value="vacCode"/>
+        <contextType value="variable"/>
+        <element value="coding"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="vaccine"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="set patient"/>
+      <source>
+        <context value="src"/>
+      </source>
+      <target>
+        <context value="immunization"/>
+        <contextType value="variable"/>
+        <element value="patient"/>
+        <variable value="patient"/>
+      </target>
+      <target>
+        <context value="patient"/>
+        <contextType value="variable"/>
+        <element value="reference"/>
+        <transform value="append"/>
+        <parameter>
+          <valueString value="Patient/"/>
+        </parameter>
+        <parameter>
+          <valueId value="pid"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="set manufacturer identifier"/>
+      <source>
+        <context value="src"/>
+        <element value="manufacturer"/>
+        <variable value="manufacturer"/>
+      </source>
+      <target>
+        <context value="immunization"/>
+        <contextType value="variable"/>
+        <element value="manufacturer"/>
+        <variable value="tman"/>
+      </target>
+      <target>
+        <context value="tman"/>
+        <contextType value="variable"/>
+        <element value="identifier"/>
+        <variable value="ident"/>
+      </target>
+      <rule>
+        <name value="set system"/>
+        <source>
+          <context value="manufacturer"/>
+          <element value="system"/>
+          <variable value="system"/>
+        </source>
+        <target>
+          <context value="ident"/>
+          <contextType value="variable"/>
+          <element value="system"/>
+          <transform value="copy"/>
+          <parameter>
+            <valueId value="system"/>
+          </parameter>
+        </target>
+      </rule>
+      <rule>
+        <name value="set value"/>
+        <source>
+          <context value="manufacturer"/>
+          <element value="code"/>
+          <variable value="code"/>
+        </source>
+        <target>
+          <context value="ident"/>
+          <contextType value="variable"/>
+          <element value="value"/>
+          <transform value="copy"/>
+          <parameter>
+            <valueId value="code"/>
+          </parameter>
+        </target>
+      </rule>
+    </rule>
+    <rule>
+      <name value="set lot number"/>
+      <source>
+        <context value="src"/>
+        <element value="lot"/>
+        <variable value="lot"/>
+      </source>
+      <target>
+        <context value="immunization"/>
+        <contextType value="variable"/>
+        <element value="lotNumber"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="lot"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="set occurrence date"/>
+      <source>
+        <context value="src"/>
+        <element value="date"/>
+        <variable value="date"/>
+      </source>
+      <target>
+        <context value="immunization"/>
+        <contextType value="variable"/>
+        <element value="occurrence"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="date"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="set location"/>
+      <source>
+        <context value="src"/>
+        <element value="centre"/>
+        <variable value="centre"/>
+      </source>
+      <target>
+        <context value="immunization"/>
+        <contextType value="variable"/>
+        <element value="location"/>
+        <variable value="location"/>
+      </target>
+      <rule>
+        <name value="set location display"/>
+        <source>
+          <context value="centre"/>
+        </source>
+        <target>
+          <context value="location"/>
+          <contextType value="variable"/>
+          <element value="display"/>
+          <transform value="copy"/>
+          <parameter>
+            <valueId value="centre"/>
+          </parameter>
+        </target>
+      </rule>
+    </rule>
+    <rule>
+      <name value="set practitioner"/>
+      <source>
+        <context value="src"/>
+        <element value="practitioner"/>
+        <variable value="practitioner"/>
+      </source>
+      <target>
+        <context value="immunization"/>
+        <contextType value="variable"/>
+        <element value="performer"/>
+        <variable value="performer"/>
+      </target>
+      <rule>
+        <name value="set performer"/>
+        <source>
+          <context value="practitioner"/>
+          <element value="value"/>
+          <variable value="hw"/>
+        </source>
+        <target>
+          <context value="performer"/>
+          <contextType value="variable"/>
+          <element value="actor"/>
+          <variable value="actor"/>
+        </target>
+        <rule>
+          <name value="set actor"/>
+          <source>
+            <context value="hw"/>
+          </source>
+          <target>
+            <context value="actor"/>
+            <contextType value="variable"/>
+            <element value="type"/>
+            <transform value="copy"/>
+            <parameter>
+              <valueString value="Practitioner"/>
+            </parameter>
+          </target>
+          <target>
+            <context value="actor"/>
+            <contextType value="variable"/>
+            <element value="identifier"/>
+            <variable value="identifier"/>
+          </target>
+          <rule>
+            <name value="set hw identifier"/>
+            <source>
+              <context value="hw"/>
+            </source>
+            <target>
+              <context value="identifier"/>
+              <contextType value="variable"/>
+              <element value="value"/>
+              <transform value="copy"/>
+              <parameter>
+                <valueId value="hw"/>
+              </parameter>
+            </target>
+          </rule>
+        </rule>
+      </rule>
+    </rule>
+    <rule>
+      <name value="set protocolApplied"/>
+      <source>
+        <context value="src"/>
+      </source>
+      <target>
+        <context value="immunization"/>
+        <contextType value="variable"/>
+        <element value="protocolApplied"/>
+        <variable value="protocol"/>
+      </target>
+      <rule>
+        <name value="set authority"/>
+        <source>
+          <context value="src"/>
+        </source>
+        <target>
+          <context value="protocol"/>
+          <contextType value="variable"/>
+          <element value="authority"/>
+          <variable value="authority"/>
+        </target>
+        <rule>
+          <name value="set issuer"/>
+          <source>
+            <context value="certificate"/>
+            <element value="issuer"/>
+            <variable value="issuer"/>
+          </source>
+          <target>
+            <context value="authority"/>
+            <contextType value="variable"/>
+            <element value="type"/>
+            <transform value="copy"/>
+            <parameter>
+              <valueString value="Organization"/>
+            </parameter>
+          </target>
+          <rule>
+            <name value="set issuer identifier"/>
+            <source>
+              <context value="issuer"/>
+              <element value="identifier"/>
+              <variable value="pha"/>
+            </source>
+            <target>
+              <context value="authority"/>
+              <contextType value="variable"/>
+              <element value="identifier"/>
+              <variable value="identifier"/>
+            </target>
+            <rule>
+              <name value="set pha"/>
+              <source>
+                <context value="pha"/>
+                <element value="value"/>
+                <variable value="value"/>
+              </source>
+              <target>
+                <context value="identifier"/>
+                <contextType value="variable"/>
+                <element value="value"/>
+                <transform value="copy"/>
+                <parameter>
+                  <valueId value="value"/>
+                </parameter>
+              </target>
+            </rule>
+          </rule>
+        </rule>
+      </rule>
+      <rule>
+        <name value="set target disease"/>
+        <source>
+          <context value="src"/>
+          <element value="disease"/>
+          <variable value="disease"/>
+        </source>
+        <target>
+          <context value="protocol"/>
+          <contextType value="variable"/>
+          <element value="targetDisease"/>
+          <variable value="tdisease"/>
+        </target>
+        <rule>
+          <name value="set target disease code"/>
+          <source>
+            <context value="disease"/>
+          </source>
+          <target>
+            <context value="tdisease"/>
+            <contextType value="variable"/>
+            <element value="coding"/>
+            <transform value="copy"/>
+            <parameter>
+              <valueId value="disease"/>
+            </parameter>
+          </target>
+        </rule>
+      </rule>
+      <rule>
+        <name value="set dose number"/>
+        <source>
+          <context value="src"/>
+          <element value="dose"/>
+          <variable value="dose"/>
+        </source>
+        <target>
+          <context value="protocol"/>
+          <contextType value="variable"/>
+          <element value="doseNumber"/>
+          <transform value="copy"/>
+          <parameter>
+            <valueId value="dose"/>
+          </parameter>
+        </target>
+      </rule>
+      <rule>
+        <name value="set total doses"/>
+        <source>
+          <context value="src"/>
+          <element value="totalDoses"/>
+          <variable value="totalDoses"/>
+        </source>
+        <target>
+          <context value="protocol"/>
+          <contextType value="variable"/>
+          <element value="seriesDoses"/>
+          <transform value="copy"/>
+          <parameter>
+            <valueId value="totalDoses"/>
+          </parameter>
+        </target>
+      </rule>
+    </rule>
+  </group>
+  <group>
+    <name value="DDCCToImmRec"/>
+    <typeMode value="none"/>
+    <input>
+      <name value="src"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="immrec"/>
+      <type value="DDCCImmunizationRecommendation"/>
+      <mode value="target"/>
+    </input>
+    <input>
+      <name value="irid"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="iid"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="pid"/>
+      <mode value="source"/>
+    </input>
+    <rule>
+      <name value="set date"/>
+      <source>
+        <context value="src"/>
+        <element value="date"/>
+        <variable value="date"/>
+      </source>
+      <target>
+        <context value="immrec"/>
+        <contextType value="variable"/>
+        <element value="date"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="date"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="set patient"/>
+      <source>
+        <context value="src"/>
+      </source>
+      <target>
+        <context value="immrec"/>
+        <contextType value="variable"/>
+        <element value="patient"/>
+        <variable value="patient"/>
+      </target>
+      <target>
+        <context value="patient"/>
+        <contextType value="variable"/>
+        <element value="reference"/>
+        <transform value="append"/>
+        <parameter>
+          <valueString value="Patient/"/>
+        </parameter>
+        <parameter>
+          <valueId value="pid"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="set recommendation"/>
+      <source>
+        <context value="src"/>
+      </source>
+      <target>
+        <context value="immrec"/>
+        <contextType value="variable"/>
+        <element value="recommendation"/>
+        <variable value="rec"/>
+      </target>
+      <rule>
+        <name value="set vaccine code"/>
+        <source>
+          <context value="src"/>
+          <element value="vaccine"/>
+          <variable value="vaccine"/>
+        </source>
+        <target>
+          <context value="rec"/>
+          <contextType value="variable"/>
+          <element value="vaccineCode"/>
+          <variable value="vaccineCode"/>
+        </target>
+        <rule>
+          <name value="set vaccine code coding"/>
+          <source>
+            <context value="vaccine"/>
+          </source>
+          <target>
+            <context value="vaccineCode"/>
+            <contextType value="variable"/>
+            <element value="coding"/>
+            <transform value="copy"/>
+            <parameter>
+              <valueId value="vaccine"/>
+            </parameter>
+          </target>
+        </rule>
+      </rule>
+      <rule>
+        <name value="set target disease"/>
+        <source>
+          <context value="src"/>
+          <element value="disease"/>
+          <variable value="disease"/>
+        </source>
+        <target>
+          <context value="rec"/>
+          <contextType value="variable"/>
+          <element value="targetDisease"/>
+          <variable value="targetDisease"/>
+        </target>
+        <rule>
+          <name value="set target disease coding"/>
+          <source>
+            <context value="disease"/>
+          </source>
+          <target>
+            <context value="targetDisease"/>
+            <contextType value="variable"/>
+            <element value="coding"/>
+            <transform value="copy"/>
+            <parameter>
+              <valueId value="disease"/>
+            </parameter>
+          </target>
+        </rule>
+      </rule>
+      <rule>
+        <name value="set forecast status"/>
+        <source>
+          <context value="src"/>
+        </source>
+        <target>
+          <context value="rec"/>
+          <contextType value="variable"/>
+          <element value="forecastStatus"/>
+          <variable value="forecast"/>
+        </target>
+        <rule>
+          <name value="set forecast status coding"/>
+          <source>
+            <context value="src"/>
+          </source>
+          <target>
+            <context value="forecast"/>
+            <contextType value="variable"/>
+            <element value="coding"/>
+            <variable value="coding"/>
+          </target>
+          <rule>
+            <name value="set forecast system"/>
+            <source>
+              <context value="src"/>
+            </source>
+            <target>
+              <context value="coding"/>
+              <contextType value="variable"/>
+              <element value="system"/>
+              <transform value="copy"/>
+              <parameter>
+                <valueString value="http://terminology.hl7.org/2.1.0/CodeSystem-immunization-recommendation-status.html"/>
+              </parameter>
+            </target>
+          </rule>
+          <rule>
+            <name value="set forecast code"/>
+            <source>
+              <context value="src"/>
+            </source>
+            <target>
+              <context value="coding"/>
+              <contextType value="variable"/>
+              <element value="code"/>
+              <transform value="copy"/>
+              <parameter>
+                <valueString value="due"/>
+              </parameter>
+            </target>
+          </rule>
+        </rule>
+      </rule>
+      <rule>
+        <name value="set date criterion"/>
+        <source>
+          <context value="src"/>
+        </source>
+        <target>
+          <context value="rec"/>
+          <contextType value="variable"/>
+          <element value="dateCriterion"/>
+          <variable value="due_date"/>
+        </target>
+        <rule>
+          <name value="set due date code"/>
+          <source>
+            <context value="src"/>
+          </source>
+          <target>
+            <context value="due_date"/>
+            <contextType value="variable"/>
+            <element value="code"/>
+            <variable value="code"/>
+          </target>
+          <rule>
+            <name value="set due date code coding"/>
+            <source>
+              <context value="src"/>
+            </source>
+            <target>
+              <context value="code"/>
+              <contextType value="variable"/>
+              <element value="coding"/>
+              <variable value="coding"/>
+            </target>
+            <rule>
+              <name value="set due date code system"/>
+              <source>
+                <context value="src"/>
+              </source>
+              <target>
+                <context value="coding"/>
+                <contextType value="variable"/>
+                <element value="system"/>
+                <transform value="copy"/>
+                <parameter>
+                  <valueString value="http://loinc.org"/>
+                </parameter>
+              </target>
+            </rule>
+            <rule>
+              <name value="set due date code code"/>
+              <source>
+                <context value="src"/>
+              </source>
+              <target>
+                <context value="coding"/>
+                <contextType value="variable"/>
+                <element value="code"/>
+                <transform value="copy"/>
+                <parameter>
+                  <valueString value="30980-7"/>
+                </parameter>
+              </target>
+            </rule>
+          </rule>
+        </rule>
+        <rule>
+          <name value="set due date value"/>
+          <source>
+            <context value="src"/>
+            <element value="nextDose"/>
+            <variable value="nextDose"/>
+          </source>
+          <target>
+            <context value="due_date"/>
+            <contextType value="variable"/>
+            <element value="value"/>
+            <transform value="copy"/>
+            <parameter>
+              <valueId value="nextDose"/>
+            </parameter>
+          </target>
+        </rule>
+      </rule>
+      <rule>
+        <name value="set dose number"/>
+        <source>
+          <context value="src"/>
+          <element value="dose"/>
+          <variable value="dose"/>
+        </source>
+        <target>
+          <context value="rec"/>
+          <contextType value="variable"/>
+          <element value="doseNumber"/>
+          <transform value="evaluate"/>
+          <parameter>
+            <valueString value="dose.toInteger() + 1"/>
+          </parameter>
+        </target>
+      </rule>
+      <rule>
+        <name value="set total doses"/>
+        <source>
+          <context value="src"/>
+          <element value="totalDoses"/>
+          <variable value="totalDoses"/>
+        </source>
+        <target>
+          <context value="rec"/>
+          <contextType value="variable"/>
+          <element value="seriesDoses"/>
+          <transform value="copy"/>
+          <parameter>
+            <valueId value="totalDoses"/>
+          </parameter>
+        </target>
+      </rule>
+      <rule>
+        <name value="set supporting immunization"/>
+        <source>
+          <context value="src"/>
+        </source>
+        <target>
+          <context value="rec"/>
+          <contextType value="variable"/>
+          <element value="supportingImmunization"/>
+          <variable value="imm"/>
+        </target>
+        <target>
+          <context value="imm"/>
+          <contextType value="variable"/>
+          <element value="reference"/>
+          <transform value="append"/>
+          <parameter>
+            <valueString value="Immunization/"/>
+          </parameter>
+          <parameter>
+            <valueId value="iid"/>
+          </parameter>
+        </target>
+      </rule>
+    </rule>
+  </group>
+</StructureMap>

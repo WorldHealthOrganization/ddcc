@@ -1,0 +1,868 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<StructureMap xmlns="http://hl7.org/fhir">
+  <id value="DVCClaimtoDVCLM"/>
+  <text>
+    <status value="generated"/><div xmlns="http://www.w3.org/1999/xhtml"><p class="res-header-id"><b>Generated Narrative: StructureMap DVCClaimtoDVCLM</b></p><a name="DVCClaimtoDVCLM"> </a><a name="hcDVCClaimtoDVCLM"> </a><a name="DVCClaimtoDVCLM-en-US"> </a><pre class="fml">
+<b>map</b><span style="color: navy"> &quot;</span>http://smart.who.int/icvp/StructureMap/DVCClaimtoDVCLM<span style="color: navy">&quot; = &quot;</span>DVCClaimtoDVCLM<span style="color: navy">&quot;
+
+</span><b>uses</b><span style="color: navy"> &quot;</span><a href="StructureDefinition-DVCPayload.html" title="DVC HCERT Payload">http://smart.who.int/icvp/StructureDefinition/DVCPayload</a><span style="color: navy">&quot; </span><b>alias </b>DVCPayload <b>as </b><b>source</b>
+<b>uses</b><span style="color: navy"> &quot;</span><a href="StructureDefinition-ModelDVC.html" title="DVC">http://smart.who.int/icvp/StructureDefinition/ModelDVC</a><span style="color: navy">&quot; </span><b>alias </b>DVCModel <b>as </b><b>target</b>
+<b>uses</b><span style="color: navy"> &quot;</span><a href="StructureDefinition-ModelVaccineDetails.html" title="DVC - Vaccine Details">http://smart.who.int/icvp/StructureDefinition/ModelVaccineDetails</a><span style="color: navy">&quot; </span><b>alias </b>ModelVaccineDetails <b>as </b><b>target</b>
+
+<b>group </b>DVCClaimtoDVCLM<span style="color: navy">(</span><b>source</b> <span style="color: maroon">src</span><span style="color: navy"> : </span>DVCPayload, <b>target</b> <span style="color: maroon">tgt</span><span style="color: navy"> : </span>DVCModel<span style="color: navy">)</span><span style="color: navy"> {
+</span>  src.n<b> as </b><span style="color: maroon">name</span><span style="color: navy"><b> -&gt; </b></span>tgt.name = <span style="color: maroon">name</span> <i>&quot;rule1&quot;</i><span style="color: navy">;</span>
+  src.dob<b> as </b><span style="color: maroon">dob</span><span style="color: navy"><b> -&gt; </b></span>tgt.dob = <span style="color: maroon">dob</span> <i>&quot;rule2&quot;</i><span style="color: navy">;</span>
+  src.s<b> as </b><span style="color: maroon">sex</span><span style="color: navy"><b> -&gt; </b></span>tgt.sex = <span style="color: maroon">sex</span> <i>&quot;rule3&quot;</i><span style="color: navy">;</span>
+  src.ntl<b> as </b><span style="color: maroon">nationality</span><span style="color: navy"><b> -&gt; </b></span>tgt.nationality = <span style="color: maroon">nationality</span> <i>&quot;rule4&quot;</i><span style="color: navy">;</span>
+  src.nid<b> as </b><span style="color: maroon">id</span><span style="color: navy"><b> -&gt; </b></span>tgt.nid = <span style="color: maroon">id</span> <i>&quot;rule5&quot;</i><span style="color: navy">;</span>
+  src.gn<b> as </b><span style="color: maroon">gName</span><span style="color: navy"><b> -&gt; </b></span>tgt.guardian = <span style="color: maroon">gName</span> <i>&quot;rule6&quot;</i><span style="color: navy">;</span>
+  src.v<b> as </b><span style="color: maroon">v</span><span style="color: navy"><b> -&gt; </b></span>tgt.vaccineDetails<b> as </b><span style="color: maroon">tv</span><b> then </b>mapVaccineDetails<span style="color: navy">(</span><span style="color: maroon">v</span><span style="color: navy">, </span><span style="color: maroon">tv</span><span style="color: navy">)</span> <i>&quot;rule7&quot;</i><span style="color: navy">;</span>
+<span style="color: navy">}
+
+</span><b>group </b>mapVaccineDetails<span style="color: navy">(</span><b>source</b> <span style="color: maroon">src</span><span style="color: navy"> : </span>BackboneElement, <b>target</b> <span style="color: maroon">tgt</span><span style="color: navy"> : </span>ModelVaccineDetails<span style="color: navy">)</span><span style="color: navy"> {
+</span>  src.tg<b> as </b><span style="color: maroon">tg</span><span style="color: navy"><b> -&gt; </b></span> <b>create</b><span style="color: navy">(</span><span style="color: blue">'Coding'</span><span style="color: navy">)</span><b> as </b><span style="color: maroon">coding</span><span style="color: navy">, </span> coding.code = <span style="color: maroon">tg</span><span style="color: navy">, </span> coding.system = <span style="color: blue">'http://id.who.int/icd/release/11/mms'</span><span style="color: navy">, </span> tgt.disease = <span style="color: maroon">coding</span> <i>&quot;rule8&quot;</i><span style="color: navy">;</span>
+  src.vp<b> as </b><span style="color: maroon">vp</span><span style="color: navy"><b> -&gt; </b></span> <b>create</b><span style="color: navy">(</span><span style="color: blue">'Coding'</span><span style="color: navy">)</span><b> as </b><span style="color: maroon">coding</span><span style="color: navy">, </span> coding.code = <span style="color: maroon">vp</span><span style="color: navy">, </span> coding.system = <span style="color: blue">'http://id.who.int/icd/release/11/mms'</span><span style="color: navy">, </span> <b>create</b><span style="color: navy">(</span><span style="color: blue">'CodeableConcept'</span><span style="color: navy">)</span><b> as </b><span style="color: maroon">code</span><span style="color: navy">, </span> code.coding = <span style="color: maroon">coding</span><span style="color: navy">, </span> tgt.vaccineClassification = <span style="color: maroon">code</span> <i>&quot;rule9&quot;</i><span style="color: navy">;</span>
+  src.mp<b> as </b><span style="color: maroon">mp</span><span style="color: navy"><b> -&gt; </b></span> <b>create</b><span style="color: navy">(</span><span style="color: blue">'Identifier'</span><span style="color: navy">)</span><b> as </b><span style="color: maroon">id</span><span style="color: navy">, </span> id.value = <span style="color: maroon">mp</span><span style="color: navy">, </span> tgt.vaccineTradeItem = <span style="color: maroon">id</span> <i>&quot;rule10&quot;</i><span style="color: navy">;</span>
+  src.ma<b> as </b><span style="color: maroon">ma</span><span style="color: navy"><b> -&gt; </b></span>tgt.manufacturer = <span style="color: maroon">ma</span> <i>&quot;rule11&quot;</i><span style="color: navy">;</span>
+  src.mid<b> as </b><span style="color: maroon">mid</span><span style="color: navy"><b> -&gt; </b></span> <b>create</b><span style="color: navy">(</span><span style="color: blue">'Identifier'</span><span style="color: navy">)</span><b> as </b><span style="color: maroon">id</span><span style="color: navy">, </span> id.value = <span style="color: maroon">mid</span><span style="color: navy">, </span> tgt.manufacturerId = <span style="color: maroon">id</span> <i>&quot;rule12&quot;</i><span style="color: navy">;</span>
+  src.dt<b> as </b><span style="color: maroon">dt</span><span style="color: navy"><b> -&gt; </b></span>tgt.date = <span style="color: maroon">dt</span> <i>&quot;rule13&quot;</i><span style="color: navy">;</span>
+  src.bo<b> as </b><span style="color: maroon">bo</span><span style="color: navy"><b> -&gt; </b></span>tgt.batchNo = <span style="color: maroon">bo</span> <i>&quot;rule14&quot;</i><span style="color: navy">;</span>
+  src<span style="color: navy"><b> -&gt; </b></span><b>create</b><span style="color: navy">(</span><span style="color: blue">'Period'</span><span style="color: navy">)</span><b> as </b><span style="color: maroon">period</span><b> then</b><span style="color: navy"> {
+</span>    src.vls<b> as </b><span style="color: maroon">start</span><span style="color: navy"><b> -&gt; </b></span>period.start = <span style="color: maroon">start</span> <i>&quot;rule15&quot;</i><span style="color: navy">;</span>
+    src.vle<b> as </b><span style="color: maroon">end</span><span style="color: navy"><b> -&gt; </b></span>period.end = <span style="color: maroon">end</span> <i>&quot;rule16&quot;</i><span style="color: navy">;</span>
+    src<span style="color: navy"><b> -&gt; </b></span>tgt.validityPeriod = <span style="color: maroon">period</span> <i>&quot;rule17&quot;</i><span style="color: navy">;</span>
+  <span style="color: navy">}</span> <i>&quot;rule18&quot;</i><span style="color: navy">;</span>
+  src.cn<b> as </b><span style="color: maroon">cn</span><span style="color: navy"><b> -&gt; </b></span>tgt.clinicianName = <span style="color: maroon">cn</span> <i>&quot;rule19&quot;</i><span style="color: navy">;</span>
+  src.is<b> as </b><span style="color: maroon">is</span><span style="color: navy"><b> -&gt; </b></span> tgt.issuer<b> as </b><span style="color: maroon">issuer</span><span style="color: navy">, </span> issuer.reference = <b>append</b><span style="color: navy">(</span><span style="color: blue">'Organization/'</span><span style="color: navy">, </span><span style="color: maroon">is</span><span style="color: navy">)</span> <i>&quot;rule21&quot;</i><span style="color: navy">;</span>
+  src.dn<b> as </b><span style="color: maroon">dn</span><span style="color: navy"><b> -&gt; </b></span> <b>create</b><span style="color: navy">(</span><span style="color: blue">'Coding'</span><span style="color: navy">)</span><b> as </b><span style="color: maroon">coding</span><span style="color: navy">, </span> coding.code = <span style="color: maroon">dn</span><span style="color: navy">, </span> coding.system = <span style="color: blue">'http://smart.who.int/icvp/CodeSystem/doseNumber'</span><span style="color: navy">, </span> <b>create</b><span style="color: navy">(</span><span style="color: blue">'CodeableConcept'</span><span style="color: navy">)</span><b> as </b><span style="color: maroon">code</span><span style="color: navy">, </span> code.coding = <span style="color: maroon">coding</span><span style="color: navy">, </span> tgt.doseNumber = <span style="color: maroon">code</span> <i>&quot;rule20&quot;</i><span style="color: navy">;</span>
+<span style="color: navy">}
+
+</span><span style="color: navy">// </span><span style="color: green">helper function</span>
+<b>group </b>generateNarrativeText<span style="color: navy">(</span><b>source</b> <span style="color: maroon">src</span><span style="color: navy"> : </span>Section, <b>target</b> <span style="color: maroon">text</span><span style="color: navy"> : </span>string<span style="color: navy">)</span><span style="color: navy"> {
+</span>  src<span style="color: navy"><b> -&gt; </b></span>text.status = <span style="color: blue">'empty'</span> <i>&quot;setstatus&quot;</i><span style="color: navy">;</span>
+  src<span style="color: navy"><b> -&gt; </b></span>text.div = <span style="color: blue">'&lt;div&gt;narrative not available&lt;/div&gt;'</span> <i>&quot;setdiv&quot;</i><span style="color: navy">;</span>
+<span style="color: navy">}
+
+</span><b>group </b>humanNameToHumanName<span style="color: navy">(</span><b>source</b> <span style="color: maroon">sourceName</span>, <b>target</b> <span style="color: maroon">targetName</span><span style="color: navy"> : </span>HumanName<span style="color: navy">)</span><span style="color: navy"> {
+</span>  sourceName.use<b> as </b><span style="color: maroon">use</span><span style="color: navy"><b> -&gt; </b></span>targetName.use = <span style="color: maroon">use</span> <i>&quot;CopyUse&quot;</i><span style="color: navy">;</span>
+  sourceName.text<b> as </b><span style="color: maroon">text</span><span style="color: navy"><b> -&gt; </b></span>targetName.text = <span style="color: maroon">text</span> <i>&quot;CopyText&quot;</i><span style="color: navy">;</span>
+  sourceName.family<b> as </b><span style="color: maroon">family</span><span style="color: navy"><b> -&gt; </b></span>targetName.family = <span style="color: maroon">family</span> <i>&quot;CopyFamily&quot;</i><span style="color: navy">;</span>
+  sourceName.given<b> as </b><span style="color: maroon">given</span><span style="color: navy"><b> -&gt; </b></span>targetName.given = <span style="color: maroon">given</span> <i>&quot;CopyGiven&quot;</i><span style="color: navy">;</span>
+  sourceName.prefix<b> as </b><span style="color: maroon">prefix</span><span style="color: navy"><b> -&gt; </b></span>targetName.prefix = <span style="color: maroon">prefix</span> <i>&quot;CopyPrefix&quot;</i><span style="color: navy">;</span>
+  sourceName.suffix<b> as </b><span style="color: maroon">suffix</span><span style="color: navy"><b> -&gt; </b></span>targetName.suffix = <span style="color: maroon">suffix</span> <i>&quot;CopySuffix&quot;</i><span style="color: navy">;</span>
+  <span style="color: navy">// </span><span style="color: green">Copy the period using the previously defined group function</span>
+  sourceName.period<b> as </b><span style="color: maroon">sourcePeriod</span><span style="color: navy"><b> -&gt; </b></span>targetName.period<b> as </b><span style="color: maroon">targetPeriod</span><b> then</b><span style="color: navy"> {
+</span>    sourcePeriod<span style="color: navy"><b> -&gt; </b></span>sourcePeriod<b> then </b>periodToPeriod<span style="color: navy">(</span><span style="color: maroon">sourcePeriod</span><span style="color: navy">, </span><span style="color: maroon">targetPeriod</span><span style="color: navy">)</span> <i>&quot;CopyPeriod&quot;</i><span style="color: navy">;</span>
+  <span style="color: navy">}</span> <i>&quot;copyPeriod&quot;</i><span style="color: navy">;</span>
+<span style="color: navy">}
+
+</span><b>group </b>periodToPeriod<span style="color: navy">(</span><b>source</b> <span style="color: maroon">sourcePeriod</span>, <b>target</b> <span style="color: maroon">targetPeriod</span><span style="color: navy"> : </span>Period<span style="color: navy">)</span><span style="color: navy"> {
+</span>  sourcePeriod.start<b> as </b><span style="color: maroon">start</span><span style="color: navy"><b> -&gt; </b></span>targetPeriod.start = <span style="color: maroon">start</span> <i>&quot;set period start&quot;</i><span style="color: navy">;</span>
+  sourcePeriod.end<b> as </b><span style="color: maroon">end</span><span style="color: navy"><b> -&gt; </b></span>targetPeriod.end = <span style="color: maroon">end</span> <i>&quot;set period end&quot;</i><span style="color: navy">;</span>
+<span style="color: navy">}
+
+</span></pre></div>
+  </text>
+  <url value="http://smart.who.int/icvp/StructureMap/DVCClaimtoDVCLM"/>
+  <version value="0.1.0"/>
+  <name value="DVCClaimtoDVCLM"/>
+  <status value="draft"/>
+  <date value="2024-10-07T07:31:05+00:00"/>
+  <publisher value="WHO"/>
+  <contact>
+    <name value="WHO"/>
+    <telecom>
+      <system value="url"/>
+      <value value="http://who.int"/>
+    </telecom>
+  </contact>
+  <structure>
+    <url value="http://smart.who.int/icvp/StructureDefinition/DVCPayload"/>
+    <mode value="source"/>
+    <alias value="DVCPayload"/>
+  </structure>
+  <structure>
+    <url value="http://smart.who.int/icvp/StructureDefinition/ModelDVC"/>
+    <mode value="target"/>
+    <alias value="DVCModel"/>
+  </structure>
+  <structure>
+    <url value="http://smart.who.int/icvp/StructureDefinition/ModelVaccineDetails"/>
+    <mode value="target"/>
+    <alias value="ModelVaccineDetails"/>
+  </structure>
+  <group>
+    <name value="DVCClaimtoDVCLM"/>
+    <typeMode value="none"/>
+    <input>
+      <name value="src"/>
+      <type value="DVCPayload"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="tgt"/>
+      <type value="DVCModel"/>
+      <mode value="target"/>
+    </input>
+    <rule>
+      <name value="rule1"/>
+      <source>
+        <context value="src"/>
+        <element value="n"/>
+        <variable value="name"/>
+      </source>
+      <target>
+        <context value="tgt"/>
+        <contextType value="variable"/>
+        <element value="name"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="name"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="rule2"/>
+      <source>
+        <context value="src"/>
+        <element value="dob"/>
+        <variable value="dob"/>
+      </source>
+      <target>
+        <context value="tgt"/>
+        <contextType value="variable"/>
+        <element value="dob"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="dob"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="rule3"/>
+      <source>
+        <context value="src"/>
+        <element value="s"/>
+        <variable value="sex"/>
+      </source>
+      <target>
+        <context value="tgt"/>
+        <contextType value="variable"/>
+        <element value="sex"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="sex"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="rule4"/>
+      <source>
+        <context value="src"/>
+        <element value="ntl"/>
+        <variable value="nationality"/>
+      </source>
+      <target>
+        <context value="tgt"/>
+        <contextType value="variable"/>
+        <element value="nationality"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="nationality"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="rule5"/>
+      <source>
+        <context value="src"/>
+        <element value="nid"/>
+        <variable value="id"/>
+      </source>
+      <target>
+        <context value="tgt"/>
+        <contextType value="variable"/>
+        <element value="nid"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="id"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="rule6"/>
+      <source>
+        <context value="src"/>
+        <element value="gn"/>
+        <variable value="gName"/>
+      </source>
+      <target>
+        <context value="tgt"/>
+        <contextType value="variable"/>
+        <element value="guardian"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="gName"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="rule7"/>
+      <source>
+        <context value="src"/>
+        <element value="v"/>
+        <variable value="v"/>
+      </source>
+      <target>
+        <context value="tgt"/>
+        <contextType value="variable"/>
+        <element value="vaccineDetails"/>
+        <variable value="tv"/>
+      </target>
+      <dependent>
+        <name value="mapVaccineDetails"/>
+        <variable value="v"/>
+        <variable value="tv"/>
+      </dependent>
+    </rule>
+  </group>
+  <group>
+    <name value="mapVaccineDetails"/>
+    <typeMode value="none"/>
+    <input>
+      <name value="src"/>
+      <type value="BackboneElement"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="tgt"/>
+      <type value="ModelVaccineDetails"/>
+      <mode value="target"/>
+    </input>
+    <rule>
+      <name value="rule8"/>
+      <source>
+        <context value="src"/>
+        <element value="tg"/>
+        <variable value="tg"/>
+      </source>
+      <target>
+        <contextType value="variable"/>
+        <variable value="coding"/>
+        <transform value="create"/>
+        <parameter>
+          <valueString value="Coding"/>
+        </parameter>
+      </target>
+      <target>
+        <context value="coding"/>
+        <contextType value="variable"/>
+        <element value="code"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="tg"/>
+        </parameter>
+      </target>
+      <target>
+        <context value="coding"/>
+        <contextType value="variable"/>
+        <element value="system"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueString value="http://id.who.int/icd/release/11/mms"/>
+        </parameter>
+      </target>
+      <target>
+        <context value="tgt"/>
+        <contextType value="variable"/>
+        <element value="disease"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="coding"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="rule9"/>
+      <source>
+        <context value="src"/>
+        <element value="vp"/>
+        <variable value="vp"/>
+      </source>
+      <target>
+        <contextType value="variable"/>
+        <variable value="coding"/>
+        <transform value="create"/>
+        <parameter>
+          <valueString value="Coding"/>
+        </parameter>
+      </target>
+      <target>
+        <context value="coding"/>
+        <contextType value="variable"/>
+        <element value="code"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="vp"/>
+        </parameter>
+      </target>
+      <target>
+        <context value="coding"/>
+        <contextType value="variable"/>
+        <element value="system"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueString value="http://id.who.int/icd/release/11/mms"/>
+        </parameter>
+      </target>
+      <target>
+        <contextType value="variable"/>
+        <variable value="code"/>
+        <transform value="create"/>
+        <parameter>
+          <valueString value="CodeableConcept"/>
+        </parameter>
+      </target>
+      <target>
+        <context value="code"/>
+        <contextType value="variable"/>
+        <element value="coding"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="coding"/>
+        </parameter>
+      </target>
+      <target>
+        <context value="tgt"/>
+        <contextType value="variable"/>
+        <element value="vaccineClassification"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="code"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="rule10"/>
+      <source>
+        <context value="src"/>
+        <element value="mp"/>
+        <variable value="mp"/>
+      </source>
+      <target>
+        <contextType value="variable"/>
+        <variable value="id"/>
+        <transform value="create"/>
+        <parameter>
+          <valueString value="Identifier"/>
+        </parameter>
+      </target>
+      <target>
+        <context value="id"/>
+        <contextType value="variable"/>
+        <element value="value"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="mp"/>
+        </parameter>
+      </target>
+      <target>
+        <context value="tgt"/>
+        <contextType value="variable"/>
+        <element value="vaccineTradeItem"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="id"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="rule11"/>
+      <source>
+        <context value="src"/>
+        <element value="ma"/>
+        <variable value="ma"/>
+      </source>
+      <target>
+        <context value="tgt"/>
+        <contextType value="variable"/>
+        <element value="manufacturer"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="ma"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="rule12"/>
+      <source>
+        <context value="src"/>
+        <element value="mid"/>
+        <variable value="mid"/>
+      </source>
+      <target>
+        <contextType value="variable"/>
+        <variable value="id"/>
+        <transform value="create"/>
+        <parameter>
+          <valueString value="Identifier"/>
+        </parameter>
+      </target>
+      <target>
+        <context value="id"/>
+        <contextType value="variable"/>
+        <element value="value"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="mid"/>
+        </parameter>
+      </target>
+      <target>
+        <context value="tgt"/>
+        <contextType value="variable"/>
+        <element value="manufacturerId"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="id"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="rule13"/>
+      <source>
+        <context value="src"/>
+        <element value="dt"/>
+        <variable value="dt"/>
+      </source>
+      <target>
+        <context value="tgt"/>
+        <contextType value="variable"/>
+        <element value="date"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="dt"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="rule14"/>
+      <source>
+        <context value="src"/>
+        <element value="bo"/>
+        <variable value="bo"/>
+      </source>
+      <target>
+        <context value="tgt"/>
+        <contextType value="variable"/>
+        <element value="batchNo"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="bo"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="rule18"/>
+      <source>
+        <context value="src"/>
+      </source>
+      <target>
+        <contextType value="variable"/>
+        <variable value="period"/>
+        <transform value="create"/>
+        <parameter>
+          <valueString value="Period"/>
+        </parameter>
+      </target>
+      <rule>
+        <name value="rule15"/>
+        <source>
+          <context value="src"/>
+          <element value="vls"/>
+          <variable value="start"/>
+        </source>
+        <target>
+          <context value="period"/>
+          <contextType value="variable"/>
+          <element value="start"/>
+          <transform value="copy"/>
+          <parameter>
+            <valueId value="start"/>
+          </parameter>
+        </target>
+      </rule>
+      <rule>
+        <name value="rule16"/>
+        <source>
+          <context value="src"/>
+          <element value="vle"/>
+          <variable value="end"/>
+        </source>
+        <target>
+          <context value="period"/>
+          <contextType value="variable"/>
+          <element value="end"/>
+          <transform value="copy"/>
+          <parameter>
+            <valueId value="end"/>
+          </parameter>
+        </target>
+      </rule>
+      <rule>
+        <name value="rule17"/>
+        <source>
+          <context value="src"/>
+        </source>
+        <target>
+          <context value="tgt"/>
+          <contextType value="variable"/>
+          <element value="validityPeriod"/>
+          <transform value="copy"/>
+          <parameter>
+            <valueId value="period"/>
+          </parameter>
+        </target>
+      </rule>
+    </rule>
+    <rule>
+      <name value="rule19"/>
+      <source>
+        <context value="src"/>
+        <element value="cn"/>
+        <variable value="cn"/>
+      </source>
+      <target>
+        <context value="tgt"/>
+        <contextType value="variable"/>
+        <element value="clinicianName"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="cn"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="rule21"/>
+      <source>
+        <context value="src"/>
+        <element value="is"/>
+        <variable value="is"/>
+      </source>
+      <target>
+        <context value="tgt"/>
+        <contextType value="variable"/>
+        <element value="issuer"/>
+        <variable value="issuer"/>
+      </target>
+      <target>
+        <context value="issuer"/>
+        <contextType value="variable"/>
+        <element value="reference"/>
+        <transform value="append"/>
+        <parameter>
+          <valueString value="Organization/"/>
+        </parameter>
+        <parameter>
+          <valueId value="is"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="rule20"/>
+      <source>
+        <context value="src"/>
+        <element value="dn"/>
+        <variable value="dn"/>
+      </source>
+      <target>
+        <contextType value="variable"/>
+        <variable value="coding"/>
+        <transform value="create"/>
+        <parameter>
+          <valueString value="Coding"/>
+        </parameter>
+      </target>
+      <target>
+        <context value="coding"/>
+        <contextType value="variable"/>
+        <element value="code"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="dn"/>
+        </parameter>
+      </target>
+      <target>
+        <context value="coding"/>
+        <contextType value="variable"/>
+        <element value="system"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueString value="http://smart.who.int/icvp/CodeSystem/doseNumber"/>
+        </parameter>
+      </target>
+      <target>
+        <contextType value="variable"/>
+        <variable value="code"/>
+        <transform value="create"/>
+        <parameter>
+          <valueString value="CodeableConcept"/>
+        </parameter>
+      </target>
+      <target>
+        <context value="code"/>
+        <contextType value="variable"/>
+        <element value="coding"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="coding"/>
+        </parameter>
+      </target>
+      <target>
+        <context value="tgt"/>
+        <contextType value="variable"/>
+        <element value="doseNumber"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="code"/>
+        </parameter>
+      </target>
+    </rule>
+  </group>
+  <group>
+    <name value="generateNarrativeText"/>
+    <typeMode value="none"/>
+    <documentation value="helper function"/>
+    <input>
+      <name value="src"/>
+      <type value="Section"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="text"/>
+      <type value="string"/>
+      <mode value="target"/>
+    </input>
+    <rule>
+      <name value="setstatus"/>
+      <source>
+        <context value="src"/>
+      </source>
+      <target>
+        <context value="text"/>
+        <contextType value="variable"/>
+        <element value="status"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueString value="empty"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="setdiv"/>
+      <source>
+        <context value="src"/>
+      </source>
+      <target>
+        <context value="text"/>
+        <contextType value="variable"/>
+        <element value="div"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueString value="&lt;div&gt;narrative not available&lt;/div&gt;"/>
+        </parameter>
+      </target>
+    </rule>
+  </group>
+  <group>
+    <name value="humanNameToHumanName"/>
+    <typeMode value="none"/>
+    <input>
+      <name value="sourceName"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="targetName"/>
+      <type value="HumanName"/>
+      <mode value="target"/>
+    </input>
+    <rule>
+      <name value="CopyUse"/>
+      <source>
+        <context value="sourceName"/>
+        <element value="use"/>
+        <variable value="use"/>
+      </source>
+      <target>
+        <context value="targetName"/>
+        <contextType value="variable"/>
+        <element value="use"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="use"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="CopyText"/>
+      <source>
+        <context value="sourceName"/>
+        <element value="text"/>
+        <variable value="text"/>
+      </source>
+      <target>
+        <context value="targetName"/>
+        <contextType value="variable"/>
+        <element value="text"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="text"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="CopyFamily"/>
+      <source>
+        <context value="sourceName"/>
+        <element value="family"/>
+        <variable value="family"/>
+      </source>
+      <target>
+        <context value="targetName"/>
+        <contextType value="variable"/>
+        <element value="family"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="family"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="CopyGiven"/>
+      <source>
+        <context value="sourceName"/>
+        <element value="given"/>
+        <variable value="given"/>
+      </source>
+      <target>
+        <context value="targetName"/>
+        <contextType value="variable"/>
+        <element value="given"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="given"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="CopyPrefix"/>
+      <source>
+        <context value="sourceName"/>
+        <element value="prefix"/>
+        <variable value="prefix"/>
+      </source>
+      <target>
+        <context value="targetName"/>
+        <contextType value="variable"/>
+        <element value="prefix"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="prefix"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="CopySuffix"/>
+      <source>
+        <context value="sourceName"/>
+        <element value="suffix"/>
+        <variable value="suffix"/>
+      </source>
+      <target>
+        <context value="targetName"/>
+        <contextType value="variable"/>
+        <element value="suffix"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="suffix"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="copyPeriod"/>
+      <source>
+        <context value="sourceName"/>
+        <element value="period"/>
+        <variable value="sourcePeriod"/>
+      </source>
+      <target>
+        <context value="targetName"/>
+        <contextType value="variable"/>
+        <element value="period"/>
+        <variable value="targetPeriod"/>
+      </target>
+      <rule>
+        <name value="CopyPeriod"/>
+        <source>
+          <context value="sourcePeriod"/>
+        </source>
+        <target>
+          <context value="sourcePeriod"/>
+          <contextType value="variable"/>
+        </target>
+        <dependent>
+          <name value="periodToPeriod"/>
+          <variable value="sourcePeriod"/>
+          <variable value="targetPeriod"/>
+        </dependent>
+      </rule>
+    </rule>
+  </group>
+  <group>
+    <name value="periodToPeriod"/>
+    <typeMode value="none"/>
+    <input>
+      <name value="sourcePeriod"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="targetPeriod"/>
+      <type value="Period"/>
+      <mode value="target"/>
+    </input>
+    <rule>
+      <name value="set period start"/>
+      <source>
+        <context value="sourcePeriod"/>
+        <element value="start"/>
+        <variable value="start"/>
+      </source>
+      <target>
+        <context value="targetPeriod"/>
+        <contextType value="variable"/>
+        <element value="start"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="start"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="set period end"/>
+      <source>
+        <context value="sourcePeriod"/>
+        <element value="end"/>
+        <variable value="end"/>
+      </source>
+      <target>
+        <context value="targetPeriod"/>
+        <contextType value="variable"/>
+        <element value="end"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="end"/>
+        </parameter>
+      </target>
+    </rule>
+  </group>
+</StructureMap>

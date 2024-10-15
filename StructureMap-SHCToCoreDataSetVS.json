@@ -1,0 +1,555 @@
+{
+  "resourceType" : "StructureMap",
+  "id" : "SHCToCoreDataSetVS",
+  "text" : {
+    "status" : "generated",
+    "div" : "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p class=\"res-header-id\"><b>Generated Narrative: StructureMap SHCToCoreDataSetVS</b></p><a name=\"SHCToCoreDataSetVS\"> </a><a name=\"hcSHCToCoreDataSetVS\"> </a><a name=\"SHCToCoreDataSetVS-en-US\"> </a><pre class=\"fml\">\r\n<b>map</b><span style=\"color: navy\"> &quot;</span>http://smart.who.int/ddcc/StructureMap/SHCToCoreDataSetVS<span style=\"color: navy\">&quot; = &quot;</span>SHCToCoreDataSetVS<span style=\"color: navy\">&quot;\r\n\r\n</span><b>uses</b><span style=\"color: navy\"> &quot;</span>http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-vaccination-bundle-dm<span style=\"color: navy\">&quot; </span><b>alias </b>SHCVaccinationBundleDM <b>as </b><b>source</b>\r\n<b>uses</b><span style=\"color: navy\"> &quot;</span>http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-patient-general-dm<span style=\"color: navy\">&quot; </span><b>alias </b>SHCPatientDM <b>as </b><b>source</b>\r\n<b>uses</b><span style=\"color: navy\"> &quot;</span>http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-vaccination-dm<span style=\"color: navy\">&quot; </span><b>alias </b>SHCImmunizationDM <b>as </b><b>source</b>\r\n<b>uses</b><span style=\"color: navy\"> &quot;</span><a href=\"http://hl7.org/fhir/R4/bundle.html\" title=\"Bundle\">http://hl7.org/fhir/StructureDefinition/Bundle</a><span style=\"color: navy\">&quot; </span><b>alias </b>DDCCBundle <b>as </b><b>target</b>\r\n<b>uses</b><span style=\"color: navy\"> &quot;</span><a href=\"StructureDefinition-DDCCCoreDataSetVS.html\" title=\"DDCC Core Data Set Logical Model for Vaccination Status\">http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSetVS</a><span style=\"color: navy\">&quot; </span><b>alias </b>DDCCVS <b>as </b><b>target</b>\r\n\r\n<b>group </b>SHCToVS<span style=\"color: navy\">(</span><b>source</b> <span style=\"color: maroon\">shc</span><span style=\"color: navy\"> : </span>SHCVaccinationBundleDM, <b>target</b> <span style=\"color: maroon\">ddccBundle</span><span style=\"color: navy\"> : </span>DDCCBundle<span style=\"color: navy\">)</span><span style=\"color: navy\"> {\r\n</span>  shc.entry<b> as </b><span style=\"color: maroon\">patientEntrySHC</span><b> then</b><span style=\"color: navy\"> {\r\n</span>    patientEntrySHC.resource<span style=\"color: navy\"> : </span>Patient first<b> as </b><span style=\"color: maroon\">patient</span><b> then</b><span style=\"color: navy\"> {\r\n</span>      shc.entry<b> as </b><span style=\"color: maroon\">entry</span><b> then</b><span style=\"color: navy\"> {\r\n</span>        <span style=\"color: navy\">// </span><span style=\"color: green\">entry.resource : Immunization as immunization where vaccineCode.memberOf('http://smart.who.int/ddcc/ValueSet/who-ddcc-allowed-vaccines-covid-19') -&gt;  ddccBundle.entry as outentry,  create('http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSetVS') as ddcc then {</span>\r\n        entry.resource<span style=\"color: navy\"> : </span>Immunization<b> as </b><span style=\"color: maroon\">immunization</span><span style=\"color: navy\"><b> -&gt; </b></span> ddccBundle.entry<b> as </b><span style=\"color: maroon\">outentry</span><span style=\"color: navy\">, </span> <b>create</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSetVS'</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">ddcc</span><b> then</b><span style=\"color: navy\"> {\r\n</span>          immunization<b> then </b>PatientToDDCCVS<span style=\"color: navy\">(</span><span style=\"color: maroon\">patient</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">ddcc</span><span style=\"color: navy\">)</span> <i>&quot;set patient&quot;</i><span style=\"color: navy\">;</span>\r\n          immunization<span style=\"color: navy\"><b> -&gt; </b></span>ddcc.vaccination<b> as </b><span style=\"color: maroon\">vaccination</span><b> then </b>ImmunizationToDDCC<span style=\"color: navy\">(</span><span style=\"color: maroon\">immunization</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">vaccination</span><span style=\"color: navy\">)</span> <i>&quot;set vaccination&quot;</i><span style=\"color: navy\">;</span>\r\n          immunization<span style=\"color: navy\"><b> -&gt; </b></span>outentry.resource = <span style=\"color: maroon\">ddcc</span> <i>&quot;set outentry&quot;</i><span style=\"color: navy\">;</span>\r\n        <span style=\"color: navy\">}</span> <i>&quot;immunizations&quot;</i><span style=\"color: navy\">;</span>\r\n      <span style=\"color: navy\">}</span> <i>&quot;entries&quot;</i><span style=\"color: navy\">;</span>\r\n    <span style=\"color: navy\">}</span> <i>&quot;get patient&quot;</i><span style=\"color: navy\">;</span>\r\n  <span style=\"color: navy\">}</span> <i>&quot;find patient&quot;</i><span style=\"color: navy\">;</span>\r\n<span style=\"color: navy\">}\r\n\r\n</span><b>group </b>PatientToDDCCVS<span style=\"color: navy\">(</span><b>source</b> <span style=\"color: maroon\">patient</span><span style=\"color: navy\"> : </span>SHCPatientDM, <b>target</b> <span style=\"color: maroon\">tgt</span><span style=\"color: navy\"> : </span>DDCCVS<span style=\"color: navy\">)</span><span style=\"color: navy\"> {\r\n</span>  patient.name<b> as </b><span style=\"color: maroon\">name</span><b> then </b>NameToText<span style=\"color: navy\">(</span><span style=\"color: maroon\">name</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">tgt</span><span style=\"color: navy\">)</span> <i>&quot;set name&quot;</i><span style=\"color: navy\">;</span>\r\n  patient.birthDate<b> as </b><span style=\"color: maroon\">birthDate</span><span style=\"color: navy\"><b> -&gt; </b></span>tgt.birthDate = <span style=\"color: maroon\">birthDate</span> <i>&quot;set birthDate&quot;</i><span style=\"color: navy\">;</span>\r\n  patient.identifier first<b> as </b><span style=\"color: maroon\">identifier</span><span style=\"color: navy\"><b> -&gt; </b></span>tgt.identifier = <span style=\"color: maroon\">identifier</span> <i>&quot;set identifier&quot;</i><span style=\"color: navy\">;</span>\r\n<span style=\"color: navy\">}\r\n\r\n</span><b>group </b>NameToText<span style=\"color: navy\">(</span><b>source</b> <span style=\"color: maroon\">name</span><span style=\"color: navy\"> : </span>HumanName, <b>target</b> <span style=\"color: maroon\">ddcc</span><span style=\"color: navy\">)</span><span style=\"color: navy\"> {\r\n</span>  <span style=\"color: navy\">// </span><span style=\"color: green\">append doesn't work until ddcc.name is set</span>\r\n  name.given first<b> as </b><span style=\"color: maroon\">given</span><span style=\"color: navy\"><b> -&gt; </b></span>ddcc.name = <span style=\"color: navy\">(</span>given.replaceMatches('$', ' ')<span style=\"color: navy\">)</span> <i>&quot;set first name&quot;</i><span style=\"color: navy\">;</span>\r\n  <span style=\"color: #b36b00\" title=\"This element was not defined prior to R5\">// name.given not_first as other -&gt; ddcc.name as tName, ddcc.name = append( tName, other ) &quot;set other names&quot;;</span>\r\n  name.given not_first<b> as </b><span style=\"color: maroon\">other</span><span style=\"color: navy\"><b> -&gt; </b></span> ddcc.name<b> as </b><span style=\"color: maroon\">tName</span><span style=\"color: navy\">, </span> <span style=\"color: navy\">(</span>other.replaceMatches('$', ' ')<span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">spaced</span><span style=\"color: navy\">, </span> ddcc.name = <b>append</b><span style=\"color: navy\">(</span><span style=\"color: maroon\">tName</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">spaced</span><span style=\"color: navy\">)</span> <i>&quot;set other names&quot;</i><span style=\"color: navy\">;</span>\r\n  name.family<b> as </b><span style=\"color: maroon\">family</span><span style=\"color: navy\"><b> -&gt; </b></span> ddcc.name<b> as </b><span style=\"color: maroon\">tName</span><span style=\"color: navy\">, </span> ddcc.name = <b>append</b><span style=\"color: navy\">(</span><span style=\"color: maroon\">tName</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">family</span><span style=\"color: navy\">)</span> <i>&quot;add family name&quot;</i><span style=\"color: navy\">;</span>\r\n  name.text<b> as </b><span style=\"color: maroon\">text</span><span style=\"color: navy\"><b> -&gt; </b></span>ddcc.name = <span style=\"color: maroon\">text</span> <i>&quot;set full name&quot;</i><span style=\"color: navy\">;</span>\r\n<span style=\"color: navy\">}\r\n\r\n</span><b>group </b>ImmunizationToDDCC<span style=\"color: navy\">(</span><b>source</b> <span style=\"color: maroon\">immunization</span><span style=\"color: navy\"> : </span>SHCImmunizationDM, <b>target</b> <span style=\"color: maroon\">vaccination</span><span style=\"color: navy\">)</span><span style=\"color: navy\"> {\r\n</span>  immunization.vaccineCode<b> as </b><span style=\"color: maroon\">vaccine</span><b> then</b><span style=\"color: navy\"> {\r\n</span>    vaccine.coding<b> as </b><span style=\"color: maroon\">coding</span><b> then</b><span style=\"color: navy\"> {\r\n</span>      coding<span style=\"color: navy\"><b> -&gt; </b></span>vaccination.vaccine = <span style=\"color: maroon\">coding</span> <i>&quot;set default vaccine&quot;</i><span style=\"color: navy\">;</span>\r\n      coding<span style=\"color: navy\"><b> -&gt; </b></span>vaccination.brand = <span style=\"color: maroon\">coding</span> <i>&quot;set default brand&quot;</i><span style=\"color: navy\">;</span>\r\n      coding<b> where </b>coding.memberOf('http://smart.who.int/ddcc/ValueSet/vaccine-covid19-cvx')<span style=\"color: navy\"><b> -&gt; </b></span>vaccination.vaccine = <b>translate</b><span style=\"color: navy\">(</span><span style=\"color: maroon\">coding</span><span style=\"color: navy\">, </span><span style=\"color: blue\">'http://smart.who.int/ddcc/ConceptMap/vaccine-covid19-cvx-to-icd11'</span><span style=\"color: navy\">, </span><span style=\"color: blue\">'Coding'</span><span style=\"color: navy\">)</span> <i>&quot;translate COVID CVX vaccine&quot;</i><span style=\"color: navy\">;</span>\r\n      coding<b> where </b>coding.memberOf('http://smart.who.int/ddcc/ValueSet/vaccine-covid19-snomed')<span style=\"color: navy\"><b> -&gt; </b></span>vaccination.vaccine = <b>translate</b><span style=\"color: navy\">(</span><span style=\"color: maroon\">coding</span><span style=\"color: navy\">, </span><span style=\"color: blue\">'http://smart.who.int/ddcc/ConceptMap/vaccine-covid19-snomed-to-icd11'</span><span style=\"color: navy\">, </span><span style=\"color: blue\">'Coding'</span><span style=\"color: navy\">)</span> <i>&quot;translate COVID SNOMED vaccine&quot;</i><span style=\"color: navy\">;</span>\r\n    <span style=\"color: navy\">}</span><span style=\"color: navy\">;</span>\r\n  <span style=\"color: navy\">}</span><span style=\"color: navy\">;</span>\r\n  immunization.manufacturer<b> as </b><span style=\"color: maroon\">tman</span><b> then</b><span style=\"color: navy\"> {\r\n</span>    tman.identifier<b> as </b><span style=\"color: maroon\">identifier</span><span style=\"color: navy\"><b> -&gt; </b></span>vaccination.manufacturer<b> as </b><span style=\"color: maroon\">manufacturer</span><b> then</b><span style=\"color: navy\"> {\r\n</span>      identifier.system<b> as </b><span style=\"color: maroon\">system</span><span style=\"color: navy\"><b> -&gt; </b></span>manufacturer.system = <span style=\"color: maroon\">system</span> <i>&quot;set manufacturer system&quot;</i><span style=\"color: navy\">;</span>\r\n      identifier.value<b> as </b><span style=\"color: maroon\">value</span><span style=\"color: navy\"><b> -&gt; </b></span>manufacturer.code = <span style=\"color: maroon\">value</span> <i>&quot;set manufacturer value&quot;</i><span style=\"color: navy\">;</span>\r\n    <span style=\"color: navy\">}</span> <i>&quot;set manufacturer id&quot;</i><span style=\"color: navy\">;</span>\r\n  <span style=\"color: navy\">}</span><span style=\"color: navy\">;</span>\r\n  immunization.lotNumber<b> as </b><span style=\"color: maroon\">lot</span><span style=\"color: navy\"><b> -&gt; </b></span>vaccination.lot = <span style=\"color: maroon\">lot</span> <i>&quot;set lot&quot;</i><span style=\"color: navy\">;</span>\r\n  immunization.occurrence<b> as </b><span style=\"color: maroon\">date</span><span style=\"color: navy\"><b> -&gt; </b></span>vaccination.date = <span style=\"color: maroon\">date</span> <i>&quot;set date&quot;</i><span style=\"color: navy\">;</span>\r\n  immunization.performer<b> as </b><span style=\"color: maroon\">performer</span><b> then</b><span style=\"color: navy\"> {\r\n</span>    performer.actor<b> as </b><span style=\"color: maroon\">actor</span><b> then</b><span style=\"color: navy\"> {\r\n</span>      actor.display<b> as </b><span style=\"color: maroon\">centre</span><span style=\"color: navy\"><b> -&gt; </b></span>vaccination.centre = <span style=\"color: maroon\">centre</span> <i>&quot;set centre&quot;</i><span style=\"color: navy\">;</span>\r\n    <span style=\"color: navy\">}</span><span style=\"color: navy\">;</span>\r\n  <span style=\"color: navy\">}</span><span style=\"color: navy\">;</span>\r\n<span style=\"color: navy\">}\r\n\r\n</span></pre></div>"
+  },
+  "url" : "http://smart.who.int/ddcc/StructureMap/SHCToCoreDataSetVS",
+  "version" : "1.0.0",
+  "name" : "SHCToCoreDataSetVS",
+  "status" : "draft",
+  "date" : "2024-10-15T13:40:08+00:00",
+  "publisher" : "WHO",
+  "contact" : [{
+    "name" : "WHO",
+    "telecom" : [{
+      "system" : "url",
+      "value" : "http://who.int"
+    }]
+  }],
+  "jurisdiction" : [{
+    "coding" : [{
+      "system" : "http://unstats.un.org/unsd/methods/m49/m49.htm",
+      "code" : "001"
+    }]
+  }],
+  "structure" : [{
+    "url" : "http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-vaccination-bundle-dm",
+    "mode" : "source",
+    "alias" : "SHCVaccinationBundleDM"
+  },
+  {
+    "url" : "http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-patient-general-dm",
+    "mode" : "source",
+    "alias" : "SHCPatientDM"
+  },
+  {
+    "url" : "http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-vaccination-dm",
+    "mode" : "source",
+    "alias" : "SHCImmunizationDM"
+  },
+  {
+    "url" : "http://hl7.org/fhir/StructureDefinition/Bundle",
+    "mode" : "target",
+    "alias" : "DDCCBundle"
+  },
+  {
+    "url" : "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSetVS",
+    "mode" : "target",
+    "alias" : "DDCCVS"
+  }],
+  "group" : [{
+    "name" : "SHCToVS",
+    "typeMode" : "none",
+    "input" : [{
+      "name" : "shc",
+      "type" : "SHCVaccinationBundleDM",
+      "mode" : "source"
+    },
+    {
+      "name" : "ddccBundle",
+      "type" : "DDCCBundle",
+      "mode" : "target"
+    }],
+    "rule" : [{
+      "name" : "find patient",
+      "source" : [{
+        "context" : "shc",
+        "element" : "entry",
+        "variable" : "patientEntrySHC"
+      }],
+      "rule" : [{
+        "name" : "get patient",
+        "source" : [{
+          "context" : "patientEntrySHC",
+          "type" : "Patient",
+          "element" : "resource",
+          "listMode" : "first",
+          "variable" : "patient"
+        }],
+        "rule" : [{
+          "name" : "entries",
+          "source" : [{
+            "context" : "shc",
+            "element" : "entry",
+            "variable" : "entry"
+          }],
+          "rule" : [{
+            "name" : "immunizations",
+            "source" : [{
+              "context" : "entry",
+              "type" : "Immunization",
+              "element" : "resource",
+              "variable" : "immunization"
+            }],
+            "target" : [{
+              "context" : "ddccBundle",
+              "contextType" : "variable",
+              "element" : "entry",
+              "variable" : "outentry"
+            },
+            {
+              "contextType" : "variable",
+              "variable" : "ddcc",
+              "transform" : "create",
+              "parameter" : [{
+                "valueString" : "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSetVS"
+              }]
+            }],
+            "rule" : [{
+              "name" : "set patient",
+              "source" : [{
+                "context" : "immunization"
+              }],
+              "dependent" : [{
+                "name" : "PatientToDDCCVS",
+                "variable" : ["patient",
+                "ddcc"]
+              }]
+            },
+            {
+              "name" : "set vaccination",
+              "source" : [{
+                "context" : "immunization"
+              }],
+              "target" : [{
+                "context" : "ddcc",
+                "contextType" : "variable",
+                "element" : "vaccination",
+                "variable" : "vaccination"
+              }],
+              "dependent" : [{
+                "name" : "ImmunizationToDDCC",
+                "variable" : ["immunization",
+                "vaccination"]
+              }]
+            },
+            {
+              "name" : "set outentry",
+              "source" : [{
+                "context" : "immunization"
+              }],
+              "target" : [{
+                "context" : "outentry",
+                "contextType" : "variable",
+                "element" : "resource",
+                "transform" : "copy",
+                "parameter" : [{
+                  "valueId" : "ddcc"
+                }]
+              }]
+            }]
+          }]
+        }]
+      }]
+    }]
+  },
+  {
+    "name" : "PatientToDDCCVS",
+    "typeMode" : "none",
+    "input" : [{
+      "name" : "patient",
+      "type" : "SHCPatientDM",
+      "mode" : "source"
+    },
+    {
+      "name" : "tgt",
+      "type" : "DDCCVS",
+      "mode" : "target"
+    }],
+    "rule" : [{
+      "name" : "set name",
+      "source" : [{
+        "context" : "patient",
+        "element" : "name",
+        "variable" : "name"
+      }],
+      "dependent" : [{
+        "name" : "NameToText",
+        "variable" : ["name",
+        "tgt"]
+      }]
+    },
+    {
+      "name" : "set birthDate",
+      "source" : [{
+        "context" : "patient",
+        "element" : "birthDate",
+        "variable" : "birthDate"
+      }],
+      "target" : [{
+        "context" : "tgt",
+        "contextType" : "variable",
+        "element" : "birthDate",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "birthDate"
+        }]
+      }]
+    },
+    {
+      "name" : "set identifier",
+      "source" : [{
+        "context" : "patient",
+        "element" : "identifier",
+        "listMode" : "first",
+        "variable" : "identifier"
+      }],
+      "target" : [{
+        "context" : "tgt",
+        "contextType" : "variable",
+        "element" : "identifier",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "identifier"
+        }]
+      }]
+    }]
+  },
+  {
+    "name" : "NameToText",
+    "typeMode" : "none",
+    "input" : [{
+      "name" : "name",
+      "type" : "HumanName",
+      "mode" : "source"
+    },
+    {
+      "name" : "ddcc",
+      "mode" : "target"
+    }],
+    "rule" : [{
+      "name" : "set first name",
+      "source" : [{
+        "context" : "name",
+        "element" : "given",
+        "listMode" : "first",
+        "variable" : "given"
+      }],
+      "target" : [{
+        "context" : "ddcc",
+        "contextType" : "variable",
+        "element" : "name",
+        "transform" : "evaluate",
+        "parameter" : [{
+          "valueString" : "given.replaceMatches('$', ' ')"
+        }]
+      }]
+    },
+    {
+      "name" : "set other names",
+      "source" : [{
+        "context" : "name",
+        "element" : "given",
+        "listMode" : "not_first",
+        "variable" : "other"
+      }],
+      "target" : [{
+        "context" : "ddcc",
+        "contextType" : "variable",
+        "element" : "name",
+        "variable" : "tName"
+      },
+      {
+        "contextType" : "variable",
+        "variable" : "spaced",
+        "transform" : "evaluate",
+        "parameter" : [{
+          "valueString" : "other.replaceMatches('$', ' ')"
+        }]
+      },
+      {
+        "context" : "ddcc",
+        "contextType" : "variable",
+        "element" : "name",
+        "transform" : "append",
+        "parameter" : [{
+          "valueId" : "tName"
+        },
+        {
+          "valueId" : "spaced"
+        }]
+      }]
+    },
+    {
+      "name" : "add family name",
+      "source" : [{
+        "context" : "name",
+        "element" : "family",
+        "variable" : "family"
+      }],
+      "target" : [{
+        "context" : "ddcc",
+        "contextType" : "variable",
+        "element" : "name",
+        "variable" : "tName"
+      },
+      {
+        "context" : "ddcc",
+        "contextType" : "variable",
+        "element" : "name",
+        "transform" : "append",
+        "parameter" : [{
+          "valueId" : "tName"
+        },
+        {
+          "valueId" : "family"
+        }]
+      }]
+    },
+    {
+      "name" : "set full name",
+      "source" : [{
+        "context" : "name",
+        "element" : "text",
+        "variable" : "text"
+      }],
+      "target" : [{
+        "context" : "ddcc",
+        "contextType" : "variable",
+        "element" : "name",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "text"
+        }]
+      }]
+    }]
+  },
+  {
+    "name" : "ImmunizationToDDCC",
+    "typeMode" : "none",
+    "input" : [{
+      "name" : "immunization",
+      "type" : "SHCImmunizationDM",
+      "mode" : "source"
+    },
+    {
+      "name" : "vaccination",
+      "mode" : "target"
+    }],
+    "rule" : [{
+      "name" : "vaccineCode",
+      "source" : [{
+        "context" : "immunization",
+        "element" : "vaccineCode",
+        "variable" : "vaccine"
+      }],
+      "rule" : [{
+        "name" : "coding",
+        "source" : [{
+          "context" : "vaccine",
+          "element" : "coding",
+          "variable" : "coding"
+        }],
+        "rule" : [{
+          "name" : "set default vaccine",
+          "source" : [{
+            "context" : "coding"
+          }],
+          "target" : [{
+            "context" : "vaccination",
+            "contextType" : "variable",
+            "element" : "vaccine",
+            "transform" : "copy",
+            "parameter" : [{
+              "valueId" : "coding"
+            }]
+          }]
+        },
+        {
+          "name" : "set default brand",
+          "source" : [{
+            "context" : "coding"
+          }],
+          "target" : [{
+            "context" : "vaccination",
+            "contextType" : "variable",
+            "element" : "brand",
+            "transform" : "copy",
+            "parameter" : [{
+              "valueId" : "coding"
+            }]
+          }]
+        },
+        {
+          "name" : "translate COVID CVX vaccine",
+          "source" : [{
+            "context" : "coding",
+            "condition" : "coding.memberOf('http://smart.who.int/ddcc/ValueSet/vaccine-covid19-cvx')"
+          }],
+          "target" : [{
+            "context" : "vaccination",
+            "contextType" : "variable",
+            "element" : "vaccine",
+            "transform" : "translate",
+            "parameter" : [{
+              "valueId" : "coding"
+            },
+            {
+              "valueString" : "http://smart.who.int/ddcc/ConceptMap/vaccine-covid19-cvx-to-icd11"
+            },
+            {
+              "valueString" : "Coding"
+            }]
+          }]
+        },
+        {
+          "name" : "translate COVID SNOMED vaccine",
+          "source" : [{
+            "context" : "coding",
+            "condition" : "coding.memberOf('http://smart.who.int/ddcc/ValueSet/vaccine-covid19-snomed')"
+          }],
+          "target" : [{
+            "context" : "vaccination",
+            "contextType" : "variable",
+            "element" : "vaccine",
+            "transform" : "translate",
+            "parameter" : [{
+              "valueId" : "coding"
+            },
+            {
+              "valueString" : "http://smart.who.int/ddcc/ConceptMap/vaccine-covid19-snomed-to-icd11"
+            },
+            {
+              "valueString" : "Coding"
+            }]
+          }]
+        }]
+      }]
+    },
+    {
+      "name" : "manufacturer",
+      "source" : [{
+        "context" : "immunization",
+        "element" : "manufacturer",
+        "variable" : "tman"
+      }],
+      "rule" : [{
+        "name" : "set manufacturer id",
+        "source" : [{
+          "context" : "tman",
+          "element" : "identifier",
+          "variable" : "identifier"
+        }],
+        "target" : [{
+          "context" : "vaccination",
+          "contextType" : "variable",
+          "element" : "manufacturer",
+          "variable" : "manufacturer"
+        }],
+        "rule" : [{
+          "name" : "set manufacturer system",
+          "source" : [{
+            "context" : "identifier",
+            "element" : "system",
+            "variable" : "system"
+          }],
+          "target" : [{
+            "context" : "manufacturer",
+            "contextType" : "variable",
+            "element" : "system",
+            "transform" : "copy",
+            "parameter" : [{
+              "valueId" : "system"
+            }]
+          }]
+        },
+        {
+          "name" : "set manufacturer value",
+          "source" : [{
+            "context" : "identifier",
+            "element" : "value",
+            "variable" : "value"
+          }],
+          "target" : [{
+            "context" : "manufacturer",
+            "contextType" : "variable",
+            "element" : "code",
+            "transform" : "copy",
+            "parameter" : [{
+              "valueId" : "value"
+            }]
+          }]
+        }]
+      }]
+    },
+    {
+      "name" : "set lot",
+      "source" : [{
+        "context" : "immunization",
+        "element" : "lotNumber",
+        "variable" : "lot"
+      }],
+      "target" : [{
+        "context" : "vaccination",
+        "contextType" : "variable",
+        "element" : "lot",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "lot"
+        }]
+      }]
+    },
+    {
+      "name" : "set date",
+      "source" : [{
+        "context" : "immunization",
+        "element" : "occurrence",
+        "variable" : "date"
+      }],
+      "target" : [{
+        "context" : "vaccination",
+        "contextType" : "variable",
+        "element" : "date",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "date"
+        }]
+      }]
+    },
+    {
+      "name" : "performer",
+      "source" : [{
+        "context" : "immunization",
+        "element" : "performer",
+        "variable" : "performer"
+      }],
+      "rule" : [{
+        "name" : "actor",
+        "source" : [{
+          "context" : "performer",
+          "element" : "actor",
+          "variable" : "actor"
+        }],
+        "rule" : [{
+          "name" : "set centre",
+          "source" : [{
+            "context" : "actor",
+            "element" : "display",
+            "variable" : "centre"
+          }],
+          "target" : [{
+            "context" : "vaccination",
+            "contextType" : "variable",
+            "element" : "centre",
+            "transform" : "copy",
+            "parameter" : [{
+              "valueId" : "centre"
+            }]
+          }]
+        }]
+      }]
+    }]
+  }]
+}

@@ -1,0 +1,123 @@
+{
+  "resourceType": "StructureMap",
+  "id": "BundleVSToAddBundle",
+  "meta": {
+    "versionId": "1",
+    "lastUpdated": "2022-06-01T12:55:43.592+00:00"
+  },
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><pre>map &quot;http://worldhealthorganization.github.io/ddcc/StructureMap/BundleVSToAddBundle&quot; = &quot;BundleVSToAddBundle&quot;\r\n\r\n\r\nuses &quot;http://hl7.org/fhir/StructureDefinition/Bundle&quot; alias DDCCBundle as source\r\nuses &quot;http://hl7.org/fhir/StructureDefinition/Bundle&quot; alias AddBundle as target\r\n\r\nimports &quot;http://worldhealthorganization.github.io/ddcc/StructureMap/CoreDataSetVSToAddBundle&quot;\r\n\r\ngroup BundleVSToAddBundle(source ddccbundle : DDCCBundle, target bundle : AddBundle) {\r\n  ddccbundle.entry first as ddcc -&gt; bundle then CoreDataSetVSToAddBundle(ddcc, bundle) &quot;get first entry from bundle&quot;;\r\n}\r\n\r\n</pre></div>"
+  },
+  "url": "http://worldhealthorganization.github.io/ddcc/StructureMap/BundleVSToAddBundle",
+  "version": "1.0.0",
+  "name": "BundleVSToAddBundle",
+  "status": "draft",
+  "date": "2022-11-23T04:26:34+00:00",
+  "publisher": "WHO",
+  "contact": [
+    {
+      "name": "WHO",
+      "telecom": [
+        {
+          "system": "url",
+          "value": "http://who.int"
+        }
+      ]
+    }
+  ],
+  "jurisdiction": [
+    {
+      "coding": [
+        {
+          "system": "http://unstats.un.org/unsd/methods/m49/m49.htm",
+          "code": "001"
+        }
+      ]
+    }
+  ],
+  "structure": [
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/Bundle",
+      "mode": "source",
+      "alias": "DDCCBundle"
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/Bundle",
+      "mode": "target",
+      "alias": "AddBundle"
+    }
+  ],
+  "import": [
+    "http://worldhealthorganization.github.io/ddcc/StructureMap/CoreDataSetVSToAddBundle"
+  ],
+  "group": [
+    {
+      "name": "BundleVSToAddBundle",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "ddccbundle",
+          "type": "DDCCBundle",
+          "mode": "source"
+        },
+        {
+          "name": "bundle",
+          "type": "AddBundle",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "get first entry from bundle",
+          "source": [
+            {
+              "context": "ddccbundle",
+              "element": "entry",
+              "listMode": "first",
+              "variable": "ddcc"
+            }
+          ],
+          "target": [
+            {
+              "contextType": "variable",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "bundle"
+                }
+              ]
+            }
+          ],
+          "dependent": [
+            {
+              "name": "CoreDataSetVSToAddBundle",
+              "variable": [
+                "ddcc",
+                "bundle"
+              ],
+              "_variable": [
+                {
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/tools/StructureDefinition/original-item-type",
+                      "valueUrl": "id"
+                    }
+                  ]
+                },
+                {
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/tools/StructureDefinition/original-item-type",
+                      "valueUrl": "id"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

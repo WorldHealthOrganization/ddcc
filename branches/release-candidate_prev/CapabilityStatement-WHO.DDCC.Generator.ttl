@@ -1,0 +1,76 @@
+@prefix fhir: <http://hl7.org/fhir/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# - resource -------------------------------------------------------------------
+
+<http://smart.who.int/ddcc/CapabilityStatement/WHO.DDCC.Generator> a fhir:CapabilityStatement ;
+  fhir:nodeRole fhir:treeRoot ;
+  fhir:id [ fhir:v "WHO.DDCC.Generator"] ; # 
+  fhir:text [
+     fhir:status [ fhir:v "generated" ] ;
+     fhir:div "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n      <p>Capability Statement for a DDCC Generator</p>\n         \n    </div>"
+  ] ; # 
+  fhir:url [ fhir:v "http://smart.who.int/ddcc/CapabilityStatement/WHO.DDCC.Generator"^^xsd:anyURI] ; # 
+  fhir:version [ fhir:v "1.0.0"] ; # 
+  fhir:name [ fhir:v "WHO_DDCC_Generator"] ; # 
+  fhir:title [ fhir:v "WHO DDCC Generator"] ; # 
+  fhir:status [ fhir:v "draft"] ; # 
+  fhir:experimental [ fhir:v "true"^^xsd:boolean] ; # 
+  fhir:date [ fhir:v "2021-05-06"^^xsd:date] ; # 
+  fhir:publisher [ fhir:v "WHO"] ; # 
+  fhir:contact ( [
+     fhir:name [ fhir:v "WHO" ] ;
+     fhir:telecom ( [
+       fhir:system [ fhir:v "url" ] ;
+       fhir:value [ fhir:v "http://who.int" ]
+     ] )
+  ] ) ; # 
+  fhir:description [ fhir:v "CapabilityStatement for WHO DDCC Generator actor."] ; # 
+  fhir:jurisdiction ( [
+     fhir:coding ( [
+       fhir:system [ fhir:v "http://unstats.un.org/unsd/methods/m49/m49.htm"^^xsd:anyURI ] ;
+       fhir:code [ fhir:v "001" ]
+     ] )
+  ] ) ; # 
+  fhir:kind [ fhir:v "requirements"] ; # 
+  fhir:fhirVersion [ fhir:v "4.3.0"] ; # 
+  fhir:format ( [ fhir:v "application/fhir+xml"] [ fhir:v "application/fhir+json"] ) ; # 
+  fhir:rest ( [
+     fhir:mode [ fhir:v "server" ] ;
+     fhir:documentation [ fhir:v "DDCC Generator Server Actor" ] ;
+     fhir:resource ( [
+       fhir:type [ fhir:v "QuestionnaireResponse" ] ;
+       fhir:supportedProfile ( [
+         fhir:v "http://smart.who.int/ddcc/StructureDefinition/DDCCQuestionnaireResponse"^^xsd:anyURI ;
+         fhir:link <http://smart.who.int/ddcc/StructureDefinition/DDCCQuestionnaireResponse>
+       ] ) ;
+       fhir:documentation [ fhir:v "." ] ;
+       fhir:interaction ( [
+         fhir:code [ fhir:v "create" ] ;
+         fhir:documentation [ fhir:v "DDCC Generator Interaction for accepting a Submit Health Event" ]
+       ] ) ;
+       fhir:operation ( [
+         fhir:name [ fhir:v "generateHealthCertificate" ] ;
+         fhir:definition [
+           fhir:v "http://smart.who.int/ddcc/OperationDefinition/DDCCQuestionnaireResponsegenerateHealthCertificate"^^xsd:anyURI ;
+           fhir:link <http://smart.who.int/ddcc/OperationDefinition/DDCCQuestionnaireResponsegenerateHealthCertificate>
+         ] ;
+         fhir:documentation [ fhir:v "Generate a health certificate based on a QuestionnaireResponse." ]
+       ] )
+     ] ) ;
+     fhir:interaction ( [
+       fhir:code [ fhir:v "batch" ]
+     ] )
+  ] [
+     fhir:mode [ fhir:v "client" ] ;
+     fhir:documentation [ fhir:v "DDCC Generator Client Actor" ] ;
+     fhir:interaction ( [
+       fhir:code [ fhir:v "batch" ] ;
+       fhir:documentation [ fhir:v "For submitting the Register Health Certificate transaction." ]
+     ] )
+  ] ) . # 
+
+# -------------------------------------------------------------------------------------
+

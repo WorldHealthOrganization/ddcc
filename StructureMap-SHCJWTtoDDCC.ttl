@@ -1,0 +1,750 @@
+@prefix fhir: <http://hl7.org/fhir/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# - resource -------------------------------------------------------------------
+
+<http://smart.who.int/ddcc/StructureMap/SHCJWTtoDDCC> a fhir:StructureMap ;
+  fhir:nodeRole fhir:treeRoot ;
+  fhir:id [ fhir:v "SHCJWTtoDDCC"] ; # 
+  fhir:text [
+     fhir:status [ fhir:v "generated" ] ;
+     fhir:div "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p class=\"res-header-id\"><b>Generated Narrative: StructureMap SHCJWTtoDDCC</b></p><a name=\"SHCJWTtoDDCC\"> </a><a name=\"hcSHCJWTtoDDCC\"> </a><a name=\"SHCJWTtoDDCC-en-US\"> </a><pre class=\"fml\">\r\n<b>map</b><span style=\"color: navy\"> &quot;</span>http://smart.who.int/ddcc/StructureMap/CertSHCtoDDCC<span style=\"color: navy\">&quot; = &quot;</span>SHCJWTtoDDCC<span style=\"color: navy\">&quot;\r\n\r\n</span><b>uses</b><span style=\"color: navy\"> &quot;</span><a href=\"StructureDefinition-CertSHC.html\" title=\"Certificate - Smart Health Card's JSon Web Token Logical Model\">http://smart.who.int/ddcc/StructureDefinition/CertSHC</a><span style=\"color: navy\">&quot; </span><b>alias </b>JWTPayload <b>as </b><b>source</b>\r\n<b>uses</b><span style=\"color: navy\"> &quot;</span>http://hl7.org/fhir/uv/shc/StructureDefinition/vc<span style=\"color: navy\">&quot; </span><b>alias </b>VC <b>as </b><b>source</b>\r\n<b>uses</b><span style=\"color: navy\"> &quot;</span>http://hl7.org/fhir/uv/shc/StructureDefinition/creadential-subject<span style=\"color: navy\">&quot; </span><b>alias </b>CredentialSubject <b>as </b><b>source</b>\r\n<b>uses</b><span style=\"color: navy\"> &quot;</span><a href=\"http://hl7.org/fhir/R4/bundle.html\" title=\"Bundle\">http://hl7.org/fhir/StructureDefinition/Bundle</a><span style=\"color: navy\">&quot; </span><b>alias </b>Bundle <b>as </b><b>target</b>\r\n\r\n<b>group </b>SHCtoDDCC<span style=\"color: navy\">(</span><b>source</b> <span style=\"color: maroon\">src</span><span style=\"color: navy\"> : </span>JWTPayload, <b>target</b> <span style=\"color: maroon\">bundle</span><span style=\"color: navy\"> : </span>Bundle<span style=\"color: navy\">)</span><span style=\"color: navy\"> {\r\n</span>  src<span style=\"color: navy\"><b> -&gt; </b></span>bundle.type = <span style=\"color: blue\">'transaction'</span> <i>&quot;set bundle type&quot;</i><span style=\"color: navy\">;</span>\r\n  src<span style=\"color: navy\"><b> -&gt; </b></span> bundle<span style=\"color: navy\">, </span> bundle.entry<b> as </b><span style=\"color: maroon\">entry</span><span style=\"color: navy\">, </span> entry.resource = <b>create</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'Composition'</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">comp</span><b> then</b><span style=\"color: navy\"> {\r\n</span>    src<span style=\"color: navy\"><b> -&gt; </b></span>bundle<b> then </b>ExtractCert<span style=\"color: navy\">(</span><span style=\"color: maroon\">src</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">bundle</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">comp</span><span style=\"color: navy\">)</span> <i>&quot;Certificate&quot;</i><span style=\"color: navy\">;</span>\r\n    src<span style=\"color: navy\"><b> -&gt; </b></span>bundle<b> then </b>ExtractComposition<span style=\"color: navy\">(</span><span style=\"color: maroon\">src</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">comp</span><span style=\"color: navy\">)</span> <i>&quot;Composition&quot;</i><span style=\"color: navy\">;</span>\r\n  <span style=\"color: navy\">}</span> <i>&quot;Patient and Composition Create&quot;</i><span style=\"color: navy\">;</span>\r\n<span style=\"color: navy\">}\r\n\r\n</span><b>group </b>ExtractCert<span style=\"color: navy\">(</span><b>source</b> <span style=\"color: maroon\">src</span><span style=\"color: navy\"> : </span>JWTPayload, <b>target</b> <span style=\"color: maroon\">bundle</span><span style=\"color: navy\"> : </span>Bundle, <b>target</b> <span style=\"color: maroon\">comp</span><span style=\"color: navy\"> : </span>Composition<span style=\"color: navy\">)</span><span style=\"color: navy\"> {\r\n</span>  src.vc<b> as </b><span style=\"color: maroon\">vc</span><span style=\"color: navy\"><b> -&gt; </b></span> bundle<span style=\"color: navy\">, </span> bundle.entry<b> as </b><span style=\"color: maroon\">entryOrg</span><span style=\"color: navy\">, </span> entryOrg.resource = <b>create</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'Organization'</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">org</span><span style=\"color: navy\">, </span> <b>uuid</b><span style=\"color: navy\">(</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">oid</span><b> then</b><span style=\"color: navy\"> {\r\n</span>    src<span style=\"color: navy\"><b> -&gt; </b></span>org.id = <span style=\"color: maroon\">oid</span> <i>&quot;Organization ID&quot;</i><span style=\"color: navy\">;</span>\r\n    src<span style=\"color: navy\"><b> -&gt; </b></span> comp.author<b> as </b><span style=\"color: maroon\">author</span><span style=\"color: navy\">, </span> author.reference = <b>append</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'Organization/'</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">oid</span><span style=\"color: navy\">)</span> <i>&quot;Set org&quot;</i><span style=\"color: navy\">;</span>\r\n    src.iss<b> as </b><span style=\"color: maroon\">iss</span><span style=\"color: navy\"><b> -&gt; </b></span> org.identifier<b> as </b><span style=\"color: maroon\">identif</span><span style=\"color: navy\">, </span> identif.value = <span style=\"color: maroon\">iss</span> <i>&quot;Set Organization name&quot;</i><span style=\"color: navy\">;</span>\r\n    vc.credentialSubject<b> as </b><span style=\"color: maroon\">credentialSubject</span><span style=\"color: navy\"><b> -&gt; </b></span>bundle<b> then</b><span style=\"color: navy\"> {\r\n</span>      credentialSubject.fhirBundle<b> as </b><span style=\"color: maroon\">fhirBundle</span><span style=\"color: navy\"><b> -&gt; </b></span>bundle<b> then</b><span style=\"color: navy\"> {\r\n</span>        fhirBundle.entry<b> as </b><span style=\"color: maroon\">bundleEntrySHC</span><b> then</b><span style=\"color: navy\"> {\r\n</span>          bundleEntrySHC.resource<span style=\"color: navy\"> : </span>Patient first<b> as </b><span style=\"color: maroon\">patientSHC</span><b> then</b><span style=\"color: navy\"> {\r\n</span>            bundleEntrySHC.fullUrl<b> as </b><span style=\"color: maroon\">ref</span><span style=\"color: navy\"><b> -&gt; </b></span> comp.subject<b> as </b><span style=\"color: maroon\">subj</span><span style=\"color: navy\">, </span> subj.reference = <b>append</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'Patient/'</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">ref</span><span style=\"color: navy\">)</span> <i>&quot;Set patient&quot;</i><span style=\"color: navy\">;</span>\r\n          <span style=\"color: navy\">}</span> <i>&quot;patient filter&quot;</i><span style=\"color: navy\">;</span>\r\n          bundleEntrySHC.resource<b> as </b><span style=\"color: maroon\">anyRes</span><span style=\"color: navy\"><b> -&gt; </b></span> bundle.entry<b> as </b><span style=\"color: maroon\">entry</span><span style=\"color: navy\">, </span> entry.resource = <span style=\"color: maroon\">anyRes</span> <i>&quot;adding resource to bundle&quot;</i><span style=\"color: navy\">;</span>\r\n        <span style=\"color: navy\">}</span> <i>&quot;for each entry&quot;</i><span style=\"color: navy\">;</span>\r\n        src<b> where </b>(fhirBundle.entry.resource.ofType(Immunization).exists())<span style=\"color: navy\"><b> -&gt; </b></span>comp.section<b> as </b><span style=\"color: maroon\">section</span><b> then</b><span style=\"color: navy\"> {\r\n</span>          src<span style=\"color: navy\"><b> -&gt; </b></span> section.code<b> as </b><span style=\"color: maroon\">code</span><span style=\"color: navy\">, </span> code.coding<b> as </b><span style=\"color: maroon\">coding</span><span style=\"color: navy\">, </span> coding.system = <span style=\"color: blue\">'http://loinc.org'</span><span style=\"color: navy\">, </span> coding.code = <span style=\"color: blue\">'11369-6'</span><span style=\"color: navy\">, </span> coding.display = <span style=\"color: blue\">'History of Immunization Narrative'</span> <i>&quot;Adding code to imm section&quot;</i><span style=\"color: navy\">;</span>\r\n          src<span style=\"color: navy\"><b> -&gt; </b></span> section.author<b> as </b><span style=\"color: maroon\">author</span><span style=\"color: navy\">, </span> author.reference = <b>append</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'Organization/'</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">oid</span><span style=\"color: navy\">)</span> <i>&quot;assing org entry to section&quot;</i><span style=\"color: navy\">;</span>\r\n          fhirBundle.entry<b> as </b><span style=\"color: maroon\">bundleEntrySHC</span><b> then</b><span style=\"color: navy\"> {\r\n</span>            bundleEntrySHC.resource<span style=\"color: navy\"> : </span>Immunization<b> as </b><span style=\"color: maroon\">immunizationSHC</span><b> then</b><span style=\"color: navy\"> {\r\n</span>              bundleEntrySHC.fullUrl<b> as </b><span style=\"color: maroon\">ref</span><span style=\"color: navy\"><b> -&gt; </b></span> section.entry<b> as </b><span style=\"color: maroon\">entry</span><span style=\"color: navy\">, </span> entry.reference = <b>append</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'Immunization/'</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">ref</span><span style=\"color: navy\">)</span> <i>&quot;add imm section&quot;</i><span style=\"color: navy\">;</span>\r\n            <span style=\"color: navy\">}</span> <i>&quot;assign immunization to composition&quot;</i><span style=\"color: navy\">;</span>\r\n          <span style=\"color: navy\">}</span> <i>&quot;Each entry&quot;</i><span style=\"color: navy\">;</span>\r\n        <span style=\"color: navy\">}</span> <i>&quot;SHC Immunization Section&quot;</i><span style=\"color: navy\">;</span>\r\n        src<b> where </b>(fhirBundle.entry.resource.ofType(Observation).exists())<span style=\"color: navy\"><b> -&gt; </b></span>comp.section<b> as </b><span style=\"color: maroon\">section</span><b> then</b><span style=\"color: navy\"> {\r\n</span>          src<span style=\"color: navy\"><b> -&gt; </b></span> section.code<b> as </b><span style=\"color: maroon\">code</span><span style=\"color: navy\">, </span> code.coding<b> as </b><span style=\"color: maroon\">coding</span><span style=\"color: navy\">, </span> coding.system = <span style=\"color: blue\">'http://loinc.org'</span><span style=\"color: navy\">, </span> coding.code = <span style=\"color: blue\">'30954-2'</span><span style=\"color: navy\">, </span> coding.display = <span style=\"color: blue\">'Results (Diagnostic findings)'</span> <i>&quot;Adding code to obs section&quot;</i><span style=\"color: navy\">;</span>\r\n          src<span style=\"color: navy\"><b> -&gt; </b></span> section.author<b> as </b><span style=\"color: maroon\">author</span><span style=\"color: navy\">, </span> author.reference = <b>append</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'Organization/'</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">oid</span><span style=\"color: navy\">)</span> <i>&quot;assing org entry to section&quot;</i><span style=\"color: navy\">;</span>\r\n          fhirBundle.entry<b> as </b><span style=\"color: maroon\">bundleEntrySHC</span><b> then</b><span style=\"color: navy\"> {\r\n</span>            bundleEntrySHC.resource<span style=\"color: navy\"> : </span>Observation<b> as </b><span style=\"color: maroon\">observationSHC</span><b> then</b><span style=\"color: navy\"> {\r\n</span>              bundleEntrySHC.fullUrl<b> as </b><span style=\"color: maroon\">ref</span><span style=\"color: navy\"><b> -&gt; </b></span> section.entry<b> as </b><span style=\"color: maroon\">entry</span><span style=\"color: navy\">, </span> entry.reference = <b>append</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'Observation/'</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">ref</span><span style=\"color: navy\">)</span> <i>&quot;add obs section&quot;</i><span style=\"color: navy\">;</span>\r\n            <span style=\"color: navy\">}</span> <i>&quot;assign immunization to composition&quot;</i><span style=\"color: navy\">;</span>\r\n          <span style=\"color: navy\">}</span> <i>&quot;Entry Obs&quot;</i><span style=\"color: navy\">;</span>\r\n        <span style=\"color: navy\">}</span> <i>&quot;SHC Observation Section&quot;</i><span style=\"color: navy\">;</span>\r\n      <span style=\"color: navy\">}</span> <i>&quot;SHC FhirBundle&quot;</i><span style=\"color: navy\">;</span>\r\n    <span style=\"color: navy\">}</span> <i>&quot;SHC Credential Subject&quot;</i><span style=\"color: navy\">;</span>\r\n  <span style=\"color: navy\">}</span> <i>&quot;Org Create&quot;</i><span style=\"color: navy\">;</span>\r\n<span style=\"color: navy\">}\r\n\r\n</span><b>group </b>ExtractComposition<span style=\"color: navy\">(</span><b>source</b> <span style=\"color: maroon\">src</span><span style=\"color: navy\"> : </span>Data, <b>target</b> <span style=\"color: maroon\">composition</span><span style=\"color: navy\"> : </span>Composition<span style=\"color: navy\">)</span><span style=\"color: navy\"> {\r\n</span>  src<span style=\"color: navy\"><b> -&gt; </b></span>composition.title = <span style=\"color: blue\">'International Certificate of Vaccination or Prophylaxis'</span> <i>&quot;Title&quot;</i><span style=\"color: navy\">;</span>\r\n  src<span style=\"color: navy\"><b> -&gt; </b></span> composition.category<b> as </b><span style=\"color: maroon\">category</span><span style=\"color: navy\">, </span> category.coding<b> as </b><span style=\"color: maroon\">coding</span><b> then</b><span style=\"color: navy\"> {\r\n</span>    src<span style=\"color: navy\"><b> -&gt; </b></span>coding.code = <span style=\"color: blue\">'ddcc-vs'</span> <i>&quot;Category&quot;</i><span style=\"color: navy\">;</span>\r\n  <span style=\"color: navy\">}</span> <i>&quot;set category&quot;</i><span style=\"color: navy\">;</span>\r\n  src<span style=\"color: navy\"><b> -&gt; </b></span> composition.type<b> as </b><span style=\"color: maroon\">type</span><span style=\"color: navy\">, </span> type.coding<b> as </b><span style=\"color: maroon\">coding</span><b> then</b><span style=\"color: navy\"> {\r\n</span>    src<span style=\"color: navy\"><b> -&gt; </b></span> coding.system = <span style=\"color: blue\">'http://loinc.org'</span><span style=\"color: navy\">, </span> coding.code = <span style=\"color: blue\">'82593-5'</span><span style=\"color: navy\">, </span> coding.display = <span style=\"color: blue\">'Immunization summary report'</span> <i>&quot;set type coding&quot;</i><span style=\"color: navy\">;</span>\r\n  <span style=\"color: navy\">}</span> <i>&quot;set type&quot;</i><span style=\"color: navy\">;</span>\r\n  src<span style=\"color: navy\"><b> -&gt; </b></span> composition.event<b> as </b><span style=\"color: maroon\">event</span><span style=\"color: navy\">, </span> event.period = <b>create</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'Period'</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">period</span><b> then </b>ExtractPeriod<span style=\"color: navy\">(</span><span style=\"color: maroon\">src</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">period</span><span style=\"color: navy\">)</span> <i>&quot;Extract Period&quot;</i><span style=\"color: navy\">;</span>\r\n<span style=\"color: navy\">}\r\n\r\n</span><b>group </b>ExtractPeriod<span style=\"color: navy\">(</span><b>source</b> <span style=\"color: maroon\">src</span><span style=\"color: navy\"> : </span>JWTPayload, <b>target</b> <span style=\"color: maroon\">tgt</span><span style=\"color: navy\"> : </span>Period<span style=\"color: navy\">)</span><span style=\"color: navy\"> {\r\n</span>  src.nbf<b> as </b><span style=\"color: maroon\">nbf</span><span style=\"color: navy\"><b> -&gt; </b></span>tgt.start = <span style=\"color: maroon\">nbf</span> <i>&quot;Start notBefore&quot;</i><span style=\"color: navy\">;</span>\r\n  src.iat<b> as </b><span style=\"color: maroon\">iat</span><span style=\"color: navy\"><b> -&gt; </b></span>tgt.start = <span style=\"color: maroon\">iat</span> <i>&quot;Start issuedAt&quot;</i><span style=\"color: navy\">;</span>\r\n  src.exp<b> as </b><span style=\"color: maroon\">exp</span><span style=\"color: navy\"><b> -&gt; </b></span>tgt.end = <span style=\"color: maroon\">exp</span> <i>&quot;End expiration&quot;</i><span style=\"color: navy\">;</span>\r\n<span style=\"color: navy\">}\r\n\r\n</span></pre></div>"
+  ] ; # 
+  fhir:url [ fhir:v "http://smart.who.int/ddcc/StructureMap/CertSHCtoDDCC"^^xsd:anyURI] ; # 
+  fhir:version [ fhir:v "1.0.0"] ; # 
+  fhir:name [ fhir:v "SHCJWTtoDDCC"] ; # 
+  fhir:status [ fhir:v "draft"] ; # 
+  fhir:date [ fhir:v "2024-10-15T13:40:08+00:00"^^xsd:dateTime] ; # 
+  fhir:publisher [ fhir:v "WHO"] ; # 
+  fhir:contact ( [
+     fhir:name [ fhir:v "WHO" ] ;
+     fhir:telecom ( [
+       fhir:system [ fhir:v "url" ] ;
+       fhir:value [ fhir:v "http://who.int" ]
+     ] )
+  ] ) ; # 
+  fhir:jurisdiction ( [
+     fhir:coding ( [
+       fhir:system [ fhir:v "http://unstats.un.org/unsd/methods/m49/m49.htm"^^xsd:anyURI ] ;
+       fhir:code [ fhir:v "001" ]
+     ] )
+  ] ) ; # 
+  fhir:structure ( [
+     fhir:url [
+       fhir:v "http://smart.who.int/ddcc/StructureDefinition/CertSHC"^^xsd:anyURI ;
+       fhir:link <http://smart.who.int/ddcc/StructureDefinition/CertSHC>
+     ] ;
+     fhir:mode [ fhir:v "source" ] ;
+     fhir:alias [ fhir:v "JWTPayload" ]
+  ] [
+     fhir:url [
+       fhir:v "http://hl7.org/fhir/uv/shc/StructureDefinition/vc"^^xsd:anyURI ;
+       fhir:link <http://hl7.org/fhir/uv/shc/StructureDefinition/vc>
+     ] ;
+     fhir:mode [ fhir:v "source" ] ;
+     fhir:alias [ fhir:v "VC" ]
+  ] [
+     fhir:url [
+       fhir:v "http://hl7.org/fhir/uv/shc/StructureDefinition/creadential-subject"^^xsd:anyURI ;
+       fhir:link <http://hl7.org/fhir/uv/shc/StructureDefinition/creadential-subject>
+     ] ;
+     fhir:mode [ fhir:v "source" ] ;
+     fhir:alias [ fhir:v "CredentialSubject" ]
+  ] [
+     fhir:url [
+       fhir:v "http://hl7.org/fhir/StructureDefinition/Bundle"^^xsd:anyURI ;
+       fhir:link <http://hl7.org/fhir/StructureDefinition/Bundle>
+     ] ;
+     fhir:mode [ fhir:v "target" ] ;
+     fhir:alias [ fhir:v "Bundle" ]
+  ] ) ; # 
+  fhir:group ( [
+     fhir:name [ fhir:v "SHCtoDDCC" ] ;
+     fhir:typeMode [ fhir:v "none" ] ;
+     fhir:input ( [
+       fhir:name [ fhir:v "src" ] ;
+       fhir:type [ fhir:v "JWTPayload" ] ;
+       fhir:mode [ fhir:v "source" ]
+     ] [
+       fhir:name [ fhir:v "bundle" ] ;
+       fhir:type [ fhir:v "Bundle" ] ;
+       fhir:mode [ fhir:v "target" ]
+     ] ) ;
+     fhir:rule ( [
+       fhir:name [ fhir:v "set bundle type" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "src" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "bundle" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "type" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "transaction" ]
+         ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "Patient and Composition Create" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "src" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "bundle" ] ;
+         fhir:contextType [ fhir:v "variable" ]
+       ] [
+         fhir:context [ fhir:v "bundle" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "entry" ] ;
+         fhir:variable [ fhir:v "entry" ]
+       ] [
+         fhir:context [ fhir:v "entry" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "resource" ] ;
+         fhir:variable [ fhir:v "comp" ] ;
+         fhir:transform [ fhir:v "create" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "Composition" ]
+         ] )
+       ] ) ;
+       fhir:rule ( [
+         fhir:name [ fhir:v "Certificate" ] ;
+         fhir:source ( [
+           fhir:context [ fhir:v "src" ]
+         ] ) ;
+         fhir:target ( [
+           fhir:context [ fhir:v "bundle" ] ;
+           fhir:contextType [ fhir:v "variable" ]
+         ] ) ;
+         fhir:dependent ( [
+           fhir:name [ fhir:v "ExtractCert" ] ;
+           fhir:variable ( [ fhir:v "src" ] [ fhir:v "bundle" ] [ fhir:v "comp" ] )
+         ] )
+       ] [
+         fhir:name [ fhir:v "Composition" ] ;
+         fhir:source ( [
+           fhir:context [ fhir:v "src" ]
+         ] ) ;
+         fhir:target ( [
+           fhir:context [ fhir:v "bundle" ] ;
+           fhir:contextType [ fhir:v "variable" ]
+         ] ) ;
+         fhir:dependent ( [
+           fhir:name [ fhir:v "ExtractComposition" ] ;
+           fhir:variable ( [ fhir:v "src" ] [ fhir:v "comp" ] )
+         ] )
+       ] )
+     ] )
+  ] [
+     fhir:name [ fhir:v "ExtractCert" ] ;
+     fhir:typeMode [ fhir:v "none" ] ;
+     fhir:input ( [
+       fhir:name [ fhir:v "src" ] ;
+       fhir:type [ fhir:v "JWTPayload" ] ;
+       fhir:mode [ fhir:v "source" ]
+     ] [
+       fhir:name [ fhir:v "bundle" ] ;
+       fhir:type [ fhir:v "Bundle" ] ;
+       fhir:mode [ fhir:v "target" ]
+     ] [
+       fhir:name [ fhir:v "comp" ] ;
+       fhir:type [ fhir:v "Composition" ] ;
+       fhir:mode [ fhir:v "target" ]
+     ] ) ;
+     fhir:rule ( [
+       fhir:name [ fhir:v "Org Create" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "src" ] ;
+         fhir:element [ fhir:v "vc" ] ;
+         fhir:variable [ fhir:v "vc" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "bundle" ] ;
+         fhir:contextType [ fhir:v "variable" ]
+       ] [
+         fhir:context [ fhir:v "bundle" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "entry" ] ;
+         fhir:variable [ fhir:v "entryOrg" ]
+       ] [
+         fhir:context [ fhir:v "entryOrg" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "resource" ] ;
+         fhir:variable [ fhir:v "org" ] ;
+         fhir:transform [ fhir:v "create" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "Organization" ]
+         ] )
+       ] [
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:variable [ fhir:v "oid" ] ;
+         fhir:transform [ fhir:v "uuid" ]
+       ] ) ;
+       fhir:rule ( [
+         fhir:name [ fhir:v "Organization ID" ] ;
+         fhir:source ( [
+           fhir:context [ fhir:v "src" ]
+         ] ) ;
+         fhir:target ( [
+           fhir:context [ fhir:v "org" ] ;
+           fhir:contextType [ fhir:v "variable" ] ;
+           fhir:element [ fhir:v "id" ] ;
+           fhir:transform [ fhir:v "copy" ] ;
+           fhir:parameter ( [
+             fhir:value [ fhir:v "oid" ]
+           ] )
+         ] )
+       ] [
+         fhir:name [ fhir:v "Composition.Set org" ] ;
+         fhir:source ( [
+           fhir:context [ fhir:v "src" ]
+         ] ) ;
+         fhir:target ( [
+           fhir:context [ fhir:v "comp" ] ;
+           fhir:contextType [ fhir:v "variable" ] ;
+           fhir:element [ fhir:v "author" ] ;
+           fhir:variable [ fhir:v "author" ]
+         ] [
+           fhir:context [ fhir:v "author" ] ;
+           fhir:contextType [ fhir:v "variable" ] ;
+           fhir:element [ fhir:v "reference" ] ;
+           fhir:transform [ fhir:v "append" ] ;
+           fhir:parameter ( [
+             fhir:value [ fhir:v "Organization/" ]
+           ] [
+             fhir:value [ fhir:v "oid" ]
+           ] )
+         ] )
+       ] [
+         fhir:name [ fhir:v "Set Organization name" ] ;
+         fhir:source ( [
+           fhir:context [ fhir:v "src" ] ;
+           fhir:element [ fhir:v "iss" ] ;
+           fhir:variable [ fhir:v "iss" ]
+         ] ) ;
+         fhir:target ( [
+           fhir:context [ fhir:v "org" ] ;
+           fhir:contextType [ fhir:v "variable" ] ;
+           fhir:element [ fhir:v "identifier" ] ;
+           fhir:variable [ fhir:v "identif" ]
+         ] [
+           fhir:context [ fhir:v "identif" ] ;
+           fhir:contextType [ fhir:v "variable" ] ;
+           fhir:element [ fhir:v "value" ] ;
+           fhir:transform [ fhir:v "copy" ] ;
+           fhir:parameter ( [
+             fhir:value [ fhir:v "iss" ]
+           ] )
+         ] )
+       ] [
+         fhir:name [ fhir:v "SHC Credential Subject" ] ;
+         fhir:source ( [
+           fhir:context [ fhir:v "vc" ] ;
+           fhir:element [ fhir:v "credentialSubject" ] ;
+           fhir:variable [ fhir:v "credentialSubject" ]
+         ] ) ;
+         fhir:target ( [
+           fhir:context [ fhir:v "bundle" ] ;
+           fhir:contextType [ fhir:v "variable" ]
+         ] ) ;
+         fhir:rule ( [
+           fhir:name [ fhir:v "SHC FhirBundle" ] ;
+           fhir:source ( [
+             fhir:context [ fhir:v "credentialSubject" ] ;
+             fhir:element [ fhir:v "fhirBundle" ] ;
+             fhir:variable [ fhir:v "fhirBundle" ]
+           ] ) ;
+           fhir:target ( [
+             fhir:context [ fhir:v "bundle" ] ;
+             fhir:contextType [ fhir:v "variable" ]
+           ] ) ;
+           fhir:rule ( [
+             fhir:name [ fhir:v "for each entry" ] ;
+             fhir:source ( [
+               fhir:context [ fhir:v "fhirBundle" ] ;
+               fhir:element [ fhir:v "entry" ] ;
+               fhir:variable [ fhir:v "bundleEntrySHC" ]
+             ] ) ;
+             fhir:rule ( [
+               fhir:name [ fhir:v "patient filter" ] ;
+               fhir:source ( [
+                 fhir:context [ fhir:v "bundleEntrySHC" ] ;
+                 fhir:type [ fhir:v "Patient" ] ;
+                 fhir:element [ fhir:v "resource" ] ;
+                 fhir:listMode [ fhir:v "first" ] ;
+                 fhir:variable [ fhir:v "patientSHC" ]
+               ] ) ;
+               fhir:rule ( [
+                 fhir:name [ fhir:v "Composition.Set patient" ] ;
+                 fhir:source ( [
+                   fhir:context [ fhir:v "bundleEntrySHC" ] ;
+                   fhir:element [ fhir:v "fullUrl" ] ;
+                   fhir:variable [ fhir:v "ref" ]
+                 ] ) ;
+                 fhir:target ( [
+                   fhir:context [ fhir:v "comp" ] ;
+                   fhir:contextType [ fhir:v "variable" ] ;
+                   fhir:element [ fhir:v "subject" ] ;
+                   fhir:variable [ fhir:v "subj" ]
+                 ] [
+                   fhir:context [ fhir:v "subj" ] ;
+                   fhir:contextType [ fhir:v "variable" ] ;
+                   fhir:element [ fhir:v "reference" ] ;
+                   fhir:transform [ fhir:v "append" ] ;
+                   fhir:parameter ( [
+                     fhir:value [ fhir:v "Patient/" ]
+                   ] [
+                     fhir:value [ fhir:v "ref" ]
+                   ] )
+                 ] )
+               ] )
+             ] [
+               fhir:name [ fhir:v "adding resource to bundle" ] ;
+               fhir:source ( [
+                 fhir:context [ fhir:v "bundleEntrySHC" ] ;
+                 fhir:element [ fhir:v "resource" ] ;
+                 fhir:variable [ fhir:v "anyRes" ]
+               ] ) ;
+               fhir:target ( [
+                 fhir:context [ fhir:v "bundle" ] ;
+                 fhir:contextType [ fhir:v "variable" ] ;
+                 fhir:element [ fhir:v "entry" ] ;
+                 fhir:variable [ fhir:v "entry" ]
+               ] [
+                 fhir:context [ fhir:v "entry" ] ;
+                 fhir:contextType [ fhir:v "variable" ] ;
+                 fhir:element [ fhir:v "resource" ] ;
+                 fhir:transform [ fhir:v "copy" ] ;
+                 fhir:parameter ( [
+                   fhir:value [ fhir:v "anyRes" ]
+                 ] )
+               ] )
+             ] )
+           ] [
+             fhir:name [ fhir:v "SHC Immunization Section" ] ;
+             fhir:source ( [
+               fhir:context [ fhir:v "src" ] ;
+               fhir:condition [ fhir:v "(fhirBundle.entry.resource.ofType(Immunization).exists())" ]
+             ] ) ;
+             fhir:target ( [
+               fhir:context [ fhir:v "comp" ] ;
+               fhir:contextType [ fhir:v "variable" ] ;
+               fhir:element [ fhir:v "section" ] ;
+               fhir:variable [ fhir:v "section" ]
+             ] ) ;
+             fhir:rule ( [
+               fhir:name [ fhir:v "Adding code to imm section" ] ;
+               fhir:source ( [
+                 fhir:context [ fhir:v "src" ]
+               ] ) ;
+               fhir:target ( [
+                 fhir:context [ fhir:v "section" ] ;
+                 fhir:contextType [ fhir:v "variable" ] ;
+                 fhir:element [ fhir:v "code" ] ;
+                 fhir:variable [ fhir:v "code" ]
+               ] [
+                 fhir:context [ fhir:v "code" ] ;
+                 fhir:contextType [ fhir:v "variable" ] ;
+                 fhir:element [ fhir:v "coding" ] ;
+                 fhir:variable [ fhir:v "coding" ]
+               ] [
+                 fhir:context [ fhir:v "coding" ] ;
+                 fhir:contextType [ fhir:v "variable" ] ;
+                 fhir:element [ fhir:v "system" ] ;
+                 fhir:transform [ fhir:v "copy" ] ;
+                 fhir:parameter ( [
+                   fhir:value [ fhir:v "http://loinc.org" ]
+                 ] )
+               ] [
+                 fhir:context [ fhir:v "coding" ] ;
+                 fhir:contextType [ fhir:v "variable" ] ;
+                 fhir:element [ fhir:v "code" ] ;
+                 fhir:transform [ fhir:v "copy" ] ;
+                 fhir:parameter ( [
+                   fhir:value [ fhir:v "11369-6" ]
+                 ] )
+               ] [
+                 fhir:context [ fhir:v "coding" ] ;
+                 fhir:contextType [ fhir:v "variable" ] ;
+                 fhir:element [ fhir:v "display" ] ;
+                 fhir:transform [ fhir:v "copy" ] ;
+                 fhir:parameter ( [
+                   fhir:value [ fhir:v "History of Immunization Narrative" ]
+                 ] )
+               ] )
+             ] [
+               fhir:name [ fhir:v "assing org entry to section" ] ;
+               fhir:source ( [
+                 fhir:context [ fhir:v "src" ]
+               ] ) ;
+               fhir:target ( [
+                 fhir:context [ fhir:v "section" ] ;
+                 fhir:contextType [ fhir:v "variable" ] ;
+                 fhir:element [ fhir:v "author" ] ;
+                 fhir:variable [ fhir:v "author" ]
+               ] [
+                 fhir:context [ fhir:v "author" ] ;
+                 fhir:contextType [ fhir:v "variable" ] ;
+                 fhir:element [ fhir:v "reference" ] ;
+                 fhir:transform [ fhir:v "append" ] ;
+                 fhir:parameter ( [
+                   fhir:value [ fhir:v "Organization/" ]
+                 ] [
+                   fhir:value [ fhir:v "oid" ]
+                 ] )
+               ] )
+             ] [
+               fhir:name [ fhir:v "Each entry" ] ;
+               fhir:source ( [
+                 fhir:context [ fhir:v "fhirBundle" ] ;
+                 fhir:element [ fhir:v "entry" ] ;
+                 fhir:variable [ fhir:v "bundleEntrySHC" ]
+               ] ) ;
+               fhir:rule ( [
+                 fhir:name [ fhir:v "assign immunization to composition" ] ;
+                 fhir:source ( [
+                   fhir:context [ fhir:v "bundleEntrySHC" ] ;
+                   fhir:type [ fhir:v "Immunization" ] ;
+                   fhir:element [ fhir:v "resource" ] ;
+                   fhir:variable [ fhir:v "immunizationSHC" ]
+                 ] ) ;
+                 fhir:rule ( [
+                   fhir:name [ fhir:v "add imm section" ] ;
+                   fhir:source ( [
+                     fhir:context [ fhir:v "bundleEntrySHC" ] ;
+                     fhir:element [ fhir:v "fullUrl" ] ;
+                     fhir:variable [ fhir:v "ref" ]
+                   ] ) ;
+                   fhir:target ( [
+                     fhir:context [ fhir:v "section" ] ;
+                     fhir:contextType [ fhir:v "variable" ] ;
+                     fhir:element [ fhir:v "entry" ] ;
+                     fhir:variable [ fhir:v "entry" ]
+                   ] [
+                     fhir:context [ fhir:v "entry" ] ;
+                     fhir:contextType [ fhir:v "variable" ] ;
+                     fhir:element [ fhir:v "reference" ] ;
+                     fhir:transform [ fhir:v "append" ] ;
+                     fhir:parameter ( [
+                       fhir:value [ fhir:v "Immunization/" ]
+                     ] [
+                       fhir:value [ fhir:v "ref" ]
+                     ] )
+                   ] )
+                 ] )
+               ] )
+             ] )
+           ] [
+             fhir:name [ fhir:v "SHC Observation Section" ] ;
+             fhir:source ( [
+               fhir:context [ fhir:v "src" ] ;
+               fhir:condition [ fhir:v "(fhirBundle.entry.resource.ofType(Observation).exists())" ]
+             ] ) ;
+             fhir:target ( [
+               fhir:context [ fhir:v "comp" ] ;
+               fhir:contextType [ fhir:v "variable" ] ;
+               fhir:element [ fhir:v "section" ] ;
+               fhir:variable [ fhir:v "section" ]
+             ] ) ;
+             fhir:rule ( [
+               fhir:name [ fhir:v "Adding code to obs section" ] ;
+               fhir:source ( [
+                 fhir:context [ fhir:v "src" ]
+               ] ) ;
+               fhir:target ( [
+                 fhir:context [ fhir:v "section" ] ;
+                 fhir:contextType [ fhir:v "variable" ] ;
+                 fhir:element [ fhir:v "code" ] ;
+                 fhir:variable [ fhir:v "code" ]
+               ] [
+                 fhir:context [ fhir:v "code" ] ;
+                 fhir:contextType [ fhir:v "variable" ] ;
+                 fhir:element [ fhir:v "coding" ] ;
+                 fhir:variable [ fhir:v "coding" ]
+               ] [
+                 fhir:context [ fhir:v "coding" ] ;
+                 fhir:contextType [ fhir:v "variable" ] ;
+                 fhir:element [ fhir:v "system" ] ;
+                 fhir:transform [ fhir:v "copy" ] ;
+                 fhir:parameter ( [
+                   fhir:value [ fhir:v "http://loinc.org" ]
+                 ] )
+               ] [
+                 fhir:context [ fhir:v "coding" ] ;
+                 fhir:contextType [ fhir:v "variable" ] ;
+                 fhir:element [ fhir:v "code" ] ;
+                 fhir:transform [ fhir:v "copy" ] ;
+                 fhir:parameter ( [
+                   fhir:value [ fhir:v "30954-2" ]
+                 ] )
+               ] [
+                 fhir:context [ fhir:v "coding" ] ;
+                 fhir:contextType [ fhir:v "variable" ] ;
+                 fhir:element [ fhir:v "display" ] ;
+                 fhir:transform [ fhir:v "copy" ] ;
+                 fhir:parameter ( [
+                   fhir:value [ fhir:v "Results (Diagnostic findings)" ]
+                 ] )
+               ] )
+             ] [
+               fhir:name [ fhir:v "assing org entry to section" ] ;
+               fhir:source ( [
+                 fhir:context [ fhir:v "src" ]
+               ] ) ;
+               fhir:target ( [
+                 fhir:context [ fhir:v "section" ] ;
+                 fhir:contextType [ fhir:v "variable" ] ;
+                 fhir:element [ fhir:v "author" ] ;
+                 fhir:variable [ fhir:v "author" ]
+               ] [
+                 fhir:context [ fhir:v "author" ] ;
+                 fhir:contextType [ fhir:v "variable" ] ;
+                 fhir:element [ fhir:v "reference" ] ;
+                 fhir:transform [ fhir:v "append" ] ;
+                 fhir:parameter ( [
+                   fhir:value [ fhir:v "Organization/" ]
+                 ] [
+                   fhir:value [ fhir:v "oid" ]
+                 ] )
+               ] )
+             ] [
+               fhir:name [ fhir:v "Entry Obs" ] ;
+               fhir:source ( [
+                 fhir:context [ fhir:v "fhirBundle" ] ;
+                 fhir:element [ fhir:v "entry" ] ;
+                 fhir:variable [ fhir:v "bundleEntrySHC" ]
+               ] ) ;
+               fhir:rule ( [
+                 fhir:name [ fhir:v "assign immunization to composition" ] ;
+                 fhir:source ( [
+                   fhir:context [ fhir:v "bundleEntrySHC" ] ;
+                   fhir:type [ fhir:v "Observation" ] ;
+                   fhir:element [ fhir:v "resource" ] ;
+                   fhir:variable [ fhir:v "observationSHC" ]
+                 ] ) ;
+                 fhir:rule ( [
+                   fhir:name [ fhir:v "add obs section" ] ;
+                   fhir:source ( [
+                     fhir:context [ fhir:v "bundleEntrySHC" ] ;
+                     fhir:element [ fhir:v "fullUrl" ] ;
+                     fhir:variable [ fhir:v "ref" ]
+                   ] ) ;
+                   fhir:target ( [
+                     fhir:context [ fhir:v "section" ] ;
+                     fhir:contextType [ fhir:v "variable" ] ;
+                     fhir:element [ fhir:v "entry" ] ;
+                     fhir:variable [ fhir:v "entry" ]
+                   ] [
+                     fhir:context [ fhir:v "entry" ] ;
+                     fhir:contextType [ fhir:v "variable" ] ;
+                     fhir:element [ fhir:v "reference" ] ;
+                     fhir:transform [ fhir:v "append" ] ;
+                     fhir:parameter ( [
+                       fhir:value [ fhir:v "Observation/" ]
+                     ] [
+                       fhir:value [ fhir:v "ref" ]
+                     ] )
+                   ] )
+                 ] )
+               ] )
+             ] )
+           ] )
+         ] )
+       ] )
+     ] )
+  ] [
+     fhir:name [ fhir:v "ExtractComposition" ] ;
+     fhir:typeMode [ fhir:v "none" ] ;
+     fhir:input ( [
+       fhir:name [ fhir:v "src" ] ;
+       fhir:type [ fhir:v "Data" ] ;
+       fhir:mode [ fhir:v "source" ]
+     ] [
+       fhir:name [ fhir:v "composition" ] ;
+       fhir:type [ fhir:v "Composition" ] ;
+       fhir:mode [ fhir:v "target" ]
+     ] ) ;
+     fhir:rule ( [
+       fhir:name [ fhir:v "Title" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "src" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "composition" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "title" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "International Certificate of Vaccination or Prophylaxis" ]
+         ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "set category" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "src" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "composition" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "category" ] ;
+         fhir:variable [ fhir:v "category" ]
+       ] [
+         fhir:context [ fhir:v "category" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "coding" ] ;
+         fhir:variable [ fhir:v "coding" ]
+       ] ) ;
+       fhir:rule ( [
+         fhir:name [ fhir:v "Category" ] ;
+         fhir:source ( [
+           fhir:context [ fhir:v "src" ]
+         ] ) ;
+         fhir:target ( [
+           fhir:context [ fhir:v "coding" ] ;
+           fhir:contextType [ fhir:v "variable" ] ;
+           fhir:element [ fhir:v "code" ] ;
+           fhir:transform [ fhir:v "copy" ] ;
+           fhir:parameter ( [
+             fhir:value [ fhir:v "ddcc-vs" ]
+           ] )
+         ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "set type" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "src" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "composition" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "type" ] ;
+         fhir:variable [ fhir:v "type" ]
+       ] [
+         fhir:context [ fhir:v "type" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "coding" ] ;
+         fhir:variable [ fhir:v "coding" ]
+       ] ) ;
+       fhir:rule ( [
+         fhir:name [ fhir:v "set type coding" ] ;
+         fhir:source ( [
+           fhir:context [ fhir:v "src" ]
+         ] ) ;
+         fhir:target ( [
+           fhir:context [ fhir:v "coding" ] ;
+           fhir:contextType [ fhir:v "variable" ] ;
+           fhir:element [ fhir:v "system" ] ;
+           fhir:transform [ fhir:v "copy" ] ;
+           fhir:parameter ( [
+             fhir:value [ fhir:v "http://loinc.org" ]
+           ] )
+         ] [
+           fhir:context [ fhir:v "coding" ] ;
+           fhir:contextType [ fhir:v "variable" ] ;
+           fhir:element [ fhir:v "code" ] ;
+           fhir:transform [ fhir:v "copy" ] ;
+           fhir:parameter ( [
+             fhir:value [ fhir:v "82593-5" ]
+           ] )
+         ] [
+           fhir:context [ fhir:v "coding" ] ;
+           fhir:contextType [ fhir:v "variable" ] ;
+           fhir:element [ fhir:v "display" ] ;
+           fhir:transform [ fhir:v "copy" ] ;
+           fhir:parameter ( [
+             fhir:value [ fhir:v "Immunization summary report" ]
+           ] )
+         ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "Extract Period" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "src" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "composition" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "event" ] ;
+         fhir:variable [ fhir:v "event" ]
+       ] [
+         fhir:context [ fhir:v "event" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "period" ] ;
+         fhir:variable [ fhir:v "period" ] ;
+         fhir:transform [ fhir:v "create" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "Period" ]
+         ] )
+       ] ) ;
+       fhir:dependent ( [
+         fhir:name [ fhir:v "ExtractPeriod" ] ;
+         fhir:variable ( [ fhir:v "src" ] [ fhir:v "period" ] )
+       ] )
+     ] )
+  ] [
+     fhir:name [ fhir:v "ExtractPeriod" ] ;
+     fhir:typeMode [ fhir:v "none" ] ;
+     fhir:input ( [
+       fhir:name [ fhir:v "src" ] ;
+       fhir:type [ fhir:v "JWTPayload" ] ;
+       fhir:mode [ fhir:v "source" ]
+     ] [
+       fhir:name [ fhir:v "tgt" ] ;
+       fhir:type [ fhir:v "Period" ] ;
+       fhir:mode [ fhir:v "target" ]
+     ] ) ;
+     fhir:rule ( [
+       fhir:name [ fhir:v "Start notBefore" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "src" ] ;
+         fhir:element [ fhir:v "nbf" ] ;
+         fhir:variable [ fhir:v "nbf" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "tgt" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "start" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "nbf" ]
+         ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "Start issuedAt" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "src" ] ;
+         fhir:element [ fhir:v "iat" ] ;
+         fhir:variable [ fhir:v "iat" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "tgt" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "start" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "iat" ]
+         ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "End expiration" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "src" ] ;
+         fhir:element [ fhir:v "exp" ] ;
+         fhir:variable [ fhir:v "exp" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "tgt" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "end" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "exp" ]
+         ] )
+       ] )
+     ] )
+  ] ) . # 
+
+# -------------------------------------------------------------------------------------
+

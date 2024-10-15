@@ -1,0 +1,1986 @@
+{
+  "resourceType": "StructureMap",
+  "id": "coredataset-to-addbundle",
+  "meta": {
+    "versionId": "1",
+    "lastUpdated": "2021-12-14T19:11:42.010+00:00"
+  },
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><pre>map &quot;http://worldhealthorganization.github.io/ddcc/StructureMap/CoreDataSetToAddBundle&quot; = &quot;CoreDataSetToAddBundle&quot;\r\n\r\n\r\nuses &quot;http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSetPoV&quot; alias DDCCPoV as source\r\nuses &quot;http://hl7.org/fhir/StructureDefinition/Bundle&quot; alias AddBundle as target\r\nuses &quot;http://hl7.org/fhir/StructureDefinition/Patient&quot; alias Patient as target\r\nuses &quot;http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCPatient&quot; alias DDCCPatient as produced\r\nuses &quot;http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCImmunization&quot; alias DDCCImmunization as produced\r\nuses &quot;http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCImmunizationRecommendation&quot; alias DDCCImmRec as produced\r\n\r\ngroup CoreDataSetToAddBundle(source ddcc : DDCCPoV, target bundle : AddBundle) {\r\n  ddcc -&gt; bundle.type = 'transaction' &quot;set bundle type&quot;;\r\n  ddcc -&gt;  uuid() as pid,  uuid() as iid,  uuid() as irid then {\r\n    ddcc -&gt;  bundle.entry as entry,  entry.fullUrl = append('urn:uuid:', pid),  entry.request as request,  request.method = 'PUT',  request.url = append('Patient/', pid),  create('http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCPatient') as patient then {\r\n      ddcc then DDCCToPatient(ddcc, patient, pid) &quot;setup patient&quot;;\r\n      ddcc -&gt; entry.resource = patient &quot;set patient resource&quot;;\r\n    } &quot;create patient resource&quot;;\r\n    ddcc.vaccination first as vaccination -&gt;  bundle.entry as entry,  entry.fullUrl = append('urn:uuid:', iid),  entry.request as request,  request.method = 'PUT',  request.url = append('Immunization/', iid),  create('http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCImmunization') as immunization then {\r\n      ddcc.certificate as certificate then DDCCToImmunization(vaccination, immunization, certificate, iid, pid) &quot;setup immunization&quot;;\r\n      ddcc -&gt; entry.resource = immunization &quot;set immunization resource&quot;;\r\n    } &quot;create immunization resource&quot;;\r\n    ddcc.vaccination first as vaccination -&gt;  bundle.entry as entry,  entry.fullUrl = append('urn:uuid:', irid),  entry.request as request,  request.method = 'PUT',  request.url = append('ImmunizationRecommendation/', irid),  create('http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCImmunizationRecommendation') as immrec then {\r\n      vaccination then DDCCToImmRec(vaccination, immrec, irid, iid, pid) &quot;setup immunization recommendation&quot;;\r\n      ddcc -&gt; entry.resource = immrec &quot;set immunization recommendation resource&quot;;\r\n    } &quot;create immunization recommendation resource&quot;;\r\n  } &quot;set uuids&quot;;\r\n}\r\n\r\ngroup DDCCToPatient(source src : DDCCPoV, target patient : DDCCPatient, source pid) {\r\n  pid -&gt; patient.id = pid &quot;set id&quot;;\r\n  src.name as name -&gt; patient.name as tName then {\r\n    name as content -&gt; tName.text = content &quot;set name&quot;;\r\n  } &quot;set full name&quot;;\r\n  src.birthDate as birthDate -&gt; patient.birthDate = birthDate &quot;set birthDate&quot;;\r\n  src.sex as sex -&gt; patient.gender = sex &quot;set gender&quot;;\r\n  src.identifier as identifier -&gt; patient.identifier = identifier &quot;set identifier&quot;;\r\n}\r\n\r\ngroup DDCCToImmunization(source src, target immunization : DDCCImmunization, source certificate, source iid, source pid) {\r\n  iid -&gt; immunization.id = iid &quot;set id&quot;;\r\n  src.brand as brand -&gt; immunization.extension as ext then {\r\n    brand -&gt;  ext.url = 'https://WorldHealthOrganization.github.io/ddcc/StructureDefinition/DDCCVaccineBrand',  ext.value = brand &quot;set brand extension values&quot;;\r\n  } &quot;set brand extension&quot;;\r\n  src.maholder as maholder -&gt; immunization.extension as ext then {\r\n    maholder -&gt;  ext.url = 'https://WorldHealthOrganization.github.io/ddcc/StructureDefinition/DDCCVaccineMarketAuthorization',  ext.value = maholder &quot;set MA Holder extension values&quot;;\r\n  } &quot;set maholder extension&quot;;\r\n  src.country as country -&gt; immunization.extension as ext then {\r\n    country.code as code -&gt;  ext.url = 'https://WorldHealthOrganization.github.io/ddcc/StructureDefinition/DDCCCountryOfVaccination',  ext.value = code &quot;set country extension values&quot;;\r\n  } &quot;set country extension&quot;;\r\n  src.validFrom as validFrom -&gt; immunization.extension as ext then {\r\n    validFrom -&gt;  ext.url = 'https://WorldHealthOrganization.github.io/ddcc/StructureDefinition/DDCCVaccineValidFrom',  ext.value = validFrom &quot;set valid from extension values&quot;;\r\n  } &quot;set vaccine valid extension&quot;;\r\n  src -&gt; immunization.status = 'completed' &quot;set status&quot;;\r\n  src.vaccine as vaccine -&gt;  immunization.vaccineCode as vacCode,  vacCode.coding = vaccine &quot;set vaccine&quot;;\r\n  src -&gt;  immunization.patient as patient,  patient.reference = append('Patient/', pid) &quot;set patient&quot;;\r\n  src.manufacturer as manufacturer -&gt;  immunization.manufacturer as tman,  tman.identifier as ident then {\r\n    manufacturer.system as system -&gt; ident.system = system &quot;set system&quot;;\r\n    manufacturer.code as code -&gt; ident.value = code &quot;set value&quot;;\r\n  } &quot;set manufacturer identifier&quot;;\r\n  src.lot as lot -&gt; immunization.lotNumber = lot &quot;set lot number&quot;;\r\n  src.date as date -&gt; immunization.occurrence = date &quot;set occurrence date&quot;;\r\n  src.centre as centre -&gt; immunization.location as location then {\r\n    centre -&gt; location.display = centre &quot;set location display&quot;;\r\n  } &quot;set location&quot;;\r\n  src.practitioner as practitioner -&gt; immunization.performer as performer then {\r\n    practitioner.value as hw -&gt; performer.actor as actor then {\r\n      hw -&gt;  actor.type = 'Practitioner',  actor.identifier as identifier then {\r\n        hw -&gt; identifier.value = hw &quot;set hw identifier&quot;;\r\n      } &quot;set actor&quot;;\r\n    } &quot;set performer&quot;;\r\n  } &quot;set practitioner&quot;;\r\n  src -&gt; immunization.protocolApplied as protocol then {\r\n    src -&gt; protocol.authority as authority then {\r\n      certificate.issuer as issuer -&gt; authority.type = 'Organization' then {\r\n        issuer.identifier as pha -&gt; authority.identifier as identifier then {\r\n          pha.value as value -&gt; identifier.value = value &quot;set pha&quot;;\r\n        } &quot;set issuer identifier&quot;;\r\n      } &quot;set issuer&quot;;\r\n    } &quot;set authority&quot;;\r\n    src.disease as disease -&gt; protocol.targetDisease as tdisease then {\r\n      disease -&gt; tdisease.coding = disease &quot;set target disease code&quot;;\r\n    } &quot;set target disease&quot;;\r\n    src.dose as dose -&gt; protocol.doseNumber = dose &quot;set dose number&quot;;\r\n    src.totalDoses as totalDoses -&gt; protocol.seriesDoses = totalDoses &quot;set total doses&quot;;\r\n  } &quot;set protocolApplied&quot;;\r\n}\r\n\r\ngroup DDCCToImmRec(source src, target immrec : DDCCImmunizationRecommendation, source irid, source iid, source pid) {\r\n  src.date as date -&gt; immrec.date = date &quot;set date&quot;;\r\n  src -&gt;  immrec.patient as patient,  patient.reference = append('Patient/', pid) &quot;set patient&quot;;\r\n  src -&gt; immrec.recommendation as rec then {\r\n    src.vaccine as vaccine -&gt; rec.vaccineCode as vaccineCode then {\r\n      vaccine -&gt; vaccineCode.coding = vaccine &quot;set vaccine code coding&quot;;\r\n    } &quot;set vaccine code&quot;;\r\n    src.disease as disease -&gt; rec.targetDisease as targetDisease then {\r\n      disease -&gt; targetDisease.coding = disease &quot;set target disease coding&quot;;\r\n    } &quot;set target disease&quot;;\r\n    src -&gt; rec.forecastStatus as forecast then {\r\n      src -&gt; forecast.coding as coding then {\r\n        src -&gt; coding.system = 'http://terminology.hl7.org/2.1.0/CodeSystem-immunization-recommendation-status.html' &quot;set forecast system&quot;;\r\n        src -&gt; coding.code = 'due' &quot;set forecast code&quot;;\r\n      } &quot;set forecast status coding&quot;;\r\n    } &quot;set forecast status&quot;;\r\n    src -&gt; rec.dateCriterion as due_date then {\r\n      src -&gt; due_date.code as code then {\r\n        src -&gt; code.coding as coding then {\r\n          src -&gt; coding.system = 'http://loinc.org' &quot;set due date code system&quot;;\r\n          src -&gt; coding.code = '30980-7' &quot;set due date code code&quot;;\r\n        } &quot;set due date code coding&quot;;\r\n      } &quot;set due date code&quot;;\r\n      src.nextDose as nextDose -&gt; due_date.value = nextDose &quot;set due date value&quot;;\r\n    } &quot;set date criterion&quot;;\r\n    src.dose as dose -&gt; rec.doseNumber = (dose.toInteger() + 1) &quot;set dose number&quot;;\r\n    src.totalDoses as totalDoses -&gt; rec.seriesDoses = totalDoses &quot;set total doses&quot;;\r\n    src -&gt;  rec.supportingImmunization as imm,  imm.reference = append('Immunization/', iid) &quot;set supporting immunization&quot;;\r\n  } &quot;set recommendation&quot;;\r\n}\r\n\r\n</pre></div>"
+  },
+  "url": "http://worldhealthorganization.github.io/ddcc/StructureMap/CoreDataSetToAddBundle",
+  "version": "1.0.0",
+  "name": "CoreDataSetToAddBundle",
+  "status": "draft",
+  "date": "2022-11-23T04:26:34+00:00",
+  "publisher": "WHO",
+  "contact": [
+    {
+      "name": "WHO",
+      "telecom": [
+        {
+          "system": "url",
+          "value": "http://who.int"
+        }
+      ]
+    }
+  ],
+  "jurisdiction": [
+    {
+      "coding": [
+        {
+          "system": "http://unstats.un.org/unsd/methods/m49/m49.htm",
+          "code": "001"
+        }
+      ]
+    }
+  ],
+  "structure": [
+    {
+      "url": "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSetPoV",
+      "mode": "source",
+      "alias": "DDCCPoV"
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/Bundle",
+      "mode": "target",
+      "alias": "AddBundle"
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/Patient",
+      "mode": "target",
+      "alias": "Patient"
+    },
+    {
+      "url": "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCPatient",
+      "mode": "produced",
+      "alias": "DDCCPatient"
+    },
+    {
+      "url": "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCImmunization",
+      "mode": "produced",
+      "alias": "DDCCImmunization"
+    },
+    {
+      "url": "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCImmunizationRecommendation",
+      "mode": "produced",
+      "alias": "DDCCImmRec"
+    }
+  ],
+  "group": [
+    {
+      "name": "CoreDataSetToAddBundle",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "ddcc",
+          "type": "DDCCPoV",
+          "mode": "source"
+        },
+        {
+          "name": "bundle",
+          "type": "AddBundle",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set bundle type",
+          "source": [
+            {
+              "context": "ddcc"
+            }
+          ],
+          "target": [
+            {
+              "context": "bundle",
+              "contextType": "variable",
+              "element": "type",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "transaction"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "set uuids",
+          "source": [
+            {
+              "context": "ddcc"
+            }
+          ],
+          "target": [
+            {
+              "contextType": "variable",
+              "variable": "pid",
+              "transform": "uuid"
+            },
+            {
+              "contextType": "variable",
+              "variable": "iid",
+              "transform": "uuid"
+            },
+            {
+              "contextType": "variable",
+              "variable": "irid",
+              "transform": "uuid"
+            }
+          ],
+          "rule": [
+            {
+              "name": "create patient resource",
+              "source": [
+                {
+                  "context": "ddcc"
+                }
+              ],
+              "target": [
+                {
+                  "context": "bundle",
+                  "contextType": "variable",
+                  "element": "entry",
+                  "variable": "entry"
+                },
+                {
+                  "context": "entry",
+                  "contextType": "variable",
+                  "element": "fullUrl",
+                  "transform": "append",
+                  "parameter": [
+                    {
+                      "valueString": "urn:uuid:"
+                    },
+                    {
+                      "valueId": "pid"
+                    }
+                  ]
+                },
+                {
+                  "context": "entry",
+                  "contextType": "variable",
+                  "element": "request",
+                  "variable": "request"
+                },
+                {
+                  "context": "request",
+                  "contextType": "variable",
+                  "element": "method",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "PUT"
+                    }
+                  ]
+                },
+                {
+                  "context": "request",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "append",
+                  "parameter": [
+                    {
+                      "valueString": "Patient/"
+                    },
+                    {
+                      "valueId": "pid"
+                    }
+                  ]
+                },
+                {
+                  "contextType": "variable",
+                  "variable": "patient",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCPatient"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "setup patient",
+                  "source": [
+                    {
+                      "context": "ddcc"
+                    }
+                  ],
+                  "dependent": [
+                    {
+                      "name": "DDCCToPatient",
+                      "variable": [
+                        "ddcc",
+                        "patient",
+                        "pid"
+                      ],
+                      "_variable": [
+                        {
+                          "extension": [
+                            {
+                              "url": "http://hl7.org/fhir/tools/StructureDefinition/original-item-type",
+                              "valueUrl": "id"
+                            }
+                          ]
+                        },
+                        {
+                          "extension": [
+                            {
+                              "url": "http://hl7.org/fhir/tools/StructureDefinition/original-item-type",
+                              "valueUrl": "id"
+                            }
+                          ]
+                        },
+                        {
+                          "extension": [
+                            {
+                              "url": "http://hl7.org/fhir/tools/StructureDefinition/original-item-type",
+                              "valueUrl": "id"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set patient resource",
+                  "source": [
+                    {
+                      "context": "ddcc"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "entry",
+                      "contextType": "variable",
+                      "element": "resource",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "patient"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "create immunization resource",
+              "source": [
+                {
+                  "context": "ddcc",
+                  "element": "vaccination",
+                  "listMode": "first",
+                  "variable": "vaccination"
+                }
+              ],
+              "target": [
+                {
+                  "context": "bundle",
+                  "contextType": "variable",
+                  "element": "entry",
+                  "variable": "entry"
+                },
+                {
+                  "context": "entry",
+                  "contextType": "variable",
+                  "element": "fullUrl",
+                  "transform": "append",
+                  "parameter": [
+                    {
+                      "valueString": "urn:uuid:"
+                    },
+                    {
+                      "valueId": "iid"
+                    }
+                  ]
+                },
+                {
+                  "context": "entry",
+                  "contextType": "variable",
+                  "element": "request",
+                  "variable": "request"
+                },
+                {
+                  "context": "request",
+                  "contextType": "variable",
+                  "element": "method",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "PUT"
+                    }
+                  ]
+                },
+                {
+                  "context": "request",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "append",
+                  "parameter": [
+                    {
+                      "valueString": "Immunization/"
+                    },
+                    {
+                      "valueId": "iid"
+                    }
+                  ]
+                },
+                {
+                  "contextType": "variable",
+                  "variable": "immunization",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCImmunization"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "setup immunization",
+                  "source": [
+                    {
+                      "context": "ddcc",
+                      "element": "certificate",
+                      "variable": "certificate"
+                    }
+                  ],
+                  "dependent": [
+                    {
+                      "name": "DDCCToImmunization",
+                      "variable": [
+                        "vaccination",
+                        "immunization",
+                        "certificate",
+                        "iid",
+                        "pid"
+                      ],
+                      "_variable": [
+                        {
+                          "extension": [
+                            {
+                              "url": "http://hl7.org/fhir/tools/StructureDefinition/original-item-type",
+                              "valueUrl": "id"
+                            }
+                          ]
+                        },
+                        {
+                          "extension": [
+                            {
+                              "url": "http://hl7.org/fhir/tools/StructureDefinition/original-item-type",
+                              "valueUrl": "id"
+                            }
+                          ]
+                        },
+                        {
+                          "extension": [
+                            {
+                              "url": "http://hl7.org/fhir/tools/StructureDefinition/original-item-type",
+                              "valueUrl": "id"
+                            }
+                          ]
+                        },
+                        {
+                          "extension": [
+                            {
+                              "url": "http://hl7.org/fhir/tools/StructureDefinition/original-item-type",
+                              "valueUrl": "id"
+                            }
+                          ]
+                        },
+                        {
+                          "extension": [
+                            {
+                              "url": "http://hl7.org/fhir/tools/StructureDefinition/original-item-type",
+                              "valueUrl": "id"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set immunization resource",
+                  "source": [
+                    {
+                      "context": "ddcc"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "entry",
+                      "contextType": "variable",
+                      "element": "resource",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "immunization"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "create immunization recommendation resource",
+              "source": [
+                {
+                  "context": "ddcc",
+                  "element": "vaccination",
+                  "listMode": "first",
+                  "variable": "vaccination"
+                }
+              ],
+              "target": [
+                {
+                  "context": "bundle",
+                  "contextType": "variable",
+                  "element": "entry",
+                  "variable": "entry"
+                },
+                {
+                  "context": "entry",
+                  "contextType": "variable",
+                  "element": "fullUrl",
+                  "transform": "append",
+                  "parameter": [
+                    {
+                      "valueString": "urn:uuid:"
+                    },
+                    {
+                      "valueId": "irid"
+                    }
+                  ]
+                },
+                {
+                  "context": "entry",
+                  "contextType": "variable",
+                  "element": "request",
+                  "variable": "request"
+                },
+                {
+                  "context": "request",
+                  "contextType": "variable",
+                  "element": "method",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "PUT"
+                    }
+                  ]
+                },
+                {
+                  "context": "request",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "append",
+                  "parameter": [
+                    {
+                      "valueString": "ImmunizationRecommendation/"
+                    },
+                    {
+                      "valueId": "irid"
+                    }
+                  ]
+                },
+                {
+                  "contextType": "variable",
+                  "variable": "immrec",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCImmunizationRecommendation"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "setup immunization recommendation",
+                  "source": [
+                    {
+                      "context": "vaccination"
+                    }
+                  ],
+                  "dependent": [
+                    {
+                      "name": "DDCCToImmRec",
+                      "variable": [
+                        "vaccination",
+                        "immrec",
+                        "irid",
+                        "iid",
+                        "pid"
+                      ],
+                      "_variable": [
+                        {
+                          "extension": [
+                            {
+                              "url": "http://hl7.org/fhir/tools/StructureDefinition/original-item-type",
+                              "valueUrl": "id"
+                            }
+                          ]
+                        },
+                        {
+                          "extension": [
+                            {
+                              "url": "http://hl7.org/fhir/tools/StructureDefinition/original-item-type",
+                              "valueUrl": "id"
+                            }
+                          ]
+                        },
+                        {
+                          "extension": [
+                            {
+                              "url": "http://hl7.org/fhir/tools/StructureDefinition/original-item-type",
+                              "valueUrl": "id"
+                            }
+                          ]
+                        },
+                        {
+                          "extension": [
+                            {
+                              "url": "http://hl7.org/fhir/tools/StructureDefinition/original-item-type",
+                              "valueUrl": "id"
+                            }
+                          ]
+                        },
+                        {
+                          "extension": [
+                            {
+                              "url": "http://hl7.org/fhir/tools/StructureDefinition/original-item-type",
+                              "valueUrl": "id"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set immunization recommendation resource",
+                  "source": [
+                    {
+                      "context": "ddcc"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "entry",
+                      "contextType": "variable",
+                      "element": "resource",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "immrec"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "DDCCToPatient",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "src",
+          "type": "DDCCPoV",
+          "mode": "source"
+        },
+        {
+          "name": "patient",
+          "type": "DDCCPatient",
+          "mode": "target"
+        },
+        {
+          "name": "pid",
+          "mode": "source"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set id",
+          "source": [
+            {
+              "context": "pid"
+            }
+          ],
+          "target": [
+            {
+              "context": "patient",
+              "contextType": "variable",
+              "element": "id",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "pid"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "set full name",
+          "source": [
+            {
+              "context": "src",
+              "element": "name",
+              "variable": "name"
+            }
+          ],
+          "target": [
+            {
+              "context": "patient",
+              "contextType": "variable",
+              "element": "name",
+              "variable": "tName"
+            }
+          ],
+          "rule": [
+            {
+              "name": "set name",
+              "source": [
+                {
+                  "context": "name",
+                  "variable": "content"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tName",
+                  "contextType": "variable",
+                  "element": "text",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "content"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "set birthDate",
+          "source": [
+            {
+              "context": "src",
+              "element": "birthDate",
+              "variable": "birthDate"
+            }
+          ],
+          "target": [
+            {
+              "context": "patient",
+              "contextType": "variable",
+              "element": "birthDate",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "birthDate"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "set gender",
+          "source": [
+            {
+              "context": "src",
+              "element": "sex",
+              "variable": "sex"
+            }
+          ],
+          "target": [
+            {
+              "context": "patient",
+              "contextType": "variable",
+              "element": "gender",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "sex"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "set identifier",
+          "source": [
+            {
+              "context": "src",
+              "element": "identifier",
+              "variable": "identifier"
+            }
+          ],
+          "target": [
+            {
+              "context": "patient",
+              "contextType": "variable",
+              "element": "identifier",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "identifier"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "DDCCToImmunization",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "src",
+          "mode": "source"
+        },
+        {
+          "name": "immunization",
+          "type": "DDCCImmunization",
+          "mode": "target"
+        },
+        {
+          "name": "certificate",
+          "mode": "source"
+        },
+        {
+          "name": "iid",
+          "mode": "source"
+        },
+        {
+          "name": "pid",
+          "mode": "source"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set id",
+          "source": [
+            {
+              "context": "iid"
+            }
+          ],
+          "target": [
+            {
+              "context": "immunization",
+              "contextType": "variable",
+              "element": "id",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "iid"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "set brand extension",
+          "source": [
+            {
+              "context": "src",
+              "element": "brand",
+              "variable": "brand"
+            }
+          ],
+          "target": [
+            {
+              "context": "immunization",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext"
+            }
+          ],
+          "rule": [
+            {
+              "name": "set brand extension values",
+              "source": [
+                {
+                  "context": "brand"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://WorldHealthOrganization.github.io/ddcc/StructureDefinition/DDCCVaccineBrand"
+                    }
+                  ]
+                },
+                {
+                  "context": "ext",
+                  "contextType": "variable",
+                  "element": "value",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "brand"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "set maholder extension",
+          "source": [
+            {
+              "context": "src",
+              "element": "maholder",
+              "variable": "maholder"
+            }
+          ],
+          "target": [
+            {
+              "context": "immunization",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext"
+            }
+          ],
+          "rule": [
+            {
+              "name": "set MA Holder extension values",
+              "source": [
+                {
+                  "context": "maholder"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://WorldHealthOrganization.github.io/ddcc/StructureDefinition/DDCCVaccineMarketAuthorization"
+                    }
+                  ]
+                },
+                {
+                  "context": "ext",
+                  "contextType": "variable",
+                  "element": "value",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "maholder"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "set country extension",
+          "source": [
+            {
+              "context": "src",
+              "element": "country",
+              "variable": "country"
+            }
+          ],
+          "target": [
+            {
+              "context": "immunization",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext"
+            }
+          ],
+          "rule": [
+            {
+              "name": "set country extension values",
+              "source": [
+                {
+                  "context": "country",
+                  "element": "code",
+                  "variable": "code"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://WorldHealthOrganization.github.io/ddcc/StructureDefinition/DDCCCountryOfVaccination"
+                    }
+                  ]
+                },
+                {
+                  "context": "ext",
+                  "contextType": "variable",
+                  "element": "value",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "code"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "set vaccine valid extension",
+          "source": [
+            {
+              "context": "src",
+              "element": "validFrom",
+              "variable": "validFrom"
+            }
+          ],
+          "target": [
+            {
+              "context": "immunization",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext"
+            }
+          ],
+          "rule": [
+            {
+              "name": "set valid from extension values",
+              "source": [
+                {
+                  "context": "validFrom"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://WorldHealthOrganization.github.io/ddcc/StructureDefinition/DDCCVaccineValidFrom"
+                    }
+                  ]
+                },
+                {
+                  "context": "ext",
+                  "contextType": "variable",
+                  "element": "value",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "validFrom"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "set status",
+          "source": [
+            {
+              "context": "src"
+            }
+          ],
+          "target": [
+            {
+              "context": "immunization",
+              "contextType": "variable",
+              "element": "status",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "completed"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "set vaccine",
+          "source": [
+            {
+              "context": "src",
+              "element": "vaccine",
+              "variable": "vaccine"
+            }
+          ],
+          "target": [
+            {
+              "context": "immunization",
+              "contextType": "variable",
+              "element": "vaccineCode",
+              "variable": "vacCode"
+            },
+            {
+              "context": "vacCode",
+              "contextType": "variable",
+              "element": "coding",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "vaccine"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "set patient",
+          "source": [
+            {
+              "context": "src"
+            }
+          ],
+          "target": [
+            {
+              "context": "immunization",
+              "contextType": "variable",
+              "element": "patient",
+              "variable": "patient"
+            },
+            {
+              "context": "patient",
+              "contextType": "variable",
+              "element": "reference",
+              "transform": "append",
+              "parameter": [
+                {
+                  "valueString": "Patient/"
+                },
+                {
+                  "valueId": "pid"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "set manufacturer identifier",
+          "source": [
+            {
+              "context": "src",
+              "element": "manufacturer",
+              "variable": "manufacturer"
+            }
+          ],
+          "target": [
+            {
+              "context": "immunization",
+              "contextType": "variable",
+              "element": "manufacturer",
+              "variable": "tman"
+            },
+            {
+              "context": "tman",
+              "contextType": "variable",
+              "element": "identifier",
+              "variable": "ident"
+            }
+          ],
+          "rule": [
+            {
+              "name": "set system",
+              "source": [
+                {
+                  "context": "manufacturer",
+                  "element": "system",
+                  "variable": "system"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ident",
+                  "contextType": "variable",
+                  "element": "system",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "system"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "set value",
+              "source": [
+                {
+                  "context": "manufacturer",
+                  "element": "code",
+                  "variable": "code"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ident",
+                  "contextType": "variable",
+                  "element": "value",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "code"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "set lot number",
+          "source": [
+            {
+              "context": "src",
+              "element": "lot",
+              "variable": "lot"
+            }
+          ],
+          "target": [
+            {
+              "context": "immunization",
+              "contextType": "variable",
+              "element": "lotNumber",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "lot"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "set occurrence date",
+          "source": [
+            {
+              "context": "src",
+              "element": "date",
+              "variable": "date"
+            }
+          ],
+          "target": [
+            {
+              "context": "immunization",
+              "contextType": "variable",
+              "element": "occurrence",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "date"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "set location",
+          "source": [
+            {
+              "context": "src",
+              "element": "centre",
+              "variable": "centre"
+            }
+          ],
+          "target": [
+            {
+              "context": "immunization",
+              "contextType": "variable",
+              "element": "location",
+              "variable": "location"
+            }
+          ],
+          "rule": [
+            {
+              "name": "set location display",
+              "source": [
+                {
+                  "context": "centre"
+                }
+              ],
+              "target": [
+                {
+                  "context": "location",
+                  "contextType": "variable",
+                  "element": "display",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "centre"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "set practitioner",
+          "source": [
+            {
+              "context": "src",
+              "element": "practitioner",
+              "variable": "practitioner"
+            }
+          ],
+          "target": [
+            {
+              "context": "immunization",
+              "contextType": "variable",
+              "element": "performer",
+              "variable": "performer"
+            }
+          ],
+          "rule": [
+            {
+              "name": "set performer",
+              "source": [
+                {
+                  "context": "practitioner",
+                  "element": "value",
+                  "variable": "hw"
+                }
+              ],
+              "target": [
+                {
+                  "context": "performer",
+                  "contextType": "variable",
+                  "element": "actor",
+                  "variable": "actor"
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set actor",
+                  "source": [
+                    {
+                      "context": "hw"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "actor",
+                      "contextType": "variable",
+                      "element": "type",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "Practitioner"
+                        }
+                      ]
+                    },
+                    {
+                      "context": "actor",
+                      "contextType": "variable",
+                      "element": "identifier",
+                      "variable": "identifier"
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "set hw identifier",
+                      "source": [
+                        {
+                          "context": "hw"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "identifier",
+                          "contextType": "variable",
+                          "element": "value",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "hw"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "set protocolApplied",
+          "source": [
+            {
+              "context": "src"
+            }
+          ],
+          "target": [
+            {
+              "context": "immunization",
+              "contextType": "variable",
+              "element": "protocolApplied",
+              "variable": "protocol"
+            }
+          ],
+          "rule": [
+            {
+              "name": "set authority",
+              "source": [
+                {
+                  "context": "src"
+                }
+              ],
+              "target": [
+                {
+                  "context": "protocol",
+                  "contextType": "variable",
+                  "element": "authority",
+                  "variable": "authority"
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set issuer",
+                  "source": [
+                    {
+                      "context": "certificate",
+                      "element": "issuer",
+                      "variable": "issuer"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "authority",
+                      "contextType": "variable",
+                      "element": "type",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "Organization"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "set issuer identifier",
+                      "source": [
+                        {
+                          "context": "issuer",
+                          "element": "identifier",
+                          "variable": "pha"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "authority",
+                          "contextType": "variable",
+                          "element": "identifier",
+                          "variable": "identifier"
+                        }
+                      ],
+                      "rule": [
+                        {
+                          "name": "set pha",
+                          "source": [
+                            {
+                              "context": "pha",
+                              "element": "value",
+                              "variable": "value"
+                            }
+                          ],
+                          "target": [
+                            {
+                              "context": "identifier",
+                              "contextType": "variable",
+                              "element": "value",
+                              "transform": "copy",
+                              "parameter": [
+                                {
+                                  "valueId": "value"
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "set target disease",
+              "source": [
+                {
+                  "context": "src",
+                  "element": "disease",
+                  "variable": "disease"
+                }
+              ],
+              "target": [
+                {
+                  "context": "protocol",
+                  "contextType": "variable",
+                  "element": "targetDisease",
+                  "variable": "tdisease"
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set target disease code",
+                  "source": [
+                    {
+                      "context": "disease"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tdisease",
+                      "contextType": "variable",
+                      "element": "coding",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "disease"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "set dose number",
+              "source": [
+                {
+                  "context": "src",
+                  "element": "dose",
+                  "variable": "dose"
+                }
+              ],
+              "target": [
+                {
+                  "context": "protocol",
+                  "contextType": "variable",
+                  "element": "doseNumber",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "dose"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "set total doses",
+              "source": [
+                {
+                  "context": "src",
+                  "element": "totalDoses",
+                  "variable": "totalDoses"
+                }
+              ],
+              "target": [
+                {
+                  "context": "protocol",
+                  "contextType": "variable",
+                  "element": "seriesDoses",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "totalDoses"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "DDCCToImmRec",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "src",
+          "mode": "source"
+        },
+        {
+          "name": "immrec",
+          "type": "DDCCImmunizationRecommendation",
+          "mode": "target"
+        },
+        {
+          "name": "irid",
+          "mode": "source"
+        },
+        {
+          "name": "iid",
+          "mode": "source"
+        },
+        {
+          "name": "pid",
+          "mode": "source"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set date",
+          "source": [
+            {
+              "context": "src",
+              "element": "date",
+              "variable": "date"
+            }
+          ],
+          "target": [
+            {
+              "context": "immrec",
+              "contextType": "variable",
+              "element": "date",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "date"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "set patient",
+          "source": [
+            {
+              "context": "src"
+            }
+          ],
+          "target": [
+            {
+              "context": "immrec",
+              "contextType": "variable",
+              "element": "patient",
+              "variable": "patient"
+            },
+            {
+              "context": "patient",
+              "contextType": "variable",
+              "element": "reference",
+              "transform": "append",
+              "parameter": [
+                {
+                  "valueString": "Patient/"
+                },
+                {
+                  "valueId": "pid"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "set recommendation",
+          "source": [
+            {
+              "context": "src"
+            }
+          ],
+          "target": [
+            {
+              "context": "immrec",
+              "contextType": "variable",
+              "element": "recommendation",
+              "variable": "rec"
+            }
+          ],
+          "rule": [
+            {
+              "name": "set vaccine code",
+              "source": [
+                {
+                  "context": "src",
+                  "element": "vaccine",
+                  "variable": "vaccine"
+                }
+              ],
+              "target": [
+                {
+                  "context": "rec",
+                  "contextType": "variable",
+                  "element": "vaccineCode",
+                  "variable": "vaccineCode"
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set vaccine code coding",
+                  "source": [
+                    {
+                      "context": "vaccine"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vaccineCode",
+                      "contextType": "variable",
+                      "element": "coding",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "vaccine"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "set target disease",
+              "source": [
+                {
+                  "context": "src",
+                  "element": "disease",
+                  "variable": "disease"
+                }
+              ],
+              "target": [
+                {
+                  "context": "rec",
+                  "contextType": "variable",
+                  "element": "targetDisease",
+                  "variable": "targetDisease"
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set target disease coding",
+                  "source": [
+                    {
+                      "context": "disease"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "targetDisease",
+                      "contextType": "variable",
+                      "element": "coding",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "disease"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "set forecast status",
+              "source": [
+                {
+                  "context": "src"
+                }
+              ],
+              "target": [
+                {
+                  "context": "rec",
+                  "contextType": "variable",
+                  "element": "forecastStatus",
+                  "variable": "forecast"
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set forecast status coding",
+                  "source": [
+                    {
+                      "context": "src"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "forecast",
+                      "contextType": "variable",
+                      "element": "coding",
+                      "variable": "coding"
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "set forecast system",
+                      "source": [
+                        {
+                          "context": "src"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "coding",
+                          "contextType": "variable",
+                          "element": "system",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "http://terminology.hl7.org/2.1.0/CodeSystem-immunization-recommendation-status.html"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "set forecast code",
+                      "source": [
+                        {
+                          "context": "src"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "coding",
+                          "contextType": "variable",
+                          "element": "code",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "due"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "set date criterion",
+              "source": [
+                {
+                  "context": "src"
+                }
+              ],
+              "target": [
+                {
+                  "context": "rec",
+                  "contextType": "variable",
+                  "element": "dateCriterion",
+                  "variable": "due_date"
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set due date code",
+                  "source": [
+                    {
+                      "context": "src"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "due_date",
+                      "contextType": "variable",
+                      "element": "code",
+                      "variable": "code"
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "set due date code coding",
+                      "source": [
+                        {
+                          "context": "src"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "code",
+                          "contextType": "variable",
+                          "element": "coding",
+                          "variable": "coding"
+                        }
+                      ],
+                      "rule": [
+                        {
+                          "name": "set due date code system",
+                          "source": [
+                            {
+                              "context": "src"
+                            }
+                          ],
+                          "target": [
+                            {
+                              "context": "coding",
+                              "contextType": "variable",
+                              "element": "system",
+                              "transform": "copy",
+                              "parameter": [
+                                {
+                                  "valueString": "http://loinc.org"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "name": "set due date code code",
+                          "source": [
+                            {
+                              "context": "src"
+                            }
+                          ],
+                          "target": [
+                            {
+                              "context": "coding",
+                              "contextType": "variable",
+                              "element": "code",
+                              "transform": "copy",
+                              "parameter": [
+                                {
+                                  "valueString": "30980-7"
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set due date value",
+                  "source": [
+                    {
+                      "context": "src",
+                      "element": "nextDose",
+                      "variable": "nextDose"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "due_date",
+                      "contextType": "variable",
+                      "element": "value",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "nextDose"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "set dose number",
+              "source": [
+                {
+                  "context": "src",
+                  "element": "dose",
+                  "variable": "dose"
+                }
+              ],
+              "target": [
+                {
+                  "context": "rec",
+                  "contextType": "variable",
+                  "element": "doseNumber",
+                  "transform": "evaluate",
+                  "parameter": [
+                    {
+                      "valueString": "dose.toInteger() + 1"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "set total doses",
+              "source": [
+                {
+                  "context": "src",
+                  "element": "totalDoses",
+                  "variable": "totalDoses"
+                }
+              ],
+              "target": [
+                {
+                  "context": "rec",
+                  "contextType": "variable",
+                  "element": "seriesDoses",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "totalDoses"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "set supporting immunization",
+              "source": [
+                {
+                  "context": "src"
+                }
+              ],
+              "target": [
+                {
+                  "context": "rec",
+                  "contextType": "variable",
+                  "element": "supportingImmunization",
+                  "variable": "imm"
+                },
+                {
+                  "context": "imm",
+                  "contextType": "variable",
+                  "element": "reference",
+                  "transform": "append",
+                  "parameter": [
+                    {
+                      "valueString": "Immunization/"
+                    },
+                    {
+                      "valueId": "iid"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

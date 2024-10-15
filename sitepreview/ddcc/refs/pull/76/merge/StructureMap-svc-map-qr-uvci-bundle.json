@@ -1,0 +1,814 @@
+{
+  "resourceType": "StructureMap",
+  "id": "svc-map-qr-uvci-bundle",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n         <pre>map &quot;http://who-int.github.io/svc/StructureMap/svc-map-qr-uvci-bundle&quot; = &quot;svc-map-qr-uvci-bundle&quot;\n\nuses &quot;http://who-int.github.io/svc/refs/heads/qr-encoding/StructureDefinition/svc-qr-uvci&quot; alias QR as source\nuses &quot;http://who-int.github.io/svc/StructureDefinition/svc-bundle&quot; alias SVC_Bundle as target\nuses &quot;http://who-int.github.io/svc/StructureDefinition/svc-composition&quot; alias SVC_Composition as produced\nuses &quot;http://who-int.github.io/svc/StructureDefinition/svc-patient&quot; alias SVC_Patient as produced\nuses &quot;http://who-int.github.io/svc/StructureDefinition/svc-organization&quot; alias SVC_Organization as produced\nuses &quot;http://who-int.github.io/svc/StructureDefinition/svc-provenance&quot; alias SVC_Provenance as produced\n\ngroup Decode_QR(source qr : QR, target bundle) {\n  qr -&gt;  create('SVC_Patient') as patient,  create('SVC_Organization') as organization then Decode_QR_Patient(qr, patient), Decode_QR_Organization(qr, organization), Decode_QR_Bundle(qr, patient, organzation, bundle) &quot;Create resources and process bundle&quot;;\n}\n\ngroup Decode_QR_Patient(source qr : QR, target patient : SVC_Patient) {\n  qr.name as qrname, patient.name as pname -&gt;  pname.text = qrname,  pname.use = 'official' &quot;Load Name&quot;;\n  qr.pid as pid -&gt; patient.identifier = id('XXXXXurn:uetf:rfc:3986', pid) &quot;Load Patient Identifer&quot;;\n  qr.birthDate as birthDate -&gt; patient.birthDate = birthDate &quot;Load Birth Date&quot;;\n}\n\ngroup Decode_QR_Organization(source qr : QR, target organization : SVC_Organization) {\n  qr.phaid as phaid -&gt; organization.identifier = id('XXXXXurn:ietf:rfc:3986', phaid) &quot;Load PHA ID&quot;;\n}\n\ngroup Decode_QR_Bundle(source qr : QR, target patient : SVC_Patient, target bundle : SVC_Bundle) {\n  qr -&gt;  bundle.status = 'final',  bundle.type = 'document' &quot;Set Bundle Metadata&quot;;\n  qr.paperid as paperid -&gt; bundle.identifier = id('XXXXXurn:ietf:rfc:3986', paperid) &quot;Load Paper SVC ID&quot;;\n  qr.signature as qrsig, bundle.signature as bsig -&gt;  bsig.data = qrsig,  bsig.type = '1.2.840.10065.1.12.1.14',  bsig.format = 'XXXXXXX TBD',  bsig.who = reference(organization) &quot;Load Signature&quot;;\n  qr -&gt;  bundle.entry as e,  e.resource = create('SVC_Composition') as compostion then Decode_QR_Composition(qr, bundle, composition) &quot;Process Composition Entry&quot;;\n}\n\ngroup Decode_QR_Composition(source qr : QR, source ,, target bundle : SVC_Bundle, target patient : SVC_Patient, target organization : SVC_Organization, target composition : SVC_Composition) {\n  qr -&gt;  composition.subject = reference(patient),  composition.author = reference(organization) &quot;Set Composition Meta&quot;;\n  qr.digitalid as digitalid -&gt; composition.identifier = id('XXXXXurn:ietf:rfc:3986', digitalid) &quot;Load Digital SVC ID&quot;;\n}\n\ngroup Decode_QR_Provenance(source qr : QR, target bundle : SVC_Bundle, target patient : SVC_Patient, target organization : SVC_Organization, target paper : SVC_Composition, target digital : SVC_Composition, target provenance : SVC_Provenance) {\n  qr, provenance.entity as e_digital, provenance.agent as agent, provenance.signature as psig -&gt;  provenance.reason = 'PUBHLTH',  provenance.policy = 'XXXXXXX urn:example:who:smart:vaccine-certificate:RC1',  provenance.target = reference(bundle),  e_digital.role = 'source',  e_digital.what = reference(composition),  e_digital.agent = reference(organization),  e_paper.role = 'source',  e_paper.what = reference(bundle),  e_paper.agent = reference(organization),  psig.format = 'XXXXX TBD',  psig.who = reference(organization),  psg.type = '1.2.840.10065.1.12.1.14',  psig.data = signature then {\n    agent.who as who -&gt;  who.reference = reference(organization),  who.onBehalfOf = reference(patient) as &quot;Set who&quot;;\n  } &quot;Set provenance&quot;;\n}\n\n</pre>\n      </div>"
+  },
+  "url": "http://who-int.github.io/svc/StructureMap/svc-map-qr-uvci-bundle",
+  "version": "0.3.1",
+  "name": "svc-map-qr-uvci-bundle",
+  "status": "draft",
+  "date": "2022-01-25T14:31:46+00:00",
+  "publisher": "WHO",
+  "contact": [
+    {
+      "name": "WHO",
+      "telecom": [
+        {
+          "system": "url",
+          "value": "http://who.int"
+        }
+      ]
+    }
+  ],
+  "jurisdiction": [
+    {
+      "coding": [
+        {
+          "system": "http://unstats.un.org/unsd/methods/m49/m49.htm",
+          "code": "001"
+        }
+      ]
+    }
+  ],
+  "structure": [
+    {
+      "url": "http://who-int.github.io/svc/refs/heads/qr-encoding/StructureDefinition/svc-qr-uvci",
+      "mode": "source",
+      "alias": "QR"
+    },
+    {
+      "url": "http://who-int.github.io/svc/StructureDefinition/svc-bundle",
+      "mode": "target",
+      "alias": "SVC_Bundle"
+    },
+    {
+      "url": "http://who-int.github.io/svc/StructureDefinition/svc-composition",
+      "mode": "produced",
+      "alias": "SVC_Composition"
+    },
+    {
+      "url": "http://who-int.github.io/svc/StructureDefinition/svc-patient",
+      "mode": "produced",
+      "alias": "SVC_Patient"
+    },
+    {
+      "url": "http://who-int.github.io/svc/StructureDefinition/svc-organization",
+      "mode": "produced",
+      "alias": "SVC_Organization"
+    },
+    {
+      "url": "http://who-int.github.io/svc/StructureDefinition/svc-provenance",
+      "mode": "produced",
+      "alias": "SVC_Provenance"
+    }
+  ],
+  "group": [
+    {
+      "name": "Decode_QR",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "qr",
+          "type": "QR",
+          "mode": "source"
+        },
+        {
+          "name": "bundle",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "Create resources and process bundle",
+          "source": [
+            {
+              "context": "qr"
+            }
+          ],
+          "target": [
+            {
+              "contextType": "variable",
+              "variable": "patient",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "SVC_Patient"
+                }
+              ]
+            },
+            {
+              "contextType": "variable",
+              "variable": "organization",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "SVC_Organization"
+                }
+              ]
+            }
+          ],
+          "dependent": [
+            {
+              "name": "Decode_QR_Patient",
+              "variable": [
+                "qr",
+                "patient"
+              ]
+            },
+            {
+              "name": "Decode_QR_Organization",
+              "variable": [
+                "qr",
+                "organization"
+              ]
+            },
+            {
+              "name": "Decode_QR_Bundle",
+              "variable": [
+                "qr",
+                "patient",
+                "organzation",
+                "bundle"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Decode_QR_Patient",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "qr",
+          "type": "QR",
+          "mode": "source"
+        },
+        {
+          "name": "patient",
+          "type": "SVC_Patient",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "Load Name",
+          "source": [
+            {
+              "context": "qr",
+              "element": "name",
+              "variable": "qrname"
+            },
+            {
+              "context": "patient",
+              "element": "name",
+              "variable": "pname"
+            }
+          ],
+          "target": [
+            {
+              "context": "pname",
+              "contextType": "variable",
+              "element": "text",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "qrname"
+                }
+              ]
+            },
+            {
+              "context": "pname",
+              "contextType": "variable",
+              "element": "use",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "official"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Load Patient Identifer",
+          "source": [
+            {
+              "context": "qr",
+              "element": "pid",
+              "variable": "pid"
+            }
+          ],
+          "target": [
+            {
+              "context": "patient",
+              "contextType": "variable",
+              "element": "identifier",
+              "transform": "id",
+              "parameter": [
+                {
+                  "valueString": "XXXXXurn:uetf:rfc:3986"
+                },
+                {
+                  "valueId": "pid"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Load Birth Date",
+          "source": [
+            {
+              "context": "qr",
+              "element": "birthDate",
+              "variable": "birthDate"
+            }
+          ],
+          "target": [
+            {
+              "context": "patient",
+              "contextType": "variable",
+              "element": "birthDate",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "birthDate"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Decode_QR_Organization",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "qr",
+          "type": "QR",
+          "mode": "source"
+        },
+        {
+          "name": "organization",
+          "type": "SVC_Organization",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "Load PHA ID",
+          "source": [
+            {
+              "context": "qr",
+              "element": "phaid",
+              "variable": "phaid"
+            }
+          ],
+          "target": [
+            {
+              "context": "organization",
+              "contextType": "variable",
+              "element": "identifier",
+              "transform": "id",
+              "parameter": [
+                {
+                  "valueString": "XXXXXurn:ietf:rfc:3986"
+                },
+                {
+                  "valueId": "phaid"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Decode_QR_Bundle",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "qr",
+          "type": "QR",
+          "mode": "source"
+        },
+        {
+          "name": "patient",
+          "type": "SVC_Patient",
+          "mode": "target"
+        },
+        {
+          "name": "bundle",
+          "type": "SVC_Bundle",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "Set Bundle Metadata",
+          "source": [
+            {
+              "context": "qr"
+            }
+          ],
+          "target": [
+            {
+              "context": "bundle",
+              "contextType": "variable",
+              "element": "status",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "final"
+                }
+              ]
+            },
+            {
+              "context": "bundle",
+              "contextType": "variable",
+              "element": "type",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "document"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Load Paper SVC ID",
+          "source": [
+            {
+              "context": "qr",
+              "element": "paperid",
+              "variable": "paperid"
+            }
+          ],
+          "target": [
+            {
+              "context": "bundle",
+              "contextType": "variable",
+              "element": "identifier",
+              "transform": "id",
+              "parameter": [
+                {
+                  "valueString": "XXXXXurn:ietf:rfc:3986"
+                },
+                {
+                  "valueId": "paperid"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Load Signature",
+          "source": [
+            {
+              "context": "qr",
+              "element": "signature",
+              "variable": "qrsig"
+            },
+            {
+              "context": "bundle",
+              "element": "signature",
+              "variable": "bsig"
+            }
+          ],
+          "target": [
+            {
+              "context": "bsig",
+              "contextType": "variable",
+              "element": "data",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "qrsig"
+                }
+              ]
+            },
+            {
+              "context": "bsig",
+              "contextType": "variable",
+              "element": "type",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "1.2.840.10065.1.12.1.14"
+                }
+              ]
+            },
+            {
+              "context": "bsig",
+              "contextType": "variable",
+              "element": "format",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "XXXXXXX TBD"
+                }
+              ]
+            },
+            {
+              "context": "bsig",
+              "contextType": "variable",
+              "element": "who",
+              "transform": "reference",
+              "parameter": [
+                {
+                  "valueId": "organization"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Process Composition Entry",
+          "source": [
+            {
+              "context": "qr"
+            }
+          ],
+          "target": [
+            {
+              "context": "bundle",
+              "contextType": "variable",
+              "element": "entry",
+              "variable": "e"
+            },
+            {
+              "context": "e",
+              "contextType": "variable",
+              "element": "resource",
+              "variable": "compostion",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "SVC_Composition"
+                }
+              ]
+            }
+          ],
+          "dependent": [
+            {
+              "name": "Decode_QR_Composition",
+              "variable": [
+                "qr",
+                "bundle",
+                "composition"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Decode_QR_Composition",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "qr",
+          "type": "QR",
+          "mode": "source"
+        },
+        {
+          "name": ",",
+          "mode": "source"
+        },
+        {
+          "name": "bundle",
+          "type": "SVC_Bundle",
+          "mode": "target"
+        },
+        {
+          "name": "patient",
+          "type": "SVC_Patient",
+          "mode": "target"
+        },
+        {
+          "name": "organization",
+          "type": "SVC_Organization",
+          "mode": "target"
+        },
+        {
+          "name": "composition",
+          "type": "SVC_Composition",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "Set Composition Meta",
+          "source": [
+            {
+              "context": "qr"
+            }
+          ],
+          "target": [
+            {
+              "context": "composition",
+              "contextType": "variable",
+              "element": "subject",
+              "transform": "reference",
+              "parameter": [
+                {
+                  "valueId": "patient"
+                }
+              ]
+            },
+            {
+              "context": "composition",
+              "contextType": "variable",
+              "element": "author",
+              "transform": "reference",
+              "parameter": [
+                {
+                  "valueId": "organization"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Load Digital SVC ID",
+          "source": [
+            {
+              "context": "qr",
+              "element": "digitalid",
+              "variable": "digitalid"
+            }
+          ],
+          "target": [
+            {
+              "context": "composition",
+              "contextType": "variable",
+              "element": "identifier",
+              "transform": "id",
+              "parameter": [
+                {
+                  "valueString": "XXXXXurn:ietf:rfc:3986"
+                },
+                {
+                  "valueId": "digitalid"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Decode_QR_Provenance",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "qr",
+          "type": "QR",
+          "mode": "source"
+        },
+        {
+          "name": "bundle",
+          "type": "SVC_Bundle",
+          "mode": "target"
+        },
+        {
+          "name": "patient",
+          "type": "SVC_Patient",
+          "mode": "target"
+        },
+        {
+          "name": "organization",
+          "type": "SVC_Organization",
+          "mode": "target"
+        },
+        {
+          "name": "paper",
+          "type": "SVC_Composition",
+          "mode": "target"
+        },
+        {
+          "name": "digital",
+          "type": "SVC_Composition",
+          "mode": "target"
+        },
+        {
+          "name": "provenance",
+          "type": "SVC_Provenance",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "Set provenance",
+          "source": [
+            {
+              "context": "qr"
+            },
+            {
+              "context": "provenance",
+              "element": "entity",
+              "variable": "e_digital"
+            },
+            {
+              "context": "provenance",
+              "element": "agent",
+              "variable": "agent"
+            },
+            {
+              "context": "provenance",
+              "element": "signature",
+              "variable": "psig"
+            }
+          ],
+          "target": [
+            {
+              "context": "provenance",
+              "contextType": "variable",
+              "element": "reason",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "PUBHLTH"
+                }
+              ]
+            },
+            {
+              "context": "provenance",
+              "contextType": "variable",
+              "element": "policy",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "XXXXXXX urn:example:who:smart:vaccine-certificate:RC1"
+                }
+              ]
+            },
+            {
+              "context": "provenance",
+              "contextType": "variable",
+              "element": "target",
+              "transform": "reference",
+              "parameter": [
+                {
+                  "valueId": "bundle"
+                }
+              ]
+            },
+            {
+              "context": "e_digital",
+              "contextType": "variable",
+              "element": "role",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "source"
+                }
+              ]
+            },
+            {
+              "context": "e_digital",
+              "contextType": "variable",
+              "element": "what",
+              "transform": "reference",
+              "parameter": [
+                {
+                  "valueId": "composition"
+                }
+              ]
+            },
+            {
+              "context": "e_digital",
+              "contextType": "variable",
+              "element": "agent",
+              "transform": "reference",
+              "parameter": [
+                {
+                  "valueId": "organization"
+                }
+              ]
+            },
+            {
+              "context": "e_paper",
+              "contextType": "variable",
+              "element": "role",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "source"
+                }
+              ]
+            },
+            {
+              "context": "e_paper",
+              "contextType": "variable",
+              "element": "what",
+              "transform": "reference",
+              "parameter": [
+                {
+                  "valueId": "bundle"
+                }
+              ]
+            },
+            {
+              "context": "e_paper",
+              "contextType": "variable",
+              "element": "agent",
+              "transform": "reference",
+              "parameter": [
+                {
+                  "valueId": "organization"
+                }
+              ]
+            },
+            {
+              "context": "psig",
+              "contextType": "variable",
+              "element": "format",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "XXXXX TBD"
+                }
+              ]
+            },
+            {
+              "context": "psig",
+              "contextType": "variable",
+              "element": "who",
+              "transform": "reference",
+              "parameter": [
+                {
+                  "valueId": "organization"
+                }
+              ]
+            },
+            {
+              "context": "psg",
+              "contextType": "variable",
+              "element": "type",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "1.2.840.10065.1.12.1.14"
+                }
+              ]
+            },
+            {
+              "context": "psig",
+              "contextType": "variable",
+              "element": "data",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "signature"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "who",
+              "source": [
+                {
+                  "context": "agent",
+                  "element": "who",
+                  "variable": "who"
+                }
+              ],
+              "target": [
+                {
+                  "context": "who",
+                  "contextType": "variable",
+                  "element": "reference",
+                  "transform": "reference",
+                  "parameter": [
+                    {
+                      "valueId": "organization"
+                    }
+                  ]
+                },
+                {
+                  "context": "who",
+                  "contextType": "variable",
+                  "element": "onBehalfOf",
+                  "variable": "\"Set who\"",
+                  "transform": "reference",
+                  "parameter": [
+                    {
+                      "valueId": "patient"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

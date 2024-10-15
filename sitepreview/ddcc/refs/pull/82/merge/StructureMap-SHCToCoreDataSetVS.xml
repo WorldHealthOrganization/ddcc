@@ -1,0 +1,390 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<StructureMap xmlns="http://hl7.org/fhir">
+  <id value="SHCToCoreDataSetVS"/>
+  <meta>
+    <versionId value="5"/>
+    <lastUpdated value="2021-12-29T00:46:08.706+00:00"/>
+  </meta>
+  <text>
+    <status value="generated"/><div xmlns="http://www.w3.org/1999/xhtml"><pre>map &quot;http://worldhealthorganization.github.io/ddcc/StructureMap/SHCToCoreDataSetVS&quot; = &quot;SHCToCoreDataSetVS&quot;
+
+
+uses &quot;http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-vaccination-bundle-dm&quot; alias SHCVaccinationBundleDM as source
+uses &quot;http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-patient-general-dm&quot; alias SHCPatientDM as source
+uses &quot;http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-vaccination-dm&quot; alias SHCImmunizationDM as source
+uses &quot;http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.VS&quot; alias DDCCVS as target
+
+group SHCToVS(source shc : SHCVaccinationBundleDM, target ddcc : DDCCVS) {
+  shc.entry as patientEntrySHC then {
+    patientEntrySHC.resource : Patient first as patientSHC then {
+      patientSHC then PatientToDDCC(patientSHC, ddcc) &quot;Patient resource&quot;;
+      shc.entry as immunizationEntrySHC then {
+        immunizationEntrySHC.resource : Immunization as immunizationSHC -&gt; ddcc.vaccination as vaccination then ImmunizationToDDCC(immunizationSHC, vaccination) &quot;Immunization resource&quot;;
+      } &quot;Immunization entry&quot;;
+    } &quot;Patient entry&quot;;
+  } &quot;map patient&quot;;
+}
+
+group PatientToDDCC(source patient : SHCPatientDM, target tgt : DDCCVS) {
+  patient.name as name then {
+    name.text as text -&gt; tgt.name = text &quot;set name&quot;;
+  } &quot;set full name&quot;;
+  patient.birthDate as birthDate -&gt; tgt.birthDate = birthDate &quot;set birthDate&quot;;
+}
+
+group ImmunizationToDDCC(source immunization : SHCImmunizationDM, target vaccination) {
+  immunization.vaccineCode as vaccineCode -&gt; vaccination.vaccine = vaccineCode &quot;set vaccine&quot;;
+  immunization.manufacturer as tman then {
+    tman.identifier as ident -&gt; vaccination.manufacturer as manufacturer then {
+      ident.system as system -&gt; manufacturer.system = system &quot;set system&quot;;
+      ident.value as value -&gt; manufacturer.code = value &quot;set value&quot;;
+    } &quot;set manufacturer&quot;;
+  };
+  immunization.lotNumber as lot -&gt; vaccination.lot = lot &quot;set lot&quot;;
+  immunization.occurrence as date -&gt; vaccination.date = date &quot;set date&quot;;
+  immunization.performer as performer then {
+    performer.actor as actor then {
+      actor.display as centre -&gt; vaccination.centre = centre &quot;set centre&quot;;
+    };
+  };
+}
+
+</pre></div>
+  </text>
+  <url value="http://worldhealthorganization.github.io/ddcc/StructureMap/SHCToCoreDataSetVS"/>
+  <version value="1.0.0"/>
+  <name value="SHCToCoreDataSetVS"/>
+  <status value="draft"/>
+  <date value="2022-11-23T04:25:10+00:00"/>
+  <publisher value="WHO"/>
+  <contact>
+    <name value="WHO"/>
+    <telecom>
+      <system value="url"/>
+      <value value="http://who.int"/>
+    </telecom>
+  </contact>
+  <jurisdiction>
+    <coding>
+      <system value="http://unstats.un.org/unsd/methods/m49/m49.htm"/>
+      <code value="001"/>
+    </coding>
+  </jurisdiction>
+  <structure>
+    <url value="http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-vaccination-bundle-dm"/>
+    <mode value="source"/>
+    <alias value="SHCVaccinationBundleDM"/>
+  </structure>
+  <structure>
+    <url value="http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-patient-general-dm"/>
+    <mode value="source"/>
+    <alias value="SHCPatientDM"/>
+  </structure>
+  <structure>
+    <url value="http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-vaccination-dm"/>
+    <mode value="source"/>
+    <alias value="SHCImmunizationDM"/>
+  </structure>
+  <structure>
+    <url value="http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.VS"/>
+    <mode value="target"/>
+    <alias value="DDCCVS"/>
+  </structure>
+  <group>
+    <name value="SHCToVS"/>
+    <typeMode value="none"/>
+    <input>
+      <name value="shc"/>
+      <type value="SHCVaccinationBundleDM"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="ddcc"/>
+      <type value="DDCCVS"/>
+      <mode value="target"/>
+    </input>
+    <rule>
+      <name value="map patient"/>
+      <source>
+        <context value="shc"/>
+        <element value="entry"/>
+        <variable value="patientEntrySHC"/>
+      </source>
+      <rule>
+        <name value="Patient entry"/>
+        <source>
+          <context value="patientEntrySHC"/>
+          <type value="Patient"/>
+          <element value="resource"/>
+          <listMode value="first"/>
+          <variable value="patientSHC"/>
+        </source>
+        <rule>
+          <name value="Patient resource"/>
+          <source>
+            <context value="patientSHC"/>
+          </source>
+          <dependent>
+            <name value="PatientToDDCC"/>
+            <variable value="patientSHC">
+              <extension url="http://hl7.org/fhir/tools/StructureDefinition/original-item-type">
+                <valueUrl value="id"/>
+              </extension>
+            </variable>
+            <variable value="ddcc">
+              <extension url="http://hl7.org/fhir/tools/StructureDefinition/original-item-type">
+                <valueUrl value="id"/>
+              </extension>
+            </variable>
+          </dependent>
+        </rule>
+        <rule>
+          <name value="Immunization entry"/>
+          <source>
+            <context value="shc"/>
+            <element value="entry"/>
+            <variable value="immunizationEntrySHC"/>
+          </source>
+          <rule>
+            <name value="Immunization resource"/>
+            <source>
+              <context value="immunizationEntrySHC"/>
+              <type value="Immunization"/>
+              <element value="resource"/>
+              <variable value="immunizationSHC"/>
+            </source>
+            <target>
+              <context value="ddcc"/>
+              <contextType value="variable"/>
+              <element value="vaccination"/>
+              <variable value="vaccination"/>
+            </target>
+            <dependent>
+              <name value="ImmunizationToDDCC"/>
+              <variable value="immunizationSHC">
+                <extension url="http://hl7.org/fhir/tools/StructureDefinition/original-item-type">
+                  <valueUrl value="id"/>
+                </extension>
+              </variable>
+              <variable value="vaccination">
+                <extension url="http://hl7.org/fhir/tools/StructureDefinition/original-item-type">
+                  <valueUrl value="id"/>
+                </extension>
+              </variable>
+            </dependent>
+          </rule>
+        </rule>
+      </rule>
+    </rule>
+  </group>
+  <group>
+    <name value="PatientToDDCC"/>
+    <typeMode value="none"/>
+    <input>
+      <name value="patient"/>
+      <type value="SHCPatientDM"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="tgt"/>
+      <type value="DDCCVS"/>
+      <mode value="target"/>
+    </input>
+    <rule>
+      <name value="set full name"/>
+      <source>
+        <context value="patient"/>
+        <element value="name"/>
+        <variable value="name"/>
+      </source>
+      <rule>
+        <name value="set name"/>
+        <source>
+          <context value="name"/>
+          <element value="text"/>
+          <variable value="text"/>
+        </source>
+        <target>
+          <context value="tgt"/>
+          <contextType value="variable"/>
+          <element value="name"/>
+          <transform value="copy"/>
+          <parameter>
+            <valueId value="text"/>
+          </parameter>
+        </target>
+      </rule>
+    </rule>
+    <rule>
+      <name value="set birthDate"/>
+      <source>
+        <context value="patient"/>
+        <element value="birthDate"/>
+        <variable value="birthDate"/>
+      </source>
+      <target>
+        <context value="tgt"/>
+        <contextType value="variable"/>
+        <element value="birthDate"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="birthDate"/>
+        </parameter>
+      </target>
+    </rule>
+  </group>
+  <group>
+    <name value="ImmunizationToDDCC"/>
+    <typeMode value="none"/>
+    <input>
+      <name value="immunization"/>
+      <type value="SHCImmunizationDM"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="vaccination"/>
+      <mode value="target"/>
+    </input>
+    <rule>
+      <name value="set vaccine"/>
+      <source>
+        <context value="immunization"/>
+        <element value="vaccineCode"/>
+        <variable value="vaccineCode"/>
+      </source>
+      <target>
+        <context value="vaccination"/>
+        <contextType value="variable"/>
+        <element value="vaccine"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="vaccineCode"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="manufacturer"/>
+      <source>
+        <context value="immunization"/>
+        <element value="manufacturer"/>
+        <variable value="tman"/>
+      </source>
+      <rule>
+        <name value="set manufacturer"/>
+        <source>
+          <context value="tman"/>
+          <element value="identifier"/>
+          <variable value="ident"/>
+        </source>
+        <target>
+          <context value="vaccination"/>
+          <contextType value="variable"/>
+          <element value="manufacturer"/>
+          <variable value="manufacturer"/>
+        </target>
+        <rule>
+          <name value="set system"/>
+          <source>
+            <context value="ident"/>
+            <element value="system"/>
+            <variable value="system"/>
+          </source>
+          <target>
+            <context value="manufacturer"/>
+            <contextType value="variable"/>
+            <element value="system"/>
+            <transform value="copy"/>
+            <parameter>
+              <valueId value="system"/>
+            </parameter>
+          </target>
+        </rule>
+        <rule>
+          <name value="set value"/>
+          <source>
+            <context value="ident"/>
+            <element value="value"/>
+            <variable value="value"/>
+          </source>
+          <target>
+            <context value="manufacturer"/>
+            <contextType value="variable"/>
+            <element value="code"/>
+            <transform value="copy"/>
+            <parameter>
+              <valueId value="value"/>
+            </parameter>
+          </target>
+        </rule>
+      </rule>
+    </rule>
+    <rule>
+      <name value="set lot"/>
+      <source>
+        <context value="immunization"/>
+        <element value="lotNumber"/>
+        <variable value="lot"/>
+      </source>
+      <target>
+        <context value="vaccination"/>
+        <contextType value="variable"/>
+        <element value="lot"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="lot"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="set date"/>
+      <source>
+        <context value="immunization"/>
+        <element value="occurrence"/>
+        <variable value="date"/>
+      </source>
+      <target>
+        <context value="vaccination"/>
+        <contextType value="variable"/>
+        <element value="date"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="date"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="performer"/>
+      <source>
+        <context value="immunization"/>
+        <element value="performer"/>
+        <variable value="performer"/>
+      </source>
+      <rule>
+        <name value="actor"/>
+        <source>
+          <context value="performer"/>
+          <element value="actor"/>
+          <variable value="actor"/>
+        </source>
+        <rule>
+          <name value="set centre"/>
+          <source>
+            <context value="actor"/>
+            <element value="display"/>
+            <variable value="centre"/>
+          </source>
+          <target>
+            <context value="vaccination"/>
+            <contextType value="variable"/>
+            <element value="centre"/>
+            <transform value="copy"/>
+            <parameter>
+              <valueId value="centre"/>
+            </parameter>
+          </target>
+        </rule>
+      </rule>
+    </rule>
+  </group>
+</StructureMap>

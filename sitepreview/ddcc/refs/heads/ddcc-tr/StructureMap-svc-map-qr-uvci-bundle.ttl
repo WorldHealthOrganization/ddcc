@@ -1,0 +1,784 @@
+@prefix fhir: <http://hl7.org/fhir/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# - resource -------------------------------------------------------------------
+
+<http://worldhealthorganization.github.io/ddcc/StructureMap/svc-map-qr-uvci-bundle> a fhir:StructureMap;
+  fhir:nodeRole fhir:treeRoot;
+  fhir:Resource.id [ fhir:value "svc-map-qr-uvci-bundle"];
+  fhir:DomainResource.text [
+     fhir:Narrative.status [ fhir:value "generated" ];
+     fhir:Narrative.div "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n         <pre>map &quot;http://who-int.github.io/svc/StructureMap/svc-map-qr-uvci-bundle&quot; = &quot;svc-map-qr-uvci-bundle&quot;\n\nuses &quot;http://who-int.github.io/svc/refs/heads/qr-encoding/StructureDefinition/svc-qr-uvci&quot; alias QR as source\nuses &quot;http://who-int.github.io/svc/StructureDefinition/svc-bundle&quot; alias SVC_Bundle as target\nuses &quot;http://who-int.github.io/svc/StructureDefinition/svc-composition&quot; alias SVC_Composition as produced\nuses &quot;http://who-int.github.io/svc/StructureDefinition/svc-patient&quot; alias SVC_Patient as produced\nuses &quot;http://who-int.github.io/svc/StructureDefinition/svc-organization&quot; alias SVC_Organization as produced\nuses &quot;http://who-int.github.io/svc/StructureDefinition/svc-provenance&quot; alias SVC_Provenance as produced\n\ngroup Decode_QR(source qr : QR, target bundle) {\n  qr -&gt;  create('SVC_Patient') as patient,  create('SVC_Organization') as organization then Decode_QR_Patient(qr, patient), Decode_QR_Organization(qr, organization), Decode_QR_Bundle(qr, patient, organzation, bundle) &quot;Create resources and process bundle&quot;;\n}\n\ngroup Decode_QR_Patient(source qr : QR, target patient : SVC_Patient) {\n  qr.name as qrname, patient.name as pname -&gt;  pname.text = qrname,  pname.use = 'official' &quot;Load Name&quot;;\n  qr.pid as pid -&gt; patient.identifier = id('XXXXXurn:uetf:rfc:3986', pid) &quot;Load Patient Identifer&quot;;\n  qr.birthDate as birthDate -&gt; patient.birthDate = birthDate &quot;Load Birth Date&quot;;\n}\n\ngroup Decode_QR_Organization(source qr : QR, target organization : SVC_Organization) {\n  qr.phaid as phaid -&gt; organization.identifier = id('XXXXXurn:ietf:rfc:3986', phaid) &quot;Load PHA ID&quot;;\n}\n\ngroup Decode_QR_Bundle(source qr : QR, target patient : SVC_Patient, target bundle : SVC_Bundle) {\n  qr -&gt;  bundle.status = 'final',  bundle.type = 'document' &quot;Set Bundle Metadata&quot;;\n  qr.paperid as paperid -&gt; bundle.identifier = id('XXXXXurn:ietf:rfc:3986', paperid) &quot;Load Paper SVC ID&quot;;\n  qr.signature as qrsig, bundle.signature as bsig -&gt;  bsig.data = qrsig,  bsig.type = '1.2.840.10065.1.12.1.14',  bsig.format = 'XXXXXXX TBD',  bsig.who = reference(organization) &quot;Load Signature&quot;;\n  qr -&gt;  bundle.entry as e,  e.resource = create('SVC_Composition') as compostion then Decode_QR_Composition(qr, bundle, composition) &quot;Process Composition Entry&quot;;\n}\n\ngroup Decode_QR_Composition(source qr : QR, source ,, target bundle : SVC_Bundle, target patient : SVC_Patient, target organization : SVC_Organization, target composition : SVC_Composition) {\n  qr -&gt;  composition.subject = reference(patient),  composition.author = reference(organization) &quot;Set Composition Meta&quot;;\n  qr.digitalid as digitalid -&gt; composition.identifier = id('XXXXXurn:ietf:rfc:3986', digitalid) &quot;Load Digital SVC ID&quot;;\n}\n\ngroup Decode_QR_Provenance(source qr : QR, target bundle : SVC_Bundle, target patient : SVC_Patient, target organization : SVC_Organization, target paper : SVC_Composition, target digital : SVC_Composition, target provenance : SVC_Provenance) {\n  qr, provenance.entity as e_digital, provenance.agent as agent, provenance.signature as psig -&gt;  provenance.reason = 'PUBHLTH',  provenance.policy = 'XXXXXXX urn:example:who:smart:vaccine-certificate:RC1',  provenance.target = reference(bundle),  e_digital.role = 'source',  e_digital.what = reference(composition),  e_digital.agent = reference(organization),  e_paper.role = 'source',  e_paper.what = reference(bundle),  e_paper.agent = reference(organization),  psig.format = 'XXXXX TBD',  psig.who = reference(organization),  psg.type = '1.2.840.10065.1.12.1.14',  psig.data = signature then {\n    agent.who as who -&gt;  who.reference = reference(organization),  who.onBehalfOf = reference(patient) as &quot;Set who&quot;;\n  } &quot;Set provenance&quot;;\n}\n\n</pre>\n      </div>"
+  ];
+  fhir:StructureMap.url [ fhir:value "http://who-int.github.io/svc/StructureMap/svc-map-qr-uvci-bundle"];
+  fhir:StructureMap.version [ fhir:value "0.3.1"];
+  fhir:StructureMap.name [ fhir:value "svc-map-qr-uvci-bundle"];
+  fhir:StructureMap.status [ fhir:value "draft"];
+  fhir:StructureMap.date [ fhir:value "2022-01-25T14:32:12+00:00"^^xsd:dateTime];
+  fhir:StructureMap.publisher [ fhir:value "WHO"];
+  fhir:StructureMap.contact [
+     fhir:index 0;
+     fhir:ContactDetail.name [ fhir:value "WHO" ];
+     fhir:ContactDetail.telecom [
+       fhir:index 0;
+       fhir:ContactPoint.system [ fhir:value "url" ];
+       fhir:ContactPoint.value [ fhir:value "http://who.int" ]
+     ]
+  ];
+  fhir:StructureMap.jurisdiction [
+     fhir:index 0;
+     fhir:CodeableConcept.coding [
+       fhir:index 0;
+       fhir:Coding.system [ fhir:value "http://unstats.un.org/unsd/methods/m49/m49.htm" ];
+       fhir:Coding.code [ fhir:value "001" ]
+     ]
+  ];
+  fhir:StructureMap.structure [
+     fhir:index 0;
+     fhir:StructureMap.structure.url [
+       fhir:value "http://who-int.github.io/svc/refs/heads/qr-encoding/StructureDefinition/svc-qr-uvci";
+       fhir:link <http://who-int.github.io/svc/refs/heads/qr-encoding/StructureDefinition/svc-qr-uvci>
+     ];
+     fhir:StructureMap.structure.mode [ fhir:value "source" ];
+     fhir:StructureMap.structure.alias [ fhir:value "QR" ]
+  ], [
+     fhir:index 1;
+     fhir:StructureMap.structure.url [
+       fhir:value "http://who-int.github.io/svc/StructureDefinition/svc-bundle";
+       fhir:link <http://who-int.github.io/svc/StructureDefinition/svc-bundle>
+     ];
+     fhir:StructureMap.structure.mode [ fhir:value "target" ];
+     fhir:StructureMap.structure.alias [ fhir:value "SVC_Bundle" ]
+  ], [
+     fhir:index 2;
+     fhir:StructureMap.structure.url [
+       fhir:value "http://who-int.github.io/svc/StructureDefinition/svc-composition";
+       fhir:link <http://who-int.github.io/svc/StructureDefinition/svc-composition>
+     ];
+     fhir:StructureMap.structure.mode [ fhir:value "produced" ];
+     fhir:StructureMap.structure.alias [ fhir:value "SVC_Composition" ]
+  ], [
+     fhir:index 3;
+     fhir:StructureMap.structure.url [
+       fhir:value "http://who-int.github.io/svc/StructureDefinition/svc-patient";
+       fhir:link <http://who-int.github.io/svc/StructureDefinition/svc-patient>
+     ];
+     fhir:StructureMap.structure.mode [ fhir:value "produced" ];
+     fhir:StructureMap.structure.alias [ fhir:value "SVC_Patient" ]
+  ], [
+     fhir:index 4;
+     fhir:StructureMap.structure.url [
+       fhir:value "http://who-int.github.io/svc/StructureDefinition/svc-organization";
+       fhir:link <http://who-int.github.io/svc/StructureDefinition/svc-organization>
+     ];
+     fhir:StructureMap.structure.mode [ fhir:value "produced" ];
+     fhir:StructureMap.structure.alias [ fhir:value "SVC_Organization" ]
+  ], [
+     fhir:index 5;
+     fhir:StructureMap.structure.url [
+       fhir:value "http://who-int.github.io/svc/StructureDefinition/svc-provenance";
+       fhir:link <http://who-int.github.io/svc/StructureDefinition/svc-provenance>
+     ];
+     fhir:StructureMap.structure.mode [ fhir:value "produced" ];
+     fhir:StructureMap.structure.alias [ fhir:value "SVC_Provenance" ]
+  ];
+  fhir:StructureMap.group [
+     fhir:index 0;
+     fhir:StructureMap.group.name [ fhir:value "Decode_QR" ];
+     fhir:StructureMap.group.typeMode [ fhir:value "none" ];
+     fhir:StructureMap.group.input [
+       fhir:index 0;
+       fhir:StructureMap.group.input.name [ fhir:value "qr" ];
+       fhir:StructureMap.group.input.type [ fhir:value "QR" ];
+       fhir:StructureMap.group.input.mode [ fhir:value "source" ]
+     ], [
+       fhir:index 1;
+       fhir:StructureMap.group.input.name [ fhir:value "bundle" ];
+       fhir:StructureMap.group.input.mode [ fhir:value "target" ]
+     ];
+     fhir:StructureMap.group.rule [
+       fhir:index 0;
+       fhir:StructureMap.group.rule.name [ fhir:value "Create resources and process bundle" ];
+       fhir:StructureMap.group.rule.source [
+         fhir:index 0;
+         fhir:StructureMap.group.rule.source.context [ fhir:value "qr" ]
+       ];
+       fhir:StructureMap.group.rule.target [
+         fhir:index 0;
+         fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ];
+         fhir:StructureMap.group.rule.target.variable [ fhir:value "patient" ];
+         fhir:StructureMap.group.rule.target.transform [ fhir:value "create" ];
+         fhir:StructureMap.group.rule.target.parameter [
+           fhir:index 0;
+           fhir:StructureMap.group.rule.target.parameter.valueString [ fhir:value "SVC_Patient" ]
+         ]
+       ], [
+         fhir:index 1;
+         fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ];
+         fhir:StructureMap.group.rule.target.variable [ fhir:value "organization" ];
+         fhir:StructureMap.group.rule.target.transform [ fhir:value "create" ];
+         fhir:StructureMap.group.rule.target.parameter [
+           fhir:index 0;
+           fhir:StructureMap.group.rule.target.parameter.valueString [ fhir:value "SVC_Organization" ]
+         ]
+       ];
+       fhir:StructureMap.group.rule.dependent [
+         fhir:index 0;
+         fhir:StructureMap.group.rule.dependent.name [ fhir:value "Decode_QR_Patient" ];
+         fhir:StructureMap.group.rule.dependent.variable [
+           fhir:value "qr";
+           fhir:index 0
+         ], [
+           fhir:value "patient";
+           fhir:index 1
+         ]
+       ], [
+         fhir:index 1;
+         fhir:StructureMap.group.rule.dependent.name [ fhir:value "Decode_QR_Organization" ];
+         fhir:StructureMap.group.rule.dependent.variable [
+           fhir:value "qr";
+           fhir:index 0
+         ], [
+           fhir:value "organization";
+           fhir:index 1
+         ]
+       ], [
+         fhir:index 2;
+         fhir:StructureMap.group.rule.dependent.name [ fhir:value "Decode_QR_Bundle" ];
+         fhir:StructureMap.group.rule.dependent.variable [
+           fhir:value "qr";
+           fhir:index 0
+         ], [
+           fhir:value "patient";
+           fhir:index 1
+         ], [
+           fhir:value "organzation";
+           fhir:index 2
+         ], [
+           fhir:value "bundle";
+           fhir:index 3
+         ]
+       ]
+     ]
+  ], [
+     fhir:index 1;
+     fhir:StructureMap.group.name [ fhir:value "Decode_QR_Patient" ];
+     fhir:StructureMap.group.typeMode [ fhir:value "none" ];
+     fhir:StructureMap.group.input [
+       fhir:index 0;
+       fhir:StructureMap.group.input.name [ fhir:value "qr" ];
+       fhir:StructureMap.group.input.type [ fhir:value "QR" ];
+       fhir:StructureMap.group.input.mode [ fhir:value "source" ]
+     ], [
+       fhir:index 1;
+       fhir:StructureMap.group.input.name [ fhir:value "patient" ];
+       fhir:StructureMap.group.input.type [ fhir:value "SVC_Patient" ];
+       fhir:StructureMap.group.input.mode [ fhir:value "target" ]
+     ];
+     fhir:StructureMap.group.rule [
+       fhir:index 0;
+       fhir:StructureMap.group.rule.name [ fhir:value "Load Name" ];
+       fhir:StructureMap.group.rule.source [
+         fhir:index 0;
+         fhir:StructureMap.group.rule.source.context [ fhir:value "qr" ];
+         fhir:StructureMap.group.rule.source.element [ fhir:value "name" ];
+         fhir:StructureMap.group.rule.source.variable [ fhir:value "qrname" ]
+       ], [
+         fhir:index 1;
+         fhir:StructureMap.group.rule.source.context [ fhir:value "patient" ];
+         fhir:StructureMap.group.rule.source.element [ fhir:value "name" ];
+         fhir:StructureMap.group.rule.source.variable [ fhir:value "pname" ]
+       ];
+       fhir:StructureMap.group.rule.target [
+         fhir:index 0;
+         fhir:StructureMap.group.rule.target.context [ fhir:value "pname" ];
+         fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ];
+         fhir:StructureMap.group.rule.target.element [ fhir:value "text" ];
+         fhir:StructureMap.group.rule.target.transform [ fhir:value "copy" ];
+         fhir:StructureMap.group.rule.target.parameter [
+           fhir:index 0;
+           fhir:StructureMap.group.rule.target.parameter.valueId [ fhir:value "qrname" ]
+         ]
+       ], [
+         fhir:index 1;
+         fhir:StructureMap.group.rule.target.context [ fhir:value "pname" ];
+         fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ];
+         fhir:StructureMap.group.rule.target.element [ fhir:value "use" ];
+         fhir:StructureMap.group.rule.target.transform [ fhir:value "copy" ];
+         fhir:StructureMap.group.rule.target.parameter [
+           fhir:index 0;
+           fhir:StructureMap.group.rule.target.parameter.valueString [ fhir:value "official" ]
+         ]
+       ]
+     ], [
+       fhir:index 1;
+       fhir:StructureMap.group.rule.name [ fhir:value "Load Patient Identifer" ];
+       fhir:StructureMap.group.rule.source [
+         fhir:index 0;
+         fhir:StructureMap.group.rule.source.context [ fhir:value "qr" ];
+         fhir:StructureMap.group.rule.source.element [ fhir:value "pid" ];
+         fhir:StructureMap.group.rule.source.variable [ fhir:value "pid" ]
+       ];
+       fhir:StructureMap.group.rule.target [
+         fhir:index 0;
+         fhir:StructureMap.group.rule.target.context [ fhir:value "patient" ];
+         fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ];
+         fhir:StructureMap.group.rule.target.element [ fhir:value "identifier" ];
+         fhir:StructureMap.group.rule.target.transform [ fhir:value "id" ];
+         fhir:StructureMap.group.rule.target.parameter [
+           fhir:index 0;
+           fhir:StructureMap.group.rule.target.parameter.valueString [ fhir:value "XXXXXurn:uetf:rfc:3986" ]
+         ], [
+           fhir:index 1;
+           fhir:StructureMap.group.rule.target.parameter.valueId [ fhir:value "pid" ]
+         ]
+       ]
+     ], [
+       fhir:index 2;
+       fhir:StructureMap.group.rule.name [ fhir:value "Load Birth Date" ];
+       fhir:StructureMap.group.rule.source [
+         fhir:index 0;
+         fhir:StructureMap.group.rule.source.context [ fhir:value "qr" ];
+         fhir:StructureMap.group.rule.source.element [ fhir:value "birthDate" ];
+         fhir:StructureMap.group.rule.source.variable [ fhir:value "birthDate" ]
+       ];
+       fhir:StructureMap.group.rule.target [
+         fhir:index 0;
+         fhir:StructureMap.group.rule.target.context [ fhir:value "patient" ];
+         fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ];
+         fhir:StructureMap.group.rule.target.element [ fhir:value "birthDate" ];
+         fhir:StructureMap.group.rule.target.transform [ fhir:value "copy" ];
+         fhir:StructureMap.group.rule.target.parameter [
+           fhir:index 0;
+           fhir:StructureMap.group.rule.target.parameter.valueId [ fhir:value "birthDate" ]
+         ]
+       ]
+     ]
+  ], [
+     fhir:index 2;
+     fhir:StructureMap.group.name [ fhir:value "Decode_QR_Organization" ];
+     fhir:StructureMap.group.typeMode [ fhir:value "none" ];
+     fhir:StructureMap.group.input [
+       fhir:index 0;
+       fhir:StructureMap.group.input.name [ fhir:value "qr" ];
+       fhir:StructureMap.group.input.type [ fhir:value "QR" ];
+       fhir:StructureMap.group.input.mode [ fhir:value "source" ]
+     ], [
+       fhir:index 1;
+       fhir:StructureMap.group.input.name [ fhir:value "organization" ];
+       fhir:StructureMap.group.input.type [ fhir:value "SVC_Organization" ];
+       fhir:StructureMap.group.input.mode [ fhir:value "target" ]
+     ];
+     fhir:StructureMap.group.rule [
+       fhir:index 0;
+       fhir:StructureMap.group.rule.name [ fhir:value "Load PHA ID" ];
+       fhir:StructureMap.group.rule.source [
+         fhir:index 0;
+         fhir:StructureMap.group.rule.source.context [ fhir:value "qr" ];
+         fhir:StructureMap.group.rule.source.element [ fhir:value "phaid" ];
+         fhir:StructureMap.group.rule.source.variable [ fhir:value "phaid" ]
+       ];
+       fhir:StructureMap.group.rule.target [
+         fhir:index 0;
+         fhir:StructureMap.group.rule.target.context [ fhir:value "organization" ];
+         fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ];
+         fhir:StructureMap.group.rule.target.element [ fhir:value "identifier" ];
+         fhir:StructureMap.group.rule.target.transform [ fhir:value "id" ];
+         fhir:StructureMap.group.rule.target.parameter [
+           fhir:index 0;
+           fhir:StructureMap.group.rule.target.parameter.valueString [ fhir:value "XXXXXurn:ietf:rfc:3986" ]
+         ], [
+           fhir:index 1;
+           fhir:StructureMap.group.rule.target.parameter.valueId [ fhir:value "phaid" ]
+         ]
+       ]
+     ]
+  ], [
+     fhir:index 3;
+     fhir:StructureMap.group.name [ fhir:value "Decode_QR_Bundle" ];
+     fhir:StructureMap.group.typeMode [ fhir:value "none" ];
+     fhir:StructureMap.group.input [
+       fhir:index 0;
+       fhir:StructureMap.group.input.name [ fhir:value "qr" ];
+       fhir:StructureMap.group.input.type [ fhir:value "QR" ];
+       fhir:StructureMap.group.input.mode [ fhir:value "source" ]
+     ], [
+       fhir:index 1;
+       fhir:StructureMap.group.input.name [ fhir:value "patient" ];
+       fhir:StructureMap.group.input.type [ fhir:value "SVC_Patient" ];
+       fhir:StructureMap.group.input.mode [ fhir:value "target" ]
+     ], [
+       fhir:index 2;
+       fhir:StructureMap.group.input.name [ fhir:value "bundle" ];
+       fhir:StructureMap.group.input.type [ fhir:value "SVC_Bundle" ];
+       fhir:StructureMap.group.input.mode [ fhir:value "target" ]
+     ];
+     fhir:StructureMap.group.rule [
+       fhir:index 0;
+       fhir:StructureMap.group.rule.name [ fhir:value "Set Bundle Metadata" ];
+       fhir:StructureMap.group.rule.source [
+         fhir:index 0;
+         fhir:StructureMap.group.rule.source.context [ fhir:value "qr" ]
+       ];
+       fhir:StructureMap.group.rule.target [
+         fhir:index 0;
+         fhir:StructureMap.group.rule.target.context [ fhir:value "bundle" ];
+         fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ];
+         fhir:StructureMap.group.rule.target.element [ fhir:value "status" ];
+         fhir:StructureMap.group.rule.target.transform [ fhir:value "copy" ];
+         fhir:StructureMap.group.rule.target.parameter [
+           fhir:index 0;
+           fhir:StructureMap.group.rule.target.parameter.valueString [ fhir:value "final" ]
+         ]
+       ], [
+         fhir:index 1;
+         fhir:StructureMap.group.rule.target.context [ fhir:value "bundle" ];
+         fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ];
+         fhir:StructureMap.group.rule.target.element [ fhir:value "type" ];
+         fhir:StructureMap.group.rule.target.transform [ fhir:value "copy" ];
+         fhir:StructureMap.group.rule.target.parameter [
+           fhir:index 0;
+           fhir:StructureMap.group.rule.target.parameter.valueString [ fhir:value "document" ]
+         ]
+       ]
+     ], [
+       fhir:index 1;
+       fhir:StructureMap.group.rule.name [ fhir:value "Load Paper SVC ID" ];
+       fhir:StructureMap.group.rule.source [
+         fhir:index 0;
+         fhir:StructureMap.group.rule.source.context [ fhir:value "qr" ];
+         fhir:StructureMap.group.rule.source.element [ fhir:value "paperid" ];
+         fhir:StructureMap.group.rule.source.variable [ fhir:value "paperid" ]
+       ];
+       fhir:StructureMap.group.rule.target [
+         fhir:index 0;
+         fhir:StructureMap.group.rule.target.context [ fhir:value "bundle" ];
+         fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ];
+         fhir:StructureMap.group.rule.target.element [ fhir:value "identifier" ];
+         fhir:StructureMap.group.rule.target.transform [ fhir:value "id" ];
+         fhir:StructureMap.group.rule.target.parameter [
+           fhir:index 0;
+           fhir:StructureMap.group.rule.target.parameter.valueString [ fhir:value "XXXXXurn:ietf:rfc:3986" ]
+         ], [
+           fhir:index 1;
+           fhir:StructureMap.group.rule.target.parameter.valueId [ fhir:value "paperid" ]
+         ]
+       ]
+     ], [
+       fhir:index 2;
+       fhir:StructureMap.group.rule.name [ fhir:value "Load Signature" ];
+       fhir:StructureMap.group.rule.source [
+         fhir:index 0;
+         fhir:StructureMap.group.rule.source.context [ fhir:value "qr" ];
+         fhir:StructureMap.group.rule.source.element [ fhir:value "signature" ];
+         fhir:StructureMap.group.rule.source.variable [ fhir:value "qrsig" ]
+       ], [
+         fhir:index 1;
+         fhir:StructureMap.group.rule.source.context [ fhir:value "bundle" ];
+         fhir:StructureMap.group.rule.source.element [ fhir:value "signature" ];
+         fhir:StructureMap.group.rule.source.variable [ fhir:value "bsig" ]
+       ];
+       fhir:StructureMap.group.rule.target [
+         fhir:index 0;
+         fhir:StructureMap.group.rule.target.context [ fhir:value "bsig" ];
+         fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ];
+         fhir:StructureMap.group.rule.target.element [ fhir:value "data" ];
+         fhir:StructureMap.group.rule.target.transform [ fhir:value "copy" ];
+         fhir:StructureMap.group.rule.target.parameter [
+           fhir:index 0;
+           fhir:StructureMap.group.rule.target.parameter.valueId [ fhir:value "qrsig" ]
+         ]
+       ], [
+         fhir:index 1;
+         fhir:StructureMap.group.rule.target.context [ fhir:value "bsig" ];
+         fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ];
+         fhir:StructureMap.group.rule.target.element [ fhir:value "type" ];
+         fhir:StructureMap.group.rule.target.transform [ fhir:value "copy" ];
+         fhir:StructureMap.group.rule.target.parameter [
+           fhir:index 0;
+           fhir:StructureMap.group.rule.target.parameter.valueString [ fhir:value "1.2.840.10065.1.12.1.14" ]
+         ]
+       ], [
+         fhir:index 2;
+         fhir:StructureMap.group.rule.target.context [ fhir:value "bsig" ];
+         fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ];
+         fhir:StructureMap.group.rule.target.element [ fhir:value "format" ];
+         fhir:StructureMap.group.rule.target.transform [ fhir:value "copy" ];
+         fhir:StructureMap.group.rule.target.parameter [
+           fhir:index 0;
+           fhir:StructureMap.group.rule.target.parameter.valueString [ fhir:value "XXXXXXX TBD" ]
+         ]
+       ], [
+         fhir:index 3;
+         fhir:StructureMap.group.rule.target.context [ fhir:value "bsig" ];
+         fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ];
+         fhir:StructureMap.group.rule.target.element [ fhir:value "who" ];
+         fhir:StructureMap.group.rule.target.transform [ fhir:value "reference" ];
+         fhir:StructureMap.group.rule.target.parameter [
+           fhir:index 0;
+           fhir:StructureMap.group.rule.target.parameter.valueId [ fhir:value "organization" ]
+         ]
+       ]
+     ], [
+       fhir:index 3;
+       fhir:StructureMap.group.rule.name [ fhir:value "Process Composition Entry" ];
+       fhir:StructureMap.group.rule.source [
+         fhir:index 0;
+         fhir:StructureMap.group.rule.source.context [ fhir:value "qr" ]
+       ];
+       fhir:StructureMap.group.rule.target [
+         fhir:index 0;
+         fhir:StructureMap.group.rule.target.context [ fhir:value "bundle" ];
+         fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ];
+         fhir:StructureMap.group.rule.target.element [ fhir:value "entry" ];
+         fhir:StructureMap.group.rule.target.variable [ fhir:value "e" ]
+       ], [
+         fhir:index 1;
+         fhir:StructureMap.group.rule.target.context [ fhir:value "e" ];
+         fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ];
+         fhir:StructureMap.group.rule.target.element [ fhir:value "resource" ];
+         fhir:StructureMap.group.rule.target.variable [ fhir:value "compostion" ];
+         fhir:StructureMap.group.rule.target.transform [ fhir:value "create" ];
+         fhir:StructureMap.group.rule.target.parameter [
+           fhir:index 0;
+           fhir:StructureMap.group.rule.target.parameter.valueString [ fhir:value "SVC_Composition" ]
+         ]
+       ];
+       fhir:StructureMap.group.rule.dependent [
+         fhir:index 0;
+         fhir:StructureMap.group.rule.dependent.name [ fhir:value "Decode_QR_Composition" ];
+         fhir:StructureMap.group.rule.dependent.variable [
+           fhir:value "qr";
+           fhir:index 0
+         ], [
+           fhir:value "bundle";
+           fhir:index 1
+         ], [
+           fhir:value "composition";
+           fhir:index 2
+         ]
+       ]
+     ]
+  ], [
+     fhir:index 4;
+     fhir:StructureMap.group.name [ fhir:value "Decode_QR_Composition" ];
+     fhir:StructureMap.group.typeMode [ fhir:value "none" ];
+     fhir:StructureMap.group.input [
+       fhir:index 0;
+       fhir:StructureMap.group.input.name [ fhir:value "qr" ];
+       fhir:StructureMap.group.input.type [ fhir:value "QR" ];
+       fhir:StructureMap.group.input.mode [ fhir:value "source" ]
+     ], [
+       fhir:index 1;
+       fhir:StructureMap.group.input.name [ fhir:value "," ];
+       fhir:StructureMap.group.input.mode [ fhir:value "source" ]
+     ], [
+       fhir:index 2;
+       fhir:StructureMap.group.input.name [ fhir:value "bundle" ];
+       fhir:StructureMap.group.input.type [ fhir:value "SVC_Bundle" ];
+       fhir:StructureMap.group.input.mode [ fhir:value "target" ]
+     ], [
+       fhir:index 3;
+       fhir:StructureMap.group.input.name [ fhir:value "patient" ];
+       fhir:StructureMap.group.input.type [ fhir:value "SVC_Patient" ];
+       fhir:StructureMap.group.input.mode [ fhir:value "target" ]
+     ], [
+       fhir:index 4;
+       fhir:StructureMap.group.input.name [ fhir:value "organization" ];
+       fhir:StructureMap.group.input.type [ fhir:value "SVC_Organization" ];
+       fhir:StructureMap.group.input.mode [ fhir:value "target" ]
+     ], [
+       fhir:index 5;
+       fhir:StructureMap.group.input.name [ fhir:value "composition" ];
+       fhir:StructureMap.group.input.type [ fhir:value "SVC_Composition" ];
+       fhir:StructureMap.group.input.mode [ fhir:value "target" ]
+     ];
+     fhir:StructureMap.group.rule [
+       fhir:index 0;
+       fhir:StructureMap.group.rule.name [ fhir:value "Set Composition Meta" ];
+       fhir:StructureMap.group.rule.source [
+         fhir:index 0;
+         fhir:StructureMap.group.rule.source.context [ fhir:value "qr" ]
+       ];
+       fhir:StructureMap.group.rule.target [
+         fhir:index 0;
+         fhir:StructureMap.group.rule.target.context [ fhir:value "composition" ];
+         fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ];
+         fhir:StructureMap.group.rule.target.element [ fhir:value "subject" ];
+         fhir:StructureMap.group.rule.target.transform [ fhir:value "reference" ];
+         fhir:StructureMap.group.rule.target.parameter [
+           fhir:index 0;
+           fhir:StructureMap.group.rule.target.parameter.valueId [ fhir:value "patient" ]
+         ]
+       ], [
+         fhir:index 1;
+         fhir:StructureMap.group.rule.target.context [ fhir:value "composition" ];
+         fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ];
+         fhir:StructureMap.group.rule.target.element [ fhir:value "author" ];
+         fhir:StructureMap.group.rule.target.transform [ fhir:value "reference" ];
+         fhir:StructureMap.group.rule.target.parameter [
+           fhir:index 0;
+           fhir:StructureMap.group.rule.target.parameter.valueId [ fhir:value "organization" ]
+         ]
+       ]
+     ], [
+       fhir:index 1;
+       fhir:StructureMap.group.rule.name [ fhir:value "Load Digital SVC ID" ];
+       fhir:StructureMap.group.rule.source [
+         fhir:index 0;
+         fhir:StructureMap.group.rule.source.context [ fhir:value "qr" ];
+         fhir:StructureMap.group.rule.source.element [ fhir:value "digitalid" ];
+         fhir:StructureMap.group.rule.source.variable [ fhir:value "digitalid" ]
+       ];
+       fhir:StructureMap.group.rule.target [
+         fhir:index 0;
+         fhir:StructureMap.group.rule.target.context [ fhir:value "composition" ];
+         fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ];
+         fhir:StructureMap.group.rule.target.element [ fhir:value "identifier" ];
+         fhir:StructureMap.group.rule.target.transform [ fhir:value "id" ];
+         fhir:StructureMap.group.rule.target.parameter [
+           fhir:index 0;
+           fhir:StructureMap.group.rule.target.parameter.valueString [ fhir:value "XXXXXurn:ietf:rfc:3986" ]
+         ], [
+           fhir:index 1;
+           fhir:StructureMap.group.rule.target.parameter.valueId [ fhir:value "digitalid" ]
+         ]
+       ]
+     ]
+  ], [
+     fhir:index 5;
+     fhir:StructureMap.group.name [ fhir:value "Decode_QR_Provenance" ];
+     fhir:StructureMap.group.typeMode [ fhir:value "none" ];
+     fhir:StructureMap.group.input [
+       fhir:index 0;
+       fhir:StructureMap.group.input.name [ fhir:value "qr" ];
+       fhir:StructureMap.group.input.type [ fhir:value "QR" ];
+       fhir:StructureMap.group.input.mode [ fhir:value "source" ]
+     ], [
+       fhir:index 1;
+       fhir:StructureMap.group.input.name [ fhir:value "bundle" ];
+       fhir:StructureMap.group.input.type [ fhir:value "SVC_Bundle" ];
+       fhir:StructureMap.group.input.mode [ fhir:value "target" ]
+     ], [
+       fhir:index 2;
+       fhir:StructureMap.group.input.name [ fhir:value "patient" ];
+       fhir:StructureMap.group.input.type [ fhir:value "SVC_Patient" ];
+       fhir:StructureMap.group.input.mode [ fhir:value "target" ]
+     ], [
+       fhir:index 3;
+       fhir:StructureMap.group.input.name [ fhir:value "organization" ];
+       fhir:StructureMap.group.input.type [ fhir:value "SVC_Organization" ];
+       fhir:StructureMap.group.input.mode [ fhir:value "target" ]
+     ], [
+       fhir:index 4;
+       fhir:StructureMap.group.input.name [ fhir:value "paper" ];
+       fhir:StructureMap.group.input.type [ fhir:value "SVC_Composition" ];
+       fhir:StructureMap.group.input.mode [ fhir:value "target" ]
+     ], [
+       fhir:index 5;
+       fhir:StructureMap.group.input.name [ fhir:value "digital" ];
+       fhir:StructureMap.group.input.type [ fhir:value "SVC_Composition" ];
+       fhir:StructureMap.group.input.mode [ fhir:value "target" ]
+     ], [
+       fhir:index 6;
+       fhir:StructureMap.group.input.name [ fhir:value "provenance" ];
+       fhir:StructureMap.group.input.type [ fhir:value "SVC_Provenance" ];
+       fhir:StructureMap.group.input.mode [ fhir:value "target" ]
+     ];
+     fhir:StructureMap.group.rule [
+       fhir:index 0;
+       fhir:StructureMap.group.rule.name [ fhir:value "Set provenance" ];
+       fhir:StructureMap.group.rule.source [
+         fhir:index 0;
+         fhir:StructureMap.group.rule.source.context [ fhir:value "qr" ]
+       ], [
+         fhir:index 1;
+         fhir:StructureMap.group.rule.source.context [ fhir:value "provenance" ];
+         fhir:StructureMap.group.rule.source.element [ fhir:value "entity" ];
+         fhir:StructureMap.group.rule.source.variable [ fhir:value "e_digital" ]
+       ], [
+         fhir:index 2;
+         fhir:StructureMap.group.rule.source.context [ fhir:value "provenance" ];
+         fhir:StructureMap.group.rule.source.element [ fhir:value "agent" ];
+         fhir:StructureMap.group.rule.source.variable [ fhir:value "agent" ]
+       ], [
+         fhir:index 3;
+         fhir:StructureMap.group.rule.source.context [ fhir:value "provenance" ];
+         fhir:StructureMap.group.rule.source.element [ fhir:value "signature" ];
+         fhir:StructureMap.group.rule.source.variable [ fhir:value "psig" ]
+       ];
+       fhir:StructureMap.group.rule.target [
+         fhir:index 0;
+         fhir:StructureMap.group.rule.target.context [ fhir:value "provenance" ];
+         fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ];
+         fhir:StructureMap.group.rule.target.element [ fhir:value "reason" ];
+         fhir:StructureMap.group.rule.target.transform [ fhir:value "copy" ];
+         fhir:StructureMap.group.rule.target.parameter [
+           fhir:index 0;
+           fhir:StructureMap.group.rule.target.parameter.valueString [ fhir:value "PUBHLTH" ]
+         ]
+       ], [
+         fhir:index 1;
+         fhir:StructureMap.group.rule.target.context [ fhir:value "provenance" ];
+         fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ];
+         fhir:StructureMap.group.rule.target.element [ fhir:value "policy" ];
+         fhir:StructureMap.group.rule.target.transform [ fhir:value "copy" ];
+         fhir:StructureMap.group.rule.target.parameter [
+           fhir:index 0;
+           fhir:StructureMap.group.rule.target.parameter.valueString [ fhir:value "XXXXXXX urn:example:who:smart:vaccine-certificate:RC1" ]
+         ]
+       ], [
+         fhir:index 2;
+         fhir:StructureMap.group.rule.target.context [ fhir:value "provenance" ];
+         fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ];
+         fhir:StructureMap.group.rule.target.element [ fhir:value "target" ];
+         fhir:StructureMap.group.rule.target.transform [ fhir:value "reference" ];
+         fhir:StructureMap.group.rule.target.parameter [
+           fhir:index 0;
+           fhir:StructureMap.group.rule.target.parameter.valueId [ fhir:value "bundle" ]
+         ]
+       ], [
+         fhir:index 3;
+         fhir:StructureMap.group.rule.target.context [ fhir:value "e_digital" ];
+         fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ];
+         fhir:StructureMap.group.rule.target.element [ fhir:value "role" ];
+         fhir:StructureMap.group.rule.target.transform [ fhir:value "copy" ];
+         fhir:StructureMap.group.rule.target.parameter [
+           fhir:index 0;
+           fhir:StructureMap.group.rule.target.parameter.valueString [ fhir:value "source" ]
+         ]
+       ], [
+         fhir:index 4;
+         fhir:StructureMap.group.rule.target.context [ fhir:value "e_digital" ];
+         fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ];
+         fhir:StructureMap.group.rule.target.element [ fhir:value "what" ];
+         fhir:StructureMap.group.rule.target.transform [ fhir:value "reference" ];
+         fhir:StructureMap.group.rule.target.parameter [
+           fhir:index 0;
+           fhir:StructureMap.group.rule.target.parameter.valueId [ fhir:value "composition" ]
+         ]
+       ], [
+         fhir:index 5;
+         fhir:StructureMap.group.rule.target.context [ fhir:value "e_digital" ];
+         fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ];
+         fhir:StructureMap.group.rule.target.element [ fhir:value "agent" ];
+         fhir:StructureMap.group.rule.target.transform [ fhir:value "reference" ];
+         fhir:StructureMap.group.rule.target.parameter [
+           fhir:index 0;
+           fhir:StructureMap.group.rule.target.parameter.valueId [ fhir:value "organization" ]
+         ]
+       ], [
+         fhir:index 6;
+         fhir:StructureMap.group.rule.target.context [ fhir:value "e_paper" ];
+         fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ];
+         fhir:StructureMap.group.rule.target.element [ fhir:value "role" ];
+         fhir:StructureMap.group.rule.target.transform [ fhir:value "copy" ];
+         fhir:StructureMap.group.rule.target.parameter [
+           fhir:index 0;
+           fhir:StructureMap.group.rule.target.parameter.valueString [ fhir:value "source" ]
+         ]
+       ], [
+         fhir:index 7;
+         fhir:StructureMap.group.rule.target.context [ fhir:value "e_paper" ];
+         fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ];
+         fhir:StructureMap.group.rule.target.element [ fhir:value "what" ];
+         fhir:StructureMap.group.rule.target.transform [ fhir:value "reference" ];
+         fhir:StructureMap.group.rule.target.parameter [
+           fhir:index 0;
+           fhir:StructureMap.group.rule.target.parameter.valueId [ fhir:value "bundle" ]
+         ]
+       ], [
+         fhir:index 8;
+         fhir:StructureMap.group.rule.target.context [ fhir:value "e_paper" ];
+         fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ];
+         fhir:StructureMap.group.rule.target.element [ fhir:value "agent" ];
+         fhir:StructureMap.group.rule.target.transform [ fhir:value "reference" ];
+         fhir:StructureMap.group.rule.target.parameter [
+           fhir:index 0;
+           fhir:StructureMap.group.rule.target.parameter.valueId [ fhir:value "organization" ]
+         ]
+       ], [
+         fhir:index 9;
+         fhir:StructureMap.group.rule.target.context [ fhir:value "psig" ];
+         fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ];
+         fhir:StructureMap.group.rule.target.element [ fhir:value "format" ];
+         fhir:StructureMap.group.rule.target.transform [ fhir:value "copy" ];
+         fhir:StructureMap.group.rule.target.parameter [
+           fhir:index 0;
+           fhir:StructureMap.group.rule.target.parameter.valueString [ fhir:value "XXXXX TBD" ]
+         ]
+       ], [
+         fhir:index 10;
+         fhir:StructureMap.group.rule.target.context [ fhir:value "psig" ];
+         fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ];
+         fhir:StructureMap.group.rule.target.element [ fhir:value "who" ];
+         fhir:StructureMap.group.rule.target.transform [ fhir:value "reference" ];
+         fhir:StructureMap.group.rule.target.parameter [
+           fhir:index 0;
+           fhir:StructureMap.group.rule.target.parameter.valueId [ fhir:value "organization" ]
+         ]
+       ], [
+         fhir:index 11;
+         fhir:StructureMap.group.rule.target.context [ fhir:value "psg" ];
+         fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ];
+         fhir:StructureMap.group.rule.target.element [ fhir:value "type" ];
+         fhir:StructureMap.group.rule.target.transform [ fhir:value "copy" ];
+         fhir:StructureMap.group.rule.target.parameter [
+           fhir:index 0;
+           fhir:StructureMap.group.rule.target.parameter.valueString [ fhir:value "1.2.840.10065.1.12.1.14" ]
+         ]
+       ], [
+         fhir:index 12;
+         fhir:StructureMap.group.rule.target.context [ fhir:value "psig" ];
+         fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ];
+         fhir:StructureMap.group.rule.target.element [ fhir:value "data" ];
+         fhir:StructureMap.group.rule.target.transform [ fhir:value "copy" ];
+         fhir:StructureMap.group.rule.target.parameter [
+           fhir:index 0;
+           fhir:StructureMap.group.rule.target.parameter.valueId [ fhir:value "signature" ]
+         ]
+       ];
+       fhir:StructureMap.group.rule.rule [
+         fhir:index 0;
+         fhir:StructureMap.group.rule.name [ fhir:value "who" ];
+         fhir:StructureMap.group.rule.source [
+           fhir:index 0;
+           fhir:StructureMap.group.rule.source.context [ fhir:value "agent" ];
+           fhir:StructureMap.group.rule.source.element [ fhir:value "who" ];
+           fhir:StructureMap.group.rule.source.variable [ fhir:value "who" ]
+         ];
+         fhir:StructureMap.group.rule.target [
+           fhir:index 0;
+           fhir:StructureMap.group.rule.target.context [ fhir:value "who" ];
+           fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ];
+           fhir:StructureMap.group.rule.target.element [ fhir:value "reference" ];
+           fhir:StructureMap.group.rule.target.transform [ fhir:value "reference" ];
+           fhir:StructureMap.group.rule.target.parameter [
+             fhir:index 0;
+             fhir:StructureMap.group.rule.target.parameter.valueId [ fhir:value "organization" ]
+           ]
+         ], [
+           fhir:index 1;
+           fhir:StructureMap.group.rule.target.context [ fhir:value "who" ];
+           fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ];
+           fhir:StructureMap.group.rule.target.element [ fhir:value "onBehalfOf" ];
+           fhir:StructureMap.group.rule.target.variable [ fhir:value "\"Set who\"" ];
+           fhir:StructureMap.group.rule.target.transform [ fhir:value "reference" ];
+           fhir:StructureMap.group.rule.target.parameter [
+             fhir:index 0;
+             fhir:StructureMap.group.rule.target.parameter.valueId [ fhir:value "patient" ]
+           ]
+         ]
+       ]
+     ]
+  ] .
+
+# - ontology header ------------------------------------------------------------
+
+<http://worldhealthorganization.github.io/ddcc/StructureMap/svc-map-qr-uvci-bundle.ttl> a owl:Ontology;
+  owl:imports fhir:fhir.ttl .
+
+# -------------------------------------------------------------------------------------
+

@@ -1,0 +1,1348 @@
+{
+  "resourceType" : "StructureMap",
+  "id" : "EUDCCtoDDCC",
+  "text" : {
+    "status" : "generated",
+    "div" : "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p class=\"res-header-id\"><b>Generated Narrative: StructureMap EUDCCtoDDCC</b></p><a name=\"EUDCCtoDDCC\"> </a><a name=\"hcEUDCCtoDDCC\"> </a><a name=\"EUDCCtoDDCC-en-US\"> </a><pre class=\"fml\">\r\n<b>map</b><span style=\"color: navy\"> &quot;</span>http://smart.who.int/ddcc/StructureMap/CertDCCtoDDCC<span style=\"color: navy\">&quot; = &quot;</span>EUDCCtoDDCC<span style=\"color: navy\">&quot;\r\n\r\n</span><b>uses</b><span style=\"color: navy\"> &quot;</span>http://smart.who.int/ddcc/StructureDefinition/CertDCC<span style=\"color: navy\">&quot; </span><b>alias </b>CWT <b>as </b><b>source</b>\r\n<b>uses</b><span style=\"color: navy\"> &quot;</span>http://hl7.eu/fhir/ig/dcc/StructureDefinition/HC1<span style=\"color: navy\">&quot; </span><b>alias </b>HC1 <b>as </b><b>source</b>\r\n<b>uses</b><span style=\"color: navy\"> &quot;</span>http://hl7.eu/fhir/ig/dcc/StructureDefinition/PersonName<span style=\"color: navy\">&quot; </span><b>alias </b>PersonName <b>as </b><b>source</b>\r\n<b>uses</b><span style=\"color: navy\"> &quot;</span>http://hl7.eu/fhir/ig/dcc/StructureDefinition/v<span style=\"color: navy\">&quot; </span><b>alias </b>VacEvent <b>as </b><b>source</b>\r\n<b>uses</b><span style=\"color: navy\"> &quot;</span>http://hl7.eu/fhir/ig/dcc/StructureDefinition/t<span style=\"color: navy\">&quot; </span><b>alias </b>TestEvent <b>as </b><b>source</b>\r\n<b>uses</b><span style=\"color: navy\"> &quot;</span>http://hl7.eu/fhir/ig/dcc/StructureDefinition/r<span style=\"color: navy\">&quot; </span><b>alias </b>RecEvent <b>as </b><b>source</b>\r\n<b>uses</b><span style=\"color: navy\"> &quot;</span><a href=\"http://hl7.org/fhir/R4/bundle.html\" title=\"Bundle\">http://hl7.org/fhir/StructureDefinition/Bundle</a><span style=\"color: navy\">&quot; </span><b>alias </b>Bundle <b>as </b><b>target</b>\r\n\r\n<b>group </b>EUDCCtoDDCC<span style=\"color: navy\">(</span><b>source</b> <span style=\"color: maroon\">src</span><span style=\"color: navy\"> : </span>CWT, <b>target</b> <span style=\"color: maroon\">bundle</span><span style=\"color: navy\"> : </span>Bundle<span style=\"color: navy\">)</span><span style=\"color: navy\"> {\r\n</span>  src<span style=\"color: navy\"><b> -&gt; </b></span>bundle.type = <span style=\"color: blue\">'transaction'</span> <i>&quot;set bundle type&quot;</i><span style=\"color: navy\">;</span>\r\n  src<span style=\"color: navy\"><b> -&gt; </b></span> bundle<span style=\"color: navy\">, </span> bundle.entry<b> as </b><span style=\"color: maroon\">entry</span><span style=\"color: navy\">, </span> entry.resource = <b>create</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'Composition'</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">comp</span><b> then</b><span style=\"color: navy\"> {\r\n</span>    src.data<b> as </b><span style=\"color: maroon\">data</span><b> then</b><span style=\"color: navy\"> {\r\n</span>      data.cert<b> as </b><span style=\"color: maroon\">cert</span><span style=\"color: navy\"><b> -&gt; </b></span>bundle<b> then </b>ExtractCert<span style=\"color: navy\">(</span><span style=\"color: maroon\">cert</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">bundle</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">comp</span><span style=\"color: navy\">)</span> <i>&quot;Certificate&quot;</i><span style=\"color: navy\">;</span>\r\n    <span style=\"color: navy\">}</span> <i>&quot;Processing cert data&quot;</i><span style=\"color: navy\">;</span>\r\n    src<span style=\"color: navy\"><b> -&gt; </b></span>bundle<b> then </b>ExtractComposition<span style=\"color: navy\">(</span><span style=\"color: maroon\">src</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">comp</span><span style=\"color: navy\">)</span> <i>&quot;Composition&quot;</i><span style=\"color: navy\">;</span>\r\n  <span style=\"color: navy\">}</span> <i>&quot;Patient and Composition Create&quot;</i><span style=\"color: navy\">;</span>\r\n<span style=\"color: navy\">}\r\n\r\n</span><b>group </b>ExtractCert<span style=\"color: navy\">(</span><b>source</b> <span style=\"color: maroon\">src</span><span style=\"color: navy\"> : </span>HC1, <b>target</b> <span style=\"color: maroon\">bundle</span><span style=\"color: navy\"> : </span>Bundle, <b>target</b> <span style=\"color: maroon\">comp</span><span style=\"color: navy\"> : </span>Composition<span style=\"color: navy\">)</span><span style=\"color: navy\"> {\r\n</span>  src<span style=\"color: navy\"><b> -&gt; </b></span> comp<span style=\"color: navy\">, </span> bundle.entry<b> as </b><span style=\"color: maroon\">entry</span><span style=\"color: navy\">, </span> entry.resource = <b>create</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'Patient'</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">patient</span><span style=\"color: navy\">, </span> <b>uuid</b><span style=\"color: navy\">(</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">pid</span><b> then</b><span style=\"color: navy\"> {\r\n</span>    src<span style=\"color: navy\"><b> -&gt; </b></span>patient<b> then </b>ExtractPatient<span style=\"color: navy\">(</span><span style=\"color: maroon\">src</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">pid</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">patient</span><span style=\"color: navy\">)</span> <i>&quot;extract patient&quot;</i><span style=\"color: navy\">;</span>\r\n    src<span style=\"color: navy\"><b> -&gt; </b></span> comp.subject<b> as </b><span style=\"color: maroon\">subj</span><span style=\"color: navy\">, </span> subj.reference = <b>append</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'Patient/'</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">pid</span><span style=\"color: navy\">)</span> <i>&quot;Set patient&quot;</i><span style=\"color: navy\">;</span>\r\n    src<b> where </b>(src.v.count() &gt; 0)<span style=\"color: navy\"><b> -&gt; </b></span>comp.section<b> as </b><span style=\"color: maroon\">section</span><b> then</b><span style=\"color: navy\"> {\r\n</span>      src<span style=\"color: navy\"><b> -&gt; </b></span> section.code<b> as </b><span style=\"color: maroon\">code</span><span style=\"color: navy\">, </span> code.coding<b> as </b><span style=\"color: maroon\">coding</span><span style=\"color: navy\">, </span> coding.system = <span style=\"color: blue\">'http://loinc.org'</span><span style=\"color: navy\">, </span> coding.code = <span style=\"color: blue\">'11369-6'</span><span style=\"color: navy\">, </span> coding.display = <span style=\"color: blue\">'History of Immunization Narrative'</span> <i>&quot;add section&quot;</i><span style=\"color: navy\">;</span>\r\n      src.v<b> as </b><span style=\"color: maroon\">vac</span><span style=\"color: navy\"><b> -&gt; </b></span> comp<span style=\"color: navy\">, </span> bundle.entry<b> as </b><span style=\"color: maroon\">entryImm</span><span style=\"color: navy\">, </span> entryImm.resource = <b>create</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'Immunization'</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">immunization</span><span style=\"color: navy\">, </span> <b>uuid</b><span style=\"color: navy\">(</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">iid</span><span style=\"color: navy\">, </span> bundle.entry<b> as </b><span style=\"color: maroon\">entryOrg</span><span style=\"color: navy\">, </span> entryOrg.resource = <b>create</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'Organization'</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">org</span><span style=\"color: navy\">, </span> <b>uuid</b><span style=\"color: navy\">(</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">oid</span><b> then</b><span style=\"color: navy\"> {\r\n</span>        src<span style=\"color: navy\"><b> -&gt; </b></span>immunization.id = <span style=\"color: maroon\">iid</span> <i>&quot;Immunization ID&quot;</i><span style=\"color: navy\">;</span>\r\n        src<span style=\"color: navy\"><b> -&gt; </b></span>org.id = <span style=\"color: maroon\">oid</span> <i>&quot;Organization ID&quot;</i><span style=\"color: navy\">;</span>\r\n        src<span style=\"color: navy\"><b> -&gt; </b></span> section.entry<b> as </b><span style=\"color: maroon\">entry</span><span style=\"color: navy\">, </span> entry.reference = <b>append</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'Immunization/'</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">iid</span><span style=\"color: navy\">)</span><span style=\"color: navy\">, </span> section.author<b> as </b><span style=\"color: maroon\">author</span><span style=\"color: navy\">, </span> author.reference = <b>append</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'Organization/'</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">oid</span><span style=\"color: navy\">)</span> <i>&quot;add entry/author to section&quot;</i><span style=\"color: navy\">;</span>\r\n        src<span style=\"color: navy\"><b> -&gt; </b></span> comp.author<b> as </b><span style=\"color: maroon\">author</span><span style=\"color: navy\">, </span> author.reference = <b>append</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'Organization/'</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">oid</span><span style=\"color: navy\">)</span> <i>&quot;Set org&quot;</i><span style=\"color: navy\">;</span>\r\n        src<span style=\"color: navy\"><b> -&gt; </b></span> immunization.patient<b> as </b><span style=\"color: maroon\">subj</span><span style=\"color: navy\">, </span> subj.reference = <b>append</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'Patient/'</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">pid</span><span style=\"color: navy\">)</span> <i>&quot;Set patient&quot;</i><span style=\"color: navy\">;</span>\r\n        vac.is<b> as </b><span style=\"color: maroon\">is</span><span style=\"color: navy\"><b> -&gt; </b></span>org.name = <span style=\"color: maroon\">is</span> <i>&quot;Set Organization name&quot;</i><span style=\"color: navy\">;</span>\r\n        src<span style=\"color: navy\"><b> -&gt; </b></span>bundle<b> then </b>ExtractVaccine<span style=\"color: navy\">(</span><span style=\"color: maroon\">vac</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">oid</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">immunization</span><span style=\"color: navy\">)</span> <i>&quot;extract vaccine info&quot;</i><span style=\"color: navy\">;</span>\r\n      <span style=\"color: navy\">}</span> <i>&quot;Immunization Create&quot;</i><span style=\"color: navy\">;</span>\r\n    <span style=\"color: navy\">}</span> <i>&quot;Vaccination List&quot;</i><span style=\"color: navy\">;</span>\r\n  <span style=\"color: navy\">}</span> <i>&quot;Patient Create&quot;</i><span style=\"color: navy\">;</span>\r\n<span style=\"color: navy\">}\r\n\r\n</span><b>group </b>ExtractVaccine<span style=\"color: navy\">(</span><b>source</b> <span style=\"color: maroon\">vac</span><span style=\"color: navy\"> : </span>VacEvent, <b>source</b> <span style=\"color: maroon\">oid</span>, <b>target</b> <span style=\"color: maroon\">immunization</span><span style=\"color: navy\"> : </span>Immunization<span style=\"color: navy\">)</span><span style=\"color: navy\"> {\r\n</span>  vac.dt<b> as </b><span style=\"color: maroon\">dt</span><span style=\"color: navy\"><b> -&gt; </b></span>immunization.occurrence = <span style=\"color: maroon\">dt</span> <i>&quot;set occurrence date&quot;</i><span style=\"color: navy\">;</span>\r\n  vac.vp<b> as </b><span style=\"color: maroon\">vp</span><span style=\"color: navy\"><b> -&gt; </b></span> immunization.vaccineCode<b> as </b><span style=\"color: maroon\">type</span><span style=\"color: navy\">, </span> type.coding<b> as </b><span style=\"color: maroon\">coding</span><span style=\"color: navy\">, </span> coding.system = <span style=\"color: blue\">'http://snomed.info/sct'</span><span style=\"color: navy\">, </span> coding.code = <span style=\"color: maroon\">vp</span> <i>&quot;set vaccine coding&quot;</i><span style=\"color: navy\">;</span>\r\n  vac.ci<b> as </b><span style=\"color: maroon\">ci</span><span style=\"color: navy\"><b> -&gt; </b></span> immunization.identifier<b> as </b><span style=\"color: maroon\">identif</span><span style=\"color: navy\">, </span> identif.value = <span style=\"color: maroon\">ci</span> <i>&quot;set identifier ci&quot;</i><span style=\"color: navy\">;</span>\r\n  vac.mp<b> as </b><span style=\"color: maroon\">mp</span><span style=\"color: navy\"><b> -&gt; </b></span> immunization.extension<b> as </b><span style=\"color: maroon\">ext</span><span style=\"color: navy\">, </span> ext.value = <b>create</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'Coding'</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">coding</span><span style=\"color: navy\">, </span> ext.url = <span style=\"color: blue\">'https://smart.who.int/ddcc/StructureDefinition/DDCCVaccineBrand'</span><span style=\"color: navy\">, </span> coding.code = <span style=\"color: maroon\">mp</span><span style=\"color: navy\">, </span> coding.system = <span style=\"color: blue\">'https://www.ema.europa.eu/en/medicines/human/EPAR/comirnaty'</span> <i>&quot;set brand&quot;</i><span style=\"color: navy\">;</span>\r\n  vac.ma<b> as </b><span style=\"color: maroon\">ma</span><span style=\"color: navy\"><b> -&gt; </b></span> immunization.extension<b> as </b><span style=\"color: maroon\">ext</span><span style=\"color: navy\">, </span> ext.value = <b>create</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'Coding'</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">coding</span><span style=\"color: navy\">, </span> ext.url = <span style=\"color: blue\">'https://smart.who.int/ddcc/StructureDefinition/DDCCVaccineMarketAuthorization'</span><span style=\"color: navy\">, </span> coding.code = <span style=\"color: maroon\">ma</span><span style=\"color: navy\">, </span> coding.system = <span style=\"color: blue\">'https://www.ema.europa.eu/en/medicines/human/EPAR/comirnaty'</span> <i>&quot;set manufacturer extension&quot;</i><span style=\"color: navy\">;</span>\r\n  vac.co<b> as </b><span style=\"color: maroon\">co</span><span style=\"color: navy\"><b> -&gt; </b></span> immunization.extension<b> as </b><span style=\"color: maroon\">ext</span><span style=\"color: navy\">, </span> ext.value = <b>create</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'Coding'</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">coding</span><span style=\"color: navy\">, </span> ext.url = <span style=\"color: blue\">'https://smart.who.int/ddcc/StructureDefinition/DDCCCountryOfVaccination'</span><span style=\"color: navy\">, </span> coding.code = <span style=\"color: maroon\">co</span><span style=\"color: navy\">, </span> coding.system = <span style=\"color: blue\">'urn:iso:std:iso:3166'</span> <i>&quot;set country&quot;</i><span style=\"color: navy\">;</span>\r\n  vac<span style=\"color: navy\"><b> -&gt; </b></span>immunization.protocolApplied<b> as </b><span style=\"color: maroon\">protocolApplied</span><b> then </b>ExtractProtocolApplied<span style=\"color: navy\">(</span><span style=\"color: maroon\">vac</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">oid</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">protocolApplied</span><span style=\"color: navy\">)</span> <i>&quot;set protocol applied&quot;</i><span style=\"color: navy\">;</span>\r\n<span style=\"color: navy\">}\r\n\r\n</span><b>group </b>ExtractProtocolApplied<span style=\"color: navy\">(</span><b>source</b> <span style=\"color: maroon\">vac</span><span style=\"color: navy\"> : </span>VacEvent, <b>source</b> <span style=\"color: maroon\">oid</span>, <b>target</b> <span style=\"color: maroon\">protocol</span><span style=\"color: navy\"> : </span>ProtocolApplied<span style=\"color: navy\">)</span><span style=\"color: navy\"> {\r\n</span>  vac.dn<b> as </b><span style=\"color: maroon\">dn</span><span style=\"color: navy\"><b> -&gt; </b></span>protocol.doseNumber = <span style=\"color: maroon\">dn</span> <i>&quot;set dose number&quot;</i><span style=\"color: navy\">;</span>\r\n  vac.sd<b> as </b><span style=\"color: maroon\">sd</span><span style=\"color: navy\"><b> -&gt; </b></span>protocol.seriesDoses = <span style=\"color: maroon\">sd</span> <i>&quot;set series doses&quot;</i><span style=\"color: navy\">;</span>\r\n  vac.tg<b> as </b><span style=\"color: maroon\">tg</span><span style=\"color: navy\"><b> -&gt; </b></span> protocol.targetDisease<b> as </b><span style=\"color: maroon\">codeable</span><span style=\"color: navy\">, </span> codeable.coding<b> as </b><span style=\"color: maroon\">coding</span><span style=\"color: navy\">, </span> coding.system = <span style=\"color: blue\">'http://snomed.info/sct'</span><span style=\"color: navy\">, </span> coding.code = <span style=\"color: maroon\">tg</span> <i>&quot;set target disease type&quot;</i><span style=\"color: navy\">;</span>\r\n  oid<span style=\"color: navy\"><b> -&gt; </b></span> protocol.authority<b> as </b><span style=\"color: maroon\">authority</span><span style=\"color: navy\">, </span> authority.reference = <b>append</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'Organization/'</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">oid</span><span style=\"color: navy\">)</span> <i>&quot;set authority&quot;</i><span style=\"color: navy\">;</span>\r\n<span style=\"color: navy\">}\r\n\r\n</span><b>group </b>ExtractPatient<span style=\"color: navy\">(</span><b>source</b> <span style=\"color: maroon\">src</span><span style=\"color: navy\"> : </span>HC1, <b>source</b> <span style=\"color: maroon\">pid</span>, <b>target</b> <span style=\"color: maroon\">patient</span><span style=\"color: navy\"> : </span>Patient<span style=\"color: navy\">)</span><span style=\"color: navy\"> {\r\n</span>  pid<span style=\"color: navy\"><b> -&gt; </b></span>patient.id = <span style=\"color: maroon\">pid</span> <i>&quot;Patient ID&quot;</i><span style=\"color: navy\">;</span>\r\n  src.nam<b> as </b><span style=\"color: maroon\">name</span><span style=\"color: navy\"><b> -&gt; </b></span>patient<b> then </b>ExtractPersonName<span style=\"color: navy\">(</span><span style=\"color: maroon\">name</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">patient</span><span style=\"color: navy\">)</span> <i>&quot;Patient&quot;</i><span style=\"color: navy\">;</span>\r\n  src.dob<b> as </b><span style=\"color: maroon\">birthDate</span><span style=\"color: navy\"><b> -&gt; </b></span>patient.birthDate = <span style=\"color: maroon\">birthDate</span> <i>&quot;set birthDate&quot;</i><span style=\"color: navy\">;</span>\r\n<span style=\"color: navy\">}\r\n\r\n</span><b>group </b>ExtractPersonName<span style=\"color: navy\">(</span><b>source</b> <span style=\"color: maroon\">src</span><span style=\"color: navy\"> : </span>PersonName, <b>target</b> <span style=\"color: maroon\">tgt</span><span style=\"color: navy\"> : </span>DDCCPatient<span style=\"color: navy\">)</span><span style=\"color: navy\"> {\r\n</span>  src<span style=\"color: navy\"><b> -&gt; </b></span>tgt.name = <b>create</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'HumanName'</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">humanName</span><b> then </b>ExtractHumanName<span style=\"color: navy\">(</span><span style=\"color: maroon\">src</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">humanName</span><span style=\"color: navy\">)</span> <i>&quot;Human Name&quot;</i><span style=\"color: navy\">;</span>\r\n  src<span style=\"color: navy\"><b> -&gt; </b></span>tgt.name = <b>create</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'HumanName'</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">humanNameStd</span><b> then </b>ExtractStandardizedName<span style=\"color: navy\">(</span><span style=\"color: maroon\">src</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">humanNameStd</span><span style=\"color: navy\">)</span> <i>&quot;Human Name Std&quot;</i><span style=\"color: navy\">;</span>\r\n<span style=\"color: navy\">}\r\n\r\n</span><b>group </b>ExtractHumanName<span style=\"color: navy\">(</span><b>source</b> <span style=\"color: maroon\">src</span><span style=\"color: navy\"> : </span>PersonName, <b>target</b> <span style=\"color: maroon\">tgt</span><span style=\"color: navy\"> : </span>HumanName<span style=\"color: navy\">)</span><span style=\"color: navy\"> {\r\n</span>  src.gn<b> as </b><span style=\"color: maroon\">givenName</span><span style=\"color: navy\"><b> -&gt; </b></span>tgt.given = <span style=\"color: maroon\">givenName</span> <i>&quot;Given Name&quot;</i><span style=\"color: navy\">;</span>\r\n  src.fn<b> as </b><span style=\"color: maroon\">familyName</span><span style=\"color: navy\"><b> -&gt; </b></span>tgt.family = <span style=\"color: maroon\">familyName</span> <i>&quot;Family Name&quot;</i><span style=\"color: navy\">;</span>\r\n  src<span style=\"color: navy\"><b> -&gt; </b></span>tgt.use = <span style=\"color: blue\">'official'</span> <i>&quot;Use&quot;</i><span style=\"color: navy\">;</span>\r\n<span style=\"color: navy\">}\r\n\r\n</span><b>group </b>ExtractStandardizedName<span style=\"color: navy\">(</span><b>source</b> <span style=\"color: maroon\">src</span><span style=\"color: navy\"> : </span>PersonName, <b>target</b> <span style=\"color: maroon\">tgt</span><span style=\"color: navy\"> : </span>HumanName<span style=\"color: navy\">)</span><span style=\"color: navy\"> {\r\n</span>  src.gnt<b> as </b><span style=\"color: maroon\">givenName</span><span style=\"color: navy\"><b> -&gt; </b></span>tgt.given = <span style=\"color: maroon\">givenName</span> <i>&quot;Given Name Std&quot;</i><span style=\"color: navy\">;</span>\r\n  src.fnt<b> as </b><span style=\"color: maroon\">familyName</span><span style=\"color: navy\"><b> -&gt; </b></span>tgt.family = <span style=\"color: maroon\">familyName</span> <i>&quot;Family Name Std&quot;</i><span style=\"color: navy\">;</span>\r\n  src<span style=\"color: navy\"><b> -&gt; </b></span>tgt.use = <span style=\"color: blue\">'official'</span> <i>&quot;Use Std&quot;</i><span style=\"color: navy\">;</span>\r\n<span style=\"color: navy\">}\r\n\r\n</span><b>group </b>ExtractComposition<span style=\"color: navy\">(</span><b>source</b> <span style=\"color: maroon\">src</span><span style=\"color: navy\"> : </span>CWT, <b>target</b> <span style=\"color: maroon\">composition</span><span style=\"color: navy\"> : </span>Composition<span style=\"color: navy\">)</span><span style=\"color: navy\"> {\r\n</span>  src<span style=\"color: navy\"><b> -&gt; </b></span>composition.title = <span style=\"color: blue\">'International Certificate of Vaccination or Prophylaxis'</span> <i>&quot;Title&quot;</i><span style=\"color: navy\">;</span>\r\n  src<span style=\"color: navy\"><b> -&gt; </b></span> composition.category<b> as </b><span style=\"color: maroon\">category</span><span style=\"color: navy\">, </span> category.coding<b> as </b><span style=\"color: maroon\">coding</span><b> then</b><span style=\"color: navy\"> {\r\n</span>    src<span style=\"color: navy\"><b> -&gt; </b></span>coding.code = <span style=\"color: blue\">'ddcc-vs'</span> <i>&quot;Category&quot;</i><span style=\"color: navy\">;</span>\r\n  <span style=\"color: navy\">}</span> <i>&quot;set category&quot;</i><span style=\"color: navy\">;</span>\r\n  src<span style=\"color: navy\"><b> -&gt; </b></span> composition.type<b> as </b><span style=\"color: maroon\">type</span><span style=\"color: navy\">, </span> type.coding<b> as </b><span style=\"color: maroon\">coding</span><b> then</b><span style=\"color: navy\"> {\r\n</span>    src<span style=\"color: navy\"><b> -&gt; </b></span> coding.system = <span style=\"color: blue\">'http://loinc.org'</span><span style=\"color: navy\">, </span> coding.code = <span style=\"color: blue\">'82593-5'</span><span style=\"color: navy\">, </span> coding.display = <span style=\"color: blue\">'Immunization summary report'</span> <i>&quot;set type coding&quot;</i><span style=\"color: navy\">;</span>\r\n  <span style=\"color: navy\">}</span> <i>&quot;set type&quot;</i><span style=\"color: navy\">;</span>\r\n  src<span style=\"color: navy\"><b> -&gt; </b></span> composition.event<b> as </b><span style=\"color: maroon\">event</span><span style=\"color: navy\">, </span> event.period = <b>create</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'Period'</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">period</span><b> then </b>ExtractPeriod<span style=\"color: navy\">(</span><span style=\"color: maroon\">src</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">period</span><span style=\"color: navy\">)</span> <i>&quot;Extract Period&quot;</i><span style=\"color: navy\">;</span>\r\n<span style=\"color: navy\">}\r\n\r\n</span><b>group </b>ExtractPeriod<span style=\"color: navy\">(</span><b>source</b> <span style=\"color: maroon\">src</span><span style=\"color: navy\"> : </span>CWT, <b>target</b> <span style=\"color: maroon\">tgt</span><span style=\"color: navy\"> : </span>Period<span style=\"color: navy\">)</span><span style=\"color: navy\"> {\r\n</span>  src.nbf<b> as </b><span style=\"color: maroon\">nbf</span><span style=\"color: navy\"><b> -&gt; </b></span>tgt.start = <span style=\"color: maroon\">nbf</span> <i>&quot;Start notBefore&quot;</i><span style=\"color: navy\">;</span>\r\n  src.iat<b> as </b><span style=\"color: maroon\">iat</span><span style=\"color: navy\"><b> -&gt; </b></span>tgt.start = <span style=\"color: maroon\">iat</span> <i>&quot;Start issuedAt&quot;</i><span style=\"color: navy\">;</span>\r\n  src.exp<b> as </b><span style=\"color: maroon\">exp</span><span style=\"color: navy\"><b> -&gt; </b></span>tgt.end = <span style=\"color: maroon\">exp</span> <i>&quot;End expiration&quot;</i><span style=\"color: navy\">;</span>\r\n<span style=\"color: navy\">}\r\n\r\n</span></pre></div>"
+  },
+  "url" : "http://smart.who.int/ddcc/StructureMap/CertDCCtoDDCC",
+  "version" : "1.0.0",
+  "name" : "EUDCCtoDDCC",
+  "status" : "draft",
+  "date" : "2024-10-15T13:40:08+00:00",
+  "publisher" : "WHO",
+  "contact" : [{
+    "name" : "WHO",
+    "telecom" : [{
+      "system" : "url",
+      "value" : "http://who.int"
+    }]
+  }],
+  "jurisdiction" : [{
+    "coding" : [{
+      "system" : "http://unstats.un.org/unsd/methods/m49/m49.htm",
+      "code" : "001"
+    }]
+  }],
+  "structure" : [{
+    "url" : "http://smart.who.int/ddcc/StructureDefinition/CertDCC",
+    "mode" : "source",
+    "alias" : "CWT"
+  },
+  {
+    "url" : "http://hl7.eu/fhir/ig/dcc/StructureDefinition/HC1",
+    "mode" : "source",
+    "alias" : "HC1"
+  },
+  {
+    "url" : "http://hl7.eu/fhir/ig/dcc/StructureDefinition/PersonName",
+    "mode" : "source",
+    "alias" : "PersonName"
+  },
+  {
+    "url" : "http://hl7.eu/fhir/ig/dcc/StructureDefinition/v",
+    "mode" : "source",
+    "alias" : "VacEvent"
+  },
+  {
+    "url" : "http://hl7.eu/fhir/ig/dcc/StructureDefinition/t",
+    "mode" : "source",
+    "alias" : "TestEvent"
+  },
+  {
+    "url" : "http://hl7.eu/fhir/ig/dcc/StructureDefinition/r",
+    "mode" : "source",
+    "alias" : "RecEvent"
+  },
+  {
+    "url" : "http://hl7.org/fhir/StructureDefinition/Bundle",
+    "mode" : "target",
+    "alias" : "Bundle"
+  }],
+  "group" : [{
+    "name" : "EUDCCtoDDCC",
+    "typeMode" : "none",
+    "input" : [{
+      "name" : "src",
+      "type" : "CWT",
+      "mode" : "source"
+    },
+    {
+      "name" : "bundle",
+      "type" : "Bundle",
+      "mode" : "target"
+    }],
+    "rule" : [{
+      "name" : "set bundle type",
+      "source" : [{
+        "context" : "src"
+      }],
+      "target" : [{
+        "context" : "bundle",
+        "contextType" : "variable",
+        "element" : "type",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueString" : "transaction"
+        }]
+      }]
+    },
+    {
+      "name" : "Patient and Composition Create",
+      "source" : [{
+        "context" : "src"
+      }],
+      "target" : [{
+        "context" : "bundle",
+        "contextType" : "variable"
+      },
+      {
+        "context" : "bundle",
+        "contextType" : "variable",
+        "element" : "entry",
+        "variable" : "entry"
+      },
+      {
+        "context" : "entry",
+        "contextType" : "variable",
+        "element" : "resource",
+        "variable" : "comp",
+        "transform" : "create",
+        "parameter" : [{
+          "valueString" : "Composition"
+        }]
+      }],
+      "rule" : [{
+        "name" : "Processing cert data",
+        "source" : [{
+          "context" : "src",
+          "element" : "data",
+          "variable" : "data"
+        }],
+        "rule" : [{
+          "name" : "Certificate",
+          "source" : [{
+            "context" : "data",
+            "element" : "cert",
+            "variable" : "cert"
+          }],
+          "target" : [{
+            "context" : "bundle",
+            "contextType" : "variable"
+          }],
+          "dependent" : [{
+            "name" : "ExtractCert",
+            "variable" : ["cert",
+            "bundle",
+            "comp"]
+          }]
+        }]
+      },
+      {
+        "name" : "Composition",
+        "source" : [{
+          "context" : "src"
+        }],
+        "target" : [{
+          "context" : "bundle",
+          "contextType" : "variable"
+        }],
+        "dependent" : [{
+          "name" : "ExtractComposition",
+          "variable" : ["src",
+          "comp"]
+        }]
+      }]
+    }]
+  },
+  {
+    "name" : "ExtractCert",
+    "typeMode" : "none",
+    "input" : [{
+      "name" : "src",
+      "type" : "HC1",
+      "mode" : "source"
+    },
+    {
+      "name" : "bundle",
+      "type" : "Bundle",
+      "mode" : "target"
+    },
+    {
+      "name" : "comp",
+      "type" : "Composition",
+      "mode" : "target"
+    }],
+    "rule" : [{
+      "name" : "Patient Create",
+      "source" : [{
+        "context" : "src"
+      }],
+      "target" : [{
+        "context" : "comp",
+        "contextType" : "variable"
+      },
+      {
+        "context" : "bundle",
+        "contextType" : "variable",
+        "element" : "entry",
+        "variable" : "entry"
+      },
+      {
+        "context" : "entry",
+        "contextType" : "variable",
+        "element" : "resource",
+        "variable" : "patient",
+        "transform" : "create",
+        "parameter" : [{
+          "valueString" : "Patient"
+        }]
+      },
+      {
+        "contextType" : "variable",
+        "variable" : "pid",
+        "transform" : "uuid"
+      }],
+      "rule" : [{
+        "name" : "extract patient",
+        "source" : [{
+          "context" : "src"
+        }],
+        "target" : [{
+          "context" : "patient",
+          "contextType" : "variable"
+        }],
+        "dependent" : [{
+          "name" : "ExtractPatient",
+          "variable" : ["src",
+          "pid",
+          "patient"]
+        }]
+      },
+      {
+        "name" : "Composition.Set patient",
+        "source" : [{
+          "context" : "src"
+        }],
+        "target" : [{
+          "context" : "comp",
+          "contextType" : "variable",
+          "element" : "subject",
+          "variable" : "subj"
+        },
+        {
+          "context" : "subj",
+          "contextType" : "variable",
+          "element" : "reference",
+          "transform" : "append",
+          "parameter" : [{
+            "valueString" : "Patient/"
+          },
+          {
+            "valueId" : "pid"
+          }]
+        }]
+      },
+      {
+        "name" : "Vaccination List",
+        "source" : [{
+          "context" : "src",
+          "condition" : "(src.v.count() > 0)"
+        }],
+        "target" : [{
+          "context" : "comp",
+          "contextType" : "variable",
+          "element" : "section",
+          "variable" : "section"
+        }],
+        "rule" : [{
+          "name" : "add section",
+          "source" : [{
+            "context" : "src"
+          }],
+          "target" : [{
+            "context" : "section",
+            "contextType" : "variable",
+            "element" : "code",
+            "variable" : "code"
+          },
+          {
+            "context" : "code",
+            "contextType" : "variable",
+            "element" : "coding",
+            "variable" : "coding"
+          },
+          {
+            "context" : "coding",
+            "contextType" : "variable",
+            "element" : "system",
+            "transform" : "copy",
+            "parameter" : [{
+              "valueString" : "http://loinc.org"
+            }]
+          },
+          {
+            "context" : "coding",
+            "contextType" : "variable",
+            "element" : "code",
+            "transform" : "copy",
+            "parameter" : [{
+              "valueString" : "11369-6"
+            }]
+          },
+          {
+            "context" : "coding",
+            "contextType" : "variable",
+            "element" : "display",
+            "transform" : "copy",
+            "parameter" : [{
+              "valueString" : "History of Immunization Narrative"
+            }]
+          }]
+        },
+        {
+          "name" : "Immunization Create",
+          "source" : [{
+            "context" : "src",
+            "element" : "v",
+            "variable" : "vac"
+          }],
+          "target" : [{
+            "context" : "comp",
+            "contextType" : "variable"
+          },
+          {
+            "context" : "bundle",
+            "contextType" : "variable",
+            "element" : "entry",
+            "variable" : "entryImm"
+          },
+          {
+            "context" : "entryImm",
+            "contextType" : "variable",
+            "element" : "resource",
+            "variable" : "immunization",
+            "transform" : "create",
+            "parameter" : [{
+              "valueString" : "Immunization"
+            }]
+          },
+          {
+            "contextType" : "variable",
+            "variable" : "iid",
+            "transform" : "uuid"
+          },
+          {
+            "context" : "bundle",
+            "contextType" : "variable",
+            "element" : "entry",
+            "variable" : "entryOrg"
+          },
+          {
+            "context" : "entryOrg",
+            "contextType" : "variable",
+            "element" : "resource",
+            "variable" : "org",
+            "transform" : "create",
+            "parameter" : [{
+              "valueString" : "Organization"
+            }]
+          },
+          {
+            "contextType" : "variable",
+            "variable" : "oid",
+            "transform" : "uuid"
+          }],
+          "rule" : [{
+            "name" : "Immunization ID",
+            "source" : [{
+              "context" : "src"
+            }],
+            "target" : [{
+              "context" : "immunization",
+              "contextType" : "variable",
+              "element" : "id",
+              "transform" : "copy",
+              "parameter" : [{
+                "valueId" : "iid"
+              }]
+            }]
+          },
+          {
+            "name" : "Organization ID",
+            "source" : [{
+              "context" : "src"
+            }],
+            "target" : [{
+              "context" : "org",
+              "contextType" : "variable",
+              "element" : "id",
+              "transform" : "copy",
+              "parameter" : [{
+                "valueId" : "oid"
+              }]
+            }]
+          },
+          {
+            "name" : "add entry/author to section",
+            "source" : [{
+              "context" : "src"
+            }],
+            "target" : [{
+              "context" : "section",
+              "contextType" : "variable",
+              "element" : "entry",
+              "variable" : "entry"
+            },
+            {
+              "context" : "entry",
+              "contextType" : "variable",
+              "element" : "reference",
+              "transform" : "append",
+              "parameter" : [{
+                "valueString" : "Immunization/"
+              },
+              {
+                "valueId" : "iid"
+              }]
+            },
+            {
+              "context" : "section",
+              "contextType" : "variable",
+              "element" : "author",
+              "variable" : "author"
+            },
+            {
+              "context" : "author",
+              "contextType" : "variable",
+              "element" : "reference",
+              "transform" : "append",
+              "parameter" : [{
+                "valueString" : "Organization/"
+              },
+              {
+                "valueId" : "oid"
+              }]
+            }]
+          },
+          {
+            "name" : "Composition.Set org",
+            "source" : [{
+              "context" : "src"
+            }],
+            "target" : [{
+              "context" : "comp",
+              "contextType" : "variable",
+              "element" : "author",
+              "variable" : "author"
+            },
+            {
+              "context" : "author",
+              "contextType" : "variable",
+              "element" : "reference",
+              "transform" : "append",
+              "parameter" : [{
+                "valueString" : "Organization/"
+              },
+              {
+                "valueId" : "oid"
+              }]
+            }]
+          },
+          {
+            "name" : "Immunization.Set patient",
+            "source" : [{
+              "context" : "src"
+            }],
+            "target" : [{
+              "context" : "immunization",
+              "contextType" : "variable",
+              "element" : "patient",
+              "variable" : "subj"
+            },
+            {
+              "context" : "subj",
+              "contextType" : "variable",
+              "element" : "reference",
+              "transform" : "append",
+              "parameter" : [{
+                "valueString" : "Patient/"
+              },
+              {
+                "valueId" : "pid"
+              }]
+            }]
+          },
+          {
+            "name" : "Set Organization name",
+            "source" : [{
+              "context" : "vac",
+              "element" : "is",
+              "variable" : "is"
+            }],
+            "target" : [{
+              "context" : "org",
+              "contextType" : "variable",
+              "element" : "name",
+              "transform" : "copy",
+              "parameter" : [{
+                "valueId" : "is"
+              }]
+            }]
+          },
+          {
+            "name" : "extract vaccine info",
+            "source" : [{
+              "context" : "src"
+            }],
+            "target" : [{
+              "context" : "bundle",
+              "contextType" : "variable"
+            }],
+            "dependent" : [{
+              "name" : "ExtractVaccine",
+              "variable" : ["vac",
+              "oid",
+              "immunization"]
+            }]
+          }]
+        }]
+      }]
+    }]
+  },
+  {
+    "name" : "ExtractVaccine",
+    "typeMode" : "none",
+    "input" : [{
+      "name" : "vac",
+      "type" : "VacEvent",
+      "mode" : "source"
+    },
+    {
+      "name" : "oid",
+      "mode" : "source"
+    },
+    {
+      "name" : "immunization",
+      "type" : "Immunization",
+      "mode" : "target"
+    }],
+    "rule" : [{
+      "name" : "set occurrence date",
+      "source" : [{
+        "context" : "vac",
+        "element" : "dt",
+        "variable" : "dt"
+      }],
+      "target" : [{
+        "context" : "immunization",
+        "contextType" : "variable",
+        "element" : "occurrence",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "dt"
+        }]
+      }]
+    },
+    {
+      "name" : "set vaccine coding",
+      "source" : [{
+        "context" : "vac",
+        "element" : "vp",
+        "variable" : "vp"
+      }],
+      "target" : [{
+        "context" : "immunization",
+        "contextType" : "variable",
+        "element" : "vaccineCode",
+        "variable" : "type"
+      },
+      {
+        "context" : "type",
+        "contextType" : "variable",
+        "element" : "coding",
+        "variable" : "coding"
+      },
+      {
+        "context" : "coding",
+        "contextType" : "variable",
+        "element" : "system",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueString" : "http://snomed.info/sct"
+        }]
+      },
+      {
+        "context" : "coding",
+        "contextType" : "variable",
+        "element" : "code",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "vp"
+        }]
+      }]
+    },
+    {
+      "name" : "set identifier ci",
+      "source" : [{
+        "context" : "vac",
+        "element" : "ci",
+        "variable" : "ci"
+      }],
+      "target" : [{
+        "context" : "immunization",
+        "contextType" : "variable",
+        "element" : "identifier",
+        "variable" : "identif"
+      },
+      {
+        "context" : "identif",
+        "contextType" : "variable",
+        "element" : "value",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "ci"
+        }]
+      }]
+    },
+    {
+      "name" : "set brand",
+      "source" : [{
+        "context" : "vac",
+        "element" : "mp",
+        "variable" : "mp"
+      }],
+      "target" : [{
+        "context" : "immunization",
+        "contextType" : "variable",
+        "element" : "extension",
+        "variable" : "ext"
+      },
+      {
+        "context" : "ext",
+        "contextType" : "variable",
+        "element" : "value",
+        "variable" : "coding",
+        "transform" : "create",
+        "parameter" : [{
+          "valueString" : "Coding"
+        }]
+      },
+      {
+        "context" : "ext",
+        "contextType" : "variable",
+        "element" : "url",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueString" : "https://smart.who.int/ddcc/StructureDefinition/DDCCVaccineBrand"
+        }]
+      },
+      {
+        "context" : "coding",
+        "contextType" : "variable",
+        "element" : "code",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "mp"
+        }]
+      },
+      {
+        "context" : "coding",
+        "contextType" : "variable",
+        "element" : "system",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueString" : "https://www.ema.europa.eu/en/medicines/human/EPAR/comirnaty"
+        }]
+      }]
+    },
+    {
+      "name" : "set manufacturer extension",
+      "source" : [{
+        "context" : "vac",
+        "element" : "ma",
+        "variable" : "ma"
+      }],
+      "target" : [{
+        "context" : "immunization",
+        "contextType" : "variable",
+        "element" : "extension",
+        "variable" : "ext"
+      },
+      {
+        "context" : "ext",
+        "contextType" : "variable",
+        "element" : "value",
+        "variable" : "coding",
+        "transform" : "create",
+        "parameter" : [{
+          "valueString" : "Coding"
+        }]
+      },
+      {
+        "context" : "ext",
+        "contextType" : "variable",
+        "element" : "url",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueString" : "https://smart.who.int/ddcc/StructureDefinition/DDCCVaccineMarketAuthorization"
+        }]
+      },
+      {
+        "context" : "coding",
+        "contextType" : "variable",
+        "element" : "code",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "ma"
+        }]
+      },
+      {
+        "context" : "coding",
+        "contextType" : "variable",
+        "element" : "system",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueString" : "https://www.ema.europa.eu/en/medicines/human/EPAR/comirnaty"
+        }]
+      }]
+    },
+    {
+      "name" : "set country",
+      "source" : [{
+        "context" : "vac",
+        "element" : "co",
+        "variable" : "co"
+      }],
+      "target" : [{
+        "context" : "immunization",
+        "contextType" : "variable",
+        "element" : "extension",
+        "variable" : "ext"
+      },
+      {
+        "context" : "ext",
+        "contextType" : "variable",
+        "element" : "value",
+        "variable" : "coding",
+        "transform" : "create",
+        "parameter" : [{
+          "valueString" : "Coding"
+        }]
+      },
+      {
+        "context" : "ext",
+        "contextType" : "variable",
+        "element" : "url",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueString" : "https://smart.who.int/ddcc/StructureDefinition/DDCCCountryOfVaccination"
+        }]
+      },
+      {
+        "context" : "coding",
+        "contextType" : "variable",
+        "element" : "code",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "co"
+        }]
+      },
+      {
+        "context" : "coding",
+        "contextType" : "variable",
+        "element" : "system",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueString" : "urn:iso:std:iso:3166"
+        }]
+      }]
+    },
+    {
+      "name" : "set protocol applied",
+      "source" : [{
+        "context" : "vac"
+      }],
+      "target" : [{
+        "context" : "immunization",
+        "contextType" : "variable",
+        "element" : "protocolApplied",
+        "variable" : "protocolApplied"
+      }],
+      "dependent" : [{
+        "name" : "ExtractProtocolApplied",
+        "variable" : ["vac",
+        "oid",
+        "protocolApplied"]
+      }]
+    }]
+  },
+  {
+    "name" : "ExtractProtocolApplied",
+    "typeMode" : "none",
+    "input" : [{
+      "name" : "vac",
+      "type" : "VacEvent",
+      "mode" : "source"
+    },
+    {
+      "name" : "oid",
+      "mode" : "source"
+    },
+    {
+      "name" : "protocol",
+      "type" : "ProtocolApplied",
+      "mode" : "target"
+    }],
+    "rule" : [{
+      "name" : "set dose number",
+      "source" : [{
+        "context" : "vac",
+        "element" : "dn",
+        "variable" : "dn"
+      }],
+      "target" : [{
+        "context" : "protocol",
+        "contextType" : "variable",
+        "element" : "doseNumber",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "dn"
+        }]
+      }]
+    },
+    {
+      "name" : "set series doses",
+      "source" : [{
+        "context" : "vac",
+        "element" : "sd",
+        "variable" : "sd"
+      }],
+      "target" : [{
+        "context" : "protocol",
+        "contextType" : "variable",
+        "element" : "seriesDoses",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "sd"
+        }]
+      }]
+    },
+    {
+      "name" : "set target disease type",
+      "source" : [{
+        "context" : "vac",
+        "element" : "tg",
+        "variable" : "tg"
+      }],
+      "target" : [{
+        "context" : "protocol",
+        "contextType" : "variable",
+        "element" : "targetDisease",
+        "variable" : "codeable"
+      },
+      {
+        "context" : "codeable",
+        "contextType" : "variable",
+        "element" : "coding",
+        "variable" : "coding"
+      },
+      {
+        "context" : "coding",
+        "contextType" : "variable",
+        "element" : "system",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueString" : "http://snomed.info/sct"
+        }]
+      },
+      {
+        "context" : "coding",
+        "contextType" : "variable",
+        "element" : "code",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "tg"
+        }]
+      }]
+    },
+    {
+      "name" : "set authority",
+      "source" : [{
+        "context" : "oid"
+      }],
+      "target" : [{
+        "context" : "protocol",
+        "contextType" : "variable",
+        "element" : "authority",
+        "variable" : "authority"
+      },
+      {
+        "context" : "authority",
+        "contextType" : "variable",
+        "element" : "reference",
+        "transform" : "append",
+        "parameter" : [{
+          "valueString" : "Organization/"
+        },
+        {
+          "valueId" : "oid"
+        }]
+      }]
+    }]
+  },
+  {
+    "name" : "ExtractPatient",
+    "typeMode" : "none",
+    "input" : [{
+      "name" : "src",
+      "type" : "HC1",
+      "mode" : "source"
+    },
+    {
+      "name" : "pid",
+      "mode" : "source"
+    },
+    {
+      "name" : "patient",
+      "type" : "Patient",
+      "mode" : "target"
+    }],
+    "rule" : [{
+      "name" : "Patient ID",
+      "source" : [{
+        "context" : "pid"
+      }],
+      "target" : [{
+        "context" : "patient",
+        "contextType" : "variable",
+        "element" : "id",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "pid"
+        }]
+      }]
+    },
+    {
+      "name" : "Patient",
+      "source" : [{
+        "context" : "src",
+        "element" : "nam",
+        "variable" : "name"
+      }],
+      "target" : [{
+        "context" : "patient",
+        "contextType" : "variable"
+      }],
+      "dependent" : [{
+        "name" : "ExtractPersonName",
+        "variable" : ["name",
+        "patient"]
+      }]
+    },
+    {
+      "name" : "set birthDate",
+      "source" : [{
+        "context" : "src",
+        "element" : "dob",
+        "variable" : "birthDate"
+      }],
+      "target" : [{
+        "context" : "patient",
+        "contextType" : "variable",
+        "element" : "birthDate",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "birthDate"
+        }]
+      }]
+    }]
+  },
+  {
+    "name" : "ExtractPersonName",
+    "typeMode" : "none",
+    "input" : [{
+      "name" : "src",
+      "type" : "PersonName",
+      "mode" : "source"
+    },
+    {
+      "name" : "tgt",
+      "type" : "DDCCPatient",
+      "mode" : "target"
+    }],
+    "rule" : [{
+      "name" : "Human Name",
+      "source" : [{
+        "context" : "src"
+      }],
+      "target" : [{
+        "context" : "tgt",
+        "contextType" : "variable",
+        "element" : "name",
+        "variable" : "humanName",
+        "transform" : "create",
+        "parameter" : [{
+          "valueString" : "HumanName"
+        }]
+      }],
+      "dependent" : [{
+        "name" : "ExtractHumanName",
+        "variable" : ["src",
+        "humanName"]
+      }]
+    },
+    {
+      "name" : "Human Name Std",
+      "source" : [{
+        "context" : "src"
+      }],
+      "target" : [{
+        "context" : "tgt",
+        "contextType" : "variable",
+        "element" : "name",
+        "variable" : "humanNameStd",
+        "transform" : "create",
+        "parameter" : [{
+          "valueString" : "HumanName"
+        }]
+      }],
+      "dependent" : [{
+        "name" : "ExtractStandardizedName",
+        "variable" : ["src",
+        "humanNameStd"]
+      }]
+    }]
+  },
+  {
+    "name" : "ExtractHumanName",
+    "typeMode" : "none",
+    "input" : [{
+      "name" : "src",
+      "type" : "PersonName",
+      "mode" : "source"
+    },
+    {
+      "name" : "tgt",
+      "type" : "HumanName",
+      "mode" : "target"
+    }],
+    "rule" : [{
+      "name" : "Given Name",
+      "source" : [{
+        "context" : "src",
+        "element" : "gn",
+        "variable" : "givenName"
+      }],
+      "target" : [{
+        "context" : "tgt",
+        "contextType" : "variable",
+        "element" : "given",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "givenName"
+        }]
+      }]
+    },
+    {
+      "name" : "Family Name",
+      "source" : [{
+        "context" : "src",
+        "element" : "fn",
+        "variable" : "familyName"
+      }],
+      "target" : [{
+        "context" : "tgt",
+        "contextType" : "variable",
+        "element" : "family",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "familyName"
+        }]
+      }]
+    },
+    {
+      "name" : "Use",
+      "source" : [{
+        "context" : "src"
+      }],
+      "target" : [{
+        "context" : "tgt",
+        "contextType" : "variable",
+        "element" : "use",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueString" : "official"
+        }]
+      }]
+    }]
+  },
+  {
+    "name" : "ExtractStandardizedName",
+    "typeMode" : "none",
+    "input" : [{
+      "name" : "src",
+      "type" : "PersonName",
+      "mode" : "source"
+    },
+    {
+      "name" : "tgt",
+      "type" : "HumanName",
+      "mode" : "target"
+    }],
+    "rule" : [{
+      "name" : "Given Name Std",
+      "source" : [{
+        "context" : "src",
+        "element" : "gnt",
+        "variable" : "givenName"
+      }],
+      "target" : [{
+        "context" : "tgt",
+        "contextType" : "variable",
+        "element" : "given",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "givenName"
+        }]
+      }]
+    },
+    {
+      "name" : "Family Name Std",
+      "source" : [{
+        "context" : "src",
+        "element" : "fnt",
+        "variable" : "familyName"
+      }],
+      "target" : [{
+        "context" : "tgt",
+        "contextType" : "variable",
+        "element" : "family",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "familyName"
+        }]
+      }]
+    },
+    {
+      "name" : "Use Std",
+      "source" : [{
+        "context" : "src"
+      }],
+      "target" : [{
+        "context" : "tgt",
+        "contextType" : "variable",
+        "element" : "use",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueString" : "official"
+        }]
+      }]
+    }]
+  },
+  {
+    "name" : "ExtractComposition",
+    "typeMode" : "none",
+    "input" : [{
+      "name" : "src",
+      "type" : "CWT",
+      "mode" : "source"
+    },
+    {
+      "name" : "composition",
+      "type" : "Composition",
+      "mode" : "target"
+    }],
+    "rule" : [{
+      "name" : "Title",
+      "source" : [{
+        "context" : "src"
+      }],
+      "target" : [{
+        "context" : "composition",
+        "contextType" : "variable",
+        "element" : "title",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueString" : "International Certificate of Vaccination or Prophylaxis"
+        }]
+      }]
+    },
+    {
+      "name" : "set category",
+      "source" : [{
+        "context" : "src"
+      }],
+      "target" : [{
+        "context" : "composition",
+        "contextType" : "variable",
+        "element" : "category",
+        "variable" : "category"
+      },
+      {
+        "context" : "category",
+        "contextType" : "variable",
+        "element" : "coding",
+        "variable" : "coding"
+      }],
+      "rule" : [{
+        "name" : "Category",
+        "source" : [{
+          "context" : "src"
+        }],
+        "target" : [{
+          "context" : "coding",
+          "contextType" : "variable",
+          "element" : "code",
+          "transform" : "copy",
+          "parameter" : [{
+            "valueString" : "ddcc-vs"
+          }]
+        }]
+      }]
+    },
+    {
+      "name" : "set type",
+      "source" : [{
+        "context" : "src"
+      }],
+      "target" : [{
+        "context" : "composition",
+        "contextType" : "variable",
+        "element" : "type",
+        "variable" : "type"
+      },
+      {
+        "context" : "type",
+        "contextType" : "variable",
+        "element" : "coding",
+        "variable" : "coding"
+      }],
+      "rule" : [{
+        "name" : "set type coding",
+        "source" : [{
+          "context" : "src"
+        }],
+        "target" : [{
+          "context" : "coding",
+          "contextType" : "variable",
+          "element" : "system",
+          "transform" : "copy",
+          "parameter" : [{
+            "valueString" : "http://loinc.org"
+          }]
+        },
+        {
+          "context" : "coding",
+          "contextType" : "variable",
+          "element" : "code",
+          "transform" : "copy",
+          "parameter" : [{
+            "valueString" : "82593-5"
+          }]
+        },
+        {
+          "context" : "coding",
+          "contextType" : "variable",
+          "element" : "display",
+          "transform" : "copy",
+          "parameter" : [{
+            "valueString" : "Immunization summary report"
+          }]
+        }]
+      }]
+    },
+    {
+      "name" : "Extract Period",
+      "source" : [{
+        "context" : "src"
+      }],
+      "target" : [{
+        "context" : "composition",
+        "contextType" : "variable",
+        "element" : "event",
+        "variable" : "event"
+      },
+      {
+        "context" : "event",
+        "contextType" : "variable",
+        "element" : "period",
+        "variable" : "period",
+        "transform" : "create",
+        "parameter" : [{
+          "valueString" : "Period"
+        }]
+      }],
+      "dependent" : [{
+        "name" : "ExtractPeriod",
+        "variable" : ["src",
+        "period"]
+      }]
+    }]
+  },
+  {
+    "name" : "ExtractPeriod",
+    "typeMode" : "none",
+    "input" : [{
+      "name" : "src",
+      "type" : "CWT",
+      "mode" : "source"
+    },
+    {
+      "name" : "tgt",
+      "type" : "Period",
+      "mode" : "target"
+    }],
+    "rule" : [{
+      "name" : "Start notBefore",
+      "source" : [{
+        "context" : "src",
+        "element" : "nbf",
+        "variable" : "nbf"
+      }],
+      "target" : [{
+        "context" : "tgt",
+        "contextType" : "variable",
+        "element" : "start",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "nbf"
+        }]
+      }]
+    },
+    {
+      "name" : "Start issuedAt",
+      "source" : [{
+        "context" : "src",
+        "element" : "iat",
+        "variable" : "iat"
+      }],
+      "target" : [{
+        "context" : "tgt",
+        "contextType" : "variable",
+        "element" : "start",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "iat"
+        }]
+      }]
+    },
+    {
+      "name" : "End expiration",
+      "source" : [{
+        "context" : "src",
+        "element" : "exp",
+        "variable" : "exp"
+      }],
+      "target" : [{
+        "context" : "tgt",
+        "contextType" : "variable",
+        "element" : "end",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "exp"
+        }]
+      }]
+    }]
+  }]
+}
