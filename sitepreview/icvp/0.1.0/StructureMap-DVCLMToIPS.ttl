@@ -1,0 +1,1961 @@
+@prefix fhir: <http://hl7.org/fhir/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# - resource -------------------------------------------------------------------
+
+<http://smart.who.int/icvp/StructureMap/DVCLMToIPS> a fhir:StructureMap ;
+  fhir:nodeRole fhir:treeRoot ;
+  fhir:id [ fhir:v "DVCLMToIPS"] ; # 
+  fhir:text [
+     fhir:status [ fhir:v "generated" ] ;
+     fhir:div "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p class=\"res-header-id\"><b>Generated Narrative: StructureMap DVCLMToIPS</b></p><a name=\"DVCLMToIPS\"> </a><a name=\"hcDVCLMToIPS\"> </a><a name=\"DVCLMToIPS-en-US\"> </a><pre class=\"fml\">\r\n<b>map</b><span style=\"color: navy\"> &quot;</span>http://smart.who.int/icvp/StructureMap/DVCLMToIPS<span style=\"color: navy\">&quot; = &quot;</span>DVCLMToIPS<span style=\"color: navy\">&quot;\r\n\r\n</span><b>uses</b><span style=\"color: navy\"> &quot;</span><a href=\"StructureDefinition-ModelDVC.html\" title=\"DVC\">http://smart.who.int/icvp/StructureDefinition/ModelDVC</a><span style=\"color: navy\">&quot; </span><b>alias </b>DVCLogicalModel <b>as </b><b>source</b>\r\n<b>uses</b><span style=\"color: navy\"> &quot;</span><a href=\"http://hl7.org/fhir/R4/bundle.html\" title=\"Bundle\">http://hl7.org/fhir/StructureDefinition/Bundle</a><span style=\"color: navy\">&quot; </span><b>alias </b>IPS <b>as </b><b>target</b>\r\n\r\n<span style=\"color: navy\">// </span><span style=\"color: green\">create Bundle</span>\r\n<b>group </b>DVCLMToIPS<span style=\"color: navy\">(</span><b>source</b> <span style=\"color: maroon\">lm</span><span style=\"color: navy\"> : </span>DVCLogicalModel, <b>target</b> <span style=\"color: maroon\">ips</span><span style=\"color: navy\"> : </span>IPS<span style=\"color: navy\">)</span><span style=\"color: navy\"> {\r\n</span>  lm<span style=\"color: navy\"><b> -&gt; </b></span>ips.type = <span style=\"color: blue\">'document'</span> <i>&quot;setIPSType&quot;</i><span style=\"color: navy\">;</span>\r\n  lm<span style=\"color: navy\"><b> -&gt; </b></span> <b>uuid</b><span style=\"color: navy\">(</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">bid</span><span style=\"color: navy\">, </span> ips.identifier<b> as </b><span style=\"color: maroon\">id</span><span style=\"color: navy\">, </span> id.value = <span style=\"color: maroon\">bid</span><span style=\"color: navy\">, </span> id.system = <span style=\"color: blue\">'urn:oid:2.16.724.4.8.10.200.10'</span> <i>&quot;setId&quot;</i><span style=\"color: navy\">;</span>\r\n  lm<span style=\"color: navy\"><b> -&gt; </b></span> <b>uuid</b><span style=\"color: navy\">(</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">cid</span><span style=\"color: navy\">, </span> <b>uuid</b><span style=\"color: navy\">(</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">pid</span><span style=\"color: navy\">, </span> <b>uuid</b><span style=\"color: navy\">(</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">mid</span><span style=\"color: navy\">, </span> <b>uuid</b><span style=\"color: navy\">(</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">aid</span><span style=\"color: navy\">, </span> <b>uuid</b><span style=\"color: navy\">(</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">proid</span><span style=\"color: navy\">, </span> <b>uuid</b><span style=\"color: navy\">(</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">immid</span><b> then</b><span style=\"color: navy\"> {\r\n</span>    lm<span style=\"color: navy\"><b> -&gt; </b></span> ips.entry<b> as </b><span style=\"color: maroon\">entry</span><span style=\"color: navy\">, </span> entry.resource = <b>create</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'Composition'</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">composition</span><span style=\"color: navy\">, </span> entry.fullUrl = <b>append</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'urn:uuid:'</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">cid</span><span style=\"color: navy\">)</span><b> then</b><span style=\"color: navy\"> {\r\n</span>      lm<b> then </b>LmToComposition<span style=\"color: navy\">(</span><span style=\"color: maroon\">lm</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">ips</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">composition</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">cid</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">pid</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">mid</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">aid</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">proid</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">immid</span><span style=\"color: navy\">)</span> <i>&quot;set LmToComposition&quot;</i><span style=\"color: navy\">;</span>\r\n      lm<span style=\"color: navy\"><b> -&gt; </b></span> ips.entry<b> as </b><span style=\"color: maroon\">entry</span><span style=\"color: navy\">, </span> entry.fullUrl = <b>append</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'urn:uuid:'</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">pid</span><span style=\"color: navy\">)</span><span style=\"color: navy\">, </span> <b>create</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'Patient'</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">patient</span><b> then</b><span style=\"color: navy\"> {\r\n</span>        lm<b> then </b>DemographicsToPatient<span style=\"color: navy\">(</span><span style=\"color: maroon\">lm</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">patient</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">pid</span><span style=\"color: navy\">)</span> <i>&quot;createPatient&quot;</i><span style=\"color: navy\">;</span>\r\n        lm<span style=\"color: navy\"><b> -&gt; </b></span>entry.resource = <span style=\"color: maroon\">patient</span> <i>&quot;setPatientEntry&quot;</i><span style=\"color: navy\">;</span>\r\n      <span style=\"color: navy\">}</span> <i>&quot;mapPatientResource&quot;</i><span style=\"color: navy\">;</span>\r\n      lm.issuer<b> as </b><span style=\"color: maroon\">issuer</span><b> then</b><span style=\"color: navy\"> {\r\n</span>        issuer.reference<b> as </b><span style=\"color: maroon\">id</span><span style=\"color: navy\"><b> -&gt; </b></span> ips.entry<b> as </b><span style=\"color: maroon\">entry</span><span style=\"color: navy\">, </span> entry.fullUrl = <b>append</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'urn:uuid:'</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">id</span><span style=\"color: navy\">)</span><span style=\"color: navy\">, </span> <b>create</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'Organization'</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">organization</span><b> then</b><span style=\"color: navy\"> {\r\n</span>          lm<span style=\"color: navy\"><b> -&gt; </b></span>organization<b> then </b>createAuthor<span style=\"color: navy\">(</span><span style=\"color: maroon\">issuer</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">organization</span><span style=\"color: navy\">)</span> <i>&quot;createOrganization&quot;</i><span style=\"color: navy\">;</span>\r\n          lm<span style=\"color: navy\"><b> -&gt; </b></span>entry.resource = <span style=\"color: maroon\">organization</span> <i>&quot;setOrganizationEntry&quot;</i><span style=\"color: navy\">;</span>\r\n        <span style=\"color: navy\">}</span> <i>&quot;mapOrganizationResource&quot;</i><span style=\"color: navy\">;</span>\r\n      <span style=\"color: navy\">}</span> <i>&quot;ss&quot;</i><span style=\"color: navy\">;</span>\r\n    <span style=\"color: navy\">}</span> <i>&quot;mapCompositionResource&quot;</i><span style=\"color: navy\">;</span>\r\n  <span style=\"color: navy\">}</span> <i>&quot;setEntries&quot;</i><span style=\"color: navy\">;</span>\r\n<span style=\"color: navy\">}\r\n\r\n</span><span style=\"color: navy\">// </span><span style=\"color: green\">create Composition</span>\r\n<b>group </b>LmToComposition<span style=\"color: navy\">(</span><b>source</b> <span style=\"color: maroon\">lm</span><span style=\"color: navy\"> : </span>DVCLogicalModel, <b>target</b> <span style=\"color: maroon\">ips</span><span style=\"color: navy\"> : </span>Bundle, <b>target</b> <span style=\"color: maroon\">composition</span><span style=\"color: navy\"> : </span>Composition, <b>source</b> <span style=\"color: maroon\">cid</span>, <b>source</b> <span style=\"color: maroon\">pid</span>, <b>source</b> <span style=\"color: maroon\">mid</span>, <b>source</b> <span style=\"color: maroon\">aid</span>, <b>source</b> <span style=\"color: maroon\">proid</span>, <b>source</b> <span style=\"color: maroon\">immid</span><span style=\"color: navy\">)</span><span style=\"color: navy\"> {\r\n</span>  cid<span style=\"color: navy\"><b> -&gt; </b></span>composition.id = <span style=\"color: maroon\">cid</span> <i>&quot;setCid&quot;</i><span style=\"color: navy\">;</span>\r\n  lm<span style=\"color: navy\"><b> -&gt; </b></span>composition.status = <span style=\"color: blue\">'final'</span> <i>&quot;setStatus&quot;</i><span style=\"color: navy\">;</span>\r\n  lm<span style=\"color: navy\"><b> -&gt; </b></span>composition.title = <span style=\"color: blue\">'International Patient Summary'</span> <i>&quot;setTitle&quot;</i><span style=\"color: navy\">;</span>\r\n  lm<span style=\"color: navy\"><b> -&gt; </b></span> <b>create</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'Coding'</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">coding</span><span style=\"color: navy\">, </span> coding.code = <span style=\"color: blue\">'60591-5'</span><span style=\"color: navy\">, </span> coding.system = <span style=\"color: blue\">'http://loinc.org'</span><span style=\"color: navy\">, </span> <b>create</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'CodeableConcept'</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">code</span><span style=\"color: navy\">, </span> code.coding = <span style=\"color: maroon\">coding</span><span style=\"color: navy\">, </span> composition.type = <span style=\"color: maroon\">code</span> <i>&quot;setType&quot;</i><span style=\"color: navy\">;</span>\r\n  lm<span style=\"color: navy\"><b> -&gt; </b></span>composition.subject<b> as </b><span style=\"color: maroon\">subject</span><b> then</b><span style=\"color: navy\"> {\r\n</span>    lm<span style=\"color: navy\"><b> -&gt; </b></span>subject.reference = <b>append</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'urn:uuid:'</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">pid</span><span style=\"color: navy\">)</span> <i>&quot;setSubject&quot;</i><span style=\"color: navy\">;</span>\r\n  <span style=\"color: navy\">}</span> <i>&quot;setSubject&quot;</i><span style=\"color: navy\">;</span>\r\n  lm.issuer<b> as </b><span style=\"color: maroon\">issuer</span><b> then</b><span style=\"color: navy\"> {\r\n</span>    issuer.reference<b> as </b><span style=\"color: maroon\">id</span><span style=\"color: navy\"><b> -&gt; </b></span>composition.author<b> as </b><span style=\"color: maroon\">author</span><b> then</b><span style=\"color: navy\"> {\r\n</span>      id<span style=\"color: navy\"><b> -&gt; </b></span>author.reference = <b>append</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'urn:uuid:'</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">id</span><span style=\"color: navy\">)</span> <i>&quot;setAuthor&quot;</i><span style=\"color: navy\">;</span>\r\n    <span style=\"color: navy\">}</span> <i>&quot;setauthr&quot;</i><span style=\"color: navy\">;</span>\r\n  <span style=\"color: navy\">}</span> <i>&quot;setid&quot;</i><span style=\"color: navy\">;</span>\r\n  lm<span style=\"color: navy\"><b> -&gt; </b></span>composition.section<b> as </b><span style=\"color: maroon\">medication</span><b> then </b>createSectionMedications<span style=\"color: navy\">(</span><span style=\"color: maroon\">lm</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">medication</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">mid</span><span style=\"color: navy\">)</span> <i>&quot;createMedication&quot;</i><span style=\"color: navy\">;</span>\r\n  lm<span style=\"color: navy\"><b> -&gt; </b></span>composition.section<b> as </b><span style=\"color: maroon\">allergies</span><b> then </b>createSectionAllergies<span style=\"color: navy\">(</span><span style=\"color: maroon\">lm</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">allergies</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">aid</span><span style=\"color: navy\">)</span> <i>&quot;createAllergies&quot;</i><span style=\"color: navy\">;</span>\r\n  lm<span style=\"color: navy\"><b> -&gt; </b></span>composition.section<b> as </b><span style=\"color: maroon\">problems</span><b> then </b>createSectionProblems<span style=\"color: navy\">(</span><span style=\"color: maroon\">lm</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">problems</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">proid</span><span style=\"color: navy\">)</span> <i>&quot;createProblems&quot;</i><span style=\"color: navy\">;</span>\r\n  lm<b> then </b>createSectionImmunizations<span style=\"color: navy\">(</span><span style=\"color: maroon\">lm</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">ips</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">composition</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">immid</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">pid</span><span style=\"color: navy\">)</span> <i>&quot;createImmunizations&quot;</i><span style=\"color: navy\">;</span>\r\n<span style=\"color: navy\">}\r\n\r\n</span><span style=\"color: navy\">// </span><span style=\"color: green\">create Patient</span>\r\n<b>group </b>DemographicsToPatient<span style=\"color: navy\">(</span><b>source</b> <span style=\"color: maroon\">lm</span><span style=\"color: navy\"> : </span>DVCLogicalModel, <b>target</b> <span style=\"color: maroon\">patient</span><span style=\"color: navy\"> : </span>Patient, <b>source</b> <span style=\"color: maroon\">pid</span><span style=\"color: navy\">)</span><span style=\"color: navy\"> {\r\n</span>  pid<span style=\"color: navy\"><b> -&gt; </b></span>patient.id = <span style=\"color: maroon\">pid</span> <i>&quot;setPatientId&quot;</i><span style=\"color: navy\">;</span>\r\n  lm.name<b> as </b><span style=\"color: maroon\">sourceName</span><span style=\"color: navy\"><b> -&gt; </b></span>patient.name<b> as </b><span style=\"color: maroon\">targetName</span><b> then </b>nameToHumanName<span style=\"color: navy\">(</span><span style=\"color: maroon\">sourceName</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">targetName</span><span style=\"color: navy\">)</span> <i>&quot;Setname&quot;</i><span style=\"color: navy\">;</span>\r\n  lm.dob<b> as </b><span style=\"color: maroon\">dob</span><span style=\"color: navy\"><b> -&gt; </b></span>patient.birthDate = <span style=\"color: maroon\">dob</span> <i>&quot;setDateofBirth&quot;</i><span style=\"color: navy\">;</span>\r\n  lm.sex<b> as </b><span style=\"color: maroon\">sex</span><b> then </b>ExtractGender<span style=\"color: navy\">(</span><span style=\"color: maroon\">sex</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">patient</span><span style=\"color: navy\">)</span> <i>&quot;Patient Gender&quot;</i><span style=\"color: navy\">;</span>\r\n  <span style=\"color: #b36b00\" title=\"This element was not defined prior to R5\">// lm.sex as sex -&gt; patient.gender = sex &quot;setSex&quot;;</span>\r\n  lm.nid<b> as </b><span style=\"color: maroon\">id</span><span style=\"color: navy\"><b> -&gt; </b></span> patient.identifier<b> as </b><span style=\"color: maroon\">identifier</span><span style=\"color: navy\">, </span> identifier.value = <span style=\"color: maroon\">id</span> <i>&quot;setNationalIdentifier&quot;</i><span style=\"color: navy\">;</span>\r\n  lm.guardian<b> as </b><span style=\"color: maroon\">guardian</span><span style=\"color: navy\"><b> -&gt; </b></span> patient.contact<b> as </b><span style=\"color: maroon\">parentContact</span><span style=\"color: navy\">, </span> parentContact.name<b> as </b><span style=\"color: maroon\">parentName</span><b> then </b>nameToHumanName<span style=\"color: navy\">(</span><span style=\"color: maroon\">guardian</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">parentName</span><span style=\"color: navy\">)</span> <i>&quot;setGuardianName&quot;</i><span style=\"color: navy\">;</span>\r\n<span style=\"color: navy\">}\r\n\r\n</span><span style=\"color: navy\">// </span><span style=\"color: green\">deals with short and case sensitive codes</span>\r\n<b>group </b>ExtractGender<span style=\"color: navy\">(</span><b>source</b> <span style=\"color: maroon\">sex</span>, <b>target</b> <span style=\"color: maroon\">patient</span><span style=\"color: navy\"> : </span>Patient<span style=\"color: navy\">)</span><span style=\"color: navy\"> {\r\n</span>  sex<b> where </b>(sex = 'M')<span style=\"color: navy\"><b> -&gt; </b></span>patient.gender = <span style=\"color: blue\">'male'</span> <i>&quot;set male&quot;</i><span style=\"color: navy\">;</span>\r\n  sex<b> where </b>(sex = 'F')<span style=\"color: navy\"><b> -&gt; </b></span>patient.gender = <span style=\"color: blue\">'female'</span> <i>&quot;set female&quot;</i><span style=\"color: navy\">;</span>\r\n  sex<b> where </b>(sex = 'm')<span style=\"color: navy\"><b> -&gt; </b></span>patient.gender = <span style=\"color: blue\">'male'</span> <i>&quot;set male&quot;</i><span style=\"color: navy\">;</span>\r\n  sex<b> where </b>(sex = 'f')<span style=\"color: navy\"><b> -&gt; </b></span>patient.gender = <span style=\"color: blue\">'female'</span> <i>&quot;set female&quot;</i><span style=\"color: navy\">;</span>\r\n  sex<b> where </b>(sex = 'Male')<span style=\"color: navy\"><b> -&gt; </b></span>patient.gender = <span style=\"color: blue\">'male'</span> <i>&quot;set male&quot;</i><span style=\"color: navy\">;</span>\r\n  sex<b> where </b>(sex = 'Female')<span style=\"color: navy\"><b> -&gt; </b></span>patient.gender = <span style=\"color: blue\">'female'</span> <i>&quot;set female&quot;</i><span style=\"color: navy\">;</span>\r\n  sex<b> where </b>(sex = 'male')<span style=\"color: navy\"><b> -&gt; </b></span>patient.gender = <span style=\"color: blue\">'male'</span> <i>&quot;set male&quot;</i><span style=\"color: navy\">;</span>\r\n  sex<b> where </b>(sex = 'female')<span style=\"color: navy\"><b> -&gt; </b></span>patient.gender = <span style=\"color: blue\">'female'</span> <i>&quot;set female&quot;</i><span style=\"color: navy\">;</span>\r\n<span style=\"color: navy\">}\r\n\r\n</span><span style=\"color: navy\">// </span><span style=\"color: green\">create author</span>\r\n<b>group </b>createAuthor<span style=\"color: navy\">(</span><b>source</b> <span style=\"color: maroon\">issuer</span>, <b>target</b> <span style=\"color: maroon\">org</span><span style=\"color: navy\"> : </span>Organization<span style=\"color: navy\">)</span><span style=\"color: navy\"> {\r\n</span>  issuer.reference<b> as </b><span style=\"color: maroon\">id</span><span style=\"color: navy\"><b> -&gt; </b></span>org.id = <span style=\"color: maroon\">id</span> <i>&quot;setID&quot;</i><span style=\"color: navy\">;</span>\r\n<span style=\"color: navy\">}\r\n\r\n</span><span style=\"color: navy\">// </span><span style=\"color: green\">create sectionMedications</span>\r\n<b>group </b>createSectionMedications<span style=\"color: navy\">(</span><b>source</b> <span style=\"color: maroon\">lm</span><span style=\"color: navy\"> : </span>DVCLogicalModel, <b>target</b> <span style=\"color: maroon\">med</span><span style=\"color: navy\"> : </span>BackboneElement, <b>source</b> <span style=\"color: maroon\">mid</span><span style=\"color: navy\">)</span><span style=\"color: navy\"> {\r\n</span>  mid<span style=\"color: navy\"><b> -&gt; </b></span>med.id = <span style=\"color: maroon\">mid</span> <i>&quot;setmedicationid&quot;</i><span style=\"color: navy\">;</span>\r\n  lm<span style=\"color: navy\"><b> -&gt; </b></span>med.title = <span style=\"color: blue\">'Medication Summary Section'</span> <i>&quot;setMedicationTitle&quot;</i><span style=\"color: navy\">;</span>\r\n  lm<span style=\"color: navy\"><b> -&gt; </b></span>med.text<b> as </b><span style=\"color: maroon\">text</span><b> then </b>generateNarrativeText<span style=\"color: navy\">(</span><span style=\"color: maroon\">med</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">text</span><span style=\"color: navy\">)</span> <i>&quot;setText&quot;</i><span style=\"color: navy\">;</span>\r\n  lm<span style=\"color: navy\"><b> -&gt; </b></span> <b>create</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'Coding'</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">coding</span><span style=\"color: navy\">, </span> coding.code = <span style=\"color: blue\">'10160-0'</span><span style=\"color: navy\">, </span> coding.system = <span style=\"color: blue\">'http://loinc.org'</span><span style=\"color: navy\">, </span> <b>create</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'CodeableConcept'</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">code</span><span style=\"color: navy\">, </span> code.coding = <span style=\"color: maroon\">coding</span><span style=\"color: navy\">, </span> med.code = <span style=\"color: maroon\">code</span> <i>&quot;setCode&quot;</i><span style=\"color: navy\">;</span>\r\n  lm<span style=\"color: navy\"><b> -&gt; </b></span> <b>create</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'Coding'</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">coding</span><span style=\"color: navy\">, </span> coding.code = <span style=\"color: blue\">'unavailable'</span><span style=\"color: navy\">, </span> coding.system = <span style=\"color: blue\">'http://hl7.org/fhir/ValueSet/list-empty-reason'</span><span style=\"color: navy\">, </span> <b>create</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'CodeableConcept'</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">code</span><span style=\"color: navy\">, </span> code.coding = <span style=\"color: maroon\">coding</span><span style=\"color: navy\">, </span> med.emptyReason = <span style=\"color: maroon\">code</span> <i>&quot;setCode&quot;</i><span style=\"color: navy\">;</span>\r\n<span style=\"color: navy\">}\r\n\r\n</span><span style=\"color: navy\">// </span><span style=\"color: green\">create sectionAllergies</span>\r\n<b>group </b>createSectionAllergies<span style=\"color: navy\">(</span><b>source</b> <span style=\"color: maroon\">lm</span><span style=\"color: navy\"> : </span>DVCLogicalModel, <b>target</b> <span style=\"color: maroon\">all</span><span style=\"color: navy\"> : </span>BackboneElement, <b>source</b> <span style=\"color: maroon\">aid</span><span style=\"color: navy\">)</span><span style=\"color: navy\"> {\r\n</span>  aid<span style=\"color: navy\"><b> -&gt; </b></span>all.id = <span style=\"color: maroon\">aid</span> <i>&quot;setAllergyId&quot;</i><span style=\"color: navy\">;</span>\r\n  lm<span style=\"color: navy\"><b> -&gt; </b></span>all.title = <span style=\"color: blue\">'Allergies Section'</span> <i>&quot;setAllergyTitle&quot;</i><span style=\"color: navy\">;</span>\r\n  lm<span style=\"color: navy\"><b> -&gt; </b></span>all.text<b> as </b><span style=\"color: maroon\">text</span><b> then </b>generateNarrativeText<span style=\"color: navy\">(</span><span style=\"color: maroon\">all</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">text</span><span style=\"color: navy\">)</span> <i>&quot;setText&quot;</i><span style=\"color: navy\">;</span>\r\n  lm<span style=\"color: navy\"><b> -&gt; </b></span> <b>create</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'Coding'</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">coding</span><span style=\"color: navy\">, </span> coding.code = <span style=\"color: blue\">'48765-2'</span><span style=\"color: navy\">, </span> coding.system = <span style=\"color: blue\">'http://loinc.org'</span><span style=\"color: navy\">, </span> <b>create</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'CodeableConcept'</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">code</span><span style=\"color: navy\">, </span> code.coding = <span style=\"color: maroon\">coding</span><span style=\"color: navy\">, </span> all.code = <span style=\"color: maroon\">code</span> <i>&quot;setCode&quot;</i><span style=\"color: navy\">;</span>\r\n  lm<span style=\"color: navy\"><b> -&gt; </b></span> <b>create</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'Coding'</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">coding</span><span style=\"color: navy\">, </span> coding.code = <span style=\"color: blue\">'unavailable'</span><span style=\"color: navy\">, </span> coding.system = <span style=\"color: blue\">'http://hl7.org/fhir/ValueSet/list-empty-reason'</span><span style=\"color: navy\">, </span> <b>create</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'CodeableConcept'</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">code</span><span style=\"color: navy\">, </span> code.coding = <span style=\"color: maroon\">coding</span><span style=\"color: navy\">, </span> all.emptyReason = <span style=\"color: maroon\">code</span> <i>&quot;setCode&quot;</i><span style=\"color: navy\">;</span>\r\n<span style=\"color: navy\">}\r\n\r\n</span><span style=\"color: navy\">// </span><span style=\"color: green\">create sectionProblems</span>\r\n<b>group </b>createSectionProblems<span style=\"color: navy\">(</span><b>source</b> <span style=\"color: maroon\">lm</span><span style=\"color: navy\"> : </span>DVCLogicalModel, <b>target</b> <span style=\"color: maroon\">prb</span><span style=\"color: navy\"> : </span>BackboneElement, <b>source</b> <span style=\"color: maroon\">proid</span><span style=\"color: navy\">)</span><span style=\"color: navy\"> {\r\n</span>  proid<span style=\"color: navy\"><b> -&gt; </b></span>prb.id = <span style=\"color: maroon\">proid</span> <i>&quot;setProblemsId&quot;</i><span style=\"color: navy\">;</span>\r\n  lm<span style=\"color: navy\"><b> -&gt; </b></span>prb.title = <span style=\"color: blue\">'Problems Section'</span> <i>&quot;setProblemTitle&quot;</i><span style=\"color: navy\">;</span>\r\n  lm<span style=\"color: navy\"><b> -&gt; </b></span>prb.text<b> as </b><span style=\"color: maroon\">text</span><b> then </b>generateNarrativeText<span style=\"color: navy\">(</span><span style=\"color: maroon\">prb</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">text</span><span style=\"color: navy\">)</span> <i>&quot;setText&quot;</i><span style=\"color: navy\">;</span>\r\n  lm<span style=\"color: navy\"><b> -&gt; </b></span> <b>create</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'Coding'</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">coding</span><span style=\"color: navy\">, </span> coding.code = <span style=\"color: blue\">'11450-4'</span><span style=\"color: navy\">, </span> coding.system = <span style=\"color: blue\">'http://loinc.org'</span><span style=\"color: navy\">, </span> <b>create</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'CodeableConcept'</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">code</span><span style=\"color: navy\">, </span> code.coding = <span style=\"color: maroon\">coding</span><span style=\"color: navy\">, </span> prb.code = <span style=\"color: maroon\">code</span> <i>&quot;setCode&quot;</i><span style=\"color: navy\">;</span>\r\n  lm<span style=\"color: navy\"><b> -&gt; </b></span> <b>create</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'Coding'</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">coding</span><span style=\"color: navy\">, </span> coding.code = <span style=\"color: blue\">'unavailable'</span><span style=\"color: navy\">, </span> coding.system = <span style=\"color: blue\">'http://hl7.org/fhir/ValueSet/list-empty-reason'</span><span style=\"color: navy\">, </span> <b>create</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'CodeableConcept'</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">code</span><span style=\"color: navy\">, </span> code.coding = <span style=\"color: maroon\">coding</span><span style=\"color: navy\">, </span> prb.emptyReason = <span style=\"color: maroon\">code</span> <i>&quot;setCode&quot;</i><span style=\"color: navy\">;</span>\r\n<span style=\"color: navy\">}\r\n\r\n</span><span style=\"color: navy\">// </span><span style=\"color: green\">create sectionImmunizations</span>\r\n<b>group </b>createSectionImmunizations<span style=\"color: navy\">(</span><b>source</b> <span style=\"color: maroon\">lm</span><span style=\"color: navy\"> : </span>DVCLogicalModel, <b>target</b> <span style=\"color: maroon\">bundle</span><span style=\"color: navy\"> : </span>Bundle, <b>target</b> <span style=\"color: maroon\">composition</span><span style=\"color: navy\"> : </span>Composition, <b>source</b> <span style=\"color: maroon\">immid</span>, <b>source</b> <span style=\"color: maroon\">pid</span><span style=\"color: navy\">)</span><span style=\"color: navy\"> {\r\n</span>  lm<span style=\"color: navy\"><b> -&gt; </b></span>composition.section<b> as </b><span style=\"color: maroon\">imm</span><b> then</b><span style=\"color: navy\"> {\r\n</span>    immid<span style=\"color: navy\"><b> -&gt; </b></span>imm.id = <span style=\"color: maroon\">immid</span> <i>&quot;setImmunizationsId&quot;</i><span style=\"color: navy\">;</span>\r\n    lm<span style=\"color: navy\"><b> -&gt; </b></span>imm.title = <span style=\"color: blue\">'Immunizations Section'</span> <i>&quot;setImmunizationTitle&quot;</i><span style=\"color: navy\">;</span>\r\n    lm<span style=\"color: navy\"><b> -&gt; </b></span>imm.text<b> as </b><span style=\"color: maroon\">text</span><b> then </b>generateNarrativeText<span style=\"color: navy\">(</span><span style=\"color: maroon\">imm</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">text</span><span style=\"color: navy\">)</span> <i>&quot;setText&quot;</i><span style=\"color: navy\">;</span>\r\n    lm<span style=\"color: navy\"><b> -&gt; </b></span> <b>create</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'Coding'</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">coding</span><span style=\"color: navy\">, </span> coding.code = <span style=\"color: blue\">'11369-6'</span><span style=\"color: navy\">, </span> coding.system = <span style=\"color: blue\">'http://loinc.org'</span><span style=\"color: navy\">, </span> <b>create</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'CodeableConcept'</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">code</span><span style=\"color: navy\">, </span> code.coding = <span style=\"color: maroon\">coding</span><span style=\"color: navy\">, </span> imm.code = <span style=\"color: maroon\">code</span> <i>&quot;setCode&quot;</i><span style=\"color: navy\">;</span>\r\n    lm.vaccineDetails<b> as </b><span style=\"color: maroon\">vax</span><span style=\"color: navy\"><b> -&gt; </b></span> <b>uuid</b><span style=\"color: navy\">(</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">id</span><span style=\"color: navy\">, </span> bundle.entry<b> as </b><span style=\"color: maroon\">entry</span><span style=\"color: navy\">, </span> entry.fullUrl = <b>append</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'urn:uuid:'</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">id</span><span style=\"color: navy\">)</span><span style=\"color: navy\">, </span> imm.entry<b> as </b><span style=\"color: maroon\">sectionEntry</span><span style=\"color: navy\">, </span> sectionEntry.reference = <b>append</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'urn:uuid:'</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">id</span><span style=\"color: navy\">)</span><span style=\"color: navy\">, </span> entry.resource = <b>create</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'Immunization'</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">immunization</span><span style=\"color: navy\">, </span> immunization.id = <span style=\"color: maroon\">id</span><b> then </b>createImmunizationResource<span style=\"color: navy\">(</span><span style=\"color: maroon\">vax</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">immunization</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">pid</span><span style=\"color: navy\">)</span> <i>&quot;setImmz&quot;</i><span style=\"color: navy\">;</span>\r\n  <span style=\"color: navy\">}</span> <i>&quot;set&quot;</i><span style=\"color: navy\">;</span>\r\n<span style=\"color: navy\">}\r\n\r\n</span><b>group </b>createImmunizationResource<span style=\"color: navy\">(</span><b>source</b> <span style=\"color: maroon\">vax</span><span style=\"color: navy\"> : </span>vaccineDetails, <b>target</b> <span style=\"color: maroon\">immunization</span><span style=\"color: navy\"> : </span>Immunization, <b>source</b> <span style=\"color: maroon\">pid</span><span style=\"color: navy\">)</span><span style=\"color: navy\"> {\r\n</span>  vax<span style=\"color: navy\"><b> -&gt; </b></span>immunization.status = <span style=\"color: blue\">'completed'</span> <i>&quot;setStatus&quot;</i><span style=\"color: navy\">;</span>\r\n  vax.vaccineClassification<b> as </b><span style=\"color: maroon\">vaccine</span><span style=\"color: navy\"><b> -&gt; </b></span>immunization.vaccineCode = <span style=\"color: maroon\">vaccine</span> <i>&quot;setvaccinecode&quot;</i><span style=\"color: navy\">;</span>\r\n  vax.date<b> as </b><span style=\"color: maroon\">date</span><span style=\"color: navy\"><b> -&gt; </b></span>immunization.occurrence = <b>append</b><span style=\"color: navy\">(</span><span style=\"color: maroon\">date</span><span style=\"color: navy\">, </span><span style=\"color: blue\">'T00:00:00.000Z'</span><span style=\"color: navy\">)</span> <i>&quot;setDate&quot;</i><span style=\"color: navy\">;</span>\r\n  vax.batchNo<b> as </b><span style=\"color: maroon\">batchNo</span><span style=\"color: navy\"><b> -&gt; </b></span>immunization.lotNumber = <span style=\"color: maroon\">batchNo</span> <i>&quot;setBatchNo&quot;</i><span style=\"color: navy\">;</span>\r\n  vax<span style=\"color: navy\"><b> -&gt; </b></span>immunization.protocolApplied<b> as </b><span style=\"color: maroon\">protocol</span><b> then</b><span style=\"color: navy\"> {\r\n</span>    vax.doseNumber<b> as </b><span style=\"color: maroon\">doseNo</span><b> then</b><span style=\"color: navy\"> {\r\n</span>      doseNo.coding<b> as </b><span style=\"color: maroon\">coding</span><b> then</b><span style=\"color: navy\"> {\r\n</span>        coding.code<b> as </b><span style=\"color: maroon\">code</span><span style=\"color: navy\"><b> -&gt; </b></span>protocol.doseNumber = <span style=\"color: maroon\">code</span> <i>&quot;setDoseNo&quot;</i><span style=\"color: navy\">;</span>\r\n      <span style=\"color: navy\">}</span> <i>&quot;setDoseNo&quot;</i><span style=\"color: navy\">;</span>\r\n    <span style=\"color: navy\">}</span> <i>&quot;setDoseNo&quot;</i><span style=\"color: navy\">;</span>\r\n    vax.disease<b> as </b><span style=\"color: maroon\">disease</span><span style=\"color: navy\"><b> -&gt; </b></span> <b>create</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'CodeableConcept'</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">code</span><span style=\"color: navy\">, </span> code.coding = <span style=\"color: maroon\">disease</span><span style=\"color: navy\">, </span> protocol.targetDisease = <span style=\"color: maroon\">code</span> <i>&quot;setTargetDisease&quot;</i><span style=\"color: navy\">;</span>\r\n  <span style=\"color: navy\">}</span> <i>&quot;setProtocolApplied&quot;</i><span style=\"color: navy\">;</span>\r\n  vax<span style=\"color: navy\"><b> -&gt; </b></span> immunization.patient<b> as </b><span style=\"color: maroon\">subject</span><span style=\"color: navy\">, </span> subject.reference = <b>append</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'urn:uuid:'</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">pid</span><span style=\"color: navy\">)</span> <i>&quot;setSubject&quot;</i><span style=\"color: navy\">;</span>\r\n  vax.manufacturerId<b> as </b><span style=\"color: maroon\">maId</span><span style=\"color: navy\"><b> -&gt; </b></span> <b>create</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'Reference'</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">maRef</span><span style=\"color: navy\">, </span> maRef.identifier = <span style=\"color: maroon\">maId</span><span style=\"color: navy\">, </span> immunization.manufacturer = <span style=\"color: maroon\">maRef</span> <i>&quot;set Manufacturer&quot;</i><span style=\"color: navy\">;</span>\r\n<span style=\"color: navy\">}\r\n\r\n</span><span style=\"color: navy\">// </span><span style=\"color: green\">helper function</span>\r\n<b>group </b>generateNarrativeText<span style=\"color: navy\">(</span><b>source</b> <span style=\"color: maroon\">src</span><span style=\"color: navy\"> : </span>Section, <b>target</b> <span style=\"color: maroon\">text</span><span style=\"color: navy\"> : </span>string<span style=\"color: navy\">)</span><span style=\"color: navy\"> {\r\n</span>  src<span style=\"color: navy\"><b> -&gt; </b></span>text.status = <span style=\"color: blue\">'empty'</span> <i>&quot;setstatus&quot;</i><span style=\"color: navy\">;</span>\r\n  src<span style=\"color: navy\"><b> -&gt; </b></span>text.div = <span style=\"color: blue\">'&lt;div xmlns=\\&quot;http://www.w3.org/1999/xhtml\\&quot;&gt;Narrative not available&lt;/div&gt;'</span> <i>&quot;setdiv&quot;</i><span style=\"color: navy\">;</span>\r\n<span style=\"color: navy\">}\r\n\r\n</span><b>group </b>nameToHumanName<span style=\"color: navy\">(</span><b>source</b> <span style=\"color: maroon\">sourceName</span>, <b>target</b> <span style=\"color: maroon\">targetName</span><span style=\"color: navy\"> : </span>HumanName<span style=\"color: navy\">)</span><span style=\"color: navy\"> {\r\n</span>  sourceName<b> as </b><span style=\"color: maroon\">patientName</span><span style=\"color: navy\"><b> -&gt; </b></span>targetName.text = <span style=\"color: maroon\">patientName</span> <i>&quot;Patient Name&quot;</i><span style=\"color: navy\">;</span>\r\n<span style=\"color: navy\">}\r\n\r\n</span><b>group </b>humanNameToHumanName<span style=\"color: navy\">(</span><b>source</b> <span style=\"color: maroon\">sourceName</span>, <b>target</b> <span style=\"color: maroon\">targetName</span><span style=\"color: navy\"> : </span>HumanName<span style=\"color: navy\">)</span><span style=\"color: navy\"> {\r\n</span>  sourceName.use<b> as </b><span style=\"color: maroon\">use</span><span style=\"color: navy\"><b> -&gt; </b></span>targetName.use = <span style=\"color: maroon\">use</span> <i>&quot;CopyUse&quot;</i><span style=\"color: navy\">;</span>\r\n  sourceName.text<b> as </b><span style=\"color: maroon\">text</span><span style=\"color: navy\"><b> -&gt; </b></span>targetName.text = <span style=\"color: maroon\">text</span> <i>&quot;CopyText&quot;</i><span style=\"color: navy\">;</span>\r\n  sourceName.family<b> as </b><span style=\"color: maroon\">family</span><span style=\"color: navy\"><b> -&gt; </b></span>targetName.family = <span style=\"color: maroon\">family</span> <i>&quot;CopyFamily&quot;</i><span style=\"color: navy\">;</span>\r\n  sourceName.given<b> as </b><span style=\"color: maroon\">given</span><span style=\"color: navy\"><b> -&gt; </b></span>targetName.given = <span style=\"color: maroon\">given</span> <i>&quot;CopyGiven&quot;</i><span style=\"color: navy\">;</span>\r\n  sourceName.prefix<b> as </b><span style=\"color: maroon\">prefix</span><span style=\"color: navy\"><b> -&gt; </b></span>targetName.prefix = <span style=\"color: maroon\">prefix</span> <i>&quot;CopyPrefix&quot;</i><span style=\"color: navy\">;</span>\r\n  sourceName.suffix<b> as </b><span style=\"color: maroon\">suffix</span><span style=\"color: navy\"><b> -&gt; </b></span>targetName.suffix = <span style=\"color: maroon\">suffix</span> <i>&quot;CopySuffix&quot;</i><span style=\"color: navy\">;</span>\r\n  <span style=\"color: navy\">// </span><span style=\"color: green\">Copy the period using the previously defined group function</span>\r\n  sourceName.period<b> as </b><span style=\"color: maroon\">sourcePeriod</span><span style=\"color: navy\"><b> -&gt; </b></span>targetName.period<b> as </b><span style=\"color: maroon\">targetPeriod</span><b> then</b><span style=\"color: navy\"> {\r\n</span>    sourcePeriod<b> then </b>periodToPeriod<span style=\"color: navy\">(</span><span style=\"color: maroon\">sourcePeriod</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">targetPeriod</span><span style=\"color: navy\">)</span> <i>&quot;CopyPeriod&quot;</i><span style=\"color: navy\">;</span>\r\n  <span style=\"color: navy\">}</span> <i>&quot;copyPeriod&quot;</i><span style=\"color: navy\">;</span>\r\n<span style=\"color: navy\">}\r\n\r\n</span><b>group </b>periodToPeriod<span style=\"color: navy\">(</span><b>source</b> <span style=\"color: maroon\">sourcePeriod</span>, <b>target</b> <span style=\"color: maroon\">targetPeriod</span><span style=\"color: navy\"> : </span>Period<span style=\"color: navy\">)</span><span style=\"color: navy\"> {\r\n</span>  sourcePeriod.start<b> as </b><span style=\"color: maroon\">start</span><span style=\"color: navy\"><b> -&gt; </b></span>targetPeriod.start = <span style=\"color: maroon\">start</span> <i>&quot;set period start&quot;</i><span style=\"color: navy\">;</span>\r\n  sourcePeriod.end<b> as </b><span style=\"color: maroon\">end</span><span style=\"color: navy\"><b> -&gt; </b></span>targetPeriod.end = <span style=\"color: maroon\">end</span> <i>&quot;set period end&quot;</i><span style=\"color: navy\">;</span>\r\n<span style=\"color: navy\">}\r\n\r\n</span></pre></div>"
+  ] ; # 
+  fhir:url [ fhir:v "http://smart.who.int/icvp/StructureMap/DVCLMToIPS"^^xsd:anyURI] ; # 
+  fhir:version [ fhir:v "0.1.0"] ; # 
+  fhir:name [ fhir:v "DVCLMToIPS"] ; # 
+  fhir:status [ fhir:v "draft"] ; # 
+  fhir:date [ fhir:v "2024-10-07T07:28:50+00:00"^^xsd:dateTime] ; # 
+  fhir:publisher [ fhir:v "WHO"] ; # 
+  fhir:contact ( [
+     fhir:name [ fhir:v "WHO" ] ;
+     fhir:telecom ( [
+       fhir:system [ fhir:v "url" ] ;
+       fhir:value [ fhir:v "http://who.int" ]
+     ] )
+  ] ) ; # 
+  fhir:structure ( [
+     fhir:url [
+       fhir:v "http://smart.who.int/icvp/StructureDefinition/ModelDVC"^^xsd:anyURI ;
+       fhir:link <http://smart.who.int/icvp/StructureDefinition/ModelDVC>
+     ] ;
+     fhir:mode [ fhir:v "source" ] ;
+     fhir:alias [ fhir:v "DVCLogicalModel" ]
+  ] [
+     fhir:url [
+       fhir:v "http://hl7.org/fhir/StructureDefinition/Bundle"^^xsd:anyURI ;
+       fhir:link <http://hl7.org/fhir/StructureDefinition/Bundle>
+     ] ;
+     fhir:mode [ fhir:v "target" ] ;
+     fhir:alias [ fhir:v "IPS" ]
+  ] ) ; # 
+  fhir:group ( [
+     fhir:name [ fhir:v "DVCLMToIPS" ] ;
+     fhir:typeMode [ fhir:v "none" ] ;
+     fhir:documentation [ fhir:v "create Bundle" ] ;
+     fhir:input ( [
+       fhir:name [ fhir:v "lm" ] ;
+       fhir:type [ fhir:v "DVCLogicalModel" ] ;
+       fhir:mode [ fhir:v "source" ]
+     ] [
+       fhir:name [ fhir:v "ips" ] ;
+       fhir:type [ fhir:v "IPS" ] ;
+       fhir:mode [ fhir:v "target" ]
+     ] ) ;
+     fhir:rule ( [
+       fhir:name [ fhir:v "setIPSType" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "lm" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "ips" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "type" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "document" ]
+         ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "setId" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "lm" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:variable [ fhir:v "bid" ] ;
+         fhir:transform [ fhir:v "uuid" ]
+       ] [
+         fhir:context [ fhir:v "ips" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "identifier" ] ;
+         fhir:variable [ fhir:v "id" ]
+       ] [
+         fhir:context [ fhir:v "id" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "value" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "bid" ]
+         ] )
+       ] [
+         fhir:context [ fhir:v "id" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "system" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "urn:oid:2.16.724.4.8.10.200.10" ]
+         ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "setEntries" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "lm" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:variable [ fhir:v "cid" ] ;
+         fhir:transform [ fhir:v "uuid" ]
+       ] [
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:variable [ fhir:v "pid" ] ;
+         fhir:transform [ fhir:v "uuid" ]
+       ] [
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:variable [ fhir:v "mid" ] ;
+         fhir:transform [ fhir:v "uuid" ]
+       ] [
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:variable [ fhir:v "aid" ] ;
+         fhir:transform [ fhir:v "uuid" ]
+       ] [
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:variable [ fhir:v "proid" ] ;
+         fhir:transform [ fhir:v "uuid" ]
+       ] [
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:variable [ fhir:v "immid" ] ;
+         fhir:transform [ fhir:v "uuid" ]
+       ] ) ;
+       fhir:rule ( [
+         fhir:name [ fhir:v "mapCompositionResource" ] ;
+         fhir:source ( [
+           fhir:context [ fhir:v "lm" ]
+         ] ) ;
+         fhir:target ( [
+           fhir:context [ fhir:v "ips" ] ;
+           fhir:contextType [ fhir:v "variable" ] ;
+           fhir:element [ fhir:v "entry" ] ;
+           fhir:variable [ fhir:v "entry" ]
+         ] [
+           fhir:context [ fhir:v "entry" ] ;
+           fhir:contextType [ fhir:v "variable" ] ;
+           fhir:element [ fhir:v "resource" ] ;
+           fhir:variable [ fhir:v "composition" ] ;
+           fhir:transform [ fhir:v "create" ] ;
+           fhir:parameter ( [
+             fhir:value [ fhir:v "Composition" ]
+           ] )
+         ] [
+           fhir:context [ fhir:v "entry" ] ;
+           fhir:contextType [ fhir:v "variable" ] ;
+           fhir:element [ fhir:v "fullUrl" ] ;
+           fhir:transform [ fhir:v "append" ] ;
+           fhir:parameter ( [
+             fhir:value [ fhir:v "urn:uuid:" ]
+           ] [
+             fhir:value [ fhir:v "cid" ]
+           ] )
+         ] ) ;
+         fhir:rule ( [
+           fhir:name [ fhir:v "set LmToComposition" ] ;
+           fhir:source ( [
+             fhir:context [ fhir:v "lm" ]
+           ] ) ;
+           fhir:dependent ( [
+             fhir:name [ fhir:v "LmToComposition" ] ;
+             fhir:variable ( [ fhir:v "lm" ] [ fhir:v "ips" ] [ fhir:v "composition" ] [ fhir:v "cid" ] [ fhir:v "pid" ] [ fhir:v "mid" ] [ fhir:v "aid" ] [ fhir:v "proid" ] [ fhir:v "immid" ] )
+           ] )
+         ] [
+           fhir:name [ fhir:v "mapPatientResource" ] ;
+           fhir:source ( [
+             fhir:context [ fhir:v "lm" ]
+           ] ) ;
+           fhir:target ( [
+             fhir:context [ fhir:v "ips" ] ;
+             fhir:contextType [ fhir:v "variable" ] ;
+             fhir:element [ fhir:v "entry" ] ;
+             fhir:variable [ fhir:v "entry" ]
+           ] [
+             fhir:context [ fhir:v "entry" ] ;
+             fhir:contextType [ fhir:v "variable" ] ;
+             fhir:element [ fhir:v "fullUrl" ] ;
+             fhir:transform [ fhir:v "append" ] ;
+             fhir:parameter ( [
+               fhir:value [ fhir:v "urn:uuid:" ]
+             ] [
+               fhir:value [ fhir:v "pid" ]
+             ] )
+           ] [
+             fhir:contextType [ fhir:v "variable" ] ;
+             fhir:variable [ fhir:v "patient" ] ;
+             fhir:transform [ fhir:v "create" ] ;
+             fhir:parameter ( [
+               fhir:value [ fhir:v "Patient" ]
+             ] )
+           ] ) ;
+           fhir:rule ( [
+             fhir:name [ fhir:v "createPatient" ] ;
+             fhir:source ( [
+               fhir:context [ fhir:v "lm" ]
+             ] ) ;
+             fhir:dependent ( [
+               fhir:name [ fhir:v "DemographicsToPatient" ] ;
+               fhir:variable ( [ fhir:v "lm" ] [ fhir:v "patient" ] [ fhir:v "pid" ] )
+             ] )
+           ] [
+             fhir:name [ fhir:v "setPatientEntry" ] ;
+             fhir:source ( [
+               fhir:context [ fhir:v "lm" ]
+             ] ) ;
+             fhir:target ( [
+               fhir:context [ fhir:v "entry" ] ;
+               fhir:contextType [ fhir:v "variable" ] ;
+               fhir:element [ fhir:v "resource" ] ;
+               fhir:transform [ fhir:v "copy" ] ;
+               fhir:parameter ( [
+                 fhir:value [ fhir:v "patient" ]
+               ] )
+             ] )
+           ] )
+         ] [
+           fhir:name [ fhir:v "ss" ] ;
+           fhir:source ( [
+             fhir:context [ fhir:v "lm" ] ;
+             fhir:element [ fhir:v "issuer" ] ;
+             fhir:variable [ fhir:v "issuer" ]
+           ] ) ;
+           fhir:rule ( [
+             fhir:name [ fhir:v "mapOrganizationResource" ] ;
+             fhir:source ( [
+               fhir:context [ fhir:v "issuer" ] ;
+               fhir:element [ fhir:v "reference" ] ;
+               fhir:variable [ fhir:v "id" ]
+             ] ) ;
+             fhir:target ( [
+               fhir:context [ fhir:v "ips" ] ;
+               fhir:contextType [ fhir:v "variable" ] ;
+               fhir:element [ fhir:v "entry" ] ;
+               fhir:variable [ fhir:v "entry" ]
+             ] [
+               fhir:context [ fhir:v "entry" ] ;
+               fhir:contextType [ fhir:v "variable" ] ;
+               fhir:element [ fhir:v "fullUrl" ] ;
+               fhir:transform [ fhir:v "append" ] ;
+               fhir:parameter ( [
+                 fhir:value [ fhir:v "urn:uuid:" ]
+               ] [
+                 fhir:value [ fhir:v "id" ]
+               ] )
+             ] [
+               fhir:contextType [ fhir:v "variable" ] ;
+               fhir:variable [ fhir:v "organization" ] ;
+               fhir:transform [ fhir:v "create" ] ;
+               fhir:parameter ( [
+                 fhir:value [ fhir:v "Organization" ]
+               ] )
+             ] ) ;
+             fhir:rule ( [
+               fhir:name [ fhir:v "createOrganization" ] ;
+               fhir:source ( [
+                 fhir:context [ fhir:v "lm" ]
+               ] ) ;
+               fhir:target ( [
+                 fhir:context [ fhir:v "organization" ] ;
+                 fhir:contextType [ fhir:v "variable" ]
+               ] ) ;
+               fhir:dependent ( [
+                 fhir:name [ fhir:v "createAuthor" ] ;
+                 fhir:variable ( [ fhir:v "issuer" ] [ fhir:v "organization" ] )
+               ] )
+             ] [
+               fhir:name [ fhir:v "setOrganizationEntry" ] ;
+               fhir:source ( [
+                 fhir:context [ fhir:v "lm" ]
+               ] ) ;
+               fhir:target ( [
+                 fhir:context [ fhir:v "entry" ] ;
+                 fhir:contextType [ fhir:v "variable" ] ;
+                 fhir:element [ fhir:v "resource" ] ;
+                 fhir:transform [ fhir:v "copy" ] ;
+                 fhir:parameter ( [
+                   fhir:value [ fhir:v "organization" ]
+                 ] )
+               ] )
+             ] )
+           ] )
+         ] )
+       ] )
+     ] )
+  ] [
+     fhir:name [ fhir:v "LmToComposition" ] ;
+     fhir:typeMode [ fhir:v "none" ] ;
+     fhir:documentation [ fhir:v "create Composition" ] ;
+     fhir:input ( [
+       fhir:name [ fhir:v "lm" ] ;
+       fhir:type [ fhir:v "DVCLogicalModel" ] ;
+       fhir:mode [ fhir:v "source" ]
+     ] [
+       fhir:name [ fhir:v "ips" ] ;
+       fhir:type [ fhir:v "Bundle" ] ;
+       fhir:mode [ fhir:v "target" ]
+     ] [
+       fhir:name [ fhir:v "composition" ] ;
+       fhir:type [ fhir:v "Composition" ] ;
+       fhir:mode [ fhir:v "target" ]
+     ] [
+       fhir:name [ fhir:v "cid" ] ;
+       fhir:mode [ fhir:v "source" ]
+     ] [
+       fhir:name [ fhir:v "pid" ] ;
+       fhir:mode [ fhir:v "source" ]
+     ] [
+       fhir:name [ fhir:v "mid" ] ;
+       fhir:mode [ fhir:v "source" ]
+     ] [
+       fhir:name [ fhir:v "aid" ] ;
+       fhir:mode [ fhir:v "source" ]
+     ] [
+       fhir:name [ fhir:v "proid" ] ;
+       fhir:mode [ fhir:v "source" ]
+     ] [
+       fhir:name [ fhir:v "immid" ] ;
+       fhir:mode [ fhir:v "source" ]
+     ] ) ;
+     fhir:rule ( [
+       fhir:name [ fhir:v "setCid" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "cid" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "composition" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "id" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "cid" ]
+         ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "setStatus" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "lm" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "composition" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "status" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "final" ]
+         ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "setTitle" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "lm" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "composition" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "title" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "International Patient Summary" ]
+         ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "setType" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "lm" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:variable [ fhir:v "coding" ] ;
+         fhir:transform [ fhir:v "create" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "Coding" ]
+         ] )
+       ] [
+         fhir:context [ fhir:v "coding" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "code" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "60591-5" ]
+         ] )
+       ] [
+         fhir:context [ fhir:v "coding" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "system" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "http://loinc.org" ]
+         ] )
+       ] [
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:variable [ fhir:v "code" ] ;
+         fhir:transform [ fhir:v "create" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "CodeableConcept" ]
+         ] )
+       ] [
+         fhir:context [ fhir:v "code" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "coding" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "coding" ]
+         ] )
+       ] [
+         fhir:context [ fhir:v "composition" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "type" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "code" ]
+         ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "setSubject" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "lm" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "composition" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "subject" ] ;
+         fhir:variable [ fhir:v "subject" ]
+       ] ) ;
+       fhir:rule ( [
+         fhir:name [ fhir:v "setSubject" ] ;
+         fhir:source ( [
+           fhir:context [ fhir:v "lm" ]
+         ] ) ;
+         fhir:target ( [
+           fhir:context [ fhir:v "subject" ] ;
+           fhir:contextType [ fhir:v "variable" ] ;
+           fhir:element [ fhir:v "reference" ] ;
+           fhir:transform [ fhir:v "append" ] ;
+           fhir:parameter ( [
+             fhir:value [ fhir:v "urn:uuid:" ]
+           ] [
+             fhir:value [ fhir:v "pid" ]
+           ] )
+         ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "setid" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "lm" ] ;
+         fhir:element [ fhir:v "issuer" ] ;
+         fhir:variable [ fhir:v "issuer" ]
+       ] ) ;
+       fhir:rule ( [
+         fhir:name [ fhir:v "setauthr" ] ;
+         fhir:source ( [
+           fhir:context [ fhir:v "issuer" ] ;
+           fhir:element [ fhir:v "reference" ] ;
+           fhir:variable [ fhir:v "id" ]
+         ] ) ;
+         fhir:target ( [
+           fhir:context [ fhir:v "composition" ] ;
+           fhir:contextType [ fhir:v "variable" ] ;
+           fhir:element [ fhir:v "author" ] ;
+           fhir:variable [ fhir:v "author" ]
+         ] ) ;
+         fhir:rule ( [
+           fhir:name [ fhir:v "setAuthor" ] ;
+           fhir:source ( [
+             fhir:context [ fhir:v "id" ]
+           ] ) ;
+           fhir:target ( [
+             fhir:context [ fhir:v "author" ] ;
+             fhir:contextType [ fhir:v "variable" ] ;
+             fhir:element [ fhir:v "reference" ] ;
+             fhir:transform [ fhir:v "append" ] ;
+             fhir:parameter ( [
+               fhir:value [ fhir:v "urn:uuid:" ]
+             ] [
+               fhir:value [ fhir:v "id" ]
+             ] )
+           ] )
+         ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "createMedication" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "lm" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "composition" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "section" ] ;
+         fhir:variable [ fhir:v "medication" ]
+       ] ) ;
+       fhir:dependent ( [
+         fhir:name [ fhir:v "createSectionMedications" ] ;
+         fhir:variable ( [ fhir:v "lm" ] [ fhir:v "medication" ] [ fhir:v "mid" ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "createAllergies" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "lm" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "composition" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "section" ] ;
+         fhir:variable [ fhir:v "allergies" ]
+       ] ) ;
+       fhir:dependent ( [
+         fhir:name [ fhir:v "createSectionAllergies" ] ;
+         fhir:variable ( [ fhir:v "lm" ] [ fhir:v "allergies" ] [ fhir:v "aid" ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "createProblems" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "lm" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "composition" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "section" ] ;
+         fhir:variable [ fhir:v "problems" ]
+       ] ) ;
+       fhir:dependent ( [
+         fhir:name [ fhir:v "createSectionProblems" ] ;
+         fhir:variable ( [ fhir:v "lm" ] [ fhir:v "problems" ] [ fhir:v "proid" ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "createImmunizations" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "lm" ]
+       ] ) ;
+       fhir:dependent ( [
+         fhir:name [ fhir:v "createSectionImmunizations" ] ;
+         fhir:variable ( [ fhir:v "lm" ] [ fhir:v "ips" ] [ fhir:v "composition" ] [ fhir:v "immid" ] [ fhir:v "pid" ] )
+       ] )
+     ] )
+  ] [
+     fhir:name [ fhir:v "DemographicsToPatient" ] ;
+     fhir:typeMode [ fhir:v "none" ] ;
+     fhir:documentation [ fhir:v "create Patient" ] ;
+     fhir:input ( [
+       fhir:name [ fhir:v "lm" ] ;
+       fhir:type [ fhir:v "DVCLogicalModel" ] ;
+       fhir:mode [ fhir:v "source" ]
+     ] [
+       fhir:name [ fhir:v "patient" ] ;
+       fhir:type [ fhir:v "Patient" ] ;
+       fhir:mode [ fhir:v "target" ]
+     ] [
+       fhir:name [ fhir:v "pid" ] ;
+       fhir:mode [ fhir:v "source" ]
+     ] ) ;
+     fhir:rule ( [
+       fhir:name [ fhir:v "setPatientId" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "pid" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "patient" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "id" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "pid" ]
+         ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "Setname" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "lm" ] ;
+         fhir:element [ fhir:v "name" ] ;
+         fhir:variable [ fhir:v "sourceName" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "patient" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "name" ] ;
+         fhir:variable [ fhir:v "targetName" ]
+       ] ) ;
+       fhir:dependent ( [
+         fhir:name [ fhir:v "nameToHumanName" ] ;
+         fhir:variable ( [ fhir:v "sourceName" ] [ fhir:v "targetName" ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "setDateofBirth" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "lm" ] ;
+         fhir:element [ fhir:v "dob" ] ;
+         fhir:variable [ fhir:v "dob" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "patient" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "birthDate" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "dob" ]
+         ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "Patient Gender" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "lm" ] ;
+         fhir:element [ fhir:v "sex" ] ;
+         fhir:variable [ fhir:v "sex" ]
+       ] ) ;
+       fhir:dependent ( [
+         fhir:name [ fhir:v "ExtractGender" ] ;
+         fhir:variable ( [ fhir:v "sex" ] [ fhir:v "patient" ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "setNationalIdentifier" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "lm" ] ;
+         fhir:element [ fhir:v "nid" ] ;
+         fhir:variable [ fhir:v "id" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "patient" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "identifier" ] ;
+         fhir:variable [ fhir:v "identifier" ]
+       ] [
+         fhir:context [ fhir:v "identifier" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "value" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "id" ]
+         ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "setGuardianName" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "lm" ] ;
+         fhir:element [ fhir:v "guardian" ] ;
+         fhir:variable [ fhir:v "guardian" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "patient" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "contact" ] ;
+         fhir:variable [ fhir:v "parentContact" ]
+       ] [
+         fhir:context [ fhir:v "parentContact" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "name" ] ;
+         fhir:variable [ fhir:v "parentName" ]
+       ] ) ;
+       fhir:dependent ( [
+         fhir:name [ fhir:v "nameToHumanName" ] ;
+         fhir:variable ( [ fhir:v "guardian" ] [ fhir:v "parentName" ] )
+       ] )
+     ] )
+  ] [
+     fhir:name [ fhir:v "ExtractGender" ] ;
+     fhir:typeMode [ fhir:v "none" ] ;
+     fhir:documentation [ fhir:v "deals with short and case sensitive codes" ] ;
+     fhir:input ( [
+       fhir:name [ fhir:v "sex" ] ;
+       fhir:mode [ fhir:v "source" ]
+     ] [
+       fhir:name [ fhir:v "patient" ] ;
+       fhir:type [ fhir:v "Patient" ] ;
+       fhir:mode [ fhir:v "target" ]
+     ] ) ;
+     fhir:rule ( [
+       fhir:name [ fhir:v "set male" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "sex" ] ;
+         fhir:condition [ fhir:v "(sex = 'M')" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "patient" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "gender" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "male" ]
+         ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "set female" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "sex" ] ;
+         fhir:condition [ fhir:v "(sex = 'F')" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "patient" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "gender" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "female" ]
+         ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "set male" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "sex" ] ;
+         fhir:condition [ fhir:v "(sex = 'm')" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "patient" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "gender" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "male" ]
+         ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "set female" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "sex" ] ;
+         fhir:condition [ fhir:v "(sex = 'f')" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "patient" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "gender" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "female" ]
+         ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "set male" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "sex" ] ;
+         fhir:condition [ fhir:v "(sex = 'Male')" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "patient" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "gender" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "male" ]
+         ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "set female" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "sex" ] ;
+         fhir:condition [ fhir:v "(sex = 'Female')" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "patient" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "gender" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "female" ]
+         ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "set male" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "sex" ] ;
+         fhir:condition [ fhir:v "(sex = 'male')" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "patient" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "gender" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "male" ]
+         ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "set female" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "sex" ] ;
+         fhir:condition [ fhir:v "(sex = 'female')" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "patient" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "gender" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "female" ]
+         ] )
+       ] )
+     ] )
+  ] [
+     fhir:name [ fhir:v "createAuthor" ] ;
+     fhir:typeMode [ fhir:v "none" ] ;
+     fhir:documentation [ fhir:v "create author" ] ;
+     fhir:input ( [
+       fhir:name [ fhir:v "issuer" ] ;
+       fhir:mode [ fhir:v "source" ]
+     ] [
+       fhir:name [ fhir:v "org" ] ;
+       fhir:type [ fhir:v "Organization" ] ;
+       fhir:mode [ fhir:v "target" ]
+     ] ) ;
+     fhir:rule ( [
+       fhir:name [ fhir:v "setID" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "issuer" ] ;
+         fhir:element [ fhir:v "reference" ] ;
+         fhir:variable [ fhir:v "id" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "org" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "id" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "id" ]
+         ] )
+       ] )
+     ] )
+  ] [
+     fhir:name [ fhir:v "createSectionMedications" ] ;
+     fhir:typeMode [ fhir:v "none" ] ;
+     fhir:documentation [ fhir:v "create sectionMedications" ] ;
+     fhir:input ( [
+       fhir:name [ fhir:v "lm" ] ;
+       fhir:type [ fhir:v "DVCLogicalModel" ] ;
+       fhir:mode [ fhir:v "source" ]
+     ] [
+       fhir:name [ fhir:v "med" ] ;
+       fhir:type [ fhir:v "BackboneElement" ] ;
+       fhir:mode [ fhir:v "target" ]
+     ] [
+       fhir:name [ fhir:v "mid" ] ;
+       fhir:mode [ fhir:v "source" ]
+     ] ) ;
+     fhir:rule ( [
+       fhir:name [ fhir:v "setmedicationid" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "mid" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "med" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "id" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "mid" ]
+         ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "setMedicationTitle" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "lm" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "med" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "title" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "Medication Summary Section" ]
+         ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "setText" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "lm" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "med" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "text" ] ;
+         fhir:variable [ fhir:v "text" ]
+       ] ) ;
+       fhir:dependent ( [
+         fhir:name [ fhir:v "generateNarrativeText" ] ;
+         fhir:variable ( [ fhir:v "med" ] [ fhir:v "text" ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "setCode" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "lm" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:variable [ fhir:v "coding" ] ;
+         fhir:transform [ fhir:v "create" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "Coding" ]
+         ] )
+       ] [
+         fhir:context [ fhir:v "coding" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "code" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "10160-0" ]
+         ] )
+       ] [
+         fhir:context [ fhir:v "coding" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "system" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "http://loinc.org" ]
+         ] )
+       ] [
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:variable [ fhir:v "code" ] ;
+         fhir:transform [ fhir:v "create" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "CodeableConcept" ]
+         ] )
+       ] [
+         fhir:context [ fhir:v "code" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "coding" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "coding" ]
+         ] )
+       ] [
+         fhir:context [ fhir:v "med" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "code" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "code" ]
+         ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "setCode" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "lm" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:variable [ fhir:v "coding" ] ;
+         fhir:transform [ fhir:v "create" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "Coding" ]
+         ] )
+       ] [
+         fhir:context [ fhir:v "coding" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "code" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "unavailable" ]
+         ] )
+       ] [
+         fhir:context [ fhir:v "coding" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "system" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "http://hl7.org/fhir/ValueSet/list-empty-reason" ]
+         ] )
+       ] [
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:variable [ fhir:v "code" ] ;
+         fhir:transform [ fhir:v "create" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "CodeableConcept" ]
+         ] )
+       ] [
+         fhir:context [ fhir:v "code" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "coding" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "coding" ]
+         ] )
+       ] [
+         fhir:context [ fhir:v "med" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "emptyReason" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "code" ]
+         ] )
+       ] )
+     ] )
+  ] [
+     fhir:name [ fhir:v "createSectionAllergies" ] ;
+     fhir:typeMode [ fhir:v "none" ] ;
+     fhir:documentation [ fhir:v "create sectionAllergies" ] ;
+     fhir:input ( [
+       fhir:name [ fhir:v "lm" ] ;
+       fhir:type [ fhir:v "DVCLogicalModel" ] ;
+       fhir:mode [ fhir:v "source" ]
+     ] [
+       fhir:name [ fhir:v "all" ] ;
+       fhir:type [ fhir:v "BackboneElement" ] ;
+       fhir:mode [ fhir:v "target" ]
+     ] [
+       fhir:name [ fhir:v "aid" ] ;
+       fhir:mode [ fhir:v "source" ]
+     ] ) ;
+     fhir:rule ( [
+       fhir:name [ fhir:v "setAllergyId" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "aid" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "all" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "id" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "aid" ]
+         ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "setAllergyTitle" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "lm" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "all" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "title" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "Allergies Section" ]
+         ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "setText" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "lm" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "all" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "text" ] ;
+         fhir:variable [ fhir:v "text" ]
+       ] ) ;
+       fhir:dependent ( [
+         fhir:name [ fhir:v "generateNarrativeText" ] ;
+         fhir:variable ( [ fhir:v "all" ] [ fhir:v "text" ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "setCode" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "lm" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:variable [ fhir:v "coding" ] ;
+         fhir:transform [ fhir:v "create" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "Coding" ]
+         ] )
+       ] [
+         fhir:context [ fhir:v "coding" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "code" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "48765-2" ]
+         ] )
+       ] [
+         fhir:context [ fhir:v "coding" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "system" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "http://loinc.org" ]
+         ] )
+       ] [
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:variable [ fhir:v "code" ] ;
+         fhir:transform [ fhir:v "create" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "CodeableConcept" ]
+         ] )
+       ] [
+         fhir:context [ fhir:v "code" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "coding" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "coding" ]
+         ] )
+       ] [
+         fhir:context [ fhir:v "all" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "code" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "code" ]
+         ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "setCode" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "lm" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:variable [ fhir:v "coding" ] ;
+         fhir:transform [ fhir:v "create" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "Coding" ]
+         ] )
+       ] [
+         fhir:context [ fhir:v "coding" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "code" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "unavailable" ]
+         ] )
+       ] [
+         fhir:context [ fhir:v "coding" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "system" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "http://hl7.org/fhir/ValueSet/list-empty-reason" ]
+         ] )
+       ] [
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:variable [ fhir:v "code" ] ;
+         fhir:transform [ fhir:v "create" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "CodeableConcept" ]
+         ] )
+       ] [
+         fhir:context [ fhir:v "code" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "coding" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "coding" ]
+         ] )
+       ] [
+         fhir:context [ fhir:v "all" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "emptyReason" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "code" ]
+         ] )
+       ] )
+     ] )
+  ] [
+     fhir:name [ fhir:v "createSectionProblems" ] ;
+     fhir:typeMode [ fhir:v "none" ] ;
+     fhir:documentation [ fhir:v "create sectionProblems" ] ;
+     fhir:input ( [
+       fhir:name [ fhir:v "lm" ] ;
+       fhir:type [ fhir:v "DVCLogicalModel" ] ;
+       fhir:mode [ fhir:v "source" ]
+     ] [
+       fhir:name [ fhir:v "prb" ] ;
+       fhir:type [ fhir:v "BackboneElement" ] ;
+       fhir:mode [ fhir:v "target" ]
+     ] [
+       fhir:name [ fhir:v "proid" ] ;
+       fhir:mode [ fhir:v "source" ]
+     ] ) ;
+     fhir:rule ( [
+       fhir:name [ fhir:v "setProblemsId" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "proid" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "prb" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "id" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "proid" ]
+         ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "setProblemTitle" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "lm" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "prb" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "title" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "Problems Section" ]
+         ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "setText" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "lm" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "prb" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "text" ] ;
+         fhir:variable [ fhir:v "text" ]
+       ] ) ;
+       fhir:dependent ( [
+         fhir:name [ fhir:v "generateNarrativeText" ] ;
+         fhir:variable ( [ fhir:v "prb" ] [ fhir:v "text" ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "setCode" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "lm" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:variable [ fhir:v "coding" ] ;
+         fhir:transform [ fhir:v "create" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "Coding" ]
+         ] )
+       ] [
+         fhir:context [ fhir:v "coding" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "code" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "11450-4" ]
+         ] )
+       ] [
+         fhir:context [ fhir:v "coding" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "system" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "http://loinc.org" ]
+         ] )
+       ] [
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:variable [ fhir:v "code" ] ;
+         fhir:transform [ fhir:v "create" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "CodeableConcept" ]
+         ] )
+       ] [
+         fhir:context [ fhir:v "code" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "coding" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "coding" ]
+         ] )
+       ] [
+         fhir:context [ fhir:v "prb" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "code" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "code" ]
+         ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "setCode" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "lm" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:variable [ fhir:v "coding" ] ;
+         fhir:transform [ fhir:v "create" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "Coding" ]
+         ] )
+       ] [
+         fhir:context [ fhir:v "coding" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "code" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "unavailable" ]
+         ] )
+       ] [
+         fhir:context [ fhir:v "coding" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "system" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "http://hl7.org/fhir/ValueSet/list-empty-reason" ]
+         ] )
+       ] [
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:variable [ fhir:v "code" ] ;
+         fhir:transform [ fhir:v "create" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "CodeableConcept" ]
+         ] )
+       ] [
+         fhir:context [ fhir:v "code" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "coding" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "coding" ]
+         ] )
+       ] [
+         fhir:context [ fhir:v "prb" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "emptyReason" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "code" ]
+         ] )
+       ] )
+     ] )
+  ] [
+     fhir:name [ fhir:v "createSectionImmunizations" ] ;
+     fhir:typeMode [ fhir:v "none" ] ;
+     fhir:documentation [ fhir:v "create sectionImmunizations" ] ;
+     fhir:input ( [
+       fhir:name [ fhir:v "lm" ] ;
+       fhir:type [ fhir:v "DVCLogicalModel" ] ;
+       fhir:mode [ fhir:v "source" ]
+     ] [
+       fhir:name [ fhir:v "bundle" ] ;
+       fhir:type [ fhir:v "Bundle" ] ;
+       fhir:mode [ fhir:v "target" ]
+     ] [
+       fhir:name [ fhir:v "composition" ] ;
+       fhir:type [ fhir:v "Composition" ] ;
+       fhir:mode [ fhir:v "target" ]
+     ] [
+       fhir:name [ fhir:v "immid" ] ;
+       fhir:mode [ fhir:v "source" ]
+     ] [
+       fhir:name [ fhir:v "pid" ] ;
+       fhir:mode [ fhir:v "source" ]
+     ] ) ;
+     fhir:rule ( [
+       fhir:name [ fhir:v "set" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "lm" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "composition" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "section" ] ;
+         fhir:variable [ fhir:v "imm" ]
+       ] ) ;
+       fhir:rule ( [
+         fhir:name [ fhir:v "setImmunizationsId" ] ;
+         fhir:source ( [
+           fhir:context [ fhir:v "immid" ]
+         ] ) ;
+         fhir:target ( [
+           fhir:context [ fhir:v "imm" ] ;
+           fhir:contextType [ fhir:v "variable" ] ;
+           fhir:element [ fhir:v "id" ] ;
+           fhir:transform [ fhir:v "copy" ] ;
+           fhir:parameter ( [
+             fhir:value [ fhir:v "immid" ]
+           ] )
+         ] )
+       ] [
+         fhir:name [ fhir:v "setImmunizationTitle" ] ;
+         fhir:source ( [
+           fhir:context [ fhir:v "lm" ]
+         ] ) ;
+         fhir:target ( [
+           fhir:context [ fhir:v "imm" ] ;
+           fhir:contextType [ fhir:v "variable" ] ;
+           fhir:element [ fhir:v "title" ] ;
+           fhir:transform [ fhir:v "copy" ] ;
+           fhir:parameter ( [
+             fhir:value [ fhir:v "Immunizations Section" ]
+           ] )
+         ] )
+       ] [
+         fhir:name [ fhir:v "setText" ] ;
+         fhir:source ( [
+           fhir:context [ fhir:v "lm" ]
+         ] ) ;
+         fhir:target ( [
+           fhir:context [ fhir:v "imm" ] ;
+           fhir:contextType [ fhir:v "variable" ] ;
+           fhir:element [ fhir:v "text" ] ;
+           fhir:variable [ fhir:v "text" ]
+         ] ) ;
+         fhir:dependent ( [
+           fhir:name [ fhir:v "generateNarrativeText" ] ;
+           fhir:variable ( [ fhir:v "imm" ] [ fhir:v "text" ] )
+         ] )
+       ] [
+         fhir:name [ fhir:v "setCode" ] ;
+         fhir:source ( [
+           fhir:context [ fhir:v "lm" ]
+         ] ) ;
+         fhir:target ( [
+           fhir:contextType [ fhir:v "variable" ] ;
+           fhir:variable [ fhir:v "coding" ] ;
+           fhir:transform [ fhir:v "create" ] ;
+           fhir:parameter ( [
+             fhir:value [ fhir:v "Coding" ]
+           ] )
+         ] [
+           fhir:context [ fhir:v "coding" ] ;
+           fhir:contextType [ fhir:v "variable" ] ;
+           fhir:element [ fhir:v "code" ] ;
+           fhir:transform [ fhir:v "copy" ] ;
+           fhir:parameter ( [
+             fhir:value [ fhir:v "11369-6" ]
+           ] )
+         ] [
+           fhir:context [ fhir:v "coding" ] ;
+           fhir:contextType [ fhir:v "variable" ] ;
+           fhir:element [ fhir:v "system" ] ;
+           fhir:transform [ fhir:v "copy" ] ;
+           fhir:parameter ( [
+             fhir:value [ fhir:v "http://loinc.org" ]
+           ] )
+         ] [
+           fhir:contextType [ fhir:v "variable" ] ;
+           fhir:variable [ fhir:v "code" ] ;
+           fhir:transform [ fhir:v "create" ] ;
+           fhir:parameter ( [
+             fhir:value [ fhir:v "CodeableConcept" ]
+           ] )
+         ] [
+           fhir:context [ fhir:v "code" ] ;
+           fhir:contextType [ fhir:v "variable" ] ;
+           fhir:element [ fhir:v "coding" ] ;
+           fhir:transform [ fhir:v "copy" ] ;
+           fhir:parameter ( [
+             fhir:value [ fhir:v "coding" ]
+           ] )
+         ] [
+           fhir:context [ fhir:v "imm" ] ;
+           fhir:contextType [ fhir:v "variable" ] ;
+           fhir:element [ fhir:v "code" ] ;
+           fhir:transform [ fhir:v "copy" ] ;
+           fhir:parameter ( [
+             fhir:value [ fhir:v "code" ]
+           ] )
+         ] )
+       ] [
+         fhir:name [ fhir:v "setImmz" ] ;
+         fhir:source ( [
+           fhir:context [ fhir:v "lm" ] ;
+           fhir:element [ fhir:v "vaccineDetails" ] ;
+           fhir:variable [ fhir:v "vax" ]
+         ] ) ;
+         fhir:target ( [
+           fhir:contextType [ fhir:v "variable" ] ;
+           fhir:variable [ fhir:v "id" ] ;
+           fhir:transform [ fhir:v "uuid" ]
+         ] [
+           fhir:context [ fhir:v "bundle" ] ;
+           fhir:contextType [ fhir:v "variable" ] ;
+           fhir:element [ fhir:v "entry" ] ;
+           fhir:variable [ fhir:v "entry" ]
+         ] [
+           fhir:context [ fhir:v "entry" ] ;
+           fhir:contextType [ fhir:v "variable" ] ;
+           fhir:element [ fhir:v "fullUrl" ] ;
+           fhir:transform [ fhir:v "append" ] ;
+           fhir:parameter ( [
+             fhir:value [ fhir:v "urn:uuid:" ]
+           ] [
+             fhir:value [ fhir:v "id" ]
+           ] )
+         ] [
+           fhir:context [ fhir:v "imm" ] ;
+           fhir:contextType [ fhir:v "variable" ] ;
+           fhir:element [ fhir:v "entry" ] ;
+           fhir:variable [ fhir:v "sectionEntry" ]
+         ] [
+           fhir:context [ fhir:v "sectionEntry" ] ;
+           fhir:contextType [ fhir:v "variable" ] ;
+           fhir:element [ fhir:v "reference" ] ;
+           fhir:transform [ fhir:v "append" ] ;
+           fhir:parameter ( [
+             fhir:value [ fhir:v "urn:uuid:" ]
+           ] [
+             fhir:value [ fhir:v "id" ]
+           ] )
+         ] [
+           fhir:context [ fhir:v "entry" ] ;
+           fhir:contextType [ fhir:v "variable" ] ;
+           fhir:element [ fhir:v "resource" ] ;
+           fhir:variable [ fhir:v "immunization" ] ;
+           fhir:transform [ fhir:v "create" ] ;
+           fhir:parameter ( [
+             fhir:value [ fhir:v "Immunization" ]
+           ] )
+         ] [
+           fhir:context [ fhir:v "immunization" ] ;
+           fhir:contextType [ fhir:v "variable" ] ;
+           fhir:element [ fhir:v "id" ] ;
+           fhir:transform [ fhir:v "copy" ] ;
+           fhir:parameter ( [
+             fhir:value [ fhir:v "id" ]
+           ] )
+         ] ) ;
+         fhir:dependent ( [
+           fhir:name [ fhir:v "createImmunizationResource" ] ;
+           fhir:variable ( [ fhir:v "vax" ] [ fhir:v "immunization" ] [ fhir:v "pid" ] )
+         ] )
+       ] )
+     ] )
+  ] [
+     fhir:name [ fhir:v "createImmunizationResource" ] ;
+     fhir:typeMode [ fhir:v "none" ] ;
+     fhir:input ( [
+       fhir:name [ fhir:v "vax" ] ;
+       fhir:type [ fhir:v "vaccineDetails" ] ;
+       fhir:mode [ fhir:v "source" ]
+     ] [
+       fhir:name [ fhir:v "immunization" ] ;
+       fhir:type [ fhir:v "Immunization" ] ;
+       fhir:mode [ fhir:v "target" ]
+     ] [
+       fhir:name [ fhir:v "pid" ] ;
+       fhir:mode [ fhir:v "source" ]
+     ] ) ;
+     fhir:rule ( [
+       fhir:name [ fhir:v "setStatus" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "vax" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "immunization" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "status" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "completed" ]
+         ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "setvaccinecode" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "vax" ] ;
+         fhir:element [ fhir:v "vaccineClassification" ] ;
+         fhir:variable [ fhir:v "vaccine" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "immunization" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "vaccineCode" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "vaccine" ]
+         ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "setDate" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "vax" ] ;
+         fhir:element [ fhir:v "date" ] ;
+         fhir:variable [ fhir:v "date" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "immunization" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "occurrence" ] ;
+         fhir:transform [ fhir:v "append" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "date" ]
+         ] [
+           fhir:value [ fhir:v "T00:00:00.000Z" ]
+         ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "setBatchNo" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "vax" ] ;
+         fhir:element [ fhir:v "batchNo" ] ;
+         fhir:variable [ fhir:v "batchNo" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "immunization" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "lotNumber" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "batchNo" ]
+         ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "setProtocolApplied" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "vax" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "immunization" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "protocolApplied" ] ;
+         fhir:variable [ fhir:v "protocol" ]
+       ] ) ;
+       fhir:rule ( [
+         fhir:name [ fhir:v "setDoseNo" ] ;
+         fhir:source ( [
+           fhir:context [ fhir:v "vax" ] ;
+           fhir:element [ fhir:v "doseNumber" ] ;
+           fhir:variable [ fhir:v "doseNo" ]
+         ] ) ;
+         fhir:rule ( [
+           fhir:name [ fhir:v "setDoseNo" ] ;
+           fhir:source ( [
+             fhir:context [ fhir:v "doseNo" ] ;
+             fhir:element [ fhir:v "coding" ] ;
+             fhir:variable [ fhir:v "coding" ]
+           ] ) ;
+           fhir:rule ( [
+             fhir:name [ fhir:v "setDoseNo" ] ;
+             fhir:source ( [
+               fhir:context [ fhir:v "coding" ] ;
+               fhir:element [ fhir:v "code" ] ;
+               fhir:variable [ fhir:v "code" ]
+             ] ) ;
+             fhir:target ( [
+               fhir:context [ fhir:v "protocol" ] ;
+               fhir:contextType [ fhir:v "variable" ] ;
+               fhir:element [ fhir:v "doseNumber" ] ;
+               fhir:transform [ fhir:v "copy" ] ;
+               fhir:parameter ( [
+                 fhir:value [ fhir:v "code" ]
+               ] )
+             ] )
+           ] )
+         ] )
+       ] [
+         fhir:name [ fhir:v "setTargetDisease" ] ;
+         fhir:source ( [
+           fhir:context [ fhir:v "vax" ] ;
+           fhir:element [ fhir:v "disease" ] ;
+           fhir:variable [ fhir:v "disease" ]
+         ] ) ;
+         fhir:target ( [
+           fhir:contextType [ fhir:v "variable" ] ;
+           fhir:variable [ fhir:v "code" ] ;
+           fhir:transform [ fhir:v "create" ] ;
+           fhir:parameter ( [
+             fhir:value [ fhir:v "CodeableConcept" ]
+           ] )
+         ] [
+           fhir:context [ fhir:v "code" ] ;
+           fhir:contextType [ fhir:v "variable" ] ;
+           fhir:element [ fhir:v "coding" ] ;
+           fhir:transform [ fhir:v "copy" ] ;
+           fhir:parameter ( [
+             fhir:value [ fhir:v "disease" ]
+           ] )
+         ] [
+           fhir:context [ fhir:v "protocol" ] ;
+           fhir:contextType [ fhir:v "variable" ] ;
+           fhir:element [ fhir:v "targetDisease" ] ;
+           fhir:transform [ fhir:v "copy" ] ;
+           fhir:parameter ( [
+             fhir:value [ fhir:v "code" ]
+           ] )
+         ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "setSubject" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "vax" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "immunization" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "patient" ] ;
+         fhir:variable [ fhir:v "subject" ]
+       ] [
+         fhir:context [ fhir:v "subject" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "reference" ] ;
+         fhir:transform [ fhir:v "append" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "urn:uuid:" ]
+         ] [
+           fhir:value [ fhir:v "pid" ]
+         ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "set Manufacturer" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "vax" ] ;
+         fhir:element [ fhir:v "manufacturerId" ] ;
+         fhir:variable [ fhir:v "maId" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:variable [ fhir:v "maRef" ] ;
+         fhir:transform [ fhir:v "create" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "Reference" ]
+         ] )
+       ] [
+         fhir:context [ fhir:v "maRef" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "identifier" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "maId" ]
+         ] )
+       ] [
+         fhir:context [ fhir:v "immunization" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "manufacturer" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "maRef" ]
+         ] )
+       ] )
+     ] )
+  ] [
+     fhir:name [ fhir:v "generateNarrativeText" ] ;
+     fhir:typeMode [ fhir:v "none" ] ;
+     fhir:documentation [ fhir:v "helper function" ] ;
+     fhir:input ( [
+       fhir:name [ fhir:v "src" ] ;
+       fhir:type [ fhir:v "Section" ] ;
+       fhir:mode [ fhir:v "source" ]
+     ] [
+       fhir:name [ fhir:v "text" ] ;
+       fhir:type [ fhir:v "string" ] ;
+       fhir:mode [ fhir:v "target" ]
+     ] ) ;
+     fhir:rule ( [
+       fhir:name [ fhir:v "setstatus" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "src" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "text" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "status" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "empty" ]
+         ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "setdiv" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "src" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "text" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "div" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "<div xmlns=\"http://www.w3.org/1999/xhtml\">Narrative not available</div>" ]
+         ] )
+       ] )
+     ] )
+  ] [
+     fhir:name [ fhir:v "nameToHumanName" ] ;
+     fhir:typeMode [ fhir:v "none" ] ;
+     fhir:input ( [
+       fhir:name [ fhir:v "sourceName" ] ;
+       fhir:mode [ fhir:v "source" ]
+     ] [
+       fhir:name [ fhir:v "targetName" ] ;
+       fhir:type [ fhir:v "HumanName" ] ;
+       fhir:mode [ fhir:v "target" ]
+     ] ) ;
+     fhir:rule ( [
+       fhir:name [ fhir:v "Patient Name" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "sourceName" ] ;
+         fhir:variable [ fhir:v "patientName" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "targetName" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "text" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "patientName" ]
+         ] )
+       ] )
+     ] )
+  ] [
+     fhir:name [ fhir:v "humanNameToHumanName" ] ;
+     fhir:typeMode [ fhir:v "none" ] ;
+     fhir:input ( [
+       fhir:name [ fhir:v "sourceName" ] ;
+       fhir:mode [ fhir:v "source" ]
+     ] [
+       fhir:name [ fhir:v "targetName" ] ;
+       fhir:type [ fhir:v "HumanName" ] ;
+       fhir:mode [ fhir:v "target" ]
+     ] ) ;
+     fhir:rule ( [
+       fhir:name [ fhir:v "CopyUse" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "sourceName" ] ;
+         fhir:element [ fhir:v "use" ] ;
+         fhir:variable [ fhir:v "use" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "targetName" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "use" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "use" ]
+         ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "CopyText" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "sourceName" ] ;
+         fhir:element [ fhir:v "text" ] ;
+         fhir:variable [ fhir:v "text" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "targetName" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "text" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "text" ]
+         ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "CopyFamily" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "sourceName" ] ;
+         fhir:element [ fhir:v "family" ] ;
+         fhir:variable [ fhir:v "family" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "targetName" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "family" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "family" ]
+         ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "CopyGiven" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "sourceName" ] ;
+         fhir:element [ fhir:v "given" ] ;
+         fhir:variable [ fhir:v "given" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "targetName" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "given" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "given" ]
+         ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "CopyPrefix" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "sourceName" ] ;
+         fhir:element [ fhir:v "prefix" ] ;
+         fhir:variable [ fhir:v "prefix" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "targetName" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "prefix" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "prefix" ]
+         ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "CopySuffix" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "sourceName" ] ;
+         fhir:element [ fhir:v "suffix" ] ;
+         fhir:variable [ fhir:v "suffix" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "targetName" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "suffix" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "suffix" ]
+         ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "copyPeriod" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "sourceName" ] ;
+         fhir:element [ fhir:v "period" ] ;
+         fhir:variable [ fhir:v "sourcePeriod" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "targetName" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "period" ] ;
+         fhir:variable [ fhir:v "targetPeriod" ]
+       ] ) ;
+       fhir:rule ( [
+         fhir:name [ fhir:v "CopyPeriod" ] ;
+         fhir:source ( [
+           fhir:context [ fhir:v "sourcePeriod" ]
+         ] ) ;
+         fhir:dependent ( [
+           fhir:name [ fhir:v "periodToPeriod" ] ;
+           fhir:variable ( [ fhir:v "sourcePeriod" ] [ fhir:v "targetPeriod" ] )
+         ] )
+       ] )
+     ] )
+  ] [
+     fhir:name [ fhir:v "periodToPeriod" ] ;
+     fhir:typeMode [ fhir:v "none" ] ;
+     fhir:input ( [
+       fhir:name [ fhir:v "sourcePeriod" ] ;
+       fhir:mode [ fhir:v "source" ]
+     ] [
+       fhir:name [ fhir:v "targetPeriod" ] ;
+       fhir:type [ fhir:v "Period" ] ;
+       fhir:mode [ fhir:v "target" ]
+     ] ) ;
+     fhir:rule ( [
+       fhir:name [ fhir:v "set period start" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "sourcePeriod" ] ;
+         fhir:element [ fhir:v "start" ] ;
+         fhir:variable [ fhir:v "start" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "targetPeriod" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "start" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "start" ]
+         ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "set period end" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "sourcePeriod" ] ;
+         fhir:element [ fhir:v "end" ] ;
+         fhir:variable [ fhir:v "end" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "targetPeriod" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "end" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "end" ]
+         ] )
+       ] )
+     ] )
+  ] ) . # 
+
+# -------------------------------------------------------------------------------------
+

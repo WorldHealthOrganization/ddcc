@@ -1,0 +1,477 @@
+{
+  "resourceType" : "StructureMap",
+  "id" : "DVCLMtoDVCClaim",
+  "text" : {
+    "status" : "generated",
+    "div" : "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p class=\"res-header-id\"><b>Generated Narrative: StructureMap DVCLMtoDVCClaim</b></p><a name=\"DVCLMtoDVCClaim\"> </a><a name=\"hcDVCLMtoDVCClaim\"> </a><a name=\"DVCLMtoDVCClaim-en-US\"> </a><pre class=\"fml\">\r\n<b>map</b><span style=\"color: navy\"> &quot;</span>http://smart.who.int/icvp/StructureMap/DVCLMtoDVCClaim<span style=\"color: navy\">&quot; = &quot;</span>DVCLMtoDVCClaim<span style=\"color: navy\">&quot;\r\n\r\n</span><b>uses</b><span style=\"color: navy\"> &quot;</span><a href=\"StructureDefinition-ModelDVC.html\" title=\"DVC\">http://smart.who.int/icvp/StructureDefinition/ModelDVC</a><span style=\"color: navy\">&quot; </span><b>alias </b>DVCLogicalModel <b>as </b><b>source</b>\r\n<b>uses</b><span style=\"color: navy\"> &quot;</span><a href=\"StructureDefinition-ModelVaccineDetails.html\" title=\"DVC - Vaccine Details\">http://smart.who.int/icvp/StructureDefinition/ModelVaccineDetails</a><span style=\"color: navy\">&quot; </span><b>alias </b>ModelVaccineDetails <b>as </b><b>source</b>\r\n<b>uses</b><span style=\"color: navy\"> &quot;</span><a href=\"StructureDefinition-DVCPayload.html\" title=\"DVC HCERT Payload\">http://smart.who.int/icvp/StructureDefinition/DVCPayload</a><span style=\"color: navy\">&quot; </span><b>alias </b>DVCClaim <b>as </b><b>target</b>\r\n\r\n<b>group </b>DVCLMtoDVCClaim<span style=\"color: navy\">(</span><b>source</b> <span style=\"color: maroon\">lm</span><span style=\"color: navy\"> : </span>DVCLogicalModel, <b>target</b> <span style=\"color: maroon\">claim</span><span style=\"color: navy\"> : </span>DVCClaim<span style=\"color: navy\">)</span><span style=\"color: navy\"> {\r\n</span>  lm.name<b> as </b><span style=\"color: maroon\">name</span><span style=\"color: navy\"><b> -&gt; </b></span>claim.n = <span style=\"color: maroon\">name</span> <i>&quot;rule1&quot;</i><span style=\"color: navy\">;</span>\r\n  lm.dob<b> as </b><span style=\"color: maroon\">dob</span><span style=\"color: navy\"><b> -&gt; </b></span>claim.dob = <span style=\"color: maroon\">dob</span> <i>&quot;rule2&quot;</i><span style=\"color: navy\">;</span>\r\n  lm.sex<b> as </b><span style=\"color: maroon\">sex</span><b> then</b><span style=\"color: navy\"> {\r\n</span>    sex.code<b> as </b><span style=\"color: maroon\">code</span><span style=\"color: navy\"><b> -&gt; </b></span>claim.s = <span style=\"color: maroon\">code</span> <i>&quot;rule3&quot;</i><span style=\"color: navy\">;</span>\r\n  <span style=\"color: navy\">}</span> <i>&quot;rule3a&quot;</i><span style=\"color: navy\">;</span>\r\n  lm.nationality<b> as </b><span style=\"color: maroon\">nationality</span><b> then</b><span style=\"color: navy\"> {\r\n</span>    nationality.code<b> as </b><span style=\"color: maroon\">code</span><span style=\"color: navy\"><b> -&gt; </b></span>claim.ntl = <span style=\"color: maroon\">code</span> <i>&quot;rule4&quot;</i><span style=\"color: navy\">;</span>\r\n  <span style=\"color: navy\">}</span> <i>&quot;rule4a&quot;</i><span style=\"color: navy\">;</span>\r\n  lm.nid<b> as </b><span style=\"color: maroon\">nid</span><span style=\"color: navy\"><b> -&gt; </b></span>claim.nid = <span style=\"color: maroon\">nid</span> <i>&quot;rule5&quot;</i><span style=\"color: navy\">;</span>\r\n  lm.guardian<b> as </b><span style=\"color: maroon\">guardian</span><span style=\"color: navy\"><b> -&gt; </b></span>claim.gn = <span style=\"color: maroon\">guardian</span> <i>&quot;rule6&quot;</i><span style=\"color: navy\">;</span>\r\n  lm.vaccineDetails<b> as </b><span style=\"color: maroon\">vaccineDetails</span><span style=\"color: navy\"><b> -&gt; </b></span>claim.v<b> as </b><span style=\"color: maroon\">tVax</span><b> then </b>mapVaccineDetails<span style=\"color: navy\">(</span><span style=\"color: maroon\">vaccineDetails</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">tVax</span><span style=\"color: navy\">)</span> <i>&quot;rule7&quot;</i><span style=\"color: navy\">;</span>\r\n<span style=\"color: navy\">}\r\n\r\n</span><b>group </b>mapVaccineDetails<span style=\"color: navy\">(</span><b>source</b> <span style=\"color: maroon\">v</span><span style=\"color: navy\"> : </span>ModelVaccineDetails, <b>target</b> <span style=\"color: maroon\">tVax</span><span style=\"color: navy\"> : </span>BackboneElement<span style=\"color: navy\">)</span><span style=\"color: navy\"> {\r\n</span>  v.doseNumber<b> as </b><span style=\"color: maroon\">dn</span><b> then</b><span style=\"color: navy\"> {\r\n</span>    dn.Coding<b> as </b><span style=\"color: maroon\">coding</span><b> then</b><span style=\"color: navy\"> {\r\n</span>      coding.code<b> as </b><span style=\"color: maroon\">doseNumber</span><span style=\"color: navy\"><b> -&gt; </b></span>tVax.dn = <span style=\"color: maroon\">doseNumber</span> <i>&quot;rule8&quot;</i><span style=\"color: navy\">;</span>\r\n    <span style=\"color: navy\">}</span> <i>&quot;rule8a&quot;</i><span style=\"color: navy\">;</span>\r\n  <span style=\"color: navy\">}</span> <i>&quot;rule8b&quot;</i><span style=\"color: navy\">;</span>\r\n  v.disease<b> as </b><span style=\"color: maroon\">coding</span><b> then</b><span style=\"color: navy\"> {\r\n</span>    coding.code<b> as </b><span style=\"color: maroon\">disease</span><span style=\"color: navy\"><b> -&gt; </b></span>tVax.tg = <span style=\"color: maroon\">disease</span> <i>&quot;rule9&quot;</i><span style=\"color: navy\">;</span>\r\n  <span style=\"color: navy\">}</span> <i>&quot;rule9a&quot;</i><span style=\"color: navy\">;</span>\r\n  v.vaccineClassification<b> as </b><span style=\"color: maroon\">vc</span><b> then</b><span style=\"color: navy\"> {\r\n</span>    vc.Coding<b> as </b><span style=\"color: maroon\">coding</span><b> then</b><span style=\"color: navy\"> {\r\n</span>      coding.code<b> as </b><span style=\"color: maroon\">vaccine</span><span style=\"color: navy\"><b> -&gt; </b></span>mtVax.vp = <span style=\"color: maroon\">vaccine</span> <i>&quot;rule10&quot;</i><span style=\"color: navy\">;</span>\r\n    <span style=\"color: navy\">}</span> <i>&quot;rule10a&quot;</i><span style=\"color: navy\">;</span>\r\n  <span style=\"color: navy\">}</span> <i>&quot;rule10b&quot;</i><span style=\"color: navy\">;</span>\r\n  v.vaccineTradeItem<b> as </b><span style=\"color: maroon\">identifier</span><b> then</b><span style=\"color: navy\"> {\r\n</span>    identifier.value<b> as </b><span style=\"color: maroon\">id</span><span style=\"color: navy\"><b> -&gt; </b></span>tVax.mp = <span style=\"color: maroon\">id</span> <i>&quot;rule11&quot;</i><span style=\"color: navy\">;</span>\r\n  <span style=\"color: navy\">}</span> <i>&quot;rule11a&quot;</i><span style=\"color: navy\">;</span>\r\n  v.manufacturer<b> as </b><span style=\"color: maroon\">manufacturer</span><span style=\"color: navy\"><b> -&gt; </b></span>tVax.ma = <span style=\"color: maroon\">manufacturer</span> <i>&quot;rule12&quot;</i><span style=\"color: navy\">;</span>\r\n  v.manufacturerId<b> as </b><span style=\"color: maroon\">identifier</span><b> then</b><span style=\"color: navy\"> {\r\n</span>    identifier.value<b> as </b><span style=\"color: maroon\">mid</span><span style=\"color: navy\"><b> -&gt; </b></span>tVax.mid = <span style=\"color: maroon\">mid</span> <i>&quot;rule13&quot;</i><span style=\"color: navy\">;</span>\r\n  <span style=\"color: navy\">}</span> <i>&quot;rule13a&quot;</i><span style=\"color: navy\">;</span>\r\n  v.date<b> as </b><span style=\"color: maroon\">date</span><span style=\"color: navy\"><b> -&gt; </b></span>tVax.dt = <span style=\"color: maroon\">date</span> <i>&quot;rule14&quot;</i><span style=\"color: navy\">;</span>\r\n  v.batchNo<b> as </b><span style=\"color: maroon\">batch</span><span style=\"color: navy\"><b> -&gt; </b></span>tVax.bo = <span style=\"color: maroon\">batch</span> <i>&quot;rule15&quot;</i><span style=\"color: navy\">;</span>\r\n  v.validityPeriod<b> as </b><span style=\"color: maroon\">period</span><b> then</b><span style=\"color: navy\"> {\r\n</span>    period.start<b> as </b><span style=\"color: maroon\">start</span><span style=\"color: navy\"><b> -&gt; </b></span>tVax.vls = <span style=\"color: maroon\">start</span> <i>&quot;rule16&quot;</i><span style=\"color: navy\">;</span>\r\n    period.end<b> as </b><span style=\"color: maroon\">end</span><span style=\"color: navy\"><b> -&gt; </b></span>tVax.vle = <span style=\"color: maroon\">end</span> <i>&quot;rule17&quot;</i><span style=\"color: navy\">;</span>\r\n  <span style=\"color: navy\">}</span> <i>&quot;rule16a&quot;</i><span style=\"color: navy\">;</span>\r\n  v.clinicianName<b> as </b><span style=\"color: maroon\">clinicianName</span><span style=\"color: navy\"><b> -&gt; </b></span>tVax.cn = <span style=\"color: maroon\">clinicianName</span> <i>&quot;rule18&quot;</i><span style=\"color: navy\">;</span>\r\n  v.issuer<b> as </b><span style=\"color: maroon\">reference</span><b> then</b><span style=\"color: navy\"> {\r\n</span>    reference.id<b> as </b><span style=\"color: maroon\">issuer</span><span style=\"color: navy\"><b> -&gt; </b></span>tVax.is = <span style=\"color: maroon\">issuer</span> <i>&quot;rule19&quot;</i><span style=\"color: navy\">;</span>\r\n  <span style=\"color: navy\">}</span> <i>&quot;rule19a&quot;</i><span style=\"color: navy\">;</span>\r\n<span style=\"color: navy\">}\r\n\r\n</span></pre></div>"
+  },
+  "url" : "http://smart.who.int/icvp/StructureMap/DVCLMtoDVCClaim",
+  "version" : "0.1.0",
+  "name" : "DVCLMtoDVCClaim",
+  "status" : "draft",
+  "date" : "2024-10-07T07:31:05+00:00",
+  "publisher" : "WHO",
+  "contact" : [{
+    "name" : "WHO",
+    "telecom" : [{
+      "system" : "url",
+      "value" : "http://who.int"
+    }]
+  }],
+  "structure" : [{
+    "url" : "http://smart.who.int/icvp/StructureDefinition/ModelDVC",
+    "mode" : "source",
+    "alias" : "DVCLogicalModel"
+  },
+  {
+    "url" : "http://smart.who.int/icvp/StructureDefinition/ModelVaccineDetails",
+    "mode" : "source",
+    "alias" : "ModelVaccineDetails"
+  },
+  {
+    "url" : "http://smart.who.int/icvp/StructureDefinition/DVCPayload",
+    "mode" : "target",
+    "alias" : "DVCClaim"
+  }],
+  "group" : [{
+    "name" : "DVCLMtoDVCClaim",
+    "typeMode" : "none",
+    "input" : [{
+      "name" : "lm",
+      "type" : "DVCLogicalModel",
+      "mode" : "source"
+    },
+    {
+      "name" : "claim",
+      "type" : "DVCClaim",
+      "mode" : "target"
+    }],
+    "rule" : [{
+      "name" : "rule1",
+      "source" : [{
+        "context" : "lm",
+        "element" : "name",
+        "variable" : "name"
+      }],
+      "target" : [{
+        "context" : "claim",
+        "contextType" : "variable",
+        "element" : "n",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "name"
+        }]
+      }]
+    },
+    {
+      "name" : "rule2",
+      "source" : [{
+        "context" : "lm",
+        "element" : "dob",
+        "variable" : "dob"
+      }],
+      "target" : [{
+        "context" : "claim",
+        "contextType" : "variable",
+        "element" : "dob",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "dob"
+        }]
+      }]
+    },
+    {
+      "name" : "rule3a",
+      "source" : [{
+        "context" : "lm",
+        "element" : "sex",
+        "variable" : "sex"
+      }],
+      "rule" : [{
+        "name" : "rule3",
+        "source" : [{
+          "context" : "sex",
+          "element" : "code",
+          "variable" : "code"
+        }],
+        "target" : [{
+          "context" : "claim",
+          "contextType" : "variable",
+          "element" : "s",
+          "transform" : "copy",
+          "parameter" : [{
+            "valueId" : "code"
+          }]
+        }]
+      }]
+    },
+    {
+      "name" : "rule4a",
+      "source" : [{
+        "context" : "lm",
+        "element" : "nationality",
+        "variable" : "nationality"
+      }],
+      "rule" : [{
+        "name" : "rule4",
+        "source" : [{
+          "context" : "nationality",
+          "element" : "code",
+          "variable" : "code"
+        }],
+        "target" : [{
+          "context" : "claim",
+          "contextType" : "variable",
+          "element" : "ntl",
+          "transform" : "copy",
+          "parameter" : [{
+            "valueId" : "code"
+          }]
+        }]
+      }]
+    },
+    {
+      "name" : "rule5",
+      "source" : [{
+        "context" : "lm",
+        "element" : "nid",
+        "variable" : "nid"
+      }],
+      "target" : [{
+        "context" : "claim",
+        "contextType" : "variable",
+        "element" : "nid",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "nid"
+        }]
+      }]
+    },
+    {
+      "name" : "rule6",
+      "source" : [{
+        "context" : "lm",
+        "element" : "guardian",
+        "variable" : "guardian"
+      }],
+      "target" : [{
+        "context" : "claim",
+        "contextType" : "variable",
+        "element" : "gn",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "guardian"
+        }]
+      }]
+    },
+    {
+      "name" : "rule7",
+      "source" : [{
+        "context" : "lm",
+        "element" : "vaccineDetails",
+        "variable" : "vaccineDetails"
+      }],
+      "target" : [{
+        "context" : "claim",
+        "contextType" : "variable",
+        "element" : "v",
+        "variable" : "tVax"
+      }],
+      "dependent" : [{
+        "name" : "mapVaccineDetails",
+        "variable" : ["vaccineDetails",
+        "tVax"]
+      }]
+    }]
+  },
+  {
+    "name" : "mapVaccineDetails",
+    "typeMode" : "none",
+    "input" : [{
+      "name" : "v",
+      "type" : "ModelVaccineDetails",
+      "mode" : "source"
+    },
+    {
+      "name" : "tVax",
+      "type" : "BackboneElement",
+      "mode" : "target"
+    }],
+    "rule" : [{
+      "name" : "rule8b",
+      "source" : [{
+        "context" : "v",
+        "element" : "doseNumber",
+        "variable" : "dn"
+      }],
+      "rule" : [{
+        "name" : "rule8a",
+        "source" : [{
+          "context" : "dn",
+          "element" : "Coding",
+          "variable" : "coding"
+        }],
+        "rule" : [{
+          "name" : "rule8",
+          "source" : [{
+            "context" : "coding",
+            "element" : "code",
+            "variable" : "doseNumber"
+          }],
+          "target" : [{
+            "context" : "tVax",
+            "contextType" : "variable",
+            "element" : "dn",
+            "transform" : "copy",
+            "parameter" : [{
+              "valueId" : "doseNumber"
+            }]
+          }]
+        }]
+      }]
+    },
+    {
+      "name" : "rule9a",
+      "source" : [{
+        "context" : "v",
+        "element" : "disease",
+        "variable" : "coding"
+      }],
+      "rule" : [{
+        "name" : "rule9",
+        "source" : [{
+          "context" : "coding",
+          "element" : "code",
+          "variable" : "disease"
+        }],
+        "target" : [{
+          "context" : "tVax",
+          "contextType" : "variable",
+          "element" : "tg",
+          "transform" : "copy",
+          "parameter" : [{
+            "valueId" : "disease"
+          }]
+        }]
+      }]
+    },
+    {
+      "name" : "rule10b",
+      "source" : [{
+        "context" : "v",
+        "element" : "vaccineClassification",
+        "variable" : "vc"
+      }],
+      "rule" : [{
+        "name" : "rule10a",
+        "source" : [{
+          "context" : "vc",
+          "element" : "Coding",
+          "variable" : "coding"
+        }],
+        "rule" : [{
+          "name" : "rule10",
+          "source" : [{
+            "context" : "coding",
+            "element" : "code",
+            "variable" : "vaccine"
+          }],
+          "target" : [{
+            "context" : "mtVax",
+            "contextType" : "variable",
+            "element" : "vp",
+            "transform" : "copy",
+            "parameter" : [{
+              "valueId" : "vaccine"
+            }]
+          }]
+        }]
+      }]
+    },
+    {
+      "name" : "rule11a",
+      "source" : [{
+        "context" : "v",
+        "element" : "vaccineTradeItem",
+        "variable" : "identifier"
+      }],
+      "rule" : [{
+        "name" : "rule11",
+        "source" : [{
+          "context" : "identifier",
+          "element" : "value",
+          "variable" : "id"
+        }],
+        "target" : [{
+          "context" : "tVax",
+          "contextType" : "variable",
+          "element" : "mp",
+          "transform" : "copy",
+          "parameter" : [{
+            "valueId" : "id"
+          }]
+        }]
+      }]
+    },
+    {
+      "name" : "rule12",
+      "source" : [{
+        "context" : "v",
+        "element" : "manufacturer",
+        "variable" : "manufacturer"
+      }],
+      "target" : [{
+        "context" : "tVax",
+        "contextType" : "variable",
+        "element" : "ma",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "manufacturer"
+        }]
+      }]
+    },
+    {
+      "name" : "rule13a",
+      "source" : [{
+        "context" : "v",
+        "element" : "manufacturerId",
+        "variable" : "identifier"
+      }],
+      "rule" : [{
+        "name" : "rule13",
+        "source" : [{
+          "context" : "identifier",
+          "element" : "value",
+          "variable" : "mid"
+        }],
+        "target" : [{
+          "context" : "tVax",
+          "contextType" : "variable",
+          "element" : "mid",
+          "transform" : "copy",
+          "parameter" : [{
+            "valueId" : "mid"
+          }]
+        }]
+      }]
+    },
+    {
+      "name" : "rule14",
+      "source" : [{
+        "context" : "v",
+        "element" : "date",
+        "variable" : "date"
+      }],
+      "target" : [{
+        "context" : "tVax",
+        "contextType" : "variable",
+        "element" : "dt",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "date"
+        }]
+      }]
+    },
+    {
+      "name" : "rule15",
+      "source" : [{
+        "context" : "v",
+        "element" : "batchNo",
+        "variable" : "batch"
+      }],
+      "target" : [{
+        "context" : "tVax",
+        "contextType" : "variable",
+        "element" : "bo",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "batch"
+        }]
+      }]
+    },
+    {
+      "name" : "rule16a",
+      "source" : [{
+        "context" : "v",
+        "element" : "validityPeriod",
+        "variable" : "period"
+      }],
+      "rule" : [{
+        "name" : "rule16",
+        "source" : [{
+          "context" : "period",
+          "element" : "start",
+          "variable" : "start"
+        }],
+        "target" : [{
+          "context" : "tVax",
+          "contextType" : "variable",
+          "element" : "vls",
+          "transform" : "copy",
+          "parameter" : [{
+            "valueId" : "start"
+          }]
+        }]
+      },
+      {
+        "name" : "rule17",
+        "source" : [{
+          "context" : "period",
+          "element" : "end",
+          "variable" : "end"
+        }],
+        "target" : [{
+          "context" : "tVax",
+          "contextType" : "variable",
+          "element" : "vle",
+          "transform" : "copy",
+          "parameter" : [{
+            "valueId" : "end"
+          }]
+        }]
+      }]
+    },
+    {
+      "name" : "rule18",
+      "source" : [{
+        "context" : "v",
+        "element" : "clinicianName",
+        "variable" : "clinicianName"
+      }],
+      "target" : [{
+        "context" : "tVax",
+        "contextType" : "variable",
+        "element" : "cn",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "clinicianName"
+        }]
+      }]
+    },
+    {
+      "name" : "rule19a",
+      "source" : [{
+        "context" : "v",
+        "element" : "issuer",
+        "variable" : "reference"
+      }],
+      "rule" : [{
+        "name" : "rule19",
+        "source" : [{
+          "context" : "reference",
+          "element" : "id",
+          "variable" : "issuer"
+        }],
+        "target" : [{
+          "context" : "tVax",
+          "contextType" : "variable",
+          "element" : "is",
+          "transform" : "copy",
+          "parameter" : [{
+            "valueId" : "issuer"
+          }]
+        }]
+      }]
+    }]
+  }]
+}

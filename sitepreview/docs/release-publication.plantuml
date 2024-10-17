@@ -1,0 +1,94 @@
+@startuml
+actor User
+hide footbox
+!pragma teoz true
+
+box "\nGitHub repositories\n"
+  box "SMART Guideline CI Repository" #FFE
+   participant "**main**" as main
+   participant "release\ncandidate" as relc
+   participant "gh-pages" as gh
+   participant "gh-pages\nwebsite" as ghw
+  end box
+
+  box "smart.who.int" #EFE
+'   participant "preview" as rels
+    participant "site\ncontent\n(main)" as site
+    participant "site\nbackup" as siteb
+end box
+
+end box
+
+box "Publication sites" #EFF
+participant "<b>GH\n<b>Pages" as ghsite
+participant "<b>FHIR\n<b>CI" as fhirsite
+participant "**Release**\n**site**" as relsite
+
+'participant "<b>https://worldhealthorganization.github.io/<ig></b>" as cisite
+'participant "<b>https://build.fhir.org/ig/worldhealthorganization/<ig></b>" as fhirsite
+end box
+
+box "Dependencies" #FEE
+participant "IG\nRegistry" as reg
+
+end box
+
+...
+group Develop and Iterate
+User -> main : commit
+activate main
+main --> main : build
+main --> gh : deploy
+activate gh
+& gh --> ghsite : Publish
+& gh --> fhirsite : Publish
+end 
+deactivate main
+...
+
+group Setup IG release
+'User -> main: add package-list.json
+User -> site : setup
+activate site
+& note right of site
+webroot folder
+publish-setup.json
+org, history templates
+end note
+site -> relsite: Initial\ncontent
+activate relsite #CEF
+end
+
+group Publish a new release
+User -> relc: publication-request.json
+relc -> relc: normal build
+
+
+'get site to working area
+'build working area and add release
+
+
+group Build release into site
+site -> siteb : backup\ncurrent site
+& site -> ghw : pull\ncurrent site
+relc -> ghw: pull candidate\nrelease content
+'activate ghw
+reg -> ghw : pull\nig-registry 
+ghw -> ghw: **build**\n**release**\n**to preview**\n**website**
+
+activate ghw #FD9
+
+end
+...
+User -> ghw: Review
+
+ghw -> site : PR\n(squash)
+deactivate ghw
+site -> relsite : Publish
+
+...
+User -> ghw : (create PR)
+& ghw -> reg : (create PR)
+
+end
+@enduml

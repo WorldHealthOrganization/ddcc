@@ -1,0 +1,974 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE HTML>
+<html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta content="text/html;charset=utf-8" http-equiv="Content-Type"/>
+    <title>Trust Network Gateway Architecture - WHO SMART Trust v1.0.0</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="author" content="http://hl7.org/fhir"/>
+
+    <link href="fhir.css" rel="stylesheet"/>
+    <link href="assets/css/fa-all.css" rel="stylesheet" type="text/css" />
+    <!-- Bootstrap core CSS -->
+    <link href="assets/css/bootstrap-fhir.css" rel="stylesheet"/>
+
+    <!-- Project extras -->
+    <link href="assets/css/project.css" rel="stylesheet"/>
+    <link href="assets/css/pygments-manni.css" rel="stylesheet"/>
+    <link href="assets/css/jquery-ui.css" rel="stylesheet"/>
+  	<link href="assets/css/prism.css" rel="stylesheet" />
+    <!-- Placeholder for child template CSS declarations -->
+    <link href="assets/css/who.css" rel="stylesheet"/>
+    <link href="assets/css/lforms.min.css" rel="stylesheet"/>
+
+    <script type="text/javascript" src="fhir-table-scripts.js"> </script>
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="assets/js/html5shiv.js"></script>
+    <script src="assets/js/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Favicons -->
+    <link rel="fhir-logo" sizes="144x144" href="assets/ico/icon-fhir-144.png"/>
+    <link rel="fhir-logo" sizes="114x114" href="assets/ico/icon-fhir-114.png"/>
+    <link rel="fhir-logo" sizes="72x72" href="assets/ico/icon-fhir-72.png"/>
+    <link rel="fhir-logo" href="assets/ico/icon-fhir-57.png"/>
+    <link rel="shortcut icon" href="assets/ico/favicon.png"/>
+  </head>
+  <body onload="document.body.style.opacity='1'">
+
+	  <script src="assets/js/prism.js"></script>
+
+    <style type="text/css">h2{--heading-prefix:"45"}
+    h3,h4,h5,h6{--heading-prefix:"45"}</style>
+    <div id="segment-header" class="segment">  <!-- segment-header -->
+
+      <div id="segment-navbar" class="segment">  <!-- segment-navbar -->
+        <div id="stripe"> </div>
+        <div class="container">  <!-- container -->
+          <!-- HEADER CONTENT -->
+  
+          <nav class="navbar navbar-inverse">
+            <!--status-bar-->
+            <div class="container">
+              <button data-target=".navbar-inverse-collapse" class="navbar-toggle" data-toggle="collapse" type="button">
+                <span class="icon-bar"> </span>
+                <span class="icon-bar"> </span>
+                <span class="icon-bar"> </span>
+              </button>
+              <a class="navbar-brand hidden" href="http://hl7.org/fhir/R4/index.html">FHIR</a>
+              <div class="nav-collapse collapse navbar-inverse-collapse">
+                <ul xmlns="http://www.w3.org/1999/xhtml" class="nav navbar-nav">
+  
+  <li class="dropdown">
+    <a data-toggle="dropdown" href="index.html" class="dropdown-toggle">Home<b class="caret"></b></a>
+    <ul class="dropdown-menu">
+      <li><a href="index.html">Summary</a></li>
+      <li><a href="changes.html">Changes</a></li>
+      <li><a href="dependencies.html">Dependencies</a></li>
+      <li><a href="references.html">References</a></li>
+	  <li><a href="adapting_guidelines.html">Adapting Guidelines for Country Use</a></li>
+    </ul>
+  </li>
+  <li class="dropdown">
+    <a data-toggle="dropdown" href="requirements.html" class="dropdown-toggle">Business Requirements<b class="caret"></b></a>
+    <ul class="dropdown-menu">
+      <li><a href="concepts.html">Concepts</a></li>
+      <li><a href="use_cases.html">Use Cases</a></li>
+      <li><a href="decision_support.html">Decision Support Logic</a></li>
+      <li><a href="functional.html">Functional Requirements</a></li>    
+    </ul>
+  </li>
+
+  <li class="dropdown">
+    <a data-toggle="dropdown" href="data_exchange.html" class="dropdown-toggle">Data Models and Exchange<b class="caret"></b></a>
+    <ul class="dropdown-menu">
+      <li><a href="actors.html">System Actors</a></li>
+      <li><a href="transactions.html">Transactions</a></li>
+      <li><a href="workflows.html">Workflows</a></li>
+      <li><a href="content_profiles.html">Content Profiles</a></li>
+    </ul>
+  </li>
+  <li class="dropdown">
+    <a data-toggle="dropdown" href="deployment.html" class="dropdown-toggle"> Deployment<b class="caret"></b></a>
+    <ul class="dropdown-menu">
+      <li><a href="security_privacy.html">Security and Privacy Considerations</a></li>
+      <li><a href="testing.html">Testing</a></li>
+	  <li><a href="reference_implementation.html">Reference Implementations</a></li>
+      <li><a href="downloads.html">Downloads</a></li>
+    </ul>
+  </li>
+	<li class="dropdown">
+		<a data-toggle="dropdown" href="deployment.html" class="dropdown-toggle"> Indices<b class="caret"></b></a>
+		<ul class="dropdown-menu">
+		  <li><a href="artifacts.html">Artifact Index</a></li>
+		   <li><a href="maps.html">Maps</a></li>
+		</ul>
+	</li>
+</ul>      
+
+              </div>  <!-- /.nav-collapse -->
+
+              <div class="sf_colsIn col-md-8  navbar-right-container" data-sf-element="LanguageSelectorSearch" data-placeholder-label="Language Selector and Search" style="display: flex; justify-content: flex-end; align-items: center;">
+                <!-- This div will be pushed to the right -->
+                <div class="language-selector" style="margin-left: auto; background-color: #00477d; color: white;">
+                  <i class="fa fa-language fa-lg"></i>
+                  <label for="language-selector"> </label>
+                  <select onChange="openLink(value)" id="language-selector" name="language-selector">
+                    <option disabled selected>Select language</option>
+                    <option value="en" class="selected">English</option>
+                  </select>
+                  <i class="fas fa-angle-down"></i>
+                </div>
+                <!-- Search Content -->
+              </div>
+            </div>  <!-- /.container -->
+          </nav>  <!-- /.navbar -->
+        <!-- /HEADER CONTENT -->
+        </div>  <!-- /container -->
+      </div>  <!-- /segment-navbar -->
+      
+
+      <div class="container" style=" justify-content: space-between; align-items: left;">
+
+        <!-- Placeholder for child template header declarations -->
+<div id="project-nav">
+    <a id="who-logo" no-external="true" href="index.html">
+      
+<img height="50" style="margin:7px" alt="Welcome on standards website" src="assets/images/h-logo-blue.svg"/>
+        
+    </a>
+</div>
+
+ <div id="family-nav">
+  <a id="fhir-logo" no-external="true" href="http://hl7.org/fhir">  </a>
+</div> 
+
+
+        <div id="ig-status" class="ig-status-active">
+          <p><span style="font-size:12pt;font-weight:bold">WHO SMART Trust</span>
+            <br/>
+            <span style="display:inline-block;">1.0.0 - 1.0.0
+
+
+
+  <img alt="International flag" src="assets/images/001.svg" height="16" title="International"/>
+
+
+            </span>
+          </p>
+        </div>
+      </div> <!-- /container -->
+    </div>  <!-- /segment-header -->
+
+
+    <!--status-bar-->
+
+    <div id="segment-breadcrumb" class="segment">  <!-- segment-breadcrumb -->
+      <div class="container">  <!-- container -->
+        <ul class="breadcrumb">
+          <li><a href='toc.html'><b>Table of Contents</b></a></li><li><b>Trust Network Gateway Architecture</b></li>
+
+        </ul>
+      </div>  <!-- /container -->
+    </div>  <!-- /segment-breadcrumb -->
+
+    <a name="top"> </a>
+    <div id="segment-content" class="segment">  <!-- segment-content -->
+      <div class="container">  <!-- container -->
+        <div class="row">
+          <div class="inner-wrapper">
+
+<style type="text/css">
+h2:before{color:silver;counter-increment:section;content:var(--heading-prefix) " ";}
+h3:before{color:silver;counter-increment:sub-section;content:var(--heading-prefix) "." counter(sub-section) " ";}
+h4:before{color:silver;counter-increment:composite;content:var(--heading-prefix) "." counter(sub-section) "." counter(composite) " ";}
+h5:before{color:silver;counter-increment:detail;content:var(--heading-prefix) "." counter(sub-section) "." counter(composite) "." counter(detail) " ";}
+h6:before{color:silver;counter-increment:more-detail;content:var(--heading-prefix) "." counter(sub-section) "." counter(composite) "." counter(detail) "." counter(more-detail)" ";}
+</style>
+<div class="col-12">
+  <!--ReleaseHeader--><p id="publish-box">This page is part of the Trust (v1.0.0: Release) based on <a no-external="true" href="http://hl7.org/fhir/R4">FHIR (HL7® FHIR® Standard) R4</a>. This is the current published version in its permanent home (it will always be available at this URL).  For a full list of available versions, see the <a no-external="true" href="http://smart.who.int/trust/history.html">Directory of published versions</a></p><!--EndReleaseHeader-->
+  <h2>Trust Network Gateway Architecture</h2>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+    <p><!-- white space is critical inside of capture --></p>
+<div class="markdown-toc">
+<ul id="markdown-toc">
+  <li><a href="#terminology" id="markdown-toc-terminology">Terminology</a></li>
+  <li><a href="#introduction" id="markdown-toc-introduction">Introduction</a></li>
+  <li><a href="#gateway-design-vision" id="markdown-toc-gateway-design-vision">Gateway Design Vision</a></li>
+  <li><a href="#architecture-overview" id="markdown-toc-architecture-overview">Architecture Overview</a></li>
+  <li><a href="#architecture-modifications--changes" id="markdown-toc-architecture-modifications--changes">Architecture Modifications &amp; Changes</a></li>
+</ul>
+
+</div>
+<h3 id="terminology">Terminology</h3>
+
+<p>These <a href="concepts.html">concepts</a> and the following table contains abbreviations and terminology used throughout this document.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Term</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>DCC</td>
+      <td>Digital COVID-19 Certificate.</td>
+    </tr>
+    <tr>
+      <td>DDCC</td>
+      <td>Digital Documentation COVID-19 Certificate.</td>
+    </tr>
+    <tr>
+      <td>DCC Gateway</td>
+      <td>REST web-application for exchange of document signer certificates, DCC value sets, DCC business rules and revocation lists for dcc verification purposes between the national backends of connected states.</td>
+    </tr>
+    <tr>
+      <td>ffline SCA certificates.</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>CMS</td>
+      <td>Cryptographic Message Syntax. According to <a href="https://datatracker.ietf.org/doc/html/rfc5652">RFC5652</a>. This syntax is used to digitally sign, digest, authenticate or encrypt arbitrary message content.</td>
+    </tr>
+    <tr>
+      <td>JRC</td>
+      <td>European Joint Research Centre.</td>
+    </tr>
+    <tr>
+      <td>OG</td>
+      <td>Origin Gateway.</td>
+    </tr>
+    <tr>
+      <td><a href="https://cql.hl7.org/">CQL</a></td>
+      <td>Clinical Quality Language.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="introduction">Introduction</h3>
+<p>This architectural specification provides the means to establish a federated trust network for use with health records like WHO Digital Documentation of COVID-19 Certificates (DDCC) technical specifications and implementation guidance documents. This is based on the assumption that Trust Network Participant may establish their own independent national trust networks, participate in a regional trust network, or wish to participate in a global federated trust network. Furthermore, Trust Network Participant may wish for these trust networks to be interoperable for domestic and cross-jurisdictional use cases. While specific governance and policy considerations required in the establishment of such interoperable trust networks is out of scope of this document, the intent is that the technical design within this document would support intra-jursidictional and cross-jurisdictional policies of Trust Network Participant.</p>
+
+<p>The Trust Network Gateway (TNG) specifications in this document are designed to support the DDCC specification, which acts as bridging/umbrella specification for various health records like digital COVID certificates (e.g., EU’s DCC, SMART Health Cards, DIVOC, and ICAO). This specification builds on the <a href="https://ec.europa.eu/health/sites/default/files/ehealth/docs/digital-green-certificates_v2_en.pdf">EU Digital Covid Certificate Gateway</a> by extending it in several important ways:</p>
+<ul>
+  <li>allowing for federation and peer exchange of information between gateways;</li>
+  <li>supporting access to metadata content (e.g. value sets/codings, business rules) with explicit adherence to the HL7 FHIR specification;</li>
+  <li>providing an explicit means for revocation of digital COVID certificates; and</li>
+  <li>allowing for (optional) support of online verification and validation workflows.</li>
+</ul>
+
+<p>Within the current DCC system the centralized gateway plays the key role of establishing  trust between all of the connected Trust Network Participant. The gateway operators follow a well-documented process to establish the identity and onboard the trust anchor of each Trust Network Participant. The TNG builds upon this system to enable the creation of trust gateways by other organizations which allows to form a federated network of trust gateways, supporting all of the major COVID-19 credential certificates.</p>
+
+<h4 id="trusted-party-vs-national-backend">Trusted Party vs. National Backend</h4>
+<p>The current gateway design is focused on the trust establishment between “National Backends” in terms of a system operated/owned by a national health authority. This can be a script, a fully automated solution or a manual process, which is able to connect the gateway trustfully and able to do uploads and downloads of the content. What other concrete solutions are behind is not in scope of the gateway itself. Within the DDCC scope, the term “National Backend” is worded too sharply, because there can be other parties which can be connected with their publishing system to a gateway in the trust network. Therefore the term “national backend” should be understood within this scope more as “Trusted Party” in terms of an attendee which has received access to a trusted gateway. The trusted gateway or the federator acts then as well as “Trusted Party” to other gateways.</p>
+
+<h3 id="gateway-design-vision">Gateway Design Vision</h3>
+<p>Currently EU DCC Gateway is a single centralized system which establishes trust between DCC participants and enables the sharing of business rules, value sets and revocation lists. If another region in the world establishes such a gateway, there is currently no method in the architecture to exchange these trusted data between the two gateways. In this new architecture within the DDCC context, multiple gateways can be connected to each other and share trusted data. In the long term, this architecture will allow the creation of groups and ultimately the establishment of a federation. Such an architecture may be applicable and of interest for non-authority parties e.g. airlines, which desire a read only copy of the gateway content. This can be established by onboarding the airline in a gateway specially setup for this purpose and is connected to the official gateway. To achieve this goal, the architecture must support multiple operation modes e.g. Primary-Secondary. 
+The current implementation of EU DCCG is, as mentioned before, a single centralized system which serves as a hub for storing and managing the necessary information gathered from the Trusted Parties.</p>
+
+<p><img src="CurrentView.drawio.png" alt="EU DCC Gateway Design - Central Implementation" style="width:400px; float:none; margin: 0px 0px 0px 0px;" /></p>
+
+<p>The TNG should realize this enhancement of the current implementation of DCCG with the purpose to create a network between multiple gateways for exchanging health record associated public key material, value sets and business rules between different parties (authority, non-authority, commercial). In this architecture a gateway can connect to any other gateway by manually configuring the list of connections and trust relationships. To manage the connections and their download behavior a new component federator is introduced. The federator is a microservice which acts as an automated download client between two gateways and fulfills all responsibilities of trusted data exchange.</p>
+
+<p><img src="ArchitectureVision.drawio.png" alt="TNG Design - Federated Implementations" style="width:400px; float:none; margin: 0px 0px 0px 0px;" /></p>
+
+<p>The backbone of this data exchange is the functionality of the current connector library which connects to the gateway and provides for the consumer the most necessary functionalities. This library is enhanced by the functionality to connect multiple gateways instead of one.</p>
+
+<h4 id="use-cases">Use Cases</h4>
+
+<h5 id="bilateral-onboarding">Bilateral Onboarding</h5>
+<p>In Bilateral Onboarding use case the <a href="https://github.com/WorldHealthOrganization/ddcc-gateway-lib">connector library</a> connects as a trusted party to multiple gateways for downloading/uploading content. This requires onboarding on both gateways.</p>
+
+<p><img src="BilateralUsage.drawio.png" alt="TNG Use Case - Bilateral Onboarding" style="width:400px; float:none; margin: 0px 0px 0px 0px;" /></p>
+
+<h5 id="peer-to-peer-exchange">Peer to Peer Exchange</h5>
+<p>In the peer-to-peer exchange use case, two or more gateways are able to exchange their data in a bi-directional manner. The source and the target gateway enable each other to download the data. All exchanged data will be appended to the existing data within the gateway. This can include the data of third-party gateways, if permitted by the data exchange agreement between two gateways.</p>
+
+<p><img src="P2PExchange.drawio.png" alt="TNG Use Case - Peer-to-Peer" style="width:400px; float:none; margin: 0px 0px 0px 0px;" /></p>
+
+<h5 id="primary-secondary-exchange">Primary-Secondary Exchange</h5>
+<p>In the primary-secondary exchange use case one or several gateways act as primary source, and another set of gateways act as secondary source . Within this mode, secondaries will download the data of the primary and append it to their own dataset or replace their dataset with the downloaded data. The primary ignores the data of the secondaries, which act just as read copies of the primary gateway. The leading national backends can connect to the primary gateway and upload the data to the one primary gateway.</p>
+
+<p><img src="PrimarySecondaryExchange.drawio.png" alt="TNG Use Case - Primary-Secondary Exchange" style="width:400px; float:none; margin: 0px 0px 0px 0px;" /></p>
+
+<h5 id="combined-sources-exchange">Combined Sources Exchange</h5>
+<p>In the combined sources exchange use case, the gateway will download data from multiple gateways and append it to its own data set. This results in a combined collection.</p>
+
+<p><img src="CombineSourcesExchange.drawio.png" alt="TNG Use Case - Primary-Secondary" style="width:400px; float:none; margin: 0px 0px 0px 0px;" /></p>
+
+<h5 id="trust-mediator">Trust Mediator</h5>
+<p>The gateway content can be used to establish trust between attendees which are just loosely coupled, for example Verifier Devices which are known by Trusted Party A, but not directly known by Trusted Party B.</p>
+
+<p><img src="ImplicitTrustRelationShip.drawio.png" alt="TNG Use Case - Implict Trust Relation" style="width:400px; float:none; margin: 0px 0px 0px 0px;" /></p>
+
+<p>To establish the trust between attendees, a trust mediator can be generated which relies on the trustlist of the gateway. The mediator can then use this information to decide whether the trust relationship should be established or not. For instance, the interceptor can check if a signature of a JWT was created by the public key of a certificate which was signed by an onboarded SCA. When the SCA is onboarded and trusted, it proves that the signature was made by someone which has the trust of this SCA. The trust for this attendee is then also given.</p>
+
+<p><img src="ExplicitTrustRelation.drawio.png" alt="TNG Use Case - Excplicit Trust Relation" style="width:400px; float:none; margin: 0px 0px 0px 0px;" /></p>
+
+<h3 id="architecture-overview">Architecture Overview</h3>
+
+<p>The Trust Network Gateway purpose is to enable the secured and trusted exchange of data within a trust network.</p>
+
+<h4 id="data-exchanged-by-tng">Data exchanged by TNG</h4>
+
+<h5 id="metadata-exchange">Metadata Exchange</h5>
+<p>TNG provides an interoperable means for exchanging key metadata in support of digital COVID-19 certificates using the HL7 FHIR standards. This includes, in particular:</p>
+<ul>
+  <li><strong>Value Sets</strong> which should be shared using the transactions defined in the IHE Sharing Value Sets and Concept Maps (SVCM) profile and include the following resources:
+    <ul>
+      <li>HL7 FHIR ValueSet resources to share codings and terminologies referenced by the various digital COVID certificate specifications (e.g. allowed vaccines or tests).   - HL7 FHIR ConceptMaps may be used to provide mappings between jurisdictionally defined coding DDCC specification coding.</li>
+    </ul>
+  </li>
+  <li><strong>Business Rules</strong> which should follow the <a href="https://docs.google.com/presentation/d/1Bb6oA-4_qPYwvg6iQcZS8CNL1XvdT0R30Vmv9zIstPs/edit#slide=id.gcb76b23c16_2_169">Knowledge Artifact</a> and <a href="https://build.fhir.org/clinicalreasoning-cds-on-fhir.html">Clinical Decision Support infrastructure</a> including the following resources:
+    <ul>
+      <li>HL7 FHIR Library resources to share libraries of business rules expressed using Clinical Quality Language (CQL)</li>
+      <li>HL7 FHIR PlanDefinition resources to indicate which business rule should be executed based on the relevant validation or continuity of care use cases.</li>
+    </ul>
+  </li>
+</ul>
+
+<p>To abstract these requirements, the Trust Network Gateway will introduce a new functionality called “Trusted References”, which allows the gateway to share any kind of service endpoint without sharing the content itself. For backwards compatibility, the functionalities of the DCC Business Rules and Value Sets remain in the architecture, but can be configured to be disabled using profiles. The explicit endpoints for business rules and value sets will be replaced by the trusted references, as the wide variance of medical content should be left to FHIR server implementations instead of the implementation of each service in the gateway itself.</p>
+
+<h5 id="public-key-exchange">Public Key Exchange</h5>
+<p>TNG provides a way to share public keys that are used to sign digital COVID certificates as well as provide lists of revoked public key certificates.</p>
+
+<h5 id="reference-exchange">Reference Exchange</h5>
+<p>TNG provides the functionality to store secure and trustful resources (i.e. FHIR value sets or Business Rule) which ensures that all attendees in the system have precise knowledge about important sources. These references can be stored in the form of URLs.</p>
+
+<h5 id="issuer-exchange">Issuer Exchange</h5>
+<p>For some Credential Types such as Verifiable Credentials, TNG is necessary to ensure the trust in issuers of those credentials. Most credentials carry an issuer ID such as an HTTP URL or a DID with the public key material to verify these credentials. To provide a trusted list of these issuers, the gateway provides functionality to upload issuer IDs.</p>
+
+<h4 id="solution-concept">Solution Concept</h4>
+<p>To realize the architectural vision, the existing DCC Gateway will be enhanced by a microservice which implements the TNG Federator component. This federator component is deployed next to the gateway and it handles the communication with other federators. Each federator is able to download the data of other components. Uploading the data to other federators is not foreseen (each gateway downloads over a federator). The trusted consumers can decide to use the federation information and must explicitly activate this feature. To summarize, the federator acts as a gateway connector/synchronizer and as an interface provider for accessing the federated data.</p>
+
+<p><img src="ArchitectureOverview.drawio.png" alt="TNG Use Case - Implict Trust Relation" style="width:400px; float:none; margin: 0px 0px 0px 0px;" /></p>
+
+<p><b>Note</b>: The DCC Gateway core architecture remains untouched. Just backwards compatible enhancements will be introduced to support the federation.</p>
+
+<h5 id="connection-establishment-to-the-gateway">Connection Establishment to the Gateway</h5>
+<p>The DDCC specification provides interoperable standards for exchanging metadata content such as trusted references, trusted certificates and signer certificates with systems via a Trust Network Gateway. This metadata is managed through Trusted Systems which will need a connection/proxying or facade service with the Trust Network Gateway (“TNG Mediator”). This mediator must be onboarded and trusted by the operator of the TNG before upload or download of content is possible. Technically this can be a script, a backend system or an OpenHIM mediator. The main tasks of this kind of software is to establish a mTLS connection with the gateway, sign the uploaded content (e.g. CMS Cryptographic Message Syntax) and upload signed DSCs, revocation entries or releasing business rules. The procedures used in background is out of scope. There may be manual release processes, automatic decisions or other processes, however it is crucial to ensured that the trusted channel and the security of the used certificates for upload/tls connection are not compromised.</p>
+
+<h5 id="options-for-bridging-to-other-systems">Options for Bridging to other Systems</h5>
+<p>A bridge tool for translating the received entries of the origin system to the HL7 FHIR / Rest API of the gateway is necessary for bridging existing systems (i.e. PKDs or any other systems which contain PKI certificates (e.g. ICAO), Business Rules or Value Sets (e.g. FHIR Servers)) to the TNG. For example, to translate an LDAP based Public Key directory to the gateway, a script/mediator may be set up to extract the DSCs and upload them automatically to the gateway. Please note that in this scenario all SCAs must be onboarded prior to the upload for this process to work.</p>
+
+<p>Under special circumstances when some “mass data transactions” or heavy synchronisations are necessary there may be an option to set up an adapter directly on top of the gateway database. The TNG itself supports JDBC which is able to accept other databases than mysql. For instance if a Cassandra, MongoDb or CouchDB is used and a JDBC driver is available, the data can be replicated across multiple nodes.</p>
+
+<p><b>Note</b>: Database Replications have their own behavior and the functionality of the gateway can not cover each available database. Therefore JDBC feature should be used only if necessary and at own risk.</p>
+
+<h4 id="building-blocks">Building Blocks</h4>
+<p>The Trust Network Gateway consists of the DCC Gateway enhanced by callback mechanisms and additional trust list sources, a new federator component with the download client, a federation API, a proxy for outgoing calls and an interface to the routes of the different services.</p>
+
+<p><img src="BuildingBlocks.drawio.png" alt="TNG Building Blocks" style="width:400px; float:none; margin: 0px 0px 0px 0px;" /></p>
+
+<h4 id="trust-model">Trust Model</h4>
+
+<h5 id="overview">Overview</h5>
+<p>The trust model of the gateway is based on the <a href="https://github.com/eu-digital-green-certificates/dgc-overview/blob/main/guides/certificate-governance.md">PKI certificate governance of the DCC Gateway</a>. All security relevant items are uploaded in signed CMS format and secured by different kinds of PKI certificates as defined by the PKI certificate governance. The central items of the trust model are the SCA to protect the Document Signer Certificates and the CMS messages to protect the uploaded content.</p>
+
+<h5 id="sca--dsc">SCA &amp; DSC</h5>
+<p>To sign digital COVID-19 certificates, a Document Signer Certificate (“DSC”) is created by an issuing authority. Each authority distributes their DSCs to verifiers, so that DSC can be used to prove the validity of an issued certificate. To establish a trust chain between used DSCs and the distributors of the national trust lists, each of the DSC is signed by a root authority (“SCA”) to verify the authenticity of the DSC itself. For security reasons, the SCA is declared as air gapped, and the public part is later on-boarded into the gateway. During the onboarding, the SCA is signed by the operator of the gateway to give the trust in the initial check. After onboarding, each incoming DSC can be checked against the trusted SCA. The operator signature (signed by DCCG<sub>TA</sub>) establishes the trust with different certificates such as the uploader certificate and the TLS authentication certificate as defined by the certificate governance.</p>
+
+<p><img src="PKITrustModel.PNG" alt="DDCC PKI Trust Model" style="width:400px; float:none; margin: 0px 0px 0px 0px;" /></p>
+
+<h5 id="cms-usage">CMS Usage</h5>
+<p>To support multiple content in the gateway in the same security level, the trust model introduces CMS as a generic container for security relevant items. The CMS format allows it to standardize signing and encryption regardless of the content, for single or multiple recipients.</p>
+
+<p><img src="CMSUsage.PNG" alt="CMS Usage" style="width:400px; float:none; margin: 0px 0px 0px 0px;" /></p>
+
+<h5 id="enhancement">Enhancement</h5>
+<p>The current trust model of the DCC Gateway supports only the connection of multiple backends and the exchange of content between them (see below).</p>
+
+<p><img src="SingleTrustAnchor.png" alt="TNG Implementation - Single Trust Anchor" style="width:400px; float:none; margin: 0px 0px 0px 0px;" /></p>
+
+<p>To realize the architecture vision, the gateway trust model will be enhanced so that the federator can support multiple trust anchors. For this purpose, the TNG Federator will be onboarded in the source gateway with an TNP<sub>TLS</sub> and TNP<sub>UP</sub> certificate to access the gateway content. In the destination gateway, the trust anchor of the source gateway is configured (and signed by the operator) to accept the source content as valid. If the verification is successful, the content will be added as a subset to the existing gateway content. The connected national backends can then download all information by activating the federation option, to get the content from both gateways. The trust chain can be verified about the trust anchor of the connected gateway and the trust list of onboarded trust anchors.</p>
+
+<p><img src="MultipleTrustAnchor.png" alt="TNG Implementation- Multiple Trust Anchor" style="width:400px; float:none; margin: 0px 0px 0px 0px;" /></p>
+
+<p><b>Note</b>: The Federator acts as a special kind of “National Backend”, therefore all TNP associated certificates except the TNP<sub>UP</sub> will be onboarded normally.</p>
+
+<h5 id="raw-public-keys">Raw Public Keys</h5>
+<p>The trust model doesn’t support raw public keys due to security reasons especially in cases where:</p>
+
+<p>Raw keys cannot be verified for validity
+Raw key ca not be verified by the source (e.g. Root Authority)
+Raw keys can be created and shared easily and bad governance “opens the door” to all participants in the trust network</p>
+
+<p>Therefore all raw keys must be converted to an x509 certificate wrapper to be a DSC on the gateway, which must be signed by a properly onboarded SCA. Verification of a COVID-19 certificate is not affected by this process, as long as the correct KID is applied during the upload (and in the certificate).</p>
+
+<h5 id="dsc-limitation">DSC Limitation</h5>
+
+<p>For legacy support, or any need for differentiation in the verification process such as for correct issuers or differentiation in KID calculation. It is recommended that the DSCs contain the following OIDs in the extended key usage field:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Field</th>
+      <th>Value</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>extendedKeyUsage</td>
+      <td>1.3.6.1.4.1.1847.2021.1.1</td>
+      <td>For Test Issuers</td>
+    </tr>
+    <tr>
+      <td>extendedKeyUsage</td>
+      <td>1.3.6.1.4.1.1847.2021.1.2</td>
+      <td>For Vaccination Issuers</td>
+    </tr>
+    <tr>
+      <td>extendedKeyUsage</td>
+      <td>1.3.6.1.4.1.1847.2021.1.3</td>
+      <td>For Recovery Issuers</td>
+    </tr>
+    <tr>
+      <td>extendedKeyUsage</td>
+      <td>1.3.6.1.4.1.1847.2022.1.20</td>
+      <td>For raw keys of DIVOC</td>
+    </tr>
+    <tr>
+      <td>extendedKeyUsage</td>
+      <td>1.3.6.1.4.1.1847.2022.1.21</td>
+      <td>For raw key of SHC</td>
+    </tr>
+    <tr>
+      <td>extendedKeyUsage</td>
+      <td>1.3.6.1.4.1.1847.2022.1.22</td>
+      <td>For raw keys in DCCs (calculate kid on Public Key only)</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>The usage of the OID can limit the scope of a Document Signer Certificate during the verification process (if supported by the verifier app). For instance, fraudulent vaccination certificates issued by test centers, will not be valid, as it is signed by an DSC limited to test result certificate issuers.</p>
+
+<p>OID can also be used as an verification indicator as it can indicate that this certificate is a wrapper around raw keys.</p>
+
+<p>Other limitations on the DSC may exist and can be defined, as and when new use cases arise.</p>
+
+<p><b>Note</b>: All extendedKey usages should be well documented on github to avoid confusion regarding the usage. Each necessary attribute should be set up to support the verification process in the best way.</p>
+
+<h4 id="federator-architecture">Federator Architecture</h4>
+<h5 id="overview-1">Overview</h5>
+<p>The federator is designed as a new sub component which can be hosted as microservice or within the gateway in one deployment. This behavior can be configured during the installation. Overall the federator offers the functionality for automated download of gateway or federation content. The downloaded content is stored in the gateway database to provide the content to the gateways federation endpoints. Trusted parties can download from these endpoints then the federated data.</p>
+
+<h5 id="black-box-view">Black-box View</h5>
+
+<p><img src="BlackBoxView.drawio.png" alt="Blackbox View of the System" style="width:400px; float:none; margin: 0px 0px 0px 0px;" /></p>
+
+<h5 id="whitebox-view">Whitebox View</h5>
+
+<p><img src="WhiteBoxView.drawio.png" alt="Blackbox View of the System" style="width:400px; float:none; margin: 0px 0px 0px 0px;" /></p>
+
+<h5 id="data-model">Data Model</h5>
+<h6 id="federator-configuration">Federator Configuration</h6>
+
+<p><b>Note</b>: Each Federation Route of the Gateway must be configured manually for explicit download, to avoid misunderstandings in configuration. This is important for security reasons. All trust anchors must be onboarded otherwise the content is filtered out.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Field</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>ID</td>
+      <td>int</td>
+      <td>Unique ID of the table row</td>
+    </tr>
+    <tr>
+      <td>GatewayId</td>
+      <td>GUID</td>
+      <td>Unique ID of the other origin gateway.</td>
+    </tr>
+    <tr>
+      <td>GatewayEndpoint</td>
+      <td>Varchar</td>
+      <td>URL of the other Gateway.</td>
+    </tr>
+    <tr>
+      <td>GatewayKid</td>
+      <td>Varchar</td>
+      <td>KID of the Origin Gateway Client Certificate to be used to connect to the other gateway. (TNG <sub>TLS FED</sub></td>
+    </tr>
+    <tr>
+      <td>GatewayPublicKey</td>
+      <td>Varchar</td>
+      <td>ECDSA Public Key of the Gateway Signature</td>
+    </tr>
+    <tr>
+      <td>AuthenticationKID</td>
+      <td>Varchar Array</td>
+      <td>KIDs of the onboarded TNG<sub>TLS GW</sub> of the other gateway.</td>
+    </tr>
+    <tr>
+      <td>TrustAnchorKIDs</td>
+      <td>Varchar Array</td>
+      <td>KIDs of the onboarded Trust Anchor (TNG <sub>TA</sub>)</td>
+    </tr>
+    <tr>
+      <td>DownloadTarget</td>
+      <td>String</td>
+      <td>FEDERATION or GATEWAYONLY</td>
+    </tr>
+    <tr>
+      <td>Mode</td>
+      <td>int</td>
+      <td>Enum for the download mode. APPEND or OVERRIDE.The append mode adds the downloaded data to the existing data set (existing federation data will be replaced). Override deletes the existing datasets (excepting the own TNP<sub>TLS</sub>, Trust anchors and federation configurations)</td>
+    </tr>
+    <tr>
+      <td>Signature</td>
+      <td>Varchar</td>
+      <td>Trust Anchor Signature</td>
+    </tr>
+  </tbody>
+</table>
+
+<h6 id="download-scheduler">Download Scheduler</h6>
+
+<table>
+  <thead>
+    <tr>
+      <th>Field</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>GatewayID</td>
+      <td>GUID</td>
+      <td>Unique ID of the Gateway</td>
+    </tr>
+    <tr>
+      <td>DownloadInterval</td>
+      <td>int</td>
+      <td>Download Interval</td>
+    </tr>
+    <tr>
+      <td>LastDownload</td>
+      <td>TimeStamp</td>
+      <td>Last Time of Download</td>
+    </tr>
+    <tr>
+      <td>Retry</td>
+      <td>boolean</td>
+      <td>Retry Flag</td>
+    </tr>
+    <tr>
+      <td>Message</td>
+      <td>String</td>
+      <td>Message of Federator</td>
+    </tr>
+    <tr>
+      <td>Failed Retries</td>
+      <td>int</td>
+      <td>Number of failed Retries</td>
+    </tr>
+  </tbody>
+</table>
+
+<h5 id="endpoints">Endpoints</h5>
+<p>To use the federated data, the gateway will be enhanced by federation endpoints which are modified variants of the common GET routes. By using this new endpoints, the common content is modified returned:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Verb</th>
+      <th>Used in Federator</th>
+      <th>Used inMediator</th>
+      <th>Route</th>
+      <th>Modification/Behavior</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>GET</td>
+      <td>X</td>
+      <td>X</td>
+      <td>/trustlist/certificates</td>
+      <td>Returns the list of trusted certificates. The list can be filtered with optional query parameters. For legacy reasons, all signercertificates introduced in the “DSC” certificate group (if profile enabled) All other certificates should be delivered over query parameter.</td>
+    </tr>
+    <tr>
+      <td>GET</td>
+      <td>X</td>
+      <td>X</td>
+      <td>/trustlist/issuers</td>
+      <td>Returns the list of trusted issuers. The list can be filtered with optional query parameters.</td>
+    </tr>
+    <tr>
+      <td>GET</td>
+      <td>X</td>
+      <td>X</td>
+      <td>/trustlist/signatures</td>
+      <td>Returns the list signatures for existing trust lists.</td>
+    </tr>
+    <tr>
+      <td>GET</td>
+      <td>X</td>
+      <td>X</td>
+      <td>/trustlist/references</td>
+      <td>Returns the list of trusted references. The list can be filtered with optional query parameters.</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><b>Note</b>: All routes should filter the delivered content by hash to avoid duplicate content delivery. Two different federations can receive from a single TP the same content in some circumstances.</p>
+
+<p><em>Common Query Parameters</em></p>
+
+<p>Each route which delivers federated data must provide an query parameter to filter the federations by using an array:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/URL?federationId=id1,id2,id3&amp;Domain=DCC&amp;ResourceType=...
+</code></pre></div></div>
+
+<p>If the mode set to “GATEWAYONLY”, it must be used to query just for the configured gateway id.</p>
+
+<p><em>Federation Format</em></p>
+
+<p>The data format of the federated data should always contain a federation wrapper with the information of federationID, Domain and resource type.</p>
+
+<h4 id="download-process">Download Process</h4>
+
+<p>To federate multiple gateway data, a download process is introduced which should ensure that only trusted data is downloaded to a local gateway. Trusted data means in this context, that the operator of a local gateway has the total control which federated data is accepted and which not. To achieve this target, the local gateway operator must explicitly onboard any remote federators plus the trust anchors of the data which can be accepted. This is necessary because each remote federator may deliver the data of multiple other gateways (which are trusted by the origin gateway operator), but this means not necessarily that this data is trusted automatically by the local gateway operator as well (implicit trust relations must be avoided). Therefore, during the download process, a check should be run which skips all data that is not explicitly trusted by the local operator. This can be reached over the whitelisting of multiple trust anchors and the cross check over the TNP<sub>UP</sub> certificates. If the trust chain is established in this way, each content can be downloaded, verified and pushed to the store. The entire download process itself follows a delta download mechanism, which downloads daily the entire content, and within the day just the deltas. This means for the trust network, that a certificate “bubbles” from the origin gateway step by step to all other gateways. Through this behavior, it must be considered that around one day between creating a key pair, and issuing the first certificates with it is considered.</p>
+
+<p><img src="DownloadProcess.drawio.png" alt="Download Process" style="width:400px; float:none; margin: 0px 0px 0px 0px;" /></p>
+
+<h3 id="architecture-modifications--changes">Architecture Modifications &amp; Changes</h3>
+
+<h4 id="eu-dcc-gateway-modifications-spec">EU DCC Gateway Modifications (<a href="https://ec.europa.eu/health/sites/default/files/ehealth/docs/digital-green-certificates_v2_en.pdf">Spec</a>)</h4>
+<h5 id="data-tables">Data Tables</h5>
+<p>The trusted party table (see chapter 4.2.3.1, EU DCC Gateway) is enhanced with a new certificate type “TRUSTANCHOR” in the API call for trust lists these new types appearing. To distinguish between a federator and a normal trusted party, a type (“TP”, “FEDERATOR”,”GATEWAY”)  for the trusted item is introduced. To distinguish between different domains of certificates, the table also gets a new column ‘‘DOMAIN”, which has the default content “DCC’’. Other content can be in the moment “ICAO”, “DIVOC” and “SHC”. The domain appears in the trustlist routes.</p>
+
+<p>Each Data Table (SignerInformation, Trusted Issuer, Trusted Reference etc.) gets a new column for the UUID, federation ID and objectVersion. The primary keys are changed to ID + federation id to guarantee the uniqueness.</p>
+
+<h5 id="signerinformation-upload">SignerInformation Upload</h5>
+<p>The signer information endpoints must be configurable by a profile to be switched on and off the routes. This is necessary to maintain backwards compatibility with the EU DCC Gateway. In the DDCC context these routes are deactivated.</p>
+
+<h5 id="trusted-certificate-upload">Trusted Certificate Upload</h5>
+<p>To support additional use cases, the gateway will be modified with endpoints which allows it to upload certificates signed by the SCA of a Trust Network Partcipant. The upload endpoint works similar to the signer information upload endpoint with the difference that the upload contains more additional information about the certificate. The concrete template for this additional information must be defined by a schema. The certificate upload must support the choice of a kid, because other standards define static kids or choose it in other ways than the DCC. If no kid is provided, the DCC standard calculation of the first 8 bytes of the SHA256 hash is applied.</p>
+
+<h5 id="health-check">Health Check</h5>
+<p>To monitor the status of the Gateway, a health check is introduced. The new route returns 200 if the gateway is up and running. When the gateway is in maintenance, the routes must return 204. All other return codes indicate an error.</p>
+
+<h5 id="route-profiles">Route Profiles</h5>
+<p>The routes for POST, PUT and DELETE will be modified by profiles to make them configurable. This allows it to switch off the data upload, which is especially for the primary-secondary/combined sources use case. Within this setup, no TNP<sub>UP</sub> certificates need to be onboarded.</p>
+
+<h5 id="value-set-and-business-rules-endpoints">Value Set and Business Rules Endpoints</h5>
+<p>The ValueSet and Business Rules endpoints must be configurable by configuration of profiles for enabling/disabling.</p>
+
+<p>Business Rules gets a new endpoint which is returning single objects by using the business rule id (/rules/{TrustNetworkPartcipant}/{ruleId}}.</p>
+
+<p>Note: This new route is introduced to create a migration path to the trusted references. Within EU DCC Standard Mode, there is no backwards compatibility impact.</p>
+
+<h5 id="trusted-references">Trusted References</h5>
+<p>The trusted references are URLs which are uploaded by the Trust Network Participants to propagate their service endpoint about value sets, business rules and other content for interoperability. Within the trusted references are just public GET methods allowed. Authorization must be covered by trust mediators, if necessary.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Field</th>
+      <th>Optional</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th> </th>
+      <th> </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>UUID</td>
+      <td>No</td>
+      <td>String</td>
+      <td>UUID for the object.</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>URL</td>
+      <td>No</td>
+      <td>String</td>
+      <td>Can be a HTTP(s)</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>Type</td>
+      <td>No</td>
+      <td>String</td>
+      <td>FHIR</td>
+      <td>DCC…</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>Version</td>
+      <td>No</td>
+      <td>String</td>
+      <td>Any version string.</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>Country</td>
+      <td>No</td>
+      <td>String</td>
+      <td>Trust Network Participant where the URL relates to.</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>Service</td>
+      <td>No</td>
+      <td>String</td>
+      <td>e.g. ValueSet, PlanDefinition etc.</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>Thumbprint</td>
+      <td>No</td>
+      <td>String</td>
+      <td>SHA256 Hash of the content behind it</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>Name</td>
+      <td>No</td>
+      <td>String</td>
+      <td>Name of the Service</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>SSLPublicKey</td>
+      <td>No</td>
+      <td>String</td>
+      <td>SSL Certificate of the endpoint (if applicable).</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>Content-Type</td>
+      <td>No</td>
+      <td>String</td>
+      <td>MIME Type of Content</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>SignatureType</td>
+      <td>No</td>
+      <td>String</td>
+      <td>NONE</td>
+      <td>JWS</td>
+      <td>CMS</td>
+    </tr>
+  </tbody>
+</table>
+
+<h5 id="trusted-issuer">Trusted Issuer</h5>
+<p>Currently it is possible to onboard SCAs as Issuer Trust Reference for DSCs which makes it hard to use it outside the PKI world. Other credential types like Verifiable Credentials are using DIDs or other Issuer IDs which are not necessarily linked to any SCA, but with crypto material behind it e.g. JWKs sources etc. To support these issuers and their credentials, the gateway will be enhanced by a trusted issuer interface which makes it possible to receive this kind of trusted ids. All of these trusted issuers must be onboarded as SCAs and all other certificates.</p>
+
+<p>A trusted issuer entry which can be onboarded is defined as :</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Field</th>
+      <th>Optional</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>URL</td>
+      <td>No</td>
+      <td>String</td>
+      <td>Can be a HTTP(s) or DID URL.</td>
+    </tr>
+    <tr>
+      <td>Type</td>
+      <td>No</td>
+      <td>String</td>
+      <td>HTTP or DID</td>
+    </tr>
+    <tr>
+      <td>Country</td>
+      <td>No</td>
+      <td>String</td>
+      <td>Trust Network Participant where the URL relates to.</td>
+    </tr>
+    <tr>
+      <td>Thumbprint</td>
+      <td>Yes</td>
+      <td>String</td>
+      <td>SHA256 Hash of the content behind it (if applicable)</td>
+    </tr>
+    <tr>
+      <td>Name</td>
+      <td>No</td>
+      <td>String</td>
+      <td>Name of the Service</td>
+    </tr>
+    <tr>
+      <td>SSLPublicKey</td>
+      <td>Yes</td>
+      <td>String</td>
+      <td>SSL Certificate of the endpoint (if applicable).</td>
+    </tr>
+    <tr>
+      <td>KeyStorageType</td>
+      <td>Yes</td>
+      <td>String</td>
+      <td>Type of Key Storage. E.g JWKS, DIDDocument, JKS etc.</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>The Entry will be onboarded in the Gateway and signed by the trust anchor.</p>
+
+<p><b>Note</b>: When the URL in this table does not resolve, all the optional fields can be empty. This is less trustful and should be avoided within operations.</p>
+
+<h5 id="deployment">Deployment</h5>
+<h6 id="constraints">Constraints</h6>
+<p>The TNG may be operated in front with a network component (Load Balancer, API Gateway, Reverse Proxy etc.) which handles the Client Certificate Authentication and Client Certificate Attribute extraction of the TLS connection. After the TLS Offloading it depends on the infrastructure, if an internal secured TLS network must be established or not. For example when the TNG is deployed in a distributed service mesh, it’s recommended to use TLS protected channels e.g. SPIFFE/SPIRE based service meshes. Which mode fits better to the deployment depends on the operators infrastructure. The gateway itself can be operated in a SSL Passthrough mode as well.</p>
+
+<p>All other components like proxies, must be aligned in the configured settings to avoid HTTP Smuggling or similar vulnerabilities.</p>
+
+<h6 id="kubernetes-setup">Kubernetes Setup</h6>
+
+<p><img src="Kubernetes.drawio.png" alt="Download Process" style="width:600px; float:none; margin: 0px 0px 0px 0px;" /></p>
+
+<h4 id="who-trust-network-gateway-modifications">WHO Trust Network Gateway Modifications</h4>
+
+<p>In the last version of the TNG<sup id="fnref:1" role="doc-noteref"><a href="#fn:1" class="footnote" rel="footnote">1</a></sup> architecture, the changes for trusted issuers and trusted certificates were made to allow different types of technologies in trust verification. This could be either X509 or DIDs according to the DID Core Specification<sup id="fnref:2" role="doc-noteref"><a href="#fn:2" class="footnote" rel="footnote">2</a></sup>. During the last iterations of specification and alignment, there were some key points which must be additionally supported in the gateway:</p>
+
+<ul>
+  <li>Native DID Support for the Gateway’s Trustlists (DID Document Format) (optional)</li>
+  <li>Decentralized Exchange of DID Documents to provide it to verifiers</li>
+  <li>WHO aligned onboarding process for eligible Trust Network Participants</li>
+</ul>
+
+<p>This section describes these changes.</p>
+
+<h5 id="technical-changes">Technical Changes</h5>
+
+<p>To support the DID document feature according to the <a href="https://github.com/WorldHealthOrganization/ddcc-trust/blob/main/TrustListSpecification.md#leading-contender-did-document">trust specification</a>, the gateway will be enhanced by a DID document generator and the capability to sign these DID documents. This contains a way to generate signing keys over a vault and register the public key of the signature over a decentralized key registry.</p>
+
+<p><img src="TechnicalChanges.drawio.png" style="float:none; margin: 0px 0px 0px 0px;" /></p>
+
+<h5 id="azure-architecture--deployment">Azure Architecture &amp; Deployment</h5>
+
+<p>Microsoft Azure public cloud is the targeted operation environment for the Trust Network Gateway hosted by WHO. The TNG will be operated on Azure Kubernetes Service (AKS) and uses Azure CDN for public key distribution via DID documents.</p>
+
+<p><img src="AzureArchitecture.drawio.png" style="float:none; margin: 0px 0px 0px 0px;" /></p>
+
+<h5 id="onboarding-process-concept">Onboarding Process Concept</h5>
+
+<p>The WHO Global Digital Health Certification Network Secretariat is responsible to manage the <a href="concepts_onboarding.html">onboarding</a> application of eligible Trust Network Participants to connect as a trusted party to the trust network.</p>
+
+<hr />
+
+<div class="footnotes" role="doc-endnotes">
+  <ol>
+    <li id="fn:1" role="doc-endnote">
+      <p>TNG Trust Network Gateway, formerly named Digital Documentation of Covid Certificates (DDCC) Gateway <a href="#fnref:1" class="reversefootnote" role="doc-backlink">&#8617;</a></p>
+    </li>
+    <li id="fn:2" role="doc-endnote">
+      <p>DID Core,   https://www.w3.org/TR/did-core/ <a href="#fnref:2" class="reversefootnote" role="doc-backlink">&#8617;</a></p>
+    </li>
+  </ol>
+</div>
+
+
+
+</div>
+        </div>  <!-- /inner-wrapper -->
+      </div>  <!-- /row -->
+    </div>  <!-- /container -->
+  </div>  <!-- /segment-content -->
+
+  <script type="text/javascript" src="assets/js/jquery.js"> </script>     <!-- note keep space here, otherwise it will be transformed to empty tag -> fails -->
+  <script type="text/javascript" src="assets/js/jquery-ui.min.js"> </script>
+
+  <script type="text/javascript">
+    $(document).ready(function(){
+      if(window.location.hash != "") {
+          $('a[href="' + window.location.hash + '"]').click()
+      }
+    });
+  </script>
+  <a name="bottom"> </a>
+  <div id="segment-footer" igtool="footer" class="segment">  <!-- segment-footer -->
+    <div class="container">  <!-- container -->
+
+      <div class="inner-wrapper">
+        <p>
+          IG &#169; 2023+ <a style="color:var(--footer-hyperlink-text-color)" href="http://who.int">WHO</a>.  Package smart.who.int.trust#1.0.0 based on <a style="color: var(--footer-hyperlink-text-color)" href="http://hl7.org/fhir/R4/">FHIR 4.0.1</a>. Generated <span title="Mon, Jan 29, 2024 21:34+0000">2024-01-29</span>
+          <br/>
+          <span style="color: var(--footer-highlight-text-color)">
+                      Links: <a style="color: var(--footer-hyperlink-text-color)" href="toc.html">Table of Contents</a> |
+                 <a style="color: var(--footer-hyperlink-text-color)" href="qa.html">QA Report</a>
+                 
+                
+| <a style="color: #81BEF7" target="_blank" href="http://smart.who.int/trust/history.html">Version History</a> | <a style="color: #81BEF7" rel="license" href="license.html">License</a>
+          </span>
+        </p>
+      </div>  <!-- /inner-wrapper -->
+    </div>  <!-- /container -->
+  </div>  <!-- /segment-footer -->
+  
+  <div id="segment-post-footer" class="segment hidden">  <!-- segment-post-footer -->
+    <div class="container">  <!-- container -->
+    </div>  <!-- /container -->
+  </div>  <!-- /segment-post-footer -->
+  
+  <!-- JS and analytics only. -->
+  <!-- Bootstrap core JavaScript
+  ================================================== -->
+  <!-- Placed at the end of the document so the pages load faster -->
+  <script type="text/javascript" src="assets/js/bootstrap.min.js"> </script>
+  <script type="text/javascript" src="assets/js/respond.min.js"> </script>
+  <script type="text/javascript" src="assets/js/anchor.min.js"> </script>
+  <script type="text/javascript" src="assets/js/clipboard.min.js"> </script>
+  <script type="text/javascript" src="assets/js/clipboard-btn.js"> </script>
+  <script>anchors.options.visible = 'hover'
+anchors.add()</script>
+  
+<!-- feedback form - Google forms -->
+<!-- v0.1, 2021-01-09 -->
+
+
+  
+
+
+
+<!-- / feedback form  -->
+
+  <!-- Analytics Below
+  ================================================== -->
+  </body>
+</html>
+

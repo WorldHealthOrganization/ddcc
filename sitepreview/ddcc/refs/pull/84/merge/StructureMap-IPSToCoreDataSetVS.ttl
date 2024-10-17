@@ -1,0 +1,877 @@
+@prefix fhir: <http://hl7.org/fhir/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# - resource -------------------------------------------------------------------
+
+<http://worldhealthorganization.github.io/ddcc/StructureMap/IPSToCoreDataSetVS> a fhir:StructureMap;
+  fhir:nodeRole fhir:treeRoot;
+  fhir:Resource.id [ fhir:value "IPSToCoreDataSetVS"];
+  fhir:DomainResource.text [
+     fhir:Narrative.status [ fhir:value "generated" ];
+     fhir:Narrative.div "<div xmlns=\"http://www.w3.org/1999/xhtml\"><pre>map &quot;http://worldhealthorganization.github.io/ddcc/StructureMap/IPSToCoreDataSetVS&quot; = &quot;IPSToCoreDataSetVS&quot;\r\n\r\n\r\nuses &quot;http://hl7.org/fhir/StructureDefinition/Bundle&quot; alias IPS as source\r\nuses &quot;http://hl7.org/fhir/StructureDefinition/Bundle&quot; alias DDCCBundle as target\r\nuses &quot;http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.VS.PoV&quot; alias DDCC as produced\r\n\r\ngroup IPSToCoreDataSetVS(source ips : IPS, target ddccBundle : DDCCBundle) {\r\n  ips.id as id -&gt; ddccBundle.id = id &quot;set id&quot;;\r\n  ips.entry first as compentry then {\r\n    compentry.resource : Composition as composition then {\r\n      composition.subject as subject then {\r\n        subject.reference as patientid then {\r\n          ips.entry as findpatient where resource.is(Patient) and (resource.id = patientid.replaceMatches('.*Patient/(?&lt;id&gt;[A-Za-z0-9\\\\-\\\\.]{1,64})$', '${id}')) then {\r\n            findpatient.resource as patient then {\r\n              ips.entry as entry then {\r\n                entry.resource : Immunization as immunization where vaccineCode.memberOf('http://worldhealthorganization.github.io/ddcc/ValueSet/who-ddcc-allowed-vaccines-covid-19') -&gt;  ddccBundle.entry as outentry,  create('http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.VS.PoV') as ddcc then {\r\n                  immunization then PatientToDDCC(patient, ddcc) &quot;set patient info&quot;;\r\n                  immunization -&gt; ddcc.vaccination as vaccination then ImmunizationToVaccination(immunization, vaccination) &quot;set vaccination&quot;;\r\n                  immunization -&gt; ddcc.certificate as certificate then IPSToCertificate(composition, certificate, immunization) &quot;set certificate&quot;;\r\n                  immunization -&gt; outentry.resource = ddcc &quot;set outentry&quot;;\r\n                } &quot;immunizations&quot;;\r\n              } &quot;entries&quot;;\r\n            } &quot;get patient&quot;;\r\n          } &quot;find patient&quot;;\r\n        } &quot;get subject reference&quot;;\r\n      } &quot;get subject&quot;;\r\n    } &quot;get composition&quot;;\r\n  } &quot;get first entry&quot;;\r\n}\r\n\r\ngroup ImmunizationToVaccination(source immunization, target vaccination) {\r\n  immunization.vaccineCode as vaccine then {\r\n    vaccine.coding as coding where memberOf('http://worldhealthorganization.github.io/ddcc/ValueSet/who-ddcc-vaccines-covid-19') then {\r\n      coding -&gt; vaccination.vaccine = coding &quot;set coding&quot;;\r\n    } &quot;copy vaccine&quot;;\r\n    vaccine.coding as coding where memberOf('http://worldhealthorganization.github.io/ddcc/ValueSet/who-ddcc-vaccines-covid-19').not() then {\r\n      coding -&gt; vaccination.vaccine = translate(coding, 'who-ddcc-map-cvx-icd11-vaccines', 'Coding') &quot;translate code&quot;;\r\n    } &quot;translate vaccine coding&quot;;\r\n    vaccine.coding as coding -&gt; vaccination.brand = translate(coding, 'who-ddcc-map-cvx-icd11-brands', 'Coding') &quot;translate brand&quot;;\r\n  } &quot;set vaccine&quot;;\r\n  immunization -&gt; vaccination.country = c('urn:iso:std:iso:3166', 'USA') &quot;set country&quot;;\r\n  immunization.lotNumber as lot -&gt; vaccination.lot = lot &quot;set lot&quot;;\r\n  immunization.occurrence as occurrence -&gt; vaccination.date = occurrence &quot;set date&quot;;\r\n  immunization.manufacturer as manufacturer then {\r\n    manufacturer.identifier as identifier -&gt; vaccination.manufacturer as vMan then {\r\n      identifier.system as system -&gt; vMan.system = system &quot;set manufacturer system&quot;;\r\n      identifier.value as value -&gt; vMan.code = value &quot;set manufactutuer code&quot;;\r\n    } &quot;set manufacturer id&quot;;\r\n  } &quot;set manufacturer&quot;;\r\n}\r\n\r\ngroup IPSToCertificate(source composition, target certificate, source immunization) {\r\n  immunization.id as id -&gt;  certificate.ddccid as ddccid,  ddccid.value = id &quot;set ddccid&quot;;\r\n  composition.id as id -&gt;  certificate.hcid as hcid,  hcid.value = id &quot;set hcid&quot;;\r\n  composition.author first as author -&gt; certificate.issuer = author &quot;set issuer&quot;;\r\n}\r\n\r\ngroup PatientToDDCC(source patient, target ddcc) {\r\n  patient.name as name then NameToText(name, ddcc) &quot;set name&quot;;\r\n  patient.birthDate as birthDate -&gt; ddcc.birthDate = birthDate &quot;set birthdate&quot;;\r\n  // patient.gender as gender -&gt; ddcc.sex = gender &quot;set sex&quot;;\r\n  patient.identifier first as identifier -&gt; ddcc.identifier = identifier &quot;set identifier&quot;;\r\n}\r\n\r\ngroup NameToText(source name : HumanName, target ddcc) {\r\n  // annoying because append doesn't work until ddcc.name is set\r\n  name.given first as given -&gt; ddcc.name = (given.replaceMatches('$', ' ')) &quot;set first name&quot;;\r\n  // name.given not_first as other -&gt; ddcc.name as tName, ddcc.name = append( tName, other ) &quot;set other names&quot;;\r\n  name.given not_first as other -&gt;  ddcc.name as tName,  (other.replaceMatches('$', ' ')) as spaced,  ddcc.name = append(tName, spaced) &quot;set other names&quot;;\r\n  name.family as family -&gt;  ddcc.name as tName,  ddcc.name = append(tName, family) &quot;add family name&quot;;\r\n  name.text as text -&gt; ddcc.name = text &quot;set full name&quot;;\r\n}\r\n\r\n</pre></div>"
+  ];
+  fhir:StructureMap.url [ fhir:value "http://worldhealthorganization.github.io/ddcc/StructureMap/IPSToCoreDataSetVS"];
+  fhir:StructureMap.version [ fhir:value "1.0.0"];
+  fhir:StructureMap.name [ fhir:value "IPSToCoreDataSetVS"];
+  fhir:StructureMap.status [ fhir:value "draft"];
+  fhir:StructureMap.date [ fhir:value "2022-11-23T04:26:34+00:00"^^xsd:dateTime];
+  fhir:StructureMap.publisher [ fhir:value "WHO"];
+  fhir:StructureMap.contact [
+     fhir:index 0;
+     fhir:ContactDetail.name [ fhir:value "WHO" ];
+     fhir:ContactDetail.telecom [
+       fhir:index 0;
+       fhir:ContactPoint.system [ fhir:value "url" ];
+       fhir:ContactPoint.value [ fhir:value "http://who.int" ]
+     ]
+  ];
+  fhir:StructureMap.jurisdiction [
+     fhir:index 0;
+     fhir:CodeableConcept.coding [
+       fhir:index 0;
+       fhir:Coding.system [ fhir:value "http://unstats.un.org/unsd/methods/m49/m49.htm" ];
+       fhir:Coding.code [ fhir:value "001" ]
+     ]
+  ];
+  fhir:StructureMap.structure [
+     fhir:index 0;
+     fhir:StructureMap.structure.url [
+       fhir:value "http://hl7.org/fhir/StructureDefinition/Bundle";
+       fhir:link <http://hl7.org/fhir/StructureDefinition/Bundle>
+     ];
+     fhir:StructureMap.structure.mode [ fhir:value "source" ];
+     fhir:StructureMap.structure.alias [ fhir:value "IPS" ]
+  ], [
+     fhir:index 1;
+     fhir:StructureMap.structure.url [
+       fhir:value "http://hl7.org/fhir/StructureDefinition/Bundle";
+       fhir:link <http://hl7.org/fhir/StructureDefinition/Bundle>
+     ];
+     fhir:StructureMap.structure.mode [ fhir:value "target" ];
+     fhir:StructureMap.structure.alias [ fhir:value "DDCCBundle" ]
+  ], [
+     fhir:index 2;
+     fhir:StructureMap.structure.url [
+       fhir:value "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.VS.PoV";
+       fhir:link <http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.VS.PoV>
+     ];
+     fhir:StructureMap.structure.mode [ fhir:value "produced" ];
+     fhir:StructureMap.structure.alias [ fhir:value "DDCC" ]
+  ];
+  fhir:StructureMap.group [
+     fhir:index 0;
+     fhir:StructureMap.group.name [ fhir:value "IPSToCoreDataSetVS" ];
+     fhir:StructureMap.group.typeMode [ fhir:value "none" ];
+     fhir:StructureMap.group.input [
+       fhir:index 0;
+       fhir:StructureMap.group.input.name [ fhir:value "ips" ];
+       fhir:StructureMap.group.input.type [ fhir:value "IPS" ];
+       fhir:StructureMap.group.input.mode [ fhir:value "source" ]
+     ], [
+       fhir:index 1;
+       fhir:StructureMap.group.input.name [ fhir:value "ddccBundle" ];
+       fhir:StructureMap.group.input.type [ fhir:value "DDCCBundle" ];
+       fhir:StructureMap.group.input.mode [ fhir:value "target" ]
+     ];
+     fhir:StructureMap.group.rule [
+       fhir:index 0;
+       fhir:StructureMap.group.rule.name [ fhir:value "set id" ];
+       fhir:StructureMap.group.rule.source [
+         fhir:index 0;
+         fhir:StructureMap.group.rule.source.context [ fhir:value "ips" ];
+         fhir:StructureMap.group.rule.source.element [ fhir:value "id" ];
+         fhir:StructureMap.group.rule.source.variable [ fhir:value "id" ]
+       ];
+       fhir:StructureMap.group.rule.target [
+         fhir:index 0;
+         fhir:StructureMap.group.rule.target.context [ fhir:value "ddccBundle" ];
+         fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ];
+         fhir:StructureMap.group.rule.target.element [ fhir:value "id" ];
+         fhir:StructureMap.group.rule.target.transform [ fhir:value "copy" ];
+         fhir:StructureMap.group.rule.target.parameter [
+           fhir:index 0;
+           fhir:StructureMap.group.rule.target.parameter.valueId [ fhir:value "id" ]
+         ]
+       ]
+     ], [
+       fhir:index 1;
+       fhir:StructureMap.group.rule.name [ fhir:value "get first entry" ];
+       fhir:StructureMap.group.rule.source [
+         fhir:index 0;
+         fhir:StructureMap.group.rule.source.context [ fhir:value "ips" ];
+         fhir:StructureMap.group.rule.source.element [ fhir:value "entry" ];
+         fhir:StructureMap.group.rule.source.listMode [ fhir:value "first" ];
+         fhir:StructureMap.group.rule.source.variable [ fhir:value "compentry" ]
+       ];
+       fhir:StructureMap.group.rule.rule [
+         fhir:index 0;
+         fhir:StructureMap.group.rule.name [ fhir:value "get composition" ];
+         fhir:StructureMap.group.rule.source [
+           fhir:index 0;
+           fhir:StructureMap.group.rule.source.context [ fhir:value "compentry" ];
+           fhir:StructureMap.group.rule.source.type [ fhir:value "Composition" ];
+           fhir:StructureMap.group.rule.source.element [ fhir:value "resource" ];
+           fhir:StructureMap.group.rule.source.variable [ fhir:value "composition" ]
+         ];
+         fhir:StructureMap.group.rule.rule [
+           fhir:index 0;
+           fhir:StructureMap.group.rule.name [ fhir:value "get subject" ];
+           fhir:StructureMap.group.rule.source [
+             fhir:index 0;
+             fhir:StructureMap.group.rule.source.context [ fhir:value "composition" ];
+             fhir:StructureMap.group.rule.source.element [ fhir:value "subject" ];
+             fhir:StructureMap.group.rule.source.variable [ fhir:value "subject" ]
+           ];
+           fhir:StructureMap.group.rule.rule [
+             fhir:index 0;
+             fhir:StructureMap.group.rule.name [ fhir:value "get subject reference" ];
+             fhir:StructureMap.group.rule.source [
+               fhir:index 0;
+               fhir:StructureMap.group.rule.source.context [ fhir:value "subject" ];
+               fhir:StructureMap.group.rule.source.element [ fhir:value "reference" ];
+               fhir:StructureMap.group.rule.source.variable [ fhir:value "patientid" ]
+             ];
+             fhir:StructureMap.group.rule.rule [
+               fhir:index 0;
+               fhir:StructureMap.group.rule.name [ fhir:value "find patient" ];
+               fhir:StructureMap.group.rule.source [
+                 fhir:index 0;
+                 fhir:StructureMap.group.rule.source.context [ fhir:value "ips" ];
+                 fhir:StructureMap.group.rule.source.element [ fhir:value "entry" ];
+                 fhir:StructureMap.group.rule.source.variable [ fhir:value "findpatient" ];
+                 fhir:StructureMap.group.rule.source.condition [ fhir:value "resource.is(Patient) and (resource.id = patientid.replaceMatches('.*Patient/(?<id>[A-Za-z0-9\\\\-\\\\.]{1,64})$', '${id}'))" ]
+               ];
+               fhir:StructureMap.group.rule.rule [
+                 fhir:index 0;
+                 fhir:StructureMap.group.rule.name [ fhir:value "get patient" ];
+                 fhir:StructureMap.group.rule.source [
+                   fhir:index 0;
+                   fhir:StructureMap.group.rule.source.context [ fhir:value "findpatient" ];
+                   fhir:StructureMap.group.rule.source.element [ fhir:value "resource" ];
+                   fhir:StructureMap.group.rule.source.variable [ fhir:value "patient" ]
+                 ];
+                 fhir:StructureMap.group.rule.rule [
+                   fhir:index 0;
+                   fhir:StructureMap.group.rule.name [ fhir:value "entries" ];
+                   fhir:StructureMap.group.rule.source [
+                     fhir:index 0;
+                     fhir:StructureMap.group.rule.source.context [ fhir:value "ips" ];
+                     fhir:StructureMap.group.rule.source.element [ fhir:value "entry" ];
+                     fhir:StructureMap.group.rule.source.variable [ fhir:value "entry" ]
+                   ];
+                   fhir:StructureMap.group.rule.rule [
+                     fhir:index 0;
+                     fhir:StructureMap.group.rule.name [ fhir:value "immunizations" ];
+                     fhir:StructureMap.group.rule.source [
+                       fhir:index 0;
+                       fhir:StructureMap.group.rule.source.context [ fhir:value "entry" ];
+                       fhir:StructureMap.group.rule.source.type [ fhir:value "Immunization" ];
+                       fhir:StructureMap.group.rule.source.element [ fhir:value "resource" ];
+                       fhir:StructureMap.group.rule.source.variable [ fhir:value "immunization" ];
+                       fhir:StructureMap.group.rule.source.condition [ fhir:value "vaccineCode.memberOf('http://worldhealthorganization.github.io/ddcc/ValueSet/who-ddcc-allowed-vaccines-covid-19')" ]
+                     ];
+                     fhir:StructureMap.group.rule.target [
+                       fhir:index 0;
+                       fhir:StructureMap.group.rule.target.context [ fhir:value "ddccBundle" ];
+                       fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ];
+                       fhir:StructureMap.group.rule.target.element [ fhir:value "entry" ];
+                       fhir:StructureMap.group.rule.target.variable [ fhir:value "outentry" ]
+                     ], [
+                       fhir:index 1;
+                       fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ];
+                       fhir:StructureMap.group.rule.target.variable [ fhir:value "ddcc" ];
+                       fhir:StructureMap.group.rule.target.transform [ fhir:value "create" ];
+                       fhir:StructureMap.group.rule.target.parameter [
+                         fhir:index 0;
+                         fhir:StructureMap.group.rule.target.parameter.valueString [ fhir:value "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.VS.PoV" ]
+                       ]
+                     ];
+                     fhir:StructureMap.group.rule.rule [
+                       fhir:index 0;
+                       fhir:StructureMap.group.rule.name [ fhir:value "set patient info" ];
+                       fhir:StructureMap.group.rule.source [
+                         fhir:index 0;
+                         fhir:StructureMap.group.rule.source.context [ fhir:value "immunization" ]
+                       ];
+                       fhir:StructureMap.group.rule.dependent [
+                         fhir:index 0;
+                         fhir:StructureMap.group.rule.dependent.name [ fhir:value "PatientToDDCC" ];
+                         fhir:StructureMap.group.rule.dependent.variable [
+                           fhir:value "patient";
+                           fhir:index 0;
+                           fhir:Element.extension [
+                             fhir:index 0;
+                             fhir:Extension.url [ fhir:value "http://hl7.org/fhir/tools/StructureDefinition/original-item-type" ];
+                             fhir:Extension.valueUrl [ fhir:value "id" ]
+                           ]
+                         ], [
+                           fhir:value "ddcc";
+                           fhir:index 1;
+                           fhir:Element.extension [
+                             fhir:index 0;
+                             fhir:Extension.url [ fhir:value "http://hl7.org/fhir/tools/StructureDefinition/original-item-type" ];
+                             fhir:Extension.valueUrl [ fhir:value "id" ]
+                           ]
+                         ]
+                       ]
+                     ], [
+                       fhir:index 1;
+                       fhir:StructureMap.group.rule.name [ fhir:value "set vaccination" ];
+                       fhir:StructureMap.group.rule.source [
+                         fhir:index 0;
+                         fhir:StructureMap.group.rule.source.context [ fhir:value "immunization" ]
+                       ];
+                       fhir:StructureMap.group.rule.target [
+                         fhir:index 0;
+                         fhir:StructureMap.group.rule.target.context [ fhir:value "ddcc" ];
+                         fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ];
+                         fhir:StructureMap.group.rule.target.element [ fhir:value "vaccination" ];
+                         fhir:StructureMap.group.rule.target.variable [ fhir:value "vaccination" ]
+                       ];
+                       fhir:StructureMap.group.rule.dependent [
+                         fhir:index 0;
+                         fhir:StructureMap.group.rule.dependent.name [ fhir:value "ImmunizationToVaccination" ];
+                         fhir:StructureMap.group.rule.dependent.variable [
+                           fhir:value "immunization";
+                           fhir:index 0;
+                           fhir:Element.extension [
+                             fhir:index 0;
+                             fhir:Extension.url [ fhir:value "http://hl7.org/fhir/tools/StructureDefinition/original-item-type" ];
+                             fhir:Extension.valueUrl [ fhir:value "id" ]
+                           ]
+                         ], [
+                           fhir:value "vaccination";
+                           fhir:index 1;
+                           fhir:Element.extension [
+                             fhir:index 0;
+                             fhir:Extension.url [ fhir:value "http://hl7.org/fhir/tools/StructureDefinition/original-item-type" ];
+                             fhir:Extension.valueUrl [ fhir:value "id" ]
+                           ]
+                         ]
+                       ]
+                     ], [
+                       fhir:index 2;
+                       fhir:StructureMap.group.rule.name [ fhir:value "set certificate" ];
+                       fhir:StructureMap.group.rule.source [
+                         fhir:index 0;
+                         fhir:StructureMap.group.rule.source.context [ fhir:value "immunization" ]
+                       ];
+                       fhir:StructureMap.group.rule.target [
+                         fhir:index 0;
+                         fhir:StructureMap.group.rule.target.context [ fhir:value "ddcc" ];
+                         fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ];
+                         fhir:StructureMap.group.rule.target.element [ fhir:value "certificate" ];
+                         fhir:StructureMap.group.rule.target.variable [ fhir:value "certificate" ]
+                       ];
+                       fhir:StructureMap.group.rule.dependent [
+                         fhir:index 0;
+                         fhir:StructureMap.group.rule.dependent.name [ fhir:value "IPSToCertificate" ];
+                         fhir:StructureMap.group.rule.dependent.variable [
+                           fhir:value "composition";
+                           fhir:index 0;
+                           fhir:Element.extension [
+                             fhir:index 0;
+                             fhir:Extension.url [ fhir:value "http://hl7.org/fhir/tools/StructureDefinition/original-item-type" ];
+                             fhir:Extension.valueUrl [ fhir:value "id" ]
+                           ]
+                         ], [
+                           fhir:value "certificate";
+                           fhir:index 1;
+                           fhir:Element.extension [
+                             fhir:index 0;
+                             fhir:Extension.url [ fhir:value "http://hl7.org/fhir/tools/StructureDefinition/original-item-type" ];
+                             fhir:Extension.valueUrl [ fhir:value "id" ]
+                           ]
+                         ], [
+                           fhir:value "immunization";
+                           fhir:index 2;
+                           fhir:Element.extension [
+                             fhir:index 0;
+                             fhir:Extension.url [ fhir:value "http://hl7.org/fhir/tools/StructureDefinition/original-item-type" ];
+                             fhir:Extension.valueUrl [ fhir:value "id" ]
+                           ]
+                         ]
+                       ]
+                     ], [
+                       fhir:index 3;
+                       fhir:StructureMap.group.rule.name [ fhir:value "set outentry" ];
+                       fhir:StructureMap.group.rule.source [
+                         fhir:index 0;
+                         fhir:StructureMap.group.rule.source.context [ fhir:value "immunization" ]
+                       ];
+                       fhir:StructureMap.group.rule.target [
+                         fhir:index 0;
+                         fhir:StructureMap.group.rule.target.context [ fhir:value "outentry" ];
+                         fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ];
+                         fhir:StructureMap.group.rule.target.element [ fhir:value "resource" ];
+                         fhir:StructureMap.group.rule.target.transform [ fhir:value "copy" ];
+                         fhir:StructureMap.group.rule.target.parameter [
+                           fhir:index 0;
+                           fhir:StructureMap.group.rule.target.parameter.valueId [ fhir:value "ddcc" ]
+                         ]
+                       ]
+                     ]
+                   ]
+                 ]
+               ]
+             ]
+           ]
+         ]
+       ]
+     ]
+  ], [
+     fhir:index 1;
+     fhir:StructureMap.group.name [ fhir:value "ImmunizationToVaccination" ];
+     fhir:StructureMap.group.typeMode [ fhir:value "none" ];
+     fhir:StructureMap.group.input [
+       fhir:index 0;
+       fhir:StructureMap.group.input.name [ fhir:value "immunization" ];
+       fhir:StructureMap.group.input.mode [ fhir:value "source" ]
+     ], [
+       fhir:index 1;
+       fhir:StructureMap.group.input.name [ fhir:value "vaccination" ];
+       fhir:StructureMap.group.input.mode [ fhir:value "target" ]
+     ];
+     fhir:StructureMap.group.rule [
+       fhir:index 0;
+       fhir:StructureMap.group.rule.name [ fhir:value "set vaccine" ];
+       fhir:StructureMap.group.rule.source [
+         fhir:index 0;
+         fhir:StructureMap.group.rule.source.context [ fhir:value "immunization" ];
+         fhir:StructureMap.group.rule.source.element [ fhir:value "vaccineCode" ];
+         fhir:StructureMap.group.rule.source.variable [ fhir:value "vaccine" ]
+       ];
+       fhir:StructureMap.group.rule.rule [
+         fhir:index 0;
+         fhir:StructureMap.group.rule.name [ fhir:value "copy vaccine" ];
+         fhir:StructureMap.group.rule.source [
+           fhir:index 0;
+           fhir:StructureMap.group.rule.source.context [ fhir:value "vaccine" ];
+           fhir:StructureMap.group.rule.source.element [ fhir:value "coding" ];
+           fhir:StructureMap.group.rule.source.variable [ fhir:value "coding" ];
+           fhir:StructureMap.group.rule.source.condition [ fhir:value "memberOf('http://worldhealthorganization.github.io/ddcc/ValueSet/who-ddcc-vaccines-covid-19')" ]
+         ];
+         fhir:StructureMap.group.rule.rule [
+           fhir:index 0;
+           fhir:StructureMap.group.rule.name [ fhir:value "set coding" ];
+           fhir:StructureMap.group.rule.source [
+             fhir:index 0;
+             fhir:StructureMap.group.rule.source.context [ fhir:value "coding" ]
+           ];
+           fhir:StructureMap.group.rule.target [
+             fhir:index 0;
+             fhir:StructureMap.group.rule.target.context [ fhir:value "vaccination" ];
+             fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ];
+             fhir:StructureMap.group.rule.target.element [ fhir:value "vaccine" ];
+             fhir:StructureMap.group.rule.target.transform [ fhir:value "copy" ];
+             fhir:StructureMap.group.rule.target.parameter [
+               fhir:index 0;
+               fhir:StructureMap.group.rule.target.parameter.valueId [ fhir:value "coding" ]
+             ]
+           ]
+         ]
+       ], [
+         fhir:index 1;
+         fhir:StructureMap.group.rule.name [ fhir:value "translate vaccine coding" ];
+         fhir:StructureMap.group.rule.source [
+           fhir:index 0;
+           fhir:StructureMap.group.rule.source.context [ fhir:value "vaccine" ];
+           fhir:StructureMap.group.rule.source.element [ fhir:value "coding" ];
+           fhir:StructureMap.group.rule.source.variable [ fhir:value "coding" ];
+           fhir:StructureMap.group.rule.source.condition [ fhir:value "memberOf('http://worldhealthorganization.github.io/ddcc/ValueSet/who-ddcc-vaccines-covid-19').not()" ]
+         ];
+         fhir:StructureMap.group.rule.rule [
+           fhir:index 0;
+           fhir:StructureMap.group.rule.name [ fhir:value "translate code" ];
+           fhir:StructureMap.group.rule.source [
+             fhir:index 0;
+             fhir:StructureMap.group.rule.source.context [ fhir:value "coding" ]
+           ];
+           fhir:StructureMap.group.rule.target [
+             fhir:index 0;
+             fhir:StructureMap.group.rule.target.context [ fhir:value "vaccination" ];
+             fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ];
+             fhir:StructureMap.group.rule.target.element [ fhir:value "vaccine" ];
+             fhir:StructureMap.group.rule.target.transform [ fhir:value "translate" ];
+             fhir:StructureMap.group.rule.target.parameter [
+               fhir:index 0;
+               fhir:StructureMap.group.rule.target.parameter.valueId [ fhir:value "coding" ]
+             ], [
+               fhir:index 1;
+               fhir:StructureMap.group.rule.target.parameter.valueString [ fhir:value "who-ddcc-map-cvx-icd11-vaccines" ]
+             ], [
+               fhir:index 2;
+               fhir:StructureMap.group.rule.target.parameter.valueString [ fhir:value "Coding" ]
+             ]
+           ]
+         ]
+       ], [
+         fhir:index 2;
+         fhir:StructureMap.group.rule.name [ fhir:value "translate brand" ];
+         fhir:StructureMap.group.rule.source [
+           fhir:index 0;
+           fhir:StructureMap.group.rule.source.context [ fhir:value "vaccine" ];
+           fhir:StructureMap.group.rule.source.element [ fhir:value "coding" ];
+           fhir:StructureMap.group.rule.source.variable [ fhir:value "coding" ]
+         ];
+         fhir:StructureMap.group.rule.target [
+           fhir:index 0;
+           fhir:StructureMap.group.rule.target.context [ fhir:value "vaccination" ];
+           fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ];
+           fhir:StructureMap.group.rule.target.element [ fhir:value "brand" ];
+           fhir:StructureMap.group.rule.target.transform [ fhir:value "translate" ];
+           fhir:StructureMap.group.rule.target.parameter [
+             fhir:index 0;
+             fhir:StructureMap.group.rule.target.parameter.valueId [ fhir:value "coding" ]
+           ], [
+             fhir:index 1;
+             fhir:StructureMap.group.rule.target.parameter.valueString [ fhir:value "who-ddcc-map-cvx-icd11-brands" ]
+           ], [
+             fhir:index 2;
+             fhir:StructureMap.group.rule.target.parameter.valueString [ fhir:value "Coding" ]
+           ]
+         ]
+       ]
+     ], [
+       fhir:index 1;
+       fhir:StructureMap.group.rule.name [ fhir:value "set country" ];
+       fhir:StructureMap.group.rule.source [
+         fhir:index 0;
+         fhir:StructureMap.group.rule.source.context [ fhir:value "immunization" ]
+       ];
+       fhir:StructureMap.group.rule.target [
+         fhir:index 0;
+         fhir:StructureMap.group.rule.target.context [ fhir:value "vaccination" ];
+         fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ];
+         fhir:StructureMap.group.rule.target.element [ fhir:value "country" ];
+         fhir:StructureMap.group.rule.target.transform [ fhir:value "c" ];
+         fhir:StructureMap.group.rule.target.parameter [
+           fhir:index 0;
+           fhir:StructureMap.group.rule.target.parameter.valueString [ fhir:value "urn:iso:std:iso:3166" ]
+         ], [
+           fhir:index 1;
+           fhir:StructureMap.group.rule.target.parameter.valueString [ fhir:value "USA" ]
+         ]
+       ]
+     ], [
+       fhir:index 2;
+       fhir:StructureMap.group.rule.name [ fhir:value "set lot" ];
+       fhir:StructureMap.group.rule.source [
+         fhir:index 0;
+         fhir:StructureMap.group.rule.source.context [ fhir:value "immunization" ];
+         fhir:StructureMap.group.rule.source.element [ fhir:value "lotNumber" ];
+         fhir:StructureMap.group.rule.source.variable [ fhir:value "lot" ]
+       ];
+       fhir:StructureMap.group.rule.target [
+         fhir:index 0;
+         fhir:StructureMap.group.rule.target.context [ fhir:value "vaccination" ];
+         fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ];
+         fhir:StructureMap.group.rule.target.element [ fhir:value "lot" ];
+         fhir:StructureMap.group.rule.target.transform [ fhir:value "copy" ];
+         fhir:StructureMap.group.rule.target.parameter [
+           fhir:index 0;
+           fhir:StructureMap.group.rule.target.parameter.valueId [ fhir:value "lot" ]
+         ]
+       ]
+     ], [
+       fhir:index 3;
+       fhir:StructureMap.group.rule.name [ fhir:value "set date" ];
+       fhir:StructureMap.group.rule.source [
+         fhir:index 0;
+         fhir:StructureMap.group.rule.source.context [ fhir:value "immunization" ];
+         fhir:StructureMap.group.rule.source.element [ fhir:value "occurrence" ];
+         fhir:StructureMap.group.rule.source.variable [ fhir:value "occurrence" ]
+       ];
+       fhir:StructureMap.group.rule.target [
+         fhir:index 0;
+         fhir:StructureMap.group.rule.target.context [ fhir:value "vaccination" ];
+         fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ];
+         fhir:StructureMap.group.rule.target.element [ fhir:value "date" ];
+         fhir:StructureMap.group.rule.target.transform [ fhir:value "copy" ];
+         fhir:StructureMap.group.rule.target.parameter [
+           fhir:index 0;
+           fhir:StructureMap.group.rule.target.parameter.valueId [ fhir:value "occurrence" ]
+         ]
+       ]
+     ], [
+       fhir:index 4;
+       fhir:StructureMap.group.rule.name [ fhir:value "set manufacturer" ];
+       fhir:StructureMap.group.rule.source [
+         fhir:index 0;
+         fhir:StructureMap.group.rule.source.context [ fhir:value "immunization" ];
+         fhir:StructureMap.group.rule.source.element [ fhir:value "manufacturer" ];
+         fhir:StructureMap.group.rule.source.variable [ fhir:value "manufacturer" ]
+       ];
+       fhir:StructureMap.group.rule.rule [
+         fhir:index 0;
+         fhir:StructureMap.group.rule.name [ fhir:value "set manufacturer id" ];
+         fhir:StructureMap.group.rule.source [
+           fhir:index 0;
+           fhir:StructureMap.group.rule.source.context [ fhir:value "manufacturer" ];
+           fhir:StructureMap.group.rule.source.element [ fhir:value "identifier" ];
+           fhir:StructureMap.group.rule.source.variable [ fhir:value "identifier" ]
+         ];
+         fhir:StructureMap.group.rule.target [
+           fhir:index 0;
+           fhir:StructureMap.group.rule.target.context [ fhir:value "vaccination" ];
+           fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ];
+           fhir:StructureMap.group.rule.target.element [ fhir:value "manufacturer" ];
+           fhir:StructureMap.group.rule.target.variable [ fhir:value "vMan" ]
+         ];
+         fhir:StructureMap.group.rule.rule [
+           fhir:index 0;
+           fhir:StructureMap.group.rule.name [ fhir:value "set manufacturer system" ];
+           fhir:StructureMap.group.rule.source [
+             fhir:index 0;
+             fhir:StructureMap.group.rule.source.context [ fhir:value "identifier" ];
+             fhir:StructureMap.group.rule.source.element [ fhir:value "system" ];
+             fhir:StructureMap.group.rule.source.variable [ fhir:value "system" ]
+           ];
+           fhir:StructureMap.group.rule.target [
+             fhir:index 0;
+             fhir:StructureMap.group.rule.target.context [ fhir:value "vMan" ];
+             fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ];
+             fhir:StructureMap.group.rule.target.element [ fhir:value "system" ];
+             fhir:StructureMap.group.rule.target.transform [ fhir:value "copy" ];
+             fhir:StructureMap.group.rule.target.parameter [
+               fhir:index 0;
+               fhir:StructureMap.group.rule.target.parameter.valueId [ fhir:value "system" ]
+             ]
+           ]
+         ], [
+           fhir:index 1;
+           fhir:StructureMap.group.rule.name [ fhir:value "set manufactutuer code" ];
+           fhir:StructureMap.group.rule.source [
+             fhir:index 0;
+             fhir:StructureMap.group.rule.source.context [ fhir:value "identifier" ];
+             fhir:StructureMap.group.rule.source.element [ fhir:value "value" ];
+             fhir:StructureMap.group.rule.source.variable [ fhir:value "value" ]
+           ];
+           fhir:StructureMap.group.rule.target [
+             fhir:index 0;
+             fhir:StructureMap.group.rule.target.context [ fhir:value "vMan" ];
+             fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ];
+             fhir:StructureMap.group.rule.target.element [ fhir:value "code" ];
+             fhir:StructureMap.group.rule.target.transform [ fhir:value "copy" ];
+             fhir:StructureMap.group.rule.target.parameter [
+               fhir:index 0;
+               fhir:StructureMap.group.rule.target.parameter.valueId [ fhir:value "value" ]
+             ]
+           ]
+         ]
+       ]
+     ]
+  ], [
+     fhir:index 2;
+     fhir:StructureMap.group.name [ fhir:value "IPSToCertificate" ];
+     fhir:StructureMap.group.typeMode [ fhir:value "none" ];
+     fhir:StructureMap.group.input [
+       fhir:index 0;
+       fhir:StructureMap.group.input.name [ fhir:value "composition" ];
+       fhir:StructureMap.group.input.mode [ fhir:value "source" ]
+     ], [
+       fhir:index 1;
+       fhir:StructureMap.group.input.name [ fhir:value "certificate" ];
+       fhir:StructureMap.group.input.mode [ fhir:value "target" ]
+     ], [
+       fhir:index 2;
+       fhir:StructureMap.group.input.name [ fhir:value "immunization" ];
+       fhir:StructureMap.group.input.mode [ fhir:value "source" ]
+     ];
+     fhir:StructureMap.group.rule [
+       fhir:index 0;
+       fhir:StructureMap.group.rule.name [ fhir:value "set ddccid" ];
+       fhir:StructureMap.group.rule.source [
+         fhir:index 0;
+         fhir:StructureMap.group.rule.source.context [ fhir:value "immunization" ];
+         fhir:StructureMap.group.rule.source.element [ fhir:value "id" ];
+         fhir:StructureMap.group.rule.source.variable [ fhir:value "id" ]
+       ];
+       fhir:StructureMap.group.rule.target [
+         fhir:index 0;
+         fhir:StructureMap.group.rule.target.context [ fhir:value "certificate" ];
+         fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ];
+         fhir:StructureMap.group.rule.target.element [ fhir:value "ddccid" ];
+         fhir:StructureMap.group.rule.target.variable [ fhir:value "ddccid" ]
+       ], [
+         fhir:index 1;
+         fhir:StructureMap.group.rule.target.context [ fhir:value "ddccid" ];
+         fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ];
+         fhir:StructureMap.group.rule.target.element [ fhir:value "value" ];
+         fhir:StructureMap.group.rule.target.transform [ fhir:value "copy" ];
+         fhir:StructureMap.group.rule.target.parameter [
+           fhir:index 0;
+           fhir:StructureMap.group.rule.target.parameter.valueId [ fhir:value "id" ]
+         ]
+       ]
+     ], [
+       fhir:index 1;
+       fhir:StructureMap.group.rule.name [ fhir:value "set hcid" ];
+       fhir:StructureMap.group.rule.source [
+         fhir:index 0;
+         fhir:StructureMap.group.rule.source.context [ fhir:value "composition" ];
+         fhir:StructureMap.group.rule.source.element [ fhir:value "id" ];
+         fhir:StructureMap.group.rule.source.variable [ fhir:value "id" ]
+       ];
+       fhir:StructureMap.group.rule.target [
+         fhir:index 0;
+         fhir:StructureMap.group.rule.target.context [ fhir:value "certificate" ];
+         fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ];
+         fhir:StructureMap.group.rule.target.element [ fhir:value "hcid" ];
+         fhir:StructureMap.group.rule.target.variable [ fhir:value "hcid" ]
+       ], [
+         fhir:index 1;
+         fhir:StructureMap.group.rule.target.context [ fhir:value "hcid" ];
+         fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ];
+         fhir:StructureMap.group.rule.target.element [ fhir:value "value" ];
+         fhir:StructureMap.group.rule.target.transform [ fhir:value "copy" ];
+         fhir:StructureMap.group.rule.target.parameter [
+           fhir:index 0;
+           fhir:StructureMap.group.rule.target.parameter.valueId [ fhir:value "id" ]
+         ]
+       ]
+     ], [
+       fhir:index 2;
+       fhir:StructureMap.group.rule.name [ fhir:value "set issuer" ];
+       fhir:StructureMap.group.rule.source [
+         fhir:index 0;
+         fhir:StructureMap.group.rule.source.context [ fhir:value "composition" ];
+         fhir:StructureMap.group.rule.source.element [ fhir:value "author" ];
+         fhir:StructureMap.group.rule.source.listMode [ fhir:value "first" ];
+         fhir:StructureMap.group.rule.source.variable [ fhir:value "author" ]
+       ];
+       fhir:StructureMap.group.rule.target [
+         fhir:index 0;
+         fhir:StructureMap.group.rule.target.context [ fhir:value "certificate" ];
+         fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ];
+         fhir:StructureMap.group.rule.target.element [ fhir:value "issuer" ];
+         fhir:StructureMap.group.rule.target.transform [ fhir:value "copy" ];
+         fhir:StructureMap.group.rule.target.parameter [
+           fhir:index 0;
+           fhir:StructureMap.group.rule.target.parameter.valueId [ fhir:value "author" ]
+         ]
+       ]
+     ]
+  ], [
+     fhir:index 3;
+     fhir:StructureMap.group.name [ fhir:value "PatientToDDCC" ];
+     fhir:StructureMap.group.typeMode [ fhir:value "none" ];
+     fhir:StructureMap.group.input [
+       fhir:index 0;
+       fhir:StructureMap.group.input.name [ fhir:value "patient" ];
+       fhir:StructureMap.group.input.mode [ fhir:value "source" ]
+     ], [
+       fhir:index 1;
+       fhir:StructureMap.group.input.name [ fhir:value "ddcc" ];
+       fhir:StructureMap.group.input.mode [ fhir:value "target" ]
+     ];
+     fhir:StructureMap.group.rule [
+       fhir:index 0;
+       fhir:StructureMap.group.rule.name [ fhir:value "set name" ];
+       fhir:StructureMap.group.rule.source [
+         fhir:index 0;
+         fhir:StructureMap.group.rule.source.context [ fhir:value "patient" ];
+         fhir:StructureMap.group.rule.source.element [ fhir:value "name" ];
+         fhir:StructureMap.group.rule.source.variable [ fhir:value "name" ]
+       ];
+       fhir:StructureMap.group.rule.dependent [
+         fhir:index 0;
+         fhir:StructureMap.group.rule.dependent.name [ fhir:value "NameToText" ];
+         fhir:StructureMap.group.rule.dependent.variable [
+           fhir:value "name";
+           fhir:index 0;
+           fhir:Element.extension [
+             fhir:index 0;
+             fhir:Extension.url [ fhir:value "http://hl7.org/fhir/tools/StructureDefinition/original-item-type" ];
+             fhir:Extension.valueUrl [ fhir:value "id" ]
+           ]
+         ], [
+           fhir:value "ddcc";
+           fhir:index 1;
+           fhir:Element.extension [
+             fhir:index 0;
+             fhir:Extension.url [ fhir:value "http://hl7.org/fhir/tools/StructureDefinition/original-item-type" ];
+             fhir:Extension.valueUrl [ fhir:value "id" ]
+           ]
+         ]
+       ]
+     ], [
+       fhir:index 1;
+       fhir:StructureMap.group.rule.name [ fhir:value "set birthdate" ];
+       fhir:StructureMap.group.rule.source [
+         fhir:index 0;
+         fhir:StructureMap.group.rule.source.context [ fhir:value "patient" ];
+         fhir:StructureMap.group.rule.source.element [ fhir:value "birthDate" ];
+         fhir:StructureMap.group.rule.source.variable [ fhir:value "birthDate" ]
+       ];
+       fhir:StructureMap.group.rule.target [
+         fhir:index 0;
+         fhir:StructureMap.group.rule.target.context [ fhir:value "ddcc" ];
+         fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ];
+         fhir:StructureMap.group.rule.target.element [ fhir:value "birthDate" ];
+         fhir:StructureMap.group.rule.target.transform [ fhir:value "copy" ];
+         fhir:StructureMap.group.rule.target.parameter [
+           fhir:index 0;
+           fhir:StructureMap.group.rule.target.parameter.valueId [ fhir:value "birthDate" ]
+         ]
+       ]
+     ], [
+       fhir:index 2;
+       fhir:StructureMap.group.rule.name [ fhir:value "set identifier" ];
+       fhir:StructureMap.group.rule.source [
+         fhir:index 0;
+         fhir:StructureMap.group.rule.source.context [ fhir:value "patient" ];
+         fhir:StructureMap.group.rule.source.element [ fhir:value "identifier" ];
+         fhir:StructureMap.group.rule.source.listMode [ fhir:value "first" ];
+         fhir:StructureMap.group.rule.source.variable [ fhir:value "identifier" ]
+       ];
+       fhir:StructureMap.group.rule.target [
+         fhir:index 0;
+         fhir:StructureMap.group.rule.target.context [ fhir:value "ddcc" ];
+         fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ];
+         fhir:StructureMap.group.rule.target.element [ fhir:value "identifier" ];
+         fhir:StructureMap.group.rule.target.transform [ fhir:value "copy" ];
+         fhir:StructureMap.group.rule.target.parameter [
+           fhir:index 0;
+           fhir:StructureMap.group.rule.target.parameter.valueId [ fhir:value "identifier" ]
+         ]
+       ];
+       fhir:StructureMap.group.rule.documentation [ fhir:value "patient.gender as gender -> ddcc.sex = gender \"set sex\";" ]
+     ]
+  ], [
+     fhir:index 4;
+     fhir:StructureMap.group.name [ fhir:value "NameToText" ];
+     fhir:StructureMap.group.typeMode [ fhir:value "none" ];
+     fhir:StructureMap.group.input [
+       fhir:index 0;
+       fhir:StructureMap.group.input.name [ fhir:value "name" ];
+       fhir:StructureMap.group.input.type [ fhir:value "HumanName" ];
+       fhir:StructureMap.group.input.mode [ fhir:value "source" ]
+     ], [
+       fhir:index 1;
+       fhir:StructureMap.group.input.name [ fhir:value "ddcc" ];
+       fhir:StructureMap.group.input.mode [ fhir:value "target" ]
+     ];
+     fhir:StructureMap.group.rule [
+       fhir:index 0;
+       fhir:StructureMap.group.rule.name [ fhir:value "set first name" ];
+       fhir:StructureMap.group.rule.source [
+         fhir:index 0;
+         fhir:StructureMap.group.rule.source.context [ fhir:value "name" ];
+         fhir:StructureMap.group.rule.source.element [ fhir:value "given" ];
+         fhir:StructureMap.group.rule.source.listMode [ fhir:value "first" ];
+         fhir:StructureMap.group.rule.source.variable [ fhir:value "given" ]
+       ];
+       fhir:StructureMap.group.rule.target [
+         fhir:index 0;
+         fhir:StructureMap.group.rule.target.context [ fhir:value "ddcc" ];
+         fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ];
+         fhir:StructureMap.group.rule.target.element [ fhir:value "name" ];
+         fhir:StructureMap.group.rule.target.transform [ fhir:value "evaluate" ];
+         fhir:StructureMap.group.rule.target.parameter [
+           fhir:index 0;
+           fhir:StructureMap.group.rule.target.parameter.valueString [ fhir:value "given.replaceMatches('$', ' ')" ]
+         ]
+       ];
+       fhir:StructureMap.group.rule.documentation [ fhir:value "annoying because append doesn't work until ddcc.name is set" ]
+     ], [
+       fhir:index 1;
+       fhir:StructureMap.group.rule.name [ fhir:value "set other names" ];
+       fhir:StructureMap.group.rule.source [
+         fhir:index 0;
+         fhir:StructureMap.group.rule.source.context [ fhir:value "name" ];
+         fhir:StructureMap.group.rule.source.element [ fhir:value "given" ];
+         fhir:StructureMap.group.rule.source.listMode [ fhir:value "not_first" ];
+         fhir:StructureMap.group.rule.source.variable [ fhir:value "other" ]
+       ];
+       fhir:StructureMap.group.rule.target [
+         fhir:index 0;
+         fhir:StructureMap.group.rule.target.context [ fhir:value "ddcc" ];
+         fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ];
+         fhir:StructureMap.group.rule.target.element [ fhir:value "name" ];
+         fhir:StructureMap.group.rule.target.variable [ fhir:value "tName" ]
+       ], [
+         fhir:index 1;
+         fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ];
+         fhir:StructureMap.group.rule.target.variable [ fhir:value "spaced" ];
+         fhir:StructureMap.group.rule.target.transform [ fhir:value "evaluate" ];
+         fhir:StructureMap.group.rule.target.parameter [
+           fhir:index 0;
+           fhir:StructureMap.group.rule.target.parameter.valueString [ fhir:value "other.replaceMatches('$', ' ')" ]
+         ]
+       ], [
+         fhir:index 2;
+         fhir:StructureMap.group.rule.target.context [ fhir:value "ddcc" ];
+         fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ];
+         fhir:StructureMap.group.rule.target.element [ fhir:value "name" ];
+         fhir:StructureMap.group.rule.target.transform [ fhir:value "append" ];
+         fhir:StructureMap.group.rule.target.parameter [
+           fhir:index 0;
+           fhir:StructureMap.group.rule.target.parameter.valueId [ fhir:value "tName" ]
+         ], [
+           fhir:index 1;
+           fhir:StructureMap.group.rule.target.parameter.valueId [ fhir:value "spaced" ]
+         ]
+       ];
+       fhir:StructureMap.group.rule.documentation [ fhir:value "name.given not_first as other -> ddcc.name as tName, ddcc.name = append( tName, other ) \"set other names\";" ]
+     ], [
+       fhir:index 2;
+       fhir:StructureMap.group.rule.name [ fhir:value "add family name" ];
+       fhir:StructureMap.group.rule.source [
+         fhir:index 0;
+         fhir:StructureMap.group.rule.source.context [ fhir:value "name" ];
+         fhir:StructureMap.group.rule.source.element [ fhir:value "family" ];
+         fhir:StructureMap.group.rule.source.variable [ fhir:value "family" ]
+       ];
+       fhir:StructureMap.group.rule.target [
+         fhir:index 0;
+         fhir:StructureMap.group.rule.target.context [ fhir:value "ddcc" ];
+         fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ];
+         fhir:StructureMap.group.rule.target.element [ fhir:value "name" ];
+         fhir:StructureMap.group.rule.target.variable [ fhir:value "tName" ]
+       ], [
+         fhir:index 1;
+         fhir:StructureMap.group.rule.target.context [ fhir:value "ddcc" ];
+         fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ];
+         fhir:StructureMap.group.rule.target.element [ fhir:value "name" ];
+         fhir:StructureMap.group.rule.target.transform [ fhir:value "append" ];
+         fhir:StructureMap.group.rule.target.parameter [
+           fhir:index 0;
+           fhir:StructureMap.group.rule.target.parameter.valueId [ fhir:value "tName" ]
+         ], [
+           fhir:index 1;
+           fhir:StructureMap.group.rule.target.parameter.valueId [ fhir:value "family" ]
+         ]
+       ]
+     ], [
+       fhir:index 3;
+       fhir:StructureMap.group.rule.name [ fhir:value "set full name" ];
+       fhir:StructureMap.group.rule.source [
+         fhir:index 0;
+         fhir:StructureMap.group.rule.source.context [ fhir:value "name" ];
+         fhir:StructureMap.group.rule.source.element [ fhir:value "text" ];
+         fhir:StructureMap.group.rule.source.variable [ fhir:value "text" ]
+       ];
+       fhir:StructureMap.group.rule.target [
+         fhir:index 0;
+         fhir:StructureMap.group.rule.target.context [ fhir:value "ddcc" ];
+         fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ];
+         fhir:StructureMap.group.rule.target.element [ fhir:value "name" ];
+         fhir:StructureMap.group.rule.target.transform [ fhir:value "copy" ];
+         fhir:StructureMap.group.rule.target.parameter [
+           fhir:index 0;
+           fhir:StructureMap.group.rule.target.parameter.valueId [ fhir:value "text" ]
+         ]
+       ]
+     ]
+  ] .
+
+# - ontology header ------------------------------------------------------------
+
+<http://worldhealthorganization.github.io/ddcc/StructureMap/IPSToCoreDataSetVS.ttl> a owl:Ontology;
+  owl:imports fhir:fhir.ttl .
+
+# -------------------------------------------------------------------------------------
+

@@ -1,0 +1,102 @@
+{
+  "resourceType": "StructureMap",
+  "id": "CoreDataSetVSToAddBundle",
+  "meta": {
+    "versionId": "1",
+    "lastUpdated": "2021-12-21T20:57:03.560+00:00"
+  },
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><pre>map &quot;http://worldhealthorganization.github.io/ddcc/StructureMap/CoreDataSetVSToAddBundle&quot; = &quot;CoreDataSetVSToAddBundle&quot;\r\n\r\n\r\nuses &quot;http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.VS&quot; alias DDCCVS as source\r\nuses &quot;http://hl7.org/fhir/StructureDefinition/Bundle&quot; alias AddBundle as target\r\n\r\nimports &quot;http://worldhealthorganization.github.io/ddcc/StructureMap/CoreDataSetVSLibrary&quot;\r\n\r\ngroup CoreDataSetToAddBundle(source ddcc : DDCCVS, target bundle : AddBundle) {\r\n  ddcc -&gt; bundle then VSToAddBundle(ddcc, bundle) &quot;setup add bundle&quot;;\r\n}\r\n\r\n</pre></div>"
+  },
+  "url": "http://worldhealthorganization.github.io/ddcc/StructureMap/CoreDataSetVSToAddBundle",
+  "version": "0.3.1",
+  "name": "CoreDataSetVSToAddBundle",
+  "status": "draft",
+  "date": "2022-01-25T14:31:46+00:00",
+  "publisher": "WHO",
+  "contact": [
+    {
+      "name": "WHO",
+      "telecom": [
+        {
+          "system": "url",
+          "value": "http://who.int"
+        }
+      ]
+    }
+  ],
+  "jurisdiction": [
+    {
+      "coding": [
+        {
+          "system": "http://unstats.un.org/unsd/methods/m49/m49.htm",
+          "code": "001"
+        }
+      ]
+    }
+  ],
+  "structure": [
+    {
+      "url": "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.VS",
+      "mode": "source",
+      "alias": "DDCCVS"
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/Bundle",
+      "mode": "target",
+      "alias": "AddBundle"
+    }
+  ],
+  "import": [
+    "http://worldhealthorganization.github.io/ddcc/StructureMap/CoreDataSetVSLibrary"
+  ],
+  "group": [
+    {
+      "name": "CoreDataSetToAddBundle",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "ddcc",
+          "type": "DDCCVS",
+          "mode": "source"
+        },
+        {
+          "name": "bundle",
+          "type": "AddBundle",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "setup add bundle",
+          "source": [
+            {
+              "context": "ddcc"
+            }
+          ],
+          "target": [
+            {
+              "contextType": "variable",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "bundle"
+                }
+              ]
+            }
+          ],
+          "dependent": [
+            {
+              "name": "VSToAddBundle",
+              "variable": [
+                "ddcc",
+                "bundle"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

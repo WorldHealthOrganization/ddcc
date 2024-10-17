@@ -1,0 +1,74 @@
+{
+  "resourceType" : "StructureMap",
+  "id" : "CoreDataSetVSToAddBundle",
+  "meta" : {
+    "versionId" : "2",
+    "lastUpdated" : "2022-06-01T12:54:53.172+00:00"
+  },
+  "text" : {
+    "status" : "generated",
+    "div" : "<div xmlns=\"http://www.w3.org/1999/xhtml\"><pre>map &quot;http://smart.who.int/ddcc/StructureMap/CoreDataSetVSToAddBundle&quot; = &quot;CoreDataSetVSToAddBundle&quot;\r\n\r\n\r\nuses &quot;http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.VS&quot; alias DDCCVS as source\r\nuses &quot;http://hl7.org/fhir/StructureDefinition/Bundle&quot; alias AddBundle as target\r\n\r\nimports &quot;http://smart.who.int/ddcc/StructureMap/CoreDataSetVSLibrary&quot;\r\n\r\ngroup CoreDataSetVSToAddBundle(source ddcc : DDCCVS, target bundle : AddBundle) {\r\n  ddcc -&gt; bundle then VSToAddBundle(ddcc, bundle) &quot;setup add bundle&quot;;\r\n}\r\n\r\n</pre></div>"
+  },
+  "url" : "http://smart.who.int/ddcc/StructureMap/CoreDataSetVSToAddBundle",
+  "version" : "1.0.0",
+  "name" : "CoreDataSetVSToAddBundle",
+  "status" : "draft",
+  "date" : "2023-11-06T04:25:12+00:00",
+  "publisher" : "WHO",
+  "contact" : [{
+    "name" : "WHO",
+    "telecom" : [{
+      "system" : "url",
+      "value" : "http://who.int"
+    }]
+  }],
+  "jurisdiction" : [{
+    "coding" : [{
+      "system" : "http://unstats.un.org/unsd/methods/m49/m49.htm",
+      "code" : "001"
+    }]
+  }],
+  "structure" : [{
+    "url" : "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.VS",
+    "mode" : "source",
+    "alias" : "DDCCVS"
+  },
+  {
+    "url" : "http://hl7.org/fhir/StructureDefinition/Bundle",
+    "mode" : "target",
+    "alias" : "AddBundle"
+  }],
+  "import" : ["http://smart.who.int/ddcc/StructureMap/CoreDataSetVSLibrary"],
+  "group" : [{
+    "name" : "CoreDataSetVSToAddBundle",
+    "typeMode" : "none",
+    "input" : [{
+      "name" : "ddcc",
+      "type" : "DDCCVS",
+      "mode" : "source"
+    },
+    {
+      "name" : "bundle",
+      "type" : "AddBundle",
+      "mode" : "target"
+    }],
+    "rule" : [{
+      "name" : "setup add bundle",
+      "source" : [{
+        "context" : "ddcc"
+      }],
+      "target" : [{
+        "contextType" : "variable",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "bundle"
+        }]
+      }],
+      "dependent" : [{
+        "name" : "VSToAddBundle",
+        "variable" : ["ddcc",
+        "bundle"]
+      }]
+    }]
+  }]
+}

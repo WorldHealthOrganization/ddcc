@@ -1,0 +1,2154 @@
+{
+  "resourceType" : "StructureMap",
+  "id" : "DVCLMToIPS",
+  "text" : {
+    "status" : "generated",
+    "div" : "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p class=\"res-header-id\"><b>Generated Narrative: StructureMap DVCLMToIPS</b></p><a name=\"DVCLMToIPS\"> </a><a name=\"hcDVCLMToIPS\"> </a><a name=\"DVCLMToIPS-en-US\"> </a><pre class=\"fml\">\r\n<b>map</b><span style=\"color: navy\"> &quot;</span>http://smart.who.int/icvp/StructureMap/DVCLMToIPS<span style=\"color: navy\">&quot; = &quot;</span>DVCLMToIPS<span style=\"color: navy\">&quot;\r\n\r\n</span><b>uses</b><span style=\"color: navy\"> &quot;</span><a href=\"StructureDefinition-ModelDVC.html\" title=\"DVC\">http://smart.who.int/icvp/StructureDefinition/ModelDVC</a><span style=\"color: navy\">&quot; </span><b>alias </b>DVCLogicalModel <b>as </b><b>source</b>\r\n<b>uses</b><span style=\"color: navy\"> &quot;</span><a href=\"http://hl7.org/fhir/R4/bundle.html\" title=\"Bundle\">http://hl7.org/fhir/StructureDefinition/Bundle</a><span style=\"color: navy\">&quot; </span><b>alias </b>IPS <b>as </b><b>target</b>\r\n\r\n<span style=\"color: navy\">// </span><span style=\"color: green\">create Bundle</span>\r\n<b>group </b>DVCLMToIPS<span style=\"color: navy\">(</span><b>source</b> <span style=\"color: maroon\">lm</span><span style=\"color: navy\"> : </span>DVCLogicalModel, <b>target</b> <span style=\"color: maroon\">ips</span><span style=\"color: navy\"> : </span>IPS<span style=\"color: navy\">)</span><span style=\"color: navy\"> {\r\n</span>  lm<span style=\"color: navy\"><b> -&gt; </b></span>ips.type = <span style=\"color: blue\">'document'</span> <i>&quot;setIPSType&quot;</i><span style=\"color: navy\">;</span>\r\n  lm<span style=\"color: navy\"><b> -&gt; </b></span> <b>uuid</b><span style=\"color: navy\">(</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">bid</span><span style=\"color: navy\">, </span> ips.identifier<b> as </b><span style=\"color: maroon\">id</span><span style=\"color: navy\">, </span> id.value = <span style=\"color: maroon\">bid</span><span style=\"color: navy\">, </span> id.system = <span style=\"color: blue\">'urn:oid:2.16.724.4.8.10.200.10'</span> <i>&quot;setId&quot;</i><span style=\"color: navy\">;</span>\r\n  lm<span style=\"color: navy\"><b> -&gt; </b></span> <b>uuid</b><span style=\"color: navy\">(</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">cid</span><span style=\"color: navy\">, </span> <b>uuid</b><span style=\"color: navy\">(</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">pid</span><span style=\"color: navy\">, </span> <b>uuid</b><span style=\"color: navy\">(</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">mid</span><span style=\"color: navy\">, </span> <b>uuid</b><span style=\"color: navy\">(</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">aid</span><span style=\"color: navy\">, </span> <b>uuid</b><span style=\"color: navy\">(</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">proid</span><span style=\"color: navy\">, </span> <b>uuid</b><span style=\"color: navy\">(</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">immid</span><b> then</b><span style=\"color: navy\"> {\r\n</span>    lm<span style=\"color: navy\"><b> -&gt; </b></span> ips.entry<b> as </b><span style=\"color: maroon\">entry</span><span style=\"color: navy\">, </span> entry.resource = <b>create</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'Composition'</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">composition</span><span style=\"color: navy\">, </span> entry.fullUrl = <b>append</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'urn:uuid:'</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">cid</span><span style=\"color: navy\">)</span><b> then</b><span style=\"color: navy\"> {\r\n</span>      lm<b> then </b>LmToComposition<span style=\"color: navy\">(</span><span style=\"color: maroon\">lm</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">ips</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">composition</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">cid</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">pid</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">mid</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">aid</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">proid</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">immid</span><span style=\"color: navy\">)</span> <i>&quot;set LmToComposition&quot;</i><span style=\"color: navy\">;</span>\r\n      lm<span style=\"color: navy\"><b> -&gt; </b></span> ips.entry<b> as </b><span style=\"color: maroon\">entry</span><span style=\"color: navy\">, </span> entry.fullUrl = <b>append</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'urn:uuid:'</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">pid</span><span style=\"color: navy\">)</span><span style=\"color: navy\">, </span> <b>create</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'Patient'</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">patient</span><b> then</b><span style=\"color: navy\"> {\r\n</span>        lm<b> then </b>DemographicsToPatient<span style=\"color: navy\">(</span><span style=\"color: maroon\">lm</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">patient</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">pid</span><span style=\"color: navy\">)</span> <i>&quot;createPatient&quot;</i><span style=\"color: navy\">;</span>\r\n        lm<span style=\"color: navy\"><b> -&gt; </b></span>entry.resource = <span style=\"color: maroon\">patient</span> <i>&quot;setPatientEntry&quot;</i><span style=\"color: navy\">;</span>\r\n      <span style=\"color: navy\">}</span> <i>&quot;mapPatientResource&quot;</i><span style=\"color: navy\">;</span>\r\n      lm.issuer<b> as </b><span style=\"color: maroon\">issuer</span><b> then</b><span style=\"color: navy\"> {\r\n</span>        issuer.reference<b> as </b><span style=\"color: maroon\">id</span><span style=\"color: navy\"><b> -&gt; </b></span> ips.entry<b> as </b><span style=\"color: maroon\">entry</span><span style=\"color: navy\">, </span> entry.fullUrl = <b>append</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'urn:uuid:'</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">id</span><span style=\"color: navy\">)</span><span style=\"color: navy\">, </span> <b>create</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'Organization'</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">organization</span><b> then</b><span style=\"color: navy\"> {\r\n</span>          lm<span style=\"color: navy\"><b> -&gt; </b></span>organization<b> then </b>createAuthor<span style=\"color: navy\">(</span><span style=\"color: maroon\">issuer</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">organization</span><span style=\"color: navy\">)</span> <i>&quot;createOrganization&quot;</i><span style=\"color: navy\">;</span>\r\n          lm<span style=\"color: navy\"><b> -&gt; </b></span>entry.resource = <span style=\"color: maroon\">organization</span> <i>&quot;setOrganizationEntry&quot;</i><span style=\"color: navy\">;</span>\r\n        <span style=\"color: navy\">}</span> <i>&quot;mapOrganizationResource&quot;</i><span style=\"color: navy\">;</span>\r\n      <span style=\"color: navy\">}</span> <i>&quot;ss&quot;</i><span style=\"color: navy\">;</span>\r\n    <span style=\"color: navy\">}</span> <i>&quot;mapCompositionResource&quot;</i><span style=\"color: navy\">;</span>\r\n  <span style=\"color: navy\">}</span> <i>&quot;setEntries&quot;</i><span style=\"color: navy\">;</span>\r\n<span style=\"color: navy\">}\r\n\r\n</span><span style=\"color: navy\">// </span><span style=\"color: green\">create Composition</span>\r\n<b>group </b>LmToComposition<span style=\"color: navy\">(</span><b>source</b> <span style=\"color: maroon\">lm</span><span style=\"color: navy\"> : </span>DVCLogicalModel, <b>target</b> <span style=\"color: maroon\">ips</span><span style=\"color: navy\"> : </span>Bundle, <b>target</b> <span style=\"color: maroon\">composition</span><span style=\"color: navy\"> : </span>Composition, <b>source</b> <span style=\"color: maroon\">cid</span>, <b>source</b> <span style=\"color: maroon\">pid</span>, <b>source</b> <span style=\"color: maroon\">mid</span>, <b>source</b> <span style=\"color: maroon\">aid</span>, <b>source</b> <span style=\"color: maroon\">proid</span>, <b>source</b> <span style=\"color: maroon\">immid</span><span style=\"color: navy\">)</span><span style=\"color: navy\"> {\r\n</span>  cid<span style=\"color: navy\"><b> -&gt; </b></span>composition.id = <span style=\"color: maroon\">cid</span> <i>&quot;setCid&quot;</i><span style=\"color: navy\">;</span>\r\n  lm<span style=\"color: navy\"><b> -&gt; </b></span>composition.status = <span style=\"color: blue\">'final'</span> <i>&quot;setStatus&quot;</i><span style=\"color: navy\">;</span>\r\n  lm<span style=\"color: navy\"><b> -&gt; </b></span>composition.title = <span style=\"color: blue\">'International Patient Summary'</span> <i>&quot;setTitle&quot;</i><span style=\"color: navy\">;</span>\r\n  lm<span style=\"color: navy\"><b> -&gt; </b></span> <b>create</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'Coding'</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">coding</span><span style=\"color: navy\">, </span> coding.code = <span style=\"color: blue\">'60591-5'</span><span style=\"color: navy\">, </span> coding.system = <span style=\"color: blue\">'http://loinc.org'</span><span style=\"color: navy\">, </span> <b>create</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'CodeableConcept'</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">code</span><span style=\"color: navy\">, </span> code.coding = <span style=\"color: maroon\">coding</span><span style=\"color: navy\">, </span> composition.type = <span style=\"color: maroon\">code</span> <i>&quot;setType&quot;</i><span style=\"color: navy\">;</span>\r\n  lm<span style=\"color: navy\"><b> -&gt; </b></span>composition.subject<b> as </b><span style=\"color: maroon\">subject</span><b> then</b><span style=\"color: navy\"> {\r\n</span>    lm<span style=\"color: navy\"><b> -&gt; </b></span>subject.reference = <b>append</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'urn:uuid:'</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">pid</span><span style=\"color: navy\">)</span> <i>&quot;setSubject&quot;</i><span style=\"color: navy\">;</span>\r\n  <span style=\"color: navy\">}</span> <i>&quot;setSubject&quot;</i><span style=\"color: navy\">;</span>\r\n  lm.issuer<b> as </b><span style=\"color: maroon\">issuer</span><b> then</b><span style=\"color: navy\"> {\r\n</span>    issuer.reference<b> as </b><span style=\"color: maroon\">id</span><span style=\"color: navy\"><b> -&gt; </b></span>composition.author<b> as </b><span style=\"color: maroon\">author</span><b> then</b><span style=\"color: navy\"> {\r\n</span>      id<span style=\"color: navy\"><b> -&gt; </b></span>author.reference = <b>append</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'urn:uuid:'</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">id</span><span style=\"color: navy\">)</span> <i>&quot;setAuthor&quot;</i><span style=\"color: navy\">;</span>\r\n    <span style=\"color: navy\">}</span> <i>&quot;setauthr&quot;</i><span style=\"color: navy\">;</span>\r\n  <span style=\"color: navy\">}</span> <i>&quot;setid&quot;</i><span style=\"color: navy\">;</span>\r\n  lm<span style=\"color: navy\"><b> -&gt; </b></span>composition.section<b> as </b><span style=\"color: maroon\">medication</span><b> then </b>createSectionMedications<span style=\"color: navy\">(</span><span style=\"color: maroon\">lm</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">medication</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">mid</span><span style=\"color: navy\">)</span> <i>&quot;createMedication&quot;</i><span style=\"color: navy\">;</span>\r\n  lm<span style=\"color: navy\"><b> -&gt; </b></span>composition.section<b> as </b><span style=\"color: maroon\">allergies</span><b> then </b>createSectionAllergies<span style=\"color: navy\">(</span><span style=\"color: maroon\">lm</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">allergies</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">aid</span><span style=\"color: navy\">)</span> <i>&quot;createAllergies&quot;</i><span style=\"color: navy\">;</span>\r\n  lm<span style=\"color: navy\"><b> -&gt; </b></span>composition.section<b> as </b><span style=\"color: maroon\">problems</span><b> then </b>createSectionProblems<span style=\"color: navy\">(</span><span style=\"color: maroon\">lm</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">problems</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">proid</span><span style=\"color: navy\">)</span> <i>&quot;createProblems&quot;</i><span style=\"color: navy\">;</span>\r\n  lm<b> then </b>createSectionImmunizations<span style=\"color: navy\">(</span><span style=\"color: maroon\">lm</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">ips</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">composition</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">immid</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">pid</span><span style=\"color: navy\">)</span> <i>&quot;createImmunizations&quot;</i><span style=\"color: navy\">;</span>\r\n<span style=\"color: navy\">}\r\n\r\n</span><span style=\"color: navy\">// </span><span style=\"color: green\">create Patient</span>\r\n<b>group </b>DemographicsToPatient<span style=\"color: navy\">(</span><b>source</b> <span style=\"color: maroon\">lm</span><span style=\"color: navy\"> : </span>DVCLogicalModel, <b>target</b> <span style=\"color: maroon\">patient</span><span style=\"color: navy\"> : </span>Patient, <b>source</b> <span style=\"color: maroon\">pid</span><span style=\"color: navy\">)</span><span style=\"color: navy\"> {\r\n</span>  pid<span style=\"color: navy\"><b> -&gt; </b></span>patient.id = <span style=\"color: maroon\">pid</span> <i>&quot;setPatientId&quot;</i><span style=\"color: navy\">;</span>\r\n  lm.name<b> as </b><span style=\"color: maroon\">sourceName</span><span style=\"color: navy\"><b> -&gt; </b></span>patient.name<b> as </b><span style=\"color: maroon\">targetName</span><b> then </b>nameToHumanName<span style=\"color: navy\">(</span><span style=\"color: maroon\">sourceName</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">targetName</span><span style=\"color: navy\">)</span> <i>&quot;Setname&quot;</i><span style=\"color: navy\">;</span>\r\n  lm.dob<b> as </b><span style=\"color: maroon\">dob</span><span style=\"color: navy\"><b> -&gt; </b></span>patient.birthDate = <span style=\"color: maroon\">dob</span> <i>&quot;setDateofBirth&quot;</i><span style=\"color: navy\">;</span>\r\n  lm.sex<b> as </b><span style=\"color: maroon\">sex</span><b> then </b>ExtractGender<span style=\"color: navy\">(</span><span style=\"color: maroon\">sex</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">patient</span><span style=\"color: navy\">)</span> <i>&quot;Patient Gender&quot;</i><span style=\"color: navy\">;</span>\r\n  <span style=\"color: #b36b00\" title=\"This element was not defined prior to R5\">// lm.sex as sex -&gt; patient.gender = sex &quot;setSex&quot;;</span>\r\n  lm.nid<b> as </b><span style=\"color: maroon\">id</span><span style=\"color: navy\"><b> -&gt; </b></span> patient.identifier<b> as </b><span style=\"color: maroon\">identifier</span><span style=\"color: navy\">, </span> identifier.value = <span style=\"color: maroon\">id</span> <i>&quot;setNationalIdentifier&quot;</i><span style=\"color: navy\">;</span>\r\n  lm.guardian<b> as </b><span style=\"color: maroon\">guardian</span><span style=\"color: navy\"><b> -&gt; </b></span> patient.contact<b> as </b><span style=\"color: maroon\">parentContact</span><span style=\"color: navy\">, </span> parentContact.name<b> as </b><span style=\"color: maroon\">parentName</span><b> then </b>nameToHumanName<span style=\"color: navy\">(</span><span style=\"color: maroon\">guardian</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">parentName</span><span style=\"color: navy\">)</span> <i>&quot;setGuardianName&quot;</i><span style=\"color: navy\">;</span>\r\n<span style=\"color: navy\">}\r\n\r\n</span><span style=\"color: navy\">// </span><span style=\"color: green\">deals with short and case sensitive codes</span>\r\n<b>group </b>ExtractGender<span style=\"color: navy\">(</span><b>source</b> <span style=\"color: maroon\">sex</span>, <b>target</b> <span style=\"color: maroon\">patient</span><span style=\"color: navy\"> : </span>Patient<span style=\"color: navy\">)</span><span style=\"color: navy\"> {\r\n</span>  sex<b> where </b>(sex = 'M')<span style=\"color: navy\"><b> -&gt; </b></span>patient.gender = <span style=\"color: blue\">'male'</span> <i>&quot;set male&quot;</i><span style=\"color: navy\">;</span>\r\n  sex<b> where </b>(sex = 'F')<span style=\"color: navy\"><b> -&gt; </b></span>patient.gender = <span style=\"color: blue\">'female'</span> <i>&quot;set female&quot;</i><span style=\"color: navy\">;</span>\r\n  sex<b> where </b>(sex = 'm')<span style=\"color: navy\"><b> -&gt; </b></span>patient.gender = <span style=\"color: blue\">'male'</span> <i>&quot;set male&quot;</i><span style=\"color: navy\">;</span>\r\n  sex<b> where </b>(sex = 'f')<span style=\"color: navy\"><b> -&gt; </b></span>patient.gender = <span style=\"color: blue\">'female'</span> <i>&quot;set female&quot;</i><span style=\"color: navy\">;</span>\r\n  sex<b> where </b>(sex = 'Male')<span style=\"color: navy\"><b> -&gt; </b></span>patient.gender = <span style=\"color: blue\">'male'</span> <i>&quot;set male&quot;</i><span style=\"color: navy\">;</span>\r\n  sex<b> where </b>(sex = 'Female')<span style=\"color: navy\"><b> -&gt; </b></span>patient.gender = <span style=\"color: blue\">'female'</span> <i>&quot;set female&quot;</i><span style=\"color: navy\">;</span>\r\n  sex<b> where </b>(sex = 'male')<span style=\"color: navy\"><b> -&gt; </b></span>patient.gender = <span style=\"color: blue\">'male'</span> <i>&quot;set male&quot;</i><span style=\"color: navy\">;</span>\r\n  sex<b> where </b>(sex = 'female')<span style=\"color: navy\"><b> -&gt; </b></span>patient.gender = <span style=\"color: blue\">'female'</span> <i>&quot;set female&quot;</i><span style=\"color: navy\">;</span>\r\n<span style=\"color: navy\">}\r\n\r\n</span><span style=\"color: navy\">// </span><span style=\"color: green\">create author</span>\r\n<b>group </b>createAuthor<span style=\"color: navy\">(</span><b>source</b> <span style=\"color: maroon\">issuer</span>, <b>target</b> <span style=\"color: maroon\">org</span><span style=\"color: navy\"> : </span>Organization<span style=\"color: navy\">)</span><span style=\"color: navy\"> {\r\n</span>  issuer.reference<b> as </b><span style=\"color: maroon\">id</span><span style=\"color: navy\"><b> -&gt; </b></span>org.id = <span style=\"color: maroon\">id</span> <i>&quot;setID&quot;</i><span style=\"color: navy\">;</span>\r\n<span style=\"color: navy\">}\r\n\r\n</span><span style=\"color: navy\">// </span><span style=\"color: green\">create sectionMedications</span>\r\n<b>group </b>createSectionMedications<span style=\"color: navy\">(</span><b>source</b> <span style=\"color: maroon\">lm</span><span style=\"color: navy\"> : </span>DVCLogicalModel, <b>target</b> <span style=\"color: maroon\">med</span><span style=\"color: navy\"> : </span>BackboneElement, <b>source</b> <span style=\"color: maroon\">mid</span><span style=\"color: navy\">)</span><span style=\"color: navy\"> {\r\n</span>  mid<span style=\"color: navy\"><b> -&gt; </b></span>med.id = <span style=\"color: maroon\">mid</span> <i>&quot;setmedicationid&quot;</i><span style=\"color: navy\">;</span>\r\n  lm<span style=\"color: navy\"><b> -&gt; </b></span>med.title = <span style=\"color: blue\">'Medication Summary Section'</span> <i>&quot;setMedicationTitle&quot;</i><span style=\"color: navy\">;</span>\r\n  lm<span style=\"color: navy\"><b> -&gt; </b></span>med.text<b> as </b><span style=\"color: maroon\">text</span><b> then </b>generateNarrativeText<span style=\"color: navy\">(</span><span style=\"color: maroon\">med</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">text</span><span style=\"color: navy\">)</span> <i>&quot;setText&quot;</i><span style=\"color: navy\">;</span>\r\n  lm<span style=\"color: navy\"><b> -&gt; </b></span> <b>create</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'Coding'</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">coding</span><span style=\"color: navy\">, </span> coding.code = <span style=\"color: blue\">'10160-0'</span><span style=\"color: navy\">, </span> coding.system = <span style=\"color: blue\">'http://loinc.org'</span><span style=\"color: navy\">, </span> <b>create</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'CodeableConcept'</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">code</span><span style=\"color: navy\">, </span> code.coding = <span style=\"color: maroon\">coding</span><span style=\"color: navy\">, </span> med.code = <span style=\"color: maroon\">code</span> <i>&quot;setCode&quot;</i><span style=\"color: navy\">;</span>\r\n  lm<span style=\"color: navy\"><b> -&gt; </b></span> <b>create</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'Coding'</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">coding</span><span style=\"color: navy\">, </span> coding.code = <span style=\"color: blue\">'unavailable'</span><span style=\"color: navy\">, </span> coding.system = <span style=\"color: blue\">'http://hl7.org/fhir/ValueSet/list-empty-reason'</span><span style=\"color: navy\">, </span> <b>create</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'CodeableConcept'</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">code</span><span style=\"color: navy\">, </span> code.coding = <span style=\"color: maroon\">coding</span><span style=\"color: navy\">, </span> med.emptyReason = <span style=\"color: maroon\">code</span> <i>&quot;setCode&quot;</i><span style=\"color: navy\">;</span>\r\n<span style=\"color: navy\">}\r\n\r\n</span><span style=\"color: navy\">// </span><span style=\"color: green\">create sectionAllergies</span>\r\n<b>group </b>createSectionAllergies<span style=\"color: navy\">(</span><b>source</b> <span style=\"color: maroon\">lm</span><span style=\"color: navy\"> : </span>DVCLogicalModel, <b>target</b> <span style=\"color: maroon\">all</span><span style=\"color: navy\"> : </span>BackboneElement, <b>source</b> <span style=\"color: maroon\">aid</span><span style=\"color: navy\">)</span><span style=\"color: navy\"> {\r\n</span>  aid<span style=\"color: navy\"><b> -&gt; </b></span>all.id = <span style=\"color: maroon\">aid</span> <i>&quot;setAllergyId&quot;</i><span style=\"color: navy\">;</span>\r\n  lm<span style=\"color: navy\"><b> -&gt; </b></span>all.title = <span style=\"color: blue\">'Allergies Section'</span> <i>&quot;setAllergyTitle&quot;</i><span style=\"color: navy\">;</span>\r\n  lm<span style=\"color: navy\"><b> -&gt; </b></span>all.text<b> as </b><span style=\"color: maroon\">text</span><b> then </b>generateNarrativeText<span style=\"color: navy\">(</span><span style=\"color: maroon\">all</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">text</span><span style=\"color: navy\">)</span> <i>&quot;setText&quot;</i><span style=\"color: navy\">;</span>\r\n  lm<span style=\"color: navy\"><b> -&gt; </b></span> <b>create</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'Coding'</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">coding</span><span style=\"color: navy\">, </span> coding.code = <span style=\"color: blue\">'48765-2'</span><span style=\"color: navy\">, </span> coding.system = <span style=\"color: blue\">'http://loinc.org'</span><span style=\"color: navy\">, </span> <b>create</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'CodeableConcept'</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">code</span><span style=\"color: navy\">, </span> code.coding = <span style=\"color: maroon\">coding</span><span style=\"color: navy\">, </span> all.code = <span style=\"color: maroon\">code</span> <i>&quot;setCode&quot;</i><span style=\"color: navy\">;</span>\r\n  lm<span style=\"color: navy\"><b> -&gt; </b></span> <b>create</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'Coding'</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">coding</span><span style=\"color: navy\">, </span> coding.code = <span style=\"color: blue\">'unavailable'</span><span style=\"color: navy\">, </span> coding.system = <span style=\"color: blue\">'http://hl7.org/fhir/ValueSet/list-empty-reason'</span><span style=\"color: navy\">, </span> <b>create</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'CodeableConcept'</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">code</span><span style=\"color: navy\">, </span> code.coding = <span style=\"color: maroon\">coding</span><span style=\"color: navy\">, </span> all.emptyReason = <span style=\"color: maroon\">code</span> <i>&quot;setCode&quot;</i><span style=\"color: navy\">;</span>\r\n<span style=\"color: navy\">}\r\n\r\n</span><span style=\"color: navy\">// </span><span style=\"color: green\">create sectionProblems</span>\r\n<b>group </b>createSectionProblems<span style=\"color: navy\">(</span><b>source</b> <span style=\"color: maroon\">lm</span><span style=\"color: navy\"> : </span>DVCLogicalModel, <b>target</b> <span style=\"color: maroon\">prb</span><span style=\"color: navy\"> : </span>BackboneElement, <b>source</b> <span style=\"color: maroon\">proid</span><span style=\"color: navy\">)</span><span style=\"color: navy\"> {\r\n</span>  proid<span style=\"color: navy\"><b> -&gt; </b></span>prb.id = <span style=\"color: maroon\">proid</span> <i>&quot;setProblemsId&quot;</i><span style=\"color: navy\">;</span>\r\n  lm<span style=\"color: navy\"><b> -&gt; </b></span>prb.title = <span style=\"color: blue\">'Problems Section'</span> <i>&quot;setProblemTitle&quot;</i><span style=\"color: navy\">;</span>\r\n  lm<span style=\"color: navy\"><b> -&gt; </b></span>prb.text<b> as </b><span style=\"color: maroon\">text</span><b> then </b>generateNarrativeText<span style=\"color: navy\">(</span><span style=\"color: maroon\">prb</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">text</span><span style=\"color: navy\">)</span> <i>&quot;setText&quot;</i><span style=\"color: navy\">;</span>\r\n  lm<span style=\"color: navy\"><b> -&gt; </b></span> <b>create</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'Coding'</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">coding</span><span style=\"color: navy\">, </span> coding.code = <span style=\"color: blue\">'11450-4'</span><span style=\"color: navy\">, </span> coding.system = <span style=\"color: blue\">'http://loinc.org'</span><span style=\"color: navy\">, </span> <b>create</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'CodeableConcept'</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">code</span><span style=\"color: navy\">, </span> code.coding = <span style=\"color: maroon\">coding</span><span style=\"color: navy\">, </span> prb.code = <span style=\"color: maroon\">code</span> <i>&quot;setCode&quot;</i><span style=\"color: navy\">;</span>\r\n  lm<span style=\"color: navy\"><b> -&gt; </b></span> <b>create</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'Coding'</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">coding</span><span style=\"color: navy\">, </span> coding.code = <span style=\"color: blue\">'unavailable'</span><span style=\"color: navy\">, </span> coding.system = <span style=\"color: blue\">'http://hl7.org/fhir/ValueSet/list-empty-reason'</span><span style=\"color: navy\">, </span> <b>create</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'CodeableConcept'</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">code</span><span style=\"color: navy\">, </span> code.coding = <span style=\"color: maroon\">coding</span><span style=\"color: navy\">, </span> prb.emptyReason = <span style=\"color: maroon\">code</span> <i>&quot;setCode&quot;</i><span style=\"color: navy\">;</span>\r\n<span style=\"color: navy\">}\r\n\r\n</span><span style=\"color: navy\">// </span><span style=\"color: green\">create sectionImmunizations</span>\r\n<b>group </b>createSectionImmunizations<span style=\"color: navy\">(</span><b>source</b> <span style=\"color: maroon\">lm</span><span style=\"color: navy\"> : </span>DVCLogicalModel, <b>target</b> <span style=\"color: maroon\">bundle</span><span style=\"color: navy\"> : </span>Bundle, <b>target</b> <span style=\"color: maroon\">composition</span><span style=\"color: navy\"> : </span>Composition, <b>source</b> <span style=\"color: maroon\">immid</span>, <b>source</b> <span style=\"color: maroon\">pid</span><span style=\"color: navy\">)</span><span style=\"color: navy\"> {\r\n</span>  lm<span style=\"color: navy\"><b> -&gt; </b></span>composition.section<b> as </b><span style=\"color: maroon\">imm</span><b> then</b><span style=\"color: navy\"> {\r\n</span>    immid<span style=\"color: navy\"><b> -&gt; </b></span>imm.id = <span style=\"color: maroon\">immid</span> <i>&quot;setImmunizationsId&quot;</i><span style=\"color: navy\">;</span>\r\n    lm<span style=\"color: navy\"><b> -&gt; </b></span>imm.title = <span style=\"color: blue\">'Immunizations Section'</span> <i>&quot;setImmunizationTitle&quot;</i><span style=\"color: navy\">;</span>\r\n    lm<span style=\"color: navy\"><b> -&gt; </b></span>imm.text<b> as </b><span style=\"color: maroon\">text</span><b> then </b>generateNarrativeText<span style=\"color: navy\">(</span><span style=\"color: maroon\">imm</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">text</span><span style=\"color: navy\">)</span> <i>&quot;setText&quot;</i><span style=\"color: navy\">;</span>\r\n    lm<span style=\"color: navy\"><b> -&gt; </b></span> <b>create</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'Coding'</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">coding</span><span style=\"color: navy\">, </span> coding.code = <span style=\"color: blue\">'11369-6'</span><span style=\"color: navy\">, </span> coding.system = <span style=\"color: blue\">'http://loinc.org'</span><span style=\"color: navy\">, </span> <b>create</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'CodeableConcept'</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">code</span><span style=\"color: navy\">, </span> code.coding = <span style=\"color: maroon\">coding</span><span style=\"color: navy\">, </span> imm.code = <span style=\"color: maroon\">code</span> <i>&quot;setCode&quot;</i><span style=\"color: navy\">;</span>\r\n    lm.vaccineDetails<b> as </b><span style=\"color: maroon\">vax</span><span style=\"color: navy\"><b> -&gt; </b></span> <b>uuid</b><span style=\"color: navy\">(</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">id</span><span style=\"color: navy\">, </span> bundle.entry<b> as </b><span style=\"color: maroon\">entry</span><span style=\"color: navy\">, </span> entry.fullUrl = <b>append</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'urn:uuid:'</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">id</span><span style=\"color: navy\">)</span><span style=\"color: navy\">, </span> imm.entry<b> as </b><span style=\"color: maroon\">sectionEntry</span><span style=\"color: navy\">, </span> sectionEntry.reference = <b>append</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'urn:uuid:'</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">id</span><span style=\"color: navy\">)</span><span style=\"color: navy\">, </span> entry.resource = <b>create</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'Immunization'</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">immunization</span><span style=\"color: navy\">, </span> immunization.id = <span style=\"color: maroon\">id</span><b> then </b>createImmunizationResource<span style=\"color: navy\">(</span><span style=\"color: maroon\">vax</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">immunization</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">pid</span><span style=\"color: navy\">)</span> <i>&quot;setImmz&quot;</i><span style=\"color: navy\">;</span>\r\n  <span style=\"color: navy\">}</span> <i>&quot;set&quot;</i><span style=\"color: navy\">;</span>\r\n<span style=\"color: navy\">}\r\n\r\n</span><b>group </b>createImmunizationResource<span style=\"color: navy\">(</span><b>source</b> <span style=\"color: maroon\">vax</span><span style=\"color: navy\"> : </span>vaccineDetails, <b>target</b> <span style=\"color: maroon\">immunization</span><span style=\"color: navy\"> : </span>Immunization, <b>source</b> <span style=\"color: maroon\">pid</span><span style=\"color: navy\">)</span><span style=\"color: navy\"> {\r\n</span>  vax<span style=\"color: navy\"><b> -&gt; </b></span>immunization.status = <span style=\"color: blue\">'completed'</span> <i>&quot;setStatus&quot;</i><span style=\"color: navy\">;</span>\r\n  vax.vaccineClassification<b> as </b><span style=\"color: maroon\">vaccine</span><span style=\"color: navy\"><b> -&gt; </b></span>immunization.vaccineCode = <span style=\"color: maroon\">vaccine</span> <i>&quot;setvaccinecode&quot;</i><span style=\"color: navy\">;</span>\r\n  vax.date<b> as </b><span style=\"color: maroon\">date</span><span style=\"color: navy\"><b> -&gt; </b></span>immunization.occurrence = <b>append</b><span style=\"color: navy\">(</span><span style=\"color: maroon\">date</span><span style=\"color: navy\">, </span><span style=\"color: blue\">'T00:00:00.000Z'</span><span style=\"color: navy\">)</span> <i>&quot;setDate&quot;</i><span style=\"color: navy\">;</span>\r\n  vax.batchNo<b> as </b><span style=\"color: maroon\">batchNo</span><span style=\"color: navy\"><b> -&gt; </b></span>immunization.lotNumber = <span style=\"color: maroon\">batchNo</span> <i>&quot;setBatchNo&quot;</i><span style=\"color: navy\">;</span>\r\n  vax<span style=\"color: navy\"><b> -&gt; </b></span>immunization.protocolApplied<b> as </b><span style=\"color: maroon\">protocol</span><b> then</b><span style=\"color: navy\"> {\r\n</span>    vax.doseNumber<b> as </b><span style=\"color: maroon\">doseNo</span><b> then</b><span style=\"color: navy\"> {\r\n</span>      doseNo.coding<b> as </b><span style=\"color: maroon\">coding</span><b> then</b><span style=\"color: navy\"> {\r\n</span>        coding.code<b> as </b><span style=\"color: maroon\">code</span><span style=\"color: navy\"><b> -&gt; </b></span>protocol.doseNumber = <span style=\"color: maroon\">code</span> <i>&quot;setDoseNo&quot;</i><span style=\"color: navy\">;</span>\r\n      <span style=\"color: navy\">}</span> <i>&quot;setDoseNo&quot;</i><span style=\"color: navy\">;</span>\r\n    <span style=\"color: navy\">}</span> <i>&quot;setDoseNo&quot;</i><span style=\"color: navy\">;</span>\r\n    vax.disease<b> as </b><span style=\"color: maroon\">disease</span><span style=\"color: navy\"><b> -&gt; </b></span> <b>create</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'CodeableConcept'</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">code</span><span style=\"color: navy\">, </span> code.coding = <span style=\"color: maroon\">disease</span><span style=\"color: navy\">, </span> protocol.targetDisease = <span style=\"color: maroon\">code</span> <i>&quot;setTargetDisease&quot;</i><span style=\"color: navy\">;</span>\r\n  <span style=\"color: navy\">}</span> <i>&quot;setProtocolApplied&quot;</i><span style=\"color: navy\">;</span>\r\n  vax<span style=\"color: navy\"><b> -&gt; </b></span> immunization.patient<b> as </b><span style=\"color: maroon\">subject</span><span style=\"color: navy\">, </span> subject.reference = <b>append</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'urn:uuid:'</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">pid</span><span style=\"color: navy\">)</span> <i>&quot;setSubject&quot;</i><span style=\"color: navy\">;</span>\r\n  vax.manufacturerId<b> as </b><span style=\"color: maroon\">maId</span><span style=\"color: navy\"><b> -&gt; </b></span> <b>create</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'Reference'</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">maRef</span><span style=\"color: navy\">, </span> maRef.identifier = <span style=\"color: maroon\">maId</span><span style=\"color: navy\">, </span> immunization.manufacturer = <span style=\"color: maroon\">maRef</span> <i>&quot;set Manufacturer&quot;</i><span style=\"color: navy\">;</span>\r\n<span style=\"color: navy\">}\r\n\r\n</span><span style=\"color: navy\">// </span><span style=\"color: green\">helper function</span>\r\n<b>group </b>generateNarrativeText<span style=\"color: navy\">(</span><b>source</b> <span style=\"color: maroon\">src</span><span style=\"color: navy\"> : </span>Section, <b>target</b> <span style=\"color: maroon\">text</span><span style=\"color: navy\"> : </span>string<span style=\"color: navy\">)</span><span style=\"color: navy\"> {\r\n</span>  src<span style=\"color: navy\"><b> -&gt; </b></span>text.status = <span style=\"color: blue\">'empty'</span> <i>&quot;setstatus&quot;</i><span style=\"color: navy\">;</span>\r\n  src<span style=\"color: navy\"><b> -&gt; </b></span>text.div = <span style=\"color: blue\">'&lt;div xmlns=\\&quot;http://www.w3.org/1999/xhtml\\&quot;&gt;Narrative not available&lt;/div&gt;'</span> <i>&quot;setdiv&quot;</i><span style=\"color: navy\">;</span>\r\n<span style=\"color: navy\">}\r\n\r\n</span><b>group </b>nameToHumanName<span style=\"color: navy\">(</span><b>source</b> <span style=\"color: maroon\">sourceName</span>, <b>target</b> <span style=\"color: maroon\">targetName</span><span style=\"color: navy\"> : </span>HumanName<span style=\"color: navy\">)</span><span style=\"color: navy\"> {\r\n</span>  sourceName<b> as </b><span style=\"color: maroon\">patientName</span><span style=\"color: navy\"><b> -&gt; </b></span>targetName.text = <span style=\"color: maroon\">patientName</span> <i>&quot;Patient Name&quot;</i><span style=\"color: navy\">;</span>\r\n<span style=\"color: navy\">}\r\n\r\n</span><b>group </b>humanNameToHumanName<span style=\"color: navy\">(</span><b>source</b> <span style=\"color: maroon\">sourceName</span>, <b>target</b> <span style=\"color: maroon\">targetName</span><span style=\"color: navy\"> : </span>HumanName<span style=\"color: navy\">)</span><span style=\"color: navy\"> {\r\n</span>  sourceName.use<b> as </b><span style=\"color: maroon\">use</span><span style=\"color: navy\"><b> -&gt; </b></span>targetName.use = <span style=\"color: maroon\">use</span> <i>&quot;CopyUse&quot;</i><span style=\"color: navy\">;</span>\r\n  sourceName.text<b> as </b><span style=\"color: maroon\">text</span><span style=\"color: navy\"><b> -&gt; </b></span>targetName.text = <span style=\"color: maroon\">text</span> <i>&quot;CopyText&quot;</i><span style=\"color: navy\">;</span>\r\n  sourceName.family<b> as </b><span style=\"color: maroon\">family</span><span style=\"color: navy\"><b> -&gt; </b></span>targetName.family = <span style=\"color: maroon\">family</span> <i>&quot;CopyFamily&quot;</i><span style=\"color: navy\">;</span>\r\n  sourceName.given<b> as </b><span style=\"color: maroon\">given</span><span style=\"color: navy\"><b> -&gt; </b></span>targetName.given = <span style=\"color: maroon\">given</span> <i>&quot;CopyGiven&quot;</i><span style=\"color: navy\">;</span>\r\n  sourceName.prefix<b> as </b><span style=\"color: maroon\">prefix</span><span style=\"color: navy\"><b> -&gt; </b></span>targetName.prefix = <span style=\"color: maroon\">prefix</span> <i>&quot;CopyPrefix&quot;</i><span style=\"color: navy\">;</span>\r\n  sourceName.suffix<b> as </b><span style=\"color: maroon\">suffix</span><span style=\"color: navy\"><b> -&gt; </b></span>targetName.suffix = <span style=\"color: maroon\">suffix</span> <i>&quot;CopySuffix&quot;</i><span style=\"color: navy\">;</span>\r\n  <span style=\"color: navy\">// </span><span style=\"color: green\">Copy the period using the previously defined group function</span>\r\n  sourceName.period<b> as </b><span style=\"color: maroon\">sourcePeriod</span><span style=\"color: navy\"><b> -&gt; </b></span>targetName.period<b> as </b><span style=\"color: maroon\">targetPeriod</span><b> then</b><span style=\"color: navy\"> {\r\n</span>    sourcePeriod<b> then </b>periodToPeriod<span style=\"color: navy\">(</span><span style=\"color: maroon\">sourcePeriod</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">targetPeriod</span><span style=\"color: navy\">)</span> <i>&quot;CopyPeriod&quot;</i><span style=\"color: navy\">;</span>\r\n  <span style=\"color: navy\">}</span> <i>&quot;copyPeriod&quot;</i><span style=\"color: navy\">;</span>\r\n<span style=\"color: navy\">}\r\n\r\n</span><b>group </b>periodToPeriod<span style=\"color: navy\">(</span><b>source</b> <span style=\"color: maroon\">sourcePeriod</span>, <b>target</b> <span style=\"color: maroon\">targetPeriod</span><span style=\"color: navy\"> : </span>Period<span style=\"color: navy\">)</span><span style=\"color: navy\"> {\r\n</span>  sourcePeriod.start<b> as </b><span style=\"color: maroon\">start</span><span style=\"color: navy\"><b> -&gt; </b></span>targetPeriod.start = <span style=\"color: maroon\">start</span> <i>&quot;set period start&quot;</i><span style=\"color: navy\">;</span>\r\n  sourcePeriod.end<b> as </b><span style=\"color: maroon\">end</span><span style=\"color: navy\"><b> -&gt; </b></span>targetPeriod.end = <span style=\"color: maroon\">end</span> <i>&quot;set period end&quot;</i><span style=\"color: navy\">;</span>\r\n<span style=\"color: navy\">}\r\n\r\n</span></pre></div>"
+  },
+  "url" : "http://smart.who.int/icvp/StructureMap/DVCLMToIPS",
+  "version" : "0.1.0",
+  "name" : "DVCLMToIPS",
+  "status" : "draft",
+  "date" : "2024-10-07T07:28:50+00:00",
+  "publisher" : "WHO",
+  "contact" : [{
+    "name" : "WHO",
+    "telecom" : [{
+      "system" : "url",
+      "value" : "http://who.int"
+    }]
+  }],
+  "structure" : [{
+    "url" : "http://smart.who.int/icvp/StructureDefinition/ModelDVC",
+    "mode" : "source",
+    "alias" : "DVCLogicalModel"
+  },
+  {
+    "url" : "http://hl7.org/fhir/StructureDefinition/Bundle",
+    "mode" : "target",
+    "alias" : "IPS"
+  }],
+  "group" : [{
+    "name" : "DVCLMToIPS",
+    "typeMode" : "none",
+    "documentation" : "create Bundle",
+    "input" : [{
+      "name" : "lm",
+      "type" : "DVCLogicalModel",
+      "mode" : "source"
+    },
+    {
+      "name" : "ips",
+      "type" : "IPS",
+      "mode" : "target"
+    }],
+    "rule" : [{
+      "name" : "setIPSType",
+      "source" : [{
+        "context" : "lm"
+      }],
+      "target" : [{
+        "context" : "ips",
+        "contextType" : "variable",
+        "element" : "type",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueString" : "document"
+        }]
+      }]
+    },
+    {
+      "name" : "setId",
+      "source" : [{
+        "context" : "lm"
+      }],
+      "target" : [{
+        "contextType" : "variable",
+        "variable" : "bid",
+        "transform" : "uuid"
+      },
+      {
+        "context" : "ips",
+        "contextType" : "variable",
+        "element" : "identifier",
+        "variable" : "id"
+      },
+      {
+        "context" : "id",
+        "contextType" : "variable",
+        "element" : "value",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "bid"
+        }]
+      },
+      {
+        "context" : "id",
+        "contextType" : "variable",
+        "element" : "system",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueString" : "urn:oid:2.16.724.4.8.10.200.10"
+        }]
+      }]
+    },
+    {
+      "name" : "setEntries",
+      "source" : [{
+        "context" : "lm"
+      }],
+      "target" : [{
+        "contextType" : "variable",
+        "variable" : "cid",
+        "transform" : "uuid"
+      },
+      {
+        "contextType" : "variable",
+        "variable" : "pid",
+        "transform" : "uuid"
+      },
+      {
+        "contextType" : "variable",
+        "variable" : "mid",
+        "transform" : "uuid"
+      },
+      {
+        "contextType" : "variable",
+        "variable" : "aid",
+        "transform" : "uuid"
+      },
+      {
+        "contextType" : "variable",
+        "variable" : "proid",
+        "transform" : "uuid"
+      },
+      {
+        "contextType" : "variable",
+        "variable" : "immid",
+        "transform" : "uuid"
+      }],
+      "rule" : [{
+        "name" : "mapCompositionResource",
+        "source" : [{
+          "context" : "lm"
+        }],
+        "target" : [{
+          "context" : "ips",
+          "contextType" : "variable",
+          "element" : "entry",
+          "variable" : "entry"
+        },
+        {
+          "context" : "entry",
+          "contextType" : "variable",
+          "element" : "resource",
+          "variable" : "composition",
+          "transform" : "create",
+          "parameter" : [{
+            "valueString" : "Composition"
+          }]
+        },
+        {
+          "context" : "entry",
+          "contextType" : "variable",
+          "element" : "fullUrl",
+          "transform" : "append",
+          "parameter" : [{
+            "valueString" : "urn:uuid:"
+          },
+          {
+            "valueId" : "cid"
+          }]
+        }],
+        "rule" : [{
+          "name" : "set LmToComposition",
+          "source" : [{
+            "context" : "lm"
+          }],
+          "dependent" : [{
+            "name" : "LmToComposition",
+            "variable" : ["lm",
+            "ips",
+            "composition",
+            "cid",
+            "pid",
+            "mid",
+            "aid",
+            "proid",
+            "immid"]
+          }]
+        },
+        {
+          "name" : "mapPatientResource",
+          "source" : [{
+            "context" : "lm"
+          }],
+          "target" : [{
+            "context" : "ips",
+            "contextType" : "variable",
+            "element" : "entry",
+            "variable" : "entry"
+          },
+          {
+            "context" : "entry",
+            "contextType" : "variable",
+            "element" : "fullUrl",
+            "transform" : "append",
+            "parameter" : [{
+              "valueString" : "urn:uuid:"
+            },
+            {
+              "valueId" : "pid"
+            }]
+          },
+          {
+            "contextType" : "variable",
+            "variable" : "patient",
+            "transform" : "create",
+            "parameter" : [{
+              "valueString" : "Patient"
+            }]
+          }],
+          "rule" : [{
+            "name" : "createPatient",
+            "source" : [{
+              "context" : "lm"
+            }],
+            "dependent" : [{
+              "name" : "DemographicsToPatient",
+              "variable" : ["lm",
+              "patient",
+              "pid"]
+            }]
+          },
+          {
+            "name" : "setPatientEntry",
+            "source" : [{
+              "context" : "lm"
+            }],
+            "target" : [{
+              "context" : "entry",
+              "contextType" : "variable",
+              "element" : "resource",
+              "transform" : "copy",
+              "parameter" : [{
+                "valueId" : "patient"
+              }]
+            }]
+          }]
+        },
+        {
+          "name" : "ss",
+          "source" : [{
+            "context" : "lm",
+            "element" : "issuer",
+            "variable" : "issuer"
+          }],
+          "rule" : [{
+            "name" : "mapOrganizationResource",
+            "source" : [{
+              "context" : "issuer",
+              "element" : "reference",
+              "variable" : "id"
+            }],
+            "target" : [{
+              "context" : "ips",
+              "contextType" : "variable",
+              "element" : "entry",
+              "variable" : "entry"
+            },
+            {
+              "context" : "entry",
+              "contextType" : "variable",
+              "element" : "fullUrl",
+              "transform" : "append",
+              "parameter" : [{
+                "valueString" : "urn:uuid:"
+              },
+              {
+                "valueId" : "id"
+              }]
+            },
+            {
+              "contextType" : "variable",
+              "variable" : "organization",
+              "transform" : "create",
+              "parameter" : [{
+                "valueString" : "Organization"
+              }]
+            }],
+            "rule" : [{
+              "name" : "createOrganization",
+              "source" : [{
+                "context" : "lm"
+              }],
+              "target" : [{
+                "context" : "organization",
+                "contextType" : "variable"
+              }],
+              "dependent" : [{
+                "name" : "createAuthor",
+                "variable" : ["issuer",
+                "organization"]
+              }]
+            },
+            {
+              "name" : "setOrganizationEntry",
+              "source" : [{
+                "context" : "lm"
+              }],
+              "target" : [{
+                "context" : "entry",
+                "contextType" : "variable",
+                "element" : "resource",
+                "transform" : "copy",
+                "parameter" : [{
+                  "valueId" : "organization"
+                }]
+              }]
+            }]
+          }]
+        }]
+      }]
+    }]
+  },
+  {
+    "name" : "LmToComposition",
+    "typeMode" : "none",
+    "documentation" : "create Composition",
+    "input" : [{
+      "name" : "lm",
+      "type" : "DVCLogicalModel",
+      "mode" : "source"
+    },
+    {
+      "name" : "ips",
+      "type" : "Bundle",
+      "mode" : "target"
+    },
+    {
+      "name" : "composition",
+      "type" : "Composition",
+      "mode" : "target"
+    },
+    {
+      "name" : "cid",
+      "mode" : "source"
+    },
+    {
+      "name" : "pid",
+      "mode" : "source"
+    },
+    {
+      "name" : "mid",
+      "mode" : "source"
+    },
+    {
+      "name" : "aid",
+      "mode" : "source"
+    },
+    {
+      "name" : "proid",
+      "mode" : "source"
+    },
+    {
+      "name" : "immid",
+      "mode" : "source"
+    }],
+    "rule" : [{
+      "name" : "setCid",
+      "source" : [{
+        "context" : "cid"
+      }],
+      "target" : [{
+        "context" : "composition",
+        "contextType" : "variable",
+        "element" : "id",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "cid"
+        }]
+      }]
+    },
+    {
+      "name" : "setStatus",
+      "source" : [{
+        "context" : "lm"
+      }],
+      "target" : [{
+        "context" : "composition",
+        "contextType" : "variable",
+        "element" : "status",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueString" : "final"
+        }]
+      }]
+    },
+    {
+      "name" : "setTitle",
+      "source" : [{
+        "context" : "lm"
+      }],
+      "target" : [{
+        "context" : "composition",
+        "contextType" : "variable",
+        "element" : "title",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueString" : "International Patient Summary"
+        }]
+      }]
+    },
+    {
+      "name" : "setType",
+      "source" : [{
+        "context" : "lm"
+      }],
+      "target" : [{
+        "contextType" : "variable",
+        "variable" : "coding",
+        "transform" : "create",
+        "parameter" : [{
+          "valueString" : "Coding"
+        }]
+      },
+      {
+        "context" : "coding",
+        "contextType" : "variable",
+        "element" : "code",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueString" : "60591-5"
+        }]
+      },
+      {
+        "context" : "coding",
+        "contextType" : "variable",
+        "element" : "system",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueString" : "http://loinc.org"
+        }]
+      },
+      {
+        "contextType" : "variable",
+        "variable" : "code",
+        "transform" : "create",
+        "parameter" : [{
+          "valueString" : "CodeableConcept"
+        }]
+      },
+      {
+        "context" : "code",
+        "contextType" : "variable",
+        "element" : "coding",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "coding"
+        }]
+      },
+      {
+        "context" : "composition",
+        "contextType" : "variable",
+        "element" : "type",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "code"
+        }]
+      }]
+    },
+    {
+      "name" : "setSubject",
+      "source" : [{
+        "context" : "lm"
+      }],
+      "target" : [{
+        "context" : "composition",
+        "contextType" : "variable",
+        "element" : "subject",
+        "variable" : "subject"
+      }],
+      "rule" : [{
+        "name" : "setSubject",
+        "source" : [{
+          "context" : "lm"
+        }],
+        "target" : [{
+          "context" : "subject",
+          "contextType" : "variable",
+          "element" : "reference",
+          "transform" : "append",
+          "parameter" : [{
+            "valueString" : "urn:uuid:"
+          },
+          {
+            "valueId" : "pid"
+          }]
+        }]
+      }]
+    },
+    {
+      "name" : "setid",
+      "source" : [{
+        "context" : "lm",
+        "element" : "issuer",
+        "variable" : "issuer"
+      }],
+      "rule" : [{
+        "name" : "setauthr",
+        "source" : [{
+          "context" : "issuer",
+          "element" : "reference",
+          "variable" : "id"
+        }],
+        "target" : [{
+          "context" : "composition",
+          "contextType" : "variable",
+          "element" : "author",
+          "variable" : "author"
+        }],
+        "rule" : [{
+          "name" : "setAuthor",
+          "source" : [{
+            "context" : "id"
+          }],
+          "target" : [{
+            "context" : "author",
+            "contextType" : "variable",
+            "element" : "reference",
+            "transform" : "append",
+            "parameter" : [{
+              "valueString" : "urn:uuid:"
+            },
+            {
+              "valueId" : "id"
+            }]
+          }]
+        }]
+      }]
+    },
+    {
+      "name" : "createMedication",
+      "source" : [{
+        "context" : "lm"
+      }],
+      "target" : [{
+        "context" : "composition",
+        "contextType" : "variable",
+        "element" : "section",
+        "variable" : "medication"
+      }],
+      "dependent" : [{
+        "name" : "createSectionMedications",
+        "variable" : ["lm",
+        "medication",
+        "mid"]
+      }]
+    },
+    {
+      "name" : "createAllergies",
+      "source" : [{
+        "context" : "lm"
+      }],
+      "target" : [{
+        "context" : "composition",
+        "contextType" : "variable",
+        "element" : "section",
+        "variable" : "allergies"
+      }],
+      "dependent" : [{
+        "name" : "createSectionAllergies",
+        "variable" : ["lm",
+        "allergies",
+        "aid"]
+      }]
+    },
+    {
+      "name" : "createProblems",
+      "source" : [{
+        "context" : "lm"
+      }],
+      "target" : [{
+        "context" : "composition",
+        "contextType" : "variable",
+        "element" : "section",
+        "variable" : "problems"
+      }],
+      "dependent" : [{
+        "name" : "createSectionProblems",
+        "variable" : ["lm",
+        "problems",
+        "proid"]
+      }]
+    },
+    {
+      "name" : "createImmunizations",
+      "source" : [{
+        "context" : "lm"
+      }],
+      "dependent" : [{
+        "name" : "createSectionImmunizations",
+        "variable" : ["lm",
+        "ips",
+        "composition",
+        "immid",
+        "pid"]
+      }]
+    }]
+  },
+  {
+    "name" : "DemographicsToPatient",
+    "typeMode" : "none",
+    "documentation" : "create Patient",
+    "input" : [{
+      "name" : "lm",
+      "type" : "DVCLogicalModel",
+      "mode" : "source"
+    },
+    {
+      "name" : "patient",
+      "type" : "Patient",
+      "mode" : "target"
+    },
+    {
+      "name" : "pid",
+      "mode" : "source"
+    }],
+    "rule" : [{
+      "name" : "setPatientId",
+      "source" : [{
+        "context" : "pid"
+      }],
+      "target" : [{
+        "context" : "patient",
+        "contextType" : "variable",
+        "element" : "id",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "pid"
+        }]
+      }]
+    },
+    {
+      "name" : "Setname",
+      "source" : [{
+        "context" : "lm",
+        "element" : "name",
+        "variable" : "sourceName"
+      }],
+      "target" : [{
+        "context" : "patient",
+        "contextType" : "variable",
+        "element" : "name",
+        "variable" : "targetName"
+      }],
+      "dependent" : [{
+        "name" : "nameToHumanName",
+        "variable" : ["sourceName",
+        "targetName"]
+      }]
+    },
+    {
+      "name" : "setDateofBirth",
+      "source" : [{
+        "context" : "lm",
+        "element" : "dob",
+        "variable" : "dob"
+      }],
+      "target" : [{
+        "context" : "patient",
+        "contextType" : "variable",
+        "element" : "birthDate",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "dob"
+        }]
+      }]
+    },
+    {
+      "name" : "Patient Gender",
+      "source" : [{
+        "context" : "lm",
+        "element" : "sex",
+        "variable" : "sex"
+      }],
+      "dependent" : [{
+        "name" : "ExtractGender",
+        "variable" : ["sex",
+        "patient"]
+      }]
+    },
+    {
+      "name" : "setNationalIdentifier",
+      "source" : [{
+        "context" : "lm",
+        "element" : "nid",
+        "variable" : "id"
+      }],
+      "target" : [{
+        "context" : "patient",
+        "contextType" : "variable",
+        "element" : "identifier",
+        "variable" : "identifier"
+      },
+      {
+        "context" : "identifier",
+        "contextType" : "variable",
+        "element" : "value",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "id"
+        }]
+      }]
+    },
+    {
+      "name" : "setGuardianName",
+      "source" : [{
+        "context" : "lm",
+        "element" : "guardian",
+        "variable" : "guardian"
+      }],
+      "target" : [{
+        "context" : "patient",
+        "contextType" : "variable",
+        "element" : "contact",
+        "variable" : "parentContact"
+      },
+      {
+        "context" : "parentContact",
+        "contextType" : "variable",
+        "element" : "name",
+        "variable" : "parentName"
+      }],
+      "dependent" : [{
+        "name" : "nameToHumanName",
+        "variable" : ["guardian",
+        "parentName"]
+      }]
+    }]
+  },
+  {
+    "name" : "ExtractGender",
+    "typeMode" : "none",
+    "documentation" : "deals with short and case sensitive codes",
+    "input" : [{
+      "name" : "sex",
+      "mode" : "source"
+    },
+    {
+      "name" : "patient",
+      "type" : "Patient",
+      "mode" : "target"
+    }],
+    "rule" : [{
+      "name" : "set male",
+      "source" : [{
+        "context" : "sex",
+        "condition" : "(sex = 'M')"
+      }],
+      "target" : [{
+        "context" : "patient",
+        "contextType" : "variable",
+        "element" : "gender",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueString" : "male"
+        }]
+      }]
+    },
+    {
+      "name" : "set female",
+      "source" : [{
+        "context" : "sex",
+        "condition" : "(sex = 'F')"
+      }],
+      "target" : [{
+        "context" : "patient",
+        "contextType" : "variable",
+        "element" : "gender",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueString" : "female"
+        }]
+      }]
+    },
+    {
+      "name" : "set male",
+      "source" : [{
+        "context" : "sex",
+        "condition" : "(sex = 'm')"
+      }],
+      "target" : [{
+        "context" : "patient",
+        "contextType" : "variable",
+        "element" : "gender",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueString" : "male"
+        }]
+      }]
+    },
+    {
+      "name" : "set female",
+      "source" : [{
+        "context" : "sex",
+        "condition" : "(sex = 'f')"
+      }],
+      "target" : [{
+        "context" : "patient",
+        "contextType" : "variable",
+        "element" : "gender",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueString" : "female"
+        }]
+      }]
+    },
+    {
+      "name" : "set male",
+      "source" : [{
+        "context" : "sex",
+        "condition" : "(sex = 'Male')"
+      }],
+      "target" : [{
+        "context" : "patient",
+        "contextType" : "variable",
+        "element" : "gender",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueString" : "male"
+        }]
+      }]
+    },
+    {
+      "name" : "set female",
+      "source" : [{
+        "context" : "sex",
+        "condition" : "(sex = 'Female')"
+      }],
+      "target" : [{
+        "context" : "patient",
+        "contextType" : "variable",
+        "element" : "gender",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueString" : "female"
+        }]
+      }]
+    },
+    {
+      "name" : "set male",
+      "source" : [{
+        "context" : "sex",
+        "condition" : "(sex = 'male')"
+      }],
+      "target" : [{
+        "context" : "patient",
+        "contextType" : "variable",
+        "element" : "gender",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueString" : "male"
+        }]
+      }]
+    },
+    {
+      "name" : "set female",
+      "source" : [{
+        "context" : "sex",
+        "condition" : "(sex = 'female')"
+      }],
+      "target" : [{
+        "context" : "patient",
+        "contextType" : "variable",
+        "element" : "gender",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueString" : "female"
+        }]
+      }]
+    }]
+  },
+  {
+    "name" : "createAuthor",
+    "typeMode" : "none",
+    "documentation" : "create author",
+    "input" : [{
+      "name" : "issuer",
+      "mode" : "source"
+    },
+    {
+      "name" : "org",
+      "type" : "Organization",
+      "mode" : "target"
+    }],
+    "rule" : [{
+      "name" : "setID",
+      "source" : [{
+        "context" : "issuer",
+        "element" : "reference",
+        "variable" : "id"
+      }],
+      "target" : [{
+        "context" : "org",
+        "contextType" : "variable",
+        "element" : "id",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "id"
+        }]
+      }]
+    }]
+  },
+  {
+    "name" : "createSectionMedications",
+    "typeMode" : "none",
+    "documentation" : "create sectionMedications",
+    "input" : [{
+      "name" : "lm",
+      "type" : "DVCLogicalModel",
+      "mode" : "source"
+    },
+    {
+      "name" : "med",
+      "type" : "BackboneElement",
+      "mode" : "target"
+    },
+    {
+      "name" : "mid",
+      "mode" : "source"
+    }],
+    "rule" : [{
+      "name" : "setmedicationid",
+      "source" : [{
+        "context" : "mid"
+      }],
+      "target" : [{
+        "context" : "med",
+        "contextType" : "variable",
+        "element" : "id",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "mid"
+        }]
+      }]
+    },
+    {
+      "name" : "setMedicationTitle",
+      "source" : [{
+        "context" : "lm"
+      }],
+      "target" : [{
+        "context" : "med",
+        "contextType" : "variable",
+        "element" : "title",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueString" : "Medication Summary Section"
+        }]
+      }]
+    },
+    {
+      "name" : "setText",
+      "source" : [{
+        "context" : "lm"
+      }],
+      "target" : [{
+        "context" : "med",
+        "contextType" : "variable",
+        "element" : "text",
+        "variable" : "text"
+      }],
+      "dependent" : [{
+        "name" : "generateNarrativeText",
+        "variable" : ["med",
+        "text"]
+      }]
+    },
+    {
+      "name" : "setCode",
+      "source" : [{
+        "context" : "lm"
+      }],
+      "target" : [{
+        "contextType" : "variable",
+        "variable" : "coding",
+        "transform" : "create",
+        "parameter" : [{
+          "valueString" : "Coding"
+        }]
+      },
+      {
+        "context" : "coding",
+        "contextType" : "variable",
+        "element" : "code",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueString" : "10160-0"
+        }]
+      },
+      {
+        "context" : "coding",
+        "contextType" : "variable",
+        "element" : "system",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueString" : "http://loinc.org"
+        }]
+      },
+      {
+        "contextType" : "variable",
+        "variable" : "code",
+        "transform" : "create",
+        "parameter" : [{
+          "valueString" : "CodeableConcept"
+        }]
+      },
+      {
+        "context" : "code",
+        "contextType" : "variable",
+        "element" : "coding",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "coding"
+        }]
+      },
+      {
+        "context" : "med",
+        "contextType" : "variable",
+        "element" : "code",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "code"
+        }]
+      }]
+    },
+    {
+      "name" : "setCode",
+      "source" : [{
+        "context" : "lm"
+      }],
+      "target" : [{
+        "contextType" : "variable",
+        "variable" : "coding",
+        "transform" : "create",
+        "parameter" : [{
+          "valueString" : "Coding"
+        }]
+      },
+      {
+        "context" : "coding",
+        "contextType" : "variable",
+        "element" : "code",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueString" : "unavailable"
+        }]
+      },
+      {
+        "context" : "coding",
+        "contextType" : "variable",
+        "element" : "system",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueString" : "http://hl7.org/fhir/ValueSet/list-empty-reason"
+        }]
+      },
+      {
+        "contextType" : "variable",
+        "variable" : "code",
+        "transform" : "create",
+        "parameter" : [{
+          "valueString" : "CodeableConcept"
+        }]
+      },
+      {
+        "context" : "code",
+        "contextType" : "variable",
+        "element" : "coding",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "coding"
+        }]
+      },
+      {
+        "context" : "med",
+        "contextType" : "variable",
+        "element" : "emptyReason",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "code"
+        }]
+      }]
+    }]
+  },
+  {
+    "name" : "createSectionAllergies",
+    "typeMode" : "none",
+    "documentation" : "create sectionAllergies",
+    "input" : [{
+      "name" : "lm",
+      "type" : "DVCLogicalModel",
+      "mode" : "source"
+    },
+    {
+      "name" : "all",
+      "type" : "BackboneElement",
+      "mode" : "target"
+    },
+    {
+      "name" : "aid",
+      "mode" : "source"
+    }],
+    "rule" : [{
+      "name" : "setAllergyId",
+      "source" : [{
+        "context" : "aid"
+      }],
+      "target" : [{
+        "context" : "all",
+        "contextType" : "variable",
+        "element" : "id",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "aid"
+        }]
+      }]
+    },
+    {
+      "name" : "setAllergyTitle",
+      "source" : [{
+        "context" : "lm"
+      }],
+      "target" : [{
+        "context" : "all",
+        "contextType" : "variable",
+        "element" : "title",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueString" : "Allergies Section"
+        }]
+      }]
+    },
+    {
+      "name" : "setText",
+      "source" : [{
+        "context" : "lm"
+      }],
+      "target" : [{
+        "context" : "all",
+        "contextType" : "variable",
+        "element" : "text",
+        "variable" : "text"
+      }],
+      "dependent" : [{
+        "name" : "generateNarrativeText",
+        "variable" : ["all",
+        "text"]
+      }]
+    },
+    {
+      "name" : "setCode",
+      "source" : [{
+        "context" : "lm"
+      }],
+      "target" : [{
+        "contextType" : "variable",
+        "variable" : "coding",
+        "transform" : "create",
+        "parameter" : [{
+          "valueString" : "Coding"
+        }]
+      },
+      {
+        "context" : "coding",
+        "contextType" : "variable",
+        "element" : "code",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueString" : "48765-2"
+        }]
+      },
+      {
+        "context" : "coding",
+        "contextType" : "variable",
+        "element" : "system",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueString" : "http://loinc.org"
+        }]
+      },
+      {
+        "contextType" : "variable",
+        "variable" : "code",
+        "transform" : "create",
+        "parameter" : [{
+          "valueString" : "CodeableConcept"
+        }]
+      },
+      {
+        "context" : "code",
+        "contextType" : "variable",
+        "element" : "coding",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "coding"
+        }]
+      },
+      {
+        "context" : "all",
+        "contextType" : "variable",
+        "element" : "code",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "code"
+        }]
+      }]
+    },
+    {
+      "name" : "setCode",
+      "source" : [{
+        "context" : "lm"
+      }],
+      "target" : [{
+        "contextType" : "variable",
+        "variable" : "coding",
+        "transform" : "create",
+        "parameter" : [{
+          "valueString" : "Coding"
+        }]
+      },
+      {
+        "context" : "coding",
+        "contextType" : "variable",
+        "element" : "code",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueString" : "unavailable"
+        }]
+      },
+      {
+        "context" : "coding",
+        "contextType" : "variable",
+        "element" : "system",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueString" : "http://hl7.org/fhir/ValueSet/list-empty-reason"
+        }]
+      },
+      {
+        "contextType" : "variable",
+        "variable" : "code",
+        "transform" : "create",
+        "parameter" : [{
+          "valueString" : "CodeableConcept"
+        }]
+      },
+      {
+        "context" : "code",
+        "contextType" : "variable",
+        "element" : "coding",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "coding"
+        }]
+      },
+      {
+        "context" : "all",
+        "contextType" : "variable",
+        "element" : "emptyReason",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "code"
+        }]
+      }]
+    }]
+  },
+  {
+    "name" : "createSectionProblems",
+    "typeMode" : "none",
+    "documentation" : "create sectionProblems",
+    "input" : [{
+      "name" : "lm",
+      "type" : "DVCLogicalModel",
+      "mode" : "source"
+    },
+    {
+      "name" : "prb",
+      "type" : "BackboneElement",
+      "mode" : "target"
+    },
+    {
+      "name" : "proid",
+      "mode" : "source"
+    }],
+    "rule" : [{
+      "name" : "setProblemsId",
+      "source" : [{
+        "context" : "proid"
+      }],
+      "target" : [{
+        "context" : "prb",
+        "contextType" : "variable",
+        "element" : "id",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "proid"
+        }]
+      }]
+    },
+    {
+      "name" : "setProblemTitle",
+      "source" : [{
+        "context" : "lm"
+      }],
+      "target" : [{
+        "context" : "prb",
+        "contextType" : "variable",
+        "element" : "title",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueString" : "Problems Section"
+        }]
+      }]
+    },
+    {
+      "name" : "setText",
+      "source" : [{
+        "context" : "lm"
+      }],
+      "target" : [{
+        "context" : "prb",
+        "contextType" : "variable",
+        "element" : "text",
+        "variable" : "text"
+      }],
+      "dependent" : [{
+        "name" : "generateNarrativeText",
+        "variable" : ["prb",
+        "text"]
+      }]
+    },
+    {
+      "name" : "setCode",
+      "source" : [{
+        "context" : "lm"
+      }],
+      "target" : [{
+        "contextType" : "variable",
+        "variable" : "coding",
+        "transform" : "create",
+        "parameter" : [{
+          "valueString" : "Coding"
+        }]
+      },
+      {
+        "context" : "coding",
+        "contextType" : "variable",
+        "element" : "code",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueString" : "11450-4"
+        }]
+      },
+      {
+        "context" : "coding",
+        "contextType" : "variable",
+        "element" : "system",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueString" : "http://loinc.org"
+        }]
+      },
+      {
+        "contextType" : "variable",
+        "variable" : "code",
+        "transform" : "create",
+        "parameter" : [{
+          "valueString" : "CodeableConcept"
+        }]
+      },
+      {
+        "context" : "code",
+        "contextType" : "variable",
+        "element" : "coding",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "coding"
+        }]
+      },
+      {
+        "context" : "prb",
+        "contextType" : "variable",
+        "element" : "code",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "code"
+        }]
+      }]
+    },
+    {
+      "name" : "setCode",
+      "source" : [{
+        "context" : "lm"
+      }],
+      "target" : [{
+        "contextType" : "variable",
+        "variable" : "coding",
+        "transform" : "create",
+        "parameter" : [{
+          "valueString" : "Coding"
+        }]
+      },
+      {
+        "context" : "coding",
+        "contextType" : "variable",
+        "element" : "code",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueString" : "unavailable"
+        }]
+      },
+      {
+        "context" : "coding",
+        "contextType" : "variable",
+        "element" : "system",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueString" : "http://hl7.org/fhir/ValueSet/list-empty-reason"
+        }]
+      },
+      {
+        "contextType" : "variable",
+        "variable" : "code",
+        "transform" : "create",
+        "parameter" : [{
+          "valueString" : "CodeableConcept"
+        }]
+      },
+      {
+        "context" : "code",
+        "contextType" : "variable",
+        "element" : "coding",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "coding"
+        }]
+      },
+      {
+        "context" : "prb",
+        "contextType" : "variable",
+        "element" : "emptyReason",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "code"
+        }]
+      }]
+    }]
+  },
+  {
+    "name" : "createSectionImmunizations",
+    "typeMode" : "none",
+    "documentation" : "create sectionImmunizations",
+    "input" : [{
+      "name" : "lm",
+      "type" : "DVCLogicalModel",
+      "mode" : "source"
+    },
+    {
+      "name" : "bundle",
+      "type" : "Bundle",
+      "mode" : "target"
+    },
+    {
+      "name" : "composition",
+      "type" : "Composition",
+      "mode" : "target"
+    },
+    {
+      "name" : "immid",
+      "mode" : "source"
+    },
+    {
+      "name" : "pid",
+      "mode" : "source"
+    }],
+    "rule" : [{
+      "name" : "set",
+      "source" : [{
+        "context" : "lm"
+      }],
+      "target" : [{
+        "context" : "composition",
+        "contextType" : "variable",
+        "element" : "section",
+        "variable" : "imm"
+      }],
+      "rule" : [{
+        "name" : "setImmunizationsId",
+        "source" : [{
+          "context" : "immid"
+        }],
+        "target" : [{
+          "context" : "imm",
+          "contextType" : "variable",
+          "element" : "id",
+          "transform" : "copy",
+          "parameter" : [{
+            "valueId" : "immid"
+          }]
+        }]
+      },
+      {
+        "name" : "setImmunizationTitle",
+        "source" : [{
+          "context" : "lm"
+        }],
+        "target" : [{
+          "context" : "imm",
+          "contextType" : "variable",
+          "element" : "title",
+          "transform" : "copy",
+          "parameter" : [{
+            "valueString" : "Immunizations Section"
+          }]
+        }]
+      },
+      {
+        "name" : "setText",
+        "source" : [{
+          "context" : "lm"
+        }],
+        "target" : [{
+          "context" : "imm",
+          "contextType" : "variable",
+          "element" : "text",
+          "variable" : "text"
+        }],
+        "dependent" : [{
+          "name" : "generateNarrativeText",
+          "variable" : ["imm",
+          "text"]
+        }]
+      },
+      {
+        "name" : "setCode",
+        "source" : [{
+          "context" : "lm"
+        }],
+        "target" : [{
+          "contextType" : "variable",
+          "variable" : "coding",
+          "transform" : "create",
+          "parameter" : [{
+            "valueString" : "Coding"
+          }]
+        },
+        {
+          "context" : "coding",
+          "contextType" : "variable",
+          "element" : "code",
+          "transform" : "copy",
+          "parameter" : [{
+            "valueString" : "11369-6"
+          }]
+        },
+        {
+          "context" : "coding",
+          "contextType" : "variable",
+          "element" : "system",
+          "transform" : "copy",
+          "parameter" : [{
+            "valueString" : "http://loinc.org"
+          }]
+        },
+        {
+          "contextType" : "variable",
+          "variable" : "code",
+          "transform" : "create",
+          "parameter" : [{
+            "valueString" : "CodeableConcept"
+          }]
+        },
+        {
+          "context" : "code",
+          "contextType" : "variable",
+          "element" : "coding",
+          "transform" : "copy",
+          "parameter" : [{
+            "valueId" : "coding"
+          }]
+        },
+        {
+          "context" : "imm",
+          "contextType" : "variable",
+          "element" : "code",
+          "transform" : "copy",
+          "parameter" : [{
+            "valueId" : "code"
+          }]
+        }]
+      },
+      {
+        "name" : "setImmz",
+        "source" : [{
+          "context" : "lm",
+          "element" : "vaccineDetails",
+          "variable" : "vax"
+        }],
+        "target" : [{
+          "contextType" : "variable",
+          "variable" : "id",
+          "transform" : "uuid"
+        },
+        {
+          "context" : "bundle",
+          "contextType" : "variable",
+          "element" : "entry",
+          "variable" : "entry"
+        },
+        {
+          "context" : "entry",
+          "contextType" : "variable",
+          "element" : "fullUrl",
+          "transform" : "append",
+          "parameter" : [{
+            "valueString" : "urn:uuid:"
+          },
+          {
+            "valueId" : "id"
+          }]
+        },
+        {
+          "context" : "imm",
+          "contextType" : "variable",
+          "element" : "entry",
+          "variable" : "sectionEntry"
+        },
+        {
+          "context" : "sectionEntry",
+          "contextType" : "variable",
+          "element" : "reference",
+          "transform" : "append",
+          "parameter" : [{
+            "valueString" : "urn:uuid:"
+          },
+          {
+            "valueId" : "id"
+          }]
+        },
+        {
+          "context" : "entry",
+          "contextType" : "variable",
+          "element" : "resource",
+          "variable" : "immunization",
+          "transform" : "create",
+          "parameter" : [{
+            "valueString" : "Immunization"
+          }]
+        },
+        {
+          "context" : "immunization",
+          "contextType" : "variable",
+          "element" : "id",
+          "transform" : "copy",
+          "parameter" : [{
+            "valueId" : "id"
+          }]
+        }],
+        "dependent" : [{
+          "name" : "createImmunizationResource",
+          "variable" : ["vax",
+          "immunization",
+          "pid"]
+        }]
+      }]
+    }]
+  },
+  {
+    "name" : "createImmunizationResource",
+    "typeMode" : "none",
+    "input" : [{
+      "name" : "vax",
+      "type" : "vaccineDetails",
+      "mode" : "source"
+    },
+    {
+      "name" : "immunization",
+      "type" : "Immunization",
+      "mode" : "target"
+    },
+    {
+      "name" : "pid",
+      "mode" : "source"
+    }],
+    "rule" : [{
+      "name" : "setStatus",
+      "source" : [{
+        "context" : "vax"
+      }],
+      "target" : [{
+        "context" : "immunization",
+        "contextType" : "variable",
+        "element" : "status",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueString" : "completed"
+        }]
+      }]
+    },
+    {
+      "name" : "setvaccinecode",
+      "source" : [{
+        "context" : "vax",
+        "element" : "vaccineClassification",
+        "variable" : "vaccine"
+      }],
+      "target" : [{
+        "context" : "immunization",
+        "contextType" : "variable",
+        "element" : "vaccineCode",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "vaccine"
+        }]
+      }]
+    },
+    {
+      "name" : "setDate",
+      "source" : [{
+        "context" : "vax",
+        "element" : "date",
+        "variable" : "date"
+      }],
+      "target" : [{
+        "context" : "immunization",
+        "contextType" : "variable",
+        "element" : "occurrence",
+        "transform" : "append",
+        "parameter" : [{
+          "valueId" : "date"
+        },
+        {
+          "valueString" : "T00:00:00.000Z"
+        }]
+      }]
+    },
+    {
+      "name" : "setBatchNo",
+      "source" : [{
+        "context" : "vax",
+        "element" : "batchNo",
+        "variable" : "batchNo"
+      }],
+      "target" : [{
+        "context" : "immunization",
+        "contextType" : "variable",
+        "element" : "lotNumber",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "batchNo"
+        }]
+      }]
+    },
+    {
+      "name" : "setProtocolApplied",
+      "source" : [{
+        "context" : "vax"
+      }],
+      "target" : [{
+        "context" : "immunization",
+        "contextType" : "variable",
+        "element" : "protocolApplied",
+        "variable" : "protocol"
+      }],
+      "rule" : [{
+        "name" : "setDoseNo",
+        "source" : [{
+          "context" : "vax",
+          "element" : "doseNumber",
+          "variable" : "doseNo"
+        }],
+        "rule" : [{
+          "name" : "setDoseNo",
+          "source" : [{
+            "context" : "doseNo",
+            "element" : "coding",
+            "variable" : "coding"
+          }],
+          "rule" : [{
+            "name" : "setDoseNo",
+            "source" : [{
+              "context" : "coding",
+              "element" : "code",
+              "variable" : "code"
+            }],
+            "target" : [{
+              "context" : "protocol",
+              "contextType" : "variable",
+              "element" : "doseNumber",
+              "transform" : "copy",
+              "parameter" : [{
+                "valueId" : "code"
+              }]
+            }]
+          }]
+        }]
+      },
+      {
+        "name" : "setTargetDisease",
+        "source" : [{
+          "context" : "vax",
+          "element" : "disease",
+          "variable" : "disease"
+        }],
+        "target" : [{
+          "contextType" : "variable",
+          "variable" : "code",
+          "transform" : "create",
+          "parameter" : [{
+            "valueString" : "CodeableConcept"
+          }]
+        },
+        {
+          "context" : "code",
+          "contextType" : "variable",
+          "element" : "coding",
+          "transform" : "copy",
+          "parameter" : [{
+            "valueId" : "disease"
+          }]
+        },
+        {
+          "context" : "protocol",
+          "contextType" : "variable",
+          "element" : "targetDisease",
+          "transform" : "copy",
+          "parameter" : [{
+            "valueId" : "code"
+          }]
+        }]
+      }]
+    },
+    {
+      "name" : "setSubject",
+      "source" : [{
+        "context" : "vax"
+      }],
+      "target" : [{
+        "context" : "immunization",
+        "contextType" : "variable",
+        "element" : "patient",
+        "variable" : "subject"
+      },
+      {
+        "context" : "subject",
+        "contextType" : "variable",
+        "element" : "reference",
+        "transform" : "append",
+        "parameter" : [{
+          "valueString" : "urn:uuid:"
+        },
+        {
+          "valueId" : "pid"
+        }]
+      }]
+    },
+    {
+      "name" : "set Manufacturer",
+      "source" : [{
+        "context" : "vax",
+        "element" : "manufacturerId",
+        "variable" : "maId"
+      }],
+      "target" : [{
+        "contextType" : "variable",
+        "variable" : "maRef",
+        "transform" : "create",
+        "parameter" : [{
+          "valueString" : "Reference"
+        }]
+      },
+      {
+        "context" : "maRef",
+        "contextType" : "variable",
+        "element" : "identifier",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "maId"
+        }]
+      },
+      {
+        "context" : "immunization",
+        "contextType" : "variable",
+        "element" : "manufacturer",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "maRef"
+        }]
+      }]
+    }]
+  },
+  {
+    "name" : "generateNarrativeText",
+    "typeMode" : "none",
+    "documentation" : "helper function",
+    "input" : [{
+      "name" : "src",
+      "type" : "Section",
+      "mode" : "source"
+    },
+    {
+      "name" : "text",
+      "type" : "string",
+      "mode" : "target"
+    }],
+    "rule" : [{
+      "name" : "setstatus",
+      "source" : [{
+        "context" : "src"
+      }],
+      "target" : [{
+        "context" : "text",
+        "contextType" : "variable",
+        "element" : "status",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueString" : "empty"
+        }]
+      }]
+    },
+    {
+      "name" : "setdiv",
+      "source" : [{
+        "context" : "src"
+      }],
+      "target" : [{
+        "context" : "text",
+        "contextType" : "variable",
+        "element" : "div",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueString" : "<div xmlns=\"http://www.w3.org/1999/xhtml\">Narrative not available</div>"
+        }]
+      }]
+    }]
+  },
+  {
+    "name" : "nameToHumanName",
+    "typeMode" : "none",
+    "input" : [{
+      "name" : "sourceName",
+      "mode" : "source"
+    },
+    {
+      "name" : "targetName",
+      "type" : "HumanName",
+      "mode" : "target"
+    }],
+    "rule" : [{
+      "name" : "Patient Name",
+      "source" : [{
+        "context" : "sourceName",
+        "variable" : "patientName"
+      }],
+      "target" : [{
+        "context" : "targetName",
+        "contextType" : "variable",
+        "element" : "text",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "patientName"
+        }]
+      }]
+    }]
+  },
+  {
+    "name" : "humanNameToHumanName",
+    "typeMode" : "none",
+    "input" : [{
+      "name" : "sourceName",
+      "mode" : "source"
+    },
+    {
+      "name" : "targetName",
+      "type" : "HumanName",
+      "mode" : "target"
+    }],
+    "rule" : [{
+      "name" : "CopyUse",
+      "source" : [{
+        "context" : "sourceName",
+        "element" : "use",
+        "variable" : "use"
+      }],
+      "target" : [{
+        "context" : "targetName",
+        "contextType" : "variable",
+        "element" : "use",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "use"
+        }]
+      }]
+    },
+    {
+      "name" : "CopyText",
+      "source" : [{
+        "context" : "sourceName",
+        "element" : "text",
+        "variable" : "text"
+      }],
+      "target" : [{
+        "context" : "targetName",
+        "contextType" : "variable",
+        "element" : "text",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "text"
+        }]
+      }]
+    },
+    {
+      "name" : "CopyFamily",
+      "source" : [{
+        "context" : "sourceName",
+        "element" : "family",
+        "variable" : "family"
+      }],
+      "target" : [{
+        "context" : "targetName",
+        "contextType" : "variable",
+        "element" : "family",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "family"
+        }]
+      }]
+    },
+    {
+      "name" : "CopyGiven",
+      "source" : [{
+        "context" : "sourceName",
+        "element" : "given",
+        "variable" : "given"
+      }],
+      "target" : [{
+        "context" : "targetName",
+        "contextType" : "variable",
+        "element" : "given",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "given"
+        }]
+      }]
+    },
+    {
+      "name" : "CopyPrefix",
+      "source" : [{
+        "context" : "sourceName",
+        "element" : "prefix",
+        "variable" : "prefix"
+      }],
+      "target" : [{
+        "context" : "targetName",
+        "contextType" : "variable",
+        "element" : "prefix",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "prefix"
+        }]
+      }]
+    },
+    {
+      "name" : "CopySuffix",
+      "source" : [{
+        "context" : "sourceName",
+        "element" : "suffix",
+        "variable" : "suffix"
+      }],
+      "target" : [{
+        "context" : "targetName",
+        "contextType" : "variable",
+        "element" : "suffix",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "suffix"
+        }]
+      }]
+    },
+    {
+      "name" : "copyPeriod",
+      "source" : [{
+        "context" : "sourceName",
+        "element" : "period",
+        "variable" : "sourcePeriod"
+      }],
+      "target" : [{
+        "context" : "targetName",
+        "contextType" : "variable",
+        "element" : "period",
+        "variable" : "targetPeriod"
+      }],
+      "rule" : [{
+        "name" : "CopyPeriod",
+        "source" : [{
+          "context" : "sourcePeriod"
+        }],
+        "dependent" : [{
+          "name" : "periodToPeriod",
+          "variable" : ["sourcePeriod",
+          "targetPeriod"]
+        }]
+      }]
+    }]
+  },
+  {
+    "name" : "periodToPeriod",
+    "typeMode" : "none",
+    "input" : [{
+      "name" : "sourcePeriod",
+      "mode" : "source"
+    },
+    {
+      "name" : "targetPeriod",
+      "type" : "Period",
+      "mode" : "target"
+    }],
+    "rule" : [{
+      "name" : "set period start",
+      "source" : [{
+        "context" : "sourcePeriod",
+        "element" : "start",
+        "variable" : "start"
+      }],
+      "target" : [{
+        "context" : "targetPeriod",
+        "contextType" : "variable",
+        "element" : "start",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "start"
+        }]
+      }]
+    },
+    {
+      "name" : "set period end",
+      "source" : [{
+        "context" : "sourcePeriod",
+        "element" : "end",
+        "variable" : "end"
+      }],
+      "target" : [{
+        "context" : "targetPeriod",
+        "contextType" : "variable",
+        "element" : "end",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "end"
+        }]
+      }]
+    }]
+  }]
+}
