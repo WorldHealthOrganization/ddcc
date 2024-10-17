@@ -21,8 +21,11 @@ jobs:
           VERSION=$(jq -r '.version' publication-request.json)
           echo "VERSION=$VERSION" >> $GITHUB_ENV
 
+      # Capture the current branch and set it as an output
       - name: Get current branch
-        run: echo "BRANCH=$(git rev-parse --abbrev-ref HEAD)" >> $GITHUB_ENV
+        id: get_branch
+        run: echo "::set-output name=BRANCH::$(git rev-parse --abbrev-ref HEAD)"
+
 
       # Create a release and tag with the version
       - name: Create release and tag
@@ -39,5 +42,4 @@ jobs:
       - name: Trigger remote workflow
         uses: WorldHealthOrganization/smart-html/.github/workflows/release.yml@main
         with:
-          branch: ${{ env.BRANCH }}  # Pass the current branch to the remote workflow
-
+          branch: ${{ steps.get_branch.outputs.BRANCH }}  # Pass the current branch to the remote workflow
