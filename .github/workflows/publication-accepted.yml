@@ -6,26 +6,21 @@ on:
 
 jobs:
   create_release_and_tag:
- #   if: contains(github.event.issue.labels.*.name, 'Build OK') && contains(github.event.issue.labels.*.name, 'publication-request')
+    if: contains(join(github.event.issue.labels.*.name, ','), 'Build OK') && contains(join(github.event.issue.labels.*.name, ','), 'publication-request')
     runs-on: ubuntu-latest
     steps:
-      # Checkout repository
-      - name: Checkout repository
+      # Checkout repository and switch to the release-candidate branch
+      - name: Checkout release-candidate branch
         uses: actions/checkout@v2
+        with:
+          ref: release-candidate
+          fetch-depth: 0  # Fetch all history for all branches and tags
 
-      # Fetch release-candidate branch and read version from publication-request.json
+      # Fetch the release-candidate branch and read version from publication-request.json
       - name: Get version from publication-request.json
         run: |
-          git fetch origin release-candidate
-          git checkout release-candidate
           VERSION=$(jq -r '.version' publication-request.json)
           echo "VERSION=$VERSION" >> $GITHUB_ENV
-
-      # Capture the current branch and set it as an output
-      - name: Get current branch
-        id: get_branch
-        run: echo "::set-output name=BRANCH::$(git rev-parse --abbrev-ref HEAD)"
-
 
       # Create a release and tag with the version
       - name: Create release and tag
@@ -38,8 +33,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # Trigger the remote reusable workflow and pass the current branch
+      # Trigger the remote reusable workflow and pass the release-candidate branch
       - name: Trigger remote workflow
         uses: WorldHealthOrganization/smart-html/.github/workflows/release.yml@main
         with:
-          branch: ${{ steps.get_branch.outputs.BRANCH }}  # Pass the current branch to the remote workflow
+          branch: release-candidate  # Always use the release-candidate branch
