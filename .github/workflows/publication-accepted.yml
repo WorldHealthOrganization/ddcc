@@ -33,8 +33,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # Trigger the remote reusable workflow and pass the release-candidate branch
-      - name: Trigger remote workflow
-        uses: WorldHealthOrganization/smart-html/.github/workflows/release.yml@main
-        with:
-          branch: release-candidate  # Always use the release-candidate branch
+  trigger_remote_workflow:
+    needs: create_release_and_tag
+    uses: WorldHealthOrganization/smart-html/.github/workflows/release.yml@main
+    with:
+      branch: release-candidate  # Always use the release-candidate branch
