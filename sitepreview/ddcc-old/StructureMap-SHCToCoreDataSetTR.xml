@@ -1,0 +1,546 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<StructureMap xmlns="http://hl7.org/fhir">
+  <id value="SHCToCoreDataSetTR"/>
+  <meta>
+    <versionId value="9"/>
+    <lastUpdated value="2023-02-15T19:50:41.165+00:00"/>
+  </meta>
+  <text>
+    <status value="generated"/><div xmlns="http://www.w3.org/1999/xhtml"><pre>map &quot;http://smart.who.int/ddcc/StructureMap/SHCToCoreDataSetTR&quot; = &quot;SHCToCoreDataSetTR&quot;
+
+
+uses &quot;http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-infectious-disease-laboratory-bundle-dm&quot; alias SHCLabBundleDM as source
+uses &quot;http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-patient-general-dm&quot; alias SHCPatientDM as source
+uses &quot;http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-infectious-disease-laboratory-result-observation-dm&quot; alias SHCLabDM as source
+uses &quot;http://hl7.org/fhir/StructureDefinition/Bundle&quot; alias DDCCBundle as target
+uses &quot;http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.TR&quot; alias DDCCTR as produced
+
+group SHCToTR(source shc : SHCLabBundleDM, target ddccBundle : DDCCBundle) {
+  shc.entry as patientEntrySHC then {
+    patientEntrySHC.resource : Patient first as patient then {
+      shc.entry as entry then {
+        // entry.resource : Immunization as immunization where vaccineCode.memberOf('http://smart.who.int/ddcc/ValueSet/who-ddcc-allowed-vaccines-covid-19') -&gt;  ddccBundle.entry as outentry,  create('http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.VS') as ddcc then {
+        entry.resource : Observation as lab -&gt;  ddccBundle.entry as outentry,  create('http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.TR') as ddcc then {
+          lab then PatientToDDCCTR(patient, ddcc) &quot;set patient&quot;;
+          lab -&gt; ddcc.test as test then LabToDDCC(lab, test) &quot;set test&quot;;
+          lab -&gt; outentry.resource = ddcc &quot;set outentry&quot;;
+        } &quot;labs&quot;;
+      } &quot;entries&quot;;
+    } &quot;get patient&quot;;
+  } &quot;find patient&quot;;
+}
+
+group PatientToDDCCTR(source patient : SHCPatientDM, target tgt : DDCCTR) {
+  patient.name as name then NameToText(name, tgt) &quot;set name&quot;;
+  patient.birthDate as birthDate -&gt; tgt.birthDate = birthDate &quot;set birthDate&quot;;
+  patient.identifier first as identifier -&gt; tgt.identifier = identifier &quot;set identifier&quot;;
+}
+
+group NameToText(source name : HumanName, target ddcc) {
+  // append doesn't work until ddcc.name is set
+  name.given first as given -&gt; ddcc.name = (given.replaceMatches('$', ' ')) &quot;set first name&quot;;
+  // name.given not_first as other -&gt; ddcc.name as tName, ddcc.name = append( tName, other ) &quot;set other names&quot;;
+  name.given not_first as other -&gt;  ddcc.name as tName,  (other.replaceMatches('$', ' ')) as spaced,  ddcc.name = append(tName, spaced) &quot;set other names&quot;;
+  name.family as family -&gt;  ddcc.name as tName,  ddcc.name = append(tName, family) &quot;add family name&quot;;
+  name.text as text -&gt; ddcc.name = text &quot;set full name&quot;;
+}
+
+group LabToDDCC(source lab : SHCLabDM, target test) {
+  lab.code as code then {
+    code.coding first as labType then {
+      labType -&gt; test.type = labType &quot;set default type&quot;;
+      labType where labType.memberOf('http://smart.who.int/ddcc/ValueSet/lab-test-type-covid19-loinc') -&gt; test.type = translate(labType, 'http://smart.who.int/ddcc/ConceptMap/lab-test-type-covid19-loinc-to-icd11', 'Coding') &quot;translate loinc type&quot;;
+      labType where labType.memberOf('http://smart.who.int/ddcc/ValueSet/lab-test-type-covid19-loinc') -&gt; test.pathogen = c('http://id.who.int/icd11/mms', 'XN109') &quot;set pathogen to COVID&quot;;
+    };
+  };
+  lab.effectiveDateTime as date -&gt; test.date = date &quot;set date&quot;;
+  lab.valueCodeableConcept as value then {
+    value.coding first as result then {
+      result -&gt; test.result = result &quot;set default result&quot;;
+      result where result.memberOf('http://smart.who.int/ddcc/ValueSet/lab-test-qual-result-snomed') -&gt; test.result = translate(result, 'http://smart.who.int/ddcc/ConceptMap/lab-test-qual-result-snomed-to-icd11') &quot;translate snomed result&quot;;
+    };
+  };
+}
+
+</pre></div>
+  </text>
+  <url value="http://smart.who.int/ddcc/StructureMap/SHCToCoreDataSetTR"/>
+  <version value="1.0.0"/>
+  <name value="SHCToCoreDataSetTR"/>
+  <status value="draft"/>
+  <date value="2023-11-06T04:25:12+00:00"/>
+  <publisher value="WHO"/>
+  <contact>
+    <name value="WHO"/>
+    <telecom>
+      <system value="url"/>
+      <value value="http://who.int"/>
+    </telecom>
+  </contact>
+  <jurisdiction>
+    <coding>
+      <system value="http://unstats.un.org/unsd/methods/m49/m49.htm"/>
+      <code value="001"/>
+    </coding>
+  </jurisdiction>
+  <structure>
+    <url value="http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-infectious-disease-laboratory-bundle-dm"/>
+    <mode value="source"/>
+    <alias value="SHCLabBundleDM"/>
+  </structure>
+  <structure>
+    <url value="http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-patient-general-dm"/>
+    <mode value="source"/>
+    <alias value="SHCPatientDM"/>
+  </structure>
+  <structure>
+    <url value="http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-infectious-disease-laboratory-result-observation-dm"/>
+    <mode value="source"/>
+    <alias value="SHCLabDM"/>
+  </structure>
+  <structure>
+    <url value="http://hl7.org/fhir/StructureDefinition/Bundle"/>
+    <mode value="target"/>
+    <alias value="DDCCBundle"/>
+  </structure>
+  <structure>
+    <url value="http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.TR"/>
+    <mode value="produced"/>
+    <alias value="DDCCTR"/>
+  </structure>
+  <group>
+    <name value="SHCToTR"/>
+    <typeMode value="none"/>
+    <input>
+      <name value="shc"/>
+      <type value="SHCLabBundleDM"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="ddccBundle"/>
+      <type value="DDCCBundle"/>
+      <mode value="target"/>
+    </input>
+    <rule>
+      <name value="find patient"/>
+      <source>
+        <context value="shc"/>
+        <element value="entry"/>
+        <variable value="patientEntrySHC"/>
+      </source>
+      <rule>
+        <name value="get patient"/>
+        <source>
+          <context value="patientEntrySHC"/>
+          <type value="Patient"/>
+          <element value="resource"/>
+          <listMode value="first"/>
+          <variable value="patient"/>
+        </source>
+        <rule>
+          <name value="entries"/>
+          <source>
+            <context value="shc"/>
+            <element value="entry"/>
+            <variable value="entry"/>
+          </source>
+          <rule>
+            <name value="labs"/>
+            <source>
+              <context value="entry"/>
+              <type value="Observation"/>
+              <element value="resource"/>
+              <variable value="lab"/>
+            </source>
+            <target>
+              <context value="ddccBundle"/>
+              <contextType value="variable"/>
+              <element value="entry"/>
+              <variable value="outentry"/>
+            </target>
+            <target>
+              <contextType value="variable"/>
+              <variable value="ddcc"/>
+              <transform value="create"/>
+              <parameter>
+                <valueString value="http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.TR"/>
+              </parameter>
+            </target>
+            <rule>
+              <name value="set patient"/>
+              <source>
+                <context value="lab"/>
+              </source>
+              <dependent>
+                <name value="PatientToDDCCTR"/>
+                <variable value="patient"/>
+                <variable value="ddcc"/>
+              </dependent>
+            </rule>
+            <rule>
+              <name value="set test"/>
+              <source>
+                <context value="lab"/>
+              </source>
+              <target>
+                <context value="ddcc"/>
+                <contextType value="variable"/>
+                <element value="test"/>
+                <variable value="test"/>
+              </target>
+              <dependent>
+                <name value="LabToDDCC"/>
+                <variable value="lab"/>
+                <variable value="test"/>
+              </dependent>
+            </rule>
+            <rule>
+              <name value="set outentry"/>
+              <source>
+                <context value="lab"/>
+              </source>
+              <target>
+                <context value="outentry"/>
+                <contextType value="variable"/>
+                <element value="resource"/>
+                <transform value="copy"/>
+                <parameter>
+                  <valueId value="ddcc"/>
+                </parameter>
+              </target>
+            </rule>
+            <documentation value="entry.resource : Immunization as immunization where vaccineCode.memberOf('http://smart.who.int/ddcc/ValueSet/who-ddcc-allowed-vaccines-covid-19') -&gt;  ddccBundle.entry as outentry,  create('http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.VS') as ddcc then {"/>
+          </rule>
+        </rule>
+      </rule>
+    </rule>
+  </group>
+  <group>
+    <name value="PatientToDDCCTR"/>
+    <typeMode value="none"/>
+    <input>
+      <name value="patient"/>
+      <type value="SHCPatientDM"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="tgt"/>
+      <type value="DDCCTR"/>
+      <mode value="target"/>
+    </input>
+    <rule>
+      <name value="set name"/>
+      <source>
+        <context value="patient"/>
+        <element value="name"/>
+        <variable value="name"/>
+      </source>
+      <dependent>
+        <name value="NameToText"/>
+        <variable value="name"/>
+        <variable value="tgt"/>
+      </dependent>
+    </rule>
+    <rule>
+      <name value="set birthDate"/>
+      <source>
+        <context value="patient"/>
+        <element value="birthDate"/>
+        <variable value="birthDate"/>
+      </source>
+      <target>
+        <context value="tgt"/>
+        <contextType value="variable"/>
+        <element value="birthDate"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="birthDate"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="set identifier"/>
+      <source>
+        <context value="patient"/>
+        <element value="identifier"/>
+        <listMode value="first"/>
+        <variable value="identifier"/>
+      </source>
+      <target>
+        <context value="tgt"/>
+        <contextType value="variable"/>
+        <element value="identifier"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="identifier"/>
+        </parameter>
+      </target>
+    </rule>
+  </group>
+  <group>
+    <name value="NameToText"/>
+    <typeMode value="none"/>
+    <input>
+      <name value="name"/>
+      <type value="HumanName"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="ddcc"/>
+      <mode value="target"/>
+    </input>
+    <rule>
+      <name value="set first name"/>
+      <source>
+        <context value="name"/>
+        <element value="given"/>
+        <listMode value="first"/>
+        <variable value="given"/>
+      </source>
+      <target>
+        <context value="ddcc"/>
+        <contextType value="variable"/>
+        <element value="name"/>
+        <transform value="evaluate"/>
+        <parameter>
+          <valueString value="given.replaceMatches('$', ' ')"/>
+        </parameter>
+      </target>
+      <documentation value="append doesn't work until ddcc.name is set"/>
+    </rule>
+    <rule>
+      <name value="set other names"/>
+      <source>
+        <context value="name"/>
+        <element value="given"/>
+        <listMode value="not_first"/>
+        <variable value="other"/>
+      </source>
+      <target>
+        <context value="ddcc"/>
+        <contextType value="variable"/>
+        <element value="name"/>
+        <variable value="tName"/>
+      </target>
+      <target>
+        <contextType value="variable"/>
+        <variable value="spaced"/>
+        <transform value="evaluate"/>
+        <parameter>
+          <valueString value="other.replaceMatches('$', ' ')"/>
+        </parameter>
+      </target>
+      <target>
+        <context value="ddcc"/>
+        <contextType value="variable"/>
+        <element value="name"/>
+        <transform value="append"/>
+        <parameter>
+          <valueId value="tName"/>
+        </parameter>
+        <parameter>
+          <valueId value="spaced"/>
+        </parameter>
+      </target>
+      <documentation value="name.given not_first as other -&gt; ddcc.name as tName, ddcc.name = append( tName, other ) &quot;set other names&quot;;"/>
+    </rule>
+    <rule>
+      <name value="add family name"/>
+      <source>
+        <context value="name"/>
+        <element value="family"/>
+        <variable value="family"/>
+      </source>
+      <target>
+        <context value="ddcc"/>
+        <contextType value="variable"/>
+        <element value="name"/>
+        <variable value="tName"/>
+      </target>
+      <target>
+        <context value="ddcc"/>
+        <contextType value="variable"/>
+        <element value="name"/>
+        <transform value="append"/>
+        <parameter>
+          <valueId value="tName"/>
+        </parameter>
+        <parameter>
+          <valueId value="family"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="set full name"/>
+      <source>
+        <context value="name"/>
+        <element value="text"/>
+        <variable value="text"/>
+      </source>
+      <target>
+        <context value="ddcc"/>
+        <contextType value="variable"/>
+        <element value="name"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="text"/>
+        </parameter>
+      </target>
+    </rule>
+  </group>
+  <group>
+    <name value="LabToDDCC"/>
+    <typeMode value="none"/>
+    <input>
+      <name value="lab"/>
+      <type value="SHCLabDM"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="test"/>
+      <mode value="target"/>
+    </input>
+    <rule>
+      <name value="code"/>
+      <source>
+        <context value="lab"/>
+        <element value="code"/>
+        <variable value="code"/>
+      </source>
+      <rule>
+        <name value="coding"/>
+        <source>
+          <context value="code"/>
+          <element value="coding"/>
+          <listMode value="first"/>
+          <variable value="labType"/>
+        </source>
+        <rule>
+          <name value="set default type"/>
+          <source>
+            <context value="labType"/>
+          </source>
+          <target>
+            <context value="test"/>
+            <contextType value="variable"/>
+            <element value="type"/>
+            <transform value="copy"/>
+            <parameter>
+              <valueId value="labType"/>
+            </parameter>
+          </target>
+        </rule>
+        <rule>
+          <name value="translate loinc type"/>
+          <source>
+            <context value="labType"/>
+            <condition value="labType.memberOf('http://smart.who.int/ddcc/ValueSet/lab-test-type-covid19-loinc')"/>
+          </source>
+          <target>
+            <context value="test"/>
+            <contextType value="variable"/>
+            <element value="type"/>
+            <transform value="translate"/>
+            <parameter>
+              <valueId value="labType"/>
+            </parameter>
+            <parameter>
+              <valueString value="http://smart.who.int/ddcc/ConceptMap/lab-test-type-covid19-loinc-to-icd11"/>
+            </parameter>
+            <parameter>
+              <valueString value="Coding"/>
+            </parameter>
+          </target>
+        </rule>
+        <rule>
+          <name value="set pathogen to COVID"/>
+          <source>
+            <context value="labType"/>
+            <condition value="labType.memberOf('http://smart.who.int/ddcc/ValueSet/lab-test-type-covid19-loinc')"/>
+          </source>
+          <target>
+            <context value="test"/>
+            <contextType value="variable"/>
+            <element value="pathogen"/>
+            <transform value="c"/>
+            <parameter>
+              <valueString value="http://id.who.int/icd11/mms"/>
+            </parameter>
+            <parameter>
+              <valueString value="XN109"/>
+            </parameter>
+          </target>
+        </rule>
+      </rule>
+    </rule>
+    <rule>
+      <name value="set date"/>
+      <source>
+        <context value="lab"/>
+        <element value="effectiveDateTime"/>
+        <variable value="date"/>
+      </source>
+      <target>
+        <context value="test"/>
+        <contextType value="variable"/>
+        <element value="date"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="date"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="valueCodeableConcept"/>
+      <source>
+        <context value="lab"/>
+        <element value="valueCodeableConcept"/>
+        <variable value="value"/>
+      </source>
+      <rule>
+        <name value="coding"/>
+        <source>
+          <context value="value"/>
+          <element value="coding"/>
+          <listMode value="first"/>
+          <variable value="result"/>
+        </source>
+        <rule>
+          <name value="set default result"/>
+          <source>
+            <context value="result"/>
+          </source>
+          <target>
+            <context value="test"/>
+            <contextType value="variable"/>
+            <element value="result"/>
+            <transform value="copy"/>
+            <parameter>
+              <valueId value="result"/>
+            </parameter>
+          </target>
+        </rule>
+        <rule>
+          <name value="translate snomed result"/>
+          <source>
+            <context value="result"/>
+            <condition value="result.memberOf('http://smart.who.int/ddcc/ValueSet/lab-test-qual-result-snomed')"/>
+          </source>
+          <target>
+            <context value="test"/>
+            <contextType value="variable"/>
+            <element value="result"/>
+            <transform value="translate"/>
+            <parameter>
+              <valueId value="result"/>
+            </parameter>
+            <parameter>
+              <valueString value="http://smart.who.int/ddcc/ConceptMap/lab-test-qual-result-snomed-to-icd11"/>
+            </parameter>
+          </target>
+        </rule>
+      </rule>
+    </rule>
+  </group>
+</StructureMap>

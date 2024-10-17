@@ -1,0 +1,89 @@
+@prefix fhir: <http://hl7.org/fhir/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# - resource -------------------------------------------------------------------
+
+<http://smart.who.int/ddcc/StructureMap/CoreDataSetVSToAddBundle> a fhir:StructureMap ;
+  fhir:nodeRole fhir:treeRoot ;
+  fhir:id [ fhir:v "CoreDataSetVSToAddBundle"] ; # 
+  fhir:meta [
+     fhir:versionId [ fhir:v "2" ] ;
+     fhir:lastUpdated [ fhir:v "2022-06-01T12:54:53.172+00:00"^^xsd:dateTime ]
+  ] ; # 
+  fhir:text [
+     fhir:status [ fhir:v "generated" ] ;
+     fhir:div "<div xmlns=\"http://www.w3.org/1999/xhtml\"><pre>map &quot;http://smart.who.int/ddcc/StructureMap/CoreDataSetVSToAddBundle&quot; = &quot;CoreDataSetVSToAddBundle&quot;\r\n\r\n\r\nuses &quot;http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.VS&quot; alias DDCCVS as source\r\nuses &quot;http://hl7.org/fhir/StructureDefinition/Bundle&quot; alias AddBundle as target\r\n\r\nimports &quot;http://smart.who.int/ddcc/StructureMap/CoreDataSetVSLibrary&quot;\r\n\r\ngroup CoreDataSetVSToAddBundle(source ddcc : DDCCVS, target bundle : AddBundle) {\r\n  ddcc -&gt; bundle then VSToAddBundle(ddcc, bundle) &quot;setup add bundle&quot;;\r\n}\r\n\r\n</pre></div>"
+  ] ; # 
+  fhir:url [ fhir:v "http://smart.who.int/ddcc/StructureMap/CoreDataSetVSToAddBundle"^^xsd:anyURI] ; # 
+  fhir:version [ fhir:v "1.0.0"] ; # 
+  fhir:name [ fhir:v "CoreDataSetVSToAddBundle"] ; # 
+  fhir:status [ fhir:v "draft"] ; # 
+  fhir:date [ fhir:v "2023-11-06T04:25:12+00:00"^^xsd:dateTime] ; # 
+  fhir:publisher [ fhir:v "WHO"] ; # 
+  fhir:contact ( [
+     fhir:name [ fhir:v "WHO" ] ;
+     fhir:telecom ( [
+       fhir:system [ fhir:v "url" ] ;
+       fhir:value [ fhir:v "http://who.int" ]
+     ] )
+  ] ) ; # 
+  fhir:jurisdiction ( [
+     fhir:coding ( [
+       fhir:system [ fhir:v "http://unstats.un.org/unsd/methods/m49/m49.htm"^^xsd:anyURI ] ;
+       fhir:code [ fhir:v "001" ]
+     ] )
+  ] ) ; # 
+  fhir:structure ( [
+     fhir:url [
+       fhir:v "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.VS"^^xsd:anyURI ;
+       fhir:link <http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.VS>
+     ] ;
+     fhir:mode [ fhir:v "source" ] ;
+     fhir:alias [ fhir:v "DDCCVS" ]
+  ] [
+     fhir:url [
+       fhir:v "http://hl7.org/fhir/StructureDefinition/Bundle"^^xsd:anyURI ;
+       fhir:link <http://hl7.org/fhir/StructureDefinition/Bundle>
+     ] ;
+     fhir:mode [ fhir:v "target" ] ;
+     fhir:alias [ fhir:v "AddBundle" ]
+  ] ) ; # 
+  fhir:import ( [
+     fhir:v "http://smart.who.int/ddcc/StructureMap/CoreDataSetVSLibrary"^^xsd:anyURI ;
+     fhir:link <http://smart.who.int/ddcc/StructureMap/CoreDataSetVSLibrary>
+  ] ) ; # 
+  fhir:group ( [
+     fhir:name [ fhir:v "CoreDataSetVSToAddBundle" ] ;
+     fhir:typeMode [ fhir:v "none" ] ;
+     fhir:input ( [
+       fhir:name [ fhir:v "ddcc" ] ;
+       fhir:type [ fhir:v "DDCCVS" ] ;
+       fhir:mode [ fhir:v "source" ]
+     ] [
+       fhir:name [ fhir:v "bundle" ] ;
+       fhir:type [ fhir:v "AddBundle" ] ;
+       fhir:mode [ fhir:v "target" ]
+     ] ) ;
+     fhir:rule ( [
+       fhir:name [ fhir:v "setup add bundle" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "ddcc" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "bundle" ]
+         ] )
+       ] ) ;
+       fhir:dependent ( [
+         fhir:name [ fhir:v "VSToAddBundle" ] ;
+         fhir:variable ( [ fhir:v "ddcc" ] [ fhir:v "bundle" ] )
+       ] )
+     ] )
+  ] ) . # 
+
+# -------------------------------------------------------------------------------------
+

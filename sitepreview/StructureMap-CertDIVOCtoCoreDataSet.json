@@ -1,0 +1,1152 @@
+{
+  "resourceType" : "StructureMap",
+  "id" : "CertDIVOCtoCoreDataSet",
+  "text" : {
+    "status" : "generated",
+    "div" : "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p class=\"res-header-id\"><b>Generated Narrative: StructureMap CertDIVOCtoCoreDataSet</b></p><a name=\"CertDIVOCtoCoreDataSet\"> </a><a name=\"hcCertDIVOCtoCoreDataSet\"> </a><a name=\"CertDIVOCtoCoreDataSet-en-US\"> </a><pre class=\"fml\">\r\n<b>map</b><span style=\"color: navy\"> &quot;</span>http://smart.who.int/ddcc/StructureMap/CertDIVOCtoCoreDataSet<span style=\"color: navy\">&quot; = &quot;</span>CertDIVOCtoCoreDataSet<span style=\"color: navy\">&quot;\r\n\r\n</span><span style=\"color: navy\">// </span><span style=\"color: green\">Structure map transforming CertDIVOC logical model to bundle of Core Data Set logical model</span>\r\n\r\n<b>uses</b><span style=\"color: navy\"> &quot;</span><a href=\"StructureDefinition-CertDIVOC.html\" title=\"Certificate - DIVOC Verifiable Credential Logical Model\">http://smart.who.int/ddcc/StructureDefinition/CertDIVOC</a><span style=\"color: navy\">&quot; </span><b>alias </b>DIVOC <b>as </b><b>source</b>\r\n<b>uses</b><span style=\"color: navy\"> &quot;</span><a href=\"http://hl7.org/fhir/R4/bundle.html\" title=\"Bundle\">http://hl7.org/fhir/StructureDefinition/Bundle</a><span style=\"color: navy\">&quot; </span><b>alias </b>DDCCBundle <b>as </b><b>target</b>\r\n<b>uses</b><span style=\"color: navy\"> &quot;</span><a href=\"StructureDefinition-DDCCCoreDataSet.html\" title=\"DDCC Core Data Set Logical Model\">http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet</a><span style=\"color: navy\">&quot; </span><b>alias </b>DDCC <b>as </b><b>target</b>\r\n<b>uses</b><span style=\"color: navy\"> &quot;</span><a href=\"StructureDefinition-DDCCCoreDataSetVS.html\" title=\"DDCC Core Data Set Logical Model for Vaccination Status\">http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSetVS</a><span style=\"color: navy\">&quot; </span><b>alias </b>DDCCVS <b>as </b><b>target</b>\r\n<b>uses</b><span style=\"color: navy\"> &quot;</span><a href=\"StructureDefinition-DDCCCoreDataSetTR.html\" title=\"DDCC Core Data Set Logical Model for Test Result\">http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSetTR</a><span style=\"color: navy\">&quot; </span><b>alias </b>DDCCTR <b>as </b><b>target</b>\r\n\r\n<b>group </b>CertDIVOCtoCoreDataSetBundle<span style=\"color: navy\">(</span><b>source</b> <span style=\"color: maroon\">src</span><span style=\"color: navy\"> : </span>DIVOC, <b>target</b> <span style=\"color: maroon\">ddccBundle</span><span style=\"color: navy\"> : </span>DDCCBundle<span style=\"color: navy\">)</span><span style=\"color: navy\"> {\r\n</span>  src.type<b> as </b><span style=\"color: maroon\">type</span><b> then</b><span style=\"color: navy\"> {\r\n</span>    type<b> where </b>type = 'ProofOfVaccinationCredential'<b> then</b><span style=\"color: navy\"> {\r\n</span>      src.evidence<b> as </b><span style=\"color: maroon\">evidence</span><span style=\"color: navy\"><b> -&gt; </b></span> ddccBundle.entry<b> as </b><span style=\"color: maroon\">outentry</span><span style=\"color: navy\">, </span> <b>create</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSetVS'</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">ddcc</span><b> then</b><span style=\"color: navy\"> {\r\n</span>        src.credentialSubject<b> as </b><span style=\"color: maroon\">credentialSubject</span><b> then </b>CredentialSubjecttoCoreDataSet<span style=\"color: navy\">(</span><span style=\"color: maroon\">credentialSubject</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">ddcc</span><span style=\"color: navy\">)</span> <i>&quot;set patient&quot;</i><span style=\"color: navy\">;</span>\r\n        src<span style=\"color: navy\"><b> -&gt; </b></span>ddcc.certificate<b> as </b><span style=\"color: maroon\">certificate</span><b> then </b>CertDIVOCtoCoreDataSetCertificate<span style=\"color: navy\">(</span><span style=\"color: maroon\">src</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">evidence</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">certificate</span><span style=\"color: navy\">)</span> <i>&quot;set certificate&quot;</i><span style=\"color: navy\">;</span>\r\n        evidence<span style=\"color: navy\"><b> -&gt; </b></span>ddcc.vaccination<b> as </b><span style=\"color: maroon\">vaccination</span><b> then </b>EvidencetoCoreDataSetVS<span style=\"color: navy\">(</span><span style=\"color: maroon\">evidence</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">vaccination</span><span style=\"color: navy\">)</span> <i>&quot;set vaccination&quot;</i><span style=\"color: navy\">;</span>\r\n        evidence<span style=\"color: navy\"><b> -&gt; </b></span>outentry.resource = <span style=\"color: maroon\">ddcc</span> <i>&quot;set outentry&quot;</i><span style=\"color: navy\">;</span>\r\n      <span style=\"color: navy\">}</span><span style=\"color: navy\">;</span>\r\n    <span style=\"color: navy\">}</span> <i>&quot;ProofOfVaccinationCredential&quot;</i><span style=\"color: navy\">;</span>\r\n    type<b> where </b>type = 'ProofOfTestCertificateCredential'<b> then</b><span style=\"color: navy\"> {\r\n</span>      src.evidence<b> as </b><span style=\"color: maroon\">evidence</span><span style=\"color: navy\"><b> -&gt; </b></span> ddccBundle.entry<b> as </b><span style=\"color: maroon\">outentry</span><span style=\"color: navy\">, </span> <b>create</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSetTR'</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">ddcc</span><b> then</b><span style=\"color: navy\"> {\r\n</span>        src.credentialSubject<b> as </b><span style=\"color: maroon\">credentialSubject</span><b> then </b>CredentialSubjecttoCoreDataSet<span style=\"color: navy\">(</span><span style=\"color: maroon\">credentialSubject</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">ddcc</span><span style=\"color: navy\">)</span> <i>&quot;set patient&quot;</i><span style=\"color: navy\">;</span>\r\n        src<span style=\"color: navy\"><b> -&gt; </b></span>ddcc.certificate<b> as </b><span style=\"color: maroon\">certificate</span><b> then </b>CertDIVOCtoCoreDataSetCertificate<span style=\"color: navy\">(</span><span style=\"color: maroon\">src</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">evidence</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">certificate</span><span style=\"color: navy\">)</span> <i>&quot;set certificate&quot;</i><span style=\"color: navy\">;</span>\r\n        evidence<span style=\"color: navy\"><b> -&gt; </b></span>ddcc.test<b> as </b><span style=\"color: maroon\">test</span><b> then </b>EvidencetoCoreDataSetTR<span style=\"color: navy\">(</span><span style=\"color: maroon\">evidence</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">test</span><span style=\"color: navy\">)</span> <i>&quot;set test&quot;</i><span style=\"color: navy\">;</span>\r\n        evidence<span style=\"color: navy\"><b> -&gt; </b></span>outentry.resource = <span style=\"color: maroon\">ddcc</span> <i>&quot;set outentry&quot;</i><span style=\"color: navy\">;</span>\r\n      <span style=\"color: navy\">}</span><span style=\"color: navy\">;</span>\r\n    <span style=\"color: navy\">}</span> <i>&quot;ProofOfTestCertificateCredential&quot;</i><span style=\"color: navy\">;</span>\r\n  <span style=\"color: navy\">}</span><span style=\"color: navy\">;</span>\r\n<span style=\"color: navy\">}\r\n\r\n</span><b>group </b>CredentialSubjecttoCoreDataSet<span style=\"color: navy\">(</span><b>source</b> <span style=\"color: maroon\">credentialSubject</span>, <b>target</b> <span style=\"color: maroon\">ddcc</span><span style=\"color: navy\"> : </span>DDCC<span style=\"color: navy\">)</span><span style=\"color: navy\"> {\r\n</span>  credentialSubject.name<b> as </b><span style=\"color: maroon\">name</span><span style=\"color: navy\"><b> -&gt; </b></span>ddcc.name = <span style=\"color: maroon\">name</span> <i>&quot;set name&quot;</i><span style=\"color: navy\">;</span>\r\n  credentialSubject.dob<b> as </b><span style=\"color: maroon\">birthDate</span><span style=\"color: navy\"><b> -&gt; </b></span>ddcc.birthDate = <span style=\"color: maroon\">birthDate</span> <i>&quot;set birthDate&quot;</i><span style=\"color: navy\">;</span>\r\n  credentialSubject.id<b> as </b><span style=\"color: maroon\">id</span><span style=\"color: navy\"><b> -&gt; </b></span> <b>create</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'Identifier'</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">identifier</span><span style=\"color: navy\">, </span> identifier.value = <span style=\"color: maroon\">id</span><b> then</b><span style=\"color: navy\"> {\r\n</span>    id<span style=\"color: navy\"><b> -&gt; </b></span>ddcc.identifier = <span style=\"color: maroon\">identifier</span> <i>&quot;set identifier&quot;</i><span style=\"color: navy\">;</span>\r\n  <span style=\"color: navy\">}</span> <i>&quot;identifier&quot;</i><span style=\"color: navy\">;</span>\r\n<span style=\"color: navy\">}\r\n\r\n</span><b>group </b>CertDIVOCtoCoreDataSetCertificate<span style=\"color: navy\">(</span><b>source</b> <span style=\"color: maroon\">src</span><span style=\"color: navy\"> : </span>DIVOC, <b>source</b> <span style=\"color: maroon\">evidence</span>, <b>target</b> <span style=\"color: maroon\">certificate</span><span style=\"color: navy\">)</span><span style=\"color: navy\"> {\r\n</span>  evidence.certificateId<b> as </b><span style=\"color: maroon\">certificateId</span><span style=\"color: navy\"><b> -&gt; </b></span> certificate.hcid<b> as </b><span style=\"color: maroon\">hcid</span><span style=\"color: navy\">, </span> hcid.value = <span style=\"color: maroon\">certificateId</span> <i>&quot;set hcid&quot;</i><span style=\"color: navy\">;</span>\r\n  src.context<b> as </b><span style=\"color: maroon\">context</span><b> then</b><span style=\"color: navy\"> {\r\n</span>    context<b> where </b>(context.contains('cowin.gov.in'))<span style=\"color: navy\"><b> -&gt; </b></span>certificate.version = <span style=\"color: maroon\">context</span> <i>&quot;set version&quot;</i><span style=\"color: navy\">;</span>\r\n  <span style=\"color: navy\">}</span><span style=\"color: navy\">;</span>\r\n  evidence<span style=\"color: navy\"><b> -&gt; </b></span>certificate.period = <b>create</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'Period'</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">period</span><b> then</b><span style=\"color: navy\"> {\r\n</span>    evidence.effectiveStart<b> as </b><span style=\"color: maroon\">effectiveStart</span><span style=\"color: navy\"><b> -&gt; </b></span>period.start = <span style=\"color: maroon\">effectiveStart</span> <i>&quot;set period start&quot;</i><span style=\"color: navy\">;</span>\r\n    evidence.effectiveUntil<b> as </b><span style=\"color: maroon\">effectiveUntil</span><span style=\"color: navy\"><b> -&gt; </b></span>period.end = <span style=\"color: maroon\">effectiveUntil</span> <i>&quot;set period end&quot;</i><span style=\"color: navy\">;</span>\r\n  <span style=\"color: navy\">}</span> <i>&quot;period&quot;</i><span style=\"color: navy\">;</span>\r\n  src.issuer<b> as </b><span style=\"color: maroon\">issuer</span><span style=\"color: navy\"><b> -&gt; </b></span> certificate.issuer = <b>create</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'Reference'</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">issuer</span><span style=\"color: navy\">, </span> issuer.display = <span style=\"color: maroon\">issuer</span> <i>&quot;set issuer&quot;</i><span style=\"color: navy\">;</span>\r\n<span style=\"color: navy\">}\r\n\r\n</span><b>group </b>EvidencetoCoreDataSetVS<span style=\"color: navy\">(</span><b>source</b> <span style=\"color: maroon\">evidence</span>, <b>target</b> <span style=\"color: maroon\">vaccination</span><span style=\"color: navy\">)</span><span style=\"color: navy\"> {\r\n</span>  evidence.icd11Code<b> as </b><span style=\"color: maroon\">icd11Code</span><span style=\"color: navy\"><b> -&gt; </b></span> vaccination.vaccine<b> as </b><span style=\"color: maroon\">coding</span><span style=\"color: navy\">, </span> coding.system = <span style=\"color: blue\">'http://id.who.int/icd11/mms'</span><span style=\"color: navy\">, </span> coding.code = <span style=\"color: maroon\">icd11Code</span> <i>&quot;set vaccine&quot;</i><span style=\"color: navy\">;</span>\r\n  evidence.vaccine<b> as </b><span style=\"color: maroon\">vaccine</span><span style=\"color: navy\"><b> -&gt; </b></span> vaccination.brand<b> as </b><span style=\"color: maroon\">coding</span><span style=\"color: navy\">, </span> coding.code = <span style=\"color: maroon\">vaccine</span> <i>&quot;set brand&quot;</i><span style=\"color: navy\">;</span>\r\n  evidence.manufacturer<b> as </b><span style=\"color: maroon\">manufacturer</span><span style=\"color: navy\"><b> -&gt; </b></span> vaccination.manufacturer<b> as </b><span style=\"color: maroon\">coding</span><span style=\"color: navy\">, </span> coding.code = <span style=\"color: maroon\">manufacturer</span> <i>&quot;set manufacturer&quot;</i><span style=\"color: navy\">;</span>\r\n  evidence.batch<b> as </b><span style=\"color: maroon\">batch</span><span style=\"color: navy\"><b> -&gt; </b></span>vaccination.lot = <span style=\"color: maroon\">batch</span> <i>&quot;set lot&quot;</i><span style=\"color: navy\">;</span>\r\n  evidence.date<b> as </b><span style=\"color: maroon\">date</span><span style=\"color: navy\"><b> -&gt; </b></span>vaccination.date = <span style=\"color: maroon\">date</span> <i>&quot;set date&quot;</i><span style=\"color: navy\">;</span>\r\n  evidence.dose<b> as </b><span style=\"color: maroon\">dose</span><span style=\"color: navy\"><b> -&gt; </b></span>vaccination.dose = <span style=\"color: maroon\">dose</span> <i>&quot;set dose&quot;</i><span style=\"color: navy\">;</span>\r\n  evidence.totalDoses<b> as </b><span style=\"color: maroon\">totalDoses</span><span style=\"color: navy\"><b> -&gt; </b></span>vaccination.totalDoses = <span style=\"color: maroon\">totalDoses</span> <i>&quot;set totalDoses&quot;</i><span style=\"color: navy\">;</span>\r\n  evidence.facility<b> as </b><span style=\"color: maroon\">facility</span><b> then</b><span style=\"color: navy\"> {\r\n</span>    facility.address<b> as </b><span style=\"color: maroon\">address</span><b> then</b><span style=\"color: navy\"> {\r\n</span>      address.addressCountry<b> as </b><span style=\"color: maroon\">addressCountry</span><span style=\"color: navy\"><b> -&gt; </b></span> vaccination.country<b> as </b><span style=\"color: maroon\">coding</span><span style=\"color: navy\">, </span> coding.system = <span style=\"color: blue\">'urn:iso:std:iso:3166'</span><span style=\"color: navy\">, </span> coding.code = <span style=\"color: maroon\">addressCountry</span> <i>&quot;set country&quot;</i><span style=\"color: navy\">;</span>\r\n    <span style=\"color: navy\">}</span><span style=\"color: navy\">;</span>\r\n    facility.name<b> as </b><span style=\"color: maroon\">name</span><span style=\"color: navy\"><b> -&gt; </b></span>vaccination.centre = <span style=\"color: maroon\">name</span> <i>&quot;set centre&quot;</i><span style=\"color: navy\">;</span>\r\n  <span style=\"color: navy\">}</span><span style=\"color: navy\">;</span>\r\n  evidence.verifier<b> as </b><span style=\"color: maroon\">verifier</span><b> then</b><span style=\"color: navy\"> {\r\n</span>    verifier.name<b> as </b><span style=\"color: maroon\">name</span><span style=\"color: navy\"><b> -&gt; </b></span> vaccination.practitioner<b> as </b><span style=\"color: maroon\">practitioner</span><span style=\"color: navy\">, </span> practitioner.value = <span style=\"color: maroon\">name</span> <i>&quot;set practitioner&quot;</i><span style=\"color: navy\">;</span>\r\n  <span style=\"color: navy\">}</span><span style=\"color: navy\">;</span>\r\n<span style=\"color: navy\">}\r\n\r\n</span><b>group </b>EvidencetoCoreDataSetTR<span style=\"color: navy\">(</span><b>source</b> <span style=\"color: maroon\">evidence</span>, <b>target</b> <span style=\"color: maroon\">test</span><span style=\"color: navy\">)</span><span style=\"color: navy\"> {\r\n</span>  evidence.disease<b> as </b><span style=\"color: maroon\">disease</span><b> then</b><span style=\"color: navy\"> {\r\n</span>    disease<b> where </b>disease = 'COVID-19'<span style=\"color: navy\"><b> -&gt; </b></span> test.pathogen<b> as </b><span style=\"color: maroon\">coding</span><span style=\"color: navy\">, </span> coding.system = <span style=\"color: blue\">'http://id.who.int/icd11/mms'</span><span style=\"color: navy\">, </span> coding.code = <span style=\"color: blue\">'XN109'</span> <i>&quot;set COVID19 pathogen&quot;</i><span style=\"color: navy\">;</span>\r\n    disease<b> where </b>(disease = 'COVID-19').not()<span style=\"color: navy\"><b> -&gt; </b></span> test.pathogen<b> as </b><span style=\"color: maroon\">coding</span><span style=\"color: navy\">, </span> coding.code = <span style=\"color: maroon\">disease</span> <i>&quot;set other pathogen&quot;</i><span style=\"color: navy\">;</span>\r\n  <span style=\"color: navy\">}</span><span style=\"color: navy\">;</span>\r\n  evidence.testType<b> as </b><span style=\"color: maroon\">testType</span><b> then</b><span style=\"color: navy\"> {\r\n</span>    testType<span style=\"color: navy\"><b> -&gt; </b></span> test.type<b> as </b><span style=\"color: maroon\">coding</span><span style=\"color: navy\">, </span> coding.code = <span style=\"color: maroon\">testType</span> <i>&quot;set default type&quot;</i><span style=\"color: navy\">;</span>\r\n    testType<span style=\"color: navy\"><b> -&gt; </b></span><b>c</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'http://smart.who.int/ddcc/CodeSystem/lab-test-type-divoc'</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">testType</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">coded</span><b> then</b><span style=\"color: navy\"> {\r\n</span>      testType<b> where </b>coded.memberOf('http://smart.who.int/ddcc/ValueSet/lab-test-type-divoc')<span style=\"color: navy\"><b> -&gt; </b></span>test.type = <b>translate</b><span style=\"color: navy\">(</span><span style=\"color: maroon\">coded</span><span style=\"color: navy\">, </span><span style=\"color: blue\">'http://smart.who.int/ddcc/ConceptMap/lab-test-type-divoc-to-icd11'</span><span style=\"color: navy\">, </span><span style=\"color: blue\">'Coding'</span><span style=\"color: navy\">)</span> <i>&quot;translate DIVOC type&quot;</i><span style=\"color: navy\">;</span>\r\n    <span style=\"color: navy\">}</span> <i>&quot;coding&quot;</i><span style=\"color: navy\">;</span>\r\n  <span style=\"color: navy\">}</span><span style=\"color: navy\">;</span>\r\n  evidence.sampleOrigin<b> as </b><span style=\"color: maroon\">sampleOrigin</span><b> then</b><span style=\"color: navy\"> {\r\n</span>    sampleOrigin<span style=\"color: navy\"><b> -&gt; </b></span> test.origin<b> as </b><span style=\"color: maroon\">coding</span><span style=\"color: navy\">, </span> coding.code = <span style=\"color: maroon\">sampleOrigin</span> <i>&quot;set default origin&quot;</i><span style=\"color: navy\">;</span>\r\n    sampleOrigin<span style=\"color: navy\"><b> -&gt; </b></span><b>c</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'http://smart.who.int/ddcc/CodeSystem/lab-test-sample-origin-divoc'</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">sampleOrigin</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">coded</span><b> then</b><span style=\"color: navy\"> {\r\n</span>      sampleOrigin<b> where </b>coded.memberOf('http://smart.who.int/ddcc/ValueSet/lab-test-sample-origin-divoc')<span style=\"color: navy\"><b> -&gt; </b></span>test.origin = <b>translate</b><span style=\"color: navy\">(</span><span style=\"color: maroon\">coded</span><span style=\"color: navy\">, </span><span style=\"color: blue\">'http://smart.who.int/ddcc/ConceptMap/lab-test-sample-origin-divoc-to-icd11'</span><span style=\"color: navy\">, </span><span style=\"color: blue\">'Coding'</span><span style=\"color: navy\">)</span> <i>&quot;translate DIVOC origin&quot;</i><span style=\"color: navy\">;</span>\r\n    <span style=\"color: navy\">}</span> <i>&quot;coding&quot;</i><span style=\"color: navy\">;</span>\r\n  <span style=\"color: navy\">}</span><span style=\"color: navy\">;</span>\r\n  evidence.result<b> as </b><span style=\"color: maroon\">result</span><b> then</b><span style=\"color: navy\"> {\r\n</span>    result<span style=\"color: navy\"><b> -&gt; </b></span> test.result<b> as </b><span style=\"color: maroon\">coding</span><span style=\"color: navy\">, </span> coding.code = <span style=\"color: maroon\">result</span> <i>&quot;set default result&quot;</i><span style=\"color: navy\">;</span>\r\n    result<span style=\"color: navy\"><b> -&gt; </b></span><b>c</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'http://smart.who.int/ddcc/CodeSystem/lab-test-qual-result-divoc'</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">result</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">coded</span><b> then</b><span style=\"color: navy\"> {\r\n</span>      result<b> where </b>coded.memberOf('http://smart.who.int/ddcc/ValueSet/lab-test-qual-result-divoc')<span style=\"color: navy\"><b> -&gt; </b></span>test.result = <b>translate</b><span style=\"color: navy\">(</span><span style=\"color: maroon\">coded</span><span style=\"color: navy\">, </span><span style=\"color: blue\">'http://smart.who.int/ddcc/ConceptMap/lab-test-qual-result-divoc-to-icd11'</span><span style=\"color: navy\">, </span><span style=\"color: blue\">'Coding'</span><span style=\"color: navy\">)</span> <i>&quot;translate DIVOC result&quot;</i><span style=\"color: navy\">;</span>\r\n    <span style=\"color: navy\">}</span> <i>&quot;coded&quot;</i><span style=\"color: navy\">;</span>\r\n  <span style=\"color: navy\">}</span><span style=\"color: navy\">;</span>\r\n  evidence.sampleCollectionTimestamp<b> as </b><span style=\"color: maroon\">date</span><span style=\"color: navy\"><b> -&gt; </b></span>test.date = <span style=\"color: maroon\">date</span> <i>&quot;set date&quot;</i><span style=\"color: navy\">;</span>\r\n  evidence.testName<b> as </b><span style=\"color: maroon\">testName</span><span style=\"color: navy\"><b> -&gt; </b></span> test.brand<b> as </b><span style=\"color: maroon\">coding</span><span style=\"color: navy\">, </span> coding.code = <span style=\"color: maroon\">testName</span> <i>&quot;set brand&quot;</i><span style=\"color: navy\">;</span>\r\n  evidence.manufacturer<b> as </b><span style=\"color: maroon\">manufacturer</span><span style=\"color: navy\"><b> -&gt; </b></span> test.manufacturer<b> as </b><span style=\"color: maroon\">coding</span><span style=\"color: navy\">, </span> coding.code = <span style=\"color: maroon\">manufacturer</span> <i>&quot;set manufacturer&quot;</i><span style=\"color: navy\">;</span>\r\n  evidence.facility<b> as </b><span style=\"color: maroon\">facility</span><b> then</b><span style=\"color: navy\"> {\r\n</span>    facility.address<b> as </b><span style=\"color: maroon\">address</span><b> then</b><span style=\"color: navy\"> {\r\n</span>      address.addressCountry<b> as </b><span style=\"color: maroon\">addressCountry</span><span style=\"color: navy\"><b> -&gt; </b></span> test.country<b> as </b><span style=\"color: maroon\">coding</span><span style=\"color: navy\">, </span> coding.system = <span style=\"color: blue\">'urn:iso:std:iso:3166'</span><span style=\"color: navy\">, </span> coding.code = <span style=\"color: maroon\">addressCountry</span> <i>&quot;set country&quot;</i><span style=\"color: navy\">;</span>\r\n    <span style=\"color: navy\">}</span><span style=\"color: navy\">;</span>\r\n    facility.name<b> as </b><span style=\"color: maroon\">name</span><span style=\"color: navy\"><b> -&gt; </b></span> test.centre<b> as </b><span style=\"color: maroon\">coding</span><span style=\"color: navy\">, </span> coding.code = <span style=\"color: maroon\">name</span> <i>&quot;set centre&quot;</i><span style=\"color: navy\">;</span>\r\n  <span style=\"color: navy\">}</span><span style=\"color: navy\">;</span>\r\n<span style=\"color: navy\">}\r\n\r\n</span></pre></div>"
+  },
+  "url" : "http://smart.who.int/ddcc/StructureMap/CertDIVOCtoCoreDataSet",
+  "version" : "1.0.0",
+  "name" : "CertDIVOCtoCoreDataSet",
+  "status" : "draft",
+  "date" : "2024-10-15T13:40:08+00:00",
+  "publisher" : "WHO",
+  "contact" : [{
+    "name" : "WHO",
+    "telecom" : [{
+      "system" : "url",
+      "value" : "http://who.int"
+    }]
+  }],
+  "description" : "Structure map transforming CertDIVOC logical model to bundle of Core Data Set logical model",
+  "jurisdiction" : [{
+    "coding" : [{
+      "system" : "http://unstats.un.org/unsd/methods/m49/m49.htm",
+      "code" : "001"
+    }]
+  }],
+  "structure" : [{
+    "url" : "http://smart.who.int/ddcc/StructureDefinition/CertDIVOC",
+    "mode" : "source",
+    "alias" : "DIVOC"
+  },
+  {
+    "url" : "http://hl7.org/fhir/StructureDefinition/Bundle",
+    "mode" : "target",
+    "alias" : "DDCCBundle"
+  },
+  {
+    "url" : "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet",
+    "mode" : "target",
+    "alias" : "DDCC"
+  },
+  {
+    "url" : "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSetVS",
+    "mode" : "target",
+    "alias" : "DDCCVS"
+  },
+  {
+    "url" : "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSetTR",
+    "mode" : "target",
+    "alias" : "DDCCTR"
+  }],
+  "group" : [{
+    "name" : "CertDIVOCtoCoreDataSetBundle",
+    "typeMode" : "none",
+    "input" : [{
+      "name" : "src",
+      "type" : "DIVOC",
+      "mode" : "source"
+    },
+    {
+      "name" : "ddccBundle",
+      "type" : "DDCCBundle",
+      "mode" : "target"
+    }],
+    "rule" : [{
+      "name" : "type",
+      "source" : [{
+        "context" : "src",
+        "element" : "type",
+        "variable" : "type"
+      }],
+      "rule" : [{
+        "name" : "ProofOfVaccinationCredential",
+        "source" : [{
+          "context" : "type",
+          "condition" : "type = 'ProofOfVaccinationCredential'"
+        }],
+        "rule" : [{
+          "name" : "evidence",
+          "source" : [{
+            "context" : "src",
+            "element" : "evidence",
+            "variable" : "evidence"
+          }],
+          "target" : [{
+            "context" : "ddccBundle",
+            "contextType" : "variable",
+            "element" : "entry",
+            "variable" : "outentry"
+          },
+          {
+            "contextType" : "variable",
+            "variable" : "ddcc",
+            "transform" : "create",
+            "parameter" : [{
+              "valueString" : "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSetVS"
+            }]
+          }],
+          "rule" : [{
+            "name" : "set patient",
+            "source" : [{
+              "context" : "src",
+              "element" : "credentialSubject",
+              "variable" : "credentialSubject"
+            }],
+            "dependent" : [{
+              "name" : "CredentialSubjecttoCoreDataSet",
+              "variable" : ["credentialSubject",
+              "ddcc"]
+            }]
+          },
+          {
+            "name" : "set certificate",
+            "source" : [{
+              "context" : "src"
+            }],
+            "target" : [{
+              "context" : "ddcc",
+              "contextType" : "variable",
+              "element" : "certificate",
+              "variable" : "certificate"
+            }],
+            "dependent" : [{
+              "name" : "CertDIVOCtoCoreDataSetCertificate",
+              "variable" : ["src",
+              "evidence",
+              "certificate"]
+            }]
+          },
+          {
+            "name" : "set vaccination",
+            "source" : [{
+              "context" : "evidence"
+            }],
+            "target" : [{
+              "context" : "ddcc",
+              "contextType" : "variable",
+              "element" : "vaccination",
+              "variable" : "vaccination"
+            }],
+            "dependent" : [{
+              "name" : "EvidencetoCoreDataSetVS",
+              "variable" : ["evidence",
+              "vaccination"]
+            }]
+          },
+          {
+            "name" : "set outentry",
+            "source" : [{
+              "context" : "evidence"
+            }],
+            "target" : [{
+              "context" : "outentry",
+              "contextType" : "variable",
+              "element" : "resource",
+              "transform" : "copy",
+              "parameter" : [{
+                "valueId" : "ddcc"
+              }]
+            }]
+          }]
+        }]
+      },
+      {
+        "name" : "ProofOfTestCertificateCredential",
+        "source" : [{
+          "context" : "type",
+          "condition" : "type = 'ProofOfTestCertificateCredential'"
+        }],
+        "rule" : [{
+          "name" : "evidence",
+          "source" : [{
+            "context" : "src",
+            "element" : "evidence",
+            "variable" : "evidence"
+          }],
+          "target" : [{
+            "context" : "ddccBundle",
+            "contextType" : "variable",
+            "element" : "entry",
+            "variable" : "outentry"
+          },
+          {
+            "contextType" : "variable",
+            "variable" : "ddcc",
+            "transform" : "create",
+            "parameter" : [{
+              "valueString" : "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSetTR"
+            }]
+          }],
+          "rule" : [{
+            "name" : "set patient",
+            "source" : [{
+              "context" : "src",
+              "element" : "credentialSubject",
+              "variable" : "credentialSubject"
+            }],
+            "dependent" : [{
+              "name" : "CredentialSubjecttoCoreDataSet",
+              "variable" : ["credentialSubject",
+              "ddcc"]
+            }]
+          },
+          {
+            "name" : "set certificate",
+            "source" : [{
+              "context" : "src"
+            }],
+            "target" : [{
+              "context" : "ddcc",
+              "contextType" : "variable",
+              "element" : "certificate",
+              "variable" : "certificate"
+            }],
+            "dependent" : [{
+              "name" : "CertDIVOCtoCoreDataSetCertificate",
+              "variable" : ["src",
+              "evidence",
+              "certificate"]
+            }]
+          },
+          {
+            "name" : "set test",
+            "source" : [{
+              "context" : "evidence"
+            }],
+            "target" : [{
+              "context" : "ddcc",
+              "contextType" : "variable",
+              "element" : "test",
+              "variable" : "test"
+            }],
+            "dependent" : [{
+              "name" : "EvidencetoCoreDataSetTR",
+              "variable" : ["evidence",
+              "test"]
+            }]
+          },
+          {
+            "name" : "set outentry",
+            "source" : [{
+              "context" : "evidence"
+            }],
+            "target" : [{
+              "context" : "outentry",
+              "contextType" : "variable",
+              "element" : "resource",
+              "transform" : "copy",
+              "parameter" : [{
+                "valueId" : "ddcc"
+              }]
+            }]
+          }]
+        }]
+      }]
+    }]
+  },
+  {
+    "name" : "CredentialSubjecttoCoreDataSet",
+    "typeMode" : "none",
+    "input" : [{
+      "name" : "credentialSubject",
+      "mode" : "source"
+    },
+    {
+      "name" : "ddcc",
+      "type" : "DDCC",
+      "mode" : "target"
+    }],
+    "rule" : [{
+      "name" : "set name",
+      "source" : [{
+        "context" : "credentialSubject",
+        "element" : "name",
+        "variable" : "name"
+      }],
+      "target" : [{
+        "context" : "ddcc",
+        "contextType" : "variable",
+        "element" : "name",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "name"
+        }]
+      }]
+    },
+    {
+      "name" : "set birthDate",
+      "source" : [{
+        "context" : "credentialSubject",
+        "element" : "dob",
+        "variable" : "birthDate"
+      }],
+      "target" : [{
+        "context" : "ddcc",
+        "contextType" : "variable",
+        "element" : "birthDate",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "birthDate"
+        }]
+      }]
+    },
+    {
+      "name" : "identifier",
+      "source" : [{
+        "context" : "credentialSubject",
+        "element" : "id",
+        "variable" : "id"
+      }],
+      "target" : [{
+        "contextType" : "variable",
+        "variable" : "identifier",
+        "transform" : "create",
+        "parameter" : [{
+          "valueString" : "Identifier"
+        }]
+      },
+      {
+        "context" : "identifier",
+        "contextType" : "variable",
+        "element" : "value",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "id"
+        }]
+      }],
+      "rule" : [{
+        "name" : "set identifier",
+        "source" : [{
+          "context" : "id"
+        }],
+        "target" : [{
+          "context" : "ddcc",
+          "contextType" : "variable",
+          "element" : "identifier",
+          "transform" : "copy",
+          "parameter" : [{
+            "valueId" : "identifier"
+          }]
+        }]
+      }]
+    }]
+  },
+  {
+    "name" : "CertDIVOCtoCoreDataSetCertificate",
+    "typeMode" : "none",
+    "input" : [{
+      "name" : "src",
+      "type" : "DIVOC",
+      "mode" : "source"
+    },
+    {
+      "name" : "evidence",
+      "mode" : "source"
+    },
+    {
+      "name" : "certificate",
+      "mode" : "target"
+    }],
+    "rule" : [{
+      "name" : "set hcid",
+      "source" : [{
+        "context" : "evidence",
+        "element" : "certificateId",
+        "variable" : "certificateId"
+      }],
+      "target" : [{
+        "context" : "certificate",
+        "contextType" : "variable",
+        "element" : "hcid",
+        "variable" : "hcid"
+      },
+      {
+        "context" : "hcid",
+        "contextType" : "variable",
+        "element" : "value",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "certificateId"
+        }]
+      }]
+    },
+    {
+      "name" : "context",
+      "source" : [{
+        "context" : "src",
+        "element" : "context",
+        "variable" : "context"
+      }],
+      "rule" : [{
+        "name" : "set version",
+        "source" : [{
+          "context" : "context",
+          "condition" : "(context.contains('cowin.gov.in'))"
+        }],
+        "target" : [{
+          "context" : "certificate",
+          "contextType" : "variable",
+          "element" : "version",
+          "transform" : "copy",
+          "parameter" : [{
+            "valueId" : "context"
+          }]
+        }]
+      }]
+    },
+    {
+      "name" : "period",
+      "source" : [{
+        "context" : "evidence"
+      }],
+      "target" : [{
+        "context" : "certificate",
+        "contextType" : "variable",
+        "element" : "period",
+        "variable" : "period",
+        "transform" : "create",
+        "parameter" : [{
+          "valueString" : "Period"
+        }]
+      }],
+      "rule" : [{
+        "name" : "set period start",
+        "source" : [{
+          "context" : "evidence",
+          "element" : "effectiveStart",
+          "variable" : "effectiveStart"
+        }],
+        "target" : [{
+          "context" : "period",
+          "contextType" : "variable",
+          "element" : "start",
+          "transform" : "copy",
+          "parameter" : [{
+            "valueId" : "effectiveStart"
+          }]
+        }]
+      },
+      {
+        "name" : "set period end",
+        "source" : [{
+          "context" : "evidence",
+          "element" : "effectiveUntil",
+          "variable" : "effectiveUntil"
+        }],
+        "target" : [{
+          "context" : "period",
+          "contextType" : "variable",
+          "element" : "end",
+          "transform" : "copy",
+          "parameter" : [{
+            "valueId" : "effectiveUntil"
+          }]
+        }]
+      }]
+    },
+    {
+      "name" : "set issuer",
+      "source" : [{
+        "context" : "src",
+        "element" : "issuer",
+        "variable" : "issuer"
+      }],
+      "target" : [{
+        "context" : "certificate",
+        "contextType" : "variable",
+        "element" : "issuer",
+        "variable" : "issuer",
+        "transform" : "create",
+        "parameter" : [{
+          "valueString" : "Reference"
+        }]
+      },
+      {
+        "context" : "issuer",
+        "contextType" : "variable",
+        "element" : "display",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "issuer"
+        }]
+      }]
+    }]
+  },
+  {
+    "name" : "EvidencetoCoreDataSetVS",
+    "typeMode" : "none",
+    "input" : [{
+      "name" : "evidence",
+      "mode" : "source"
+    },
+    {
+      "name" : "vaccination",
+      "mode" : "target"
+    }],
+    "rule" : [{
+      "name" : "set vaccine",
+      "source" : [{
+        "context" : "evidence",
+        "element" : "icd11Code",
+        "variable" : "icd11Code"
+      }],
+      "target" : [{
+        "context" : "vaccination",
+        "contextType" : "variable",
+        "element" : "vaccine",
+        "variable" : "coding"
+      },
+      {
+        "context" : "coding",
+        "contextType" : "variable",
+        "element" : "system",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueString" : "http://id.who.int/icd11/mms"
+        }]
+      },
+      {
+        "context" : "coding",
+        "contextType" : "variable",
+        "element" : "code",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "icd11Code"
+        }]
+      }]
+    },
+    {
+      "name" : "set brand",
+      "source" : [{
+        "context" : "evidence",
+        "element" : "vaccine",
+        "variable" : "vaccine"
+      }],
+      "target" : [{
+        "context" : "vaccination",
+        "contextType" : "variable",
+        "element" : "brand",
+        "variable" : "coding"
+      },
+      {
+        "context" : "coding",
+        "contextType" : "variable",
+        "element" : "code",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "vaccine"
+        }]
+      }]
+    },
+    {
+      "name" : "set manufacturer",
+      "source" : [{
+        "context" : "evidence",
+        "element" : "manufacturer",
+        "variable" : "manufacturer"
+      }],
+      "target" : [{
+        "context" : "vaccination",
+        "contextType" : "variable",
+        "element" : "manufacturer",
+        "variable" : "coding"
+      },
+      {
+        "context" : "coding",
+        "contextType" : "variable",
+        "element" : "code",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "manufacturer"
+        }]
+      }]
+    },
+    {
+      "name" : "set lot",
+      "source" : [{
+        "context" : "evidence",
+        "element" : "batch",
+        "variable" : "batch"
+      }],
+      "target" : [{
+        "context" : "vaccination",
+        "contextType" : "variable",
+        "element" : "lot",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "batch"
+        }]
+      }]
+    },
+    {
+      "name" : "set date",
+      "source" : [{
+        "context" : "evidence",
+        "element" : "date",
+        "variable" : "date"
+      }],
+      "target" : [{
+        "context" : "vaccination",
+        "contextType" : "variable",
+        "element" : "date",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "date"
+        }]
+      }]
+    },
+    {
+      "name" : "set dose",
+      "source" : [{
+        "context" : "evidence",
+        "element" : "dose",
+        "variable" : "dose"
+      }],
+      "target" : [{
+        "context" : "vaccination",
+        "contextType" : "variable",
+        "element" : "dose",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "dose"
+        }]
+      }]
+    },
+    {
+      "name" : "set totalDoses",
+      "source" : [{
+        "context" : "evidence",
+        "element" : "totalDoses",
+        "variable" : "totalDoses"
+      }],
+      "target" : [{
+        "context" : "vaccination",
+        "contextType" : "variable",
+        "element" : "totalDoses",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "totalDoses"
+        }]
+      }]
+    },
+    {
+      "name" : "facility",
+      "source" : [{
+        "context" : "evidence",
+        "element" : "facility",
+        "variable" : "facility"
+      }],
+      "rule" : [{
+        "name" : "address",
+        "source" : [{
+          "context" : "facility",
+          "element" : "address",
+          "variable" : "address"
+        }],
+        "rule" : [{
+          "name" : "set country",
+          "source" : [{
+            "context" : "address",
+            "element" : "addressCountry",
+            "variable" : "addressCountry"
+          }],
+          "target" : [{
+            "context" : "vaccination",
+            "contextType" : "variable",
+            "element" : "country",
+            "variable" : "coding"
+          },
+          {
+            "context" : "coding",
+            "contextType" : "variable",
+            "element" : "system",
+            "transform" : "copy",
+            "parameter" : [{
+              "valueString" : "urn:iso:std:iso:3166"
+            }]
+          },
+          {
+            "context" : "coding",
+            "contextType" : "variable",
+            "element" : "code",
+            "transform" : "copy",
+            "parameter" : [{
+              "valueId" : "addressCountry"
+            }]
+          }]
+        }]
+      },
+      {
+        "name" : "set centre",
+        "source" : [{
+          "context" : "facility",
+          "element" : "name",
+          "variable" : "name"
+        }],
+        "target" : [{
+          "context" : "vaccination",
+          "contextType" : "variable",
+          "element" : "centre",
+          "transform" : "copy",
+          "parameter" : [{
+            "valueId" : "name"
+          }]
+        }]
+      }]
+    },
+    {
+      "name" : "verifier",
+      "source" : [{
+        "context" : "evidence",
+        "element" : "verifier",
+        "variable" : "verifier"
+      }],
+      "rule" : [{
+        "name" : "set practitioner",
+        "source" : [{
+          "context" : "verifier",
+          "element" : "name",
+          "variable" : "name"
+        }],
+        "target" : [{
+          "context" : "vaccination",
+          "contextType" : "variable",
+          "element" : "practitioner",
+          "variable" : "practitioner"
+        },
+        {
+          "context" : "practitioner",
+          "contextType" : "variable",
+          "element" : "value",
+          "transform" : "copy",
+          "parameter" : [{
+            "valueId" : "name"
+          }]
+        }]
+      }]
+    }]
+  },
+  {
+    "name" : "EvidencetoCoreDataSetTR",
+    "typeMode" : "none",
+    "input" : [{
+      "name" : "evidence",
+      "mode" : "source"
+    },
+    {
+      "name" : "test",
+      "mode" : "target"
+    }],
+    "rule" : [{
+      "name" : "disease",
+      "source" : [{
+        "context" : "evidence",
+        "element" : "disease",
+        "variable" : "disease"
+      }],
+      "rule" : [{
+        "name" : "set COVID19 pathogen",
+        "source" : [{
+          "context" : "disease",
+          "condition" : "disease = 'COVID-19'"
+        }],
+        "target" : [{
+          "context" : "test",
+          "contextType" : "variable",
+          "element" : "pathogen",
+          "variable" : "coding"
+        },
+        {
+          "context" : "coding",
+          "contextType" : "variable",
+          "element" : "system",
+          "transform" : "copy",
+          "parameter" : [{
+            "valueString" : "http://id.who.int/icd11/mms"
+          }]
+        },
+        {
+          "context" : "coding",
+          "contextType" : "variable",
+          "element" : "code",
+          "transform" : "copy",
+          "parameter" : [{
+            "valueString" : "XN109"
+          }]
+        }]
+      },
+      {
+        "name" : "set other pathogen",
+        "source" : [{
+          "context" : "disease",
+          "condition" : "(disease = 'COVID-19').not()"
+        }],
+        "target" : [{
+          "context" : "test",
+          "contextType" : "variable",
+          "element" : "pathogen",
+          "variable" : "coding"
+        },
+        {
+          "context" : "coding",
+          "contextType" : "variable",
+          "element" : "code",
+          "transform" : "copy",
+          "parameter" : [{
+            "valueId" : "disease"
+          }]
+        }]
+      }]
+    },
+    {
+      "name" : "testType",
+      "source" : [{
+        "context" : "evidence",
+        "element" : "testType",
+        "variable" : "testType"
+      }],
+      "rule" : [{
+        "name" : "set default type",
+        "source" : [{
+          "context" : "testType"
+        }],
+        "target" : [{
+          "context" : "test",
+          "contextType" : "variable",
+          "element" : "type",
+          "variable" : "coding"
+        },
+        {
+          "context" : "coding",
+          "contextType" : "variable",
+          "element" : "code",
+          "transform" : "copy",
+          "parameter" : [{
+            "valueId" : "testType"
+          }]
+        }]
+      },
+      {
+        "name" : "coding",
+        "source" : [{
+          "context" : "testType"
+        }],
+        "target" : [{
+          "contextType" : "variable",
+          "variable" : "coded",
+          "transform" : "c",
+          "parameter" : [{
+            "valueString" : "http://smart.who.int/ddcc/CodeSystem/lab-test-type-divoc"
+          },
+          {
+            "valueId" : "testType"
+          }]
+        }],
+        "rule" : [{
+          "name" : "translate DIVOC type",
+          "source" : [{
+            "context" : "testType",
+            "condition" : "coded.memberOf('http://smart.who.int/ddcc/ValueSet/lab-test-type-divoc')"
+          }],
+          "target" : [{
+            "context" : "test",
+            "contextType" : "variable",
+            "element" : "type",
+            "transform" : "translate",
+            "parameter" : [{
+              "valueId" : "coded"
+            },
+            {
+              "valueString" : "http://smart.who.int/ddcc/ConceptMap/lab-test-type-divoc-to-icd11"
+            },
+            {
+              "valueString" : "Coding"
+            }]
+          }]
+        }]
+      }]
+    },
+    {
+      "name" : "sampleOrigin",
+      "source" : [{
+        "context" : "evidence",
+        "element" : "sampleOrigin",
+        "variable" : "sampleOrigin"
+      }],
+      "rule" : [{
+        "name" : "set default origin",
+        "source" : [{
+          "context" : "sampleOrigin"
+        }],
+        "target" : [{
+          "context" : "test",
+          "contextType" : "variable",
+          "element" : "origin",
+          "variable" : "coding"
+        },
+        {
+          "context" : "coding",
+          "contextType" : "variable",
+          "element" : "code",
+          "transform" : "copy",
+          "parameter" : [{
+            "valueId" : "sampleOrigin"
+          }]
+        }]
+      },
+      {
+        "name" : "coding",
+        "source" : [{
+          "context" : "sampleOrigin"
+        }],
+        "target" : [{
+          "contextType" : "variable",
+          "variable" : "coded",
+          "transform" : "c",
+          "parameter" : [{
+            "valueString" : "http://smart.who.int/ddcc/CodeSystem/lab-test-sample-origin-divoc"
+          },
+          {
+            "valueId" : "sampleOrigin"
+          }]
+        }],
+        "rule" : [{
+          "name" : "translate DIVOC origin",
+          "source" : [{
+            "context" : "sampleOrigin",
+            "condition" : "coded.memberOf('http://smart.who.int/ddcc/ValueSet/lab-test-sample-origin-divoc')"
+          }],
+          "target" : [{
+            "context" : "test",
+            "contextType" : "variable",
+            "element" : "origin",
+            "transform" : "translate",
+            "parameter" : [{
+              "valueId" : "coded"
+            },
+            {
+              "valueString" : "http://smart.who.int/ddcc/ConceptMap/lab-test-sample-origin-divoc-to-icd11"
+            },
+            {
+              "valueString" : "Coding"
+            }]
+          }]
+        }]
+      }]
+    },
+    {
+      "name" : "result",
+      "source" : [{
+        "context" : "evidence",
+        "element" : "result",
+        "variable" : "result"
+      }],
+      "rule" : [{
+        "name" : "set default result",
+        "source" : [{
+          "context" : "result"
+        }],
+        "target" : [{
+          "context" : "test",
+          "contextType" : "variable",
+          "element" : "result",
+          "variable" : "coding"
+        },
+        {
+          "context" : "coding",
+          "contextType" : "variable",
+          "element" : "code",
+          "transform" : "copy",
+          "parameter" : [{
+            "valueId" : "result"
+          }]
+        }]
+      },
+      {
+        "name" : "coded",
+        "source" : [{
+          "context" : "result"
+        }],
+        "target" : [{
+          "contextType" : "variable",
+          "variable" : "coded",
+          "transform" : "c",
+          "parameter" : [{
+            "valueString" : "http://smart.who.int/ddcc/CodeSystem/lab-test-qual-result-divoc"
+          },
+          {
+            "valueId" : "result"
+          }]
+        }],
+        "rule" : [{
+          "name" : "translate DIVOC result",
+          "source" : [{
+            "context" : "result",
+            "condition" : "coded.memberOf('http://smart.who.int/ddcc/ValueSet/lab-test-qual-result-divoc')"
+          }],
+          "target" : [{
+            "context" : "test",
+            "contextType" : "variable",
+            "element" : "result",
+            "transform" : "translate",
+            "parameter" : [{
+              "valueId" : "coded"
+            },
+            {
+              "valueString" : "http://smart.who.int/ddcc/ConceptMap/lab-test-qual-result-divoc-to-icd11"
+            },
+            {
+              "valueString" : "Coding"
+            }]
+          }]
+        }]
+      }]
+    },
+    {
+      "name" : "set date",
+      "source" : [{
+        "context" : "evidence",
+        "element" : "sampleCollectionTimestamp",
+        "variable" : "date"
+      }],
+      "target" : [{
+        "context" : "test",
+        "contextType" : "variable",
+        "element" : "date",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "date"
+        }]
+      }]
+    },
+    {
+      "name" : "set brand",
+      "source" : [{
+        "context" : "evidence",
+        "element" : "testName",
+        "variable" : "testName"
+      }],
+      "target" : [{
+        "context" : "test",
+        "contextType" : "variable",
+        "element" : "brand",
+        "variable" : "coding"
+      },
+      {
+        "context" : "coding",
+        "contextType" : "variable",
+        "element" : "code",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "testName"
+        }]
+      }]
+    },
+    {
+      "name" : "set manufacturer",
+      "source" : [{
+        "context" : "evidence",
+        "element" : "manufacturer",
+        "variable" : "manufacturer"
+      }],
+      "target" : [{
+        "context" : "test",
+        "contextType" : "variable",
+        "element" : "manufacturer",
+        "variable" : "coding"
+      },
+      {
+        "context" : "coding",
+        "contextType" : "variable",
+        "element" : "code",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "manufacturer"
+        }]
+      }]
+    },
+    {
+      "name" : "facility",
+      "source" : [{
+        "context" : "evidence",
+        "element" : "facility",
+        "variable" : "facility"
+      }],
+      "rule" : [{
+        "name" : "address",
+        "source" : [{
+          "context" : "facility",
+          "element" : "address",
+          "variable" : "address"
+        }],
+        "rule" : [{
+          "name" : "set country",
+          "source" : [{
+            "context" : "address",
+            "element" : "addressCountry",
+            "variable" : "addressCountry"
+          }],
+          "target" : [{
+            "context" : "test",
+            "contextType" : "variable",
+            "element" : "country",
+            "variable" : "coding"
+          },
+          {
+            "context" : "coding",
+            "contextType" : "variable",
+            "element" : "system",
+            "transform" : "copy",
+            "parameter" : [{
+              "valueString" : "urn:iso:std:iso:3166"
+            }]
+          },
+          {
+            "context" : "coding",
+            "contextType" : "variable",
+            "element" : "code",
+            "transform" : "copy",
+            "parameter" : [{
+              "valueId" : "addressCountry"
+            }]
+          }]
+        }]
+      },
+      {
+        "name" : "set centre",
+        "source" : [{
+          "context" : "facility",
+          "element" : "name",
+          "variable" : "name"
+        }],
+        "target" : [{
+          "context" : "test",
+          "contextType" : "variable",
+          "element" : "centre",
+          "variable" : "coding"
+        },
+        {
+          "context" : "coding",
+          "contextType" : "variable",
+          "element" : "code",
+          "transform" : "copy",
+          "parameter" : [{
+            "valueId" : "name"
+          }]
+        }]
+      }]
+    }]
+  }]
+}

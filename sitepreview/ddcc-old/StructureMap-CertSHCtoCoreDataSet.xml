@@ -1,0 +1,513 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<StructureMap xmlns="http://hl7.org/fhir">
+  <id value="CertSHCtoCoreDataSet"/>
+  <meta>
+    <versionId value="6"/>
+    <lastUpdated value="2023-02-07T17:09:07.618+00:00"/>
+  </meta>
+  <text>
+    <status value="generated"/><div xmlns="http://www.w3.org/1999/xhtml"><pre>map &quot;http://smart.who.int/ddcc/StructureMap/CertSHCtoCoreDataSet&quot; = &quot;CertSHCtoCoreDataSet&quot;
+
+// Structure map transforming CertSHC logical model to bundle of Core Data Set logical model
+
+uses &quot;http://smart.who.int/ddcc/StructureDefinition/CertSHC&quot; alias JWTPayload as source
+uses &quot;http://hl7.org/fhir/StructureDefinition/Bundle&quot; alias DDCCBundle as target
+uses &quot;http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet&quot; alias DDCC as produced
+uses &quot;http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.VS&quot; alias DDCCVS as produced
+
+imports &quot;http://smart.who.int/ddcc/StructureMap/SHCToCoreDataSetVS&quot;
+imports &quot;http://smart.who.int/ddcc/StructureMap/SHCToCoreDataSetTR&quot;
+
+group CertSHCtoCoreDataSetBundle(source src : JWTPayload, target ddccBundle : Bundle) {
+  src.vc as vc then {
+    vc.credentialSubject as credentialSubject then {
+      credentialSubject.fhirBundle as fhirBundle then {
+        fhirBundle.entry as patientEntrySHC then {
+          patientEntrySHC.resource : Patient first as patient then {
+            fhirBundle.entry as entry then {
+              entry.resource : Immunization as immunization -&gt;  ddccBundle.entry as outentry,  create('http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.VS') as ddcc then {
+                immunization then PatientToDDCCVS(patient, ddcc) &quot;set patient&quot;;
+                immunization -&gt; ddcc.vaccination as vaccination then ImmunizationToDDCC(immunization, vaccination) &quot;set vaccination&quot;;
+                immunization then CertSHCtoCoreDataSet(src, ddcc) &quot;set ddcc&quot;;
+                immunization -&gt; outentry.resource = ddcc &quot;set outentry&quot;;
+              } &quot;immunizations&quot;;
+              entry.resource : Observation as lab -&gt;  ddccBundle.entry as outentry,  create('http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.TR') as ddcc then {
+                lab then PatientToDDCCTR(patient, ddcc) &quot;set patient&quot;;
+                lab -&gt; ddcc.test as test then LabToDDCC(lab, test) &quot;set test&quot;;
+                lab then CertSHCtoCoreDataSet(src, ddcc) &quot;set ddcc&quot;;
+                lab -&gt; outentry.resource = ddcc &quot;set outentry&quot;;
+              } &quot;labs&quot;;
+            } &quot;entries&quot;;
+          } &quot;get patient&quot;;
+        } &quot;find patient&quot;;
+      };
+    };
+  };
+}
+
+group CertSHCtoCoreDataSet(source src : JWTPayload, target ddcc : DDCC) {
+  src -&gt; ddcc.certificate as cert then {
+    src.iss -&gt; cert.issuer = create('Reference') as issuer then {
+      src.iss as iss -&gt; issuer.reference = iss &quot;set issuer&quot;;
+    } &quot;issuer&quot;;
+    src -&gt; cert.period = create('Period') as period then {
+      src then JwtToPeriod(src, period) &quot;set period&quot;;
+    } &quot;period&quot;;
+  } &quot;certificate&quot;;
+}
+
+group JwtToPeriod(source src : JWTPayload, target tgt : Period) {
+  src.nbf as nbf -&gt;  append(nbf, ' seconds') as epoch,  tgt.start = (@1970-01-01T00:00:00.000+00:00 + epoch.toQuantity()) &quot;set period start to notBefore&quot;;
+  src.iat as iat -&gt;  append(iat, ' seconds') as epoch,  tgt.start = (@1970-01-01T00:00:00.000+00:00 + epoch.toQuantity()) &quot;set period start to  issuedAt&quot;;
+  src.exp as exp -&gt;  append(exp, ' seconds') as epoch,  tgt.end = (@1970-01-01T00:00:00.000+00:00 + epoch.toQuantity()) &quot;set period end&quot;;
+}
+
+</pre></div>
+  </text>
+  <url value="http://smart.who.int/ddcc/StructureMap/CertSHCtoCoreDataSet"/>
+  <version value="1.0.0"/>
+  <name value="CertSHCtoCoreDataSet"/>
+  <status value="draft"/>
+  <date value="2023-11-06T04:25:12+00:00"/>
+  <publisher value="WHO"/>
+  <contact>
+    <name value="WHO"/>
+    <telecom>
+      <system value="url"/>
+      <value value="http://who.int"/>
+    </telecom>
+  </contact>
+  <description value="Structure map transforming CertSHC logical model to bundle of Core Data Set logical model"/>
+  <jurisdiction>
+    <coding>
+      <system value="http://unstats.un.org/unsd/methods/m49/m49.htm"/>
+      <code value="001"/>
+    </coding>
+  </jurisdiction>
+  <structure>
+    <url value="http://smart.who.int/ddcc/StructureDefinition/CertSHC"/>
+    <mode value="source"/>
+    <alias value="JWTPayload"/>
+  </structure>
+  <structure>
+    <url value="http://hl7.org/fhir/StructureDefinition/Bundle"/>
+    <mode value="target"/>
+    <alias value="DDCCBundle"/>
+  </structure>
+  <structure>
+    <url value="http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet"/>
+    <mode value="produced"/>
+    <alias value="DDCC"/>
+  </structure>
+  <structure>
+    <url value="http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.VS"/>
+    <mode value="produced"/>
+    <alias value="DDCCVS"/>
+  </structure>
+  <import value="http://smart.who.int/ddcc/StructureMap/SHCToCoreDataSetVS"/>
+  <import value="http://smart.who.int/ddcc/StructureMap/SHCToCoreDataSetTR"/>
+  <group>
+    <name value="CertSHCtoCoreDataSetBundle"/>
+    <typeMode value="none"/>
+    <input>
+      <name value="src"/>
+      <type value="JWTPayload"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="ddccBundle"/>
+      <type value="Bundle"/>
+      <mode value="target"/>
+    </input>
+    <rule>
+      <name value="vc"/>
+      <source>
+        <context value="src"/>
+        <element value="vc"/>
+        <variable value="vc"/>
+      </source>
+      <rule>
+        <name value="credentialSubject"/>
+        <source>
+          <context value="vc"/>
+          <element value="credentialSubject"/>
+          <variable value="credentialSubject"/>
+        </source>
+        <rule>
+          <name value="fhirBundle"/>
+          <source>
+            <context value="credentialSubject"/>
+            <element value="fhirBundle"/>
+            <variable value="fhirBundle"/>
+          </source>
+          <rule>
+            <name value="find patient"/>
+            <source>
+              <context value="fhirBundle"/>
+              <element value="entry"/>
+              <variable value="patientEntrySHC"/>
+            </source>
+            <rule>
+              <name value="get patient"/>
+              <source>
+                <context value="patientEntrySHC"/>
+                <type value="Patient"/>
+                <element value="resource"/>
+                <listMode value="first"/>
+                <variable value="patient"/>
+              </source>
+              <rule>
+                <name value="entries"/>
+                <source>
+                  <context value="fhirBundle"/>
+                  <element value="entry"/>
+                  <variable value="entry"/>
+                </source>
+                <rule>
+                  <name value="immunizations"/>
+                  <source>
+                    <context value="entry"/>
+                    <type value="Immunization"/>
+                    <element value="resource"/>
+                    <variable value="immunization"/>
+                  </source>
+                  <target>
+                    <context value="ddccBundle"/>
+                    <contextType value="variable"/>
+                    <element value="entry"/>
+                    <variable value="outentry"/>
+                  </target>
+                  <target>
+                    <contextType value="variable"/>
+                    <variable value="ddcc"/>
+                    <transform value="create"/>
+                    <parameter>
+                      <valueString value="http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.VS"/>
+                    </parameter>
+                  </target>
+                  <rule>
+                    <name value="set patient"/>
+                    <source>
+                      <context value="immunization"/>
+                    </source>
+                    <dependent>
+                      <name value="PatientToDDCCVS"/>
+                      <variable value="patient"/>
+                      <variable value="ddcc"/>
+                    </dependent>
+                  </rule>
+                  <rule>
+                    <name value="set vaccination"/>
+                    <source>
+                      <context value="immunization"/>
+                    </source>
+                    <target>
+                      <context value="ddcc"/>
+                      <contextType value="variable"/>
+                      <element value="vaccination"/>
+                      <variable value="vaccination"/>
+                    </target>
+                    <dependent>
+                      <name value="ImmunizationToDDCC"/>
+                      <variable value="immunization"/>
+                      <variable value="vaccination"/>
+                    </dependent>
+                  </rule>
+                  <rule>
+                    <name value="set ddcc"/>
+                    <source>
+                      <context value="immunization"/>
+                    </source>
+                    <dependent>
+                      <name value="CertSHCtoCoreDataSet"/>
+                      <variable value="src"/>
+                      <variable value="ddcc"/>
+                    </dependent>
+                  </rule>
+                  <rule>
+                    <name value="set outentry"/>
+                    <source>
+                      <context value="immunization"/>
+                    </source>
+                    <target>
+                      <context value="outentry"/>
+                      <contextType value="variable"/>
+                      <element value="resource"/>
+                      <transform value="copy"/>
+                      <parameter>
+                        <valueId value="ddcc"/>
+                      </parameter>
+                    </target>
+                  </rule>
+                </rule>
+                <rule>
+                  <name value="labs"/>
+                  <source>
+                    <context value="entry"/>
+                    <type value="Observation"/>
+                    <element value="resource"/>
+                    <variable value="lab"/>
+                  </source>
+                  <target>
+                    <context value="ddccBundle"/>
+                    <contextType value="variable"/>
+                    <element value="entry"/>
+                    <variable value="outentry"/>
+                  </target>
+                  <target>
+                    <contextType value="variable"/>
+                    <variable value="ddcc"/>
+                    <transform value="create"/>
+                    <parameter>
+                      <valueString value="http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.TR"/>
+                    </parameter>
+                  </target>
+                  <rule>
+                    <name value="set patient"/>
+                    <source>
+                      <context value="lab"/>
+                    </source>
+                    <dependent>
+                      <name value="PatientToDDCCTR"/>
+                      <variable value="patient"/>
+                      <variable value="ddcc"/>
+                    </dependent>
+                  </rule>
+                  <rule>
+                    <name value="set test"/>
+                    <source>
+                      <context value="lab"/>
+                    </source>
+                    <target>
+                      <context value="ddcc"/>
+                      <contextType value="variable"/>
+                      <element value="test"/>
+                      <variable value="test"/>
+                    </target>
+                    <dependent>
+                      <name value="LabToDDCC"/>
+                      <variable value="lab"/>
+                      <variable value="test"/>
+                    </dependent>
+                  </rule>
+                  <rule>
+                    <name value="set ddcc"/>
+                    <source>
+                      <context value="lab"/>
+                    </source>
+                    <dependent>
+                      <name value="CertSHCtoCoreDataSet"/>
+                      <variable value="src"/>
+                      <variable value="ddcc"/>
+                    </dependent>
+                  </rule>
+                  <rule>
+                    <name value="set outentry"/>
+                    <source>
+                      <context value="lab"/>
+                    </source>
+                    <target>
+                      <context value="outentry"/>
+                      <contextType value="variable"/>
+                      <element value="resource"/>
+                      <transform value="copy"/>
+                      <parameter>
+                        <valueId value="ddcc"/>
+                      </parameter>
+                    </target>
+                  </rule>
+                </rule>
+              </rule>
+            </rule>
+          </rule>
+        </rule>
+      </rule>
+    </rule>
+  </group>
+  <group>
+    <name value="CertSHCtoCoreDataSet"/>
+    <typeMode value="none"/>
+    <input>
+      <name value="src"/>
+      <type value="JWTPayload"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="ddcc"/>
+      <type value="DDCC"/>
+      <mode value="target"/>
+    </input>
+    <rule>
+      <name value="certificate"/>
+      <source>
+        <context value="src"/>
+      </source>
+      <target>
+        <context value="ddcc"/>
+        <contextType value="variable"/>
+        <element value="certificate"/>
+        <variable value="cert"/>
+      </target>
+      <rule>
+        <name value="issuer"/>
+        <source>
+          <context value="src"/>
+          <element value="iss"/>
+        </source>
+        <target>
+          <context value="cert"/>
+          <contextType value="variable"/>
+          <element value="issuer"/>
+          <variable value="issuer"/>
+          <transform value="create"/>
+          <parameter>
+            <valueString value="Reference"/>
+          </parameter>
+        </target>
+        <rule>
+          <name value="set issuer"/>
+          <source>
+            <context value="src"/>
+            <element value="iss"/>
+            <variable value="iss"/>
+          </source>
+          <target>
+            <context value="issuer"/>
+            <contextType value="variable"/>
+            <element value="reference"/>
+            <transform value="copy"/>
+            <parameter>
+              <valueId value="iss"/>
+            </parameter>
+          </target>
+        </rule>
+      </rule>
+      <rule>
+        <name value="period"/>
+        <source>
+          <context value="src"/>
+        </source>
+        <target>
+          <context value="cert"/>
+          <contextType value="variable"/>
+          <element value="period"/>
+          <variable value="period"/>
+          <transform value="create"/>
+          <parameter>
+            <valueString value="Period"/>
+          </parameter>
+        </target>
+        <rule>
+          <name value="set period"/>
+          <source>
+            <context value="src"/>
+          </source>
+          <dependent>
+            <name value="JwtToPeriod"/>
+            <variable value="src"/>
+            <variable value="period"/>
+          </dependent>
+        </rule>
+      </rule>
+    </rule>
+  </group>
+  <group>
+    <name value="JwtToPeriod"/>
+    <typeMode value="none"/>
+    <input>
+      <name value="src"/>
+      <type value="JWTPayload"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="tgt"/>
+      <type value="Period"/>
+      <mode value="target"/>
+    </input>
+    <rule>
+      <name value="set period start to notBefore"/>
+      <source>
+        <context value="src"/>
+        <element value="nbf"/>
+        <variable value="nbf"/>
+      </source>
+      <target>
+        <contextType value="variable"/>
+        <variable value="epoch"/>
+        <transform value="append"/>
+        <parameter>
+          <valueId value="nbf"/>
+        </parameter>
+        <parameter>
+          <valueString value=" seconds"/>
+        </parameter>
+      </target>
+      <target>
+        <context value="tgt"/>
+        <contextType value="variable"/>
+        <element value="start"/>
+        <transform value="evaluate"/>
+        <parameter>
+          <valueString value="@1970-01-01T00:00:00.000+00:00 + epoch.toQuantity()"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="set period start to  issuedAt"/>
+      <source>
+        <context value="src"/>
+        <element value="iat"/>
+        <variable value="iat"/>
+      </source>
+      <target>
+        <contextType value="variable"/>
+        <variable value="epoch"/>
+        <transform value="append"/>
+        <parameter>
+          <valueId value="iat"/>
+        </parameter>
+        <parameter>
+          <valueString value=" seconds"/>
+        </parameter>
+      </target>
+      <target>
+        <context value="tgt"/>
+        <contextType value="variable"/>
+        <element value="start"/>
+        <transform value="evaluate"/>
+        <parameter>
+          <valueString value="@1970-01-01T00:00:00.000+00:00 + epoch.toQuantity()"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="set period end"/>
+      <source>
+        <context value="src"/>
+        <element value="exp"/>
+        <variable value="exp"/>
+      </source>
+      <target>
+        <contextType value="variable"/>
+        <variable value="epoch"/>
+        <transform value="append"/>
+        <parameter>
+          <valueId value="exp"/>
+        </parameter>
+        <parameter>
+          <valueString value=" seconds"/>
+        </parameter>
+      </target>
+      <target>
+        <context value="tgt"/>
+        <contextType value="variable"/>
+        <element value="end"/>
+        <transform value="evaluate"/>
+        <parameter>
+          <valueString value="@1970-01-01T00:00:00.000+00:00 + epoch.toQuantity()"/>
+        </parameter>
+      </target>
+    </rule>
+  </group>
+</StructureMap>

@@ -1,0 +1,507 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<StructureMap xmlns="http://hl7.org/fhir">
+  <id value="SHCtoDDCC"/>
+  <text>
+    <status value="generated"/><div xmlns="http://www.w3.org/1999/xhtml"><p class="res-header-id"><b>Generated Narrative: StructureMap SHCtoDDCC</b></p><a name="SHCtoDDCC"> </a><a name="hcSHCtoDDCC"> </a><a name="SHCtoDDCC-en-US"> </a><pre class="fml">
+<b>map</b><span style="color: navy"> &quot;</span>http://smart.who.int/ddcc/StructureMap/SHCtoDDCC<span style="color: navy">&quot; = &quot;</span>SHCtoDDCC<span style="color: navy">&quot;
+
+</span><b>uses</b><span style="color: navy"> &quot;</span>http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-vaccination-bundle-dm<span style="color: navy">&quot; </span><b>alias </b>SHCVaccinationBundleDM <b>as </b><b>source</b>
+<b>uses</b><span style="color: navy"> &quot;</span>http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-patient-general-dm<span style="color: navy">&quot; </span><b>alias </b>SHCPatientDM <b>as </b><b>source</b>
+<b>uses</b><span style="color: navy"> &quot;</span>http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-vaccination-dm<span style="color: navy">&quot; </span><b>alias </b>SHCImmunizationDM <b>as </b><b>source</b>
+<b>uses</b><span style="color: navy"> &quot;</span><a href="http://hl7.org/fhir/R4/bundle.html" title="Bundle">http://hl7.org/fhir/StructureDefinition/Bundle</a><span style="color: navy">&quot; </span><b>alias </b>Bundle <b>as </b><b>target</b>
+<b>uses</b><span style="color: navy"> &quot;</span><a href="StructureDefinition-DDCCDocument.html" title="DDCC Document">http://smart.who.int/ddcc/StructureDefinition/DDCCDocument</a><span style="color: navy">&quot; </span><b>alias </b>DDCCDocument <b>as </b><b>target</b>
+<b>uses</b><span style="color: navy"> &quot;</span><a href="StructureDefinition-DDCCPatient.html" title="DDCC Patient">http://smart.who.int/ddcc/StructureDefinition/DDCCPatient</a><span style="color: navy">&quot; </span><b>alias </b>DDCCPatient <b>as </b><b>target</b>
+<b>uses</b><span style="color: navy"> &quot;</span><a href="StructureDefinition-DDCCComposition.html" title="DDCC Composition">http://smart.who.int/ddcc/StructureDefinition/DDCCComposition</a><span style="color: navy">&quot; </span><b>alias </b>DDCCComposition <b>as </b><b>target</b>
+<b>uses</b><span style="color: navy"> &quot;</span><a href="StructureDefinition-DDCCOrganization.html" title="DDCC Organization">http://smart.who.int/ddcc/StructureDefinition/DDCCOrganization</a><span style="color: navy">&quot; </span><b>alias </b>DDCCOrganization <b>as </b><b>target</b>
+<b>uses</b><span style="color: navy"> &quot;</span>http://smart.who.int/ddcc/StructureDefinition/DDCCCountryOfVaccination<span style="color: navy">&quot; </span><b>alias </b>DDCCCountryOfVaccination <b>as </b><b>target</b>
+<b>uses</b><span style="color: navy"> &quot;</span>http://smart.who.int/ddcc/StructureDefinition/DDCCVaccineBrand<span style="color: navy">&quot; </span><b>alias </b>DDCCVaccineBrand <b>as </b><b>target</b>
+<b>uses</b><span style="color: navy"> &quot;</span><a href="StructureDefinition-DDCCImmunization.html" title="DDCC Immunization">http://smart.who.int/ddcc/StructureDefinition/DDCCImmunization</a><span style="color: navy">&quot; </span><b>alias </b>DDCCImmunization <b>as </b><b>target</b>
+
+<b>group </b>SHCtoDDCC<span style="color: navy">(</span><b>source</b> <span style="color: maroon">shc</span><span style="color: navy"> : </span>SHCVaccinationBundleDM, <b>target</b> <span style="color: maroon">ddcc</span><span style="color: navy"> : </span>Bundle<span style="color: navy">)</span><span style="color: navy"> {
+</span>  shc.entry<b> as </b><span style="color: maroon">patientEntrySHC</span><b> then</b><span style="color: navy"> {
+</span>    patientEntrySHC.resource<span style="color: navy"> : </span>Patient first<b> as </b><span style="color: maroon">patientSHC</span><b> then</b><span style="color: navy"> {
+</span>      shc.entry<b> as </b><span style="color: maroon">immunizationEntrySHC</span><b> then</b><span style="color: navy"> {
+</span>        immunizationEntrySHC.resource<span style="color: navy"> : </span>Immunization<b> as </b><span style="color: maroon">immunizationSHC</span><b> then</b><span style="color: navy"> {
+</span>          immunizationEntrySHC<span style="color: navy"><b> -&gt; </b></span>ddcc.type = <span style="color: blue">'collection'</span> <i>&quot;Bundle type&quot;</i><span style="color: navy">;</span>
+          immunizationEntrySHC<span style="color: navy"><b> -&gt; </b></span>ddcc.entry<b> as </b><span style="color: maroon">ddccEntry</span><b> then</b><span style="color: navy"> {
+</span>            immunizationSHC<span style="color: navy"><b> -&gt; </b></span>ddccEntry.resource = <b>create</b><span style="color: navy">(</span><span style="color: blue">'Bundle'</span><span style="color: navy">)</span><b> as </b><span style="color: maroon">ddccdocument</span><b> then</b><span style="color: navy"> {
+</span>              immunizationSHC<span style="color: navy"><b> -&gt; </b></span>ddccdocument.type = <span style="color: blue">'document'</span> <i>&quot;DDCC Document type&quot;</i><span style="color: navy">;</span>
+              patientSHC<span style="color: navy"><b> -&gt; </b></span>ddccdocument.entry<b> as </b><span style="color: maroon">ddccDocumentEntry</span><b> then</b><span style="color: navy"> {
+</span>                patientSHC<span style="color: navy"><b> -&gt; </b></span>ddccDocumentEntry.resource = <b>create</b><span style="color: navy">(</span><span style="color: blue">'Patient'</span><span style="color: navy">)</span><b> as </b><span style="color: maroon">patientDDCC</span><b> then </b>SHCPatienttoDDCC<span style="color: navy">(</span><span style="color: maroon">patientSHC</span><span style="color: navy">, </span><span style="color: maroon">patientDDCC</span><span style="color: navy">)</span> <i>&quot;DDCC Document patient resource&quot;</i><span style="color: navy">;</span>
+              <span style="color: navy">}</span> <i>&quot;DDCC Document patient entry&quot;</i><span style="color: navy">;</span>
+              immunizationSHC<span style="color: navy"><b> -&gt; </b></span>ddccdocument.entry<b> as </b><span style="color: maroon">ddccDocumentEntry</span><b> then</b><span style="color: navy"> {
+</span>                immunizationSHC<span style="color: navy"><b> -&gt; </b></span>ddccDocumentEntry.resource = <b>create</b><span style="color: navy">(</span><span style="color: blue">'Immunization'</span><span style="color: navy">)</span><b> as </b><span style="color: maroon">immunizationDDCC</span><b> then </b>SHCImmunizationtoDDCC<span style="color: navy">(</span><span style="color: maroon">immunizationSHC</span><span style="color: navy">, </span><span style="color: maroon">immunizationDDCC</span><span style="color: navy">)</span> <i>&quot;DDCC Document immunization resource&quot;</i><span style="color: navy">;</span>
+              <span style="color: navy">}</span> <i>&quot;DDCC Document immunization entry&quot;</i><span style="color: navy">;</span>
+            <span style="color: navy">}</span> <i>&quot;DDCC Document bundle&quot;</i><span style="color: navy">;</span>
+          <span style="color: navy">}</span> <i>&quot;DDCC Document entry&quot;</i><span style="color: navy">;</span>
+        <span style="color: navy">}</span> <i>&quot;Is immunization entry&quot;</i><span style="color: navy">;</span>
+      <span style="color: navy">}</span> <i>&quot;For each immunization entry&quot;</i><span style="color: navy">;</span>
+    <span style="color: navy">}</span> <i>&quot;Is Patient entry&quot;</i><span style="color: navy">;</span>
+  <span style="color: navy">}</span> <i>&quot;map patient&quot;</i><span style="color: navy">;</span>
+<span style="color: navy">}
+
+</span><b>group </b>SHCPatienttoDDCC<span style="color: navy">(</span><b>source</b> <span style="color: maroon">patient</span><span style="color: navy"> : </span>SHCPatientDM, <b>target</b> <span style="color: maroon">patientDDCC</span><span style="color: navy"> : </span>DDCCPatient<span style="color: navy">)</span><span style="color: navy"> {
+</span>  immunization.status<b> as </b><span style="color: maroon">status</span><span style="color: navy"><b> -&gt; </b></span>immunizationDDCC.status = <span style="color: maroon">status</span> <i>&quot;Status&quot;</i><span style="color: navy">;</span>
+  immunization.coding<b> as </b><span style="color: maroon">coding</span><span style="color: navy"><b> -&gt; </b></span>immunizationDDCC.coding = <span style="color: maroon">coding</span> <i>&quot;Coding&quot;</i><span style="color: navy">;</span>
+  immunization.occurrence<b> as </b><span style="color: maroon">occurrenceDateTime</span><span style="color: navy"><b> -&gt; </b></span>immunizationDDCC.occurrence = <span style="color: maroon">occurrenceDateTime</span> <i>&quot;Occurrence DateTime&quot;</i><span style="color: navy">;</span>
+  immunization.manfacturer<b> as </b><span style="color: maroon">manfacturer</span><span style="color: navy"><b> -&gt; </b></span>immunizationDDCC.manfacturer = <span style="color: maroon">manfacturer</span> <i>&quot;Manufacturer&quot;</i><span style="color: navy">;</span>
+  immunization.lotNumber<b> as </b><span style="color: maroon">lotNumber</span><span style="color: navy"><b> -&gt; </b></span>immunizationDDCC.lotNumber = <span style="color: maroon">lotNumber</span> <i>&quot;Lot Number&quot;</i><span style="color: navy">;</span>
+<span style="color: navy">}
+
+</span><b>group </b>SHCImmunizationtoDDCC<span style="color: navy">(</span><b>source</b> <span style="color: maroon">immunization</span><span style="color: navy"> : </span>SHCImmunizationDM, <b>target</b> <span style="color: maroon">immunizationDDCC</span><span style="color: navy"> : </span>DDCCImmunization<span style="color: navy">)</span><span style="color: navy"> {
+</span>  immunization.status<b> as </b><span style="color: maroon">status</span><span style="color: navy"><b> -&gt; </b></span>immunizationDDCC.status = <span style="color: maroon">status</span> <i>&quot;Status&quot;</i><span style="color: navy">;</span>
+  immunization.coding<b> as </b><span style="color: maroon">coding</span><span style="color: navy"><b> -&gt; </b></span>immunizationDDCC.coding = <span style="color: maroon">coding</span> <i>&quot;Coding&quot;</i><span style="color: navy">;</span>
+  immunization.occurrence<b> as </b><span style="color: maroon">occurrenceDateTime</span><span style="color: navy"><b> -&gt; </b></span>immunizationDDCC.occurrence = <span style="color: maroon">occurrenceDateTime</span> <i>&quot;Occurrence DateTime&quot;</i><span style="color: navy">;</span>
+  immunization.manfacturer<b> as </b><span style="color: maroon">manfacturer</span><span style="color: navy"><b> -&gt; </b></span>immunizationDDCC.manfacturer = <span style="color: maroon">manfacturer</span> <i>&quot;Manufacturer&quot;</i><span style="color: navy">;</span>
+  immunization.lotNumber<b> as </b><span style="color: maroon">lotNumber</span><span style="color: navy"><b> -&gt; </b></span>immunizationDDCC.lotNumber = <span style="color: maroon">lotNumber</span> <i>&quot;Lot Number&quot;</i><span style="color: navy">;</span>
+<span style="color: navy">}
+
+</span></pre></div>
+  </text>
+  <url value="http://smart.who.int/ddcc/StructureMap/SHCtoDDCC"/>
+  <version value="1.0.0"/>
+  <name value="SHCtoDDCC"/>
+  <status value="draft"/>
+  <date value="2024-10-15T13:40:08+00:00"/>
+  <publisher value="WHO"/>
+  <contact>
+    <name value="WHO"/>
+    <telecom>
+      <system value="url"/>
+      <value value="http://who.int"/>
+    </telecom>
+  </contact>
+  <jurisdiction>
+    <coding>
+      <system value="http://unstats.un.org/unsd/methods/m49/m49.htm"/>
+      <code value="001"/>
+    </coding>
+  </jurisdiction>
+  <structure>
+    <url value="http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-vaccination-bundle-dm"/>
+    <mode value="source"/>
+    <alias value="SHCVaccinationBundleDM"/>
+  </structure>
+  <structure>
+    <url value="http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-patient-general-dm"/>
+    <mode value="source"/>
+    <alias value="SHCPatientDM"/>
+  </structure>
+  <structure>
+    <url value="http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-vaccination-dm"/>
+    <mode value="source"/>
+    <alias value="SHCImmunizationDM"/>
+  </structure>
+  <structure>
+    <url value="http://hl7.org/fhir/StructureDefinition/Bundle"/>
+    <mode value="target"/>
+    <alias value="Bundle"/>
+  </structure>
+  <structure>
+    <url value="http://smart.who.int/ddcc/StructureDefinition/DDCCDocument"/>
+    <mode value="target"/>
+    <alias value="DDCCDocument"/>
+  </structure>
+  <structure>
+    <url value="http://smart.who.int/ddcc/StructureDefinition/DDCCPatient"/>
+    <mode value="target"/>
+    <alias value="DDCCPatient"/>
+  </structure>
+  <structure>
+    <url value="http://smart.who.int/ddcc/StructureDefinition/DDCCComposition"/>
+    <mode value="target"/>
+    <alias value="DDCCComposition"/>
+  </structure>
+  <structure>
+    <url value="http://smart.who.int/ddcc/StructureDefinition/DDCCOrganization"/>
+    <mode value="target"/>
+    <alias value="DDCCOrganization"/>
+  </structure>
+  <structure>
+    <url value="http://smart.who.int/ddcc/StructureDefinition/DDCCCountryOfVaccination"/>
+    <mode value="target"/>
+    <alias value="DDCCCountryOfVaccination"/>
+  </structure>
+  <structure>
+    <url value="http://smart.who.int/ddcc/StructureDefinition/DDCCVaccineBrand"/>
+    <mode value="target"/>
+    <alias value="DDCCVaccineBrand"/>
+  </structure>
+  <structure>
+    <url value="http://smart.who.int/ddcc/StructureDefinition/DDCCImmunization"/>
+    <mode value="target"/>
+    <alias value="DDCCImmunization"/>
+  </structure>
+  <group>
+    <name value="SHCtoDDCC"/>
+    <typeMode value="none"/>
+    <input>
+      <name value="shc"/>
+      <type value="SHCVaccinationBundleDM"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="ddcc"/>
+      <type value="Bundle"/>
+      <mode value="target"/>
+    </input>
+    <rule>
+      <name value="map patient"/>
+      <source>
+        <context value="shc"/>
+        <element value="entry"/>
+        <variable value="patientEntrySHC"/>
+      </source>
+      <rule>
+        <name value="Is Patient entry"/>
+        <source>
+          <context value="patientEntrySHC"/>
+          <type value="Patient"/>
+          <element value="resource"/>
+          <listMode value="first"/>
+          <variable value="patientSHC"/>
+        </source>
+        <rule>
+          <name value="For each immunization entry"/>
+          <source>
+            <context value="shc"/>
+            <element value="entry"/>
+            <variable value="immunizationEntrySHC"/>
+          </source>
+          <rule>
+            <name value="Is immunization entry"/>
+            <source>
+              <context value="immunizationEntrySHC"/>
+              <type value="Immunization"/>
+              <element value="resource"/>
+              <variable value="immunizationSHC"/>
+            </source>
+            <rule>
+              <name value="Bundle type"/>
+              <source>
+                <context value="immunizationEntrySHC"/>
+              </source>
+              <target>
+                <context value="ddcc"/>
+                <contextType value="variable"/>
+                <element value="type"/>
+                <transform value="copy"/>
+                <parameter>
+                  <valueString value="collection"/>
+                </parameter>
+              </target>
+            </rule>
+            <rule>
+              <name value="DDCC Document entry"/>
+              <source>
+                <context value="immunizationEntrySHC"/>
+              </source>
+              <target>
+                <context value="ddcc"/>
+                <contextType value="variable"/>
+                <element value="entry"/>
+                <variable value="ddccEntry"/>
+              </target>
+              <rule>
+                <name value="DDCC Document bundle"/>
+                <source>
+                  <context value="immunizationSHC"/>
+                </source>
+                <target>
+                  <context value="ddccEntry"/>
+                  <contextType value="variable"/>
+                  <element value="resource"/>
+                  <variable value="ddccdocument"/>
+                  <transform value="create"/>
+                  <parameter>
+                    <valueString value="Bundle"/>
+                  </parameter>
+                </target>
+                <rule>
+                  <name value="DDCC Document type"/>
+                  <source>
+                    <context value="immunizationSHC"/>
+                  </source>
+                  <target>
+                    <context value="ddccdocument"/>
+                    <contextType value="variable"/>
+                    <element value="type"/>
+                    <transform value="copy"/>
+                    <parameter>
+                      <valueString value="document"/>
+                    </parameter>
+                  </target>
+                </rule>
+                <rule>
+                  <name value="DDCC Document patient entry"/>
+                  <source>
+                    <context value="patientSHC"/>
+                  </source>
+                  <target>
+                    <context value="ddccdocument"/>
+                    <contextType value="variable"/>
+                    <element value="entry"/>
+                    <variable value="ddccDocumentEntry"/>
+                  </target>
+                  <rule>
+                    <name value="DDCC Document patient resource"/>
+                    <source>
+                      <context value="patientSHC"/>
+                    </source>
+                    <target>
+                      <context value="ddccDocumentEntry"/>
+                      <contextType value="variable"/>
+                      <element value="resource"/>
+                      <variable value="patientDDCC"/>
+                      <transform value="create"/>
+                      <parameter>
+                        <valueString value="Patient"/>
+                      </parameter>
+                    </target>
+                    <dependent>
+                      <name value="SHCPatienttoDDCC"/>
+                      <variable value="patientSHC"/>
+                      <variable value="patientDDCC"/>
+                    </dependent>
+                  </rule>
+                </rule>
+                <rule>
+                  <name value="DDCC Document immunization entry"/>
+                  <source>
+                    <context value="immunizationSHC"/>
+                  </source>
+                  <target>
+                    <context value="ddccdocument"/>
+                    <contextType value="variable"/>
+                    <element value="entry"/>
+                    <variable value="ddccDocumentEntry"/>
+                  </target>
+                  <rule>
+                    <name value="DDCC Document immunization resource"/>
+                    <source>
+                      <context value="immunizationSHC"/>
+                    </source>
+                    <target>
+                      <context value="ddccDocumentEntry"/>
+                      <contextType value="variable"/>
+                      <element value="resource"/>
+                      <variable value="immunizationDDCC"/>
+                      <transform value="create"/>
+                      <parameter>
+                        <valueString value="Immunization"/>
+                      </parameter>
+                    </target>
+                    <dependent>
+                      <name value="SHCImmunizationtoDDCC"/>
+                      <variable value="immunizationSHC"/>
+                      <variable value="immunizationDDCC"/>
+                    </dependent>
+                  </rule>
+                </rule>
+              </rule>
+            </rule>
+          </rule>
+        </rule>
+      </rule>
+    </rule>
+  </group>
+  <group>
+    <name value="SHCPatienttoDDCC"/>
+    <typeMode value="none"/>
+    <input>
+      <name value="patient"/>
+      <type value="SHCPatientDM"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="patientDDCC"/>
+      <type value="DDCCPatient"/>
+      <mode value="target"/>
+    </input>
+    <rule>
+      <name value="Status"/>
+      <source>
+        <context value="immunization"/>
+        <element value="status"/>
+        <variable value="status"/>
+      </source>
+      <target>
+        <context value="immunizationDDCC"/>
+        <contextType value="variable"/>
+        <element value="status"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="status"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="Coding"/>
+      <source>
+        <context value="immunization"/>
+        <element value="coding"/>
+        <variable value="coding"/>
+      </source>
+      <target>
+        <context value="immunizationDDCC"/>
+        <contextType value="variable"/>
+        <element value="coding"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="coding"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="Occurrence DateTime"/>
+      <source>
+        <context value="immunization"/>
+        <element value="occurrence"/>
+        <variable value="occurrenceDateTime"/>
+      </source>
+      <target>
+        <context value="immunizationDDCC"/>
+        <contextType value="variable"/>
+        <element value="occurrence"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="occurrenceDateTime"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="Manufacturer"/>
+      <source>
+        <context value="immunization"/>
+        <element value="manfacturer"/>
+        <variable value="manfacturer"/>
+      </source>
+      <target>
+        <context value="immunizationDDCC"/>
+        <contextType value="variable"/>
+        <element value="manfacturer"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="manfacturer"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="Lot Number"/>
+      <source>
+        <context value="immunization"/>
+        <element value="lotNumber"/>
+        <variable value="lotNumber"/>
+      </source>
+      <target>
+        <context value="immunizationDDCC"/>
+        <contextType value="variable"/>
+        <element value="lotNumber"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="lotNumber"/>
+        </parameter>
+      </target>
+    </rule>
+  </group>
+  <group>
+    <name value="SHCImmunizationtoDDCC"/>
+    <typeMode value="none"/>
+    <input>
+      <name value="immunization"/>
+      <type value="SHCImmunizationDM"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="immunizationDDCC"/>
+      <type value="DDCCImmunization"/>
+      <mode value="target"/>
+    </input>
+    <rule>
+      <name value="Status"/>
+      <source>
+        <context value="immunization"/>
+        <element value="status"/>
+        <variable value="status"/>
+      </source>
+      <target>
+        <context value="immunizationDDCC"/>
+        <contextType value="variable"/>
+        <element value="status"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="status"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="Coding"/>
+      <source>
+        <context value="immunization"/>
+        <element value="coding"/>
+        <variable value="coding"/>
+      </source>
+      <target>
+        <context value="immunizationDDCC"/>
+        <contextType value="variable"/>
+        <element value="coding"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="coding"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="Occurrence DateTime"/>
+      <source>
+        <context value="immunization"/>
+        <element value="occurrence"/>
+        <variable value="occurrenceDateTime"/>
+      </source>
+      <target>
+        <context value="immunizationDDCC"/>
+        <contextType value="variable"/>
+        <element value="occurrence"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="occurrenceDateTime"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="Manufacturer"/>
+      <source>
+        <context value="immunization"/>
+        <element value="manfacturer"/>
+        <variable value="manfacturer"/>
+      </source>
+      <target>
+        <context value="immunizationDDCC"/>
+        <contextType value="variable"/>
+        <element value="manfacturer"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="manfacturer"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="Lot Number"/>
+      <source>
+        <context value="immunization"/>
+        <element value="lotNumber"/>
+        <variable value="lotNumber"/>
+      </source>
+      <target>
+        <context value="immunizationDDCC"/>
+        <contextType value="variable"/>
+        <element value="lotNumber"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="lotNumber"/>
+        </parameter>
+      </target>
+    </rule>
+  </group>
+</StructureMap>

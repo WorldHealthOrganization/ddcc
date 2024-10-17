@@ -1,0 +1,566 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<StructureMap xmlns="http://hl7.org/fhir">
+  <id value="DDCCtoCoredataset"/>
+  <meta>
+    <versionId value="1"/>
+    <lastUpdated value="2022-03-01T19:17:56.589+00:00"/>
+  </meta>
+  <text>
+    <status value="generated"/><div xmlns="http://www.w3.org/1999/xhtml"><pre>map &quot;http://worldhealthorganization.github.io/ddcc/StructureMap/DDCCtoCoredataset&quot; = &quot;DDCCtoCoredataset&quot;
+
+
+uses &quot;http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCVSComposition&quot; alias DDCC as source
+uses &quot;http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCDocument&quot; alias DDCCDocument as source
+uses &quot;http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCPatient&quot; alias DDCCPatient as source
+uses &quot;http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCVSComposition&quot; alias DDCCVSComposition as source
+uses &quot;http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCountryOfVaccination&quot; alias DDCCCountryOfVaccination as source
+uses &quot;http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCVaccineBrand&quot; alias DDCCVaccineBrand as source
+uses &quot;http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCOrganization&quot; alias DDCCOrganization as source
+uses &quot;http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCImmunization&quot; alias DDCCImmunization as source
+uses &quot;http://worldhealthorganization.github.io/ddcc/DDCCCoreDataSet.VS.PoV&quot; alias DDCCCoreDataSetPoV as target
+
+group DecodeDDCCtoQR(source ddcc : DDCCDocument, target qr : DDCCCoreDataSetPoV) {
+  ddcc.entry as entry then {
+    // entry.resource : DDCCPatient as patient
+    entry.resource : Patient as patient then DecodePatientToQR(patient, qr) &quot;Patient&quot;;
+  };
+  ddcc.entry as entry then {
+    entry.resource : Immunization as immunization log immunization then DecodeImmunizationToQR(ddcc, immunization, qr) &quot;Immunization&quot;;
+  };
+}
+
+group DecodePatientToQR(source patient : DDCCPatient, target qr : DDCCCoreDataSetPoV) {
+  patient.birthDate as birthDate -&gt; qr.birthDate = birthDate;
+  patient.name as name then {
+    name.text as text -&gt; qr.name = text;
+  };
+}
+
+group DecodeImmunizationToQR(source ddcc : DDCCDocument, source immunization : DDCCImmunization, target qr : DDCCCoreDataSetPoV) {
+  immunization -&gt; qr.vaccination = create('BackboneElement') as vacEvent then {
+    immunization.protocolApplied as protocol then {
+      protocol.doseNumberPositiveInt as dose -&gt; vacEvent.dose = dose;
+      protocol.seriesDosesPositiveInt as doseNum -&gt; vacEvent.totalDoses = doseNum;
+      protocol.targetDisease as targetDisease then {
+        targetDisease.valueCodableConcept as valueCodableConcept -&gt; vacEvent.disease = valueCodableConcept;
+      } &quot;Target-Disease&quot;;
+    };
+    immunization.occurrenceDateTime as date -&gt; vacEvent.date = date;
+    // TODO: need to populate vacEvent.maholder
+    immunization.extension as country where (url = 'http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCountryOfEvent') then {
+      country.valueCode as code -&gt;  vacEvent.country = create('Coding') as coding,  coding.code = code,  coding.system = 'http://hl7.org/fhir/ValueSet/iso3166-1-3';
+    } &quot;Country&quot;;
+    // immunization.extension : DDCCBrand as brand
+    immunization.extension as brand where (url = 'http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCEventBrand') then {
+      brand.valueCoding as valueCoding -&gt; vacEvent.brand = valueCoding;
+    } &quot;Vaccine-Brand&quot;;
+    immunization.vaccineCode as vaccineCode then {
+      vaccineCode.coding as coding -&gt; vacEvent.vaccine = coding;
+    } &quot;Vaccine-Code&quot;;
+    ddcc.entry as entry then {
+      // entry.resource : DDCCOrganization as organization
+      entry.resource : Organization as organization then {
+        organization.name as name -&gt; vacEvent.centre = name;
+      } &quot;Centre-Name&quot;;
+    } &quot;Vaccination-Centre&quot;;
+    ddcc.entry as entry then {
+      // entry.resource : DDCCVSComposition as composition
+      entry.resource : Composition as composition then {
+        composition.identifier as identifier -&gt; qr.identifier = identifier;
+      } &quot;Vaccination-Event-ID&quot;;
+    } &quot;Vaccination-Event&quot;;
+  } &quot;Vaccination&quot;;
+}
+
+</pre></div>
+  </text>
+  <url value="http://worldhealthorganization.github.io/ddcc/StructureMap/DDCCtoCoredataset"/>
+  <version value="1.0.0"/>
+  <name value="DDCCtoCoredataset"/>
+  <status value="draft"/>
+  <date value="2022-11-23T04:26:34+00:00"/>
+  <publisher value="WHO"/>
+  <contact>
+    <name value="WHO"/>
+    <telecom>
+      <system value="url"/>
+      <value value="http://who.int"/>
+    </telecom>
+  </contact>
+  <jurisdiction>
+    <coding>
+      <system value="http://unstats.un.org/unsd/methods/m49/m49.htm"/>
+      <code value="001"/>
+    </coding>
+  </jurisdiction>
+  <structure>
+    <url value="http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCVSComposition"/>
+    <mode value="source"/>
+    <alias value="DDCC"/>
+  </structure>
+  <structure>
+    <url value="http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCDocument"/>
+    <mode value="source"/>
+    <alias value="DDCCDocument"/>
+  </structure>
+  <structure>
+    <url value="http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCPatient"/>
+    <mode value="source"/>
+    <alias value="DDCCPatient"/>
+  </structure>
+  <structure>
+    <url value="http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCVSComposition"/>
+    <mode value="source"/>
+    <alias value="DDCCVSComposition"/>
+  </structure>
+  <structure>
+    <url value="http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCountryOfVaccination"/>
+    <mode value="source"/>
+    <alias value="DDCCCountryOfVaccination"/>
+  </structure>
+  <structure>
+    <url value="http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCVaccineBrand"/>
+    <mode value="source"/>
+    <alias value="DDCCVaccineBrand"/>
+  </structure>
+  <structure>
+    <url value="http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCOrganization"/>
+    <mode value="source"/>
+    <alias value="DDCCOrganization"/>
+  </structure>
+  <structure>
+    <url value="http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCImmunization"/>
+    <mode value="source"/>
+    <alias value="DDCCImmunization"/>
+  </structure>
+  <structure>
+    <url value="http://worldhealthorganization.github.io/ddcc/DDCCCoreDataSet.VS.PoV"/>
+    <mode value="target"/>
+    <alias value="DDCCCoreDataSetPoV"/>
+  </structure>
+  <group>
+    <name value="DecodeDDCCtoQR"/>
+    <typeMode value="none"/>
+    <input>
+      <name value="ddcc"/>
+      <type value="DDCCDocument"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="qr"/>
+      <type value="DDCCCoreDataSetPoV"/>
+      <mode value="target"/>
+    </input>
+    <rule>
+      <name value="entry"/>
+      <source>
+        <context value="ddcc"/>
+        <element value="entry"/>
+        <variable value="entry"/>
+      </source>
+      <rule>
+        <name value="Patient"/>
+        <source>
+          <context value="entry"/>
+          <type value="Patient"/>
+          <element value="resource"/>
+          <variable value="patient"/>
+        </source>
+        <dependent>
+          <name value="DecodePatientToQR"/>
+          <variable value="patient">
+            <extension url="http://hl7.org/fhir/tools/StructureDefinition/original-item-type">
+              <valueUrl value="id"/>
+            </extension>
+          </variable>
+          <variable value="qr">
+            <extension url="http://hl7.org/fhir/tools/StructureDefinition/original-item-type">
+              <valueUrl value="id"/>
+            </extension>
+          </variable>
+        </dependent>
+        <documentation value="entry.resource : DDCCPatient as patient"/>
+      </rule>
+    </rule>
+    <rule>
+      <name value="entry"/>
+      <source>
+        <context value="ddcc"/>
+        <element value="entry"/>
+        <variable value="entry"/>
+      </source>
+      <rule>
+        <name value="Immunization"/>
+        <source>
+          <context value="entry"/>
+          <type value="Immunization"/>
+          <element value="resource"/>
+          <variable value="immunization"/>
+          <logMessage value="immunization"/>
+        </source>
+        <dependent>
+          <name value="DecodeImmunizationToQR"/>
+          <variable value="ddcc">
+            <extension url="http://hl7.org/fhir/tools/StructureDefinition/original-item-type">
+              <valueUrl value="id"/>
+            </extension>
+          </variable>
+          <variable value="immunization">
+            <extension url="http://hl7.org/fhir/tools/StructureDefinition/original-item-type">
+              <valueUrl value="id"/>
+            </extension>
+          </variable>
+          <variable value="qr">
+            <extension url="http://hl7.org/fhir/tools/StructureDefinition/original-item-type">
+              <valueUrl value="id"/>
+            </extension>
+          </variable>
+        </dependent>
+      </rule>
+    </rule>
+  </group>
+  <group>
+    <name value="DecodePatientToQR"/>
+    <typeMode value="none"/>
+    <input>
+      <name value="patient"/>
+      <type value="DDCCPatient"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="qr"/>
+      <type value="DDCCCoreDataSetPoV"/>
+      <mode value="target"/>
+    </input>
+    <rule>
+      <name value="birthDate"/>
+      <source>
+        <context value="patient"/>
+        <element value="birthDate"/>
+        <variable value="birthDate"/>
+      </source>
+      <target>
+        <context value="qr"/>
+        <contextType value="variable"/>
+        <element value="birthDate"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="birthDate"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="name"/>
+      <source>
+        <context value="patient"/>
+        <element value="name"/>
+        <variable value="name"/>
+      </source>
+      <rule>
+        <name value="text"/>
+        <source>
+          <context value="name"/>
+          <element value="text"/>
+          <variable value="text"/>
+        </source>
+        <target>
+          <context value="qr"/>
+          <contextType value="variable"/>
+          <element value="name"/>
+          <transform value="copy"/>
+          <parameter>
+            <valueId value="text"/>
+          </parameter>
+        </target>
+      </rule>
+    </rule>
+  </group>
+  <group>
+    <name value="DecodeImmunizationToQR"/>
+    <typeMode value="none"/>
+    <input>
+      <name value="ddcc"/>
+      <type value="DDCCDocument"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="immunization"/>
+      <type value="DDCCImmunization"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="qr"/>
+      <type value="DDCCCoreDataSetPoV"/>
+      <mode value="target"/>
+    </input>
+    <rule>
+      <name value="Vaccination"/>
+      <source>
+        <context value="immunization"/>
+      </source>
+      <target>
+        <context value="qr"/>
+        <contextType value="variable"/>
+        <element value="vaccination"/>
+        <variable value="vacEvent"/>
+        <transform value="create"/>
+        <parameter>
+          <valueString value="BackboneElement"/>
+        </parameter>
+      </target>
+      <rule>
+        <name value="protocolApplied"/>
+        <source>
+          <context value="immunization"/>
+          <element value="protocolApplied"/>
+          <variable value="protocol"/>
+        </source>
+        <rule>
+          <name value="doseNumberPositiveInt"/>
+          <source>
+            <context value="protocol"/>
+            <element value="doseNumberPositiveInt"/>
+            <variable value="dose"/>
+          </source>
+          <target>
+            <context value="vacEvent"/>
+            <contextType value="variable"/>
+            <element value="dose"/>
+            <transform value="copy"/>
+            <parameter>
+              <valueId value="dose"/>
+            </parameter>
+          </target>
+        </rule>
+        <rule>
+          <name value="seriesDosesPositiveInt"/>
+          <source>
+            <context value="protocol"/>
+            <element value="seriesDosesPositiveInt"/>
+            <variable value="doseNum"/>
+          </source>
+          <target>
+            <context value="vacEvent"/>
+            <contextType value="variable"/>
+            <element value="totalDoses"/>
+            <transform value="copy"/>
+            <parameter>
+              <valueId value="doseNum"/>
+            </parameter>
+          </target>
+        </rule>
+        <rule>
+          <name value="Target-Disease"/>
+          <source>
+            <context value="protocol"/>
+            <element value="targetDisease"/>
+            <variable value="targetDisease"/>
+          </source>
+          <rule>
+            <name value="valueCodableConcept"/>
+            <source>
+              <context value="targetDisease"/>
+              <element value="valueCodableConcept"/>
+              <variable value="valueCodableConcept"/>
+            </source>
+            <target>
+              <context value="vacEvent"/>
+              <contextType value="variable"/>
+              <element value="disease"/>
+              <transform value="copy"/>
+              <parameter>
+                <valueId value="valueCodableConcept"/>
+              </parameter>
+            </target>
+          </rule>
+        </rule>
+      </rule>
+      <rule>
+        <name value="occurrenceDateTime"/>
+        <source>
+          <context value="immunization"/>
+          <element value="occurrenceDateTime"/>
+          <variable value="date"/>
+        </source>
+        <target>
+          <context value="vacEvent"/>
+          <contextType value="variable"/>
+          <element value="date"/>
+          <transform value="copy"/>
+          <parameter>
+            <valueId value="date"/>
+          </parameter>
+        </target>
+      </rule>
+      <rule>
+        <name value="Country"/>
+        <source>
+          <context value="immunization"/>
+          <element value="extension"/>
+          <variable value="country"/>
+          <condition value="(url = 'http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCountryOfEvent')"/>
+        </source>
+        <rule>
+          <name value="valueCode"/>
+          <source>
+            <context value="country"/>
+            <element value="valueCode"/>
+            <variable value="code"/>
+          </source>
+          <target>
+            <context value="vacEvent"/>
+            <contextType value="variable"/>
+            <element value="country"/>
+            <variable value="coding"/>
+            <transform value="create"/>
+            <parameter>
+              <valueString value="Coding"/>
+            </parameter>
+          </target>
+          <target>
+            <context value="coding"/>
+            <contextType value="variable"/>
+            <element value="code"/>
+            <transform value="copy"/>
+            <parameter>
+              <valueId value="code"/>
+            </parameter>
+          </target>
+          <target>
+            <context value="coding"/>
+            <contextType value="variable"/>
+            <element value="system"/>
+            <transform value="copy"/>
+            <parameter>
+              <valueString value="http://hl7.org/fhir/ValueSet/iso3166-1-3"/>
+            </parameter>
+          </target>
+        </rule>
+        <documentation value="TODO: need to populate vacEvent.maholder"/>
+      </rule>
+      <rule>
+        <name value="Vaccine-Brand"/>
+        <source>
+          <context value="immunization"/>
+          <element value="extension"/>
+          <variable value="brand"/>
+          <condition value="(url = 'http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCEventBrand')"/>
+        </source>
+        <rule>
+          <name value="valueCoding"/>
+          <source>
+            <context value="brand"/>
+            <element value="valueCoding"/>
+            <variable value="valueCoding"/>
+          </source>
+          <target>
+            <context value="vacEvent"/>
+            <contextType value="variable"/>
+            <element value="brand"/>
+            <transform value="copy"/>
+            <parameter>
+              <valueId value="valueCoding"/>
+            </parameter>
+          </target>
+        </rule>
+        <documentation value="immunization.extension : DDCCBrand as brand"/>
+      </rule>
+      <rule>
+        <name value="Vaccine-Code"/>
+        <source>
+          <context value="immunization"/>
+          <element value="vaccineCode"/>
+          <variable value="vaccineCode"/>
+        </source>
+        <rule>
+          <name value="coding"/>
+          <source>
+            <context value="vaccineCode"/>
+            <element value="coding"/>
+            <variable value="coding"/>
+          </source>
+          <target>
+            <context value="vacEvent"/>
+            <contextType value="variable"/>
+            <element value="vaccine"/>
+            <transform value="copy"/>
+            <parameter>
+              <valueId value="coding"/>
+            </parameter>
+          </target>
+        </rule>
+      </rule>
+      <rule>
+        <name value="Vaccination-Centre"/>
+        <source>
+          <context value="ddcc"/>
+          <element value="entry"/>
+          <variable value="entry"/>
+        </source>
+        <rule>
+          <name value="Centre-Name"/>
+          <source>
+            <context value="entry"/>
+            <type value="Organization"/>
+            <element value="resource"/>
+            <variable value="organization"/>
+          </source>
+          <rule>
+            <name value="name"/>
+            <source>
+              <context value="organization"/>
+              <element value="name"/>
+              <variable value="name"/>
+            </source>
+            <target>
+              <context value="vacEvent"/>
+              <contextType value="variable"/>
+              <element value="centre"/>
+              <transform value="copy"/>
+              <parameter>
+                <valueId value="name"/>
+              </parameter>
+            </target>
+          </rule>
+          <documentation value="entry.resource : DDCCOrganization as organization"/>
+        </rule>
+      </rule>
+      <rule>
+        <name value="Vaccination-Event"/>
+        <source>
+          <context value="ddcc"/>
+          <element value="entry"/>
+          <variable value="entry"/>
+        </source>
+        <rule>
+          <name value="Vaccination-Event-ID"/>
+          <source>
+            <context value="entry"/>
+            <type value="Composition"/>
+            <element value="resource"/>
+            <variable value="composition"/>
+          </source>
+          <rule>
+            <name value="identifier"/>
+            <source>
+              <context value="composition"/>
+              <element value="identifier"/>
+              <variable value="identifier"/>
+            </source>
+            <target>
+              <context value="qr"/>
+              <contextType value="variable"/>
+              <element value="identifier"/>
+              <transform value="copy"/>
+              <parameter>
+                <valueId value="identifier"/>
+              </parameter>
+            </target>
+          </rule>
+          <documentation value="entry.resource : DDCCVSComposition as composition"/>
+        </rule>
+      </rule>
+    </rule>
+  </group>
+</StructureMap>

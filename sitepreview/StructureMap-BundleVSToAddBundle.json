@@ -1,0 +1,70 @@
+{
+  "resourceType" : "StructureMap",
+  "id" : "BundleVSToAddBundle",
+  "text" : {
+    "status" : "generated",
+    "div" : "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p class=\"res-header-id\"><b>Generated Narrative: StructureMap BundleVSToAddBundle</b></p><a name=\"BundleVSToAddBundle\"> </a><a name=\"hcBundleVSToAddBundle\"> </a><a name=\"BundleVSToAddBundle-en-US\"> </a><pre class=\"fml\">\r\n<b>map</b><span style=\"color: navy\"> &quot;</span>http://smart.who.int/ddcc/StructureMap/BundleVSToAddBundle<span style=\"color: navy\">&quot; = &quot;</span>BundleVSToAddBundle<span style=\"color: navy\">&quot;\r\n\r\n</span><b>uses</b><span style=\"color: navy\"> &quot;</span><a href=\"http://hl7.org/fhir/R4/bundle.html\" title=\"Bundle\">http://hl7.org/fhir/StructureDefinition/Bundle</a><span style=\"color: navy\">&quot; </span><b>alias </b>DDCCBundle <b>as </b><b>source</b>\r\n<b>uses</b><span style=\"color: navy\"> &quot;</span><a href=\"http://hl7.org/fhir/R4/bundle.html\" title=\"Bundle\">http://hl7.org/fhir/StructureDefinition/Bundle</a><span style=\"color: navy\">&quot; </span><b>alias </b>AddBundle <b>as </b><b>target</b>\r\n\r\n<b>imports</b><span style=\"color: navy\"> &quot;</span><a href=\"StructureMap-CoreDataSetVSToAddBundle.html\" title=\"CoreDataSetVSToAddBundle\">http://smart.who.int/ddcc/StructureMap/CoreDataSetVSToAddBundle</a><span style=\"color: navy\">&quot;\r\n</span>\r\n<b>group </b>BundleVSToAddBundle<span style=\"color: navy\">(</span><b>source</b> <span style=\"color: maroon\">ddccbundle</span><span style=\"color: navy\"> : </span>DDCCBundle, <b>target</b> <span style=\"color: maroon\">bundle</span><span style=\"color: navy\"> : </span>AddBundle<span style=\"color: navy\">)</span><span style=\"color: navy\"> {\r\n</span>  ddccbundle.entry first<b> as </b><span style=\"color: maroon\">ddcc</span><span style=\"color: navy\"><b> -&gt; </b></span>bundle<b> then </b>CoreDataSetVSToAddBundle<span style=\"color: navy\">(</span><span style=\"color: maroon\">ddcc</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">bundle</span><span style=\"color: navy\">)</span> <i>&quot;get first entry from bundle&quot;</i><span style=\"color: navy\">;</span>\r\n<span style=\"color: navy\">}\r\n\r\n</span></pre></div>"
+  },
+  "url" : "http://smart.who.int/ddcc/StructureMap/BundleVSToAddBundle",
+  "version" : "1.0.0",
+  "name" : "BundleVSToAddBundle",
+  "status" : "draft",
+  "date" : "2024-10-15T13:40:08+00:00",
+  "publisher" : "WHO",
+  "contact" : [{
+    "name" : "WHO",
+    "telecom" : [{
+      "system" : "url",
+      "value" : "http://who.int"
+    }]
+  }],
+  "jurisdiction" : [{
+    "coding" : [{
+      "system" : "http://unstats.un.org/unsd/methods/m49/m49.htm",
+      "code" : "001"
+    }]
+  }],
+  "structure" : [{
+    "url" : "http://hl7.org/fhir/StructureDefinition/Bundle",
+    "mode" : "source",
+    "alias" : "DDCCBundle"
+  },
+  {
+    "url" : "http://hl7.org/fhir/StructureDefinition/Bundle",
+    "mode" : "target",
+    "alias" : "AddBundle"
+  }],
+  "import" : ["http://smart.who.int/ddcc/StructureMap/CoreDataSetVSToAddBundle"],
+  "group" : [{
+    "name" : "BundleVSToAddBundle",
+    "typeMode" : "none",
+    "input" : [{
+      "name" : "ddccbundle",
+      "type" : "DDCCBundle",
+      "mode" : "source"
+    },
+    {
+      "name" : "bundle",
+      "type" : "AddBundle",
+      "mode" : "target"
+    }],
+    "rule" : [{
+      "name" : "get first entry from bundle",
+      "source" : [{
+        "context" : "ddccbundle",
+        "element" : "entry",
+        "listMode" : "first",
+        "variable" : "ddcc"
+      }],
+      "target" : [{
+        "context" : "bundle",
+        "contextType" : "variable"
+      }],
+      "dependent" : [{
+        "name" : "CoreDataSetVSToAddBundle",
+        "variable" : ["ddcc",
+        "bundle"]
+      }]
+    }]
+  }]
+}

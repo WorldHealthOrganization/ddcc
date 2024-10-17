@@ -1,0 +1,793 @@
+{
+  "resourceType" : "StructureMap",
+  "id" : "SHCJWTtoDDCC",
+  "text" : {
+    "status" : "generated",
+    "div" : "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p class=\"res-header-id\"><b>Generated Narrative: StructureMap SHCJWTtoDDCC</b></p><a name=\"SHCJWTtoDDCC\"> </a><a name=\"hcSHCJWTtoDDCC\"> </a><a name=\"SHCJWTtoDDCC-en-US\"> </a><pre class=\"fml\">\r\n<b>map</b><span style=\"color: navy\"> &quot;</span>http://smart.who.int/ddcc/StructureMap/CertSHCtoDDCC<span style=\"color: navy\">&quot; = &quot;</span>SHCJWTtoDDCC<span style=\"color: navy\">&quot;\r\n\r\n</span><b>uses</b><span style=\"color: navy\"> &quot;</span><a href=\"StructureDefinition-CertSHC.html\" title=\"Certificate - Smart Health Card's JSon Web Token Logical Model\">http://smart.who.int/ddcc/StructureDefinition/CertSHC</a><span style=\"color: navy\">&quot; </span><b>alias </b>JWTPayload <b>as </b><b>source</b>\r\n<b>uses</b><span style=\"color: navy\"> &quot;</span>http://hl7.org/fhir/uv/shc/StructureDefinition/vc<span style=\"color: navy\">&quot; </span><b>alias </b>VC <b>as </b><b>source</b>\r\n<b>uses</b><span style=\"color: navy\"> &quot;</span>http://hl7.org/fhir/uv/shc/StructureDefinition/creadential-subject<span style=\"color: navy\">&quot; </span><b>alias </b>CredentialSubject <b>as </b><b>source</b>\r\n<b>uses</b><span style=\"color: navy\"> &quot;</span><a href=\"http://hl7.org/fhir/R4/bundle.html\" title=\"Bundle\">http://hl7.org/fhir/StructureDefinition/Bundle</a><span style=\"color: navy\">&quot; </span><b>alias </b>Bundle <b>as </b><b>target</b>\r\n\r\n<b>group </b>SHCtoDDCC<span style=\"color: navy\">(</span><b>source</b> <span style=\"color: maroon\">src</span><span style=\"color: navy\"> : </span>JWTPayload, <b>target</b> <span style=\"color: maroon\">bundle</span><span style=\"color: navy\"> : </span>Bundle<span style=\"color: navy\">)</span><span style=\"color: navy\"> {\r\n</span>  src<span style=\"color: navy\"><b> -&gt; </b></span>bundle.type = <span style=\"color: blue\">'transaction'</span> <i>&quot;set bundle type&quot;</i><span style=\"color: navy\">;</span>\r\n  src<span style=\"color: navy\"><b> -&gt; </b></span> bundle<span style=\"color: navy\">, </span> bundle.entry<b> as </b><span style=\"color: maroon\">entry</span><span style=\"color: navy\">, </span> entry.resource = <b>create</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'Composition'</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">comp</span><b> then</b><span style=\"color: navy\"> {\r\n</span>    src<span style=\"color: navy\"><b> -&gt; </b></span>bundle<b> then </b>ExtractCert<span style=\"color: navy\">(</span><span style=\"color: maroon\">src</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">bundle</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">comp</span><span style=\"color: navy\">)</span> <i>&quot;Certificate&quot;</i><span style=\"color: navy\">;</span>\r\n    src<span style=\"color: navy\"><b> -&gt; </b></span>bundle<b> then </b>ExtractComposition<span style=\"color: navy\">(</span><span style=\"color: maroon\">src</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">comp</span><span style=\"color: navy\">)</span> <i>&quot;Composition&quot;</i><span style=\"color: navy\">;</span>\r\n  <span style=\"color: navy\">}</span> <i>&quot;Patient and Composition Create&quot;</i><span style=\"color: navy\">;</span>\r\n<span style=\"color: navy\">}\r\n\r\n</span><b>group </b>ExtractCert<span style=\"color: navy\">(</span><b>source</b> <span style=\"color: maroon\">src</span><span style=\"color: navy\"> : </span>JWTPayload, <b>target</b> <span style=\"color: maroon\">bundle</span><span style=\"color: navy\"> : </span>Bundle, <b>target</b> <span style=\"color: maroon\">comp</span><span style=\"color: navy\"> : </span>Composition<span style=\"color: navy\">)</span><span style=\"color: navy\"> {\r\n</span>  src.vc<b> as </b><span style=\"color: maroon\">vc</span><span style=\"color: navy\"><b> -&gt; </b></span> bundle<span style=\"color: navy\">, </span> bundle.entry<b> as </b><span style=\"color: maroon\">entryOrg</span><span style=\"color: navy\">, </span> entryOrg.resource = <b>create</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'Organization'</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">org</span><span style=\"color: navy\">, </span> <b>uuid</b><span style=\"color: navy\">(</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">oid</span><b> then</b><span style=\"color: navy\"> {\r\n</span>    src<span style=\"color: navy\"><b> -&gt; </b></span>org.id = <span style=\"color: maroon\">oid</span> <i>&quot;Organization ID&quot;</i><span style=\"color: navy\">;</span>\r\n    src<span style=\"color: navy\"><b> -&gt; </b></span> comp.author<b> as </b><span style=\"color: maroon\">author</span><span style=\"color: navy\">, </span> author.reference = <b>append</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'Organization/'</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">oid</span><span style=\"color: navy\">)</span> <i>&quot;Set org&quot;</i><span style=\"color: navy\">;</span>\r\n    src.iss<b> as </b><span style=\"color: maroon\">iss</span><span style=\"color: navy\"><b> -&gt; </b></span> org.identifier<b> as </b><span style=\"color: maroon\">identif</span><span style=\"color: navy\">, </span> identif.value = <span style=\"color: maroon\">iss</span> <i>&quot;Set Organization name&quot;</i><span style=\"color: navy\">;</span>\r\n    vc.credentialSubject<b> as </b><span style=\"color: maroon\">credentialSubject</span><span style=\"color: navy\"><b> -&gt; </b></span>bundle<b> then</b><span style=\"color: navy\"> {\r\n</span>      credentialSubject.fhirBundle<b> as </b><span style=\"color: maroon\">fhirBundle</span><span style=\"color: navy\"><b> -&gt; </b></span>bundle<b> then</b><span style=\"color: navy\"> {\r\n</span>        fhirBundle.entry<b> as </b><span style=\"color: maroon\">bundleEntrySHC</span><b> then</b><span style=\"color: navy\"> {\r\n</span>          bundleEntrySHC.resource<span style=\"color: navy\"> : </span>Patient first<b> as </b><span style=\"color: maroon\">patientSHC</span><b> then</b><span style=\"color: navy\"> {\r\n</span>            bundleEntrySHC.fullUrl<b> as </b><span style=\"color: maroon\">ref</span><span style=\"color: navy\"><b> -&gt; </b></span> comp.subject<b> as </b><span style=\"color: maroon\">subj</span><span style=\"color: navy\">, </span> subj.reference = <b>append</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'Patient/'</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">ref</span><span style=\"color: navy\">)</span> <i>&quot;Set patient&quot;</i><span style=\"color: navy\">;</span>\r\n          <span style=\"color: navy\">}</span> <i>&quot;patient filter&quot;</i><span style=\"color: navy\">;</span>\r\n          bundleEntrySHC.resource<b> as </b><span style=\"color: maroon\">anyRes</span><span style=\"color: navy\"><b> -&gt; </b></span> bundle.entry<b> as </b><span style=\"color: maroon\">entry</span><span style=\"color: navy\">, </span> entry.resource = <span style=\"color: maroon\">anyRes</span> <i>&quot;adding resource to bundle&quot;</i><span style=\"color: navy\">;</span>\r\n        <span style=\"color: navy\">}</span> <i>&quot;for each entry&quot;</i><span style=\"color: navy\">;</span>\r\n        src<b> where </b>(fhirBundle.entry.resource.ofType(Immunization).exists())<span style=\"color: navy\"><b> -&gt; </b></span>comp.section<b> as </b><span style=\"color: maroon\">section</span><b> then</b><span style=\"color: navy\"> {\r\n</span>          src<span style=\"color: navy\"><b> -&gt; </b></span> section.code<b> as </b><span style=\"color: maroon\">code</span><span style=\"color: navy\">, </span> code.coding<b> as </b><span style=\"color: maroon\">coding</span><span style=\"color: navy\">, </span> coding.system = <span style=\"color: blue\">'http://loinc.org'</span><span style=\"color: navy\">, </span> coding.code = <span style=\"color: blue\">'11369-6'</span><span style=\"color: navy\">, </span> coding.display = <span style=\"color: blue\">'History of Immunization Narrative'</span> <i>&quot;Adding code to imm section&quot;</i><span style=\"color: navy\">;</span>\r\n          src<span style=\"color: navy\"><b> -&gt; </b></span> section.author<b> as </b><span style=\"color: maroon\">author</span><span style=\"color: navy\">, </span> author.reference = <b>append</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'Organization/'</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">oid</span><span style=\"color: navy\">)</span> <i>&quot;assing org entry to section&quot;</i><span style=\"color: navy\">;</span>\r\n          fhirBundle.entry<b> as </b><span style=\"color: maroon\">bundleEntrySHC</span><b> then</b><span style=\"color: navy\"> {\r\n</span>            bundleEntrySHC.resource<span style=\"color: navy\"> : </span>Immunization<b> as </b><span style=\"color: maroon\">immunizationSHC</span><b> then</b><span style=\"color: navy\"> {\r\n</span>              bundleEntrySHC.fullUrl<b> as </b><span style=\"color: maroon\">ref</span><span style=\"color: navy\"><b> -&gt; </b></span> section.entry<b> as </b><span style=\"color: maroon\">entry</span><span style=\"color: navy\">, </span> entry.reference = <b>append</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'Immunization/'</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">ref</span><span style=\"color: navy\">)</span> <i>&quot;add imm section&quot;</i><span style=\"color: navy\">;</span>\r\n            <span style=\"color: navy\">}</span> <i>&quot;assign immunization to composition&quot;</i><span style=\"color: navy\">;</span>\r\n          <span style=\"color: navy\">}</span> <i>&quot;Each entry&quot;</i><span style=\"color: navy\">;</span>\r\n        <span style=\"color: navy\">}</span> <i>&quot;SHC Immunization Section&quot;</i><span style=\"color: navy\">;</span>\r\n        src<b> where </b>(fhirBundle.entry.resource.ofType(Observation).exists())<span style=\"color: navy\"><b> -&gt; </b></span>comp.section<b> as </b><span style=\"color: maroon\">section</span><b> then</b><span style=\"color: navy\"> {\r\n</span>          src<span style=\"color: navy\"><b> -&gt; </b></span> section.code<b> as </b><span style=\"color: maroon\">code</span><span style=\"color: navy\">, </span> code.coding<b> as </b><span style=\"color: maroon\">coding</span><span style=\"color: navy\">, </span> coding.system = <span style=\"color: blue\">'http://loinc.org'</span><span style=\"color: navy\">, </span> coding.code = <span style=\"color: blue\">'30954-2'</span><span style=\"color: navy\">, </span> coding.display = <span style=\"color: blue\">'Results (Diagnostic findings)'</span> <i>&quot;Adding code to obs section&quot;</i><span style=\"color: navy\">;</span>\r\n          src<span style=\"color: navy\"><b> -&gt; </b></span> section.author<b> as </b><span style=\"color: maroon\">author</span><span style=\"color: navy\">, </span> author.reference = <b>append</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'Organization/'</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">oid</span><span style=\"color: navy\">)</span> <i>&quot;assing org entry to section&quot;</i><span style=\"color: navy\">;</span>\r\n          fhirBundle.entry<b> as </b><span style=\"color: maroon\">bundleEntrySHC</span><b> then</b><span style=\"color: navy\"> {\r\n</span>            bundleEntrySHC.resource<span style=\"color: navy\"> : </span>Observation<b> as </b><span style=\"color: maroon\">observationSHC</span><b> then</b><span style=\"color: navy\"> {\r\n</span>              bundleEntrySHC.fullUrl<b> as </b><span style=\"color: maroon\">ref</span><span style=\"color: navy\"><b> -&gt; </b></span> section.entry<b> as </b><span style=\"color: maroon\">entry</span><span style=\"color: navy\">, </span> entry.reference = <b>append</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'Observation/'</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">ref</span><span style=\"color: navy\">)</span> <i>&quot;add obs section&quot;</i><span style=\"color: navy\">;</span>\r\n            <span style=\"color: navy\">}</span> <i>&quot;assign immunization to composition&quot;</i><span style=\"color: navy\">;</span>\r\n          <span style=\"color: navy\">}</span> <i>&quot;Entry Obs&quot;</i><span style=\"color: navy\">;</span>\r\n        <span style=\"color: navy\">}</span> <i>&quot;SHC Observation Section&quot;</i><span style=\"color: navy\">;</span>\r\n      <span style=\"color: navy\">}</span> <i>&quot;SHC FhirBundle&quot;</i><span style=\"color: navy\">;</span>\r\n    <span style=\"color: navy\">}</span> <i>&quot;SHC Credential Subject&quot;</i><span style=\"color: navy\">;</span>\r\n  <span style=\"color: navy\">}</span> <i>&quot;Org Create&quot;</i><span style=\"color: navy\">;</span>\r\n<span style=\"color: navy\">}\r\n\r\n</span><b>group </b>ExtractComposition<span style=\"color: navy\">(</span><b>source</b> <span style=\"color: maroon\">src</span><span style=\"color: navy\"> : </span>Data, <b>target</b> <span style=\"color: maroon\">composition</span><span style=\"color: navy\"> : </span>Composition<span style=\"color: navy\">)</span><span style=\"color: navy\"> {\r\n</span>  src<span style=\"color: navy\"><b> -&gt; </b></span>composition.title = <span style=\"color: blue\">'International Certificate of Vaccination or Prophylaxis'</span> <i>&quot;Title&quot;</i><span style=\"color: navy\">;</span>\r\n  src<span style=\"color: navy\"><b> -&gt; </b></span> composition.category<b> as </b><span style=\"color: maroon\">category</span><span style=\"color: navy\">, </span> category.coding<b> as </b><span style=\"color: maroon\">coding</span><b> then</b><span style=\"color: navy\"> {\r\n</span>    src<span style=\"color: navy\"><b> -&gt; </b></span>coding.code = <span style=\"color: blue\">'ddcc-vs'</span> <i>&quot;Category&quot;</i><span style=\"color: navy\">;</span>\r\n  <span style=\"color: navy\">}</span> <i>&quot;set category&quot;</i><span style=\"color: navy\">;</span>\r\n  src<span style=\"color: navy\"><b> -&gt; </b></span> composition.type<b> as </b><span style=\"color: maroon\">type</span><span style=\"color: navy\">, </span> type.coding<b> as </b><span style=\"color: maroon\">coding</span><b> then</b><span style=\"color: navy\"> {\r\n</span>    src<span style=\"color: navy\"><b> -&gt; </b></span> coding.system = <span style=\"color: blue\">'http://loinc.org'</span><span style=\"color: navy\">, </span> coding.code = <span style=\"color: blue\">'82593-5'</span><span style=\"color: navy\">, </span> coding.display = <span style=\"color: blue\">'Immunization summary report'</span> <i>&quot;set type coding&quot;</i><span style=\"color: navy\">;</span>\r\n  <span style=\"color: navy\">}</span> <i>&quot;set type&quot;</i><span style=\"color: navy\">;</span>\r\n  src<span style=\"color: navy\"><b> -&gt; </b></span> composition.event<b> as </b><span style=\"color: maroon\">event</span><span style=\"color: navy\">, </span> event.period = <b>create</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'Period'</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">period</span><b> then </b>ExtractPeriod<span style=\"color: navy\">(</span><span style=\"color: maroon\">src</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">period</span><span style=\"color: navy\">)</span> <i>&quot;Extract Period&quot;</i><span style=\"color: navy\">;</span>\r\n<span style=\"color: navy\">}\r\n\r\n</span><b>group </b>ExtractPeriod<span style=\"color: navy\">(</span><b>source</b> <span style=\"color: maroon\">src</span><span style=\"color: navy\"> : </span>JWTPayload, <b>target</b> <span style=\"color: maroon\">tgt</span><span style=\"color: navy\"> : </span>Period<span style=\"color: navy\">)</span><span style=\"color: navy\"> {\r\n</span>  src.nbf<b> as </b><span style=\"color: maroon\">nbf</span><span style=\"color: navy\"><b> -&gt; </b></span>tgt.start = <span style=\"color: maroon\">nbf</span> <i>&quot;Start notBefore&quot;</i><span style=\"color: navy\">;</span>\r\n  src.iat<b> as </b><span style=\"color: maroon\">iat</span><span style=\"color: navy\"><b> -&gt; </b></span>tgt.start = <span style=\"color: maroon\">iat</span> <i>&quot;Start issuedAt&quot;</i><span style=\"color: navy\">;</span>\r\n  src.exp<b> as </b><span style=\"color: maroon\">exp</span><span style=\"color: navy\"><b> -&gt; </b></span>tgt.end = <span style=\"color: maroon\">exp</span> <i>&quot;End expiration&quot;</i><span style=\"color: navy\">;</span>\r\n<span style=\"color: navy\">}\r\n\r\n</span></pre></div>"
+  },
+  "url" : "http://smart.who.int/ddcc/StructureMap/CertSHCtoDDCC",
+  "version" : "1.0.0",
+  "name" : "SHCJWTtoDDCC",
+  "status" : "draft",
+  "date" : "2024-10-15T13:40:08+00:00",
+  "publisher" : "WHO",
+  "contact" : [{
+    "name" : "WHO",
+    "telecom" : [{
+      "system" : "url",
+      "value" : "http://who.int"
+    }]
+  }],
+  "jurisdiction" : [{
+    "coding" : [{
+      "system" : "http://unstats.un.org/unsd/methods/m49/m49.htm",
+      "code" : "001"
+    }]
+  }],
+  "structure" : [{
+    "url" : "http://smart.who.int/ddcc/StructureDefinition/CertSHC",
+    "mode" : "source",
+    "alias" : "JWTPayload"
+  },
+  {
+    "url" : "http://hl7.org/fhir/uv/shc/StructureDefinition/vc",
+    "mode" : "source",
+    "alias" : "VC"
+  },
+  {
+    "url" : "http://hl7.org/fhir/uv/shc/StructureDefinition/creadential-subject",
+    "mode" : "source",
+    "alias" : "CredentialSubject"
+  },
+  {
+    "url" : "http://hl7.org/fhir/StructureDefinition/Bundle",
+    "mode" : "target",
+    "alias" : "Bundle"
+  }],
+  "group" : [{
+    "name" : "SHCtoDDCC",
+    "typeMode" : "none",
+    "input" : [{
+      "name" : "src",
+      "type" : "JWTPayload",
+      "mode" : "source"
+    },
+    {
+      "name" : "bundle",
+      "type" : "Bundle",
+      "mode" : "target"
+    }],
+    "rule" : [{
+      "name" : "set bundle type",
+      "source" : [{
+        "context" : "src"
+      }],
+      "target" : [{
+        "context" : "bundle",
+        "contextType" : "variable",
+        "element" : "type",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueString" : "transaction"
+        }]
+      }]
+    },
+    {
+      "name" : "Patient and Composition Create",
+      "source" : [{
+        "context" : "src"
+      }],
+      "target" : [{
+        "context" : "bundle",
+        "contextType" : "variable"
+      },
+      {
+        "context" : "bundle",
+        "contextType" : "variable",
+        "element" : "entry",
+        "variable" : "entry"
+      },
+      {
+        "context" : "entry",
+        "contextType" : "variable",
+        "element" : "resource",
+        "variable" : "comp",
+        "transform" : "create",
+        "parameter" : [{
+          "valueString" : "Composition"
+        }]
+      }],
+      "rule" : [{
+        "name" : "Certificate",
+        "source" : [{
+          "context" : "src"
+        }],
+        "target" : [{
+          "context" : "bundle",
+          "contextType" : "variable"
+        }],
+        "dependent" : [{
+          "name" : "ExtractCert",
+          "variable" : ["src",
+          "bundle",
+          "comp"]
+        }]
+      },
+      {
+        "name" : "Composition",
+        "source" : [{
+          "context" : "src"
+        }],
+        "target" : [{
+          "context" : "bundle",
+          "contextType" : "variable"
+        }],
+        "dependent" : [{
+          "name" : "ExtractComposition",
+          "variable" : ["src",
+          "comp"]
+        }]
+      }]
+    }]
+  },
+  {
+    "name" : "ExtractCert",
+    "typeMode" : "none",
+    "input" : [{
+      "name" : "src",
+      "type" : "JWTPayload",
+      "mode" : "source"
+    },
+    {
+      "name" : "bundle",
+      "type" : "Bundle",
+      "mode" : "target"
+    },
+    {
+      "name" : "comp",
+      "type" : "Composition",
+      "mode" : "target"
+    }],
+    "rule" : [{
+      "name" : "Org Create",
+      "source" : [{
+        "context" : "src",
+        "element" : "vc",
+        "variable" : "vc"
+      }],
+      "target" : [{
+        "context" : "bundle",
+        "contextType" : "variable"
+      },
+      {
+        "context" : "bundle",
+        "contextType" : "variable",
+        "element" : "entry",
+        "variable" : "entryOrg"
+      },
+      {
+        "context" : "entryOrg",
+        "contextType" : "variable",
+        "element" : "resource",
+        "variable" : "org",
+        "transform" : "create",
+        "parameter" : [{
+          "valueString" : "Organization"
+        }]
+      },
+      {
+        "contextType" : "variable",
+        "variable" : "oid",
+        "transform" : "uuid"
+      }],
+      "rule" : [{
+        "name" : "Organization ID",
+        "source" : [{
+          "context" : "src"
+        }],
+        "target" : [{
+          "context" : "org",
+          "contextType" : "variable",
+          "element" : "id",
+          "transform" : "copy",
+          "parameter" : [{
+            "valueId" : "oid"
+          }]
+        }]
+      },
+      {
+        "name" : "Composition.Set org",
+        "source" : [{
+          "context" : "src"
+        }],
+        "target" : [{
+          "context" : "comp",
+          "contextType" : "variable",
+          "element" : "author",
+          "variable" : "author"
+        },
+        {
+          "context" : "author",
+          "contextType" : "variable",
+          "element" : "reference",
+          "transform" : "append",
+          "parameter" : [{
+            "valueString" : "Organization/"
+          },
+          {
+            "valueId" : "oid"
+          }]
+        }]
+      },
+      {
+        "name" : "Set Organization name",
+        "source" : [{
+          "context" : "src",
+          "element" : "iss",
+          "variable" : "iss"
+        }],
+        "target" : [{
+          "context" : "org",
+          "contextType" : "variable",
+          "element" : "identifier",
+          "variable" : "identif"
+        },
+        {
+          "context" : "identif",
+          "contextType" : "variable",
+          "element" : "value",
+          "transform" : "copy",
+          "parameter" : [{
+            "valueId" : "iss"
+          }]
+        }]
+      },
+      {
+        "name" : "SHC Credential Subject",
+        "source" : [{
+          "context" : "vc",
+          "element" : "credentialSubject",
+          "variable" : "credentialSubject"
+        }],
+        "target" : [{
+          "context" : "bundle",
+          "contextType" : "variable"
+        }],
+        "rule" : [{
+          "name" : "SHC FhirBundle",
+          "source" : [{
+            "context" : "credentialSubject",
+            "element" : "fhirBundle",
+            "variable" : "fhirBundle"
+          }],
+          "target" : [{
+            "context" : "bundle",
+            "contextType" : "variable"
+          }],
+          "rule" : [{
+            "name" : "for each entry",
+            "source" : [{
+              "context" : "fhirBundle",
+              "element" : "entry",
+              "variable" : "bundleEntrySHC"
+            }],
+            "rule" : [{
+              "name" : "patient filter",
+              "source" : [{
+                "context" : "bundleEntrySHC",
+                "type" : "Patient",
+                "element" : "resource",
+                "listMode" : "first",
+                "variable" : "patientSHC"
+              }],
+              "rule" : [{
+                "name" : "Composition.Set patient",
+                "source" : [{
+                  "context" : "bundleEntrySHC",
+                  "element" : "fullUrl",
+                  "variable" : "ref"
+                }],
+                "target" : [{
+                  "context" : "comp",
+                  "contextType" : "variable",
+                  "element" : "subject",
+                  "variable" : "subj"
+                },
+                {
+                  "context" : "subj",
+                  "contextType" : "variable",
+                  "element" : "reference",
+                  "transform" : "append",
+                  "parameter" : [{
+                    "valueString" : "Patient/"
+                  },
+                  {
+                    "valueId" : "ref"
+                  }]
+                }]
+              }]
+            },
+            {
+              "name" : "adding resource to bundle",
+              "source" : [{
+                "context" : "bundleEntrySHC",
+                "element" : "resource",
+                "variable" : "anyRes"
+              }],
+              "target" : [{
+                "context" : "bundle",
+                "contextType" : "variable",
+                "element" : "entry",
+                "variable" : "entry"
+              },
+              {
+                "context" : "entry",
+                "contextType" : "variable",
+                "element" : "resource",
+                "transform" : "copy",
+                "parameter" : [{
+                  "valueId" : "anyRes"
+                }]
+              }]
+            }]
+          },
+          {
+            "name" : "SHC Immunization Section",
+            "source" : [{
+              "context" : "src",
+              "condition" : "(fhirBundle.entry.resource.ofType(Immunization).exists())"
+            }],
+            "target" : [{
+              "context" : "comp",
+              "contextType" : "variable",
+              "element" : "section",
+              "variable" : "section"
+            }],
+            "rule" : [{
+              "name" : "Adding code to imm section",
+              "source" : [{
+                "context" : "src"
+              }],
+              "target" : [{
+                "context" : "section",
+                "contextType" : "variable",
+                "element" : "code",
+                "variable" : "code"
+              },
+              {
+                "context" : "code",
+                "contextType" : "variable",
+                "element" : "coding",
+                "variable" : "coding"
+              },
+              {
+                "context" : "coding",
+                "contextType" : "variable",
+                "element" : "system",
+                "transform" : "copy",
+                "parameter" : [{
+                  "valueString" : "http://loinc.org"
+                }]
+              },
+              {
+                "context" : "coding",
+                "contextType" : "variable",
+                "element" : "code",
+                "transform" : "copy",
+                "parameter" : [{
+                  "valueString" : "11369-6"
+                }]
+              },
+              {
+                "context" : "coding",
+                "contextType" : "variable",
+                "element" : "display",
+                "transform" : "copy",
+                "parameter" : [{
+                  "valueString" : "History of Immunization Narrative"
+                }]
+              }]
+            },
+            {
+              "name" : "assing org entry to section",
+              "source" : [{
+                "context" : "src"
+              }],
+              "target" : [{
+                "context" : "section",
+                "contextType" : "variable",
+                "element" : "author",
+                "variable" : "author"
+              },
+              {
+                "context" : "author",
+                "contextType" : "variable",
+                "element" : "reference",
+                "transform" : "append",
+                "parameter" : [{
+                  "valueString" : "Organization/"
+                },
+                {
+                  "valueId" : "oid"
+                }]
+              }]
+            },
+            {
+              "name" : "Each entry",
+              "source" : [{
+                "context" : "fhirBundle",
+                "element" : "entry",
+                "variable" : "bundleEntrySHC"
+              }],
+              "rule" : [{
+                "name" : "assign immunization to composition",
+                "source" : [{
+                  "context" : "bundleEntrySHC",
+                  "type" : "Immunization",
+                  "element" : "resource",
+                  "variable" : "immunizationSHC"
+                }],
+                "rule" : [{
+                  "name" : "add imm section",
+                  "source" : [{
+                    "context" : "bundleEntrySHC",
+                    "element" : "fullUrl",
+                    "variable" : "ref"
+                  }],
+                  "target" : [{
+                    "context" : "section",
+                    "contextType" : "variable",
+                    "element" : "entry",
+                    "variable" : "entry"
+                  },
+                  {
+                    "context" : "entry",
+                    "contextType" : "variable",
+                    "element" : "reference",
+                    "transform" : "append",
+                    "parameter" : [{
+                      "valueString" : "Immunization/"
+                    },
+                    {
+                      "valueId" : "ref"
+                    }]
+                  }]
+                }]
+              }]
+            }]
+          },
+          {
+            "name" : "SHC Observation Section",
+            "source" : [{
+              "context" : "src",
+              "condition" : "(fhirBundle.entry.resource.ofType(Observation).exists())"
+            }],
+            "target" : [{
+              "context" : "comp",
+              "contextType" : "variable",
+              "element" : "section",
+              "variable" : "section"
+            }],
+            "rule" : [{
+              "name" : "Adding code to obs section",
+              "source" : [{
+                "context" : "src"
+              }],
+              "target" : [{
+                "context" : "section",
+                "contextType" : "variable",
+                "element" : "code",
+                "variable" : "code"
+              },
+              {
+                "context" : "code",
+                "contextType" : "variable",
+                "element" : "coding",
+                "variable" : "coding"
+              },
+              {
+                "context" : "coding",
+                "contextType" : "variable",
+                "element" : "system",
+                "transform" : "copy",
+                "parameter" : [{
+                  "valueString" : "http://loinc.org"
+                }]
+              },
+              {
+                "context" : "coding",
+                "contextType" : "variable",
+                "element" : "code",
+                "transform" : "copy",
+                "parameter" : [{
+                  "valueString" : "30954-2"
+                }]
+              },
+              {
+                "context" : "coding",
+                "contextType" : "variable",
+                "element" : "display",
+                "transform" : "copy",
+                "parameter" : [{
+                  "valueString" : "Results (Diagnostic findings)"
+                }]
+              }]
+            },
+            {
+              "name" : "assing org entry to section",
+              "source" : [{
+                "context" : "src"
+              }],
+              "target" : [{
+                "context" : "section",
+                "contextType" : "variable",
+                "element" : "author",
+                "variable" : "author"
+              },
+              {
+                "context" : "author",
+                "contextType" : "variable",
+                "element" : "reference",
+                "transform" : "append",
+                "parameter" : [{
+                  "valueString" : "Organization/"
+                },
+                {
+                  "valueId" : "oid"
+                }]
+              }]
+            },
+            {
+              "name" : "Entry Obs",
+              "source" : [{
+                "context" : "fhirBundle",
+                "element" : "entry",
+                "variable" : "bundleEntrySHC"
+              }],
+              "rule" : [{
+                "name" : "assign immunization to composition",
+                "source" : [{
+                  "context" : "bundleEntrySHC",
+                  "type" : "Observation",
+                  "element" : "resource",
+                  "variable" : "observationSHC"
+                }],
+                "rule" : [{
+                  "name" : "add obs section",
+                  "source" : [{
+                    "context" : "bundleEntrySHC",
+                    "element" : "fullUrl",
+                    "variable" : "ref"
+                  }],
+                  "target" : [{
+                    "context" : "section",
+                    "contextType" : "variable",
+                    "element" : "entry",
+                    "variable" : "entry"
+                  },
+                  {
+                    "context" : "entry",
+                    "contextType" : "variable",
+                    "element" : "reference",
+                    "transform" : "append",
+                    "parameter" : [{
+                      "valueString" : "Observation/"
+                    },
+                    {
+                      "valueId" : "ref"
+                    }]
+                  }]
+                }]
+              }]
+            }]
+          }]
+        }]
+      }]
+    }]
+  },
+  {
+    "name" : "ExtractComposition",
+    "typeMode" : "none",
+    "input" : [{
+      "name" : "src",
+      "type" : "Data",
+      "mode" : "source"
+    },
+    {
+      "name" : "composition",
+      "type" : "Composition",
+      "mode" : "target"
+    }],
+    "rule" : [{
+      "name" : "Title",
+      "source" : [{
+        "context" : "src"
+      }],
+      "target" : [{
+        "context" : "composition",
+        "contextType" : "variable",
+        "element" : "title",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueString" : "International Certificate of Vaccination or Prophylaxis"
+        }]
+      }]
+    },
+    {
+      "name" : "set category",
+      "source" : [{
+        "context" : "src"
+      }],
+      "target" : [{
+        "context" : "composition",
+        "contextType" : "variable",
+        "element" : "category",
+        "variable" : "category"
+      },
+      {
+        "context" : "category",
+        "contextType" : "variable",
+        "element" : "coding",
+        "variable" : "coding"
+      }],
+      "rule" : [{
+        "name" : "Category",
+        "source" : [{
+          "context" : "src"
+        }],
+        "target" : [{
+          "context" : "coding",
+          "contextType" : "variable",
+          "element" : "code",
+          "transform" : "copy",
+          "parameter" : [{
+            "valueString" : "ddcc-vs"
+          }]
+        }]
+      }]
+    },
+    {
+      "name" : "set type",
+      "source" : [{
+        "context" : "src"
+      }],
+      "target" : [{
+        "context" : "composition",
+        "contextType" : "variable",
+        "element" : "type",
+        "variable" : "type"
+      },
+      {
+        "context" : "type",
+        "contextType" : "variable",
+        "element" : "coding",
+        "variable" : "coding"
+      }],
+      "rule" : [{
+        "name" : "set type coding",
+        "source" : [{
+          "context" : "src"
+        }],
+        "target" : [{
+          "context" : "coding",
+          "contextType" : "variable",
+          "element" : "system",
+          "transform" : "copy",
+          "parameter" : [{
+            "valueString" : "http://loinc.org"
+          }]
+        },
+        {
+          "context" : "coding",
+          "contextType" : "variable",
+          "element" : "code",
+          "transform" : "copy",
+          "parameter" : [{
+            "valueString" : "82593-5"
+          }]
+        },
+        {
+          "context" : "coding",
+          "contextType" : "variable",
+          "element" : "display",
+          "transform" : "copy",
+          "parameter" : [{
+            "valueString" : "Immunization summary report"
+          }]
+        }]
+      }]
+    },
+    {
+      "name" : "Extract Period",
+      "source" : [{
+        "context" : "src"
+      }],
+      "target" : [{
+        "context" : "composition",
+        "contextType" : "variable",
+        "element" : "event",
+        "variable" : "event"
+      },
+      {
+        "context" : "event",
+        "contextType" : "variable",
+        "element" : "period",
+        "variable" : "period",
+        "transform" : "create",
+        "parameter" : [{
+          "valueString" : "Period"
+        }]
+      }],
+      "dependent" : [{
+        "name" : "ExtractPeriod",
+        "variable" : ["src",
+        "period"]
+      }]
+    }]
+  },
+  {
+    "name" : "ExtractPeriod",
+    "typeMode" : "none",
+    "input" : [{
+      "name" : "src",
+      "type" : "JWTPayload",
+      "mode" : "source"
+    },
+    {
+      "name" : "tgt",
+      "type" : "Period",
+      "mode" : "target"
+    }],
+    "rule" : [{
+      "name" : "Start notBefore",
+      "source" : [{
+        "context" : "src",
+        "element" : "nbf",
+        "variable" : "nbf"
+      }],
+      "target" : [{
+        "context" : "tgt",
+        "contextType" : "variable",
+        "element" : "start",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "nbf"
+        }]
+      }]
+    },
+    {
+      "name" : "Start issuedAt",
+      "source" : [{
+        "context" : "src",
+        "element" : "iat",
+        "variable" : "iat"
+      }],
+      "target" : [{
+        "context" : "tgt",
+        "contextType" : "variable",
+        "element" : "start",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "iat"
+        }]
+      }]
+    },
+    {
+      "name" : "End expiration",
+      "source" : [{
+        "context" : "src",
+        "element" : "exp",
+        "variable" : "exp"
+      }],
+      "target" : [{
+        "context" : "tgt",
+        "contextType" : "variable",
+        "element" : "end",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "exp"
+        }]
+      }]
+    }]
+  }]
+}

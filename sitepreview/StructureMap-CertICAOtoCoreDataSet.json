@@ -1,0 +1,1236 @@
+{
+  "resourceType" : "StructureMap",
+  "id" : "CertICAOtoCoreDataSet",
+  "text" : {
+    "status" : "generated",
+    "div" : "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p class=\"res-header-id\"><b>Generated Narrative: StructureMap CertICAOtoCoreDataSet</b></p><a name=\"CertICAOtoCoreDataSet\"> </a><a name=\"hcCertICAOtoCoreDataSet\"> </a><a name=\"CertICAOtoCoreDataSet-en-US\"> </a><pre class=\"fml\">\r\n<b>map</b><span style=\"color: navy\"> &quot;</span>http://smart.who.int/ddcc/StructureMap/CertICAOtoCoreDataSet<span style=\"color: navy\">&quot; = &quot;</span>CertICAOtoCoreDataSet<span style=\"color: navy\">&quot;\r\n\r\n</span><span style=\"color: navy\">// </span><span style=\"color: green\">Structure map transforming CertICAO logical model to bundle of Core Data Set logical model</span>\r\n\r\n<b>uses</b><span style=\"color: navy\"> &quot;</span>http://smart.who.int/ddcc/StructureDefinition/CertICAOVDS<span style=\"color: navy\">&quot; </span><b>alias </b>VDS <b>as </b><b>source</b>\r\n<b>uses</b><span style=\"color: navy\"> &quot;</span><a href=\"http://hl7.org/fhir/R4/bundle.html\" title=\"Bundle\">http://hl7.org/fhir/StructureDefinition/Bundle</a><span style=\"color: navy\">&quot; </span><b>alias </b>DDCCBundle <b>as </b><b>target</b>\r\n<b>uses</b><span style=\"color: navy\"> &quot;</span><a href=\"StructureDefinition-DDCCCoreDataSet.html\" title=\"DDCC Core Data Set Logical Model\">http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet</a><span style=\"color: navy\">&quot; </span><b>alias </b>DDCC <b>as </b><b>target</b>\r\n<b>uses</b><span style=\"color: navy\"> &quot;</span><a href=\"StructureDefinition-DDCCCoreDataSetVS.html\" title=\"DDCC Core Data Set Logical Model for Vaccination Status\">http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSetVS</a><span style=\"color: navy\">&quot; </span><b>alias </b>DDCCVS <b>as </b><b>target</b>\r\n<b>uses</b><span style=\"color: navy\"> &quot;</span><a href=\"StructureDefinition-DDCCCoreDataSetTR.html\" title=\"DDCC Core Data Set Logical Model for Test Result\">http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSetTR</a><span style=\"color: navy\">&quot; </span><b>alias </b>DDCCTR <b>as </b><b>target</b>\r\n\r\n<b>group </b>CertICAOtoCoreDataSet<span style=\"color: navy\">(</span><b>source</b> <span style=\"color: maroon\">src</span><span style=\"color: navy\"> : </span>VDS, <b>target</b> <span style=\"color: maroon\">ddccBundle</span><span style=\"color: navy\"> : </span>DDCCBundle<span style=\"color: navy\">)</span><span style=\"color: navy\"> {\r\n</span>  src.data<b> as </b><span style=\"color: maroon\">data</span><b> then</b><span style=\"color: navy\"> {\r\n</span>    data.msg<b> as </b><span style=\"color: maroon\">msg</span><b> then</b><span style=\"color: navy\"> {\r\n</span>      msg.ve<b> as </b><span style=\"color: maroon\">ve</span><b> then</b><span style=\"color: navy\"> {\r\n</span>        ve.vd<b> as </b><span style=\"color: maroon\">vd</span><span style=\"color: navy\"><b> -&gt; </b></span> ddccBundle.entry<b> as </b><span style=\"color: maroon\">outentry</span><span style=\"color: navy\">, </span> <b>create</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSetVS'</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">ddcc</span><b> then</b><span style=\"color: navy\"> {\r\n</span>          data.hdr<b> as </b><span style=\"color: maroon\">hdr</span><span style=\"color: navy\"><b> -&gt; </b></span>ddcc.certificate<b> as </b><span style=\"color: maroon\">certificate</span><b> then </b>VDStoCoreDataSetCertificate<span style=\"color: navy\">(</span><span style=\"color: maroon\">hdr</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">msg</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">certificate</span><span style=\"color: navy\">)</span> <i>&quot;set certificate&quot;</i><span style=\"color: navy\">;</span>\r\n          msg.pid<b> as </b><span style=\"color: maroon\">pid</span><b> then </b>ExtractPatient<span style=\"color: navy\">(</span><span style=\"color: maroon\">pid</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">ddcc</span><span style=\"color: navy\">)</span> <i>&quot;set patient&quot;</i><span style=\"color: navy\">;</span>\r\n          vd<span style=\"color: navy\"><b> -&gt; </b></span>ddcc.vaccination<b> as </b><span style=\"color: maroon\">vaccination</span><b> then </b>ExtractVaccine<span style=\"color: navy\">(</span><span style=\"color: maroon\">ve</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">vd</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">vaccination</span><span style=\"color: navy\">)</span> <i>&quot;set vaccination&quot;</i><span style=\"color: navy\">;</span>\r\n          vd<span style=\"color: navy\"><b> -&gt; </b></span>outentry.resource = <span style=\"color: maroon\">ddcc</span> <i>&quot;set outentry&quot;</i><span style=\"color: navy\">;</span>\r\n        <span style=\"color: navy\">}</span><span style=\"color: navy\">;</span>\r\n      <span style=\"color: navy\">}</span><span style=\"color: navy\">;</span>\r\n      msg.tr<b> as </b><span style=\"color: maroon\">tr</span><span style=\"color: navy\"><b> -&gt; </b></span> ddccBundle.entry<b> as </b><span style=\"color: maroon\">outentry</span><span style=\"color: navy\">, </span> <b>create</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSetTR'</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">ddcc</span><b> then</b><span style=\"color: navy\"> {\r\n</span>        data.hdr<b> as </b><span style=\"color: maroon\">hdr</span><span style=\"color: navy\"><b> -&gt; </b></span>ddcc.certificate<b> as </b><span style=\"color: maroon\">certificate</span><b> then </b>VDStoCoreDataSetCertificate<span style=\"color: navy\">(</span><span style=\"color: maroon\">hdr</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">msg</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">certificate</span><span style=\"color: navy\">)</span> <i>&quot;set certificate&quot;</i><span style=\"color: navy\">;</span>\r\n        msg.pid<b> as </b><span style=\"color: maroon\">pid</span><b> then </b>ExtractPatient<span style=\"color: navy\">(</span><span style=\"color: maroon\">pid</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">ddcc</span><span style=\"color: navy\">)</span> <i>&quot;set patient&quot;</i><span style=\"color: navy\">;</span>\r\n        msg.sp<b> as </b><span style=\"color: maroon\">sp</span><b> then</b><span style=\"color: navy\"> {\r\n</span>          msg.dat<b> as </b><span style=\"color: maroon\">dat</span><span style=\"color: navy\"><b> -&gt; </b></span>ddcc.test<b> as </b><span style=\"color: maroon\">test</span><b> then </b>ExtractTest<span style=\"color: navy\">(</span><span style=\"color: maroon\">sp</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">dat</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">tr</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">test</span><span style=\"color: navy\">)</span> <i>&quot;set test&quot;</i><span style=\"color: navy\">;</span>\r\n        <span style=\"color: navy\">}</span><span style=\"color: navy\">;</span>\r\n        tr<span style=\"color: navy\"><b> -&gt; </b></span>outentry.resource = <span style=\"color: maroon\">ddcc</span> <i>&quot;set outentry&quot;</i><span style=\"color: navy\">;</span>\r\n      <span style=\"color: navy\">}</span><span style=\"color: navy\">;</span>\r\n    <span style=\"color: navy\">}</span><span style=\"color: navy\">;</span>\r\n  <span style=\"color: navy\">}</span><span style=\"color: navy\">;</span>\r\n<span style=\"color: navy\">}\r\n\r\n</span><b>group </b>VDStoCoreDataSetCertificate<span style=\"color: navy\">(</span><b>source</b> <span style=\"color: maroon\">hdr</span>, <b>source</b> <span style=\"color: maroon\">msg</span>, <b>target</b> <span style=\"color: maroon\">certificate</span><span style=\"color: navy\">)</span><span style=\"color: navy\"> {\r\n</span>  hdr.v<b> as </b><span style=\"color: maroon\">v</span><span style=\"color: navy\"><b> -&gt; </b></span>certificate.version = <span style=\"color: maroon\">v</span> <i>&quot;set version&quot;</i><span style=\"color: navy\">;</span>\r\n  msg.uvci<b> as </b><span style=\"color: maroon\">uvci</span><span style=\"color: navy\"><b> -&gt; </b></span> certificate.hcid<b> as </b><span style=\"color: maroon\">hcid</span><span style=\"color: navy\">, </span> hcid.value = <span style=\"color: maroon\">uvci</span> <i>&quot;set hcid from uvci&quot;</i><span style=\"color: navy\">;</span>\r\n  msg.utci<b> as </b><span style=\"color: maroon\">utci</span><span style=\"color: navy\"><b> -&gt; </b></span> certificate.hcid<b> as </b><span style=\"color: maroon\">hcid</span><span style=\"color: navy\">, </span> hcid.value = <span style=\"color: maroon\">utci</span> <i>&quot;set hcid from utci&quot;</i><span style=\"color: navy\">;</span>\r\n  hdr.is<b> as </b><span style=\"color: maroon\">is</span><span style=\"color: navy\"><b> -&gt; </b></span> certificate.issuer = <b>create</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'Reference'</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">issuer</span><span style=\"color: navy\">, </span> issuer.display = <span style=\"color: maroon\">is</span> <i>&quot;set issuer&quot;</i><span style=\"color: navy\">;</span>\r\n<span style=\"color: navy\">}\r\n\r\n</span><b>group </b>ExtractPatient<span style=\"color: navy\">(</span><b>source</b> <span style=\"color: maroon\">pid</span>, <b>target</b> <span style=\"color: maroon\">ddcc</span><span style=\"color: navy\"> : </span>DDCC<span style=\"color: navy\">)</span><span style=\"color: navy\"> {\r\n</span>  pid.n<b> as </b><span style=\"color: maroon\">name</span><span style=\"color: navy\"><b> -&gt; </b></span>ddcc.name = <span style=\"color: maroon\">name</span> <i>&quot;set name&quot;</i><span style=\"color: navy\">;</span>\r\n  pid.dob<b> as </b><span style=\"color: maroon\">birthDate</span><span style=\"color: navy\"><b> -&gt; </b></span>ddcc.birthDate = <span style=\"color: maroon\">birthDate</span> <i>&quot;set birthDate&quot;</i><span style=\"color: navy\">;</span>\r\n  pid.i<b> as </b><span style=\"color: maroon\">priorityIdentifier</span><span style=\"color: navy\"><b> -&gt; </b></span> ddcc.identifier<b> as </b><span style=\"color: maroon\">identifier</span><span style=\"color: navy\">, </span> identifier.value = <span style=\"color: maroon\">priorityIdentifier</span> <i>&quot;set priorityIdentifier&quot;</i><span style=\"color: navy\">;</span>\r\n  pid.dn<span style=\"color: navy\"><b> -&gt; </b></span>ddcc.identifier<b> as </b><span style=\"color: maroon\">identifier</span><b> then </b>ExtractDocumentTypeNumber<span style=\"color: navy\">(</span><span style=\"color: maroon\">pid</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">identifier</span><span style=\"color: navy\">)</span> <i>&quot;set Document Type Number&quot;</i><span style=\"color: navy\">;</span>\r\n<span style=\"color: navy\">}\r\n\r\n</span><b>group </b>ExtractDocumentTypeNumber<span style=\"color: navy\">(</span><b>source</b> <span style=\"color: maroon\">src</span>, <b>target</b> <span style=\"color: maroon\">identif</span><span style=\"color: navy\"> : </span>Identifier<span style=\"color: navy\">)</span><span style=\"color: navy\"> {\r\n</span>  src.dn<b> as </b><span style=\"color: maroon\">docNumber</span><span style=\"color: navy\"><b> -&gt; </b></span>identif.value = <span style=\"color: maroon\">docNumber</span> <i>&quot;set doc number&quot;</i><span style=\"color: navy\">;</span>\r\n  src.dt<b> as </b><span style=\"color: maroon\">docType</span><b> where </b>(docType = 'P')<span style=\"color: navy\"><b> -&gt; </b></span>identif.system = <span style=\"color: blue\">'PPN'</span> <i>&quot;set doc number P&quot;</i><span style=\"color: navy\">;</span> <span style=\"color: navy\">// </span><span style=\"color: green\">P – Passport (Doc 9303-4)</span>\r\n  src.dt<b> as </b><span style=\"color: maroon\">docType</span><b> where </b>(docType = 'A')<span style=\"color: navy\"><b> -&gt; </b></span>identif.system = <span style=\"color: blue\">'DL'</span> <i>&quot;set doc number A&quot;</i><span style=\"color: navy\">;</span> <span style=\"color: navy\">// </span><span style=\"color: green\">A – ID Card (Doc 9303-5)</span>\r\n  src.dt<b> as </b><span style=\"color: maroon\">docType</span><b> where </b>(docType = 'C')<span style=\"color: navy\"><b> -&gt; </b></span>identif.system = <span style=\"color: blue\">'DL'</span> <i>&quot;set doc number C&quot;</i><span style=\"color: navy\">;</span> <span style=\"color: navy\">// </span><span style=\"color: green\">C – ID Card (Doc 9303-5)</span>\r\n  src.dt<b> as </b><span style=\"color: maroon\">docType</span><b> where </b>(docType = 'I')<span style=\"color: navy\"><b> -&gt; </b></span>identif.system = <span style=\"color: blue\">'DL'</span> <i>&quot;set doc number I&quot;</i><span style=\"color: navy\">;</span> <span style=\"color: navy\">// </span><span style=\"color: green\">I – ID Card Doc 9303-5)</span>\r\n  src.dt<b> as </b><span style=\"color: maroon\">docType</span><b> where </b>(docType = 'AC')<span style=\"color: navy\"><b> -&gt; </b></span>identif.system = <span style=\"color: blue\">'EN'</span> <i>&quot;set doc number AC&quot;</i><span style=\"color: navy\">;</span> <span style=\"color: navy\">// </span><span style=\"color: green\">AC - Crew Member Certificate (Doc 9303-5)</span>\r\n  src.dt<b> as </b><span style=\"color: maroon\">docType</span><b> where </b>(docType = 'V')<span style=\"color: navy\"><b> -&gt; </b></span>identif.system = <span style=\"color: blue\">'ACSN'</span> <i>&quot;set doc number V&quot;</i><span style=\"color: navy\">;</span> <span style=\"color: navy\">// </span><span style=\"color: green\">V – Visa (Doc 9303-7)</span>\r\n  src.dt<b> as </b><span style=\"color: maroon\">docType</span><b> where </b>(docType = 'D')<span style=\"color: navy\"><b> -&gt; </b></span>identif.system = <span style=\"color: blue\">'DL'</span> <i>&quot;set doc number D&quot;</i><span style=\"color: navy\">;</span> <span style=\"color: navy\">// </span><span style=\"color: green\">D – Driving License (ISO18013-1)</span>\r\n<span style=\"color: navy\">}\r\n\r\n</span><b>group </b>ExtractVaccine<span style=\"color: navy\">(</span><b>source</b> <span style=\"color: maroon\">ve</span>, <b>source</b> <span style=\"color: maroon\">vd</span>, <b>target</b> <span style=\"color: maroon\">vaccination</span><span style=\"color: navy\">)</span><span style=\"color: navy\"> {\r\n</span>  ve.des<b> as </b><span style=\"color: maroon\">des</span><span style=\"color: navy\"><b> -&gt; </b></span> vaccination.vaccine<b> as </b><span style=\"color: maroon\">coding</span><span style=\"color: navy\">, </span> coding.system = <span style=\"color: blue\">'http://id.who.int/icd11/mms'</span><span style=\"color: navy\">, </span> coding.code = <span style=\"color: maroon\">des</span> <i>&quot;set vaccine&quot;</i><span style=\"color: navy\">;</span>\r\n  ve.nam<b> as </b><span style=\"color: maroon\">nam</span><span style=\"color: navy\"><b> -&gt; </b></span> vaccination.brand<b> as </b><span style=\"color: maroon\">coding</span><span style=\"color: navy\">, </span> coding.code = <span style=\"color: maroon\">nam</span> <i>&quot;set brand&quot;</i><span style=\"color: navy\">;</span>\r\n  ve.dis<b> as </b><span style=\"color: maroon\">dis</span><span style=\"color: navy\"><b> -&gt; </b></span> vaccination.disease<b> as </b><span style=\"color: maroon\">coding</span><span style=\"color: navy\">, </span> coding.system = <span style=\"color: blue\">'http://id.who.int/icd11/mms'</span><span style=\"color: navy\">, </span> coding.code = <span style=\"color: maroon\">dis</span> <i>&quot;set target disease&quot;</i><span style=\"color: navy\">;</span>\r\n  vd.dvc<b> as </b><span style=\"color: maroon\">dvc</span><span style=\"color: navy\"><b> -&gt; </b></span>vaccination.date = <span style=\"color: maroon\">dvc</span> <i>&quot;set date&quot;</i><span style=\"color: navy\">;</span>\r\n  vd.seq<b> as </b><span style=\"color: maroon\">seq</span><span style=\"color: navy\"><b> -&gt; </b></span>vaccination.dose = <span style=\"color: maroon\">seq</span> <i>&quot;set dose&quot;</i><span style=\"color: navy\">;</span>\r\n  vd.dvn<b> as </b><span style=\"color: maroon\">dvn</span><span style=\"color: navy\"><b> -&gt; </b></span>vaccination.nextDose = <span style=\"color: maroon\">dvn</span> <i>&quot;set nextDose&quot;</i><span style=\"color: navy\">;</span>\r\n  vd.ctr<b> as </b><span style=\"color: maroon\">ctr</span><span style=\"color: navy\"><b> -&gt; </b></span>vaccination.country<b> as </b><span style=\"color: maroon\">coding</span><b> then</b><span style=\"color: navy\"> {\r\n</span>    ctr<b> then </b>ExtractCountry<span style=\"color: navy\">(</span><span style=\"color: maroon\">ctr</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">coding</span><span style=\"color: navy\">)</span> <i>&quot;set country&quot;</i><span style=\"color: navy\">;</span>\r\n  <span style=\"color: navy\">}</span><span style=\"color: navy\">;</span>\r\n  vd.adm<b> as </b><span style=\"color: maroon\">adm</span><span style=\"color: navy\"><b> -&gt; </b></span>vaccination.centre = <span style=\"color: maroon\">adm</span> <i>&quot;set centre&quot;</i><span style=\"color: navy\">;</span>\r\n  vd.lot<b> as </b><span style=\"color: maroon\">lot</span><span style=\"color: navy\"><b> -&gt; </b></span>vaccination.lot = <span style=\"color: maroon\">lot</span> <i>&quot;set lot&quot;</i><span style=\"color: navy\">;</span>\r\n<span style=\"color: navy\">}\r\n\r\n</span><b>group </b>ExtractTest<span style=\"color: navy\">(</span><b>source</b> <span style=\"color: maroon\">sp</span>, <b>source</b> <span style=\"color: maroon\">dat</span>, <b>source</b> <span style=\"color: maroon\">tr</span>, <b>target</b> <span style=\"color: maroon\">test</span><span style=\"color: navy\">)</span><span style=\"color: navy\"> {\r\n</span>  tr<span style=\"color: navy\"><b> -&gt; </b></span> test.pathogen<b> as </b><span style=\"color: maroon\">coding</span><span style=\"color: navy\">, </span> coding.system = <span style=\"color: blue\">'http://id.who.int/icd11/mms'</span><span style=\"color: navy\">, </span> coding.code = <span style=\"color: blue\">'XN109'</span> <i>&quot;set pathogen&quot;</i><span style=\"color: navy\">;</span>\r\n  tr.tc<b> as </b><span style=\"color: maroon\">tc</span><b> then</b><span style=\"color: navy\"> {\r\n</span>    tc<span style=\"color: navy\"><b> -&gt; </b></span> test.type<b> as </b><span style=\"color: maroon\">coding</span><span style=\"color: navy\">, </span> coding.code = <span style=\"color: maroon\">tc</span> <i>&quot;set default type&quot;</i><span style=\"color: navy\">;</span>\r\n    tc<span style=\"color: navy\"><b> -&gt; </b></span><b>c</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'http://smart.who.int/ddcc/CodeSystem/lab-test-type-icao'</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">tc</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">coded</span><b> then</b><span style=\"color: navy\"> {\r\n</span>      tc<b> where </b>coded.memberOf('http://smart.who.int/ddcc/ValueSet/lab-test-type-icao')<span style=\"color: navy\"><b> -&gt; </b></span>test.type = <b>translate</b><span style=\"color: navy\">(</span><span style=\"color: maroon\">coded</span><span style=\"color: navy\">, </span><span style=\"color: blue\">'http://smart.who.int/ddcc/ConceptMap/lab-test-type-icao-to-icd11'</span><span style=\"color: navy\">, </span><span style=\"color: blue\">'Coding'</span><span style=\"color: navy\">)</span> <i>&quot;translate ICAO type&quot;</i><span style=\"color: navy\">;</span>\r\n    <span style=\"color: navy\">}</span> <i>&quot;coding&quot;</i><span style=\"color: navy\">;</span>\r\n  <span style=\"color: navy\">}</span><span style=\"color: navy\">;</span>\r\n  tr.m<b> as </b><span style=\"color: maroon\">m</span><b> then</b><span style=\"color: navy\"> {\r\n</span>    m<span style=\"color: navy\"><b> -&gt; </b></span> test.origin<b> as </b><span style=\"color: maroon\">coding</span><span style=\"color: navy\">, </span> coding.code = <span style=\"color: maroon\">m</span> <i>&quot;set default origin&quot;</i><span style=\"color: navy\">;</span>\r\n    m<span style=\"color: navy\"><b> -&gt; </b></span><b>c</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'http://smart.who.int/ddcc/CodeSystem/lab-test-sample-origin-icao'</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">m</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">coded</span><b> then</b><span style=\"color: navy\"> {\r\n</span>      m<b> where </b>coded.memberOf('http://smart.who.int/ddcc/ValueSet/lab-test-sample-origin-icao')<span style=\"color: navy\"><b> -&gt; </b></span>test.origin = <b>translate</b><span style=\"color: navy\">(</span><span style=\"color: maroon\">coded</span><span style=\"color: navy\">, </span><span style=\"color: blue\">'http://smart.who.int/ddcc/ConceptMap/lab-test-sample-origin-icao-to-icd11'</span><span style=\"color: navy\">, </span><span style=\"color: blue\">'Coding'</span><span style=\"color: navy\">)</span> <i>&quot;translate ICAO origin&quot;</i><span style=\"color: navy\">;</span>\r\n    <span style=\"color: navy\">}</span> <i>&quot;coding&quot;</i><span style=\"color: navy\">;</span>\r\n  <span style=\"color: navy\">}</span><span style=\"color: navy\">;</span>\r\n  dat.sc<b> as </b><span style=\"color: maroon\">date</span><span style=\"color: navy\"><b> -&gt; </b></span>test.date = <span style=\"color: maroon\">date</span> <i>&quot;set date&quot;</i><span style=\"color: navy\">;</span>\r\n  tr.r<b> as </b><span style=\"color: maroon\">r</span><b> then</b><span style=\"color: navy\"> {\r\n</span>    r<span style=\"color: navy\"><b> -&gt; </b></span> test.result<b> as </b><span style=\"color: maroon\">coding</span><span style=\"color: navy\">, </span> coding.code = <span style=\"color: maroon\">r</span> <i>&quot;set default result&quot;</i><span style=\"color: navy\">;</span>\r\n    r<span style=\"color: navy\"><b> -&gt; </b></span><b>c</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'http://smart.who.int/ddcc/CodeSystem/lab-test-qual-result-icao'</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">r</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">coded</span><b> then</b><span style=\"color: navy\"> {\r\n</span>      r<b> where </b>coded.memberOf('http://smart.who.int/ddcc/ValueSet/lab-test-qual-result-icao')<span style=\"color: navy\"><b> -&gt; </b></span>test.result = <b>translate</b><span style=\"color: navy\">(</span><span style=\"color: maroon\">coded</span><span style=\"color: navy\">, </span><span style=\"color: blue\">'http://smart.who.int/ddcc/ConceptMap/lab-test-qual-result-icao-to-icd11'</span><span style=\"color: navy\">, </span><span style=\"color: blue\">'Coding'</span><span style=\"color: navy\">)</span> <i>&quot;translate ICAO result&quot;</i><span style=\"color: navy\">;</span>\r\n    <span style=\"color: navy\">}</span> <i>&quot;coding&quot;</i><span style=\"color: navy\">;</span>\r\n  <span style=\"color: navy\">}</span><span style=\"color: navy\">;</span>\r\n  sp.spn<b> as </b><span style=\"color: maroon\">spn</span><span style=\"color: navy\"><b> -&gt; </b></span> test.centre<b> as </b><span style=\"color: maroon\">coding</span><span style=\"color: navy\">, </span> coding.code = <span style=\"color: maroon\">spn</span> <i>&quot;set centre&quot;</i><span style=\"color: navy\">;</span>\r\n  sp.ctr<b> as </b><span style=\"color: maroon\">ctr</span><span style=\"color: navy\"><b> -&gt; </b></span>test.country<b> as </b><span style=\"color: maroon\">coding</span><b> then</b><span style=\"color: navy\"> {\r\n</span>    ctr<b> then </b>ExtractCountry<span style=\"color: navy\">(</span><span style=\"color: maroon\">ctr</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">coding</span><span style=\"color: navy\">)</span> <i>&quot;set country&quot;</i><span style=\"color: navy\">;</span>\r\n  <span style=\"color: navy\">}</span><span style=\"color: navy\">;</span>\r\n<span style=\"color: navy\">}\r\n\r\n</span><b>group </b>ExtractCountry<span style=\"color: navy\">(</span><b>source</b> <span style=\"color: maroon\">country</span>, <b>target</b> <span style=\"color: maroon\">coding</span><span style=\"color: navy\">)</span><span style=\"color: navy\"> {\r\n</span>  <span style=\"color: navy\">// </span><span style=\"color: green\">ICAO Doc 9303-1 country codes are a superset of ISO 3166 3 letter codes</span>\r\n  country<span style=\"color: navy\"><b> -&gt; </b></span>coding.code = <span style=\"color: maroon\">country</span> <i>&quot;set default country&quot;</i><span style=\"color: navy\">;</span>\r\n  country<span style=\"color: navy\"><b> -&gt; </b></span><b>c</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'urn:iso:std:iso:3166'</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">country</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">coded</span><b> then</b><span style=\"color: navy\"> {\r\n</span>    country<b> where </b>coded.memberOf('http://hl7.org/fhir/ValueSet/iso3166-1-3')<span style=\"color: navy\"><b> -&gt; </b></span> coding.code = <span style=\"color: maroon\">country</span><span style=\"color: navy\">, </span> coding.system = <span style=\"color: blue\">'urn:iso:std:iso:3166'</span> <i>&quot;set country with system&quot;</i><span style=\"color: navy\">;</span>\r\n  <span style=\"color: navy\">}</span> <i>&quot;coded&quot;</i><span style=\"color: navy\">;</span>\r\n<span style=\"color: navy\">}\r\n\r\n</span></pre></div>"
+  },
+  "url" : "http://smart.who.int/ddcc/StructureMap/CertICAOtoCoreDataSet",
+  "version" : "1.0.0",
+  "name" : "CertICAOtoCoreDataSet",
+  "status" : "draft",
+  "date" : "2024-10-15T13:40:08+00:00",
+  "publisher" : "WHO",
+  "contact" : [{
+    "name" : "WHO",
+    "telecom" : [{
+      "system" : "url",
+      "value" : "http://who.int"
+    }]
+  }],
+  "description" : "Structure map transforming CertICAO logical model to bundle of Core Data Set logical model",
+  "jurisdiction" : [{
+    "coding" : [{
+      "system" : "http://unstats.un.org/unsd/methods/m49/m49.htm",
+      "code" : "001"
+    }]
+  }],
+  "structure" : [{
+    "url" : "http://smart.who.int/ddcc/StructureDefinition/CertICAOVDS",
+    "mode" : "source",
+    "alias" : "VDS"
+  },
+  {
+    "url" : "http://hl7.org/fhir/StructureDefinition/Bundle",
+    "mode" : "target",
+    "alias" : "DDCCBundle"
+  },
+  {
+    "url" : "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet",
+    "mode" : "target",
+    "alias" : "DDCC"
+  },
+  {
+    "url" : "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSetVS",
+    "mode" : "target",
+    "alias" : "DDCCVS"
+  },
+  {
+    "url" : "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSetTR",
+    "mode" : "target",
+    "alias" : "DDCCTR"
+  }],
+  "group" : [{
+    "name" : "CertICAOtoCoreDataSet",
+    "typeMode" : "none",
+    "input" : [{
+      "name" : "src",
+      "type" : "VDS",
+      "mode" : "source"
+    },
+    {
+      "name" : "ddccBundle",
+      "type" : "DDCCBundle",
+      "mode" : "target"
+    }],
+    "rule" : [{
+      "name" : "data",
+      "source" : [{
+        "context" : "src",
+        "element" : "data",
+        "variable" : "data"
+      }],
+      "rule" : [{
+        "name" : "msg",
+        "source" : [{
+          "context" : "data",
+          "element" : "msg",
+          "variable" : "msg"
+        }],
+        "rule" : [{
+          "name" : "ve",
+          "source" : [{
+            "context" : "msg",
+            "element" : "ve",
+            "variable" : "ve"
+          }],
+          "rule" : [{
+            "name" : "vd",
+            "source" : [{
+              "context" : "ve",
+              "element" : "vd",
+              "variable" : "vd"
+            }],
+            "target" : [{
+              "context" : "ddccBundle",
+              "contextType" : "variable",
+              "element" : "entry",
+              "variable" : "outentry"
+            },
+            {
+              "contextType" : "variable",
+              "variable" : "ddcc",
+              "transform" : "create",
+              "parameter" : [{
+                "valueString" : "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSetVS"
+              }]
+            }],
+            "rule" : [{
+              "name" : "set certificate",
+              "source" : [{
+                "context" : "data",
+                "element" : "hdr",
+                "variable" : "hdr"
+              }],
+              "target" : [{
+                "context" : "ddcc",
+                "contextType" : "variable",
+                "element" : "certificate",
+                "variable" : "certificate"
+              }],
+              "dependent" : [{
+                "name" : "VDStoCoreDataSetCertificate",
+                "variable" : ["hdr",
+                "msg",
+                "certificate"]
+              }]
+            },
+            {
+              "name" : "set patient",
+              "source" : [{
+                "context" : "msg",
+                "element" : "pid",
+                "variable" : "pid"
+              }],
+              "dependent" : [{
+                "name" : "ExtractPatient",
+                "variable" : ["pid",
+                "ddcc"]
+              }]
+            },
+            {
+              "name" : "set vaccination",
+              "source" : [{
+                "context" : "vd"
+              }],
+              "target" : [{
+                "context" : "ddcc",
+                "contextType" : "variable",
+                "element" : "vaccination",
+                "variable" : "vaccination"
+              }],
+              "dependent" : [{
+                "name" : "ExtractVaccine",
+                "variable" : ["ve",
+                "vd",
+                "vaccination"]
+              }]
+            },
+            {
+              "name" : "set outentry",
+              "source" : [{
+                "context" : "vd"
+              }],
+              "target" : [{
+                "context" : "outentry",
+                "contextType" : "variable",
+                "element" : "resource",
+                "transform" : "copy",
+                "parameter" : [{
+                  "valueId" : "ddcc"
+                }]
+              }]
+            }]
+          }]
+        },
+        {
+          "name" : "tr",
+          "source" : [{
+            "context" : "msg",
+            "element" : "tr",
+            "variable" : "tr"
+          }],
+          "target" : [{
+            "context" : "ddccBundle",
+            "contextType" : "variable",
+            "element" : "entry",
+            "variable" : "outentry"
+          },
+          {
+            "contextType" : "variable",
+            "variable" : "ddcc",
+            "transform" : "create",
+            "parameter" : [{
+              "valueString" : "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSetTR"
+            }]
+          }],
+          "rule" : [{
+            "name" : "set certificate",
+            "source" : [{
+              "context" : "data",
+              "element" : "hdr",
+              "variable" : "hdr"
+            }],
+            "target" : [{
+              "context" : "ddcc",
+              "contextType" : "variable",
+              "element" : "certificate",
+              "variable" : "certificate"
+            }],
+            "dependent" : [{
+              "name" : "VDStoCoreDataSetCertificate",
+              "variable" : ["hdr",
+              "msg",
+              "certificate"]
+            }]
+          },
+          {
+            "name" : "set patient",
+            "source" : [{
+              "context" : "msg",
+              "element" : "pid",
+              "variable" : "pid"
+            }],
+            "dependent" : [{
+              "name" : "ExtractPatient",
+              "variable" : ["pid",
+              "ddcc"]
+            }]
+          },
+          {
+            "name" : "sp",
+            "source" : [{
+              "context" : "msg",
+              "element" : "sp",
+              "variable" : "sp"
+            }],
+            "rule" : [{
+              "name" : "set test",
+              "source" : [{
+                "context" : "msg",
+                "element" : "dat",
+                "variable" : "dat"
+              }],
+              "target" : [{
+                "context" : "ddcc",
+                "contextType" : "variable",
+                "element" : "test",
+                "variable" : "test"
+              }],
+              "dependent" : [{
+                "name" : "ExtractTest",
+                "variable" : ["sp",
+                "dat",
+                "tr",
+                "test"]
+              }]
+            }]
+          },
+          {
+            "name" : "set outentry",
+            "source" : [{
+              "context" : "tr"
+            }],
+            "target" : [{
+              "context" : "outentry",
+              "contextType" : "variable",
+              "element" : "resource",
+              "transform" : "copy",
+              "parameter" : [{
+                "valueId" : "ddcc"
+              }]
+            }]
+          }]
+        }]
+      }]
+    }]
+  },
+  {
+    "name" : "VDStoCoreDataSetCertificate",
+    "typeMode" : "none",
+    "input" : [{
+      "name" : "hdr",
+      "mode" : "source"
+    },
+    {
+      "name" : "msg",
+      "mode" : "source"
+    },
+    {
+      "name" : "certificate",
+      "mode" : "target"
+    }],
+    "rule" : [{
+      "name" : "set version",
+      "source" : [{
+        "context" : "hdr",
+        "element" : "v",
+        "variable" : "v"
+      }],
+      "target" : [{
+        "context" : "certificate",
+        "contextType" : "variable",
+        "element" : "version",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "v"
+        }]
+      }]
+    },
+    {
+      "name" : "set hcid from uvci",
+      "source" : [{
+        "context" : "msg",
+        "element" : "uvci",
+        "variable" : "uvci"
+      }],
+      "target" : [{
+        "context" : "certificate",
+        "contextType" : "variable",
+        "element" : "hcid",
+        "variable" : "hcid"
+      },
+      {
+        "context" : "hcid",
+        "contextType" : "variable",
+        "element" : "value",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "uvci"
+        }]
+      }]
+    },
+    {
+      "name" : "set hcid from utci",
+      "source" : [{
+        "context" : "msg",
+        "element" : "utci",
+        "variable" : "utci"
+      }],
+      "target" : [{
+        "context" : "certificate",
+        "contextType" : "variable",
+        "element" : "hcid",
+        "variable" : "hcid"
+      },
+      {
+        "context" : "hcid",
+        "contextType" : "variable",
+        "element" : "value",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "utci"
+        }]
+      }]
+    },
+    {
+      "name" : "set issuer",
+      "source" : [{
+        "context" : "hdr",
+        "element" : "is",
+        "variable" : "is"
+      }],
+      "target" : [{
+        "context" : "certificate",
+        "contextType" : "variable",
+        "element" : "issuer",
+        "variable" : "issuer",
+        "transform" : "create",
+        "parameter" : [{
+          "valueString" : "Reference"
+        }]
+      },
+      {
+        "context" : "issuer",
+        "contextType" : "variable",
+        "element" : "display",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "is"
+        }]
+      }]
+    }]
+  },
+  {
+    "name" : "ExtractPatient",
+    "typeMode" : "none",
+    "input" : [{
+      "name" : "pid",
+      "mode" : "source"
+    },
+    {
+      "name" : "ddcc",
+      "type" : "DDCC",
+      "mode" : "target"
+    }],
+    "rule" : [{
+      "name" : "set name",
+      "source" : [{
+        "context" : "pid",
+        "element" : "n",
+        "variable" : "name"
+      }],
+      "target" : [{
+        "context" : "ddcc",
+        "contextType" : "variable",
+        "element" : "name",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "name"
+        }]
+      }]
+    },
+    {
+      "name" : "set birthDate",
+      "source" : [{
+        "context" : "pid",
+        "element" : "dob",
+        "variable" : "birthDate"
+      }],
+      "target" : [{
+        "context" : "ddcc",
+        "contextType" : "variable",
+        "element" : "birthDate",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "birthDate"
+        }]
+      }]
+    },
+    {
+      "name" : "set priorityIdentifier",
+      "source" : [{
+        "context" : "pid",
+        "element" : "i",
+        "variable" : "priorityIdentifier"
+      }],
+      "target" : [{
+        "context" : "ddcc",
+        "contextType" : "variable",
+        "element" : "identifier",
+        "variable" : "identifier"
+      },
+      {
+        "context" : "identifier",
+        "contextType" : "variable",
+        "element" : "value",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "priorityIdentifier"
+        }]
+      }]
+    },
+    {
+      "name" : "set Document Type Number",
+      "source" : [{
+        "context" : "pid",
+        "element" : "dn"
+      }],
+      "target" : [{
+        "context" : "ddcc",
+        "contextType" : "variable",
+        "element" : "identifier",
+        "variable" : "identifier"
+      }],
+      "dependent" : [{
+        "name" : "ExtractDocumentTypeNumber",
+        "variable" : ["pid",
+        "identifier"]
+      }]
+    }]
+  },
+  {
+    "name" : "ExtractDocumentTypeNumber",
+    "typeMode" : "none",
+    "input" : [{
+      "name" : "src",
+      "mode" : "source"
+    },
+    {
+      "name" : "identif",
+      "type" : "Identifier",
+      "mode" : "target"
+    }],
+    "rule" : [{
+      "name" : "set doc number",
+      "source" : [{
+        "context" : "src",
+        "element" : "dn",
+        "variable" : "docNumber"
+      }],
+      "target" : [{
+        "context" : "identif",
+        "contextType" : "variable",
+        "element" : "value",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "docNumber"
+        }]
+      }]
+    },
+    {
+      "name" : "set doc number P",
+      "source" : [{
+        "context" : "src",
+        "element" : "dt",
+        "variable" : "docType",
+        "condition" : "(docType = 'P')"
+      }],
+      "target" : [{
+        "context" : "identif",
+        "contextType" : "variable",
+        "element" : "system",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueString" : "PPN"
+        }]
+      }],
+      "documentation" : "P – Passport (Doc 9303-4)"
+    },
+    {
+      "name" : "set doc number A",
+      "source" : [{
+        "context" : "src",
+        "element" : "dt",
+        "variable" : "docType",
+        "condition" : "(docType = 'A')"
+      }],
+      "target" : [{
+        "context" : "identif",
+        "contextType" : "variable",
+        "element" : "system",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueString" : "DL"
+        }]
+      }],
+      "documentation" : "A – ID Card (Doc 9303-5)"
+    },
+    {
+      "name" : "set doc number C",
+      "source" : [{
+        "context" : "src",
+        "element" : "dt",
+        "variable" : "docType",
+        "condition" : "(docType = 'C')"
+      }],
+      "target" : [{
+        "context" : "identif",
+        "contextType" : "variable",
+        "element" : "system",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueString" : "DL"
+        }]
+      }],
+      "documentation" : "C – ID Card (Doc 9303-5)"
+    },
+    {
+      "name" : "set doc number I",
+      "source" : [{
+        "context" : "src",
+        "element" : "dt",
+        "variable" : "docType",
+        "condition" : "(docType = 'I')"
+      }],
+      "target" : [{
+        "context" : "identif",
+        "contextType" : "variable",
+        "element" : "system",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueString" : "DL"
+        }]
+      }],
+      "documentation" : "I – ID Card Doc 9303-5)"
+    },
+    {
+      "name" : "set doc number AC",
+      "source" : [{
+        "context" : "src",
+        "element" : "dt",
+        "variable" : "docType",
+        "condition" : "(docType = 'AC')"
+      }],
+      "target" : [{
+        "context" : "identif",
+        "contextType" : "variable",
+        "element" : "system",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueString" : "EN"
+        }]
+      }],
+      "documentation" : "AC - Crew Member Certificate (Doc 9303-5)"
+    },
+    {
+      "name" : "set doc number V",
+      "source" : [{
+        "context" : "src",
+        "element" : "dt",
+        "variable" : "docType",
+        "condition" : "(docType = 'V')"
+      }],
+      "target" : [{
+        "context" : "identif",
+        "contextType" : "variable",
+        "element" : "system",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueString" : "ACSN"
+        }]
+      }],
+      "documentation" : "V – Visa (Doc 9303-7)"
+    },
+    {
+      "name" : "set doc number D",
+      "source" : [{
+        "context" : "src",
+        "element" : "dt",
+        "variable" : "docType",
+        "condition" : "(docType = 'D')"
+      }],
+      "target" : [{
+        "context" : "identif",
+        "contextType" : "variable",
+        "element" : "system",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueString" : "DL"
+        }]
+      }],
+      "documentation" : "D – Driving License (ISO18013-1)"
+    }]
+  },
+  {
+    "name" : "ExtractVaccine",
+    "typeMode" : "none",
+    "input" : [{
+      "name" : "ve",
+      "mode" : "source"
+    },
+    {
+      "name" : "vd",
+      "mode" : "source"
+    },
+    {
+      "name" : "vaccination",
+      "mode" : "target"
+    }],
+    "rule" : [{
+      "name" : "set vaccine",
+      "source" : [{
+        "context" : "ve",
+        "element" : "des",
+        "variable" : "des"
+      }],
+      "target" : [{
+        "context" : "vaccination",
+        "contextType" : "variable",
+        "element" : "vaccine",
+        "variable" : "coding"
+      },
+      {
+        "context" : "coding",
+        "contextType" : "variable",
+        "element" : "system",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueString" : "http://id.who.int/icd11/mms"
+        }]
+      },
+      {
+        "context" : "coding",
+        "contextType" : "variable",
+        "element" : "code",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "des"
+        }]
+      }]
+    },
+    {
+      "name" : "set brand",
+      "source" : [{
+        "context" : "ve",
+        "element" : "nam",
+        "variable" : "nam"
+      }],
+      "target" : [{
+        "context" : "vaccination",
+        "contextType" : "variable",
+        "element" : "brand",
+        "variable" : "coding"
+      },
+      {
+        "context" : "coding",
+        "contextType" : "variable",
+        "element" : "code",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "nam"
+        }]
+      }]
+    },
+    {
+      "name" : "set target disease",
+      "source" : [{
+        "context" : "ve",
+        "element" : "dis",
+        "variable" : "dis"
+      }],
+      "target" : [{
+        "context" : "vaccination",
+        "contextType" : "variable",
+        "element" : "disease",
+        "variable" : "coding"
+      },
+      {
+        "context" : "coding",
+        "contextType" : "variable",
+        "element" : "system",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueString" : "http://id.who.int/icd11/mms"
+        }]
+      },
+      {
+        "context" : "coding",
+        "contextType" : "variable",
+        "element" : "code",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "dis"
+        }]
+      }]
+    },
+    {
+      "name" : "set date",
+      "source" : [{
+        "context" : "vd",
+        "element" : "dvc",
+        "variable" : "dvc"
+      }],
+      "target" : [{
+        "context" : "vaccination",
+        "contextType" : "variable",
+        "element" : "date",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "dvc"
+        }]
+      }]
+    },
+    {
+      "name" : "set dose",
+      "source" : [{
+        "context" : "vd",
+        "element" : "seq",
+        "variable" : "seq"
+      }],
+      "target" : [{
+        "context" : "vaccination",
+        "contextType" : "variable",
+        "element" : "dose",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "seq"
+        }]
+      }]
+    },
+    {
+      "name" : "set nextDose",
+      "source" : [{
+        "context" : "vd",
+        "element" : "dvn",
+        "variable" : "dvn"
+      }],
+      "target" : [{
+        "context" : "vaccination",
+        "contextType" : "variable",
+        "element" : "nextDose",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "dvn"
+        }]
+      }]
+    },
+    {
+      "name" : "ctr",
+      "source" : [{
+        "context" : "vd",
+        "element" : "ctr",
+        "variable" : "ctr"
+      }],
+      "target" : [{
+        "context" : "vaccination",
+        "contextType" : "variable",
+        "element" : "country",
+        "variable" : "coding"
+      }],
+      "rule" : [{
+        "name" : "set country",
+        "source" : [{
+          "context" : "ctr"
+        }],
+        "dependent" : [{
+          "name" : "ExtractCountry",
+          "variable" : ["ctr",
+          "coding"]
+        }]
+      }]
+    },
+    {
+      "name" : "set centre",
+      "source" : [{
+        "context" : "vd",
+        "element" : "adm",
+        "variable" : "adm"
+      }],
+      "target" : [{
+        "context" : "vaccination",
+        "contextType" : "variable",
+        "element" : "centre",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "adm"
+        }]
+      }]
+    },
+    {
+      "name" : "set lot",
+      "source" : [{
+        "context" : "vd",
+        "element" : "lot",
+        "variable" : "lot"
+      }],
+      "target" : [{
+        "context" : "vaccination",
+        "contextType" : "variable",
+        "element" : "lot",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "lot"
+        }]
+      }]
+    }]
+  },
+  {
+    "name" : "ExtractTest",
+    "typeMode" : "none",
+    "input" : [{
+      "name" : "sp",
+      "mode" : "source"
+    },
+    {
+      "name" : "dat",
+      "mode" : "source"
+    },
+    {
+      "name" : "tr",
+      "mode" : "source"
+    },
+    {
+      "name" : "test",
+      "mode" : "target"
+    }],
+    "rule" : [{
+      "name" : "set pathogen",
+      "source" : [{
+        "context" : "tr"
+      }],
+      "target" : [{
+        "context" : "test",
+        "contextType" : "variable",
+        "element" : "pathogen",
+        "variable" : "coding"
+      },
+      {
+        "context" : "coding",
+        "contextType" : "variable",
+        "element" : "system",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueString" : "http://id.who.int/icd11/mms"
+        }]
+      },
+      {
+        "context" : "coding",
+        "contextType" : "variable",
+        "element" : "code",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueString" : "XN109"
+        }]
+      }]
+    },
+    {
+      "name" : "tc",
+      "source" : [{
+        "context" : "tr",
+        "element" : "tc",
+        "variable" : "tc"
+      }],
+      "rule" : [{
+        "name" : "set default type",
+        "source" : [{
+          "context" : "tc"
+        }],
+        "target" : [{
+          "context" : "test",
+          "contextType" : "variable",
+          "element" : "type",
+          "variable" : "coding"
+        },
+        {
+          "context" : "coding",
+          "contextType" : "variable",
+          "element" : "code",
+          "transform" : "copy",
+          "parameter" : [{
+            "valueId" : "tc"
+          }]
+        }]
+      },
+      {
+        "name" : "coding",
+        "source" : [{
+          "context" : "tc"
+        }],
+        "target" : [{
+          "contextType" : "variable",
+          "variable" : "coded",
+          "transform" : "c",
+          "parameter" : [{
+            "valueString" : "http://smart.who.int/ddcc/CodeSystem/lab-test-type-icao"
+          },
+          {
+            "valueId" : "tc"
+          }]
+        }],
+        "rule" : [{
+          "name" : "translate ICAO type",
+          "source" : [{
+            "context" : "tc",
+            "condition" : "coded.memberOf('http://smart.who.int/ddcc/ValueSet/lab-test-type-icao')"
+          }],
+          "target" : [{
+            "context" : "test",
+            "contextType" : "variable",
+            "element" : "type",
+            "transform" : "translate",
+            "parameter" : [{
+              "valueId" : "coded"
+            },
+            {
+              "valueString" : "http://smart.who.int/ddcc/ConceptMap/lab-test-type-icao-to-icd11"
+            },
+            {
+              "valueString" : "Coding"
+            }]
+          }]
+        }]
+      }]
+    },
+    {
+      "name" : "m",
+      "source" : [{
+        "context" : "tr",
+        "element" : "m",
+        "variable" : "m"
+      }],
+      "rule" : [{
+        "name" : "set default origin",
+        "source" : [{
+          "context" : "m"
+        }],
+        "target" : [{
+          "context" : "test",
+          "contextType" : "variable",
+          "element" : "origin",
+          "variable" : "coding"
+        },
+        {
+          "context" : "coding",
+          "contextType" : "variable",
+          "element" : "code",
+          "transform" : "copy",
+          "parameter" : [{
+            "valueId" : "m"
+          }]
+        }]
+      },
+      {
+        "name" : "coding",
+        "source" : [{
+          "context" : "m"
+        }],
+        "target" : [{
+          "contextType" : "variable",
+          "variable" : "coded",
+          "transform" : "c",
+          "parameter" : [{
+            "valueString" : "http://smart.who.int/ddcc/CodeSystem/lab-test-sample-origin-icao"
+          },
+          {
+            "valueId" : "m"
+          }]
+        }],
+        "rule" : [{
+          "name" : "translate ICAO origin",
+          "source" : [{
+            "context" : "m",
+            "condition" : "coded.memberOf('http://smart.who.int/ddcc/ValueSet/lab-test-sample-origin-icao')"
+          }],
+          "target" : [{
+            "context" : "test",
+            "contextType" : "variable",
+            "element" : "origin",
+            "transform" : "translate",
+            "parameter" : [{
+              "valueId" : "coded"
+            },
+            {
+              "valueString" : "http://smart.who.int/ddcc/ConceptMap/lab-test-sample-origin-icao-to-icd11"
+            },
+            {
+              "valueString" : "Coding"
+            }]
+          }]
+        }]
+      }]
+    },
+    {
+      "name" : "set date",
+      "source" : [{
+        "context" : "dat",
+        "element" : "sc",
+        "variable" : "date"
+      }],
+      "target" : [{
+        "context" : "test",
+        "contextType" : "variable",
+        "element" : "date",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "date"
+        }]
+      }]
+    },
+    {
+      "name" : "r",
+      "source" : [{
+        "context" : "tr",
+        "element" : "r",
+        "variable" : "r"
+      }],
+      "rule" : [{
+        "name" : "set default result",
+        "source" : [{
+          "context" : "r"
+        }],
+        "target" : [{
+          "context" : "test",
+          "contextType" : "variable",
+          "element" : "result",
+          "variable" : "coding"
+        },
+        {
+          "context" : "coding",
+          "contextType" : "variable",
+          "element" : "code",
+          "transform" : "copy",
+          "parameter" : [{
+            "valueId" : "r"
+          }]
+        }]
+      },
+      {
+        "name" : "coding",
+        "source" : [{
+          "context" : "r"
+        }],
+        "target" : [{
+          "contextType" : "variable",
+          "variable" : "coded",
+          "transform" : "c",
+          "parameter" : [{
+            "valueString" : "http://smart.who.int/ddcc/CodeSystem/lab-test-qual-result-icao"
+          },
+          {
+            "valueId" : "r"
+          }]
+        }],
+        "rule" : [{
+          "name" : "translate ICAO result",
+          "source" : [{
+            "context" : "r",
+            "condition" : "coded.memberOf('http://smart.who.int/ddcc/ValueSet/lab-test-qual-result-icao')"
+          }],
+          "target" : [{
+            "context" : "test",
+            "contextType" : "variable",
+            "element" : "result",
+            "transform" : "translate",
+            "parameter" : [{
+              "valueId" : "coded"
+            },
+            {
+              "valueString" : "http://smart.who.int/ddcc/ConceptMap/lab-test-qual-result-icao-to-icd11"
+            },
+            {
+              "valueString" : "Coding"
+            }]
+          }]
+        }]
+      }]
+    },
+    {
+      "name" : "set centre",
+      "source" : [{
+        "context" : "sp",
+        "element" : "spn",
+        "variable" : "spn"
+      }],
+      "target" : [{
+        "context" : "test",
+        "contextType" : "variable",
+        "element" : "centre",
+        "variable" : "coding"
+      },
+      {
+        "context" : "coding",
+        "contextType" : "variable",
+        "element" : "code",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "spn"
+        }]
+      }]
+    },
+    {
+      "name" : "ctr",
+      "source" : [{
+        "context" : "sp",
+        "element" : "ctr",
+        "variable" : "ctr"
+      }],
+      "target" : [{
+        "context" : "test",
+        "contextType" : "variable",
+        "element" : "country",
+        "variable" : "coding"
+      }],
+      "rule" : [{
+        "name" : "set country",
+        "source" : [{
+          "context" : "ctr"
+        }],
+        "dependent" : [{
+          "name" : "ExtractCountry",
+          "variable" : ["ctr",
+          "coding"]
+        }]
+      }]
+    }]
+  },
+  {
+    "name" : "ExtractCountry",
+    "typeMode" : "none",
+    "input" : [{
+      "name" : "country",
+      "mode" : "source"
+    },
+    {
+      "name" : "coding",
+      "mode" : "target"
+    }],
+    "rule" : [{
+      "name" : "set default country",
+      "source" : [{
+        "context" : "country"
+      }],
+      "target" : [{
+        "context" : "coding",
+        "contextType" : "variable",
+        "element" : "code",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "country"
+        }]
+      }]
+    },
+    {
+      "name" : "coded",
+      "source" : [{
+        "context" : "country"
+      }],
+      "target" : [{
+        "contextType" : "variable",
+        "variable" : "coded",
+        "transform" : "c",
+        "parameter" : [{
+          "valueString" : "urn:iso:std:iso:3166"
+        },
+        {
+          "valueId" : "country"
+        }]
+      }],
+      "rule" : [{
+        "name" : "set country with system",
+        "source" : [{
+          "context" : "country",
+          "condition" : "coded.memberOf('http://hl7.org/fhir/ValueSet/iso3166-1-3')"
+        }],
+        "target" : [{
+          "context" : "coding",
+          "contextType" : "variable",
+          "element" : "code",
+          "transform" : "copy",
+          "parameter" : [{
+            "valueId" : "country"
+          }]
+        },
+        {
+          "context" : "coding",
+          "contextType" : "variable",
+          "element" : "system",
+          "transform" : "copy",
+          "parameter" : [{
+            "valueString" : "urn:iso:std:iso:3166"
+          }]
+        }]
+      }]
+    }]
+  }]
+}
