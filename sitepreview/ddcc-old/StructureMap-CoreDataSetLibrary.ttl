@@ -1,0 +1,584 @@
+@prefix fhir: <http://hl7.org/fhir/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# - resource -------------------------------------------------------------------
+
+<http://smart.who.int/ddcc/StructureMap/CoreDataSetLibrary> a fhir:StructureMap ;
+  fhir:nodeRole fhir:treeRoot ;
+  fhir:id [ fhir:v "CoreDataSetLibrary"] ; # 
+  fhir:meta [
+     fhir:versionId [ fhir:v "1" ] ;
+     fhir:lastUpdated [ fhir:v "2022-03-01T19:17:52.081+00:00"^^xsd:dateTime ]
+  ] ; # 
+  fhir:text [
+     fhir:status [ fhir:v "generated" ] ;
+     fhir:div "<div xmlns=\"http://www.w3.org/1999/xhtml\"><pre>map &quot;http://smart.who.int/ddcc/StructureMap/CoreDataSetLibrary&quot; = &quot;CoreDataSetLibrary&quot;\r\n\r\n\r\nuses &quot;http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.VS&quot; alias DDCCVS as source\r\nuses &quot;http://hl7.org/fhir/StructureDefinition/Patient&quot; alias Patient as target\r\nuses &quot;http://smart.who.int/ddcc/StructureDefinition/DDCCPatient&quot; alias DDCCPatient as produced\r\nuses &quot;http://smart.who.int/ddcc/StructureDefinition/DDCCDocumentReferenceQR&quot; alias DDCCDocRefQR as produced\r\nuses &quot;http://smart.who.int/ddcc/StructureDefinition/DDCCComposition&quot; alias DDCCComposition as produced\r\n\r\ngroup DDCCToPatient(source src : DDCCVS, target patient : DDCCPatient, source pid) {\r\n  pid -&gt; patient.id = pid &quot;set id&quot;;\r\n  src.name as name -&gt; patient.name as tName then {\r\n    name -&gt; tName.text = name &quot;set name&quot;;\r\n  } &quot;set full name&quot;;\r\n  src.birthDate as birthDate -&gt; patient.birthDate = birthDate &quot;set birthDate&quot;;\r\n  src.identifier as identifier -&gt; patient.identifier = identifier &quot;set identifier&quot;;\r\n}\r\n\r\ngroup DDCCToDocumentReference(source src : DDCCVS, target ref : DDCCDocRefQR, source id, source pid) {\r\n  id -&gt; ref.id = id &quot;set id&quot;;\r\n  src -&gt; ref.status = 'current' &quot;set status&quot;;\r\n  src -&gt;  ref.subject as patient,  patient.reference = append('Patient/', pid) &quot;set patient&quot;;\r\n  src -&gt; ref.content as content then {\r\n    src -&gt;  content.attachment as attachment,  attachment.contentType = 'application/json' &quot;set contentType&quot;;\r\n    src -&gt;  content.format as format,  format.system = 'http://smart.who.int/ddcc/CodeSystem/DDCC-QR-Format-CodeSystem',  format.code = 'serialized' &quot;set format code&quot;;\r\n  } &quot;set serialized content&quot;;\r\n  src -&gt; ref.content as content then {\r\n    src -&gt;  content.attachment as attachment,  attachment.contentType = 'image/png' &quot;set contentType&quot;;\r\n    src -&gt;  content.format as format,  format.system = 'http://smart.who.int/ddcc/CodeSystem/DDCC-QR-Format-CodeSystem',  format.code = 'image' &quot;set format code&quot;;\r\n  } &quot;set image content&quot;;\r\n  src -&gt; ref.content as content then {\r\n    src -&gt;  content.attachment as attachment,  attachment.contentType = 'application/pdf' &quot;set contentType&quot;;\r\n    src -&gt;  content.format as format,  format.system = 'http://smart.who.int/ddcc/CodeSystem/DDCC-QR-Format-CodeSystem',  format.code = 'pdf' &quot;set format code&quot;;\r\n  } &quot;set pdf content&quot;;\r\n}\r\n\r\ngroup DDCCToComposition(source src : DDCCVS, target comp : DDCCComposition, source id, source pid) {\r\n  id -&gt; comp.id = id &quot;set id&quot;;\r\n  src -&gt;  comp.subject as patient,  patient.reference = append('Patient/', pid) &quot;set patient&quot;;\r\n  src -&gt;  comp.type as type,  type.coding as coding then {\r\n    src -&gt;  coding.system = 'http://loinc.org',  coding.code = '82593-5' &quot;set type coding&quot;;\r\n  } &quot;set type&quot;;\r\n  src.certificate as certificate -&gt;  comp.author as author,  comp.event as event then {\r\n    certificate.period as period -&gt; event.period = period &quot;set event period&quot;;\r\n    certificate.issuer as issuer -&gt; author.type = 'Organization' then {\r\n      issuer.identifier as pha -&gt; author.identifier as identifier then {\r\n        pha.value as value -&gt; identifier.value = value &quot;set pha&quot;;\r\n      } &quot;set author identifier&quot;;\r\n    } &quot;set author ref&quot;;\r\n  } &quot;set certificate&quot;;\r\n}\r\n\r\n</pre></div>"
+  ] ; # 
+  fhir:url [ fhir:v "http://smart.who.int/ddcc/StructureMap/CoreDataSetLibrary"^^xsd:anyURI] ; # 
+  fhir:version [ fhir:v "1.0.0"] ; # 
+  fhir:name [ fhir:v "CoreDataSetLibrary"] ; # 
+  fhir:status [ fhir:v "draft"] ; # 
+  fhir:date [ fhir:v "2023-11-06T04:25:12+00:00"^^xsd:dateTime] ; # 
+  fhir:publisher [ fhir:v "WHO"] ; # 
+  fhir:contact ( [
+     fhir:name [ fhir:v "WHO" ] ;
+     fhir:telecom ( [
+       fhir:system [ fhir:v "url" ] ;
+       fhir:value [ fhir:v "http://who.int" ]
+     ] )
+  ] ) ; # 
+  fhir:jurisdiction ( [
+     fhir:coding ( [
+       fhir:system [ fhir:v "http://unstats.un.org/unsd/methods/m49/m49.htm"^^xsd:anyURI ] ;
+       fhir:code [ fhir:v "001" ]
+     ] )
+  ] ) ; # 
+  fhir:structure ( [
+     fhir:url [
+       fhir:v "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.VS"^^xsd:anyURI ;
+       fhir:link <http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.VS>
+     ] ;
+     fhir:mode [ fhir:v "source" ] ;
+     fhir:alias [ fhir:v "DDCCVS" ]
+  ] [
+     fhir:url [
+       fhir:v "http://hl7.org/fhir/StructureDefinition/Patient"^^xsd:anyURI ;
+       fhir:link <http://hl7.org/fhir/StructureDefinition/Patient>
+     ] ;
+     fhir:mode [ fhir:v "target" ] ;
+     fhir:alias [ fhir:v "Patient" ]
+  ] [
+     fhir:url [
+       fhir:v "http://smart.who.int/ddcc/StructureDefinition/DDCCPatient"^^xsd:anyURI ;
+       fhir:link <http://smart.who.int/ddcc/StructureDefinition/DDCCPatient>
+     ] ;
+     fhir:mode [ fhir:v "produced" ] ;
+     fhir:alias [ fhir:v "DDCCPatient" ]
+  ] [
+     fhir:url [
+       fhir:v "http://smart.who.int/ddcc/StructureDefinition/DDCCDocumentReferenceQR"^^xsd:anyURI ;
+       fhir:link <http://smart.who.int/ddcc/StructureDefinition/DDCCDocumentReferenceQR>
+     ] ;
+     fhir:mode [ fhir:v "produced" ] ;
+     fhir:alias [ fhir:v "DDCCDocRefQR" ]
+  ] [
+     fhir:url [
+       fhir:v "http://smart.who.int/ddcc/StructureDefinition/DDCCComposition"^^xsd:anyURI ;
+       fhir:link <http://smart.who.int/ddcc/StructureDefinition/DDCCComposition>
+     ] ;
+     fhir:mode [ fhir:v "produced" ] ;
+     fhir:alias [ fhir:v "DDCCComposition" ]
+  ] ) ; # 
+  fhir:group ( [
+     fhir:name [ fhir:v "DDCCToPatient" ] ;
+     fhir:typeMode [ fhir:v "none" ] ;
+     fhir:input ( [
+       fhir:name [ fhir:v "src" ] ;
+       fhir:type [ fhir:v "DDCCVS" ] ;
+       fhir:mode [ fhir:v "source" ]
+     ] [
+       fhir:name [ fhir:v "patient" ] ;
+       fhir:type [ fhir:v "DDCCPatient" ] ;
+       fhir:mode [ fhir:v "target" ]
+     ] [
+       fhir:name [ fhir:v "pid" ] ;
+       fhir:mode [ fhir:v "source" ]
+     ] ) ;
+     fhir:rule ( [
+       fhir:name [ fhir:v "set id" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "pid" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "patient" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "id" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "pid" ]
+         ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "set full name" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "src" ] ;
+         fhir:element [ fhir:v "name" ] ;
+         fhir:variable [ fhir:v "name" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "patient" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "name" ] ;
+         fhir:variable [ fhir:v "tName" ]
+       ] ) ;
+       fhir:rule ( [
+         fhir:name [ fhir:v "set name" ] ;
+         fhir:source ( [
+           fhir:context [ fhir:v "name" ]
+         ] ) ;
+         fhir:target ( [
+           fhir:context [ fhir:v "tName" ] ;
+           fhir:contextType [ fhir:v "variable" ] ;
+           fhir:element [ fhir:v "text" ] ;
+           fhir:transform [ fhir:v "copy" ] ;
+           fhir:parameter ( [
+             fhir:value [ fhir:v "name" ]
+           ] )
+         ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "set birthDate" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "src" ] ;
+         fhir:element [ fhir:v "birthDate" ] ;
+         fhir:variable [ fhir:v "birthDate" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "patient" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "birthDate" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "birthDate" ]
+         ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "set identifier" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "src" ] ;
+         fhir:element [ fhir:v "identifier" ] ;
+         fhir:variable [ fhir:v "identifier" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "patient" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "identifier" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "identifier" ]
+         ] )
+       ] )
+     ] )
+  ] [
+     fhir:name [ fhir:v "DDCCToDocumentReference" ] ;
+     fhir:typeMode [ fhir:v "none" ] ;
+     fhir:input ( [
+       fhir:name [ fhir:v "src" ] ;
+       fhir:type [ fhir:v "DDCCVS" ] ;
+       fhir:mode [ fhir:v "source" ]
+     ] [
+       fhir:name [ fhir:v "ref" ] ;
+       fhir:type [ fhir:v "DDCCDocRefQR" ] ;
+       fhir:mode [ fhir:v "target" ]
+     ] [
+       fhir:name [ fhir:v "id" ] ;
+       fhir:mode [ fhir:v "source" ]
+     ] [
+       fhir:name [ fhir:v "pid" ] ;
+       fhir:mode [ fhir:v "source" ]
+     ] ) ;
+     fhir:rule ( [
+       fhir:name [ fhir:v "set id" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "id" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "ref" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "id" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "id" ]
+         ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "set status" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "src" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "ref" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "status" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "current" ]
+         ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "set patient" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "src" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "ref" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "subject" ] ;
+         fhir:variable [ fhir:v "patient" ]
+       ] [
+         fhir:context [ fhir:v "patient" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "reference" ] ;
+         fhir:transform [ fhir:v "append" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "Patient/" ]
+         ] [
+           fhir:value [ fhir:v "pid" ]
+         ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "set serialized content" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "src" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "ref" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "content" ] ;
+         fhir:variable [ fhir:v "content" ]
+       ] ) ;
+       fhir:rule ( [
+         fhir:name [ fhir:v "set contentType" ] ;
+         fhir:source ( [
+           fhir:context [ fhir:v "src" ]
+         ] ) ;
+         fhir:target ( [
+           fhir:context [ fhir:v "content" ] ;
+           fhir:contextType [ fhir:v "variable" ] ;
+           fhir:element [ fhir:v "attachment" ] ;
+           fhir:variable [ fhir:v "attachment" ]
+         ] [
+           fhir:context [ fhir:v "attachment" ] ;
+           fhir:contextType [ fhir:v "variable" ] ;
+           fhir:element [ fhir:v "contentType" ] ;
+           fhir:transform [ fhir:v "copy" ] ;
+           fhir:parameter ( [
+             fhir:value [ fhir:v "application/json" ]
+           ] )
+         ] )
+       ] [
+         fhir:name [ fhir:v "set format code" ] ;
+         fhir:source ( [
+           fhir:context [ fhir:v "src" ]
+         ] ) ;
+         fhir:target ( [
+           fhir:context [ fhir:v "content" ] ;
+           fhir:contextType [ fhir:v "variable" ] ;
+           fhir:element [ fhir:v "format" ] ;
+           fhir:variable [ fhir:v "format" ]
+         ] [
+           fhir:context [ fhir:v "format" ] ;
+           fhir:contextType [ fhir:v "variable" ] ;
+           fhir:element [ fhir:v "system" ] ;
+           fhir:transform [ fhir:v "copy" ] ;
+           fhir:parameter ( [
+             fhir:value [ fhir:v "http://smart.who.int/ddcc/CodeSystem/DDCC-QR-Format-CodeSystem" ]
+           ] )
+         ] [
+           fhir:context [ fhir:v "format" ] ;
+           fhir:contextType [ fhir:v "variable" ] ;
+           fhir:element [ fhir:v "code" ] ;
+           fhir:transform [ fhir:v "copy" ] ;
+           fhir:parameter ( [
+             fhir:value [ fhir:v "serialized" ]
+           ] )
+         ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "set image content" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "src" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "ref" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "content" ] ;
+         fhir:variable [ fhir:v "content" ]
+       ] ) ;
+       fhir:rule ( [
+         fhir:name [ fhir:v "set contentType" ] ;
+         fhir:source ( [
+           fhir:context [ fhir:v "src" ]
+         ] ) ;
+         fhir:target ( [
+           fhir:context [ fhir:v "content" ] ;
+           fhir:contextType [ fhir:v "variable" ] ;
+           fhir:element [ fhir:v "attachment" ] ;
+           fhir:variable [ fhir:v "attachment" ]
+         ] [
+           fhir:context [ fhir:v "attachment" ] ;
+           fhir:contextType [ fhir:v "variable" ] ;
+           fhir:element [ fhir:v "contentType" ] ;
+           fhir:transform [ fhir:v "copy" ] ;
+           fhir:parameter ( [
+             fhir:value [ fhir:v "image/png" ]
+           ] )
+         ] )
+       ] [
+         fhir:name [ fhir:v "set format code" ] ;
+         fhir:source ( [
+           fhir:context [ fhir:v "src" ]
+         ] ) ;
+         fhir:target ( [
+           fhir:context [ fhir:v "content" ] ;
+           fhir:contextType [ fhir:v "variable" ] ;
+           fhir:element [ fhir:v "format" ] ;
+           fhir:variable [ fhir:v "format" ]
+         ] [
+           fhir:context [ fhir:v "format" ] ;
+           fhir:contextType [ fhir:v "variable" ] ;
+           fhir:element [ fhir:v "system" ] ;
+           fhir:transform [ fhir:v "copy" ] ;
+           fhir:parameter ( [
+             fhir:value [ fhir:v "http://smart.who.int/ddcc/CodeSystem/DDCC-QR-Format-CodeSystem" ]
+           ] )
+         ] [
+           fhir:context [ fhir:v "format" ] ;
+           fhir:contextType [ fhir:v "variable" ] ;
+           fhir:element [ fhir:v "code" ] ;
+           fhir:transform [ fhir:v "copy" ] ;
+           fhir:parameter ( [
+             fhir:value [ fhir:v "image" ]
+           ] )
+         ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "set pdf content" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "src" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "ref" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "content" ] ;
+         fhir:variable [ fhir:v "content" ]
+       ] ) ;
+       fhir:rule ( [
+         fhir:name [ fhir:v "set contentType" ] ;
+         fhir:source ( [
+           fhir:context [ fhir:v "src" ]
+         ] ) ;
+         fhir:target ( [
+           fhir:context [ fhir:v "content" ] ;
+           fhir:contextType [ fhir:v "variable" ] ;
+           fhir:element [ fhir:v "attachment" ] ;
+           fhir:variable [ fhir:v "attachment" ]
+         ] [
+           fhir:context [ fhir:v "attachment" ] ;
+           fhir:contextType [ fhir:v "variable" ] ;
+           fhir:element [ fhir:v "contentType" ] ;
+           fhir:transform [ fhir:v "copy" ] ;
+           fhir:parameter ( [
+             fhir:value [ fhir:v "application/pdf" ]
+           ] )
+         ] )
+       ] [
+         fhir:name [ fhir:v "set format code" ] ;
+         fhir:source ( [
+           fhir:context [ fhir:v "src" ]
+         ] ) ;
+         fhir:target ( [
+           fhir:context [ fhir:v "content" ] ;
+           fhir:contextType [ fhir:v "variable" ] ;
+           fhir:element [ fhir:v "format" ] ;
+           fhir:variable [ fhir:v "format" ]
+         ] [
+           fhir:context [ fhir:v "format" ] ;
+           fhir:contextType [ fhir:v "variable" ] ;
+           fhir:element [ fhir:v "system" ] ;
+           fhir:transform [ fhir:v "copy" ] ;
+           fhir:parameter ( [
+             fhir:value [ fhir:v "http://smart.who.int/ddcc/CodeSystem/DDCC-QR-Format-CodeSystem" ]
+           ] )
+         ] [
+           fhir:context [ fhir:v "format" ] ;
+           fhir:contextType [ fhir:v "variable" ] ;
+           fhir:element [ fhir:v "code" ] ;
+           fhir:transform [ fhir:v "copy" ] ;
+           fhir:parameter ( [
+             fhir:value [ fhir:v "pdf" ]
+           ] )
+         ] )
+       ] )
+     ] )
+  ] [
+     fhir:name [ fhir:v "DDCCToComposition" ] ;
+     fhir:typeMode [ fhir:v "none" ] ;
+     fhir:input ( [
+       fhir:name [ fhir:v "src" ] ;
+       fhir:type [ fhir:v "DDCCVS" ] ;
+       fhir:mode [ fhir:v "source" ]
+     ] [
+       fhir:name [ fhir:v "comp" ] ;
+       fhir:type [ fhir:v "DDCCComposition" ] ;
+       fhir:mode [ fhir:v "target" ]
+     ] [
+       fhir:name [ fhir:v "id" ] ;
+       fhir:mode [ fhir:v "source" ]
+     ] [
+       fhir:name [ fhir:v "pid" ] ;
+       fhir:mode [ fhir:v "source" ]
+     ] ) ;
+     fhir:rule ( [
+       fhir:name [ fhir:v "set id" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "id" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "comp" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "id" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "id" ]
+         ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "set patient" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "src" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "comp" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "subject" ] ;
+         fhir:variable [ fhir:v "patient" ]
+       ] [
+         fhir:context [ fhir:v "patient" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "reference" ] ;
+         fhir:transform [ fhir:v "append" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "Patient/" ]
+         ] [
+           fhir:value [ fhir:v "pid" ]
+         ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "set type" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "src" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "comp" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "type" ] ;
+         fhir:variable [ fhir:v "type" ]
+       ] [
+         fhir:context [ fhir:v "type" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "coding" ] ;
+         fhir:variable [ fhir:v "coding" ]
+       ] ) ;
+       fhir:rule ( [
+         fhir:name [ fhir:v "set type coding" ] ;
+         fhir:source ( [
+           fhir:context [ fhir:v "src" ]
+         ] ) ;
+         fhir:target ( [
+           fhir:context [ fhir:v "coding" ] ;
+           fhir:contextType [ fhir:v "variable" ] ;
+           fhir:element [ fhir:v "system" ] ;
+           fhir:transform [ fhir:v "copy" ] ;
+           fhir:parameter ( [
+             fhir:value [ fhir:v "http://loinc.org" ]
+           ] )
+         ] [
+           fhir:context [ fhir:v "coding" ] ;
+           fhir:contextType [ fhir:v "variable" ] ;
+           fhir:element [ fhir:v "code" ] ;
+           fhir:transform [ fhir:v "copy" ] ;
+           fhir:parameter ( [
+             fhir:value [ fhir:v "82593-5" ]
+           ] )
+         ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "set certificate" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "src" ] ;
+         fhir:element [ fhir:v "certificate" ] ;
+         fhir:variable [ fhir:v "certificate" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "comp" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "author" ] ;
+         fhir:variable [ fhir:v "author" ]
+       ] [
+         fhir:context [ fhir:v "comp" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "event" ] ;
+         fhir:variable [ fhir:v "event" ]
+       ] ) ;
+       fhir:rule ( [
+         fhir:name [ fhir:v "set event period" ] ;
+         fhir:source ( [
+           fhir:context [ fhir:v "certificate" ] ;
+           fhir:element [ fhir:v "period" ] ;
+           fhir:variable [ fhir:v "period" ]
+         ] ) ;
+         fhir:target ( [
+           fhir:context [ fhir:v "event" ] ;
+           fhir:contextType [ fhir:v "variable" ] ;
+           fhir:element [ fhir:v "period" ] ;
+           fhir:transform [ fhir:v "copy" ] ;
+           fhir:parameter ( [
+             fhir:value [ fhir:v "period" ]
+           ] )
+         ] )
+       ] [
+         fhir:name [ fhir:v "set author ref" ] ;
+         fhir:source ( [
+           fhir:context [ fhir:v "certificate" ] ;
+           fhir:element [ fhir:v "issuer" ] ;
+           fhir:variable [ fhir:v "issuer" ]
+         ] ) ;
+         fhir:target ( [
+           fhir:context [ fhir:v "author" ] ;
+           fhir:contextType [ fhir:v "variable" ] ;
+           fhir:element [ fhir:v "type" ] ;
+           fhir:transform [ fhir:v "copy" ] ;
+           fhir:parameter ( [
+             fhir:value [ fhir:v "Organization" ]
+           ] )
+         ] ) ;
+         fhir:rule ( [
+           fhir:name [ fhir:v "set author identifier" ] ;
+           fhir:source ( [
+             fhir:context [ fhir:v "issuer" ] ;
+             fhir:element [ fhir:v "identifier" ] ;
+             fhir:variable [ fhir:v "pha" ]
+           ] ) ;
+           fhir:target ( [
+             fhir:context [ fhir:v "author" ] ;
+             fhir:contextType [ fhir:v "variable" ] ;
+             fhir:element [ fhir:v "identifier" ] ;
+             fhir:variable [ fhir:v "identifier" ]
+           ] ) ;
+           fhir:rule ( [
+             fhir:name [ fhir:v "set pha" ] ;
+             fhir:source ( [
+               fhir:context [ fhir:v "pha" ] ;
+               fhir:element [ fhir:v "value" ] ;
+               fhir:variable [ fhir:v "value" ]
+             ] ) ;
+             fhir:target ( [
+               fhir:context [ fhir:v "identifier" ] ;
+               fhir:contextType [ fhir:v "variable" ] ;
+               fhir:element [ fhir:v "value" ] ;
+               fhir:transform [ fhir:v "copy" ] ;
+               fhir:parameter ( [
+                 fhir:value [ fhir:v "value" ]
+               ] )
+             ] )
+           ] )
+         ] )
+       ] )
+     ] )
+  ] ) . # 
+
+# -------------------------------------------------------------------------------------
+

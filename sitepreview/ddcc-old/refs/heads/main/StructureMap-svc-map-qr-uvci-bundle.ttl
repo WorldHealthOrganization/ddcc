@@ -1,0 +1,602 @@
+@prefix fhir: <http://hl7.org/fhir/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# - resource -------------------------------------------------------------------
+
+<http://smart.who.int/ddcc/StructureMap/svc-map-qr-uvci-bundle> a fhir:StructureMap ;
+  fhir:nodeRole fhir:treeRoot ;
+  fhir:id [ fhir:v "svc-map-qr-uvci-bundle"] ; # 
+  fhir:text [
+     fhir:status [ fhir:v "generated" ] ;
+     fhir:div "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n         <pre>map &quot;http://who-int.github.io/svc/StructureMap/svc-map-qr-uvci-bundle&quot; = &quot;svc-map-qr-uvci-bundle&quot;\n\nuses &quot;http://who-int.github.io/svc/refs/heads/qr-encoding/StructureDefinition/svc-qr-uvci&quot; alias QR as source\nuses &quot;http://who-int.github.io/svc/StructureDefinition/svc-bundle&quot; alias SVC_Bundle as target\nuses &quot;http://who-int.github.io/svc/StructureDefinition/svc-composition&quot; alias SVC_Composition as produced\nuses &quot;http://who-int.github.io/svc/StructureDefinition/svc-patient&quot; alias SVC_Patient as produced\nuses &quot;http://who-int.github.io/svc/StructureDefinition/svc-organization&quot; alias SVC_Organization as produced\nuses &quot;http://who-int.github.io/svc/StructureDefinition/svc-provenance&quot; alias SVC_Provenance as produced\n\ngroup Decode_QR(source qr : QR, target bundle) {\n  qr -&gt;  create('SVC_Patient') as patient,  create('SVC_Organization') as organization then Decode_QR_Patient(qr, patient), Decode_QR_Organization(qr, organization), Decode_QR_Bundle(qr, patient, organzation, bundle) &quot;Create resources and process bundle&quot;;\n}\n\ngroup Decode_QR_Patient(source qr : QR, target patient : SVC_Patient) {\n  qr.name as qrname, patient.name as pname -&gt;  pname.text = qrname,  pname.use = 'official' &quot;Load Name&quot;;\n  qr.pid as pid -&gt; patient.identifier = id('XXXXXurn:uetf:rfc:3986', pid) &quot;Load Patient Identifer&quot;;\n  qr.birthDate as birthDate -&gt; patient.birthDate = birthDate &quot;Load Birth Date&quot;;\n}\n\ngroup Decode_QR_Organization(source qr : QR, target organization : SVC_Organization) {\n  qr.phaid as phaid -&gt; organization.identifier = id('XXXXXurn:ietf:rfc:3986', phaid) &quot;Load PHA ID&quot;;\n}\n\ngroup Decode_QR_Bundle(source qr : QR, target patient : SVC_Patient, target bundle : SVC_Bundle) {\n  qr -&gt;  bundle.status = 'final',  bundle.type = 'document' &quot;Set Bundle Metadata&quot;;\n  qr.paperid as paperid -&gt; bundle.identifier = id('XXXXXurn:ietf:rfc:3986', paperid) &quot;Load Paper SVC ID&quot;;\n  qr.signature as qrsig, bundle.signature as bsig -&gt;  bsig.data = qrsig,  bsig.type = '1.2.840.10065.1.12.1.14',  bsig.format = 'XXXXXXX TBD',  bsig.who = reference(organization) &quot;Load Signature&quot;;\n  qr -&gt;  bundle.entry as e,  e.resource = create('SVC_Composition') as compostion then Decode_QR_Composition(qr, bundle, composition) &quot;Process Composition Entry&quot;;\n}\n\ngroup Decode_QR_Composition(source qr : QR, source ,, target bundle : SVC_Bundle, target patient : SVC_Patient, target organization : SVC_Organization, target composition : SVC_Composition) {\n  qr -&gt;  composition.subject = reference(patient),  composition.author = reference(organization) &quot;Set Composition Meta&quot;;\n  qr.digitalid as digitalid -&gt; composition.identifier = id('XXXXXurn:ietf:rfc:3986', digitalid) &quot;Load Digital SVC ID&quot;;\n}\n\ngroup Decode_QR_Provenance(source qr : QR, target bundle : SVC_Bundle, target patient : SVC_Patient, target organization : SVC_Organization, target paper : SVC_Composition, target digital : SVC_Composition, target provenance : SVC_Provenance) {\n  qr, provenance.entity as e_digital, provenance.agent as agent, provenance.signature as psig -&gt;  provenance.reason = 'PUBHLTH',  provenance.policy = 'XXXXXXX urn:example:who:smart:vaccine-certificate:RC1',  provenance.target = reference(bundle),  e_digital.role = 'source',  e_digital.what = reference(composition),  e_digital.agent = reference(organization),  e_paper.role = 'source',  e_paper.what = reference(bundle),  e_paper.agent = reference(organization),  psig.format = 'XXXXX TBD',  psig.who = reference(organization),  psg.type = '1.2.840.10065.1.12.1.14',  psig.data = signature then {\n    agent.who as who -&gt;  who.reference = reference(organization),  who.onBehalfOf = reference(patient) as &quot;Set who&quot;;\n  } &quot;Set provenance&quot;;\n}\n\n</pre>\n      </div>"
+  ] ; # 
+  fhir:url [ fhir:v "http://who-int.github.io/svc/StructureMap/svc-map-qr-uvci-bundle"^^xsd:anyURI] ; # 
+  fhir:version [ fhir:v "1.0.0"] ; # 
+  fhir:name [ fhir:v "svc-map-qr-uvci-bundle"] ; # 
+  fhir:status [ fhir:v "draft"] ; # 
+  fhir:date [ fhir:v "2023-11-06T04:25:12+00:00"^^xsd:dateTime] ; # 
+  fhir:publisher [ fhir:v "WHO"] ; # 
+  fhir:contact ( [
+     fhir:name [ fhir:v "WHO" ] ;
+     fhir:telecom ( [
+       fhir:system [ fhir:v "url" ] ;
+       fhir:value [ fhir:v "http://who.int" ]
+     ] )
+  ] ) ; # 
+  fhir:jurisdiction ( [
+     fhir:coding ( [
+       fhir:system [ fhir:v "http://unstats.un.org/unsd/methods/m49/m49.htm"^^xsd:anyURI ] ;
+       fhir:code [ fhir:v "001" ]
+     ] )
+  ] ) ; # 
+  fhir:structure ( [
+     fhir:url [
+       fhir:v "http://who-int.github.io/svc/refs/heads/qr-encoding/StructureDefinition/svc-qr-uvci"^^xsd:anyURI ;
+       fhir:link <http://who-int.github.io/svc/refs/heads/qr-encoding/StructureDefinition/svc-qr-uvci>
+     ] ;
+     fhir:mode [ fhir:v "source" ] ;
+     fhir:alias [ fhir:v "QR" ]
+  ] [
+     fhir:url [
+       fhir:v "http://who-int.github.io/svc/StructureDefinition/svc-bundle"^^xsd:anyURI ;
+       fhir:link <http://who-int.github.io/svc/StructureDefinition/svc-bundle>
+     ] ;
+     fhir:mode [ fhir:v "target" ] ;
+     fhir:alias [ fhir:v "SVC_Bundle" ]
+  ] [
+     fhir:url [
+       fhir:v "http://who-int.github.io/svc/StructureDefinition/svc-composition"^^xsd:anyURI ;
+       fhir:link <http://who-int.github.io/svc/StructureDefinition/svc-composition>
+     ] ;
+     fhir:mode [ fhir:v "produced" ] ;
+     fhir:alias [ fhir:v "SVC_Composition" ]
+  ] [
+     fhir:url [
+       fhir:v "http://who-int.github.io/svc/StructureDefinition/svc-patient"^^xsd:anyURI ;
+       fhir:link <http://who-int.github.io/svc/StructureDefinition/svc-patient>
+     ] ;
+     fhir:mode [ fhir:v "produced" ] ;
+     fhir:alias [ fhir:v "SVC_Patient" ]
+  ] [
+     fhir:url [
+       fhir:v "http://who-int.github.io/svc/StructureDefinition/svc-organization"^^xsd:anyURI ;
+       fhir:link <http://who-int.github.io/svc/StructureDefinition/svc-organization>
+     ] ;
+     fhir:mode [ fhir:v "produced" ] ;
+     fhir:alias [ fhir:v "SVC_Organization" ]
+  ] [
+     fhir:url [
+       fhir:v "http://who-int.github.io/svc/StructureDefinition/svc-provenance"^^xsd:anyURI ;
+       fhir:link <http://who-int.github.io/svc/StructureDefinition/svc-provenance>
+     ] ;
+     fhir:mode [ fhir:v "produced" ] ;
+     fhir:alias [ fhir:v "SVC_Provenance" ]
+  ] ) ; # 
+  fhir:group ( [
+     fhir:name [ fhir:v "Decode_QR" ] ;
+     fhir:typeMode [ fhir:v "none" ] ;
+     fhir:input ( [
+       fhir:name [ fhir:v "qr" ] ;
+       fhir:type [ fhir:v "QR" ] ;
+       fhir:mode [ fhir:v "source" ]
+     ] [
+       fhir:name [ fhir:v "bundle" ] ;
+       fhir:mode [ fhir:v "target" ]
+     ] ) ;
+     fhir:rule ( [
+       fhir:name [ fhir:v "Create resources and process bundle" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "qr" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:variable [ fhir:v "patient" ] ;
+         fhir:transform [ fhir:v "create" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "SVC_Patient" ]
+         ] )
+       ] [
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:variable [ fhir:v "organization" ] ;
+         fhir:transform [ fhir:v "create" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "SVC_Organization" ]
+         ] )
+       ] ) ;
+       fhir:dependent ( [
+         fhir:name [ fhir:v "Decode_QR_Patient" ] ;
+         fhir:variable ( [ fhir:v "qr" ] [ fhir:v "patient" ] )
+       ] [
+         fhir:name [ fhir:v "Decode_QR_Organization" ] ;
+         fhir:variable ( [ fhir:v "qr" ] [ fhir:v "organization" ] )
+       ] [
+         fhir:name [ fhir:v "Decode_QR_Bundle" ] ;
+         fhir:variable ( [ fhir:v "qr" ] [ fhir:v "patient" ] [ fhir:v "organzation" ] [ fhir:v "bundle" ] )
+       ] )
+     ] )
+  ] [
+     fhir:name [ fhir:v "Decode_QR_Patient" ] ;
+     fhir:typeMode [ fhir:v "none" ] ;
+     fhir:input ( [
+       fhir:name [ fhir:v "qr" ] ;
+       fhir:type [ fhir:v "QR" ] ;
+       fhir:mode [ fhir:v "source" ]
+     ] [
+       fhir:name [ fhir:v "patient" ] ;
+       fhir:type [ fhir:v "SVC_Patient" ] ;
+       fhir:mode [ fhir:v "target" ]
+     ] ) ;
+     fhir:rule ( [
+       fhir:name [ fhir:v "Load Name" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "qr" ] ;
+         fhir:element [ fhir:v "name" ] ;
+         fhir:variable [ fhir:v "qrname" ]
+       ] [
+         fhir:context [ fhir:v "patient" ] ;
+         fhir:element [ fhir:v "name" ] ;
+         fhir:variable [ fhir:v "pname" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "pname" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "text" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "qrname" ]
+         ] )
+       ] [
+         fhir:context [ fhir:v "pname" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "use" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "official" ]
+         ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "Load Patient Identifer" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "qr" ] ;
+         fhir:element [ fhir:v "pid" ] ;
+         fhir:variable [ fhir:v "pid" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "patient" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "identifier" ] ;
+         fhir:transform [ fhir:v "id" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "XXXXXurn:uetf:rfc:3986" ]
+         ] [
+           fhir:value [ fhir:v "pid" ]
+         ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "Load Birth Date" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "qr" ] ;
+         fhir:element [ fhir:v "birthDate" ] ;
+         fhir:variable [ fhir:v "birthDate" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "patient" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "birthDate" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "birthDate" ]
+         ] )
+       ] )
+     ] )
+  ] [
+     fhir:name [ fhir:v "Decode_QR_Organization" ] ;
+     fhir:typeMode [ fhir:v "none" ] ;
+     fhir:input ( [
+       fhir:name [ fhir:v "qr" ] ;
+       fhir:type [ fhir:v "QR" ] ;
+       fhir:mode [ fhir:v "source" ]
+     ] [
+       fhir:name [ fhir:v "organization" ] ;
+       fhir:type [ fhir:v "SVC_Organization" ] ;
+       fhir:mode [ fhir:v "target" ]
+     ] ) ;
+     fhir:rule ( [
+       fhir:name [ fhir:v "Load PHA ID" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "qr" ] ;
+         fhir:element [ fhir:v "phaid" ] ;
+         fhir:variable [ fhir:v "phaid" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "organization" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "identifier" ] ;
+         fhir:transform [ fhir:v "id" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "XXXXXurn:ietf:rfc:3986" ]
+         ] [
+           fhir:value [ fhir:v "phaid" ]
+         ] )
+       ] )
+     ] )
+  ] [
+     fhir:name [ fhir:v "Decode_QR_Bundle" ] ;
+     fhir:typeMode [ fhir:v "none" ] ;
+     fhir:input ( [
+       fhir:name [ fhir:v "qr" ] ;
+       fhir:type [ fhir:v "QR" ] ;
+       fhir:mode [ fhir:v "source" ]
+     ] [
+       fhir:name [ fhir:v "patient" ] ;
+       fhir:type [ fhir:v "SVC_Patient" ] ;
+       fhir:mode [ fhir:v "target" ]
+     ] [
+       fhir:name [ fhir:v "bundle" ] ;
+       fhir:type [ fhir:v "SVC_Bundle" ] ;
+       fhir:mode [ fhir:v "target" ]
+     ] ) ;
+     fhir:rule ( [
+       fhir:name [ fhir:v "Set Bundle Metadata" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "qr" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "bundle" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "status" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "final" ]
+         ] )
+       ] [
+         fhir:context [ fhir:v "bundle" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "type" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "document" ]
+         ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "Load Paper SVC ID" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "qr" ] ;
+         fhir:element [ fhir:v "paperid" ] ;
+         fhir:variable [ fhir:v "paperid" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "bundle" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "identifier" ] ;
+         fhir:transform [ fhir:v "id" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "XXXXXurn:ietf:rfc:3986" ]
+         ] [
+           fhir:value [ fhir:v "paperid" ]
+         ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "Load Signature" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "qr" ] ;
+         fhir:element [ fhir:v "signature" ] ;
+         fhir:variable [ fhir:v "qrsig" ]
+       ] [
+         fhir:context [ fhir:v "bundle" ] ;
+         fhir:element [ fhir:v "signature" ] ;
+         fhir:variable [ fhir:v "bsig" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "bsig" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "data" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "qrsig" ]
+         ] )
+       ] [
+         fhir:context [ fhir:v "bsig" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "type" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "1.2.840.10065.1.12.1.14" ]
+         ] )
+       ] [
+         fhir:context [ fhir:v "bsig" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "format" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "XXXXXXX TBD" ]
+         ] )
+       ] [
+         fhir:context [ fhir:v "bsig" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "who" ] ;
+         fhir:transform [ fhir:v "reference" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "organization" ]
+         ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "Process Composition Entry" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "qr" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "bundle" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "entry" ] ;
+         fhir:variable [ fhir:v "e" ]
+       ] [
+         fhir:context [ fhir:v "e" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "resource" ] ;
+         fhir:variable [ fhir:v "compostion" ] ;
+         fhir:transform [ fhir:v "create" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "SVC_Composition" ]
+         ] )
+       ] ) ;
+       fhir:dependent ( [
+         fhir:name [ fhir:v "Decode_QR_Composition" ] ;
+         fhir:variable ( [ fhir:v "qr" ] [ fhir:v "bundle" ] [ fhir:v "composition" ] )
+       ] )
+     ] )
+  ] [
+     fhir:name [ fhir:v "Decode_QR_Composition" ] ;
+     fhir:typeMode [ fhir:v "none" ] ;
+     fhir:input ( [
+       fhir:name [ fhir:v "qr" ] ;
+       fhir:type [ fhir:v "QR" ] ;
+       fhir:mode [ fhir:v "source" ]
+     ] [
+       fhir:name [ fhir:v "," ] ;
+       fhir:mode [ fhir:v "source" ]
+     ] [
+       fhir:name [ fhir:v "bundle" ] ;
+       fhir:type [ fhir:v "SVC_Bundle" ] ;
+       fhir:mode [ fhir:v "target" ]
+     ] [
+       fhir:name [ fhir:v "patient" ] ;
+       fhir:type [ fhir:v "SVC_Patient" ] ;
+       fhir:mode [ fhir:v "target" ]
+     ] [
+       fhir:name [ fhir:v "organization" ] ;
+       fhir:type [ fhir:v "SVC_Organization" ] ;
+       fhir:mode [ fhir:v "target" ]
+     ] [
+       fhir:name [ fhir:v "composition" ] ;
+       fhir:type [ fhir:v "SVC_Composition" ] ;
+       fhir:mode [ fhir:v "target" ]
+     ] ) ;
+     fhir:rule ( [
+       fhir:name [ fhir:v "Set Composition Meta" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "qr" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "composition" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "subject" ] ;
+         fhir:transform [ fhir:v "reference" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "patient" ]
+         ] )
+       ] [
+         fhir:context [ fhir:v "composition" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "author" ] ;
+         fhir:transform [ fhir:v "reference" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "organization" ]
+         ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "Load Digital SVC ID" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "qr" ] ;
+         fhir:element [ fhir:v "digitalid" ] ;
+         fhir:variable [ fhir:v "digitalid" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "composition" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "identifier" ] ;
+         fhir:transform [ fhir:v "id" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "XXXXXurn:ietf:rfc:3986" ]
+         ] [
+           fhir:value [ fhir:v "digitalid" ]
+         ] )
+       ] )
+     ] )
+  ] [
+     fhir:name [ fhir:v "Decode_QR_Provenance" ] ;
+     fhir:typeMode [ fhir:v "none" ] ;
+     fhir:input ( [
+       fhir:name [ fhir:v "qr" ] ;
+       fhir:type [ fhir:v "QR" ] ;
+       fhir:mode [ fhir:v "source" ]
+     ] [
+       fhir:name [ fhir:v "bundle" ] ;
+       fhir:type [ fhir:v "SVC_Bundle" ] ;
+       fhir:mode [ fhir:v "target" ]
+     ] [
+       fhir:name [ fhir:v "patient" ] ;
+       fhir:type [ fhir:v "SVC_Patient" ] ;
+       fhir:mode [ fhir:v "target" ]
+     ] [
+       fhir:name [ fhir:v "organization" ] ;
+       fhir:type [ fhir:v "SVC_Organization" ] ;
+       fhir:mode [ fhir:v "target" ]
+     ] [
+       fhir:name [ fhir:v "paper" ] ;
+       fhir:type [ fhir:v "SVC_Composition" ] ;
+       fhir:mode [ fhir:v "target" ]
+     ] [
+       fhir:name [ fhir:v "digital" ] ;
+       fhir:type [ fhir:v "SVC_Composition" ] ;
+       fhir:mode [ fhir:v "target" ]
+     ] [
+       fhir:name [ fhir:v "provenance" ] ;
+       fhir:type [ fhir:v "SVC_Provenance" ] ;
+       fhir:mode [ fhir:v "target" ]
+     ] ) ;
+     fhir:rule ( [
+       fhir:name [ fhir:v "Set provenance" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "qr" ]
+       ] [
+         fhir:context [ fhir:v "provenance" ] ;
+         fhir:element [ fhir:v "entity" ] ;
+         fhir:variable [ fhir:v "e_digital" ]
+       ] [
+         fhir:context [ fhir:v "provenance" ] ;
+         fhir:element [ fhir:v "agent" ] ;
+         fhir:variable [ fhir:v "agent" ]
+       ] [
+         fhir:context [ fhir:v "provenance" ] ;
+         fhir:element [ fhir:v "signature" ] ;
+         fhir:variable [ fhir:v "psig" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "provenance" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "reason" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "PUBHLTH" ]
+         ] )
+       ] [
+         fhir:context [ fhir:v "provenance" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "policy" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "XXXXXXX urn:example:who:smart:vaccine-certificate:RC1" ]
+         ] )
+       ] [
+         fhir:context [ fhir:v "provenance" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "target" ] ;
+         fhir:transform [ fhir:v "reference" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "bundle" ]
+         ] )
+       ] [
+         fhir:context [ fhir:v "e_digital" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "role" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "source" ]
+         ] )
+       ] [
+         fhir:context [ fhir:v "e_digital" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "what" ] ;
+         fhir:transform [ fhir:v "reference" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "composition" ]
+         ] )
+       ] [
+         fhir:context [ fhir:v "e_digital" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "agent" ] ;
+         fhir:transform [ fhir:v "reference" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "organization" ]
+         ] )
+       ] [
+         fhir:context [ fhir:v "e_paper" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "role" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "source" ]
+         ] )
+       ] [
+         fhir:context [ fhir:v "e_paper" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "what" ] ;
+         fhir:transform [ fhir:v "reference" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "bundle" ]
+         ] )
+       ] [
+         fhir:context [ fhir:v "e_paper" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "agent" ] ;
+         fhir:transform [ fhir:v "reference" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "organization" ]
+         ] )
+       ] [
+         fhir:context [ fhir:v "psig" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "format" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "XXXXX TBD" ]
+         ] )
+       ] [
+         fhir:context [ fhir:v "psig" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "who" ] ;
+         fhir:transform [ fhir:v "reference" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "organization" ]
+         ] )
+       ] [
+         fhir:context [ fhir:v "psg" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "type" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "1.2.840.10065.1.12.1.14" ]
+         ] )
+       ] [
+         fhir:context [ fhir:v "psig" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "data" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "signature" ]
+         ] )
+       ] ) ;
+       fhir:rule ( [
+         fhir:name [ fhir:v "who" ] ;
+         fhir:source ( [
+           fhir:context [ fhir:v "agent" ] ;
+           fhir:element [ fhir:v "who" ] ;
+           fhir:variable [ fhir:v "who" ]
+         ] ) ;
+         fhir:target ( [
+           fhir:context [ fhir:v "who" ] ;
+           fhir:contextType [ fhir:v "variable" ] ;
+           fhir:element [ fhir:v "reference" ] ;
+           fhir:transform [ fhir:v "reference" ] ;
+           fhir:parameter ( [
+             fhir:value [ fhir:v "organization" ]
+           ] )
+         ] [
+           fhir:context [ fhir:v "who" ] ;
+           fhir:contextType [ fhir:v "variable" ] ;
+           fhir:element [ fhir:v "onBehalfOf" ] ;
+           fhir:variable [ fhir:v "\"Set who\"" ] ;
+           fhir:transform [ fhir:v "reference" ] ;
+           fhir:parameter ( [
+             fhir:value [ fhir:v "patient" ]
+           ] )
+         ] )
+       ] )
+     ] )
+  ] ) . # 
+
+# -------------------------------------------------------------------------------------
+

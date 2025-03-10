@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<StructureMap xmlns="http://hl7.org/fhir">
+  <id value="CoreDataSetVSToAddBundle"/>
+  <meta>
+    <versionId value="2"/>
+    <lastUpdated value="2022-06-01T12:54:53.172+00:00"/>
+  </meta>
+  <text>
+    <status value="generated"/><div xmlns="http://www.w3.org/1999/xhtml"><pre>map &quot;http://smart.who.int/ddcc/StructureMap/CoreDataSetVSToAddBundle&quot; = &quot;CoreDataSetVSToAddBundle&quot;
+
+
+uses &quot;http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.VS&quot; alias DDCCVS as source
+uses &quot;http://hl7.org/fhir/StructureDefinition/Bundle&quot; alias AddBundle as target
+
+imports &quot;http://smart.who.int/ddcc/StructureMap/CoreDataSetVSLibrary&quot;
+
+group CoreDataSetVSToAddBundle(source ddcc : DDCCVS, target bundle : AddBundle) {
+  ddcc -&gt; bundle then VSToAddBundle(ddcc, bundle) &quot;setup add bundle&quot;;
+}
+
+</pre></div>
+  </text>
+  <url value="http://smart.who.int/ddcc/StructureMap/CoreDataSetVSToAddBundle"/>
+  <version value="1.0.0"/>
+  <name value="CoreDataSetVSToAddBundle"/>
+  <status value="draft"/>
+  <date value="2023-11-06T04:25:12+00:00"/>
+  <publisher value="WHO"/>
+  <contact>
+    <name value="WHO"/>
+    <telecom>
+      <system value="url"/>
+      <value value="http://who.int"/>
+    </telecom>
+  </contact>
+  <jurisdiction>
+    <coding>
+      <system value="http://unstats.un.org/unsd/methods/m49/m49.htm"/>
+      <code value="001"/>
+    </coding>
+  </jurisdiction>
+  <structure>
+    <url value="http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.VS"/>
+    <mode value="source"/>
+    <alias value="DDCCVS"/>
+  </structure>
+  <structure>
+    <url value="http://hl7.org/fhir/StructureDefinition/Bundle"/>
+    <mode value="target"/>
+    <alias value="AddBundle"/>
+  </structure>
+  <import value="http://smart.who.int/ddcc/StructureMap/CoreDataSetVSLibrary"/>
+  <group>
+    <name value="CoreDataSetVSToAddBundle"/>
+    <typeMode value="none"/>
+    <input>
+      <name value="ddcc"/>
+      <type value="DDCCVS"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="bundle"/>
+      <type value="AddBundle"/>
+      <mode value="target"/>
+    </input>
+    <rule>
+      <name value="setup add bundle"/>
+      <source>
+        <context value="ddcc"/>
+      </source>
+      <target>
+        <contextType value="variable"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="bundle"/>
+        </parameter>
+      </target>
+      <dependent>
+        <name value="VSToAddBundle"/>
+        <variable value="ddcc"/>
+        <variable value="bundle"/>
+      </dependent>
+    </rule>
+  </group>
+</StructureMap>

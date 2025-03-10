@@ -1,0 +1,601 @@
+{
+  "resourceType" : "StructureMap",
+  "id" : "CoreDataSetLibrary",
+  "text" : {
+    "status" : "generated",
+    "div" : "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p class=\"res-header-id\"><b>Generated Narrative: StructureMap CoreDataSetLibrary</b></p><a name=\"CoreDataSetLibrary\"> </a><a name=\"hcCoreDataSetLibrary\"> </a><a name=\"CoreDataSetLibrary-en-US\"> </a><pre class=\"fml\">\r\n<b>map</b><span style=\"color: navy\"> &quot;</span>http://smart.who.int/ddcc/StructureMap/CoreDataSetLibrary<span style=\"color: navy\">&quot; = &quot;</span>CoreDataSetLibrary<span style=\"color: navy\">&quot;\r\n\r\n</span><b>uses</b><span style=\"color: navy\"> &quot;</span><a href=\"StructureDefinition-DDCCCoreDataSetVS.html\" title=\"DDCC Core Data Set Logical Model for Vaccination Status\">http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSetVS</a><span style=\"color: navy\">&quot; </span><b>alias </b>DDCCVS <b>as </b><b>source</b>\r\n<b>uses</b><span style=\"color: navy\"> &quot;</span><a href=\"http://hl7.org/fhir/R4/patient.html\" title=\"Patient\">http://hl7.org/fhir/StructureDefinition/Patient</a><span style=\"color: navy\">&quot; </span><b>alias </b>Patient <b>as </b><b>target</b>\r\n<b>uses</b><span style=\"color: navy\"> &quot;</span><a href=\"StructureDefinition-DDCCPatient.html\" title=\"DDCC Patient\">http://smart.who.int/ddcc/StructureDefinition/DDCCPatient</a><span style=\"color: navy\">&quot; </span><b>alias </b>DDCCPatient <b>as </b><b>target</b>\r\n<b>uses</b><span style=\"color: navy\"> &quot;</span><a href=\"StructureDefinition-DDCCDocumentReferenceQR.html\" title=\"DDCC DocumentReference return for QR\">http://smart.who.int/ddcc/StructureDefinition/DDCCDocumentReferenceQR</a><span style=\"color: navy\">&quot; </span><b>alias </b>DDCCDocRefQR <b>as </b><b>target</b>\r\n<b>uses</b><span style=\"color: navy\"> &quot;</span><a href=\"StructureDefinition-DDCCComposition.html\" title=\"DDCC Composition\">http://smart.who.int/ddcc/StructureDefinition/DDCCComposition</a><span style=\"color: navy\">&quot; </span><b>alias </b>DDCCComposition <b>as </b><b>target</b>\r\n\r\n<b>group </b>DDCCToPatient<span style=\"color: navy\">(</span><b>source</b> <span style=\"color: maroon\">src</span><span style=\"color: navy\"> : </span>DDCCVS, <b>target</b> <span style=\"color: maroon\">patient</span><span style=\"color: navy\"> : </span>DDCCPatient, <b>source</b> <span style=\"color: maroon\">pid</span><span style=\"color: navy\">)</span><span style=\"color: navy\"> {\r\n</span>  pid<span style=\"color: navy\"><b> -&gt; </b></span>patient.id = <span style=\"color: maroon\">pid</span> <i>&quot;set id&quot;</i><span style=\"color: navy\">;</span>\r\n  src.name<b> as </b><span style=\"color: maroon\">name</span><span style=\"color: navy\"><b> -&gt; </b></span>patient.name<b> as </b><span style=\"color: maroon\">tName</span><b> then</b><span style=\"color: navy\"> {\r\n</span>    name<span style=\"color: navy\"><b> -&gt; </b></span>tName.text = <span style=\"color: maroon\">name</span> <i>&quot;set name&quot;</i><span style=\"color: navy\">;</span>\r\n  <span style=\"color: navy\">}</span> <i>&quot;set full name&quot;</i><span style=\"color: navy\">;</span>\r\n  src.birthDate<b> as </b><span style=\"color: maroon\">birthDate</span><span style=\"color: navy\"><b> -&gt; </b></span>patient.birthDate = <span style=\"color: maroon\">birthDate</span> <i>&quot;set birthDate&quot;</i><span style=\"color: navy\">;</span>\r\n  src.identifier<b> as </b><span style=\"color: maroon\">identifier</span><span style=\"color: navy\"><b> -&gt; </b></span>patient.identifier = <span style=\"color: maroon\">identifier</span> <i>&quot;set identifier&quot;</i><span style=\"color: navy\">;</span>\r\n<span style=\"color: navy\">}\r\n\r\n</span><b>group </b>DDCCToDocumentReference<span style=\"color: navy\">(</span><b>source</b> <span style=\"color: maroon\">src</span><span style=\"color: navy\"> : </span>DDCCVS, <b>target</b> <span style=\"color: maroon\">ref</span><span style=\"color: navy\"> : </span>DDCCDocRefQR, <b>source</b> <span style=\"color: maroon\">id</span>, <b>source</b> <span style=\"color: maroon\">pid</span><span style=\"color: navy\">)</span><span style=\"color: navy\"> {\r\n</span>  id<span style=\"color: navy\"><b> -&gt; </b></span>ref.id = <span style=\"color: maroon\">id</span> <i>&quot;set id&quot;</i><span style=\"color: navy\">;</span>\r\n  src<span style=\"color: navy\"><b> -&gt; </b></span>ref.status = <span style=\"color: blue\">'current'</span> <i>&quot;set status&quot;</i><span style=\"color: navy\">;</span>\r\n  src<span style=\"color: navy\"><b> -&gt; </b></span> ref.subject<b> as </b><span style=\"color: maroon\">patient</span><span style=\"color: navy\">, </span> patient.reference = <b>append</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'Patient/'</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">pid</span><span style=\"color: navy\">)</span> <i>&quot;set patient&quot;</i><span style=\"color: navy\">;</span>\r\n  src<span style=\"color: navy\"><b> -&gt; </b></span>ref.content<b> as </b><span style=\"color: maroon\">content</span><b> then</b><span style=\"color: navy\"> {\r\n</span>    src<span style=\"color: navy\"><b> -&gt; </b></span> content.attachment<b> as </b><span style=\"color: maroon\">attachment</span><span style=\"color: navy\">, </span> attachment.contentType = <span style=\"color: blue\">'application/json'</span> <i>&quot;set contentType&quot;</i><span style=\"color: navy\">;</span>\r\n    src<span style=\"color: navy\"><b> -&gt; </b></span> content.format<b> as </b><span style=\"color: maroon\">format</span><span style=\"color: navy\">, </span> format.system = <span style=\"color: blue\">'http://smart.who.int/ddcc/CodeSystem/DDCCQRFormatCodeSystem'</span><span style=\"color: navy\">, </span> format.code = <span style=\"color: blue\">'serialized'</span> <i>&quot;set format code&quot;</i><span style=\"color: navy\">;</span>\r\n  <span style=\"color: navy\">}</span> <i>&quot;set serialized content&quot;</i><span style=\"color: navy\">;</span>\r\n  src<span style=\"color: navy\"><b> -&gt; </b></span>ref.content<b> as </b><span style=\"color: maroon\">content</span><b> then</b><span style=\"color: navy\"> {\r\n</span>    src<span style=\"color: navy\"><b> -&gt; </b></span> content.attachment<b> as </b><span style=\"color: maroon\">attachment</span><span style=\"color: navy\">, </span> attachment.contentType = <span style=\"color: blue\">'image/png'</span> <i>&quot;set contentType&quot;</i><span style=\"color: navy\">;</span>\r\n    src<span style=\"color: navy\"><b> -&gt; </b></span> content.format<b> as </b><span style=\"color: maroon\">format</span><span style=\"color: navy\">, </span> format.system = <span style=\"color: blue\">'http://smart.who.int/ddcc/CodeSystem/DDCCQRFormatCodeSystem'</span><span style=\"color: navy\">, </span> format.code = <span style=\"color: blue\">'image'</span> <i>&quot;set format code&quot;</i><span style=\"color: navy\">;</span>\r\n  <span style=\"color: navy\">}</span> <i>&quot;set image content&quot;</i><span style=\"color: navy\">;</span>\r\n  src<span style=\"color: navy\"><b> -&gt; </b></span>ref.content<b> as </b><span style=\"color: maroon\">content</span><b> then</b><span style=\"color: navy\"> {\r\n</span>    src<span style=\"color: navy\"><b> -&gt; </b></span> content.attachment<b> as </b><span style=\"color: maroon\">attachment</span><span style=\"color: navy\">, </span> attachment.contentType = <span style=\"color: blue\">'application/pdf'</span> <i>&quot;set contentType&quot;</i><span style=\"color: navy\">;</span>\r\n    src<span style=\"color: navy\"><b> -&gt; </b></span> content.format<b> as </b><span style=\"color: maroon\">format</span><span style=\"color: navy\">, </span> format.system = <span style=\"color: blue\">'http://smart.who.int/ddcc/CodeSystem/DDCCQRFormatCodeSystem'</span><span style=\"color: navy\">, </span> format.code = <span style=\"color: blue\">'pdf'</span> <i>&quot;set format code&quot;</i><span style=\"color: navy\">;</span>\r\n  <span style=\"color: navy\">}</span> <i>&quot;set pdf content&quot;</i><span style=\"color: navy\">;</span>\r\n<span style=\"color: navy\">}\r\n\r\n</span><b>group </b>DDCCToComposition<span style=\"color: navy\">(</span><b>source</b> <span style=\"color: maroon\">src</span><span style=\"color: navy\"> : </span>DDCCVS, <b>target</b> <span style=\"color: maroon\">comp</span><span style=\"color: navy\"> : </span>DDCCComposition, <b>source</b> <span style=\"color: maroon\">id</span>, <b>source</b> <span style=\"color: maroon\">pid</span><span style=\"color: navy\">)</span><span style=\"color: navy\"> {\r\n</span>  id<span style=\"color: navy\"><b> -&gt; </b></span>comp.id = <span style=\"color: maroon\">id</span> <i>&quot;set id&quot;</i><span style=\"color: navy\">;</span>\r\n  src<span style=\"color: navy\"><b> -&gt; </b></span> comp.subject<b> as </b><span style=\"color: maroon\">patient</span><span style=\"color: navy\">, </span> patient.reference = <b>append</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'Patient/'</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">pid</span><span style=\"color: navy\">)</span> <i>&quot;set patient&quot;</i><span style=\"color: navy\">;</span>\r\n  src<span style=\"color: navy\"><b> -&gt; </b></span> comp.type<b> as </b><span style=\"color: maroon\">type</span><span style=\"color: navy\">, </span> type.coding<b> as </b><span style=\"color: maroon\">coding</span><b> then</b><span style=\"color: navy\"> {\r\n</span>    src<span style=\"color: navy\"><b> -&gt; </b></span> coding.system = <span style=\"color: blue\">'http://loinc.org'</span><span style=\"color: navy\">, </span> coding.code = <span style=\"color: blue\">'82593-5'</span> <i>&quot;set type coding&quot;</i><span style=\"color: navy\">;</span>\r\n  <span style=\"color: navy\">}</span> <i>&quot;set type&quot;</i><span style=\"color: navy\">;</span>\r\n  src.certificate<b> as </b><span style=\"color: maroon\">certificate</span><span style=\"color: navy\"><b> -&gt; </b></span> comp.author<b> as </b><span style=\"color: maroon\">author</span><span style=\"color: navy\">, </span> comp.event<b> as </b><span style=\"color: maroon\">event</span><b> then</b><span style=\"color: navy\"> {\r\n</span>    certificate.period<b> as </b><span style=\"color: maroon\">period</span><span style=\"color: navy\"><b> -&gt; </b></span>event.period = <span style=\"color: maroon\">period</span> <i>&quot;set event period&quot;</i><span style=\"color: navy\">;</span>\r\n    certificate.issuer<b> as </b><span style=\"color: maroon\">issuer</span><span style=\"color: navy\"><b> -&gt; </b></span>author.type = <span style=\"color: blue\">'Organization'</span><b> then</b><span style=\"color: navy\"> {\r\n</span>      issuer.identifier<b> as </b><span style=\"color: maroon\">pha</span><span style=\"color: navy\"><b> -&gt; </b></span>author.identifier<b> as </b><span style=\"color: maroon\">identifier</span><b> then</b><span style=\"color: navy\"> {\r\n</span>        pha.value<b> as </b><span style=\"color: maroon\">value</span><span style=\"color: navy\"><b> -&gt; </b></span>identifier.value = <span style=\"color: maroon\">value</span> <i>&quot;set pha&quot;</i><span style=\"color: navy\">;</span>\r\n      <span style=\"color: navy\">}</span> <i>&quot;set author identifier&quot;</i><span style=\"color: navy\">;</span>\r\n    <span style=\"color: navy\">}</span> <i>&quot;set author ref&quot;</i><span style=\"color: navy\">;</span>\r\n  <span style=\"color: navy\">}</span> <i>&quot;set certificate&quot;</i><span style=\"color: navy\">;</span>\r\n<span style=\"color: navy\">}\r\n\r\n</span></pre></div>"
+  },
+  "url" : "http://smart.who.int/ddcc/StructureMap/CoreDataSetLibrary",
+  "version" : "1.0.0",
+  "name" : "CoreDataSetLibrary",
+  "status" : "draft",
+  "date" : "2024-10-15T13:40:08+00:00",
+  "publisher" : "WHO",
+  "contact" : [{
+    "name" : "WHO",
+    "telecom" : [{
+      "system" : "url",
+      "value" : "http://who.int"
+    }]
+  }],
+  "jurisdiction" : [{
+    "coding" : [{
+      "system" : "http://unstats.un.org/unsd/methods/m49/m49.htm",
+      "code" : "001"
+    }]
+  }],
+  "structure" : [{
+    "url" : "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSetVS",
+    "mode" : "source",
+    "alias" : "DDCCVS"
+  },
+  {
+    "url" : "http://hl7.org/fhir/StructureDefinition/Patient",
+    "mode" : "target",
+    "alias" : "Patient"
+  },
+  {
+    "url" : "http://smart.who.int/ddcc/StructureDefinition/DDCCPatient",
+    "mode" : "target",
+    "alias" : "DDCCPatient"
+  },
+  {
+    "url" : "http://smart.who.int/ddcc/StructureDefinition/DDCCDocumentReferenceQR",
+    "mode" : "target",
+    "alias" : "DDCCDocRefQR"
+  },
+  {
+    "url" : "http://smart.who.int/ddcc/StructureDefinition/DDCCComposition",
+    "mode" : "target",
+    "alias" : "DDCCComposition"
+  }],
+  "group" : [{
+    "name" : "DDCCToPatient",
+    "typeMode" : "none",
+    "input" : [{
+      "name" : "src",
+      "type" : "DDCCVS",
+      "mode" : "source"
+    },
+    {
+      "name" : "patient",
+      "type" : "DDCCPatient",
+      "mode" : "target"
+    },
+    {
+      "name" : "pid",
+      "mode" : "source"
+    }],
+    "rule" : [{
+      "name" : "set id",
+      "source" : [{
+        "context" : "pid"
+      }],
+      "target" : [{
+        "context" : "patient",
+        "contextType" : "variable",
+        "element" : "id",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "pid"
+        }]
+      }]
+    },
+    {
+      "name" : "set full name",
+      "source" : [{
+        "context" : "src",
+        "element" : "name",
+        "variable" : "name"
+      }],
+      "target" : [{
+        "context" : "patient",
+        "contextType" : "variable",
+        "element" : "name",
+        "variable" : "tName"
+      }],
+      "rule" : [{
+        "name" : "set name",
+        "source" : [{
+          "context" : "name"
+        }],
+        "target" : [{
+          "context" : "tName",
+          "contextType" : "variable",
+          "element" : "text",
+          "transform" : "copy",
+          "parameter" : [{
+            "valueId" : "name"
+          }]
+        }]
+      }]
+    },
+    {
+      "name" : "set birthDate",
+      "source" : [{
+        "context" : "src",
+        "element" : "birthDate",
+        "variable" : "birthDate"
+      }],
+      "target" : [{
+        "context" : "patient",
+        "contextType" : "variable",
+        "element" : "birthDate",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "birthDate"
+        }]
+      }]
+    },
+    {
+      "name" : "set identifier",
+      "source" : [{
+        "context" : "src",
+        "element" : "identifier",
+        "variable" : "identifier"
+      }],
+      "target" : [{
+        "context" : "patient",
+        "contextType" : "variable",
+        "element" : "identifier",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "identifier"
+        }]
+      }]
+    }]
+  },
+  {
+    "name" : "DDCCToDocumentReference",
+    "typeMode" : "none",
+    "input" : [{
+      "name" : "src",
+      "type" : "DDCCVS",
+      "mode" : "source"
+    },
+    {
+      "name" : "ref",
+      "type" : "DDCCDocRefQR",
+      "mode" : "target"
+    },
+    {
+      "name" : "id",
+      "mode" : "source"
+    },
+    {
+      "name" : "pid",
+      "mode" : "source"
+    }],
+    "rule" : [{
+      "name" : "set id",
+      "source" : [{
+        "context" : "id"
+      }],
+      "target" : [{
+        "context" : "ref",
+        "contextType" : "variable",
+        "element" : "id",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "id"
+        }]
+      }]
+    },
+    {
+      "name" : "set status",
+      "source" : [{
+        "context" : "src"
+      }],
+      "target" : [{
+        "context" : "ref",
+        "contextType" : "variable",
+        "element" : "status",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueString" : "current"
+        }]
+      }]
+    },
+    {
+      "name" : "set patient",
+      "source" : [{
+        "context" : "src"
+      }],
+      "target" : [{
+        "context" : "ref",
+        "contextType" : "variable",
+        "element" : "subject",
+        "variable" : "patient"
+      },
+      {
+        "context" : "patient",
+        "contextType" : "variable",
+        "element" : "reference",
+        "transform" : "append",
+        "parameter" : [{
+          "valueString" : "Patient/"
+        },
+        {
+          "valueId" : "pid"
+        }]
+      }]
+    },
+    {
+      "name" : "set serialized content",
+      "source" : [{
+        "context" : "src"
+      }],
+      "target" : [{
+        "context" : "ref",
+        "contextType" : "variable",
+        "element" : "content",
+        "variable" : "content"
+      }],
+      "rule" : [{
+        "name" : "set contentType",
+        "source" : [{
+          "context" : "src"
+        }],
+        "target" : [{
+          "context" : "content",
+          "contextType" : "variable",
+          "element" : "attachment",
+          "variable" : "attachment"
+        },
+        {
+          "context" : "attachment",
+          "contextType" : "variable",
+          "element" : "contentType",
+          "transform" : "copy",
+          "parameter" : [{
+            "valueString" : "application/json"
+          }]
+        }]
+      },
+      {
+        "name" : "set format code",
+        "source" : [{
+          "context" : "src"
+        }],
+        "target" : [{
+          "context" : "content",
+          "contextType" : "variable",
+          "element" : "format",
+          "variable" : "format"
+        },
+        {
+          "context" : "format",
+          "contextType" : "variable",
+          "element" : "system",
+          "transform" : "copy",
+          "parameter" : [{
+            "valueString" : "http://smart.who.int/ddcc/CodeSystem/DDCCQRFormatCodeSystem"
+          }]
+        },
+        {
+          "context" : "format",
+          "contextType" : "variable",
+          "element" : "code",
+          "transform" : "copy",
+          "parameter" : [{
+            "valueString" : "serialized"
+          }]
+        }]
+      }]
+    },
+    {
+      "name" : "set image content",
+      "source" : [{
+        "context" : "src"
+      }],
+      "target" : [{
+        "context" : "ref",
+        "contextType" : "variable",
+        "element" : "content",
+        "variable" : "content"
+      }],
+      "rule" : [{
+        "name" : "set contentType",
+        "source" : [{
+          "context" : "src"
+        }],
+        "target" : [{
+          "context" : "content",
+          "contextType" : "variable",
+          "element" : "attachment",
+          "variable" : "attachment"
+        },
+        {
+          "context" : "attachment",
+          "contextType" : "variable",
+          "element" : "contentType",
+          "transform" : "copy",
+          "parameter" : [{
+            "valueString" : "image/png"
+          }]
+        }]
+      },
+      {
+        "name" : "set format code",
+        "source" : [{
+          "context" : "src"
+        }],
+        "target" : [{
+          "context" : "content",
+          "contextType" : "variable",
+          "element" : "format",
+          "variable" : "format"
+        },
+        {
+          "context" : "format",
+          "contextType" : "variable",
+          "element" : "system",
+          "transform" : "copy",
+          "parameter" : [{
+            "valueString" : "http://smart.who.int/ddcc/CodeSystem/DDCCQRFormatCodeSystem"
+          }]
+        },
+        {
+          "context" : "format",
+          "contextType" : "variable",
+          "element" : "code",
+          "transform" : "copy",
+          "parameter" : [{
+            "valueString" : "image"
+          }]
+        }]
+      }]
+    },
+    {
+      "name" : "set pdf content",
+      "source" : [{
+        "context" : "src"
+      }],
+      "target" : [{
+        "context" : "ref",
+        "contextType" : "variable",
+        "element" : "content",
+        "variable" : "content"
+      }],
+      "rule" : [{
+        "name" : "set contentType",
+        "source" : [{
+          "context" : "src"
+        }],
+        "target" : [{
+          "context" : "content",
+          "contextType" : "variable",
+          "element" : "attachment",
+          "variable" : "attachment"
+        },
+        {
+          "context" : "attachment",
+          "contextType" : "variable",
+          "element" : "contentType",
+          "transform" : "copy",
+          "parameter" : [{
+            "valueString" : "application/pdf"
+          }]
+        }]
+      },
+      {
+        "name" : "set format code",
+        "source" : [{
+          "context" : "src"
+        }],
+        "target" : [{
+          "context" : "content",
+          "contextType" : "variable",
+          "element" : "format",
+          "variable" : "format"
+        },
+        {
+          "context" : "format",
+          "contextType" : "variable",
+          "element" : "system",
+          "transform" : "copy",
+          "parameter" : [{
+            "valueString" : "http://smart.who.int/ddcc/CodeSystem/DDCCQRFormatCodeSystem"
+          }]
+        },
+        {
+          "context" : "format",
+          "contextType" : "variable",
+          "element" : "code",
+          "transform" : "copy",
+          "parameter" : [{
+            "valueString" : "pdf"
+          }]
+        }]
+      }]
+    }]
+  },
+  {
+    "name" : "DDCCToComposition",
+    "typeMode" : "none",
+    "input" : [{
+      "name" : "src",
+      "type" : "DDCCVS",
+      "mode" : "source"
+    },
+    {
+      "name" : "comp",
+      "type" : "DDCCComposition",
+      "mode" : "target"
+    },
+    {
+      "name" : "id",
+      "mode" : "source"
+    },
+    {
+      "name" : "pid",
+      "mode" : "source"
+    }],
+    "rule" : [{
+      "name" : "set id",
+      "source" : [{
+        "context" : "id"
+      }],
+      "target" : [{
+        "context" : "comp",
+        "contextType" : "variable",
+        "element" : "id",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "id"
+        }]
+      }]
+    },
+    {
+      "name" : "set patient",
+      "source" : [{
+        "context" : "src"
+      }],
+      "target" : [{
+        "context" : "comp",
+        "contextType" : "variable",
+        "element" : "subject",
+        "variable" : "patient"
+      },
+      {
+        "context" : "patient",
+        "contextType" : "variable",
+        "element" : "reference",
+        "transform" : "append",
+        "parameter" : [{
+          "valueString" : "Patient/"
+        },
+        {
+          "valueId" : "pid"
+        }]
+      }]
+    },
+    {
+      "name" : "set type",
+      "source" : [{
+        "context" : "src"
+      }],
+      "target" : [{
+        "context" : "comp",
+        "contextType" : "variable",
+        "element" : "type",
+        "variable" : "type"
+      },
+      {
+        "context" : "type",
+        "contextType" : "variable",
+        "element" : "coding",
+        "variable" : "coding"
+      }],
+      "rule" : [{
+        "name" : "set type coding",
+        "source" : [{
+          "context" : "src"
+        }],
+        "target" : [{
+          "context" : "coding",
+          "contextType" : "variable",
+          "element" : "system",
+          "transform" : "copy",
+          "parameter" : [{
+            "valueString" : "http://loinc.org"
+          }]
+        },
+        {
+          "context" : "coding",
+          "contextType" : "variable",
+          "element" : "code",
+          "transform" : "copy",
+          "parameter" : [{
+            "valueString" : "82593-5"
+          }]
+        }]
+      }]
+    },
+    {
+      "name" : "set certificate",
+      "source" : [{
+        "context" : "src",
+        "element" : "certificate",
+        "variable" : "certificate"
+      }],
+      "target" : [{
+        "context" : "comp",
+        "contextType" : "variable",
+        "element" : "author",
+        "variable" : "author"
+      },
+      {
+        "context" : "comp",
+        "contextType" : "variable",
+        "element" : "event",
+        "variable" : "event"
+      }],
+      "rule" : [{
+        "name" : "set event period",
+        "source" : [{
+          "context" : "certificate",
+          "element" : "period",
+          "variable" : "period"
+        }],
+        "target" : [{
+          "context" : "event",
+          "contextType" : "variable",
+          "element" : "period",
+          "transform" : "copy",
+          "parameter" : [{
+            "valueId" : "period"
+          }]
+        }]
+      },
+      {
+        "name" : "set author ref",
+        "source" : [{
+          "context" : "certificate",
+          "element" : "issuer",
+          "variable" : "issuer"
+        }],
+        "target" : [{
+          "context" : "author",
+          "contextType" : "variable",
+          "element" : "type",
+          "transform" : "copy",
+          "parameter" : [{
+            "valueString" : "Organization"
+          }]
+        }],
+        "rule" : [{
+          "name" : "set author identifier",
+          "source" : [{
+            "context" : "issuer",
+            "element" : "identifier",
+            "variable" : "pha"
+          }],
+          "target" : [{
+            "context" : "author",
+            "contextType" : "variable",
+            "element" : "identifier",
+            "variable" : "identifier"
+          }],
+          "rule" : [{
+            "name" : "set pha",
+            "source" : [{
+              "context" : "pha",
+              "element" : "value",
+              "variable" : "value"
+            }],
+            "target" : [{
+              "context" : "identifier",
+              "contextType" : "variable",
+              "element" : "value",
+              "transform" : "copy",
+              "parameter" : [{
+                "valueId" : "value"
+              }]
+            }]
+          }]
+        }]
+      }]
+    }]
+  }]
+}

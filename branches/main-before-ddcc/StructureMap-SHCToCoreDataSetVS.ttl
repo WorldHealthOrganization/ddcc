@@ -1,0 +1,540 @@
+@prefix fhir: <http://hl7.org/fhir/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# - resource -------------------------------------------------------------------
+
+<http://smart.who.int/ddcc/StructureMap/SHCToCoreDataSetVS> a fhir:StructureMap ;
+  fhir:nodeRole fhir:treeRoot ;
+  fhir:id [ fhir:v "SHCToCoreDataSetVS"] ; # 
+  fhir:text [
+     fhir:status [ fhir:v "generated" ] ;
+     fhir:div "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p class=\"res-header-id\"><b>Generated Narrative: StructureMap SHCToCoreDataSetVS</b></p><a name=\"SHCToCoreDataSetVS\"> </a><a name=\"hcSHCToCoreDataSetVS\"> </a><a name=\"SHCToCoreDataSetVS-en-US\"> </a><pre class=\"fml\">\r\n<b>map</b><span style=\"color: navy\"> &quot;</span>http://smart.who.int/ddcc/StructureMap/SHCToCoreDataSetVS<span style=\"color: navy\">&quot; = &quot;</span>SHCToCoreDataSetVS<span style=\"color: navy\">&quot;\r\n\r\n</span><b>uses</b><span style=\"color: navy\"> &quot;</span>http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-vaccination-bundle-dm<span style=\"color: navy\">&quot; </span><b>alias </b>SHCVaccinationBundleDM <b>as </b><b>source</b>\r\n<b>uses</b><span style=\"color: navy\"> &quot;</span>http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-patient-general-dm<span style=\"color: navy\">&quot; </span><b>alias </b>SHCPatientDM <b>as </b><b>source</b>\r\n<b>uses</b><span style=\"color: navy\"> &quot;</span>http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-vaccination-dm<span style=\"color: navy\">&quot; </span><b>alias </b>SHCImmunizationDM <b>as </b><b>source</b>\r\n<b>uses</b><span style=\"color: navy\"> &quot;</span><a href=\"http://hl7.org/fhir/R4/bundle.html\" title=\"Bundle\">http://hl7.org/fhir/StructureDefinition/Bundle</a><span style=\"color: navy\">&quot; </span><b>alias </b>DDCCBundle <b>as </b><b>target</b>\r\n<b>uses</b><span style=\"color: navy\"> &quot;</span><a href=\"StructureDefinition-DDCCCoreDataSetVS.html\" title=\"DDCC Core Data Set Logical Model for Vaccination Status\">http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSetVS</a><span style=\"color: navy\">&quot; </span><b>alias </b>DDCCVS <b>as </b><b>target</b>\r\n\r\n<b>group </b>SHCToVS<span style=\"color: navy\">(</span><b>source</b> <span style=\"color: maroon\">shc</span><span style=\"color: navy\"> : </span>SHCVaccinationBundleDM, <b>target</b> <span style=\"color: maroon\">ddccBundle</span><span style=\"color: navy\"> : </span>DDCCBundle<span style=\"color: navy\">)</span><span style=\"color: navy\"> {\r\n</span>  shc.entry<b> as </b><span style=\"color: maroon\">patientEntrySHC</span><b> then</b><span style=\"color: navy\"> {\r\n</span>    patientEntrySHC.resource<span style=\"color: navy\"> : </span>Patient first<b> as </b><span style=\"color: maroon\">patient</span><b> then</b><span style=\"color: navy\"> {\r\n</span>      shc.entry<b> as </b><span style=\"color: maroon\">entry</span><b> then</b><span style=\"color: navy\"> {\r\n</span>        <span style=\"color: navy\">// </span><span style=\"color: green\">entry.resource : Immunization as immunization where vaccineCode.memberOf('http://smart.who.int/ddcc/ValueSet/who-ddcc-allowed-vaccines-covid-19') -&gt;  ddccBundle.entry as outentry,  create('http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSetVS') as ddcc then {</span>\r\n        entry.resource<span style=\"color: navy\"> : </span>Immunization<b> as </b><span style=\"color: maroon\">immunization</span><span style=\"color: navy\"><b> -&gt; </b></span> ddccBundle.entry<b> as </b><span style=\"color: maroon\">outentry</span><span style=\"color: navy\">, </span> <b>create</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSetVS'</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">ddcc</span><b> then</b><span style=\"color: navy\"> {\r\n</span>          immunization<b> then </b>PatientToDDCCVS<span style=\"color: navy\">(</span><span style=\"color: maroon\">patient</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">ddcc</span><span style=\"color: navy\">)</span> <i>&quot;set patient&quot;</i><span style=\"color: navy\">;</span>\r\n          immunization<span style=\"color: navy\"><b> -&gt; </b></span>ddcc.vaccination<b> as </b><span style=\"color: maroon\">vaccination</span><b> then </b>ImmunizationToDDCC<span style=\"color: navy\">(</span><span style=\"color: maroon\">immunization</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">vaccination</span><span style=\"color: navy\">)</span> <i>&quot;set vaccination&quot;</i><span style=\"color: navy\">;</span>\r\n          immunization<span style=\"color: navy\"><b> -&gt; </b></span>outentry.resource = <span style=\"color: maroon\">ddcc</span> <i>&quot;set outentry&quot;</i><span style=\"color: navy\">;</span>\r\n        <span style=\"color: navy\">}</span> <i>&quot;immunizations&quot;</i><span style=\"color: navy\">;</span>\r\n      <span style=\"color: navy\">}</span> <i>&quot;entries&quot;</i><span style=\"color: navy\">;</span>\r\n    <span style=\"color: navy\">}</span> <i>&quot;get patient&quot;</i><span style=\"color: navy\">;</span>\r\n  <span style=\"color: navy\">}</span> <i>&quot;find patient&quot;</i><span style=\"color: navy\">;</span>\r\n<span style=\"color: navy\">}\r\n\r\n</span><b>group </b>PatientToDDCCVS<span style=\"color: navy\">(</span><b>source</b> <span style=\"color: maroon\">patient</span><span style=\"color: navy\"> : </span>SHCPatientDM, <b>target</b> <span style=\"color: maroon\">tgt</span><span style=\"color: navy\"> : </span>DDCCVS<span style=\"color: navy\">)</span><span style=\"color: navy\"> {\r\n</span>  patient.name<b> as </b><span style=\"color: maroon\">name</span><b> then </b>NameToText<span style=\"color: navy\">(</span><span style=\"color: maroon\">name</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">tgt</span><span style=\"color: navy\">)</span> <i>&quot;set name&quot;</i><span style=\"color: navy\">;</span>\r\n  patient.birthDate<b> as </b><span style=\"color: maroon\">birthDate</span><span style=\"color: navy\"><b> -&gt; </b></span>tgt.birthDate = <span style=\"color: maroon\">birthDate</span> <i>&quot;set birthDate&quot;</i><span style=\"color: navy\">;</span>\r\n  patient.identifier first<b> as </b><span style=\"color: maroon\">identifier</span><span style=\"color: navy\"><b> -&gt; </b></span>tgt.identifier = <span style=\"color: maroon\">identifier</span> <i>&quot;set identifier&quot;</i><span style=\"color: navy\">;</span>\r\n<span style=\"color: navy\">}\r\n\r\n</span><b>group </b>NameToText<span style=\"color: navy\">(</span><b>source</b> <span style=\"color: maroon\">name</span><span style=\"color: navy\"> : </span>HumanName, <b>target</b> <span style=\"color: maroon\">ddcc</span><span style=\"color: navy\">)</span><span style=\"color: navy\"> {\r\n</span>  <span style=\"color: navy\">// </span><span style=\"color: green\">append doesn't work until ddcc.name is set</span>\r\n  name.given first<b> as </b><span style=\"color: maroon\">given</span><span style=\"color: navy\"><b> -&gt; </b></span>ddcc.name = <span style=\"color: navy\">(</span>given.replaceMatches('$', ' ')<span style=\"color: navy\">)</span> <i>&quot;set first name&quot;</i><span style=\"color: navy\">;</span>\r\n  <span style=\"color: #b36b00\" title=\"This element was not defined prior to R5\">// name.given not_first as other -&gt; ddcc.name as tName, ddcc.name = append( tName, other ) &quot;set other names&quot;;</span>\r\n  name.given not_first<b> as </b><span style=\"color: maroon\">other</span><span style=\"color: navy\"><b> -&gt; </b></span> ddcc.name<b> as </b><span style=\"color: maroon\">tName</span><span style=\"color: navy\">, </span> <span style=\"color: navy\">(</span>other.replaceMatches('$', ' ')<span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">spaced</span><span style=\"color: navy\">, </span> ddcc.name = <b>append</b><span style=\"color: navy\">(</span><span style=\"color: maroon\">tName</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">spaced</span><span style=\"color: navy\">)</span> <i>&quot;set other names&quot;</i><span style=\"color: navy\">;</span>\r\n  name.family<b> as </b><span style=\"color: maroon\">family</span><span style=\"color: navy\"><b> -&gt; </b></span> ddcc.name<b> as </b><span style=\"color: maroon\">tName</span><span style=\"color: navy\">, </span> ddcc.name = <b>append</b><span style=\"color: navy\">(</span><span style=\"color: maroon\">tName</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">family</span><span style=\"color: navy\">)</span> <i>&quot;add family name&quot;</i><span style=\"color: navy\">;</span>\r\n  name.text<b> as </b><span style=\"color: maroon\">text</span><span style=\"color: navy\"><b> -&gt; </b></span>ddcc.name = <span style=\"color: maroon\">text</span> <i>&quot;set full name&quot;</i><span style=\"color: navy\">;</span>\r\n<span style=\"color: navy\">}\r\n\r\n</span><b>group </b>ImmunizationToDDCC<span style=\"color: navy\">(</span><b>source</b> <span style=\"color: maroon\">immunization</span><span style=\"color: navy\"> : </span>SHCImmunizationDM, <b>target</b> <span style=\"color: maroon\">vaccination</span><span style=\"color: navy\">)</span><span style=\"color: navy\"> {\r\n</span>  immunization.vaccineCode<b> as </b><span style=\"color: maroon\">vaccine</span><b> then</b><span style=\"color: navy\"> {\r\n</span>    vaccine.coding<b> as </b><span style=\"color: maroon\">coding</span><b> then</b><span style=\"color: navy\"> {\r\n</span>      coding<span style=\"color: navy\"><b> -&gt; </b></span>vaccination.vaccine = <span style=\"color: maroon\">coding</span> <i>&quot;set default vaccine&quot;</i><span style=\"color: navy\">;</span>\r\n      coding<span style=\"color: navy\"><b> -&gt; </b></span>vaccination.brand = <span style=\"color: maroon\">coding</span> <i>&quot;set default brand&quot;</i><span style=\"color: navy\">;</span>\r\n      coding<b> where </b>coding.memberOf('http://smart.who.int/ddcc/ValueSet/vaccine-covid19-cvx')<span style=\"color: navy\"><b> -&gt; </b></span>vaccination.vaccine = <b>translate</b><span style=\"color: navy\">(</span><span style=\"color: maroon\">coding</span><span style=\"color: navy\">, </span><span style=\"color: blue\">'http://smart.who.int/ddcc/ConceptMap/vaccine-covid19-cvx-to-icd11'</span><span style=\"color: navy\">, </span><span style=\"color: blue\">'Coding'</span><span style=\"color: navy\">)</span> <i>&quot;translate COVID CVX vaccine&quot;</i><span style=\"color: navy\">;</span>\r\n      coding<b> where </b>coding.memberOf('http://smart.who.int/ddcc/ValueSet/vaccine-covid19-snomed')<span style=\"color: navy\"><b> -&gt; </b></span>vaccination.vaccine = <b>translate</b><span style=\"color: navy\">(</span><span style=\"color: maroon\">coding</span><span style=\"color: navy\">, </span><span style=\"color: blue\">'http://smart.who.int/ddcc/ConceptMap/vaccine-covid19-snomed-to-icd11'</span><span style=\"color: navy\">, </span><span style=\"color: blue\">'Coding'</span><span style=\"color: navy\">)</span> <i>&quot;translate COVID SNOMED vaccine&quot;</i><span style=\"color: navy\">;</span>\r\n    <span style=\"color: navy\">}</span><span style=\"color: navy\">;</span>\r\n  <span style=\"color: navy\">}</span><span style=\"color: navy\">;</span>\r\n  immunization.manufacturer<b> as </b><span style=\"color: maroon\">tman</span><b> then</b><span style=\"color: navy\"> {\r\n</span>    tman.identifier<b> as </b><span style=\"color: maroon\">identifier</span><span style=\"color: navy\"><b> -&gt; </b></span>vaccination.manufacturer<b> as </b><span style=\"color: maroon\">manufacturer</span><b> then</b><span style=\"color: navy\"> {\r\n</span>      identifier.system<b> as </b><span style=\"color: maroon\">system</span><span style=\"color: navy\"><b> -&gt; </b></span>manufacturer.system = <span style=\"color: maroon\">system</span> <i>&quot;set manufacturer system&quot;</i><span style=\"color: navy\">;</span>\r\n      identifier.value<b> as </b><span style=\"color: maroon\">value</span><span style=\"color: navy\"><b> -&gt; </b></span>manufacturer.code = <span style=\"color: maroon\">value</span> <i>&quot;set manufacturer value&quot;</i><span style=\"color: navy\">;</span>\r\n    <span style=\"color: navy\">}</span> <i>&quot;set manufacturer id&quot;</i><span style=\"color: navy\">;</span>\r\n  <span style=\"color: navy\">}</span><span style=\"color: navy\">;</span>\r\n  immunization.lotNumber<b> as </b><span style=\"color: maroon\">lot</span><span style=\"color: navy\"><b> -&gt; </b></span>vaccination.lot = <span style=\"color: maroon\">lot</span> <i>&quot;set lot&quot;</i><span style=\"color: navy\">;</span>\r\n  immunization.occurrence<b> as </b><span style=\"color: maroon\">date</span><span style=\"color: navy\"><b> -&gt; </b></span>vaccination.date = <span style=\"color: maroon\">date</span> <i>&quot;set date&quot;</i><span style=\"color: navy\">;</span>\r\n  immunization.performer<b> as </b><span style=\"color: maroon\">performer</span><b> then</b><span style=\"color: navy\"> {\r\n</span>    performer.actor<b> as </b><span style=\"color: maroon\">actor</span><b> then</b><span style=\"color: navy\"> {\r\n</span>      actor.display<b> as </b><span style=\"color: maroon\">centre</span><span style=\"color: navy\"><b> -&gt; </b></span>vaccination.centre = <span style=\"color: maroon\">centre</span> <i>&quot;set centre&quot;</i><span style=\"color: navy\">;</span>\r\n    <span style=\"color: navy\">}</span><span style=\"color: navy\">;</span>\r\n  <span style=\"color: navy\">}</span><span style=\"color: navy\">;</span>\r\n<span style=\"color: navy\">}\r\n\r\n</span></pre></div>"
+  ] ; # 
+  fhir:url [ fhir:v "http://smart.who.int/ddcc/StructureMap/SHCToCoreDataSetVS"^^xsd:anyURI] ; # 
+  fhir:version [ fhir:v "1.0.0"] ; # 
+  fhir:name [ fhir:v "SHCToCoreDataSetVS"] ; # 
+  fhir:status [ fhir:v "draft"] ; # 
+  fhir:date [ fhir:v "2024-10-16T15:43:03+00:00"^^xsd:dateTime] ; # 
+  fhir:publisher [ fhir:v "WHO"] ; # 
+  fhir:contact ( [
+     fhir:name [ fhir:v "WHO" ] ;
+     fhir:telecom ( [
+       fhir:system [ fhir:v "url" ] ;
+       fhir:value [ fhir:v "http://who.int" ]
+     ] )
+  ] ) ; # 
+  fhir:jurisdiction ( [
+     fhir:coding ( [
+       fhir:system [ fhir:v "http://unstats.un.org/unsd/methods/m49/m49.htm"^^xsd:anyURI ] ;
+       fhir:code [ fhir:v "001" ]
+     ] )
+  ] ) ; # 
+  fhir:structure ( [
+     fhir:url [
+       fhir:v "http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-vaccination-bundle-dm"^^xsd:anyURI ;
+       fhir:link <http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-vaccination-bundle-dm>
+     ] ;
+     fhir:mode [ fhir:v "source" ] ;
+     fhir:alias [ fhir:v "SHCVaccinationBundleDM" ]
+  ] [
+     fhir:url [
+       fhir:v "http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-patient-general-dm"^^xsd:anyURI ;
+       fhir:link <http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-patient-general-dm>
+     ] ;
+     fhir:mode [ fhir:v "source" ] ;
+     fhir:alias [ fhir:v "SHCPatientDM" ]
+  ] [
+     fhir:url [
+       fhir:v "http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-vaccination-dm"^^xsd:anyURI ;
+       fhir:link <http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-vaccination-dm>
+     ] ;
+     fhir:mode [ fhir:v "source" ] ;
+     fhir:alias [ fhir:v "SHCImmunizationDM" ]
+  ] [
+     fhir:url [
+       fhir:v "http://hl7.org/fhir/StructureDefinition/Bundle"^^xsd:anyURI ;
+       fhir:link <http://hl7.org/fhir/StructureDefinition/Bundle>
+     ] ;
+     fhir:mode [ fhir:v "target" ] ;
+     fhir:alias [ fhir:v "DDCCBundle" ]
+  ] [
+     fhir:url [
+       fhir:v "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSetVS"^^xsd:anyURI ;
+       fhir:link <http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSetVS>
+     ] ;
+     fhir:mode [ fhir:v "target" ] ;
+     fhir:alias [ fhir:v "DDCCVS" ]
+  ] ) ; # 
+  fhir:group ( [
+     fhir:name [ fhir:v "SHCToVS" ] ;
+     fhir:typeMode [ fhir:v "none" ] ;
+     fhir:input ( [
+       fhir:name [ fhir:v "shc" ] ;
+       fhir:type [ fhir:v "SHCVaccinationBundleDM" ] ;
+       fhir:mode [ fhir:v "source" ]
+     ] [
+       fhir:name [ fhir:v "ddccBundle" ] ;
+       fhir:type [ fhir:v "DDCCBundle" ] ;
+       fhir:mode [ fhir:v "target" ]
+     ] ) ;
+     fhir:rule ( [
+       fhir:name [ fhir:v "find patient" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "shc" ] ;
+         fhir:element [ fhir:v "entry" ] ;
+         fhir:variable [ fhir:v "patientEntrySHC" ]
+       ] ) ;
+       fhir:rule ( [
+         fhir:name [ fhir:v "get patient" ] ;
+         fhir:source ( [
+           fhir:context [ fhir:v "patientEntrySHC" ] ;
+           fhir:type [ fhir:v "Patient" ] ;
+           fhir:element [ fhir:v "resource" ] ;
+           fhir:listMode [ fhir:v "first" ] ;
+           fhir:variable [ fhir:v "patient" ]
+         ] ) ;
+         fhir:rule ( [
+           fhir:name [ fhir:v "entries" ] ;
+           fhir:source ( [
+             fhir:context [ fhir:v "shc" ] ;
+             fhir:element [ fhir:v "entry" ] ;
+             fhir:variable [ fhir:v "entry" ]
+           ] ) ;
+           fhir:rule ( [
+             fhir:name [ fhir:v "immunizations" ] ;
+             fhir:source ( [
+               fhir:context [ fhir:v "entry" ] ;
+               fhir:type [ fhir:v "Immunization" ] ;
+               fhir:element [ fhir:v "resource" ] ;
+               fhir:variable [ fhir:v "immunization" ]
+             ] ) ;
+             fhir:target ( [
+               fhir:context [ fhir:v "ddccBundle" ] ;
+               fhir:contextType [ fhir:v "variable" ] ;
+               fhir:element [ fhir:v "entry" ] ;
+               fhir:variable [ fhir:v "outentry" ]
+             ] [
+               fhir:contextType [ fhir:v "variable" ] ;
+               fhir:variable [ fhir:v "ddcc" ] ;
+               fhir:transform [ fhir:v "create" ] ;
+               fhir:parameter ( [
+                 fhir:value [ fhir:v "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSetVS" ]
+               ] )
+             ] ) ;
+             fhir:rule ( [
+               fhir:name [ fhir:v "set patient" ] ;
+               fhir:source ( [
+                 fhir:context [ fhir:v "immunization" ]
+               ] ) ;
+               fhir:dependent ( [
+                 fhir:name [ fhir:v "PatientToDDCCVS" ] ;
+                 fhir:variable ( [ fhir:v "patient" ] [ fhir:v "ddcc" ] )
+               ] )
+             ] [
+               fhir:name [ fhir:v "set vaccination" ] ;
+               fhir:source ( [
+                 fhir:context [ fhir:v "immunization" ]
+               ] ) ;
+               fhir:target ( [
+                 fhir:context [ fhir:v "ddcc" ] ;
+                 fhir:contextType [ fhir:v "variable" ] ;
+                 fhir:element [ fhir:v "vaccination" ] ;
+                 fhir:variable [ fhir:v "vaccination" ]
+               ] ) ;
+               fhir:dependent ( [
+                 fhir:name [ fhir:v "ImmunizationToDDCC" ] ;
+                 fhir:variable ( [ fhir:v "immunization" ] [ fhir:v "vaccination" ] )
+               ] )
+             ] [
+               fhir:name [ fhir:v "set outentry" ] ;
+               fhir:source ( [
+                 fhir:context [ fhir:v "immunization" ]
+               ] ) ;
+               fhir:target ( [
+                 fhir:context [ fhir:v "outentry" ] ;
+                 fhir:contextType [ fhir:v "variable" ] ;
+                 fhir:element [ fhir:v "resource" ] ;
+                 fhir:transform [ fhir:v "copy" ] ;
+                 fhir:parameter ( [
+                   fhir:value [ fhir:v "ddcc" ]
+                 ] )
+               ] )
+             ] )
+           ] )
+         ] )
+       ] )
+     ] )
+  ] [
+     fhir:name [ fhir:v "PatientToDDCCVS" ] ;
+     fhir:typeMode [ fhir:v "none" ] ;
+     fhir:input ( [
+       fhir:name [ fhir:v "patient" ] ;
+       fhir:type [ fhir:v "SHCPatientDM" ] ;
+       fhir:mode [ fhir:v "source" ]
+     ] [
+       fhir:name [ fhir:v "tgt" ] ;
+       fhir:type [ fhir:v "DDCCVS" ] ;
+       fhir:mode [ fhir:v "target" ]
+     ] ) ;
+     fhir:rule ( [
+       fhir:name [ fhir:v "set name" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "patient" ] ;
+         fhir:element [ fhir:v "name" ] ;
+         fhir:variable [ fhir:v "name" ]
+       ] ) ;
+       fhir:dependent ( [
+         fhir:name [ fhir:v "NameToText" ] ;
+         fhir:variable ( [ fhir:v "name" ] [ fhir:v "tgt" ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "set birthDate" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "patient" ] ;
+         fhir:element [ fhir:v "birthDate" ] ;
+         fhir:variable [ fhir:v "birthDate" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "tgt" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "birthDate" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "birthDate" ]
+         ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "set identifier" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "patient" ] ;
+         fhir:element [ fhir:v "identifier" ] ;
+         fhir:listMode [ fhir:v "first" ] ;
+         fhir:variable [ fhir:v "identifier" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "tgt" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "identifier" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "identifier" ]
+         ] )
+       ] )
+     ] )
+  ] [
+     fhir:name [ fhir:v "NameToText" ] ;
+     fhir:typeMode [ fhir:v "none" ] ;
+     fhir:input ( [
+       fhir:name [ fhir:v "name" ] ;
+       fhir:type [ fhir:v "HumanName" ] ;
+       fhir:mode [ fhir:v "source" ]
+     ] [
+       fhir:name [ fhir:v "ddcc" ] ;
+       fhir:mode [ fhir:v "target" ]
+     ] ) ;
+     fhir:rule ( [
+       fhir:name [ fhir:v "set first name" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "name" ] ;
+         fhir:element [ fhir:v "given" ] ;
+         fhir:listMode [ fhir:v "first" ] ;
+         fhir:variable [ fhir:v "given" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "ddcc" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "name" ] ;
+         fhir:transform [ fhir:v "evaluate" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "given.replaceMatches('$', ' ')" ]
+         ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "set other names" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "name" ] ;
+         fhir:element [ fhir:v "given" ] ;
+         fhir:listMode [ fhir:v "not_first" ] ;
+         fhir:variable [ fhir:v "other" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "ddcc" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "name" ] ;
+         fhir:variable [ fhir:v "tName" ]
+       ] [
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:variable [ fhir:v "spaced" ] ;
+         fhir:transform [ fhir:v "evaluate" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "other.replaceMatches('$', ' ')" ]
+         ] )
+       ] [
+         fhir:context [ fhir:v "ddcc" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "name" ] ;
+         fhir:transform [ fhir:v "append" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "tName" ]
+         ] [
+           fhir:value [ fhir:v "spaced" ]
+         ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "add family name" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "name" ] ;
+         fhir:element [ fhir:v "family" ] ;
+         fhir:variable [ fhir:v "family" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "ddcc" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "name" ] ;
+         fhir:variable [ fhir:v "tName" ]
+       ] [
+         fhir:context [ fhir:v "ddcc" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "name" ] ;
+         fhir:transform [ fhir:v "append" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "tName" ]
+         ] [
+           fhir:value [ fhir:v "family" ]
+         ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "set full name" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "name" ] ;
+         fhir:element [ fhir:v "text" ] ;
+         fhir:variable [ fhir:v "text" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "ddcc" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "name" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "text" ]
+         ] )
+       ] )
+     ] )
+  ] [
+     fhir:name [ fhir:v "ImmunizationToDDCC" ] ;
+     fhir:typeMode [ fhir:v "none" ] ;
+     fhir:input ( [
+       fhir:name [ fhir:v "immunization" ] ;
+       fhir:type [ fhir:v "SHCImmunizationDM" ] ;
+       fhir:mode [ fhir:v "source" ]
+     ] [
+       fhir:name [ fhir:v "vaccination" ] ;
+       fhir:mode [ fhir:v "target" ]
+     ] ) ;
+     fhir:rule ( [
+       fhir:name [ fhir:v "vaccineCode" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "immunization" ] ;
+         fhir:element [ fhir:v "vaccineCode" ] ;
+         fhir:variable [ fhir:v "vaccine" ]
+       ] ) ;
+       fhir:rule ( [
+         fhir:name [ fhir:v "coding" ] ;
+         fhir:source ( [
+           fhir:context [ fhir:v "vaccine" ] ;
+           fhir:element [ fhir:v "coding" ] ;
+           fhir:variable [ fhir:v "coding" ]
+         ] ) ;
+         fhir:rule ( [
+           fhir:name [ fhir:v "set default vaccine" ] ;
+           fhir:source ( [
+             fhir:context [ fhir:v "coding" ]
+           ] ) ;
+           fhir:target ( [
+             fhir:context [ fhir:v "vaccination" ] ;
+             fhir:contextType [ fhir:v "variable" ] ;
+             fhir:element [ fhir:v "vaccine" ] ;
+             fhir:transform [ fhir:v "copy" ] ;
+             fhir:parameter ( [
+               fhir:value [ fhir:v "coding" ]
+             ] )
+           ] )
+         ] [
+           fhir:name [ fhir:v "set default brand" ] ;
+           fhir:source ( [
+             fhir:context [ fhir:v "coding" ]
+           ] ) ;
+           fhir:target ( [
+             fhir:context [ fhir:v "vaccination" ] ;
+             fhir:contextType [ fhir:v "variable" ] ;
+             fhir:element [ fhir:v "brand" ] ;
+             fhir:transform [ fhir:v "copy" ] ;
+             fhir:parameter ( [
+               fhir:value [ fhir:v "coding" ]
+             ] )
+           ] )
+         ] [
+           fhir:name [ fhir:v "translate COVID CVX vaccine" ] ;
+           fhir:source ( [
+             fhir:context [ fhir:v "coding" ] ;
+             fhir:condition [ fhir:v "coding.memberOf('http://smart.who.int/ddcc/ValueSet/vaccine-covid19-cvx')" ]
+           ] ) ;
+           fhir:target ( [
+             fhir:context [ fhir:v "vaccination" ] ;
+             fhir:contextType [ fhir:v "variable" ] ;
+             fhir:element [ fhir:v "vaccine" ] ;
+             fhir:transform [ fhir:v "translate" ] ;
+             fhir:parameter ( [
+               fhir:value [ fhir:v "coding" ]
+             ] [
+               fhir:value [ fhir:v "http://smart.who.int/ddcc/ConceptMap/vaccine-covid19-cvx-to-icd11" ]
+             ] [
+               fhir:value [ fhir:v "Coding" ]
+             ] )
+           ] )
+         ] [
+           fhir:name [ fhir:v "translate COVID SNOMED vaccine" ] ;
+           fhir:source ( [
+             fhir:context [ fhir:v "coding" ] ;
+             fhir:condition [ fhir:v "coding.memberOf('http://smart.who.int/ddcc/ValueSet/vaccine-covid19-snomed')" ]
+           ] ) ;
+           fhir:target ( [
+             fhir:context [ fhir:v "vaccination" ] ;
+             fhir:contextType [ fhir:v "variable" ] ;
+             fhir:element [ fhir:v "vaccine" ] ;
+             fhir:transform [ fhir:v "translate" ] ;
+             fhir:parameter ( [
+               fhir:value [ fhir:v "coding" ]
+             ] [
+               fhir:value [ fhir:v "http://smart.who.int/ddcc/ConceptMap/vaccine-covid19-snomed-to-icd11" ]
+             ] [
+               fhir:value [ fhir:v "Coding" ]
+             ] )
+           ] )
+         ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "manufacturer" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "immunization" ] ;
+         fhir:element [ fhir:v "manufacturer" ] ;
+         fhir:variable [ fhir:v "tman" ]
+       ] ) ;
+       fhir:rule ( [
+         fhir:name [ fhir:v "set manufacturer id" ] ;
+         fhir:source ( [
+           fhir:context [ fhir:v "tman" ] ;
+           fhir:element [ fhir:v "identifier" ] ;
+           fhir:variable [ fhir:v "identifier" ]
+         ] ) ;
+         fhir:target ( [
+           fhir:context [ fhir:v "vaccination" ] ;
+           fhir:contextType [ fhir:v "variable" ] ;
+           fhir:element [ fhir:v "manufacturer" ] ;
+           fhir:variable [ fhir:v "manufacturer" ]
+         ] ) ;
+         fhir:rule ( [
+           fhir:name [ fhir:v "set manufacturer system" ] ;
+           fhir:source ( [
+             fhir:context [ fhir:v "identifier" ] ;
+             fhir:element [ fhir:v "system" ] ;
+             fhir:variable [ fhir:v "system" ]
+           ] ) ;
+           fhir:target ( [
+             fhir:context [ fhir:v "manufacturer" ] ;
+             fhir:contextType [ fhir:v "variable" ] ;
+             fhir:element [ fhir:v "system" ] ;
+             fhir:transform [ fhir:v "copy" ] ;
+             fhir:parameter ( [
+               fhir:value [ fhir:v "system" ]
+             ] )
+           ] )
+         ] [
+           fhir:name [ fhir:v "set manufacturer value" ] ;
+           fhir:source ( [
+             fhir:context [ fhir:v "identifier" ] ;
+             fhir:element [ fhir:v "value" ] ;
+             fhir:variable [ fhir:v "value" ]
+           ] ) ;
+           fhir:target ( [
+             fhir:context [ fhir:v "manufacturer" ] ;
+             fhir:contextType [ fhir:v "variable" ] ;
+             fhir:element [ fhir:v "code" ] ;
+             fhir:transform [ fhir:v "copy" ] ;
+             fhir:parameter ( [
+               fhir:value [ fhir:v "value" ]
+             ] )
+           ] )
+         ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "set lot" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "immunization" ] ;
+         fhir:element [ fhir:v "lotNumber" ] ;
+         fhir:variable [ fhir:v "lot" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "vaccination" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "lot" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "lot" ]
+         ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "set date" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "immunization" ] ;
+         fhir:element [ fhir:v "occurrence" ] ;
+         fhir:variable [ fhir:v "date" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "vaccination" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "date" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "date" ]
+         ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "performer" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "immunization" ] ;
+         fhir:element [ fhir:v "performer" ] ;
+         fhir:variable [ fhir:v "performer" ]
+       ] ) ;
+       fhir:rule ( [
+         fhir:name [ fhir:v "actor" ] ;
+         fhir:source ( [
+           fhir:context [ fhir:v "performer" ] ;
+           fhir:element [ fhir:v "actor" ] ;
+           fhir:variable [ fhir:v "actor" ]
+         ] ) ;
+         fhir:rule ( [
+           fhir:name [ fhir:v "set centre" ] ;
+           fhir:source ( [
+             fhir:context [ fhir:v "actor" ] ;
+             fhir:element [ fhir:v "display" ] ;
+             fhir:variable [ fhir:v "centre" ]
+           ] ) ;
+           fhir:target ( [
+             fhir:context [ fhir:v "vaccination" ] ;
+             fhir:contextType [ fhir:v "variable" ] ;
+             fhir:element [ fhir:v "centre" ] ;
+             fhir:transform [ fhir:v "copy" ] ;
+             fhir:parameter ( [
+               fhir:value [ fhir:v "centre" ]
+             ] )
+           ] )
+         ] )
+       ] )
+     ] )
+  ] ) . # 
+
+# -------------------------------------------------------------------------------------
+

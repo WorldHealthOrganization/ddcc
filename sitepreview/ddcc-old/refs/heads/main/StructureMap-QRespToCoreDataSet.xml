@@ -1,0 +1,957 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<StructureMap xmlns="http://hl7.org/fhir">
+  <id value="QRespToCoreDataSet"/>
+  <meta>
+    <versionId value="1"/>
+    <lastUpdated value="2021-12-21T20:57:05.036+00:00"/>
+  </meta>
+  <text>
+    <status value="generated"/><div xmlns="http://www.w3.org/1999/xhtml"><pre>map &quot;http://worldhealthorganization.github.io/ddcc/StructureMap/QRespToCoreDataSet&quot; = &quot;QRespToCoreDataSet&quot;
+
+
+uses &quot;http://hl7.org/fhir/StructureDefinition/QuestionnaireResponse&quot; alias QResp as source
+uses &quot;http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.VS.PoV&quot; alias DDCCPoV as target
+
+group QRespToCoreDataSet(source qr : QResp, target ddcc : DDCCPoV) {
+  // qr.item as item where item.linkId = 'name' -&gt; ddcc.name as name then {
+  //     log 'got answer';
+  //     item.answer first as answer -&gt; name = answer.valueString;
+  //   };
+  qr as src then QRespToHeader(src, ddcc) &quot;set header content&quot;;
+  qr as src -&gt; ddcc.vaccination as vaccination then QRespToVaccination(src, vaccination) &quot;set vaccination content&quot;;
+  qr as src -&gt; ddcc.certificate as certificate then QRespToCertificate(src, certificate) &quot;set certificate content&quot;;
+}
+
+group QRespToHeader(source qr, target ddcc) {
+  qr.item as item then {
+    item.answer first as answer where item.linkId = 'name' then {
+      answer.valueString as content -&gt; ddcc.name = content &quot;set name&quot;;
+    } &quot;first answser for name&quot;;
+    item.answer first as answer where item.linkId = 'birthDate' then {
+      answer.valueDate as content -&gt; ddcc.birthDate = content &quot;set birthDate&quot;;
+    } &quot;first answer for birthDate&quot;;
+    item.answer first as answer where item.linkId = 'identifier' -&gt; ddcc.identifier as identifier then {
+      answer.valueString as content -&gt; identifier.value = content &quot;set identifier&quot;;
+    } &quot;first answer for identifier&quot;;
+    item.answer first as answer where item.linkId = 'sex' then {
+      answer.valueCoding as coding then {
+        coding.code as content -&gt; ddcc.sex = content &quot;set sex&quot;;
+      } &quot;process coding&quot;;
+    } &quot;first answer for sex&quot;;
+  } &quot;header items&quot;;
+}
+
+group QRespToVaccination(source qr, target vaccination) {
+  qr.item as item then {
+    item.answer first as answer where item.linkId = 'vaccine' then {
+      answer.valueCoding as content -&gt; vaccination.vaccine = content &quot;set vaccine&quot;;
+    } &quot;first answer for vaccine&quot;;
+    item.answer first as answer where item.linkId = 'brand' then {
+      answer.valueCoding as content -&gt; vaccination.brand = content &quot;set brand&quot;;
+    } &quot;first answer for brand&quot;;
+    item.answer first as answer where item.linkId = 'manufacturer' then {
+      answer.valueCoding as content -&gt; vaccination.manufacturer = content &quot;set manufacturer&quot;;
+    } &quot;first answer for manufacturer&quot;;
+    item.answer first as answer where item.linkId = 'ma_holder' then {
+      answer.valueCoding as content -&gt; vaccination.maholder = content &quot;set maholder&quot;;
+    } &quot;first answer for maholder&quot;;
+    item.answer first as answer where item.linkId = 'lot' then {
+      answer.valueString as content -&gt; vaccination.lot = content &quot;set lot&quot;;
+    } &quot;first answser for lot&quot;;
+    item.answer first as answer where item.linkId = 'date' then {
+      answer.valueDate as content -&gt; vaccination.date = content &quot;set date&quot;;
+    } &quot;first answer for date&quot;;
+    item.answer first as answer where item.linkId = 'vaccine_valid' then {
+      answer.valueDate as content -&gt; vaccination.validFrom = content &quot;set validFrom&quot;;
+    } &quot;first answer for validFrom&quot;;
+    item.answer first as answer where item.linkId = 'dose' then {
+      answer.valueInteger as content -&gt; vaccination.dose = content &quot;set dose&quot;;
+    } &quot;first answer for dose&quot;;
+    item.answer first as answer where item.linkId = 'total_doses' then {
+      answer.valueInteger as content -&gt; vaccination.totalDoses = content &quot;set totalDoses&quot;;
+    } &quot;first answer for totalDoses&quot;;
+    item.answer first as answer where item.linkId = 'country' then {
+      answer.valueCoding as content -&gt; vaccination.country = content &quot;set country&quot;;
+    } &quot;first answer for country&quot;;
+    item.answer first as answer where item.linkId = 'centre' then {
+      answer.valueString as content -&gt; vaccination.centre = content &quot;set centre&quot;;
+    } &quot;first answser for centre&quot;;
+    item.answer first as answer where item.linkId = 'hw' -&gt; vaccination.practitioner as identifier then {
+      answer.valueString as content -&gt; identifier.value = content &quot;set practitioner&quot;;
+    } &quot;first answser for practitioner&quot;;
+    item.answer first as answer where item.linkId = 'disease' then {
+      answer.valueCoding as content -&gt; vaccination.disease = content &quot;set disease&quot;;
+    } &quot;first answer for disease&quot;;
+    item.answer first as answer where item.linkId = 'due_date' then {
+      answer.valueDate as content -&gt; vaccination.nextDose = content &quot;set nextDose&quot;;
+    } &quot;first answer for nextDose&quot;;
+  } &quot;vaccination items&quot;;
+}
+
+group QRespToPeriod(source qr, target period) {
+  qr.item as item then {
+    item.answer first as answer where item.linkId = 'valid_from' then {
+      answer.valueDate as content -&gt; period.start = content &quot;set valid_from&quot;;
+    } &quot;first answer for valid_from&quot;;
+    item.answer first as answer where item.linkId = 'valid_until' then {
+      answer.valueDate as content -&gt; period.end = content &quot;set valid_until&quot;;
+    } &quot;first answer for valid_until&quot;;
+  } &quot;vaccination validity items&quot;;
+}
+
+group QRespToCertificate(source qr, target certificate) {
+  qr.item as item then {
+    item.answer first as answer where item.linkId = 'pha' -&gt; certificate.issuer as issuer then {
+      answer.valueString as content -&gt; issuer.identifier as identifier then {
+        content as value -&gt; identifier.value = value &quot;set issuer identifier&quot;;
+      } &quot;set issuer&quot;;
+    } &quot;first answser for hcid&quot;;
+    item.answer first as answer where item.linkId = 'hcid' -&gt; certificate.hcid as hcid then {
+      answer.valueString as content -&gt;  hcid.value = content,  certificate.version = 'RC2' &quot;set hcid and version&quot;;
+    } &quot;first answser for hcid&quot;;
+  } &quot;certificate items&quot;;
+  qr as src -&gt; certificate.period as period then QRespToPeriod(src, period) &quot;set vaccination period&quot;;
+}
+
+</pre></div>
+  </text>
+  <url value="http://worldhealthorganization.github.io/ddcc/StructureMap/QRespToCoreDataSet"/>
+  <version value="0.3.1"/>
+  <name value="QRespToCoreDataSet"/>
+  <status value="draft"/>
+  <date value="2022-02-13T22:11:31+00:00"/>
+  <publisher value="WHO"/>
+  <contact>
+    <name value="WHO"/>
+    <telecom>
+      <system value="url"/>
+      <value value="http://who.int"/>
+    </telecom>
+  </contact>
+  <jurisdiction>
+    <coding>
+      <system value="http://unstats.un.org/unsd/methods/m49/m49.htm"/>
+      <code value="001"/>
+    </coding>
+  </jurisdiction>
+  <structure>
+    <url value="http://hl7.org/fhir/StructureDefinition/QuestionnaireResponse"/>
+    <mode value="source"/>
+    <alias value="QResp"/>
+  </structure>
+  <structure>
+    <url value="http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.VS.PoV"/>
+    <mode value="target"/>
+    <alias value="DDCCPoV"/>
+  </structure>
+  <group>
+    <name value="QRespToCoreDataSet"/>
+    <typeMode value="none"/>
+    <input>
+      <name value="qr"/>
+      <type value="QResp"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="ddcc"/>
+      <type value="DDCCPoV"/>
+      <mode value="target"/>
+    </input>
+    <rule>
+      <name value="set header content"/>
+      <source>
+        <context value="qr"/>
+        <variable value="src"/>
+      </source>
+      <dependent>
+        <name value="QRespToHeader"/>
+        <variable value="src"/>
+        <variable value="ddcc"/>
+      </dependent>
+      <documentation value="qr.item as item where item.linkId = &#39;name&#39; -&gt; ddcc.name as name then {&#xD;&#xA;    log &#39;got answer&#39;;&#xD;&#xA;    item.answer first as answer -&gt; name = answer.valueString;&#xD;&#xA;  };"/>
+    </rule>
+    <rule>
+      <name value="set vaccination content"/>
+      <source>
+        <context value="qr"/>
+        <variable value="src"/>
+      </source>
+      <target>
+        <context value="ddcc"/>
+        <contextType value="variable"/>
+        <element value="vaccination"/>
+        <variable value="vaccination"/>
+      </target>
+      <dependent>
+        <name value="QRespToVaccination"/>
+        <variable value="src"/>
+        <variable value="vaccination"/>
+      </dependent>
+    </rule>
+    <rule>
+      <name value="set certificate content"/>
+      <source>
+        <context value="qr"/>
+        <variable value="src"/>
+      </source>
+      <target>
+        <context value="ddcc"/>
+        <contextType value="variable"/>
+        <element value="certificate"/>
+        <variable value="certificate"/>
+      </target>
+      <dependent>
+        <name value="QRespToCertificate"/>
+        <variable value="src"/>
+        <variable value="certificate"/>
+      </dependent>
+    </rule>
+  </group>
+  <group>
+    <name value="QRespToHeader"/>
+    <typeMode value="none"/>
+    <input>
+      <name value="qr"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="ddcc"/>
+      <mode value="target"/>
+    </input>
+    <rule>
+      <name value="header items"/>
+      <source>
+        <context value="qr"/>
+        <element value="item"/>
+        <variable value="item"/>
+      </source>
+      <rule>
+        <name value="first answser for name"/>
+        <source>
+          <context value="item"/>
+          <element value="answer"/>
+          <listMode value="first"/>
+          <variable value="answer"/>
+          <condition value="item.linkId = &#39;name&#39;"/>
+        </source>
+        <rule>
+          <name value="set name"/>
+          <source>
+            <context value="answer"/>
+            <element value="valueString"/>
+            <variable value="content"/>
+          </source>
+          <target>
+            <context value="ddcc"/>
+            <contextType value="variable"/>
+            <element value="name"/>
+            <transform value="copy"/>
+            <parameter>
+              <valueId value="content"/>
+            </parameter>
+          </target>
+        </rule>
+      </rule>
+      <rule>
+        <name value="first answer for birthDate"/>
+        <source>
+          <context value="item"/>
+          <element value="answer"/>
+          <listMode value="first"/>
+          <variable value="answer"/>
+          <condition value="item.linkId = &#39;birthDate&#39;"/>
+        </source>
+        <rule>
+          <name value="set birthDate"/>
+          <source>
+            <context value="answer"/>
+            <element value="valueDate"/>
+            <variable value="content"/>
+          </source>
+          <target>
+            <context value="ddcc"/>
+            <contextType value="variable"/>
+            <element value="birthDate"/>
+            <transform value="copy"/>
+            <parameter>
+              <valueId value="content"/>
+            </parameter>
+          </target>
+        </rule>
+      </rule>
+      <rule>
+        <name value="first answer for identifier"/>
+        <source>
+          <context value="item"/>
+          <element value="answer"/>
+          <listMode value="first"/>
+          <variable value="answer"/>
+          <condition value="item.linkId = &#39;identifier&#39;"/>
+        </source>
+        <target>
+          <context value="ddcc"/>
+          <contextType value="variable"/>
+          <element value="identifier"/>
+          <variable value="identifier"/>
+        </target>
+        <rule>
+          <name value="set identifier"/>
+          <source>
+            <context value="answer"/>
+            <element value="valueString"/>
+            <variable value="content"/>
+          </source>
+          <target>
+            <context value="identifier"/>
+            <contextType value="variable"/>
+            <element value="value"/>
+            <transform value="copy"/>
+            <parameter>
+              <valueId value="content"/>
+            </parameter>
+          </target>
+        </rule>
+      </rule>
+      <rule>
+        <name value="first answer for sex"/>
+        <source>
+          <context value="item"/>
+          <element value="answer"/>
+          <listMode value="first"/>
+          <variable value="answer"/>
+          <condition value="item.linkId = &#39;sex&#39;"/>
+        </source>
+        <rule>
+          <name value="process coding"/>
+          <source>
+            <context value="answer"/>
+            <element value="valueCoding"/>
+            <variable value="coding"/>
+          </source>
+          <rule>
+            <name value="set sex"/>
+            <source>
+              <context value="coding"/>
+              <element value="code"/>
+              <variable value="content"/>
+            </source>
+            <target>
+              <context value="ddcc"/>
+              <contextType value="variable"/>
+              <element value="sex"/>
+              <transform value="copy"/>
+              <parameter>
+                <valueId value="content"/>
+              </parameter>
+            </target>
+          </rule>
+        </rule>
+      </rule>
+    </rule>
+  </group>
+  <group>
+    <name value="QRespToVaccination"/>
+    <typeMode value="none"/>
+    <input>
+      <name value="qr"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="vaccination"/>
+      <mode value="target"/>
+    </input>
+    <rule>
+      <name value="vaccination items"/>
+      <source>
+        <context value="qr"/>
+        <element value="item"/>
+        <variable value="item"/>
+      </source>
+      <rule>
+        <name value="first answer for vaccine"/>
+        <source>
+          <context value="item"/>
+          <element value="answer"/>
+          <listMode value="first"/>
+          <variable value="answer"/>
+          <condition value="item.linkId = &#39;vaccine&#39;"/>
+        </source>
+        <rule>
+          <name value="set vaccine"/>
+          <source>
+            <context value="answer"/>
+            <element value="valueCoding"/>
+            <variable value="content"/>
+          </source>
+          <target>
+            <context value="vaccination"/>
+            <contextType value="variable"/>
+            <element value="vaccine"/>
+            <transform value="copy"/>
+            <parameter>
+              <valueId value="content"/>
+            </parameter>
+          </target>
+        </rule>
+      </rule>
+      <rule>
+        <name value="first answer for brand"/>
+        <source>
+          <context value="item"/>
+          <element value="answer"/>
+          <listMode value="first"/>
+          <variable value="answer"/>
+          <condition value="item.linkId = &#39;brand&#39;"/>
+        </source>
+        <rule>
+          <name value="set brand"/>
+          <source>
+            <context value="answer"/>
+            <element value="valueCoding"/>
+            <variable value="content"/>
+          </source>
+          <target>
+            <context value="vaccination"/>
+            <contextType value="variable"/>
+            <element value="brand"/>
+            <transform value="copy"/>
+            <parameter>
+              <valueId value="content"/>
+            </parameter>
+          </target>
+        </rule>
+      </rule>
+      <rule>
+        <name value="first answer for manufacturer"/>
+        <source>
+          <context value="item"/>
+          <element value="answer"/>
+          <listMode value="first"/>
+          <variable value="answer"/>
+          <condition value="item.linkId = &#39;manufacturer&#39;"/>
+        </source>
+        <rule>
+          <name value="set manufacturer"/>
+          <source>
+            <context value="answer"/>
+            <element value="valueCoding"/>
+            <variable value="content"/>
+          </source>
+          <target>
+            <context value="vaccination"/>
+            <contextType value="variable"/>
+            <element value="manufacturer"/>
+            <transform value="copy"/>
+            <parameter>
+              <valueId value="content"/>
+            </parameter>
+          </target>
+        </rule>
+      </rule>
+      <rule>
+        <name value="first answer for maholder"/>
+        <source>
+          <context value="item"/>
+          <element value="answer"/>
+          <listMode value="first"/>
+          <variable value="answer"/>
+          <condition value="item.linkId = &#39;ma_holder&#39;"/>
+        </source>
+        <rule>
+          <name value="set maholder"/>
+          <source>
+            <context value="answer"/>
+            <element value="valueCoding"/>
+            <variable value="content"/>
+          </source>
+          <target>
+            <context value="vaccination"/>
+            <contextType value="variable"/>
+            <element value="maholder"/>
+            <transform value="copy"/>
+            <parameter>
+              <valueId value="content"/>
+            </parameter>
+          </target>
+        </rule>
+      </rule>
+      <rule>
+        <name value="first answser for lot"/>
+        <source>
+          <context value="item"/>
+          <element value="answer"/>
+          <listMode value="first"/>
+          <variable value="answer"/>
+          <condition value="item.linkId = &#39;lot&#39;"/>
+        </source>
+        <rule>
+          <name value="set lot"/>
+          <source>
+            <context value="answer"/>
+            <element value="valueString"/>
+            <variable value="content"/>
+          </source>
+          <target>
+            <context value="vaccination"/>
+            <contextType value="variable"/>
+            <element value="lot"/>
+            <transform value="copy"/>
+            <parameter>
+              <valueId value="content"/>
+            </parameter>
+          </target>
+        </rule>
+      </rule>
+      <rule>
+        <name value="first answer for date"/>
+        <source>
+          <context value="item"/>
+          <element value="answer"/>
+          <listMode value="first"/>
+          <variable value="answer"/>
+          <condition value="item.linkId = &#39;date&#39;"/>
+        </source>
+        <rule>
+          <name value="set date"/>
+          <source>
+            <context value="answer"/>
+            <element value="valueDate"/>
+            <variable value="content"/>
+          </source>
+          <target>
+            <context value="vaccination"/>
+            <contextType value="variable"/>
+            <element value="date"/>
+            <transform value="copy"/>
+            <parameter>
+              <valueId value="content"/>
+            </parameter>
+          </target>
+        </rule>
+      </rule>
+      <rule>
+        <name value="first answer for validFrom"/>
+        <source>
+          <context value="item"/>
+          <element value="answer"/>
+          <listMode value="first"/>
+          <variable value="answer"/>
+          <condition value="item.linkId = &#39;vaccine_valid&#39;"/>
+        </source>
+        <rule>
+          <name value="set validFrom"/>
+          <source>
+            <context value="answer"/>
+            <element value="valueDate"/>
+            <variable value="content"/>
+          </source>
+          <target>
+            <context value="vaccination"/>
+            <contextType value="variable"/>
+            <element value="validFrom"/>
+            <transform value="copy"/>
+            <parameter>
+              <valueId value="content"/>
+            </parameter>
+          </target>
+        </rule>
+      </rule>
+      <rule>
+        <name value="first answer for dose"/>
+        <source>
+          <context value="item"/>
+          <element value="answer"/>
+          <listMode value="first"/>
+          <variable value="answer"/>
+          <condition value="item.linkId = &#39;dose&#39;"/>
+        </source>
+        <rule>
+          <name value="set dose"/>
+          <source>
+            <context value="answer"/>
+            <element value="valueInteger"/>
+            <variable value="content"/>
+          </source>
+          <target>
+            <context value="vaccination"/>
+            <contextType value="variable"/>
+            <element value="dose"/>
+            <transform value="copy"/>
+            <parameter>
+              <valueId value="content"/>
+            </parameter>
+          </target>
+        </rule>
+      </rule>
+      <rule>
+        <name value="first answer for totalDoses"/>
+        <source>
+          <context value="item"/>
+          <element value="answer"/>
+          <listMode value="first"/>
+          <variable value="answer"/>
+          <condition value="item.linkId = &#39;total_doses&#39;"/>
+        </source>
+        <rule>
+          <name value="set totalDoses"/>
+          <source>
+            <context value="answer"/>
+            <element value="valueInteger"/>
+            <variable value="content"/>
+          </source>
+          <target>
+            <context value="vaccination"/>
+            <contextType value="variable"/>
+            <element value="totalDoses"/>
+            <transform value="copy"/>
+            <parameter>
+              <valueId value="content"/>
+            </parameter>
+          </target>
+        </rule>
+      </rule>
+      <rule>
+        <name value="first answer for country"/>
+        <source>
+          <context value="item"/>
+          <element value="answer"/>
+          <listMode value="first"/>
+          <variable value="answer"/>
+          <condition value="item.linkId = &#39;country&#39;"/>
+        </source>
+        <rule>
+          <name value="set country"/>
+          <source>
+            <context value="answer"/>
+            <element value="valueCoding"/>
+            <variable value="content"/>
+          </source>
+          <target>
+            <context value="vaccination"/>
+            <contextType value="variable"/>
+            <element value="country"/>
+            <transform value="copy"/>
+            <parameter>
+              <valueId value="content"/>
+            </parameter>
+          </target>
+        </rule>
+      </rule>
+      <rule>
+        <name value="first answser for centre"/>
+        <source>
+          <context value="item"/>
+          <element value="answer"/>
+          <listMode value="first"/>
+          <variable value="answer"/>
+          <condition value="item.linkId = &#39;centre&#39;"/>
+        </source>
+        <rule>
+          <name value="set centre"/>
+          <source>
+            <context value="answer"/>
+            <element value="valueString"/>
+            <variable value="content"/>
+          </source>
+          <target>
+            <context value="vaccination"/>
+            <contextType value="variable"/>
+            <element value="centre"/>
+            <transform value="copy"/>
+            <parameter>
+              <valueId value="content"/>
+            </parameter>
+          </target>
+        </rule>
+      </rule>
+      <rule>
+        <name value="first answser for practitioner"/>
+        <source>
+          <context value="item"/>
+          <element value="answer"/>
+          <listMode value="first"/>
+          <variable value="answer"/>
+          <condition value="item.linkId = &#39;hw&#39;"/>
+        </source>
+        <target>
+          <context value="vaccination"/>
+          <contextType value="variable"/>
+          <element value="practitioner"/>
+          <variable value="identifier"/>
+        </target>
+        <rule>
+          <name value="set practitioner"/>
+          <source>
+            <context value="answer"/>
+            <element value="valueString"/>
+            <variable value="content"/>
+          </source>
+          <target>
+            <context value="identifier"/>
+            <contextType value="variable"/>
+            <element value="value"/>
+            <transform value="copy"/>
+            <parameter>
+              <valueId value="content"/>
+            </parameter>
+          </target>
+        </rule>
+      </rule>
+      <rule>
+        <name value="first answer for disease"/>
+        <source>
+          <context value="item"/>
+          <element value="answer"/>
+          <listMode value="first"/>
+          <variable value="answer"/>
+          <condition value="item.linkId = &#39;disease&#39;"/>
+        </source>
+        <rule>
+          <name value="set disease"/>
+          <source>
+            <context value="answer"/>
+            <element value="valueCoding"/>
+            <variable value="content"/>
+          </source>
+          <target>
+            <context value="vaccination"/>
+            <contextType value="variable"/>
+            <element value="disease"/>
+            <transform value="copy"/>
+            <parameter>
+              <valueId value="content"/>
+            </parameter>
+          </target>
+        </rule>
+      </rule>
+      <rule>
+        <name value="first answer for nextDose"/>
+        <source>
+          <context value="item"/>
+          <element value="answer"/>
+          <listMode value="first"/>
+          <variable value="answer"/>
+          <condition value="item.linkId = &#39;due_date&#39;"/>
+        </source>
+        <rule>
+          <name value="set nextDose"/>
+          <source>
+            <context value="answer"/>
+            <element value="valueDate"/>
+            <variable value="content"/>
+          </source>
+          <target>
+            <context value="vaccination"/>
+            <contextType value="variable"/>
+            <element value="nextDose"/>
+            <transform value="copy"/>
+            <parameter>
+              <valueId value="content"/>
+            </parameter>
+          </target>
+        </rule>
+      </rule>
+    </rule>
+  </group>
+  <group>
+    <name value="QRespToPeriod"/>
+    <typeMode value="none"/>
+    <input>
+      <name value="qr"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="period"/>
+      <mode value="target"/>
+    </input>
+    <rule>
+      <name value="vaccination validity items"/>
+      <source>
+        <context value="qr"/>
+        <element value="item"/>
+        <variable value="item"/>
+      </source>
+      <rule>
+        <name value="first answer for valid_from"/>
+        <source>
+          <context value="item"/>
+          <element value="answer"/>
+          <listMode value="first"/>
+          <variable value="answer"/>
+          <condition value="item.linkId = &#39;valid_from&#39;"/>
+        </source>
+        <rule>
+          <name value="set valid_from"/>
+          <source>
+            <context value="answer"/>
+            <element value="valueDate"/>
+            <variable value="content"/>
+          </source>
+          <target>
+            <context value="period"/>
+            <contextType value="variable"/>
+            <element value="start"/>
+            <transform value="copy"/>
+            <parameter>
+              <valueId value="content"/>
+            </parameter>
+          </target>
+        </rule>
+      </rule>
+      <rule>
+        <name value="first answer for valid_until"/>
+        <source>
+          <context value="item"/>
+          <element value="answer"/>
+          <listMode value="first"/>
+          <variable value="answer"/>
+          <condition value="item.linkId = &#39;valid_until&#39;"/>
+        </source>
+        <rule>
+          <name value="set valid_until"/>
+          <source>
+            <context value="answer"/>
+            <element value="valueDate"/>
+            <variable value="content"/>
+          </source>
+          <target>
+            <context value="period"/>
+            <contextType value="variable"/>
+            <element value="end"/>
+            <transform value="copy"/>
+            <parameter>
+              <valueId value="content"/>
+            </parameter>
+          </target>
+        </rule>
+      </rule>
+    </rule>
+  </group>
+  <group>
+    <name value="QRespToCertificate"/>
+    <typeMode value="none"/>
+    <input>
+      <name value="qr"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="certificate"/>
+      <mode value="target"/>
+    </input>
+    <rule>
+      <name value="certificate items"/>
+      <source>
+        <context value="qr"/>
+        <element value="item"/>
+        <variable value="item"/>
+      </source>
+      <rule>
+        <name value="first answser for hcid"/>
+        <source>
+          <context value="item"/>
+          <element value="answer"/>
+          <listMode value="first"/>
+          <variable value="answer"/>
+          <condition value="item.linkId = &#39;pha&#39;"/>
+        </source>
+        <target>
+          <context value="certificate"/>
+          <contextType value="variable"/>
+          <element value="issuer"/>
+          <variable value="issuer"/>
+        </target>
+        <rule>
+          <name value="set issuer"/>
+          <source>
+            <context value="answer"/>
+            <element value="valueString"/>
+            <variable value="content"/>
+          </source>
+          <target>
+            <context value="issuer"/>
+            <contextType value="variable"/>
+            <element value="identifier"/>
+            <variable value="identifier"/>
+          </target>
+          <rule>
+            <name value="set issuer identifier"/>
+            <source>
+              <context value="content"/>
+              <variable value="value"/>
+            </source>
+            <target>
+              <context value="identifier"/>
+              <contextType value="variable"/>
+              <element value="value"/>
+              <transform value="copy"/>
+              <parameter>
+                <valueId value="value"/>
+              </parameter>
+            </target>
+          </rule>
+        </rule>
+      </rule>
+      <rule>
+        <name value="first answser for hcid"/>
+        <source>
+          <context value="item"/>
+          <element value="answer"/>
+          <listMode value="first"/>
+          <variable value="answer"/>
+          <condition value="item.linkId = &#39;hcid&#39;"/>
+        </source>
+        <target>
+          <context value="certificate"/>
+          <contextType value="variable"/>
+          <element value="hcid"/>
+          <variable value="hcid"/>
+        </target>
+        <rule>
+          <name value="set hcid and version"/>
+          <source>
+            <context value="answer"/>
+            <element value="valueString"/>
+            <variable value="content"/>
+          </source>
+          <target>
+            <context value="hcid"/>
+            <contextType value="variable"/>
+            <element value="value"/>
+            <transform value="copy"/>
+            <parameter>
+              <valueId value="content"/>
+            </parameter>
+          </target>
+          <target>
+            <context value="certificate"/>
+            <contextType value="variable"/>
+            <element value="version"/>
+            <transform value="copy"/>
+            <parameter>
+              <valueString value="RC2"/>
+            </parameter>
+          </target>
+        </rule>
+      </rule>
+    </rule>
+    <rule>
+      <name value="set vaccination period"/>
+      <source>
+        <context value="qr"/>
+        <variable value="src"/>
+      </source>
+      <target>
+        <context value="certificate"/>
+        <contextType value="variable"/>
+        <element value="period"/>
+        <variable value="period"/>
+      </target>
+      <dependent>
+        <name value="QRespToPeriod"/>
+        <variable value="src"/>
+        <variable value="period"/>
+      </dependent>
+    </rule>
+  </group>
+</StructureMap>

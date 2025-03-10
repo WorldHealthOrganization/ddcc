@@ -1,0 +1,101 @@
+{
+  "resourceType" : "StructureMap",
+  "id" : "DVCClaimtoIPS",
+  "text" : {
+    "status" : "generated",
+    "div" : "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p class=\"res-header-id\"><b>Generated Narrative: StructureMap DVCClaimtoIPS</b></p><a name=\"DVCClaimtoIPS\"> </a><a name=\"hcDVCClaimtoIPS\"> </a><a name=\"DVCClaimtoIPS-en-US\"> </a><pre class=\"fml\">\r\n<b>map</b><span style=\"color: navy\"> &quot;</span>http://smart.who.int/icvp/StructureMap/DVCClaimtoIPS<span style=\"color: navy\">&quot; = &quot;</span>DVCClaimtoIPS<span style=\"color: navy\">&quot;\r\n\r\n</span><b>uses</b><span style=\"color: navy\"> &quot;</span><a href=\"StructureDefinition-DVCPayload.html\" title=\"DVC HCERT Payload\">http://smart.who.int/icvp/StructureDefinition/DVCPayload</a><span style=\"color: navy\">&quot; </span><b>alias </b>DVCPayload <b>as </b><b>source</b>\r\n<b>uses</b><span style=\"color: navy\"> &quot;</span><a href=\"http://hl7.org/fhir/R4/bundle.html\" title=\"Bundle\">http://hl7.org/fhir/StructureDefinition/Bundle</a><span style=\"color: navy\">&quot; </span><b>alias </b>IPS <b>as </b><b>target</b>\r\n<b>uses</b><span style=\"color: navy\"> &quot;</span><a href=\"StructureDefinition-ModelDVC.html\" title=\"DVC\">http://smart.who.int/icvp/StructureDefinition/ModelDVC</a><span style=\"color: navy\">&quot; </span><b>alias </b>DVCModel <b>as </b><b>target</b>\r\n<b>uses</b><span style=\"color: navy\"> &quot;</span><a href=\"StructureDefinition-ModelVaccineDetails.html\" title=\"DVC - Vaccine Details\">http://smart.who.int/icvp/StructureDefinition/ModelVaccineDetails</a><span style=\"color: navy\">&quot; </span><b>alias </b>ModelVaccineDetails <b>as </b><b>target</b>\r\n\r\n<b>imports</b><span style=\"color: navy\"> &quot;</span><a href=\"StructureMap-DVCLMToIPS.html\" title=\"DVCLMToIPS\">http://smart.who.int/icvp/StructureMap/DVCLMToIPS</a><span style=\"color: navy\">&quot;\r\n</span><b>imports</b><span style=\"color: navy\"> &quot;</span><a href=\"StructureMap-DVCClaimtoDVCLM.html\" title=\"DVCClaimtoDVCLM\">http://smart.who.int/icvp/StructureMap/DVCClaimtoDVCLM</a><span style=\"color: navy\">&quot;\r\n</span>\r\n<b>group </b>DVCClaimtoIPS<span style=\"color: navy\">(</span><b>source</b> <span style=\"color: maroon\">DVCClaim</span><span style=\"color: navy\"> : </span>DVCPayload, <b>target</b> <span style=\"color: maroon\">IPS</span><span style=\"color: navy\"> : </span>Bundle<span style=\"color: navy\">)</span><span style=\"color: navy\"> {\r\n</span>  DVCClaim<span style=\"color: navy\"><b> -&gt; </b></span><b>create</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'http://smart.who.int/icvp/StructureDefinition/ModelDVC'</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">model</span><b> then</b><span style=\"color: navy\"> {\r\n</span>    DVCClaim<span style=\"color: navy\"><b> -&gt; </b></span>model<b> then </b>DVCClaimtoDVCLM<span style=\"color: navy\">(</span><span style=\"color: maroon\">DVCClaim</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">model</span><span style=\"color: navy\">)</span> <i>&quot;rule1&quot;</i><span style=\"color: navy\">;</span>\r\n    DVCClaim<span style=\"color: navy\"><b> -&gt; </b></span>IPS<b> then </b>DVCLMToIPS<span style=\"color: navy\">(</span><span style=\"color: maroon\">model</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">IPS</span><span style=\"color: navy\">)</span> <i>&quot;rule2&quot;</i><span style=\"color: navy\">;</span>\r\n  <span style=\"color: navy\">}</span> <i>&quot;rule3&quot;</i><span style=\"color: navy\">;</span>\r\n<span style=\"color: navy\">}\r\n\r\n</span></pre></div>"
+  },
+  "url" : "http://smart.who.int/icvp/StructureMap/DVCClaimtoIPS",
+  "version" : "0.1.0",
+  "name" : "DVCClaimtoIPS",
+  "status" : "draft",
+  "date" : "2024-10-07T07:31:05+00:00",
+  "publisher" : "WHO",
+  "contact" : [{
+    "name" : "WHO",
+    "telecom" : [{
+      "system" : "url",
+      "value" : "http://who.int"
+    }]
+  }],
+  "structure" : [{
+    "url" : "http://smart.who.int/icvp/StructureDefinition/DVCPayload",
+    "mode" : "source",
+    "alias" : "DVCPayload"
+  },
+  {
+    "url" : "http://hl7.org/fhir/StructureDefinition/Bundle",
+    "mode" : "target",
+    "alias" : "IPS"
+  },
+  {
+    "url" : "http://smart.who.int/icvp/StructureDefinition/ModelDVC",
+    "mode" : "target",
+    "alias" : "DVCModel"
+  },
+  {
+    "url" : "http://smart.who.int/icvp/StructureDefinition/ModelVaccineDetails",
+    "mode" : "target",
+    "alias" : "ModelVaccineDetails"
+  }],
+  "import" : ["http://smart.who.int/icvp/StructureMap/DVCLMToIPS",
+  "http://smart.who.int/icvp/StructureMap/DVCClaimtoDVCLM"],
+  "group" : [{
+    "name" : "DVCClaimtoIPS",
+    "typeMode" : "none",
+    "input" : [{
+      "name" : "DVCClaim",
+      "type" : "DVCPayload",
+      "mode" : "source"
+    },
+    {
+      "name" : "IPS",
+      "type" : "Bundle",
+      "mode" : "target"
+    }],
+    "rule" : [{
+      "name" : "rule3",
+      "source" : [{
+        "context" : "DVCClaim"
+      }],
+      "target" : [{
+        "contextType" : "variable",
+        "variable" : "model",
+        "transform" : "create",
+        "parameter" : [{
+          "valueString" : "http://smart.who.int/icvp/StructureDefinition/ModelDVC"
+        }]
+      }],
+      "rule" : [{
+        "name" : "rule1",
+        "source" : [{
+          "context" : "DVCClaim"
+        }],
+        "target" : [{
+          "context" : "model",
+          "contextType" : "variable"
+        }],
+        "dependent" : [{
+          "name" : "DVCClaimtoDVCLM",
+          "variable" : ["DVCClaim",
+          "model"]
+        }]
+      },
+      {
+        "name" : "rule2",
+        "source" : [{
+          "context" : "DVCClaim"
+        }],
+        "target" : [{
+          "context" : "IPS",
+          "contextType" : "variable"
+        }],
+        "dependent" : [{
+          "name" : "DVCLMToIPS",
+          "variable" : ["model",
+          "IPS"]
+        }]
+      }]
+    }]
+  }]
+}

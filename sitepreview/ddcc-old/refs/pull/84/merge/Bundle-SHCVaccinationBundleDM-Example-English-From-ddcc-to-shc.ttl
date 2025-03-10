@@ -1,0 +1,70 @@
+@prefix fhir: <http://hl7.org/fhir/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# - resource -------------------------------------------------------------------
+
+<http://worldhealthorganization.github.io/ddcc/Bundle/SHCVaccinationBundleDM-Example-English-From-ddcc-to-shc> a fhir:Bundle;
+  fhir:nodeRole fhir:treeRoot;
+  fhir:Resource.id [ fhir:value "SHCVaccinationBundleDM-Example-English-From-ddcc-to-shc"];
+  fhir:Bundle.type [ fhir:value "collection"];
+  fhir:Bundle.entry [
+     fhir:index 0;
+     fhir:Bundle.entry.fullUrl [ fhir:value "resource:0" ];
+     fhir:Bundle.entry.resource <resource:0>
+  ], [
+     fhir:index 1;
+     fhir:Bundle.entry.fullUrl [ fhir:value "resource:1" ];
+     fhir:Bundle.entry.resource <resource:1>
+  ] .
+
+<resource:0> a fhir:Patient;
+  fhir:DomainResource.text [
+     fhir:Narrative.status [ fhir:value "generated" ];
+     fhir:Narrative.div "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative: Patient</b></p><div style=\"display: inline-block; background-color: #d9e0e7; padding: 6px; margin: 4px; border: 1px solid #8da1b4; border-radius: 5px; line-height: 60%\"/><p><b>name</b>: Aulus Agerius</p><p><b>birthDate</b>: 2003-03-03</p></div>"
+  ];
+  fhir:Patient.name [
+     fhir:index 0;
+     fhir:HumanName.text [ fhir:value "Aulus Agerius" ]
+  ];
+  fhir:Patient.birthDate [ fhir:value "2003-03-03"^^xsd:date] .
+
+<resource:1> a fhir:Immunization;
+  fhir:DomainResource.text [
+     fhir:Narrative.status [ fhir:value "generated" ];
+     fhir:Narrative.div "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative: Immunization</b></p><div style=\"display: inline-block; background-color: #d9e0e7; padding: 6px; margin: 4px; border: 1px solid #8da1b4; border-radius: 5px; line-height: 60%\"/><p><b>status</b>: completed</p><p><b>vaccineCode</b>: COVID-19 vaccine, replicating viral vector <span style=\"background: LightGoldenRodYellow; margin: 4px; border: 1px solid khaki\"> (<a href=\"CodeSystem-DDCC-ICD11-CodeSystem.html\">DDCC Codes for ICD11</a>#XM0CX4)</span></p><p><b>patient</b>: <a href=\"#resource0\">See above (resource:0)</a></p><p><b>occurrence</b>: 2021-05-06</p><p><b>manufacturer</b>: <span/></p><p><b>lotNumber</b>: 123</p><h3>Performers</h3><table class=\"grid\"><tr><td>-</td><td><b>Actor</b></td></tr><tr><td>*</td><td><span>: Government Hospital</span></td></tr></table></div>"
+  ];
+  fhir:Immunization.status [ fhir:value "completed"];
+  fhir:Immunization.vaccineCode [
+     fhir:CodeableConcept.coding [
+       fhir:index 0;
+       fhir:Coding.system [ fhir:value "http://id.who.int/icd11/mms" ];
+       fhir:Coding.code [ fhir:value "XM0CX4" ]
+     ]
+  ];
+  fhir:Immunization.patient [
+     fhir:Reference.reference [ fhir:value "resource:0" ]
+  ];
+  fhir:Immunization.occurrenceDateTime [ fhir:value "2021-05-06"^^xsd:date];
+  fhir:Immunization.manufacturer [
+     fhir:Reference.identifier [
+       fhir:Identifier.system [ fhir:value "http://worldhealthorganization.github.io/ddcc/CodeSystem/DDCC-Example-Test-CodeSystem" ];
+       fhir:Identifier.value [ fhir:value "TEST" ]
+     ]
+  ];
+  fhir:Immunization.lotNumber [ fhir:value "123"];
+  fhir:Immunization.performer [
+     fhir:index 0;
+     fhir:Immunization.performer.actor [
+       fhir:Reference.display [ fhir:value "Government Hospital" ]
+     ]
+  ] .
+
+# - ontology header ------------------------------------------------------------
+
+<http://worldhealthorganization.github.io/ddcc/Bundle/SHCVaccinationBundleDM-Example-English-From-ddcc-to-shc.ttl> a owl:Ontology;
+  owl:imports fhir:fhir.ttl .
+
+# -------------------------------------------------------------------------------------
+

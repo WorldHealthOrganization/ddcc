@@ -1,0 +1,1168 @@
+{
+  "resourceType": "StructureMap",
+  "id": "QRespToCoreDataSet",
+  "meta": {
+    "versionId": "1",
+    "lastUpdated": "2021-12-21T20:57:05.036+00:00"
+  },
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><pre>map &quot;http://worldhealthorganization.github.io/ddcc/StructureMap/QRespToCoreDataSet&quot; = &quot;QRespToCoreDataSet&quot;\r\n\r\n\r\nuses &quot;http://hl7.org/fhir/StructureDefinition/QuestionnaireResponse&quot; alias QResp as source\r\nuses &quot;http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.VS.PoV&quot; alias DDCCPoV as target\r\n\r\ngroup QRespToCoreDataSet(source qr : QResp, target ddcc : DDCCPoV) {\r\n  // qr.item as item where item.linkId = 'name' -&gt; ddcc.name as name then {\r\n  //     log 'got answer';\r\n  //     item.answer first as answer -&gt; name = answer.valueString;\r\n  //   };\r\n  qr as src then QRespToHeader(src, ddcc) &quot;set header content&quot;;\r\n  qr as src -&gt; ddcc.vaccination as vaccination then QRespToVaccination(src, vaccination) &quot;set vaccination content&quot;;\r\n  qr as src -&gt; ddcc.certificate as certificate then QRespToCertificate(src, certificate) &quot;set certificate content&quot;;\r\n}\r\n\r\ngroup QRespToHeader(source qr, target ddcc) {\r\n  qr.item as item then {\r\n    item.answer first as answer where item.linkId = 'name' then {\r\n      answer.valueString as content -&gt; ddcc.name = content &quot;set name&quot;;\r\n    } &quot;first answser for name&quot;;\r\n    item.answer first as answer where item.linkId = 'birthDate' then {\r\n      answer.valueDate as content -&gt; ddcc.birthDate = content &quot;set birthDate&quot;;\r\n    } &quot;first answer for birthDate&quot;;\r\n    item.answer first as answer where item.linkId = 'identifier' -&gt; ddcc.identifier as identifier then {\r\n      answer.valueString as content -&gt; identifier.value = content &quot;set identifier&quot;;\r\n    } &quot;first answer for identifier&quot;;\r\n    item.answer first as answer where item.linkId = 'sex' then {\r\n      answer.valueCoding as coding then {\r\n        coding.code as content -&gt; ddcc.sex = content &quot;set sex&quot;;\r\n      } &quot;process coding&quot;;\r\n    } &quot;first answer for sex&quot;;\r\n  } &quot;header items&quot;;\r\n}\r\n\r\ngroup QRespToVaccination(source qr, target vaccination) {\r\n  qr.item as item then {\r\n    item.answer first as answer where item.linkId = 'vaccine' then {\r\n      answer.valueCoding as content -&gt; vaccination.vaccine = content &quot;set vaccine&quot;;\r\n    } &quot;first answer for vaccine&quot;;\r\n    item.answer first as answer where item.linkId = 'brand' then {\r\n      answer.valueCoding as content -&gt; vaccination.brand = content &quot;set brand&quot;;\r\n    } &quot;first answer for brand&quot;;\r\n    item.answer first as answer where item.linkId = 'manufacturer' then {\r\n      answer.valueCoding as content -&gt; vaccination.manufacturer = content &quot;set manufacturer&quot;;\r\n    } &quot;first answer for manufacturer&quot;;\r\n    item.answer first as answer where item.linkId = 'ma_holder' then {\r\n      answer.valueCoding as content -&gt; vaccination.maholder = content &quot;set maholder&quot;;\r\n    } &quot;first answer for maholder&quot;;\r\n    item.answer first as answer where item.linkId = 'lot' then {\r\n      answer.valueString as content -&gt; vaccination.lot = content &quot;set lot&quot;;\r\n    } &quot;first answser for lot&quot;;\r\n    item.answer first as answer where item.linkId = 'date' then {\r\n      answer.valueDate as content -&gt; vaccination.date = content &quot;set date&quot;;\r\n    } &quot;first answer for date&quot;;\r\n    item.answer first as answer where item.linkId = 'vaccine_valid' then {\r\n      answer.valueDate as content -&gt; vaccination.validFrom = content &quot;set validFrom&quot;;\r\n    } &quot;first answer for validFrom&quot;;\r\n    item.answer first as answer where item.linkId = 'dose' then {\r\n      answer.valueInteger as content -&gt; vaccination.dose = content &quot;set dose&quot;;\r\n    } &quot;first answer for dose&quot;;\r\n    item.answer first as answer where item.linkId = 'total_doses' then {\r\n      answer.valueInteger as content -&gt; vaccination.totalDoses = content &quot;set totalDoses&quot;;\r\n    } &quot;first answer for totalDoses&quot;;\r\n    item.answer first as answer where item.linkId = 'country' then {\r\n      answer.valueCoding as content -&gt; vaccination.country = content &quot;set country&quot;;\r\n    } &quot;first answer for country&quot;;\r\n    item.answer first as answer where item.linkId = 'centre' then {\r\n      answer.valueString as content -&gt; vaccination.centre = content &quot;set centre&quot;;\r\n    } &quot;first answser for centre&quot;;\r\n    item.answer first as answer where item.linkId = 'hw' -&gt; vaccination.practitioner as identifier then {\r\n      answer.valueString as content -&gt; identifier.value = content &quot;set practitioner&quot;;\r\n    } &quot;first answser for practitioner&quot;;\r\n    item.answer first as answer where item.linkId = 'disease' then {\r\n      answer.valueCoding as content -&gt; vaccination.disease = content &quot;set disease&quot;;\r\n    } &quot;first answer for disease&quot;;\r\n    item.answer first as answer where item.linkId = 'due_date' then {\r\n      answer.valueDate as content -&gt; vaccination.nextDose = content &quot;set nextDose&quot;;\r\n    } &quot;first answer for nextDose&quot;;\r\n  } &quot;vaccination items&quot;;\r\n}\r\n\r\ngroup QRespToPeriod(source qr, target period) {\r\n  qr.item as item then {\r\n    item.answer first as answer where item.linkId = 'valid_from' then {\r\n      answer.valueDate as content -&gt; period.start = content &quot;set valid_from&quot;;\r\n    } &quot;first answer for valid_from&quot;;\r\n    item.answer first as answer where item.linkId = 'valid_until' then {\r\n      answer.valueDate as content -&gt; period.end = content &quot;set valid_until&quot;;\r\n    } &quot;first answer for valid_until&quot;;\r\n  } &quot;vaccination validity items&quot;;\r\n}\r\n\r\ngroup QRespToCertificate(source qr, target certificate) {\r\n  qr.item as item then {\r\n    item.answer first as answer where item.linkId = 'pha' -&gt; certificate.issuer as issuer then {\r\n      answer.valueString as content -&gt; issuer.identifier as identifier then {\r\n        content as value -&gt; identifier.value = value &quot;set issuer identifier&quot;;\r\n      } &quot;set issuer&quot;;\r\n    } &quot;first answser for hcid&quot;;\r\n    item.answer first as answer where item.linkId = 'hcid' -&gt; certificate.hcid as hcid then {\r\n      answer.valueString as content -&gt;  hcid.value = content,  certificate.version = 'RC2' &quot;set hcid and version&quot;;\r\n    } &quot;first answser for hcid&quot;;\r\n  } &quot;certificate items&quot;;\r\n  qr as src -&gt; certificate.period as period then QRespToPeriod(src, period) &quot;set vaccination period&quot;;\r\n}\r\n\r\n</pre></div>"
+  },
+  "url": "http://worldhealthorganization.github.io/ddcc/StructureMap/QRespToCoreDataSet",
+  "version": "0.3.1",
+  "name": "QRespToCoreDataSet",
+  "status": "draft",
+  "date": "2022-02-13T22:11:31+00:00",
+  "publisher": "WHO",
+  "contact": [
+    {
+      "name": "WHO",
+      "telecom": [
+        {
+          "system": "url",
+          "value": "http://who.int"
+        }
+      ]
+    }
+  ],
+  "jurisdiction": [
+    {
+      "coding": [
+        {
+          "system": "http://unstats.un.org/unsd/methods/m49/m49.htm",
+          "code": "001"
+        }
+      ]
+    }
+  ],
+  "structure": [
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/QuestionnaireResponse",
+      "mode": "source",
+      "alias": "QResp"
+    },
+    {
+      "url": "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.VS.PoV",
+      "mode": "target",
+      "alias": "DDCCPoV"
+    }
+  ],
+  "group": [
+    {
+      "name": "QRespToCoreDataSet",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "qr",
+          "type": "QResp",
+          "mode": "source"
+        },
+        {
+          "name": "ddcc",
+          "type": "DDCCPoV",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set header content",
+          "source": [
+            {
+              "context": "qr",
+              "variable": "src"
+            }
+          ],
+          "dependent": [
+            {
+              "name": "QRespToHeader",
+              "variable": [
+                "src",
+                "ddcc"
+              ]
+            }
+          ],
+          "documentation": "qr.item as item where item.linkId = 'name' -> ddcc.name as name then {\r\n    log 'got answer';\r\n    item.answer first as answer -> name = answer.valueString;\r\n  };"
+        },
+        {
+          "name": "set vaccination content",
+          "source": [
+            {
+              "context": "qr",
+              "variable": "src"
+            }
+          ],
+          "target": [
+            {
+              "context": "ddcc",
+              "contextType": "variable",
+              "element": "vaccination",
+              "variable": "vaccination"
+            }
+          ],
+          "dependent": [
+            {
+              "name": "QRespToVaccination",
+              "variable": [
+                "src",
+                "vaccination"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "set certificate content",
+          "source": [
+            {
+              "context": "qr",
+              "variable": "src"
+            }
+          ],
+          "target": [
+            {
+              "context": "ddcc",
+              "contextType": "variable",
+              "element": "certificate",
+              "variable": "certificate"
+            }
+          ],
+          "dependent": [
+            {
+              "name": "QRespToCertificate",
+              "variable": [
+                "src",
+                "certificate"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "QRespToHeader",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "qr",
+          "mode": "source"
+        },
+        {
+          "name": "ddcc",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "header items",
+          "source": [
+            {
+              "context": "qr",
+              "element": "item",
+              "variable": "item"
+            }
+          ],
+          "rule": [
+            {
+              "name": "first answser for name",
+              "source": [
+                {
+                  "context": "item",
+                  "element": "answer",
+                  "listMode": "first",
+                  "variable": "answer",
+                  "condition": "item.linkId = 'name'"
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set name",
+                  "source": [
+                    {
+                      "context": "answer",
+                      "element": "valueString",
+                      "variable": "content"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ddcc",
+                      "contextType": "variable",
+                      "element": "name",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "content"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "first answer for birthDate",
+              "source": [
+                {
+                  "context": "item",
+                  "element": "answer",
+                  "listMode": "first",
+                  "variable": "answer",
+                  "condition": "item.linkId = 'birthDate'"
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set birthDate",
+                  "source": [
+                    {
+                      "context": "answer",
+                      "element": "valueDate",
+                      "variable": "content"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ddcc",
+                      "contextType": "variable",
+                      "element": "birthDate",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "content"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "first answer for identifier",
+              "source": [
+                {
+                  "context": "item",
+                  "element": "answer",
+                  "listMode": "first",
+                  "variable": "answer",
+                  "condition": "item.linkId = 'identifier'"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ddcc",
+                  "contextType": "variable",
+                  "element": "identifier",
+                  "variable": "identifier"
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set identifier",
+                  "source": [
+                    {
+                      "context": "answer",
+                      "element": "valueString",
+                      "variable": "content"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "identifier",
+                      "contextType": "variable",
+                      "element": "value",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "content"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "first answer for sex",
+              "source": [
+                {
+                  "context": "item",
+                  "element": "answer",
+                  "listMode": "first",
+                  "variable": "answer",
+                  "condition": "item.linkId = 'sex'"
+                }
+              ],
+              "rule": [
+                {
+                  "name": "process coding",
+                  "source": [
+                    {
+                      "context": "answer",
+                      "element": "valueCoding",
+                      "variable": "coding"
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "set sex",
+                      "source": [
+                        {
+                          "context": "coding",
+                          "element": "code",
+                          "variable": "content"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "ddcc",
+                          "contextType": "variable",
+                          "element": "sex",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "content"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "QRespToVaccination",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "qr",
+          "mode": "source"
+        },
+        {
+          "name": "vaccination",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "vaccination items",
+          "source": [
+            {
+              "context": "qr",
+              "element": "item",
+              "variable": "item"
+            }
+          ],
+          "rule": [
+            {
+              "name": "first answer for vaccine",
+              "source": [
+                {
+                  "context": "item",
+                  "element": "answer",
+                  "listMode": "first",
+                  "variable": "answer",
+                  "condition": "item.linkId = 'vaccine'"
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set vaccine",
+                  "source": [
+                    {
+                      "context": "answer",
+                      "element": "valueCoding",
+                      "variable": "content"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vaccination",
+                      "contextType": "variable",
+                      "element": "vaccine",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "content"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "first answer for brand",
+              "source": [
+                {
+                  "context": "item",
+                  "element": "answer",
+                  "listMode": "first",
+                  "variable": "answer",
+                  "condition": "item.linkId = 'brand'"
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set brand",
+                  "source": [
+                    {
+                      "context": "answer",
+                      "element": "valueCoding",
+                      "variable": "content"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vaccination",
+                      "contextType": "variable",
+                      "element": "brand",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "content"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "first answer for manufacturer",
+              "source": [
+                {
+                  "context": "item",
+                  "element": "answer",
+                  "listMode": "first",
+                  "variable": "answer",
+                  "condition": "item.linkId = 'manufacturer'"
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set manufacturer",
+                  "source": [
+                    {
+                      "context": "answer",
+                      "element": "valueCoding",
+                      "variable": "content"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vaccination",
+                      "contextType": "variable",
+                      "element": "manufacturer",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "content"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "first answer for maholder",
+              "source": [
+                {
+                  "context": "item",
+                  "element": "answer",
+                  "listMode": "first",
+                  "variable": "answer",
+                  "condition": "item.linkId = 'ma_holder'"
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set maholder",
+                  "source": [
+                    {
+                      "context": "answer",
+                      "element": "valueCoding",
+                      "variable": "content"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vaccination",
+                      "contextType": "variable",
+                      "element": "maholder",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "content"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "first answser for lot",
+              "source": [
+                {
+                  "context": "item",
+                  "element": "answer",
+                  "listMode": "first",
+                  "variable": "answer",
+                  "condition": "item.linkId = 'lot'"
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set lot",
+                  "source": [
+                    {
+                      "context": "answer",
+                      "element": "valueString",
+                      "variable": "content"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vaccination",
+                      "contextType": "variable",
+                      "element": "lot",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "content"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "first answer for date",
+              "source": [
+                {
+                  "context": "item",
+                  "element": "answer",
+                  "listMode": "first",
+                  "variable": "answer",
+                  "condition": "item.linkId = 'date'"
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set date",
+                  "source": [
+                    {
+                      "context": "answer",
+                      "element": "valueDate",
+                      "variable": "content"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vaccination",
+                      "contextType": "variable",
+                      "element": "date",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "content"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "first answer for validFrom",
+              "source": [
+                {
+                  "context": "item",
+                  "element": "answer",
+                  "listMode": "first",
+                  "variable": "answer",
+                  "condition": "item.linkId = 'vaccine_valid'"
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set validFrom",
+                  "source": [
+                    {
+                      "context": "answer",
+                      "element": "valueDate",
+                      "variable": "content"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vaccination",
+                      "contextType": "variable",
+                      "element": "validFrom",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "content"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "first answer for dose",
+              "source": [
+                {
+                  "context": "item",
+                  "element": "answer",
+                  "listMode": "first",
+                  "variable": "answer",
+                  "condition": "item.linkId = 'dose'"
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set dose",
+                  "source": [
+                    {
+                      "context": "answer",
+                      "element": "valueInteger",
+                      "variable": "content"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vaccination",
+                      "contextType": "variable",
+                      "element": "dose",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "content"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "first answer for totalDoses",
+              "source": [
+                {
+                  "context": "item",
+                  "element": "answer",
+                  "listMode": "first",
+                  "variable": "answer",
+                  "condition": "item.linkId = 'total_doses'"
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set totalDoses",
+                  "source": [
+                    {
+                      "context": "answer",
+                      "element": "valueInteger",
+                      "variable": "content"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vaccination",
+                      "contextType": "variable",
+                      "element": "totalDoses",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "content"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "first answer for country",
+              "source": [
+                {
+                  "context": "item",
+                  "element": "answer",
+                  "listMode": "first",
+                  "variable": "answer",
+                  "condition": "item.linkId = 'country'"
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set country",
+                  "source": [
+                    {
+                      "context": "answer",
+                      "element": "valueCoding",
+                      "variable": "content"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vaccination",
+                      "contextType": "variable",
+                      "element": "country",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "content"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "first answser for centre",
+              "source": [
+                {
+                  "context": "item",
+                  "element": "answer",
+                  "listMode": "first",
+                  "variable": "answer",
+                  "condition": "item.linkId = 'centre'"
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set centre",
+                  "source": [
+                    {
+                      "context": "answer",
+                      "element": "valueString",
+                      "variable": "content"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vaccination",
+                      "contextType": "variable",
+                      "element": "centre",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "content"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "first answser for practitioner",
+              "source": [
+                {
+                  "context": "item",
+                  "element": "answer",
+                  "listMode": "first",
+                  "variable": "answer",
+                  "condition": "item.linkId = 'hw'"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vaccination",
+                  "contextType": "variable",
+                  "element": "practitioner",
+                  "variable": "identifier"
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set practitioner",
+                  "source": [
+                    {
+                      "context": "answer",
+                      "element": "valueString",
+                      "variable": "content"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "identifier",
+                      "contextType": "variable",
+                      "element": "value",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "content"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "first answer for disease",
+              "source": [
+                {
+                  "context": "item",
+                  "element": "answer",
+                  "listMode": "first",
+                  "variable": "answer",
+                  "condition": "item.linkId = 'disease'"
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set disease",
+                  "source": [
+                    {
+                      "context": "answer",
+                      "element": "valueCoding",
+                      "variable": "content"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vaccination",
+                      "contextType": "variable",
+                      "element": "disease",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "content"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "first answer for nextDose",
+              "source": [
+                {
+                  "context": "item",
+                  "element": "answer",
+                  "listMode": "first",
+                  "variable": "answer",
+                  "condition": "item.linkId = 'due_date'"
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set nextDose",
+                  "source": [
+                    {
+                      "context": "answer",
+                      "element": "valueDate",
+                      "variable": "content"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vaccination",
+                      "contextType": "variable",
+                      "element": "nextDose",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "content"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "QRespToPeriod",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "qr",
+          "mode": "source"
+        },
+        {
+          "name": "period",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "vaccination validity items",
+          "source": [
+            {
+              "context": "qr",
+              "element": "item",
+              "variable": "item"
+            }
+          ],
+          "rule": [
+            {
+              "name": "first answer for valid_from",
+              "source": [
+                {
+                  "context": "item",
+                  "element": "answer",
+                  "listMode": "first",
+                  "variable": "answer",
+                  "condition": "item.linkId = 'valid_from'"
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set valid_from",
+                  "source": [
+                    {
+                      "context": "answer",
+                      "element": "valueDate",
+                      "variable": "content"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "period",
+                      "contextType": "variable",
+                      "element": "start",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "content"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "first answer for valid_until",
+              "source": [
+                {
+                  "context": "item",
+                  "element": "answer",
+                  "listMode": "first",
+                  "variable": "answer",
+                  "condition": "item.linkId = 'valid_until'"
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set valid_until",
+                  "source": [
+                    {
+                      "context": "answer",
+                      "element": "valueDate",
+                      "variable": "content"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "period",
+                      "contextType": "variable",
+                      "element": "end",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "content"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "QRespToCertificate",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "qr",
+          "mode": "source"
+        },
+        {
+          "name": "certificate",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "certificate items",
+          "source": [
+            {
+              "context": "qr",
+              "element": "item",
+              "variable": "item"
+            }
+          ],
+          "rule": [
+            {
+              "name": "first answser for hcid",
+              "source": [
+                {
+                  "context": "item",
+                  "element": "answer",
+                  "listMode": "first",
+                  "variable": "answer",
+                  "condition": "item.linkId = 'pha'"
+                }
+              ],
+              "target": [
+                {
+                  "context": "certificate",
+                  "contextType": "variable",
+                  "element": "issuer",
+                  "variable": "issuer"
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set issuer",
+                  "source": [
+                    {
+                      "context": "answer",
+                      "element": "valueString",
+                      "variable": "content"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "issuer",
+                      "contextType": "variable",
+                      "element": "identifier",
+                      "variable": "identifier"
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "set issuer identifier",
+                      "source": [
+                        {
+                          "context": "content",
+                          "variable": "value"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "identifier",
+                          "contextType": "variable",
+                          "element": "value",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "value"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "first answser for hcid",
+              "source": [
+                {
+                  "context": "item",
+                  "element": "answer",
+                  "listMode": "first",
+                  "variable": "answer",
+                  "condition": "item.linkId = 'hcid'"
+                }
+              ],
+              "target": [
+                {
+                  "context": "certificate",
+                  "contextType": "variable",
+                  "element": "hcid",
+                  "variable": "hcid"
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set hcid and version",
+                  "source": [
+                    {
+                      "context": "answer",
+                      "element": "valueString",
+                      "variable": "content"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "hcid",
+                      "contextType": "variable",
+                      "element": "value",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "content"
+                        }
+                      ]
+                    },
+                    {
+                      "context": "certificate",
+                      "contextType": "variable",
+                      "element": "version",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "RC2"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "set vaccination period",
+          "source": [
+            {
+              "context": "qr",
+              "variable": "src"
+            }
+          ],
+          "target": [
+            {
+              "context": "certificate",
+              "contextType": "variable",
+              "element": "period",
+              "variable": "period"
+            }
+          ],
+          "dependent": [
+            {
+              "name": "QRespToPeriod",
+              "variable": [
+                "src",
+                "period"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

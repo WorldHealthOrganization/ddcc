@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<StructureMap xmlns="http://hl7.org/fhir">
+  <id value="ddcc-resources-to-coredataset"/>
+  <meta>
+    <versionId value="1"/>
+    <lastUpdated value="2021-12-14T19:11:43.510+00:00"/>
+  </meta>
+  <text>
+    <status value="generated"/><div xmlns="http://www.w3.org/1999/xhtml"><pre>map &quot;http://smart.who.int/ddcc/StructureMap/ResourcesToCoreDataSet&quot; = &quot;ResourcesToCoreDataSet&quot;
+
+
+uses &quot;http://hl7.org/fhir/StructureDefinition/Bundle&quot; alias Bundle as source
+uses &quot;http://hl7.org/fhir/StructureDefinition/HumanName&quot; alias HumanName as produced
+uses &quot;http://smart.who.int/ddcc/StructureDefinition/DDCCPatient&quot; alias DDCCPatient as source
+uses &quot;http://smart.who.int/ddcc/StructureDefinition/DDCCImmunization&quot; alias DDCCImmunization as source
+uses &quot;http://smart.who.int/ddcc/StructureDefinition/DDCCImmunizationRecommendation&quot; alias DDCCImmunizationRecommendation as source
+uses &quot;http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSetPoV&quot; alias DDCCPoV as target
+
+group ResourcesToCoreDataSet(source bundle : Bundle, target ddcc : DDCCPoV) {
+  bundle.entry as entry then {
+    entry.resource : Patient as patient then PatientToHeader(patient, ddcc) &quot;set header&quot;;
+  } &quot;set header from patient&quot;;
+}
+
+group PatientToHeader(source patient : DDCCPatient, target ddcc : DDCCPoV) {
+  patient.name as name then {
+    name as src -&gt; ddcc as tgt then NameToText(src, tgt) &quot;setting name&quot;;
+  } &quot;set name&quot;;
+}
+
+group NameToText(source src : HumanName, target tgt) {
+  src.given as given -&gt; tgt.name = given &quot;set here&quot;;
+}
+
+</pre></div>
+  </text>
+  <url value="http://smart.who.int/ddcc/StructureMap/ResourcesToCoreDataSet"/>
+  <version value="1.0.0"/>
+  <name value="ResourcesToCoreDataSet"/>
+  <status value="draft"/>
+  <date value="2023-11-06T04:25:12+00:00"/>
+  <publisher value="WHO"/>
+  <contact>
+    <name value="WHO"/>
+    <telecom>
+      <system value="url"/>
+      <value value="http://who.int"/>
+    </telecom>
+  </contact>
+  <jurisdiction>
+    <coding>
+      <system value="http://unstats.un.org/unsd/methods/m49/m49.htm"/>
+      <code value="001"/>
+    </coding>
+  </jurisdiction>
+  <structure>
+    <url value="http://hl7.org/fhir/StructureDefinition/Bundle"/>
+    <mode value="source"/>
+    <alias value="Bundle"/>
+  </structure>
+  <structure>
+    <url value="http://hl7.org/fhir/StructureDefinition/HumanName"/>
+    <mode value="produced"/>
+    <alias value="HumanName"/>
+  </structure>
+  <structure>
+    <url value="http://smart.who.int/ddcc/StructureDefinition/DDCCPatient"/>
+    <mode value="source"/>
+    <alias value="DDCCPatient"/>
+  </structure>
+  <structure>
+    <url value="http://smart.who.int/ddcc/StructureDefinition/DDCCImmunization"/>
+    <mode value="source"/>
+    <alias value="DDCCImmunization"/>
+  </structure>
+  <structure>
+    <url value="http://smart.who.int/ddcc/StructureDefinition/DDCCImmunizationRecommendation"/>
+    <mode value="source"/>
+    <alias value="DDCCImmunizationRecommendation"/>
+  </structure>
+  <structure>
+    <url value="http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSetPoV"/>
+    <mode value="target"/>
+    <alias value="DDCCPoV"/>
+  </structure>
+  <group>
+    <name value="ResourcesToCoreDataSet"/>
+    <typeMode value="none"/>
+    <input>
+      <name value="bundle"/>
+      <type value="Bundle"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="ddcc"/>
+      <type value="DDCCPoV"/>
+      <mode value="target"/>
+    </input>
+    <rule>
+      <name value="set header from patient"/>
+      <source>
+        <context value="bundle"/>
+        <element value="entry"/>
+        <variable value="entry"/>
+      </source>
+      <rule>
+        <name value="set header"/>
+        <source>
+          <context value="entry"/>
+          <type value="Patient"/>
+          <element value="resource"/>
+          <variable value="patient"/>
+        </source>
+        <dependent>
+          <name value="PatientToHeader"/>
+          <variable value="patient"/>
+          <variable value="ddcc"/>
+        </dependent>
+      </rule>
+    </rule>
+  </group>
+  <group>
+    <name value="PatientToHeader"/>
+    <typeMode value="none"/>
+    <input>
+      <name value="patient"/>
+      <type value="DDCCPatient"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="ddcc"/>
+      <type value="DDCCPoV"/>
+      <mode value="target"/>
+    </input>
+    <rule>
+      <name value="set name"/>
+      <source>
+        <context value="patient"/>
+        <element value="name"/>
+        <variable value="name"/>
+      </source>
+      <rule>
+        <name value="setting name"/>
+        <source>
+          <context value="name"/>
+          <variable value="src"/>
+        </source>
+        <target>
+          <contextType value="variable"/>
+          <variable value="tgt"/>
+          <transform value="copy"/>
+          <parameter>
+            <valueId value="ddcc"/>
+          </parameter>
+        </target>
+        <dependent>
+          <name value="NameToText"/>
+          <variable value="src"/>
+          <variable value="tgt"/>
+        </dependent>
+      </rule>
+    </rule>
+  </group>
+  <group>
+    <name value="NameToText"/>
+    <typeMode value="none"/>
+    <input>
+      <name value="src"/>
+      <type value="HumanName"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="tgt"/>
+      <mode value="target"/>
+    </input>
+    <rule>
+      <name value="set here"/>
+      <source>
+        <context value="src"/>
+        <element value="given"/>
+        <variable value="given"/>
+      </source>
+      <target>
+        <context value="tgt"/>
+        <contextType value="variable"/>
+        <element value="name"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="given"/>
+        </parameter>
+      </target>
+    </rule>
+  </group>
+</StructureMap>

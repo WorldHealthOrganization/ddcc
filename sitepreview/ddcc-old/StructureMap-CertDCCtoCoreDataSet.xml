@@ -1,0 +1,1253 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<StructureMap xmlns="http://hl7.org/fhir">
+  <id value="CertDCCtoCoreDataSet"/>
+  <meta>
+    <versionId value="35"/>
+    <lastUpdated value="2023-02-15T22:34:19.164+00:00"/>
+  </meta>
+  <text>
+    <status value="generated"/><div xmlns="http://www.w3.org/1999/xhtml"><pre>map &quot;http://smart.who.int/ddcc/StructureMap/CertDCCtoCoreDataSet&quot; = &quot;CertDCCtoCoreDataSet&quot;
+
+// Structure map transforming CertDCC logical model to bundle of Core Data Set logical model
+
+uses &quot;http://smart.who.int/ddcc/StructureDefinition/CertDCC&quot; alias CWTPayload as source
+uses &quot;http://hl7.org/fhir/StructureDefinition/Bundle&quot; alias DDCCBundle as target
+uses &quot;http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet&quot; alias DDCC as produced
+uses &quot;http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.VS&quot; alias DDCCVS as produced
+uses &quot;http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.TR&quot; alias DDCCTR as produced
+
+group CertDCCtoCoreDataSet(source src : CWTPayload, target ddccBundle : DDCCBundle) {
+  src.&quot;-260&quot; as hcert then {
+    hcert.&quot;1&quot; as dcc then {
+      dcc.v as v -&gt;  ddccBundle.entry as outentry,  create('http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.VS') as ddcc then {
+        v then DCCtoCoreDataSet(dcc, ddcc) &quot;set DDCC&quot;;
+        v -&gt; ddcc.certificate as certificate then CertDCCtoCoreDataSetCertificate(src, dcc, v, certificate) &quot;set certificate&quot;;
+        v -&gt; ddcc.vaccination as vaccination then VtoCoreDataSetVS(v, vaccination) &quot;set vaccination&quot;;
+        v -&gt; outentry.resource = ddcc &quot;set outentry&quot;;
+      };
+      dcc.t as t -&gt;  ddccBundle.entry as outentry,  create('http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.TR') as ddcc then {
+        t then DCCtoCoreDataSet(dcc, ddcc) &quot;set DDCC&quot;;
+        t -&gt; ddcc.certificate as certificate then CertDCCtoCoreDataSetCertificate(src, dcc, t, certificate) &quot;set certificate&quot;;
+        t -&gt; ddcc.test as test then TtoCoreDataSetTR(t, test) &quot;set test&quot;;
+        t -&gt; outentry.resource = ddcc &quot;set outentry&quot;;
+      };
+    } &quot;eu_DCC_v1&quot;;
+  } &quot;hcert&quot;;
+}
+
+group DCCtoCoreDataSet(source dcc, target ddcc : DDCC) {
+  dcc.dob as birthDate -&gt; ddcc.birthDate = birthDate &quot;set birthDate&quot;;
+  dcc.nam as nam then {
+    nam.gn as given -&gt; ddcc.name = (given.replaceMatches('$', ' ')) &quot;set given name&quot;;
+    nam.fn as family -&gt;  ddcc.name as tName,  ddcc.name = append(tName, family) &quot;add family name&quot;;
+  };
+}
+
+group CertDCCtoCoreDataSetCertificate(source src : CWTPayload, source dcc, source g, target certificate) {
+  src -&gt; certificate.period = create('Period') as period then CwtToPeriod(src, period) &quot;set period&quot;;
+  dcc.ver as ver -&gt; certificate.version = ver &quot;set version&quot;;
+  g.ci as ci -&gt;  certificate.hcid as hcid,  hcid.value = ci &quot;set hcid&quot;;
+  g.is as is -&gt;  certificate.issuer = create('Reference') as issuer,  issuer.display = is &quot;set issuer&quot;;
+}
+
+group CwtToPeriod(source src : CWTPayload, target tgt : Period) {
+  src.&quot;6&quot; as iat -&gt;  append(iat, ' seconds') as epoch,  tgt.start = (@1970-01-01T00:00:00.000+00:00 + epoch.toQuantity()) &quot;set period start&quot;;
+  src.&quot;4&quot; as exp -&gt;  append(exp, ' seconds') as epoch,  tgt.end = (@1970-01-01T00:00:00.000+00:00 + epoch.toQuantity()) &quot;set period end&quot;;
+}
+
+group VtoCoreDataSetVS(source v, target vaccination) {
+  v.tg as tg -&gt;  vaccination.disease as coding,  coding.system = 'http://snomed.info/sct',  coding.code = tg &quot;set target disease&quot;;
+  v.vp as vp -&gt;  vaccination.vaccine as coding,  coding.system = 'https://ec.europa.eu/health/documents/community-register/html/',  coding.code = vp &quot;set vaccine&quot;;
+  v.mp as mp then {
+    mp -&gt;  vaccination.brand as coding,  coding.system = 'https://id.uvci.eu/valuesets/vaccine-medicinal-product.json',  coding.code = mp &quot;set default brand&quot;;
+    mp -&gt; c('https://ec.europa.eu/health/documents/community-register/html/', mp) as coded then {
+      mp where coded.memberOf('http://smart.who.int/ddcc/ValueSet/vaccine-covid19-euur') -&gt; vaccination.brand = translate(coded, 'http://smart.who.int/ddcc/ConceptMap/vaccine-covid19-euur-to-icd11', 'Coding') &quot;translate COVID19 brand&quot;;
+    } &quot;coding&quot;;
+  };
+  v.ma as ma -&gt;  vaccination.maholder as coding,  coding.system = 'https://id.uvci.eu/valuesets/vaccine-mah-manf.json',  coding.code = ma &quot;set maholder&quot;;
+  v.dt as date -&gt; vaccination.date = date &quot;set date&quot;;
+  v.dn as dose -&gt; vaccination.dose = dose &quot;set dose&quot;;
+  v.sd as totalDoses -&gt; vaccination.totalDoses = totalDoses &quot;set totalDoses&quot;;
+  v.co as co -&gt;  vaccination.country as coding,  coding.code = co,  coding.system = 'urn:iso:std:iso:3166' &quot;set country&quot;;
+}
+
+group TtoCoreDataSetTR(source t, target test) {
+  t.tg as tg then {
+    tg -&gt;  test.pathogen as coding,  coding.system = 'http://snomed.info/sct',  coding.code = tg &quot;set default pathogen&quot;;
+    tg -&gt; c('http://snomed.info/sct', tg) as coded then {
+      tg where coded.memberOf('http://smart.who.int/ddcc/ValueSet/lab-test-pathogen-covid19-snomed') -&gt; test.pathogen = translate(coded, 'http://smart.who.int/ddcc/ConceptMap/lab-test-pathogen-snomed-to-icd11', 'Coding') &quot;translate COVID19 pathogen&quot;;
+    } &quot;coding&quot;;
+  };
+  t.tt as tt then {
+    tt -&gt;  test.type as coding,  coding.system = 'http://loinc.org',  coding.code = tt &quot;set default type&quot;;
+    tt -&gt; c('http://loinc.org', tt) as coded then {
+      tt where coded.memberOf('http://smart.who.int/ddcc/ValueSet/lab-test-type-covid19-loinc') -&gt; test.type = translate(coded, 'http://smart.who.int/ddcc/ConceptMap/lab-test-type-covid19-loinc-to-icd11', 'Coding') &quot;translate COVID19 type&quot;;
+    } &quot;coding&quot;;
+  };
+  t.nm as nm -&gt;  test.brand as coding,  coding.system = 'https://id.uvci.eu/valuesets/test-manf.json',  coding.code = nm &quot;set brand&quot;;
+  t.ma as ma -&gt;  test.manufacturer as coding,  coding.system = 'https://covid-19-diagnostics.jrc.ec.europa.eu/devices',  coding.code = ma &quot;set manufacturer&quot;;
+  t.sc as date -&gt; test.date = date &quot;set date&quot;;
+  t.tr as tr then {
+    tr -&gt;  test.result as coding,  coding.system = 'http://snomed.info/sct',  coding.code = tr &quot;set default result&quot;;
+    tr -&gt; c('http://snomed.info/sct', tr) as coded then {
+      tr where coded.memberOf('http://smart.who.int/ddcc/ValueSet/lab-test-qual-result-snomed') -&gt; test.result = translate(coded, 'http://smart.who.int/ddcc/ConceptMap/lab-test-qual-result-snomed-to-icd11', 'Coding') &quot;translate COVID19 result&quot;;
+    } &quot;coding&quot;;
+  };
+  t.tc as tc -&gt;  test.centre as coding,  coding.code = tc &quot;set centre&quot;;
+  t.co as co -&gt;  test.country as coding,  coding.code = co,  coding.system = 'urn:iso:std:iso:3166' &quot;set country&quot;;
+}
+
+</pre></div>
+  </text>
+  <url value="http://smart.who.int/ddcc/StructureMap/CertDCCtoCoreDataSet"/>
+  <version value="1.0.0"/>
+  <name value="CertDCCtoCoreDataSet"/>
+  <status value="draft"/>
+  <date value="2023-11-06T04:25:12+00:00"/>
+  <publisher value="WHO"/>
+  <contact>
+    <name value="WHO"/>
+    <telecom>
+      <system value="url"/>
+      <value value="http://who.int"/>
+    </telecom>
+  </contact>
+  <description value="Structure map transforming CertDCC logical model to bundle of Core Data Set logical model"/>
+  <jurisdiction>
+    <coding>
+      <system value="http://unstats.un.org/unsd/methods/m49/m49.htm"/>
+      <code value="001"/>
+    </coding>
+  </jurisdiction>
+  <structure>
+    <url value="http://smart.who.int/ddcc/StructureDefinition/CertDCC"/>
+    <mode value="source"/>
+    <alias value="CWTPayload"/>
+  </structure>
+  <structure>
+    <url value="http://hl7.org/fhir/StructureDefinition/Bundle"/>
+    <mode value="target"/>
+    <alias value="DDCCBundle"/>
+  </structure>
+  <structure>
+    <url value="http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet"/>
+    <mode value="produced"/>
+    <alias value="DDCC"/>
+  </structure>
+  <structure>
+    <url value="http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.VS"/>
+    <mode value="produced"/>
+    <alias value="DDCCVS"/>
+  </structure>
+  <structure>
+    <url value="http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.TR"/>
+    <mode value="produced"/>
+    <alias value="DDCCTR"/>
+  </structure>
+  <group>
+    <name value="CertDCCtoCoreDataSet"/>
+    <typeMode value="none"/>
+    <input>
+      <name value="src"/>
+      <type value="CWTPayload"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="ddccBundle"/>
+      <type value="DDCCBundle"/>
+      <mode value="target"/>
+    </input>
+    <rule>
+      <name value="hcert"/>
+      <source>
+        <context value="src"/>
+        <element value="-260"/>
+        <variable value="hcert"/>
+      </source>
+      <rule>
+        <name value="eu_DCC_v1"/>
+        <source>
+          <context value="hcert"/>
+          <element value="1"/>
+          <variable value="dcc"/>
+        </source>
+        <rule>
+          <name value="v"/>
+          <source>
+            <context value="dcc"/>
+            <element value="v"/>
+            <variable value="v"/>
+          </source>
+          <target>
+            <context value="ddccBundle"/>
+            <contextType value="variable"/>
+            <element value="entry"/>
+            <variable value="outentry"/>
+          </target>
+          <target>
+            <contextType value="variable"/>
+            <variable value="ddcc"/>
+            <transform value="create"/>
+            <parameter>
+              <valueString value="http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.VS"/>
+            </parameter>
+          </target>
+          <rule>
+            <name value="set DDCC"/>
+            <source>
+              <context value="v"/>
+            </source>
+            <dependent>
+              <name value="DCCtoCoreDataSet"/>
+              <variable value="dcc"/>
+              <variable value="ddcc"/>
+            </dependent>
+          </rule>
+          <rule>
+            <name value="set certificate"/>
+            <source>
+              <context value="v"/>
+            </source>
+            <target>
+              <context value="ddcc"/>
+              <contextType value="variable"/>
+              <element value="certificate"/>
+              <variable value="certificate"/>
+            </target>
+            <dependent>
+              <name value="CertDCCtoCoreDataSetCertificate"/>
+              <variable value="src"/>
+              <variable value="dcc"/>
+              <variable value="v"/>
+              <variable value="certificate"/>
+            </dependent>
+          </rule>
+          <rule>
+            <name value="set vaccination"/>
+            <source>
+              <context value="v"/>
+            </source>
+            <target>
+              <context value="ddcc"/>
+              <contextType value="variable"/>
+              <element value="vaccination"/>
+              <variable value="vaccination"/>
+            </target>
+            <dependent>
+              <name value="VtoCoreDataSetVS"/>
+              <variable value="v"/>
+              <variable value="vaccination"/>
+            </dependent>
+          </rule>
+          <rule>
+            <name value="set outentry"/>
+            <source>
+              <context value="v"/>
+            </source>
+            <target>
+              <context value="outentry"/>
+              <contextType value="variable"/>
+              <element value="resource"/>
+              <transform value="copy"/>
+              <parameter>
+                <valueId value="ddcc"/>
+              </parameter>
+            </target>
+          </rule>
+        </rule>
+        <rule>
+          <name value="t"/>
+          <source>
+            <context value="dcc"/>
+            <element value="t"/>
+            <variable value="t"/>
+          </source>
+          <target>
+            <context value="ddccBundle"/>
+            <contextType value="variable"/>
+            <element value="entry"/>
+            <variable value="outentry"/>
+          </target>
+          <target>
+            <contextType value="variable"/>
+            <variable value="ddcc"/>
+            <transform value="create"/>
+            <parameter>
+              <valueString value="http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.TR"/>
+            </parameter>
+          </target>
+          <rule>
+            <name value="set DDCC"/>
+            <source>
+              <context value="t"/>
+            </source>
+            <dependent>
+              <name value="DCCtoCoreDataSet"/>
+              <variable value="dcc"/>
+              <variable value="ddcc"/>
+            </dependent>
+          </rule>
+          <rule>
+            <name value="set certificate"/>
+            <source>
+              <context value="t"/>
+            </source>
+            <target>
+              <context value="ddcc"/>
+              <contextType value="variable"/>
+              <element value="certificate"/>
+              <variable value="certificate"/>
+            </target>
+            <dependent>
+              <name value="CertDCCtoCoreDataSetCertificate"/>
+              <variable value="src"/>
+              <variable value="dcc"/>
+              <variable value="t"/>
+              <variable value="certificate"/>
+            </dependent>
+          </rule>
+          <rule>
+            <name value="set test"/>
+            <source>
+              <context value="t"/>
+            </source>
+            <target>
+              <context value="ddcc"/>
+              <contextType value="variable"/>
+              <element value="test"/>
+              <variable value="test"/>
+            </target>
+            <dependent>
+              <name value="TtoCoreDataSetTR"/>
+              <variable value="t"/>
+              <variable value="test"/>
+            </dependent>
+          </rule>
+          <rule>
+            <name value="set outentry"/>
+            <source>
+              <context value="t"/>
+            </source>
+            <target>
+              <context value="outentry"/>
+              <contextType value="variable"/>
+              <element value="resource"/>
+              <transform value="copy"/>
+              <parameter>
+                <valueId value="ddcc"/>
+              </parameter>
+            </target>
+          </rule>
+        </rule>
+      </rule>
+    </rule>
+  </group>
+  <group>
+    <name value="DCCtoCoreDataSet"/>
+    <typeMode value="none"/>
+    <input>
+      <name value="dcc"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="ddcc"/>
+      <type value="DDCC"/>
+      <mode value="target"/>
+    </input>
+    <rule>
+      <name value="set birthDate"/>
+      <source>
+        <context value="dcc"/>
+        <element value="dob"/>
+        <variable value="birthDate"/>
+      </source>
+      <target>
+        <context value="ddcc"/>
+        <contextType value="variable"/>
+        <element value="birthDate"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="birthDate"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="nam"/>
+      <source>
+        <context value="dcc"/>
+        <element value="nam"/>
+        <variable value="nam"/>
+      </source>
+      <rule>
+        <name value="set given name"/>
+        <source>
+          <context value="nam"/>
+          <element value="gn"/>
+          <variable value="given"/>
+        </source>
+        <target>
+          <context value="ddcc"/>
+          <contextType value="variable"/>
+          <element value="name"/>
+          <transform value="evaluate"/>
+          <parameter>
+            <valueString value="given.replaceMatches('$', ' ')"/>
+          </parameter>
+        </target>
+      </rule>
+      <rule>
+        <name value="add family name"/>
+        <source>
+          <context value="nam"/>
+          <element value="fn"/>
+          <variable value="family"/>
+        </source>
+        <target>
+          <context value="ddcc"/>
+          <contextType value="variable"/>
+          <element value="name"/>
+          <variable value="tName"/>
+        </target>
+        <target>
+          <context value="ddcc"/>
+          <contextType value="variable"/>
+          <element value="name"/>
+          <transform value="append"/>
+          <parameter>
+            <valueId value="tName"/>
+          </parameter>
+          <parameter>
+            <valueId value="family"/>
+          </parameter>
+        </target>
+      </rule>
+    </rule>
+  </group>
+  <group>
+    <name value="CertDCCtoCoreDataSetCertificate"/>
+    <typeMode value="none"/>
+    <input>
+      <name value="src"/>
+      <type value="CWTPayload"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="dcc"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="g"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="certificate"/>
+      <mode value="target"/>
+    </input>
+    <rule>
+      <name value="set period"/>
+      <source>
+        <context value="src"/>
+      </source>
+      <target>
+        <context value="certificate"/>
+        <contextType value="variable"/>
+        <element value="period"/>
+        <variable value="period"/>
+        <transform value="create"/>
+        <parameter>
+          <valueString value="Period"/>
+        </parameter>
+      </target>
+      <dependent>
+        <name value="CwtToPeriod"/>
+        <variable value="src"/>
+        <variable value="period"/>
+      </dependent>
+    </rule>
+    <rule>
+      <name value="set version"/>
+      <source>
+        <context value="dcc"/>
+        <element value="ver"/>
+        <variable value="ver"/>
+      </source>
+      <target>
+        <context value="certificate"/>
+        <contextType value="variable"/>
+        <element value="version"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="ver"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="set hcid"/>
+      <source>
+        <context value="g"/>
+        <element value="ci"/>
+        <variable value="ci"/>
+      </source>
+      <target>
+        <context value="certificate"/>
+        <contextType value="variable"/>
+        <element value="hcid"/>
+        <variable value="hcid"/>
+      </target>
+      <target>
+        <context value="hcid"/>
+        <contextType value="variable"/>
+        <element value="value"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="ci"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="set issuer"/>
+      <source>
+        <context value="g"/>
+        <element value="is"/>
+        <variable value="is"/>
+      </source>
+      <target>
+        <context value="certificate"/>
+        <contextType value="variable"/>
+        <element value="issuer"/>
+        <variable value="issuer"/>
+        <transform value="create"/>
+        <parameter>
+          <valueString value="Reference"/>
+        </parameter>
+      </target>
+      <target>
+        <context value="issuer"/>
+        <contextType value="variable"/>
+        <element value="display"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="is"/>
+        </parameter>
+      </target>
+    </rule>
+  </group>
+  <group>
+    <name value="CwtToPeriod"/>
+    <typeMode value="none"/>
+    <input>
+      <name value="src"/>
+      <type value="CWTPayload"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="tgt"/>
+      <type value="Period"/>
+      <mode value="target"/>
+    </input>
+    <rule>
+      <name value="set period start"/>
+      <source>
+        <context value="src"/>
+        <element value="6"/>
+        <variable value="iat"/>
+      </source>
+      <target>
+        <contextType value="variable"/>
+        <variable value="epoch"/>
+        <transform value="append"/>
+        <parameter>
+          <valueId value="iat"/>
+        </parameter>
+        <parameter>
+          <valueString value=" seconds"/>
+        </parameter>
+      </target>
+      <target>
+        <context value="tgt"/>
+        <contextType value="variable"/>
+        <element value="start"/>
+        <transform value="evaluate"/>
+        <parameter>
+          <valueString value="@1970-01-01T00:00:00.000+00:00 + epoch.toQuantity()"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="set period end"/>
+      <source>
+        <context value="src"/>
+        <element value="4"/>
+        <variable value="exp"/>
+      </source>
+      <target>
+        <contextType value="variable"/>
+        <variable value="epoch"/>
+        <transform value="append"/>
+        <parameter>
+          <valueId value="exp"/>
+        </parameter>
+        <parameter>
+          <valueString value=" seconds"/>
+        </parameter>
+      </target>
+      <target>
+        <context value="tgt"/>
+        <contextType value="variable"/>
+        <element value="end"/>
+        <transform value="evaluate"/>
+        <parameter>
+          <valueString value="@1970-01-01T00:00:00.000+00:00 + epoch.toQuantity()"/>
+        </parameter>
+      </target>
+    </rule>
+  </group>
+  <group>
+    <name value="VtoCoreDataSetVS"/>
+    <typeMode value="none"/>
+    <input>
+      <name value="v"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="vaccination"/>
+      <mode value="target"/>
+    </input>
+    <rule>
+      <name value="set target disease"/>
+      <source>
+        <context value="v"/>
+        <element value="tg"/>
+        <variable value="tg"/>
+      </source>
+      <target>
+        <context value="vaccination"/>
+        <contextType value="variable"/>
+        <element value="disease"/>
+        <variable value="coding"/>
+      </target>
+      <target>
+        <context value="coding"/>
+        <contextType value="variable"/>
+        <element value="system"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueString value="http://snomed.info/sct"/>
+        </parameter>
+      </target>
+      <target>
+        <context value="coding"/>
+        <contextType value="variable"/>
+        <element value="code"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="tg"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="set vaccine"/>
+      <source>
+        <context value="v"/>
+        <element value="vp"/>
+        <variable value="vp"/>
+      </source>
+      <target>
+        <context value="vaccination"/>
+        <contextType value="variable"/>
+        <element value="vaccine"/>
+        <variable value="coding"/>
+      </target>
+      <target>
+        <context value="coding"/>
+        <contextType value="variable"/>
+        <element value="system"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueString value="https://ec.europa.eu/health/documents/community-register/html/"/>
+        </parameter>
+      </target>
+      <target>
+        <context value="coding"/>
+        <contextType value="variable"/>
+        <element value="code"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="vp"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="mp"/>
+      <source>
+        <context value="v"/>
+        <element value="mp"/>
+        <variable value="mp"/>
+      </source>
+      <rule>
+        <name value="set default brand"/>
+        <source>
+          <context value="mp"/>
+        </source>
+        <target>
+          <context value="vaccination"/>
+          <contextType value="variable"/>
+          <element value="brand"/>
+          <variable value="coding"/>
+        </target>
+        <target>
+          <context value="coding"/>
+          <contextType value="variable"/>
+          <element value="system"/>
+          <transform value="copy"/>
+          <parameter>
+            <valueString value="https://id.uvci.eu/valuesets/vaccine-medicinal-product.json"/>
+          </parameter>
+        </target>
+        <target>
+          <context value="coding"/>
+          <contextType value="variable"/>
+          <element value="code"/>
+          <transform value="copy"/>
+          <parameter>
+            <valueId value="mp"/>
+          </parameter>
+        </target>
+      </rule>
+      <rule>
+        <name value="coding"/>
+        <source>
+          <context value="mp"/>
+        </source>
+        <target>
+          <contextType value="variable"/>
+          <variable value="coded"/>
+          <transform value="c"/>
+          <parameter>
+            <valueString value="https://ec.europa.eu/health/documents/community-register/html/"/>
+          </parameter>
+          <parameter>
+            <valueId value="mp"/>
+          </parameter>
+        </target>
+        <rule>
+          <name value="translate COVID19 brand"/>
+          <source>
+            <context value="mp"/>
+            <condition value="coded.memberOf('http://smart.who.int/ddcc/ValueSet/vaccine-covid19-euur')"/>
+          </source>
+          <target>
+            <context value="vaccination"/>
+            <contextType value="variable"/>
+            <element value="brand"/>
+            <transform value="translate"/>
+            <parameter>
+              <valueId value="coded"/>
+            </parameter>
+            <parameter>
+              <valueString value="http://smart.who.int/ddcc/ConceptMap/vaccine-covid19-euur-to-icd11"/>
+            </parameter>
+            <parameter>
+              <valueString value="Coding"/>
+            </parameter>
+          </target>
+        </rule>
+      </rule>
+    </rule>
+    <rule>
+      <name value="set maholder"/>
+      <source>
+        <context value="v"/>
+        <element value="ma"/>
+        <variable value="ma"/>
+      </source>
+      <target>
+        <context value="vaccination"/>
+        <contextType value="variable"/>
+        <element value="maholder"/>
+        <variable value="coding"/>
+      </target>
+      <target>
+        <context value="coding"/>
+        <contextType value="variable"/>
+        <element value="system"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueString value="https://id.uvci.eu/valuesets/vaccine-mah-manf.json"/>
+        </parameter>
+      </target>
+      <target>
+        <context value="coding"/>
+        <contextType value="variable"/>
+        <element value="code"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="ma"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="set date"/>
+      <source>
+        <context value="v"/>
+        <element value="dt"/>
+        <variable value="date"/>
+      </source>
+      <target>
+        <context value="vaccination"/>
+        <contextType value="variable"/>
+        <element value="date"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="date"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="set dose"/>
+      <source>
+        <context value="v"/>
+        <element value="dn"/>
+        <variable value="dose"/>
+      </source>
+      <target>
+        <context value="vaccination"/>
+        <contextType value="variable"/>
+        <element value="dose"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="dose"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="set totalDoses"/>
+      <source>
+        <context value="v"/>
+        <element value="sd"/>
+        <variable value="totalDoses"/>
+      </source>
+      <target>
+        <context value="vaccination"/>
+        <contextType value="variable"/>
+        <element value="totalDoses"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="totalDoses"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="set country"/>
+      <source>
+        <context value="v"/>
+        <element value="co"/>
+        <variable value="co"/>
+      </source>
+      <target>
+        <context value="vaccination"/>
+        <contextType value="variable"/>
+        <element value="country"/>
+        <variable value="coding"/>
+      </target>
+      <target>
+        <context value="coding"/>
+        <contextType value="variable"/>
+        <element value="code"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="co"/>
+        </parameter>
+      </target>
+      <target>
+        <context value="coding"/>
+        <contextType value="variable"/>
+        <element value="system"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueString value="urn:iso:std:iso:3166"/>
+        </parameter>
+      </target>
+    </rule>
+  </group>
+  <group>
+    <name value="TtoCoreDataSetTR"/>
+    <typeMode value="none"/>
+    <input>
+      <name value="t"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="test"/>
+      <mode value="target"/>
+    </input>
+    <rule>
+      <name value="tg"/>
+      <source>
+        <context value="t"/>
+        <element value="tg"/>
+        <variable value="tg"/>
+      </source>
+      <rule>
+        <name value="set default pathogen"/>
+        <source>
+          <context value="tg"/>
+        </source>
+        <target>
+          <context value="test"/>
+          <contextType value="variable"/>
+          <element value="pathogen"/>
+          <variable value="coding"/>
+        </target>
+        <target>
+          <context value="coding"/>
+          <contextType value="variable"/>
+          <element value="system"/>
+          <transform value="copy"/>
+          <parameter>
+            <valueString value="http://snomed.info/sct"/>
+          </parameter>
+        </target>
+        <target>
+          <context value="coding"/>
+          <contextType value="variable"/>
+          <element value="code"/>
+          <transform value="copy"/>
+          <parameter>
+            <valueId value="tg"/>
+          </parameter>
+        </target>
+      </rule>
+      <rule>
+        <name value="coding"/>
+        <source>
+          <context value="tg"/>
+        </source>
+        <target>
+          <contextType value="variable"/>
+          <variable value="coded"/>
+          <transform value="c"/>
+          <parameter>
+            <valueString value="http://snomed.info/sct"/>
+          </parameter>
+          <parameter>
+            <valueId value="tg"/>
+          </parameter>
+        </target>
+        <rule>
+          <name value="translate COVID19 pathogen"/>
+          <source>
+            <context value="tg"/>
+            <condition value="coded.memberOf('http://smart.who.int/ddcc/ValueSet/lab-test-pathogen-covid19-snomed')"/>
+          </source>
+          <target>
+            <context value="test"/>
+            <contextType value="variable"/>
+            <element value="pathogen"/>
+            <transform value="translate"/>
+            <parameter>
+              <valueId value="coded"/>
+            </parameter>
+            <parameter>
+              <valueString value="http://smart.who.int/ddcc/ConceptMap/lab-test-pathogen-snomed-to-icd11"/>
+            </parameter>
+            <parameter>
+              <valueString value="Coding"/>
+            </parameter>
+          </target>
+        </rule>
+      </rule>
+    </rule>
+    <rule>
+      <name value="tt"/>
+      <source>
+        <context value="t"/>
+        <element value="tt"/>
+        <variable value="tt"/>
+      </source>
+      <rule>
+        <name value="set default type"/>
+        <source>
+          <context value="tt"/>
+        </source>
+        <target>
+          <context value="test"/>
+          <contextType value="variable"/>
+          <element value="type"/>
+          <variable value="coding"/>
+        </target>
+        <target>
+          <context value="coding"/>
+          <contextType value="variable"/>
+          <element value="system"/>
+          <transform value="copy"/>
+          <parameter>
+            <valueString value="http://loinc.org"/>
+          </parameter>
+        </target>
+        <target>
+          <context value="coding"/>
+          <contextType value="variable"/>
+          <element value="code"/>
+          <transform value="copy"/>
+          <parameter>
+            <valueId value="tt"/>
+          </parameter>
+        </target>
+      </rule>
+      <rule>
+        <name value="coding"/>
+        <source>
+          <context value="tt"/>
+        </source>
+        <target>
+          <contextType value="variable"/>
+          <variable value="coded"/>
+          <transform value="c"/>
+          <parameter>
+            <valueString value="http://loinc.org"/>
+          </parameter>
+          <parameter>
+            <valueId value="tt"/>
+          </parameter>
+        </target>
+        <rule>
+          <name value="translate COVID19 type"/>
+          <source>
+            <context value="tt"/>
+            <condition value="coded.memberOf('http://smart.who.int/ddcc/ValueSet/lab-test-type-covid19-loinc')"/>
+          </source>
+          <target>
+            <context value="test"/>
+            <contextType value="variable"/>
+            <element value="type"/>
+            <transform value="translate"/>
+            <parameter>
+              <valueId value="coded"/>
+            </parameter>
+            <parameter>
+              <valueString value="http://smart.who.int/ddcc/ConceptMap/lab-test-type-covid19-loinc-to-icd11"/>
+            </parameter>
+            <parameter>
+              <valueString value="Coding"/>
+            </parameter>
+          </target>
+        </rule>
+      </rule>
+    </rule>
+    <rule>
+      <name value="set brand"/>
+      <source>
+        <context value="t"/>
+        <element value="nm"/>
+        <variable value="nm"/>
+      </source>
+      <target>
+        <context value="test"/>
+        <contextType value="variable"/>
+        <element value="brand"/>
+        <variable value="coding"/>
+      </target>
+      <target>
+        <context value="coding"/>
+        <contextType value="variable"/>
+        <element value="system"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueString value="https://id.uvci.eu/valuesets/test-manf.json"/>
+        </parameter>
+      </target>
+      <target>
+        <context value="coding"/>
+        <contextType value="variable"/>
+        <element value="code"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="nm"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="set manufacturer"/>
+      <source>
+        <context value="t"/>
+        <element value="ma"/>
+        <variable value="ma"/>
+      </source>
+      <target>
+        <context value="test"/>
+        <contextType value="variable"/>
+        <element value="manufacturer"/>
+        <variable value="coding"/>
+      </target>
+      <target>
+        <context value="coding"/>
+        <contextType value="variable"/>
+        <element value="system"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueString value="https://covid-19-diagnostics.jrc.ec.europa.eu/devices"/>
+        </parameter>
+      </target>
+      <target>
+        <context value="coding"/>
+        <contextType value="variable"/>
+        <element value="code"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="ma"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="set date"/>
+      <source>
+        <context value="t"/>
+        <element value="sc"/>
+        <variable value="date"/>
+      </source>
+      <target>
+        <context value="test"/>
+        <contextType value="variable"/>
+        <element value="date"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="date"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="tr"/>
+      <source>
+        <context value="t"/>
+        <element value="tr"/>
+        <variable value="tr"/>
+      </source>
+      <rule>
+        <name value="set default result"/>
+        <source>
+          <context value="tr"/>
+        </source>
+        <target>
+          <context value="test"/>
+          <contextType value="variable"/>
+          <element value="result"/>
+          <variable value="coding"/>
+        </target>
+        <target>
+          <context value="coding"/>
+          <contextType value="variable"/>
+          <element value="system"/>
+          <transform value="copy"/>
+          <parameter>
+            <valueString value="http://snomed.info/sct"/>
+          </parameter>
+        </target>
+        <target>
+          <context value="coding"/>
+          <contextType value="variable"/>
+          <element value="code"/>
+          <transform value="copy"/>
+          <parameter>
+            <valueId value="tr"/>
+          </parameter>
+        </target>
+      </rule>
+      <rule>
+        <name value="coding"/>
+        <source>
+          <context value="tr"/>
+        </source>
+        <target>
+          <contextType value="variable"/>
+          <variable value="coded"/>
+          <transform value="c"/>
+          <parameter>
+            <valueString value="http://snomed.info/sct"/>
+          </parameter>
+          <parameter>
+            <valueId value="tr"/>
+          </parameter>
+        </target>
+        <rule>
+          <name value="translate COVID19 result"/>
+          <source>
+            <context value="tr"/>
+            <condition value="coded.memberOf('http://smart.who.int/ddcc/ValueSet/lab-test-qual-result-snomed')"/>
+          </source>
+          <target>
+            <context value="test"/>
+            <contextType value="variable"/>
+            <element value="result"/>
+            <transform value="translate"/>
+            <parameter>
+              <valueId value="coded"/>
+            </parameter>
+            <parameter>
+              <valueString value="http://smart.who.int/ddcc/ConceptMap/lab-test-qual-result-snomed-to-icd11"/>
+            </parameter>
+            <parameter>
+              <valueString value="Coding"/>
+            </parameter>
+          </target>
+        </rule>
+      </rule>
+    </rule>
+    <rule>
+      <name value="set centre"/>
+      <source>
+        <context value="t"/>
+        <element value="tc"/>
+        <variable value="tc"/>
+      </source>
+      <target>
+        <context value="test"/>
+        <contextType value="variable"/>
+        <element value="centre"/>
+        <variable value="coding"/>
+      </target>
+      <target>
+        <context value="coding"/>
+        <contextType value="variable"/>
+        <element value="code"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="tc"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="set country"/>
+      <source>
+        <context value="t"/>
+        <element value="co"/>
+        <variable value="co"/>
+      </source>
+      <target>
+        <context value="test"/>
+        <contextType value="variable"/>
+        <element value="country"/>
+        <variable value="coding"/>
+      </target>
+      <target>
+        <context value="coding"/>
+        <contextType value="variable"/>
+        <element value="code"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="co"/>
+        </parameter>
+      </target>
+      <target>
+        <context value="coding"/>
+        <contextType value="variable"/>
+        <element value="system"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueString value="urn:iso:std:iso:3166"/>
+        </parameter>
+      </target>
+    </rule>
+  </group>
+</StructureMap>

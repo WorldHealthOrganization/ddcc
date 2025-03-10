@@ -1,0 +1,259 @@
+{
+  "resourceType": "StructureMap",
+  "id": "ddcc-resources-to-coredataset",
+  "meta": {
+    "versionId": "1",
+    "lastUpdated": "2021-12-14T19:11:43.510+00:00"
+  },
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><pre>map &quot;http://worldhealthorganization.github.io/ddcc/StructureMap/ResourcesToCoreDataSet&quot; = &quot;ResourcesToCoreDataSet&quot;\r\n\r\n\r\nuses &quot;http://hl7.org/fhir/StructureDefinition/Bundle&quot; alias Bundle as source\r\nuses &quot;http://hl7.org/fhir/StructureDefinition/HumanName&quot; alias HumanName as produced\r\nuses &quot;http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCPatient&quot; alias DDCCPatient as source\r\nuses &quot;http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCImmunization&quot; alias DDCCImmunization as source\r\nuses &quot;http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCImmunizationRecommendation&quot; alias DDCCImmunizationRecommendation as source\r\nuses &quot;http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSetPoV&quot; alias DDCCPoV as target\r\n\r\ngroup ResourcesToCoreDataSet(source bundle : Bundle, target ddcc : DDCCPoV) {\r\n  bundle.entry as entry then {\r\n    entry.resource : Patient as patient then PatientToHeader(patient, ddcc) &quot;set header&quot;;\r\n  } &quot;set header from patient&quot;;\r\n}\r\n\r\ngroup PatientToHeader(source patient : DDCCPatient, target ddcc : DDCCPoV) {\r\n  patient.name as name then {\r\n    name as src -&gt; ddcc as tgt then NameToText(src, tgt) &quot;setting name&quot;;\r\n  } &quot;set name&quot;;\r\n}\r\n\r\ngroup NameToText(source src : HumanName, target tgt) {\r\n  src.given as given -&gt; tgt.name = given &quot;set here&quot;;\r\n}\r\n\r\n</pre></div>"
+  },
+  "url": "http://worldhealthorganization.github.io/ddcc/StructureMap/ResourcesToCoreDataSet",
+  "version": "1.0.0",
+  "name": "ResourcesToCoreDataSet",
+  "status": "draft",
+  "date": "2022-11-23T04:26:34+00:00",
+  "publisher": "WHO",
+  "contact": [
+    {
+      "name": "WHO",
+      "telecom": [
+        {
+          "system": "url",
+          "value": "http://who.int"
+        }
+      ]
+    }
+  ],
+  "jurisdiction": [
+    {
+      "coding": [
+        {
+          "system": "http://unstats.un.org/unsd/methods/m49/m49.htm",
+          "code": "001"
+        }
+      ]
+    }
+  ],
+  "structure": [
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/Bundle",
+      "mode": "source",
+      "alias": "Bundle"
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/HumanName",
+      "mode": "produced",
+      "alias": "HumanName"
+    },
+    {
+      "url": "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCPatient",
+      "mode": "source",
+      "alias": "DDCCPatient"
+    },
+    {
+      "url": "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCImmunization",
+      "mode": "source",
+      "alias": "DDCCImmunization"
+    },
+    {
+      "url": "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCImmunizationRecommendation",
+      "mode": "source",
+      "alias": "DDCCImmunizationRecommendation"
+    },
+    {
+      "url": "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSetPoV",
+      "mode": "target",
+      "alias": "DDCCPoV"
+    }
+  ],
+  "group": [
+    {
+      "name": "ResourcesToCoreDataSet",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "bundle",
+          "type": "Bundle",
+          "mode": "source"
+        },
+        {
+          "name": "ddcc",
+          "type": "DDCCPoV",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set header from patient",
+          "source": [
+            {
+              "context": "bundle",
+              "element": "entry",
+              "variable": "entry"
+            }
+          ],
+          "rule": [
+            {
+              "name": "set header",
+              "source": [
+                {
+                  "context": "entry",
+                  "type": "Patient",
+                  "element": "resource",
+                  "variable": "patient"
+                }
+              ],
+              "dependent": [
+                {
+                  "name": "PatientToHeader",
+                  "variable": [
+                    "patient",
+                    "ddcc"
+                  ],
+                  "_variable": [
+                    {
+                      "extension": [
+                        {
+                          "url": "http://hl7.org/fhir/tools/StructureDefinition/original-item-type",
+                          "valueUrl": "id"
+                        }
+                      ]
+                    },
+                    {
+                      "extension": [
+                        {
+                          "url": "http://hl7.org/fhir/tools/StructureDefinition/original-item-type",
+                          "valueUrl": "id"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "PatientToHeader",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "patient",
+          "type": "DDCCPatient",
+          "mode": "source"
+        },
+        {
+          "name": "ddcc",
+          "type": "DDCCPoV",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set name",
+          "source": [
+            {
+              "context": "patient",
+              "element": "name",
+              "variable": "name"
+            }
+          ],
+          "rule": [
+            {
+              "name": "setting name",
+              "source": [
+                {
+                  "context": "name",
+                  "variable": "src"
+                }
+              ],
+              "target": [
+                {
+                  "contextType": "variable",
+                  "variable": "tgt",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "ddcc"
+                    }
+                  ]
+                }
+              ],
+              "dependent": [
+                {
+                  "name": "NameToText",
+                  "variable": [
+                    "src",
+                    "tgt"
+                  ],
+                  "_variable": [
+                    {
+                      "extension": [
+                        {
+                          "url": "http://hl7.org/fhir/tools/StructureDefinition/original-item-type",
+                          "valueUrl": "id"
+                        }
+                      ]
+                    },
+                    {
+                      "extension": [
+                        {
+                          "url": "http://hl7.org/fhir/tools/StructureDefinition/original-item-type",
+                          "valueUrl": "id"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "NameToText",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "src",
+          "type": "HumanName",
+          "mode": "source"
+        },
+        {
+          "name": "tgt",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set here",
+          "source": [
+            {
+              "context": "src",
+              "element": "given",
+              "variable": "given"
+            }
+          ],
+          "target": [
+            {
+              "context": "tgt",
+              "contextType": "variable",
+              "element": "name",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "given"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

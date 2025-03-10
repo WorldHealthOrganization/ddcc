@@ -1,0 +1,1078 @@
+@prefix fhir: <http://hl7.org/fhir/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# - resource -------------------------------------------------------------------
+
+<http://smart.who.int/ddcc/StructureMap/CertDCCtoCoreDataSet> a fhir:StructureMap ;
+  fhir:nodeRole fhir:treeRoot ;
+  fhir:id [ fhir:v "CertDCCtoCoreDataSet"] ; # 
+  fhir:text [
+     fhir:status [ fhir:v "generated" ] ;
+     fhir:div "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p class=\"res-header-id\"><b>Generated Narrative: StructureMap CertDCCtoCoreDataSet</b></p><a name=\"CertDCCtoCoreDataSet\"> </a><a name=\"hcCertDCCtoCoreDataSet\"> </a><a name=\"CertDCCtoCoreDataSet-en-US\"> </a><pre class=\"fml\">\r\n<b>map</b><span style=\"color: navy\"> &quot;</span>http://smart.who.int/ddcc/StructureMap/CertDCCtoCoreDataSet<span style=\"color: navy\">&quot; = &quot;</span>CertDCCtoCoreDataSet<span style=\"color: navy\">&quot;\r\n\r\n</span><span style=\"color: navy\">// </span><span style=\"color: green\">Structure map transforming CertDCC logical model to bundle of Core Data Set logical model</span>\r\n\r\n<b>uses</b><span style=\"color: navy\"> &quot;</span>http://smart.who.int/ddcc/StructureDefinition/CertDCC<span style=\"color: navy\">&quot; </span><b>alias </b>CWTPayload <b>as </b><b>source</b>\r\n<b>uses</b><span style=\"color: navy\"> &quot;</span><a href=\"http://hl7.org/fhir/R4/bundle.html\" title=\"Bundle\">http://hl7.org/fhir/StructureDefinition/Bundle</a><span style=\"color: navy\">&quot; </span><b>alias </b>DDCCBundle <b>as </b><b>target</b>\r\n<b>uses</b><span style=\"color: navy\"> &quot;</span><a href=\"StructureDefinition-DDCCCoreDataSet.html\" title=\"DDCC Core Data Set Logical Model\">http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet</a><span style=\"color: navy\">&quot; </span><b>alias </b>DDCC <b>as </b><b>target</b>\r\n<b>uses</b><span style=\"color: navy\"> &quot;</span><a href=\"StructureDefinition-DDCCCoreDataSetVS.html\" title=\"DDCC Core Data Set Logical Model for Vaccination Status\">http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSetVS</a><span style=\"color: navy\">&quot; </span><b>alias </b>DDCCVS <b>as </b><b>target</b>\r\n<b>uses</b><span style=\"color: navy\"> &quot;</span><a href=\"StructureDefinition-DDCCCoreDataSetTR.html\" title=\"DDCC Core Data Set Logical Model for Test Result\">http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSetTR</a><span style=\"color: navy\">&quot; </span><b>alias </b>DDCCTR <b>as </b><b>target</b>\r\n\r\n<b>group </b>CertDCCtoCoreDataSet<span style=\"color: navy\">(</span><b>source</b> <span style=\"color: maroon\">src</span><span style=\"color: navy\"> : </span>CWTPayload, <b>target</b> <span style=\"color: maroon\">ddccBundle</span><span style=\"color: navy\"> : </span>DDCCBundle<span style=\"color: navy\">)</span><span style=\"color: navy\"> {\r\n</span>  src.-260<b> as </b><span style=\"color: maroon\">hcert</span><b> then</b><span style=\"color: navy\"> {\r\n</span>    hcert.1<b> as </b><span style=\"color: maroon\">dcc</span><b> then</b><span style=\"color: navy\"> {\r\n</span>      dcc.v<b> as </b><span style=\"color: maroon\">v</span><span style=\"color: navy\"><b> -&gt; </b></span> ddccBundle.entry<b> as </b><span style=\"color: maroon\">outentry</span><span style=\"color: navy\">, </span> <b>create</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSetVS'</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">ddcc</span><b> then</b><span style=\"color: navy\"> {\r\n</span>        v<b> then </b>DCCtoCoreDataSet<span style=\"color: navy\">(</span><span style=\"color: maroon\">dcc</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">ddcc</span><span style=\"color: navy\">)</span> <i>&quot;set DDCC&quot;</i><span style=\"color: navy\">;</span>\r\n        v<span style=\"color: navy\"><b> -&gt; </b></span>ddcc.certificate<b> as </b><span style=\"color: maroon\">certificate</span><b> then </b>CertDCCtoCoreDataSetCertificate<span style=\"color: navy\">(</span><span style=\"color: maroon\">src</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">dcc</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">v</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">certificate</span><span style=\"color: navy\">)</span> <i>&quot;set certificate&quot;</i><span style=\"color: navy\">;</span>\r\n        v<span style=\"color: navy\"><b> -&gt; </b></span>ddcc.vaccination<b> as </b><span style=\"color: maroon\">vaccination</span><b> then </b>VtoCoreDataSetVS<span style=\"color: navy\">(</span><span style=\"color: maroon\">v</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">vaccination</span><span style=\"color: navy\">)</span> <i>&quot;set vaccination&quot;</i><span style=\"color: navy\">;</span>\r\n        v<span style=\"color: navy\"><b> -&gt; </b></span>outentry.resource = <span style=\"color: maroon\">ddcc</span> <i>&quot;set outentry&quot;</i><span style=\"color: navy\">;</span>\r\n      <span style=\"color: navy\">}</span><span style=\"color: navy\">;</span>\r\n      dcc.t<b> as </b><span style=\"color: maroon\">t</span><span style=\"color: navy\"><b> -&gt; </b></span> ddccBundle.entry<b> as </b><span style=\"color: maroon\">outentry</span><span style=\"color: navy\">, </span> <b>create</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSetTR'</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">ddcc</span><b> then</b><span style=\"color: navy\"> {\r\n</span>        t<b> then </b>DCCtoCoreDataSet<span style=\"color: navy\">(</span><span style=\"color: maroon\">dcc</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">ddcc</span><span style=\"color: navy\">)</span> <i>&quot;set DDCC&quot;</i><span style=\"color: navy\">;</span>\r\n        t<span style=\"color: navy\"><b> -&gt; </b></span>ddcc.certificate<b> as </b><span style=\"color: maroon\">certificate</span><b> then </b>CertDCCtoCoreDataSetCertificate<span style=\"color: navy\">(</span><span style=\"color: maroon\">src</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">dcc</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">t</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">certificate</span><span style=\"color: navy\">)</span> <i>&quot;set certificate&quot;</i><span style=\"color: navy\">;</span>\r\n        t<span style=\"color: navy\"><b> -&gt; </b></span>ddcc.test<b> as </b><span style=\"color: maroon\">test</span><b> then </b>TtoCoreDataSetTR<span style=\"color: navy\">(</span><span style=\"color: maroon\">t</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">test</span><span style=\"color: navy\">)</span> <i>&quot;set test&quot;</i><span style=\"color: navy\">;</span>\r\n        t<span style=\"color: navy\"><b> -&gt; </b></span>outentry.resource = <span style=\"color: maroon\">ddcc</span> <i>&quot;set outentry&quot;</i><span style=\"color: navy\">;</span>\r\n      <span style=\"color: navy\">}</span><span style=\"color: navy\">;</span>\r\n    <span style=\"color: navy\">}</span> <i>&quot;eu_DCC_v1&quot;</i><span style=\"color: navy\">;</span>\r\n  <span style=\"color: navy\">}</span> <i>&quot;hcert&quot;</i><span style=\"color: navy\">;</span>\r\n<span style=\"color: navy\">}\r\n\r\n</span><b>group </b>DCCtoCoreDataSet<span style=\"color: navy\">(</span><b>source</b> <span style=\"color: maroon\">dcc</span>, <b>target</b> <span style=\"color: maroon\">ddcc</span><span style=\"color: navy\"> : </span>DDCC<span style=\"color: navy\">)</span><span style=\"color: navy\"> {\r\n</span>  dcc.dob<b> as </b><span style=\"color: maroon\">birthDate</span><span style=\"color: navy\"><b> -&gt; </b></span>ddcc.birthDate = <span style=\"color: maroon\">birthDate</span> <i>&quot;set birthDate&quot;</i><span style=\"color: navy\">;</span>\r\n  dcc.nam<b> as </b><span style=\"color: maroon\">nam</span><b> then</b><span style=\"color: navy\"> {\r\n</span>    nam.gn<b> as </b><span style=\"color: maroon\">given</span><span style=\"color: navy\"><b> -&gt; </b></span>ddcc.name = <span style=\"color: navy\">(</span>given.replaceMatches('$', ' ')<span style=\"color: navy\">)</span> <i>&quot;set given name&quot;</i><span style=\"color: navy\">;</span>\r\n    nam.fn<b> as </b><span style=\"color: maroon\">family</span><span style=\"color: navy\"><b> -&gt; </b></span> ddcc.name<b> as </b><span style=\"color: maroon\">tName</span><span style=\"color: navy\">, </span> ddcc.name = <b>append</b><span style=\"color: navy\">(</span><span style=\"color: maroon\">tName</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">family</span><span style=\"color: navy\">)</span> <i>&quot;add family name&quot;</i><span style=\"color: navy\">;</span>\r\n  <span style=\"color: navy\">}</span><span style=\"color: navy\">;</span>\r\n<span style=\"color: navy\">}\r\n\r\n</span><b>group </b>CertDCCtoCoreDataSetCertificate<span style=\"color: navy\">(</span><b>source</b> <span style=\"color: maroon\">src</span><span style=\"color: navy\"> : </span>CWTPayload, <b>source</b> <span style=\"color: maroon\">dcc</span>, <b>source</b> <span style=\"color: maroon\">g</span>, <b>target</b> <span style=\"color: maroon\">certificate</span><span style=\"color: navy\">)</span><span style=\"color: navy\"> {\r\n</span>  src<span style=\"color: navy\"><b> -&gt; </b></span>certificate.period = <b>create</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'Period'</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">period</span><b> then </b>CwtToPeriod<span style=\"color: navy\">(</span><span style=\"color: maroon\">src</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">period</span><span style=\"color: navy\">)</span> <i>&quot;set period&quot;</i><span style=\"color: navy\">;</span>\r\n  dcc.ver<b> as </b><span style=\"color: maroon\">ver</span><span style=\"color: navy\"><b> -&gt; </b></span>certificate.version = <span style=\"color: maroon\">ver</span> <i>&quot;set version&quot;</i><span style=\"color: navy\">;</span>\r\n  g.ci<b> as </b><span style=\"color: maroon\">ci</span><span style=\"color: navy\"><b> -&gt; </b></span> certificate.hcid<b> as </b><span style=\"color: maroon\">hcid</span><span style=\"color: navy\">, </span> hcid.value = <span style=\"color: maroon\">ci</span> <i>&quot;set hcid&quot;</i><span style=\"color: navy\">;</span>\r\n  g.is<b> as </b><span style=\"color: maroon\">is</span><span style=\"color: navy\"><b> -&gt; </b></span> certificate.issuer = <b>create</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'Reference'</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">issuer</span><span style=\"color: navy\">, </span> issuer.display = <span style=\"color: maroon\">is</span> <i>&quot;set issuer&quot;</i><span style=\"color: navy\">;</span>\r\n<span style=\"color: navy\">}\r\n\r\n</span><b>group </b>CwtToPeriod<span style=\"color: navy\">(</span><b>source</b> <span style=\"color: maroon\">src</span><span style=\"color: navy\"> : </span>CWTPayload, <b>target</b> <span style=\"color: maroon\">tgt</span><span style=\"color: navy\"> : </span>Period<span style=\"color: navy\">)</span><span style=\"color: navy\"> {\r\n</span>  src.6<b> as </b><span style=\"color: maroon\">iat</span><span style=\"color: navy\"><b> -&gt; </b></span> <b>append</b><span style=\"color: navy\">(</span><span style=\"color: maroon\">iat</span><span style=\"color: navy\">, </span><span style=\"color: blue\">' seconds'</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">epoch</span><span style=\"color: navy\">, </span> tgt.start = <span style=\"color: navy\">(</span>@1970-01-01T00:00:00.000+00:00 + epoch.toQuantity()<span style=\"color: navy\">)</span> <i>&quot;set period start&quot;</i><span style=\"color: navy\">;</span>\r\n  src.4<b> as </b><span style=\"color: maroon\">exp</span><span style=\"color: navy\"><b> -&gt; </b></span> <b>append</b><span style=\"color: navy\">(</span><span style=\"color: maroon\">exp</span><span style=\"color: navy\">, </span><span style=\"color: blue\">' seconds'</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">epoch</span><span style=\"color: navy\">, </span> tgt.end = <span style=\"color: navy\">(</span>@1970-01-01T00:00:00.000+00:00 + epoch.toQuantity()<span style=\"color: navy\">)</span> <i>&quot;set period end&quot;</i><span style=\"color: navy\">;</span>\r\n<span style=\"color: navy\">}\r\n\r\n</span><b>group </b>VtoCoreDataSetVS<span style=\"color: navy\">(</span><b>source</b> <span style=\"color: maroon\">v</span>, <b>target</b> <span style=\"color: maroon\">vaccination</span><span style=\"color: navy\">)</span><span style=\"color: navy\"> {\r\n</span>  v.tg<b> as </b><span style=\"color: maroon\">tg</span><span style=\"color: navy\"><b> -&gt; </b></span> vaccination.disease<b> as </b><span style=\"color: maroon\">coding</span><span style=\"color: navy\">, </span> coding.system = <span style=\"color: blue\">'http://snomed.info/sct'</span><span style=\"color: navy\">, </span> coding.code = <span style=\"color: maroon\">tg</span> <i>&quot;set target disease&quot;</i><span style=\"color: navy\">;</span>\r\n  v.vp<b> as </b><span style=\"color: maroon\">vp</span><span style=\"color: navy\"><b> -&gt; </b></span> vaccination.vaccine<b> as </b><span style=\"color: maroon\">coding</span><span style=\"color: navy\">, </span> coding.system = <span style=\"color: blue\">'https://ec.europa.eu/health/documents/community-register/html/'</span><span style=\"color: navy\">, </span> coding.code = <span style=\"color: maroon\">vp</span> <i>&quot;set vaccine&quot;</i><span style=\"color: navy\">;</span>\r\n  v.mp<b> as </b><span style=\"color: maroon\">mp</span><b> then</b><span style=\"color: navy\"> {\r\n</span>    mp<span style=\"color: navy\"><b> -&gt; </b></span> vaccination.brand<b> as </b><span style=\"color: maroon\">coding</span><span style=\"color: navy\">, </span> coding.system = <span style=\"color: blue\">'https://id.uvci.eu/valuesets/vaccine-medicinal-product.json'</span><span style=\"color: navy\">, </span> coding.code = <span style=\"color: maroon\">mp</span> <i>&quot;set default brand&quot;</i><span style=\"color: navy\">;</span>\r\n    mp<span style=\"color: navy\"><b> -&gt; </b></span><b>c</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'https://ec.europa.eu/health/documents/community-register/html/'</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">mp</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">coded</span><b> then</b><span style=\"color: navy\"> {\r\n</span>      mp<b> where </b>coded.memberOf('http://smart.who.int/ddcc/ValueSet/vaccine-covid19-euur')<span style=\"color: navy\"><b> -&gt; </b></span>vaccination.brand = <b>translate</b><span style=\"color: navy\">(</span><span style=\"color: maroon\">coded</span><span style=\"color: navy\">, </span><span style=\"color: blue\">'http://smart.who.int/ddcc/ConceptMap/vaccine-covid19-euur-to-icd11'</span><span style=\"color: navy\">, </span><span style=\"color: blue\">'Coding'</span><span style=\"color: navy\">)</span> <i>&quot;translate COVID19 brand&quot;</i><span style=\"color: navy\">;</span>\r\n    <span style=\"color: navy\">}</span> <i>&quot;coding&quot;</i><span style=\"color: navy\">;</span>\r\n  <span style=\"color: navy\">}</span><span style=\"color: navy\">;</span>\r\n  v.ma<b> as </b><span style=\"color: maroon\">ma</span><span style=\"color: navy\"><b> -&gt; </b></span> vaccination.maholder<b> as </b><span style=\"color: maroon\">coding</span><span style=\"color: navy\">, </span> coding.system = <span style=\"color: blue\">'https://id.uvci.eu/valuesets/vaccine-mah-manf.json'</span><span style=\"color: navy\">, </span> coding.code = <span style=\"color: maroon\">ma</span> <i>&quot;set maholder&quot;</i><span style=\"color: navy\">;</span>\r\n  v.dt<b> as </b><span style=\"color: maroon\">date</span><span style=\"color: navy\"><b> -&gt; </b></span>vaccination.date = <span style=\"color: maroon\">date</span> <i>&quot;set date&quot;</i><span style=\"color: navy\">;</span>\r\n  v.dn<b> as </b><span style=\"color: maroon\">dose</span><span style=\"color: navy\"><b> -&gt; </b></span>vaccination.dose = <span style=\"color: maroon\">dose</span> <i>&quot;set dose&quot;</i><span style=\"color: navy\">;</span>\r\n  v.sd<b> as </b><span style=\"color: maroon\">totalDoses</span><span style=\"color: navy\"><b> -&gt; </b></span>vaccination.totalDoses = <span style=\"color: maroon\">totalDoses</span> <i>&quot;set totalDoses&quot;</i><span style=\"color: navy\">;</span>\r\n  v.co<b> as </b><span style=\"color: maroon\">co</span><span style=\"color: navy\"><b> -&gt; </b></span> vaccination.country<b> as </b><span style=\"color: maroon\">coding</span><span style=\"color: navy\">, </span> coding.code = <span style=\"color: maroon\">co</span><span style=\"color: navy\">, </span> coding.system = <span style=\"color: blue\">'urn:iso:std:iso:3166'</span> <i>&quot;set country&quot;</i><span style=\"color: navy\">;</span>\r\n<span style=\"color: navy\">}\r\n\r\n</span><b>group </b>TtoCoreDataSetTR<span style=\"color: navy\">(</span><b>source</b> <span style=\"color: maroon\">t</span>, <b>target</b> <span style=\"color: maroon\">test</span><span style=\"color: navy\">)</span><span style=\"color: navy\"> {\r\n</span>  t.tg<b> as </b><span style=\"color: maroon\">tg</span><b> then</b><span style=\"color: navy\"> {\r\n</span>    tg<span style=\"color: navy\"><b> -&gt; </b></span> test.pathogen<b> as </b><span style=\"color: maroon\">coding</span><span style=\"color: navy\">, </span> coding.system = <span style=\"color: blue\">'http://snomed.info/sct'</span><span style=\"color: navy\">, </span> coding.code = <span style=\"color: maroon\">tg</span> <i>&quot;set default pathogen&quot;</i><span style=\"color: navy\">;</span>\r\n    tg<span style=\"color: navy\"><b> -&gt; </b></span><b>c</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'http://snomed.info/sct'</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">tg</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">coded</span><b> then</b><span style=\"color: navy\"> {\r\n</span>      tg<b> where </b>coded.memberOf('http://smart.who.int/ddcc/ValueSet/lab-test-pathogen-covid19-snomed')<span style=\"color: navy\"><b> -&gt; </b></span>test.pathogen = <b>translate</b><span style=\"color: navy\">(</span><span style=\"color: maroon\">coded</span><span style=\"color: navy\">, </span><span style=\"color: blue\">'http://smart.who.int/ddcc/ConceptMap/lab-test-pathogen-snomed-to-icd11'</span><span style=\"color: navy\">, </span><span style=\"color: blue\">'Coding'</span><span style=\"color: navy\">)</span> <i>&quot;translate COVID19 pathogen&quot;</i><span style=\"color: navy\">;</span>\r\n    <span style=\"color: navy\">}</span> <i>&quot;coding&quot;</i><span style=\"color: navy\">;</span>\r\n  <span style=\"color: navy\">}</span><span style=\"color: navy\">;</span>\r\n  t.tt<b> as </b><span style=\"color: maroon\">tt</span><b> then</b><span style=\"color: navy\"> {\r\n</span>    tt<span style=\"color: navy\"><b> -&gt; </b></span> test.type<b> as </b><span style=\"color: maroon\">coding</span><span style=\"color: navy\">, </span> coding.system = <span style=\"color: blue\">'http://loinc.org'</span><span style=\"color: navy\">, </span> coding.code = <span style=\"color: maroon\">tt</span> <i>&quot;set default type&quot;</i><span style=\"color: navy\">;</span>\r\n    tt<span style=\"color: navy\"><b> -&gt; </b></span><b>c</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'http://loinc.org'</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">tt</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">coded</span><b> then</b><span style=\"color: navy\"> {\r\n</span>      tt<b> where </b>coded.memberOf('http://smart.who.int/ddcc/ValueSet/lab-test-type-covid19-loinc')<span style=\"color: navy\"><b> -&gt; </b></span>test.type = <b>translate</b><span style=\"color: navy\">(</span><span style=\"color: maroon\">coded</span><span style=\"color: navy\">, </span><span style=\"color: blue\">'http://smart.who.int/ddcc/ConceptMap/lab-test-type-covid19-loinc-to-icd11'</span><span style=\"color: navy\">, </span><span style=\"color: blue\">'Coding'</span><span style=\"color: navy\">)</span> <i>&quot;translate COVID19 type&quot;</i><span style=\"color: navy\">;</span>\r\n    <span style=\"color: navy\">}</span> <i>&quot;coding&quot;</i><span style=\"color: navy\">;</span>\r\n  <span style=\"color: navy\">}</span><span style=\"color: navy\">;</span>\r\n  t.nm<b> as </b><span style=\"color: maroon\">nm</span><span style=\"color: navy\"><b> -&gt; </b></span> test.brand<b> as </b><span style=\"color: maroon\">coding</span><span style=\"color: navy\">, </span> coding.system = <span style=\"color: blue\">'https://id.uvci.eu/valuesets/test-manf.json'</span><span style=\"color: navy\">, </span> coding.code = <span style=\"color: maroon\">nm</span> <i>&quot;set brand&quot;</i><span style=\"color: navy\">;</span>\r\n  t.ma<b> as </b><span style=\"color: maroon\">ma</span><span style=\"color: navy\"><b> -&gt; </b></span> test.manufacturer<b> as </b><span style=\"color: maroon\">coding</span><span style=\"color: navy\">, </span> coding.system = <span style=\"color: blue\">'https://covid-19-diagnostics.jrc.ec.europa.eu/devices'</span><span style=\"color: navy\">, </span> coding.code = <span style=\"color: maroon\">ma</span> <i>&quot;set manufacturer&quot;</i><span style=\"color: navy\">;</span>\r\n  t.sc<b> as </b><span style=\"color: maroon\">date</span><span style=\"color: navy\"><b> -&gt; </b></span>test.date = <span style=\"color: maroon\">date</span> <i>&quot;set date&quot;</i><span style=\"color: navy\">;</span>\r\n  t.tr<b> as </b><span style=\"color: maroon\">tr</span><b> then</b><span style=\"color: navy\"> {\r\n</span>    tr<span style=\"color: navy\"><b> -&gt; </b></span> test.result<b> as </b><span style=\"color: maroon\">coding</span><span style=\"color: navy\">, </span> coding.system = <span style=\"color: blue\">'http://snomed.info/sct'</span><span style=\"color: navy\">, </span> coding.code = <span style=\"color: maroon\">tr</span> <i>&quot;set default result&quot;</i><span style=\"color: navy\">;</span>\r\n    tr<span style=\"color: navy\"><b> -&gt; </b></span><b>c</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'http://snomed.info/sct'</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">tr</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">coded</span><b> then</b><span style=\"color: navy\"> {\r\n</span>      tr<b> where </b>coded.memberOf('http://smart.who.int/ddcc/ValueSet/lab-test-qual-result-snomed')<span style=\"color: navy\"><b> -&gt; </b></span>test.result = <b>translate</b><span style=\"color: navy\">(</span><span style=\"color: maroon\">coded</span><span style=\"color: navy\">, </span><span style=\"color: blue\">'http://smart.who.int/ddcc/ConceptMap/lab-test-qual-result-snomed-to-icd11'</span><span style=\"color: navy\">, </span><span style=\"color: blue\">'Coding'</span><span style=\"color: navy\">)</span> <i>&quot;translate COVID19 result&quot;</i><span style=\"color: navy\">;</span>\r\n    <span style=\"color: navy\">}</span> <i>&quot;coding&quot;</i><span style=\"color: navy\">;</span>\r\n  <span style=\"color: navy\">}</span><span style=\"color: navy\">;</span>\r\n  t.tc<b> as </b><span style=\"color: maroon\">tc</span><span style=\"color: navy\"><b> -&gt; </b></span> test.centre<b> as </b><span style=\"color: maroon\">coding</span><span style=\"color: navy\">, </span> coding.code = <span style=\"color: maroon\">tc</span> <i>&quot;set centre&quot;</i><span style=\"color: navy\">;</span>\r\n  t.co<b> as </b><span style=\"color: maroon\">co</span><span style=\"color: navy\"><b> -&gt; </b></span> test.country<b> as </b><span style=\"color: maroon\">coding</span><span style=\"color: navy\">, </span> coding.code = <span style=\"color: maroon\">co</span><span style=\"color: navy\">, </span> coding.system = <span style=\"color: blue\">'urn:iso:std:iso:3166'</span> <i>&quot;set country&quot;</i><span style=\"color: navy\">;</span>\r\n<span style=\"color: navy\">}\r\n\r\n</span></pre></div>"
+  ] ; # 
+  fhir:url [ fhir:v "http://smart.who.int/ddcc/StructureMap/CertDCCtoCoreDataSet"^^xsd:anyURI] ; # 
+  fhir:version [ fhir:v "1.0.0"] ; # 
+  fhir:name [ fhir:v "CertDCCtoCoreDataSet"] ; # 
+  fhir:status [ fhir:v "draft"] ; # 
+  fhir:date [ fhir:v "2024-10-17T06:51:23+00:00"^^xsd:dateTime] ; # 
+  fhir:publisher [ fhir:v "WHO"] ; # 
+  fhir:contact ( [
+     fhir:name [ fhir:v "WHO" ] ;
+     fhir:telecom ( [
+       fhir:system [ fhir:v "url" ] ;
+       fhir:value [ fhir:v "http://who.int" ]
+     ] )
+  ] ) ; # 
+  fhir:description [ fhir:v "Structure map transforming CertDCC logical model to bundle of Core Data Set logical model"] ; # 
+  fhir:jurisdiction ( [
+     fhir:coding ( [
+       fhir:system [ fhir:v "http://unstats.un.org/unsd/methods/m49/m49.htm"^^xsd:anyURI ] ;
+       fhir:code [ fhir:v "001" ]
+     ] )
+  ] ) ; # 
+  fhir:structure ( [
+     fhir:url [
+       fhir:v "http://smart.who.int/ddcc/StructureDefinition/CertDCC"^^xsd:anyURI ;
+       fhir:link <http://smart.who.int/ddcc/StructureDefinition/CertDCC>
+     ] ;
+     fhir:mode [ fhir:v "source" ] ;
+     fhir:alias [ fhir:v "CWTPayload" ]
+  ] [
+     fhir:url [
+       fhir:v "http://hl7.org/fhir/StructureDefinition/Bundle"^^xsd:anyURI ;
+       fhir:link <http://hl7.org/fhir/StructureDefinition/Bundle>
+     ] ;
+     fhir:mode [ fhir:v "target" ] ;
+     fhir:alias [ fhir:v "DDCCBundle" ]
+  ] [
+     fhir:url [
+       fhir:v "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet"^^xsd:anyURI ;
+       fhir:link <http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet>
+     ] ;
+     fhir:mode [ fhir:v "target" ] ;
+     fhir:alias [ fhir:v "DDCC" ]
+  ] [
+     fhir:url [
+       fhir:v "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSetVS"^^xsd:anyURI ;
+       fhir:link <http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSetVS>
+     ] ;
+     fhir:mode [ fhir:v "target" ] ;
+     fhir:alias [ fhir:v "DDCCVS" ]
+  ] [
+     fhir:url [
+       fhir:v "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSetTR"^^xsd:anyURI ;
+       fhir:link <http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSetTR>
+     ] ;
+     fhir:mode [ fhir:v "target" ] ;
+     fhir:alias [ fhir:v "DDCCTR" ]
+  ] ) ; # 
+  fhir:group ( [
+     fhir:name [ fhir:v "CertDCCtoCoreDataSet" ] ;
+     fhir:typeMode [ fhir:v "none" ] ;
+     fhir:input ( [
+       fhir:name [ fhir:v "src" ] ;
+       fhir:type [ fhir:v "CWTPayload" ] ;
+       fhir:mode [ fhir:v "source" ]
+     ] [
+       fhir:name [ fhir:v "ddccBundle" ] ;
+       fhir:type [ fhir:v "DDCCBundle" ] ;
+       fhir:mode [ fhir:v "target" ]
+     ] ) ;
+     fhir:rule ( [
+       fhir:name [ fhir:v "hcert" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "src" ] ;
+         fhir:element [ fhir:v "-260" ] ;
+         fhir:variable [ fhir:v "hcert" ]
+       ] ) ;
+       fhir:rule ( [
+         fhir:name [ fhir:v "eu_DCC_v1" ] ;
+         fhir:source ( [
+           fhir:context [ fhir:v "hcert" ] ;
+           fhir:element [ fhir:v "1" ] ;
+           fhir:variable [ fhir:v "dcc" ]
+         ] ) ;
+         fhir:rule ( [
+           fhir:name [ fhir:v "v" ] ;
+           fhir:source ( [
+             fhir:context [ fhir:v "dcc" ] ;
+             fhir:element [ fhir:v "v" ] ;
+             fhir:variable [ fhir:v "v" ]
+           ] ) ;
+           fhir:target ( [
+             fhir:context [ fhir:v "ddccBundle" ] ;
+             fhir:contextType [ fhir:v "variable" ] ;
+             fhir:element [ fhir:v "entry" ] ;
+             fhir:variable [ fhir:v "outentry" ]
+           ] [
+             fhir:contextType [ fhir:v "variable" ] ;
+             fhir:variable [ fhir:v "ddcc" ] ;
+             fhir:transform [ fhir:v "create" ] ;
+             fhir:parameter ( [
+               fhir:value [ fhir:v "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSetVS" ]
+             ] )
+           ] ) ;
+           fhir:rule ( [
+             fhir:name [ fhir:v "set DDCC" ] ;
+             fhir:source ( [
+               fhir:context [ fhir:v "v" ]
+             ] ) ;
+             fhir:dependent ( [
+               fhir:name [ fhir:v "DCCtoCoreDataSet" ] ;
+               fhir:variable ( [ fhir:v "dcc" ] [ fhir:v "ddcc" ] )
+             ] )
+           ] [
+             fhir:name [ fhir:v "set certificate" ] ;
+             fhir:source ( [
+               fhir:context [ fhir:v "v" ]
+             ] ) ;
+             fhir:target ( [
+               fhir:context [ fhir:v "ddcc" ] ;
+               fhir:contextType [ fhir:v "variable" ] ;
+               fhir:element [ fhir:v "certificate" ] ;
+               fhir:variable [ fhir:v "certificate" ]
+             ] ) ;
+             fhir:dependent ( [
+               fhir:name [ fhir:v "CertDCCtoCoreDataSetCertificate" ] ;
+               fhir:variable ( [ fhir:v "src" ] [ fhir:v "dcc" ] [ fhir:v "v" ] [ fhir:v "certificate" ] )
+             ] )
+           ] [
+             fhir:name [ fhir:v "set vaccination" ] ;
+             fhir:source ( [
+               fhir:context [ fhir:v "v" ]
+             ] ) ;
+             fhir:target ( [
+               fhir:context [ fhir:v "ddcc" ] ;
+               fhir:contextType [ fhir:v "variable" ] ;
+               fhir:element [ fhir:v "vaccination" ] ;
+               fhir:variable [ fhir:v "vaccination" ]
+             ] ) ;
+             fhir:dependent ( [
+               fhir:name [ fhir:v "VtoCoreDataSetVS" ] ;
+               fhir:variable ( [ fhir:v "v" ] [ fhir:v "vaccination" ] )
+             ] )
+           ] [
+             fhir:name [ fhir:v "set outentry" ] ;
+             fhir:source ( [
+               fhir:context [ fhir:v "v" ]
+             ] ) ;
+             fhir:target ( [
+               fhir:context [ fhir:v "outentry" ] ;
+               fhir:contextType [ fhir:v "variable" ] ;
+               fhir:element [ fhir:v "resource" ] ;
+               fhir:transform [ fhir:v "copy" ] ;
+               fhir:parameter ( [
+                 fhir:value [ fhir:v "ddcc" ]
+               ] )
+             ] )
+           ] )
+         ] [
+           fhir:name [ fhir:v "t" ] ;
+           fhir:source ( [
+             fhir:context [ fhir:v "dcc" ] ;
+             fhir:element [ fhir:v "t" ] ;
+             fhir:variable [ fhir:v "t" ]
+           ] ) ;
+           fhir:target ( [
+             fhir:context [ fhir:v "ddccBundle" ] ;
+             fhir:contextType [ fhir:v "variable" ] ;
+             fhir:element [ fhir:v "entry" ] ;
+             fhir:variable [ fhir:v "outentry" ]
+           ] [
+             fhir:contextType [ fhir:v "variable" ] ;
+             fhir:variable [ fhir:v "ddcc" ] ;
+             fhir:transform [ fhir:v "create" ] ;
+             fhir:parameter ( [
+               fhir:value [ fhir:v "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSetTR" ]
+             ] )
+           ] ) ;
+           fhir:rule ( [
+             fhir:name [ fhir:v "set DDCC" ] ;
+             fhir:source ( [
+               fhir:context [ fhir:v "t" ]
+             ] ) ;
+             fhir:dependent ( [
+               fhir:name [ fhir:v "DCCtoCoreDataSet" ] ;
+               fhir:variable ( [ fhir:v "dcc" ] [ fhir:v "ddcc" ] )
+             ] )
+           ] [
+             fhir:name [ fhir:v "set certificate" ] ;
+             fhir:source ( [
+               fhir:context [ fhir:v "t" ]
+             ] ) ;
+             fhir:target ( [
+               fhir:context [ fhir:v "ddcc" ] ;
+               fhir:contextType [ fhir:v "variable" ] ;
+               fhir:element [ fhir:v "certificate" ] ;
+               fhir:variable [ fhir:v "certificate" ]
+             ] ) ;
+             fhir:dependent ( [
+               fhir:name [ fhir:v "CertDCCtoCoreDataSetCertificate" ] ;
+               fhir:variable ( [ fhir:v "src" ] [ fhir:v "dcc" ] [ fhir:v "t" ] [ fhir:v "certificate" ] )
+             ] )
+           ] [
+             fhir:name [ fhir:v "set test" ] ;
+             fhir:source ( [
+               fhir:context [ fhir:v "t" ]
+             ] ) ;
+             fhir:target ( [
+               fhir:context [ fhir:v "ddcc" ] ;
+               fhir:contextType [ fhir:v "variable" ] ;
+               fhir:element [ fhir:v "test" ] ;
+               fhir:variable [ fhir:v "test" ]
+             ] ) ;
+             fhir:dependent ( [
+               fhir:name [ fhir:v "TtoCoreDataSetTR" ] ;
+               fhir:variable ( [ fhir:v "t" ] [ fhir:v "test" ] )
+             ] )
+           ] [
+             fhir:name [ fhir:v "set outentry" ] ;
+             fhir:source ( [
+               fhir:context [ fhir:v "t" ]
+             ] ) ;
+             fhir:target ( [
+               fhir:context [ fhir:v "outentry" ] ;
+               fhir:contextType [ fhir:v "variable" ] ;
+               fhir:element [ fhir:v "resource" ] ;
+               fhir:transform [ fhir:v "copy" ] ;
+               fhir:parameter ( [
+                 fhir:value [ fhir:v "ddcc" ]
+               ] )
+             ] )
+           ] )
+         ] )
+       ] )
+     ] )
+  ] [
+     fhir:name [ fhir:v "DCCtoCoreDataSet" ] ;
+     fhir:typeMode [ fhir:v "none" ] ;
+     fhir:input ( [
+       fhir:name [ fhir:v "dcc" ] ;
+       fhir:mode [ fhir:v "source" ]
+     ] [
+       fhir:name [ fhir:v "ddcc" ] ;
+       fhir:type [ fhir:v "DDCC" ] ;
+       fhir:mode [ fhir:v "target" ]
+     ] ) ;
+     fhir:rule ( [
+       fhir:name [ fhir:v "set birthDate" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "dcc" ] ;
+         fhir:element [ fhir:v "dob" ] ;
+         fhir:variable [ fhir:v "birthDate" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "ddcc" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "birthDate" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "birthDate" ]
+         ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "nam" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "dcc" ] ;
+         fhir:element [ fhir:v "nam" ] ;
+         fhir:variable [ fhir:v "nam" ]
+       ] ) ;
+       fhir:rule ( [
+         fhir:name [ fhir:v "set given name" ] ;
+         fhir:source ( [
+           fhir:context [ fhir:v "nam" ] ;
+           fhir:element [ fhir:v "gn" ] ;
+           fhir:variable [ fhir:v "given" ]
+         ] ) ;
+         fhir:target ( [
+           fhir:context [ fhir:v "ddcc" ] ;
+           fhir:contextType [ fhir:v "variable" ] ;
+           fhir:element [ fhir:v "name" ] ;
+           fhir:transform [ fhir:v "evaluate" ] ;
+           fhir:parameter ( [
+             fhir:value [ fhir:v "given.replaceMatches('$', ' ')" ]
+           ] )
+         ] )
+       ] [
+         fhir:name [ fhir:v "add family name" ] ;
+         fhir:source ( [
+           fhir:context [ fhir:v "nam" ] ;
+           fhir:element [ fhir:v "fn" ] ;
+           fhir:variable [ fhir:v "family" ]
+         ] ) ;
+         fhir:target ( [
+           fhir:context [ fhir:v "ddcc" ] ;
+           fhir:contextType [ fhir:v "variable" ] ;
+           fhir:element [ fhir:v "name" ] ;
+           fhir:variable [ fhir:v "tName" ]
+         ] [
+           fhir:context [ fhir:v "ddcc" ] ;
+           fhir:contextType [ fhir:v "variable" ] ;
+           fhir:element [ fhir:v "name" ] ;
+           fhir:transform [ fhir:v "append" ] ;
+           fhir:parameter ( [
+             fhir:value [ fhir:v "tName" ]
+           ] [
+             fhir:value [ fhir:v "family" ]
+           ] )
+         ] )
+       ] )
+     ] )
+  ] [
+     fhir:name [ fhir:v "CertDCCtoCoreDataSetCertificate" ] ;
+     fhir:typeMode [ fhir:v "none" ] ;
+     fhir:input ( [
+       fhir:name [ fhir:v "src" ] ;
+       fhir:type [ fhir:v "CWTPayload" ] ;
+       fhir:mode [ fhir:v "source" ]
+     ] [
+       fhir:name [ fhir:v "dcc" ] ;
+       fhir:mode [ fhir:v "source" ]
+     ] [
+       fhir:name [ fhir:v "g" ] ;
+       fhir:mode [ fhir:v "source" ]
+     ] [
+       fhir:name [ fhir:v "certificate" ] ;
+       fhir:mode [ fhir:v "target" ]
+     ] ) ;
+     fhir:rule ( [
+       fhir:name [ fhir:v "set period" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "src" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "certificate" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "period" ] ;
+         fhir:variable [ fhir:v "period" ] ;
+         fhir:transform [ fhir:v "create" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "Period" ]
+         ] )
+       ] ) ;
+       fhir:dependent ( [
+         fhir:name [ fhir:v "CwtToPeriod" ] ;
+         fhir:variable ( [ fhir:v "src" ] [ fhir:v "period" ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "set version" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "dcc" ] ;
+         fhir:element [ fhir:v "ver" ] ;
+         fhir:variable [ fhir:v "ver" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "certificate" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "version" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "ver" ]
+         ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "set hcid" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "g" ] ;
+         fhir:element [ fhir:v "ci" ] ;
+         fhir:variable [ fhir:v "ci" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "certificate" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "hcid" ] ;
+         fhir:variable [ fhir:v "hcid" ]
+       ] [
+         fhir:context [ fhir:v "hcid" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "value" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "ci" ]
+         ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "set issuer" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "g" ] ;
+         fhir:element [ fhir:v "is" ] ;
+         fhir:variable [ fhir:v "is" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "certificate" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "issuer" ] ;
+         fhir:variable [ fhir:v "issuer" ] ;
+         fhir:transform [ fhir:v "create" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "Reference" ]
+         ] )
+       ] [
+         fhir:context [ fhir:v "issuer" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "display" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "is" ]
+         ] )
+       ] )
+     ] )
+  ] [
+     fhir:name [ fhir:v "CwtToPeriod" ] ;
+     fhir:typeMode [ fhir:v "none" ] ;
+     fhir:input ( [
+       fhir:name [ fhir:v "src" ] ;
+       fhir:type [ fhir:v "CWTPayload" ] ;
+       fhir:mode [ fhir:v "source" ]
+     ] [
+       fhir:name [ fhir:v "tgt" ] ;
+       fhir:type [ fhir:v "Period" ] ;
+       fhir:mode [ fhir:v "target" ]
+     ] ) ;
+     fhir:rule ( [
+       fhir:name [ fhir:v "set period start" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "src" ] ;
+         fhir:element [ fhir:v "6" ] ;
+         fhir:variable [ fhir:v "iat" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:variable [ fhir:v "epoch" ] ;
+         fhir:transform [ fhir:v "append" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "iat" ]
+         ] [
+           fhir:value [ fhir:v " seconds" ]
+         ] )
+       ] [
+         fhir:context [ fhir:v "tgt" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "start" ] ;
+         fhir:transform [ fhir:v "evaluate" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "@1970-01-01T00:00:00.000+00:00 + epoch.toQuantity()" ]
+         ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "set period end" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "src" ] ;
+         fhir:element [ fhir:v "4" ] ;
+         fhir:variable [ fhir:v "exp" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:variable [ fhir:v "epoch" ] ;
+         fhir:transform [ fhir:v "append" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "exp" ]
+         ] [
+           fhir:value [ fhir:v " seconds" ]
+         ] )
+       ] [
+         fhir:context [ fhir:v "tgt" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "end" ] ;
+         fhir:transform [ fhir:v "evaluate" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "@1970-01-01T00:00:00.000+00:00 + epoch.toQuantity()" ]
+         ] )
+       ] )
+     ] )
+  ] [
+     fhir:name [ fhir:v "VtoCoreDataSetVS" ] ;
+     fhir:typeMode [ fhir:v "none" ] ;
+     fhir:input ( [
+       fhir:name [ fhir:v "v" ] ;
+       fhir:mode [ fhir:v "source" ]
+     ] [
+       fhir:name [ fhir:v "vaccination" ] ;
+       fhir:mode [ fhir:v "target" ]
+     ] ) ;
+     fhir:rule ( [
+       fhir:name [ fhir:v "set target disease" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "v" ] ;
+         fhir:element [ fhir:v "tg" ] ;
+         fhir:variable [ fhir:v "tg" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "vaccination" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "disease" ] ;
+         fhir:variable [ fhir:v "coding" ]
+       ] [
+         fhir:context [ fhir:v "coding" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "system" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "http://snomed.info/sct" ]
+         ] )
+       ] [
+         fhir:context [ fhir:v "coding" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "code" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "tg" ]
+         ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "set vaccine" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "v" ] ;
+         fhir:element [ fhir:v "vp" ] ;
+         fhir:variable [ fhir:v "vp" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "vaccination" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "vaccine" ] ;
+         fhir:variable [ fhir:v "coding" ]
+       ] [
+         fhir:context [ fhir:v "coding" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "system" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "https://ec.europa.eu/health/documents/community-register/html/" ]
+         ] )
+       ] [
+         fhir:context [ fhir:v "coding" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "code" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "vp" ]
+         ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "mp" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "v" ] ;
+         fhir:element [ fhir:v "mp" ] ;
+         fhir:variable [ fhir:v "mp" ]
+       ] ) ;
+       fhir:rule ( [
+         fhir:name [ fhir:v "set default brand" ] ;
+         fhir:source ( [
+           fhir:context [ fhir:v "mp" ]
+         ] ) ;
+         fhir:target ( [
+           fhir:context [ fhir:v "vaccination" ] ;
+           fhir:contextType [ fhir:v "variable" ] ;
+           fhir:element [ fhir:v "brand" ] ;
+           fhir:variable [ fhir:v "coding" ]
+         ] [
+           fhir:context [ fhir:v "coding" ] ;
+           fhir:contextType [ fhir:v "variable" ] ;
+           fhir:element [ fhir:v "system" ] ;
+           fhir:transform [ fhir:v "copy" ] ;
+           fhir:parameter ( [
+             fhir:value [ fhir:v "https://id.uvci.eu/valuesets/vaccine-medicinal-product.json" ]
+           ] )
+         ] [
+           fhir:context [ fhir:v "coding" ] ;
+           fhir:contextType [ fhir:v "variable" ] ;
+           fhir:element [ fhir:v "code" ] ;
+           fhir:transform [ fhir:v "copy" ] ;
+           fhir:parameter ( [
+             fhir:value [ fhir:v "mp" ]
+           ] )
+         ] )
+       ] [
+         fhir:name [ fhir:v "coding" ] ;
+         fhir:source ( [
+           fhir:context [ fhir:v "mp" ]
+         ] ) ;
+         fhir:target ( [
+           fhir:contextType [ fhir:v "variable" ] ;
+           fhir:variable [ fhir:v "coded" ] ;
+           fhir:transform [ fhir:v "c" ] ;
+           fhir:parameter ( [
+             fhir:value [ fhir:v "https://ec.europa.eu/health/documents/community-register/html/" ]
+           ] [
+             fhir:value [ fhir:v "mp" ]
+           ] )
+         ] ) ;
+         fhir:rule ( [
+           fhir:name [ fhir:v "translate COVID19 brand" ] ;
+           fhir:source ( [
+             fhir:context [ fhir:v "mp" ] ;
+             fhir:condition [ fhir:v "coded.memberOf('http://smart.who.int/ddcc/ValueSet/vaccine-covid19-euur')" ]
+           ] ) ;
+           fhir:target ( [
+             fhir:context [ fhir:v "vaccination" ] ;
+             fhir:contextType [ fhir:v "variable" ] ;
+             fhir:element [ fhir:v "brand" ] ;
+             fhir:transform [ fhir:v "translate" ] ;
+             fhir:parameter ( [
+               fhir:value [ fhir:v "coded" ]
+             ] [
+               fhir:value [ fhir:v "http://smart.who.int/ddcc/ConceptMap/vaccine-covid19-euur-to-icd11" ]
+             ] [
+               fhir:value [ fhir:v "Coding" ]
+             ] )
+           ] )
+         ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "set maholder" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "v" ] ;
+         fhir:element [ fhir:v "ma" ] ;
+         fhir:variable [ fhir:v "ma" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "vaccination" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "maholder" ] ;
+         fhir:variable [ fhir:v "coding" ]
+       ] [
+         fhir:context [ fhir:v "coding" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "system" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "https://id.uvci.eu/valuesets/vaccine-mah-manf.json" ]
+         ] )
+       ] [
+         fhir:context [ fhir:v "coding" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "code" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "ma" ]
+         ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "set date" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "v" ] ;
+         fhir:element [ fhir:v "dt" ] ;
+         fhir:variable [ fhir:v "date" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "vaccination" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "date" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "date" ]
+         ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "set dose" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "v" ] ;
+         fhir:element [ fhir:v "dn" ] ;
+         fhir:variable [ fhir:v "dose" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "vaccination" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "dose" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "dose" ]
+         ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "set totalDoses" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "v" ] ;
+         fhir:element [ fhir:v "sd" ] ;
+         fhir:variable [ fhir:v "totalDoses" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "vaccination" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "totalDoses" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "totalDoses" ]
+         ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "set country" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "v" ] ;
+         fhir:element [ fhir:v "co" ] ;
+         fhir:variable [ fhir:v "co" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "vaccination" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "country" ] ;
+         fhir:variable [ fhir:v "coding" ]
+       ] [
+         fhir:context [ fhir:v "coding" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "code" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "co" ]
+         ] )
+       ] [
+         fhir:context [ fhir:v "coding" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "system" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "urn:iso:std:iso:3166" ]
+         ] )
+       ] )
+     ] )
+  ] [
+     fhir:name [ fhir:v "TtoCoreDataSetTR" ] ;
+     fhir:typeMode [ fhir:v "none" ] ;
+     fhir:input ( [
+       fhir:name [ fhir:v "t" ] ;
+       fhir:mode [ fhir:v "source" ]
+     ] [
+       fhir:name [ fhir:v "test" ] ;
+       fhir:mode [ fhir:v "target" ]
+     ] ) ;
+     fhir:rule ( [
+       fhir:name [ fhir:v "tg" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "t" ] ;
+         fhir:element [ fhir:v "tg" ] ;
+         fhir:variable [ fhir:v "tg" ]
+       ] ) ;
+       fhir:rule ( [
+         fhir:name [ fhir:v "set default pathogen" ] ;
+         fhir:source ( [
+           fhir:context [ fhir:v "tg" ]
+         ] ) ;
+         fhir:target ( [
+           fhir:context [ fhir:v "test" ] ;
+           fhir:contextType [ fhir:v "variable" ] ;
+           fhir:element [ fhir:v "pathogen" ] ;
+           fhir:variable [ fhir:v "coding" ]
+         ] [
+           fhir:context [ fhir:v "coding" ] ;
+           fhir:contextType [ fhir:v "variable" ] ;
+           fhir:element [ fhir:v "system" ] ;
+           fhir:transform [ fhir:v "copy" ] ;
+           fhir:parameter ( [
+             fhir:value [ fhir:v "http://snomed.info/sct" ]
+           ] )
+         ] [
+           fhir:context [ fhir:v "coding" ] ;
+           fhir:contextType [ fhir:v "variable" ] ;
+           fhir:element [ fhir:v "code" ] ;
+           fhir:transform [ fhir:v "copy" ] ;
+           fhir:parameter ( [
+             fhir:value [ fhir:v "tg" ]
+           ] )
+         ] )
+       ] [
+         fhir:name [ fhir:v "coding" ] ;
+         fhir:source ( [
+           fhir:context [ fhir:v "tg" ]
+         ] ) ;
+         fhir:target ( [
+           fhir:contextType [ fhir:v "variable" ] ;
+           fhir:variable [ fhir:v "coded" ] ;
+           fhir:transform [ fhir:v "c" ] ;
+           fhir:parameter ( [
+             fhir:value [ fhir:v "http://snomed.info/sct" ]
+           ] [
+             fhir:value [ fhir:v "tg" ]
+           ] )
+         ] ) ;
+         fhir:rule ( [
+           fhir:name [ fhir:v "translate COVID19 pathogen" ] ;
+           fhir:source ( [
+             fhir:context [ fhir:v "tg" ] ;
+             fhir:condition [ fhir:v "coded.memberOf('http://smart.who.int/ddcc/ValueSet/lab-test-pathogen-covid19-snomed')" ]
+           ] ) ;
+           fhir:target ( [
+             fhir:context [ fhir:v "test" ] ;
+             fhir:contextType [ fhir:v "variable" ] ;
+             fhir:element [ fhir:v "pathogen" ] ;
+             fhir:transform [ fhir:v "translate" ] ;
+             fhir:parameter ( [
+               fhir:value [ fhir:v "coded" ]
+             ] [
+               fhir:value [ fhir:v "http://smart.who.int/ddcc/ConceptMap/lab-test-pathogen-snomed-to-icd11" ]
+             ] [
+               fhir:value [ fhir:v "Coding" ]
+             ] )
+           ] )
+         ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "tt" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "t" ] ;
+         fhir:element [ fhir:v "tt" ] ;
+         fhir:variable [ fhir:v "tt" ]
+       ] ) ;
+       fhir:rule ( [
+         fhir:name [ fhir:v "set default type" ] ;
+         fhir:source ( [
+           fhir:context [ fhir:v "tt" ]
+         ] ) ;
+         fhir:target ( [
+           fhir:context [ fhir:v "test" ] ;
+           fhir:contextType [ fhir:v "variable" ] ;
+           fhir:element [ fhir:v "type" ] ;
+           fhir:variable [ fhir:v "coding" ]
+         ] [
+           fhir:context [ fhir:v "coding" ] ;
+           fhir:contextType [ fhir:v "variable" ] ;
+           fhir:element [ fhir:v "system" ] ;
+           fhir:transform [ fhir:v "copy" ] ;
+           fhir:parameter ( [
+             fhir:value [ fhir:v "http://loinc.org" ]
+           ] )
+         ] [
+           fhir:context [ fhir:v "coding" ] ;
+           fhir:contextType [ fhir:v "variable" ] ;
+           fhir:element [ fhir:v "code" ] ;
+           fhir:transform [ fhir:v "copy" ] ;
+           fhir:parameter ( [
+             fhir:value [ fhir:v "tt" ]
+           ] )
+         ] )
+       ] [
+         fhir:name [ fhir:v "coding" ] ;
+         fhir:source ( [
+           fhir:context [ fhir:v "tt" ]
+         ] ) ;
+         fhir:target ( [
+           fhir:contextType [ fhir:v "variable" ] ;
+           fhir:variable [ fhir:v "coded" ] ;
+           fhir:transform [ fhir:v "c" ] ;
+           fhir:parameter ( [
+             fhir:value [ fhir:v "http://loinc.org" ]
+           ] [
+             fhir:value [ fhir:v "tt" ]
+           ] )
+         ] ) ;
+         fhir:rule ( [
+           fhir:name [ fhir:v "translate COVID19 type" ] ;
+           fhir:source ( [
+             fhir:context [ fhir:v "tt" ] ;
+             fhir:condition [ fhir:v "coded.memberOf('http://smart.who.int/ddcc/ValueSet/lab-test-type-covid19-loinc')" ]
+           ] ) ;
+           fhir:target ( [
+             fhir:context [ fhir:v "test" ] ;
+             fhir:contextType [ fhir:v "variable" ] ;
+             fhir:element [ fhir:v "type" ] ;
+             fhir:transform [ fhir:v "translate" ] ;
+             fhir:parameter ( [
+               fhir:value [ fhir:v "coded" ]
+             ] [
+               fhir:value [ fhir:v "http://smart.who.int/ddcc/ConceptMap/lab-test-type-covid19-loinc-to-icd11" ]
+             ] [
+               fhir:value [ fhir:v "Coding" ]
+             ] )
+           ] )
+         ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "set brand" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "t" ] ;
+         fhir:element [ fhir:v "nm" ] ;
+         fhir:variable [ fhir:v "nm" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "test" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "brand" ] ;
+         fhir:variable [ fhir:v "coding" ]
+       ] [
+         fhir:context [ fhir:v "coding" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "system" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "https://id.uvci.eu/valuesets/test-manf.json" ]
+         ] )
+       ] [
+         fhir:context [ fhir:v "coding" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "code" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "nm" ]
+         ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "set manufacturer" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "t" ] ;
+         fhir:element [ fhir:v "ma" ] ;
+         fhir:variable [ fhir:v "ma" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "test" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "manufacturer" ] ;
+         fhir:variable [ fhir:v "coding" ]
+       ] [
+         fhir:context [ fhir:v "coding" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "system" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "https://covid-19-diagnostics.jrc.ec.europa.eu/devices" ]
+         ] )
+       ] [
+         fhir:context [ fhir:v "coding" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "code" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "ma" ]
+         ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "set date" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "t" ] ;
+         fhir:element [ fhir:v "sc" ] ;
+         fhir:variable [ fhir:v "date" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "test" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "date" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "date" ]
+         ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "tr" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "t" ] ;
+         fhir:element [ fhir:v "tr" ] ;
+         fhir:variable [ fhir:v "tr" ]
+       ] ) ;
+       fhir:rule ( [
+         fhir:name [ fhir:v "set default result" ] ;
+         fhir:source ( [
+           fhir:context [ fhir:v "tr" ]
+         ] ) ;
+         fhir:target ( [
+           fhir:context [ fhir:v "test" ] ;
+           fhir:contextType [ fhir:v "variable" ] ;
+           fhir:element [ fhir:v "result" ] ;
+           fhir:variable [ fhir:v "coding" ]
+         ] [
+           fhir:context [ fhir:v "coding" ] ;
+           fhir:contextType [ fhir:v "variable" ] ;
+           fhir:element [ fhir:v "system" ] ;
+           fhir:transform [ fhir:v "copy" ] ;
+           fhir:parameter ( [
+             fhir:value [ fhir:v "http://snomed.info/sct" ]
+           ] )
+         ] [
+           fhir:context [ fhir:v "coding" ] ;
+           fhir:contextType [ fhir:v "variable" ] ;
+           fhir:element [ fhir:v "code" ] ;
+           fhir:transform [ fhir:v "copy" ] ;
+           fhir:parameter ( [
+             fhir:value [ fhir:v "tr" ]
+           ] )
+         ] )
+       ] [
+         fhir:name [ fhir:v "coding" ] ;
+         fhir:source ( [
+           fhir:context [ fhir:v "tr" ]
+         ] ) ;
+         fhir:target ( [
+           fhir:contextType [ fhir:v "variable" ] ;
+           fhir:variable [ fhir:v "coded" ] ;
+           fhir:transform [ fhir:v "c" ] ;
+           fhir:parameter ( [
+             fhir:value [ fhir:v "http://snomed.info/sct" ]
+           ] [
+             fhir:value [ fhir:v "tr" ]
+           ] )
+         ] ) ;
+         fhir:rule ( [
+           fhir:name [ fhir:v "translate COVID19 result" ] ;
+           fhir:source ( [
+             fhir:context [ fhir:v "tr" ] ;
+             fhir:condition [ fhir:v "coded.memberOf('http://smart.who.int/ddcc/ValueSet/lab-test-qual-result-snomed')" ]
+           ] ) ;
+           fhir:target ( [
+             fhir:context [ fhir:v "test" ] ;
+             fhir:contextType [ fhir:v "variable" ] ;
+             fhir:element [ fhir:v "result" ] ;
+             fhir:transform [ fhir:v "translate" ] ;
+             fhir:parameter ( [
+               fhir:value [ fhir:v "coded" ]
+             ] [
+               fhir:value [ fhir:v "http://smart.who.int/ddcc/ConceptMap/lab-test-qual-result-snomed-to-icd11" ]
+             ] [
+               fhir:value [ fhir:v "Coding" ]
+             ] )
+           ] )
+         ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "set centre" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "t" ] ;
+         fhir:element [ fhir:v "tc" ] ;
+         fhir:variable [ fhir:v "tc" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "test" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "centre" ] ;
+         fhir:variable [ fhir:v "coding" ]
+       ] [
+         fhir:context [ fhir:v "coding" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "code" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "tc" ]
+         ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "set country" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "t" ] ;
+         fhir:element [ fhir:v "co" ] ;
+         fhir:variable [ fhir:v "co" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "test" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "country" ] ;
+         fhir:variable [ fhir:v "coding" ]
+       ] [
+         fhir:context [ fhir:v "coding" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "code" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "co" ]
+         ] )
+       ] [
+         fhir:context [ fhir:v "coding" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "system" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "urn:iso:std:iso:3166" ]
+         ] )
+       ] )
+     ] )
+  ] ) . # 
+
+# -------------------------------------------------------------------------------------
+

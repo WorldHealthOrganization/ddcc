@@ -1,0 +1,651 @@
+{
+  "resourceType": "StructureMap",
+  "id": "shc-to-ddcc",
+  "meta": {
+    "versionId": "22",
+    "lastUpdated": "2021-12-29T00:19:27.135+00:00"
+  },
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><pre>map &quot;http://worldhealthorganization.github.io/ddcc/StructureMap/SHCtoDDCC&quot; = &quot;SHCtoDDCC&quot;\r\n\r\n\r\nuses &quot;http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-vaccination-bundle-dm&quot; alias SHCVaccinationBundleDM as source\r\nuses &quot;http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-patient-general-dm&quot; alias SHCPatientDM as source\r\nuses &quot;http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-vaccination-dm&quot; alias SHCImmunizationDM as source\r\nuses &quot;http://hl7.org/fhir/StructureDefinition/Bundle&quot; alias Bundle as target\r\nuses &quot;http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCDocument&quot; alias DDCCDocument as produced\r\nuses &quot;http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCPatient&quot; alias DDCCPatient as produced\r\nuses &quot;http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCComposition&quot; alias DDCCComposition as produced\r\nuses &quot;http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCOrganization&quot; alias DDCCOrganization as produced\r\nuses &quot;http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCountryOfVaccination&quot; alias DDCCCountryOfVaccination as produced\r\nuses &quot;http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCVaccineBrand&quot; alias DDCCVaccineBrand as produced\r\nuses &quot;http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCImmunization&quot; alias DDCCImmunization as produced\r\n\r\ngroup SHCtoDDCC(source shc : SHCVaccinationBundleDM, target ddcc : Bundle) {\r\n  shc.entry as patientEntrySHC then {\r\n    patientEntrySHC.resource : Patient first as patientSHC then {\r\n      shc.entry as immunizationEntrySHC then {\r\n        immunizationEntrySHC.resource : Immunization as immunizationSHC then {\r\n          immunizationEntrySHC -&gt; ddcc.type = 'collection' &quot;Bundle type&quot;;\r\n          immunizationEntrySHC -&gt; ddcc.entry as ddccEntry then {\r\n            immunizationSHC -&gt; ddccEntry.resource = create('Bundle') as ddccdocument then {\r\n              immunizationSHC -&gt; ddccdocument.type = 'document' &quot;DDCC Document type&quot;;\r\n              patientSHC -&gt; ddccdocument.entry as ddccDocumentEntry then {\r\n                patientSHC -&gt; ddccDocumentEntry.resource = create('Patient') as patientDDCC then SHCPatienttoDDCC(patientSHC, patientDDCC) &quot;DDCC Document patient resource&quot;;\r\n              } &quot;DDCC Document patient entry&quot;;\r\n              immunizationSHC -&gt; ddccdocument.entry as ddccDocumentEntry then {\r\n                immunizationSHC -&gt; ddccDocumentEntry.resource = create('Immunization') as immunizationDDCC then SHCImmunizationtoDDCC(immunizationSHC, immunizationDDCC) &quot;DDCC Document immunization resource&quot;;\r\n              } &quot;DDCC Document immunization entry&quot;;\r\n            } &quot;DDCC Document bundle&quot;;\r\n          } &quot;DDCC Document entry&quot;;\r\n        } &quot;Is immunization entry&quot;;\r\n      } &quot;For each immunization entry&quot;;\r\n    } &quot;Is Patient entry&quot;;\r\n  } &quot;map patient&quot;;\r\n}\r\n\r\ngroup SHCPatienttoDDCC(source patient : SHCPatientDM, target patientDDCC : DDCCPatient) {\r\n  immunization.status as status -&gt; immunizationDDCC.status = status &quot;Status&quot;;\r\n  immunization.coding as coding -&gt; immunizationDDCC.coding = coding &quot;Coding&quot;;\r\n  immunization.occurrence as occurrenceDateTime -&gt; immunizationDDCC.occurrence = occurrenceDateTime &quot;Occurrence DateTime&quot;;\r\n  immunization.manfacturer as manfacturer -&gt; immunizationDDCC.manfacturer = manfacturer &quot;Manufacturer&quot;;\r\n  immunization.lotNumber as lotNumber -&gt; immunizationDDCC.lotNumber = lotNumber &quot;Lot Number&quot;;\r\n}\r\n\r\ngroup SHCImmunizationtoDDCC(source immunization : SHCImmunizationDM, target immunizationDDCC : DDCCImmunization) {\r\n  immunization.status as status -&gt; immunizationDDCC.status = status &quot;Status&quot;;\r\n  immunization.coding as coding -&gt; immunizationDDCC.coding = coding &quot;Coding&quot;;\r\n  immunization.occurrence as occurrenceDateTime -&gt; immunizationDDCC.occurrence = occurrenceDateTime &quot;Occurrence DateTime&quot;;\r\n  immunization.manfacturer as manfacturer -&gt; immunizationDDCC.manfacturer = manfacturer &quot;Manufacturer&quot;;\r\n  immunization.lotNumber as lotNumber -&gt; immunizationDDCC.lotNumber = lotNumber &quot;Lot Number&quot;;\r\n}\r\n\r\n</pre></div>"
+  },
+  "url": "http://worldhealthorganization.github.io/ddcc/StructureMap/SHCtoDDCC",
+  "version": "1.0.0",
+  "name": "SHCtoDDCC",
+  "status": "draft",
+  "date": "2022-11-23T04:26:34+00:00",
+  "publisher": "WHO",
+  "contact": [
+    {
+      "name": "WHO",
+      "telecom": [
+        {
+          "system": "url",
+          "value": "http://who.int"
+        }
+      ]
+    }
+  ],
+  "jurisdiction": [
+    {
+      "coding": [
+        {
+          "system": "http://unstats.un.org/unsd/methods/m49/m49.htm",
+          "code": "001"
+        }
+      ]
+    }
+  ],
+  "structure": [
+    {
+      "url": "http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-vaccination-bundle-dm",
+      "mode": "source",
+      "alias": "SHCVaccinationBundleDM"
+    },
+    {
+      "url": "http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-patient-general-dm",
+      "mode": "source",
+      "alias": "SHCPatientDM"
+    },
+    {
+      "url": "http://hl7.org/fhir/uv/shc-vaccination/StructureDefinition/shc-vaccination-dm",
+      "mode": "source",
+      "alias": "SHCImmunizationDM"
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/Bundle",
+      "mode": "target",
+      "alias": "Bundle"
+    },
+    {
+      "url": "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCDocument",
+      "mode": "produced",
+      "alias": "DDCCDocument"
+    },
+    {
+      "url": "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCPatient",
+      "mode": "produced",
+      "alias": "DDCCPatient"
+    },
+    {
+      "url": "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCComposition",
+      "mode": "produced",
+      "alias": "DDCCComposition"
+    },
+    {
+      "url": "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCOrganization",
+      "mode": "produced",
+      "alias": "DDCCOrganization"
+    },
+    {
+      "url": "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCountryOfVaccination",
+      "mode": "produced",
+      "alias": "DDCCCountryOfVaccination"
+    },
+    {
+      "url": "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCVaccineBrand",
+      "mode": "produced",
+      "alias": "DDCCVaccineBrand"
+    },
+    {
+      "url": "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCImmunization",
+      "mode": "produced",
+      "alias": "DDCCImmunization"
+    }
+  ],
+  "group": [
+    {
+      "name": "SHCtoDDCC",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "shc",
+          "type": "SHCVaccinationBundleDM",
+          "mode": "source"
+        },
+        {
+          "name": "ddcc",
+          "type": "Bundle",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "map patient",
+          "source": [
+            {
+              "context": "shc",
+              "element": "entry",
+              "variable": "patientEntrySHC"
+            }
+          ],
+          "rule": [
+            {
+              "name": "Is Patient entry",
+              "source": [
+                {
+                  "context": "patientEntrySHC",
+                  "type": "Patient",
+                  "element": "resource",
+                  "listMode": "first",
+                  "variable": "patientSHC"
+                }
+              ],
+              "rule": [
+                {
+                  "name": "For each immunization entry",
+                  "source": [
+                    {
+                      "context": "shc",
+                      "element": "entry",
+                      "variable": "immunizationEntrySHC"
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "Is immunization entry",
+                      "source": [
+                        {
+                          "context": "immunizationEntrySHC",
+                          "type": "Immunization",
+                          "element": "resource",
+                          "variable": "immunizationSHC"
+                        }
+                      ],
+                      "rule": [
+                        {
+                          "name": "Bundle type",
+                          "source": [
+                            {
+                              "context": "immunizationEntrySHC"
+                            }
+                          ],
+                          "target": [
+                            {
+                              "context": "ddcc",
+                              "contextType": "variable",
+                              "element": "type",
+                              "transform": "copy",
+                              "parameter": [
+                                {
+                                  "valueString": "collection"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "name": "DDCC Document entry",
+                          "source": [
+                            {
+                              "context": "immunizationEntrySHC"
+                            }
+                          ],
+                          "target": [
+                            {
+                              "context": "ddcc",
+                              "contextType": "variable",
+                              "element": "entry",
+                              "variable": "ddccEntry"
+                            }
+                          ],
+                          "rule": [
+                            {
+                              "name": "DDCC Document bundle",
+                              "source": [
+                                {
+                                  "context": "immunizationSHC"
+                                }
+                              ],
+                              "target": [
+                                {
+                                  "context": "ddccEntry",
+                                  "contextType": "variable",
+                                  "element": "resource",
+                                  "variable": "ddccdocument",
+                                  "transform": "create",
+                                  "parameter": [
+                                    {
+                                      "valueString": "Bundle"
+                                    }
+                                  ]
+                                }
+                              ],
+                              "rule": [
+                                {
+                                  "name": "DDCC Document type",
+                                  "source": [
+                                    {
+                                      "context": "immunizationSHC"
+                                    }
+                                  ],
+                                  "target": [
+                                    {
+                                      "context": "ddccdocument",
+                                      "contextType": "variable",
+                                      "element": "type",
+                                      "transform": "copy",
+                                      "parameter": [
+                                        {
+                                          "valueString": "document"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                },
+                                {
+                                  "name": "DDCC Document patient entry",
+                                  "source": [
+                                    {
+                                      "context": "patientSHC"
+                                    }
+                                  ],
+                                  "target": [
+                                    {
+                                      "context": "ddccdocument",
+                                      "contextType": "variable",
+                                      "element": "entry",
+                                      "variable": "ddccDocumentEntry"
+                                    }
+                                  ],
+                                  "rule": [
+                                    {
+                                      "name": "DDCC Document patient resource",
+                                      "source": [
+                                        {
+                                          "context": "patientSHC"
+                                        }
+                                      ],
+                                      "target": [
+                                        {
+                                          "context": "ddccDocumentEntry",
+                                          "contextType": "variable",
+                                          "element": "resource",
+                                          "variable": "patientDDCC",
+                                          "transform": "create",
+                                          "parameter": [
+                                            {
+                                              "valueString": "Patient"
+                                            }
+                                          ]
+                                        }
+                                      ],
+                                      "dependent": [
+                                        {
+                                          "name": "SHCPatienttoDDCC",
+                                          "variable": [
+                                            "patientSHC",
+                                            "patientDDCC"
+                                          ],
+                                          "_variable": [
+                                            {
+                                              "extension": [
+                                                {
+                                                  "url": "http://hl7.org/fhir/tools/StructureDefinition/original-item-type",
+                                                  "valueUrl": "id"
+                                                }
+                                              ]
+                                            },
+                                            {
+                                              "extension": [
+                                                {
+                                                  "url": "http://hl7.org/fhir/tools/StructureDefinition/original-item-type",
+                                                  "valueUrl": "id"
+                                                }
+                                              ]
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                },
+                                {
+                                  "name": "DDCC Document immunization entry",
+                                  "source": [
+                                    {
+                                      "context": "immunizationSHC"
+                                    }
+                                  ],
+                                  "target": [
+                                    {
+                                      "context": "ddccdocument",
+                                      "contextType": "variable",
+                                      "element": "entry",
+                                      "variable": "ddccDocumentEntry"
+                                    }
+                                  ],
+                                  "rule": [
+                                    {
+                                      "name": "DDCC Document immunization resource",
+                                      "source": [
+                                        {
+                                          "context": "immunizationSHC"
+                                        }
+                                      ],
+                                      "target": [
+                                        {
+                                          "context": "ddccDocumentEntry",
+                                          "contextType": "variable",
+                                          "element": "resource",
+                                          "variable": "immunizationDDCC",
+                                          "transform": "create",
+                                          "parameter": [
+                                            {
+                                              "valueString": "Immunization"
+                                            }
+                                          ]
+                                        }
+                                      ],
+                                      "dependent": [
+                                        {
+                                          "name": "SHCImmunizationtoDDCC",
+                                          "variable": [
+                                            "immunizationSHC",
+                                            "immunizationDDCC"
+                                          ],
+                                          "_variable": [
+                                            {
+                                              "extension": [
+                                                {
+                                                  "url": "http://hl7.org/fhir/tools/StructureDefinition/original-item-type",
+                                                  "valueUrl": "id"
+                                                }
+                                              ]
+                                            },
+                                            {
+                                              "extension": [
+                                                {
+                                                  "url": "http://hl7.org/fhir/tools/StructureDefinition/original-item-type",
+                                                  "valueUrl": "id"
+                                                }
+                                              ]
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "SHCPatienttoDDCC",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "patient",
+          "type": "SHCPatientDM",
+          "mode": "source"
+        },
+        {
+          "name": "patientDDCC",
+          "type": "DDCCPatient",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "Status",
+          "source": [
+            {
+              "context": "immunization",
+              "element": "status",
+              "variable": "status"
+            }
+          ],
+          "target": [
+            {
+              "context": "immunizationDDCC",
+              "contextType": "variable",
+              "element": "status",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "status"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Coding",
+          "source": [
+            {
+              "context": "immunization",
+              "element": "coding",
+              "variable": "coding"
+            }
+          ],
+          "target": [
+            {
+              "context": "immunizationDDCC",
+              "contextType": "variable",
+              "element": "coding",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "coding"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Occurrence DateTime",
+          "source": [
+            {
+              "context": "immunization",
+              "element": "occurrence",
+              "variable": "occurrenceDateTime"
+            }
+          ],
+          "target": [
+            {
+              "context": "immunizationDDCC",
+              "contextType": "variable",
+              "element": "occurrence",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "occurrenceDateTime"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Manufacturer",
+          "source": [
+            {
+              "context": "immunization",
+              "element": "manfacturer",
+              "variable": "manfacturer"
+            }
+          ],
+          "target": [
+            {
+              "context": "immunizationDDCC",
+              "contextType": "variable",
+              "element": "manfacturer",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "manfacturer"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Lot Number",
+          "source": [
+            {
+              "context": "immunization",
+              "element": "lotNumber",
+              "variable": "lotNumber"
+            }
+          ],
+          "target": [
+            {
+              "context": "immunizationDDCC",
+              "contextType": "variable",
+              "element": "lotNumber",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "lotNumber"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "SHCImmunizationtoDDCC",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "immunization",
+          "type": "SHCImmunizationDM",
+          "mode": "source"
+        },
+        {
+          "name": "immunizationDDCC",
+          "type": "DDCCImmunization",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "Status",
+          "source": [
+            {
+              "context": "immunization",
+              "element": "status",
+              "variable": "status"
+            }
+          ],
+          "target": [
+            {
+              "context": "immunizationDDCC",
+              "contextType": "variable",
+              "element": "status",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "status"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Coding",
+          "source": [
+            {
+              "context": "immunization",
+              "element": "coding",
+              "variable": "coding"
+            }
+          ],
+          "target": [
+            {
+              "context": "immunizationDDCC",
+              "contextType": "variable",
+              "element": "coding",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "coding"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Occurrence DateTime",
+          "source": [
+            {
+              "context": "immunization",
+              "element": "occurrence",
+              "variable": "occurrenceDateTime"
+            }
+          ],
+          "target": [
+            {
+              "context": "immunizationDDCC",
+              "contextType": "variable",
+              "element": "occurrence",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "occurrenceDateTime"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Manufacturer",
+          "source": [
+            {
+              "context": "immunization",
+              "element": "manfacturer",
+              "variable": "manfacturer"
+            }
+          ],
+          "target": [
+            {
+              "context": "immunizationDDCC",
+              "contextType": "variable",
+              "element": "manfacturer",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "manfacturer"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Lot Number",
+          "source": [
+            {
+              "context": "immunization",
+              "element": "lotNumber",
+              "variable": "lotNumber"
+            }
+          ],
+          "target": [
+            {
+              "context": "immunizationDDCC",
+              "contextType": "variable",
+              "element": "lotNumber",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "lotNumber"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

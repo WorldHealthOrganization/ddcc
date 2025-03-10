@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<StructureMap xmlns="http://hl7.org/fhir">
+  <id value="BundleVSToAddBundle"/>
+  <meta>
+    <versionId value="1"/>
+    <lastUpdated value="2022-06-01T12:55:43.592+00:00"/>
+  </meta>
+  <text>
+    <status value="generated"/><div xmlns="http://www.w3.org/1999/xhtml"><pre>map &quot;http://worldhealthorganization.github.io/ddcc/StructureMap/BundleVSToAddBundle&quot; = &quot;BundleVSToAddBundle&quot;
+
+
+uses &quot;http://hl7.org/fhir/StructureDefinition/Bundle&quot; alias DDCCBundle as source
+uses &quot;http://hl7.org/fhir/StructureDefinition/Bundle&quot; alias AddBundle as target
+
+imports &quot;http://worldhealthorganization.github.io/ddcc/StructureMap/CoreDataSetVSToAddBundle&quot;
+
+group BundleVSToAddBundle(source ddccbundle : DDCCBundle, target bundle : AddBundle) {
+  ddccbundle.entry first as ddcc -&gt; bundle then CoreDataSetVSToAddBundle(ddcc, bundle) &quot;get first entry from bundle&quot;;
+}
+
+</pre></div>
+  </text>
+  <url value="http://worldhealthorganization.github.io/ddcc/StructureMap/BundleVSToAddBundle"/>
+  <version value="1.0.0"/>
+  <name value="BundleVSToAddBundle"/>
+  <status value="draft"/>
+  <date value="2022-11-23T04:25:10+00:00"/>
+  <publisher value="WHO"/>
+  <contact>
+    <name value="WHO"/>
+    <telecom>
+      <system value="url"/>
+      <value value="http://who.int"/>
+    </telecom>
+  </contact>
+  <jurisdiction>
+    <coding>
+      <system value="http://unstats.un.org/unsd/methods/m49/m49.htm"/>
+      <code value="001"/>
+    </coding>
+  </jurisdiction>
+  <structure>
+    <url value="http://hl7.org/fhir/StructureDefinition/Bundle"/>
+    <mode value="source"/>
+    <alias value="DDCCBundle"/>
+  </structure>
+  <structure>
+    <url value="http://hl7.org/fhir/StructureDefinition/Bundle"/>
+    <mode value="target"/>
+    <alias value="AddBundle"/>
+  </structure>
+  <import value="http://worldhealthorganization.github.io/ddcc/StructureMap/CoreDataSetVSToAddBundle"/>
+  <group>
+    <name value="BundleVSToAddBundle"/>
+    <typeMode value="none"/>
+    <input>
+      <name value="ddccbundle"/>
+      <type value="DDCCBundle"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="bundle"/>
+      <type value="AddBundle"/>
+      <mode value="target"/>
+    </input>
+    <rule>
+      <name value="get first entry from bundle"/>
+      <source>
+        <context value="ddccbundle"/>
+        <element value="entry"/>
+        <listMode value="first"/>
+        <variable value="ddcc"/>
+      </source>
+      <target>
+        <contextType value="variable"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="bundle"/>
+        </parameter>
+      </target>
+      <dependent>
+        <name value="CoreDataSetVSToAddBundle"/>
+        <variable value="ddcc">
+          <extension url="http://hl7.org/fhir/tools/StructureDefinition/original-item-type">
+            <valueUrl value="id"/>
+          </extension>
+        </variable>
+        <variable value="bundle">
+          <extension url="http://hl7.org/fhir/tools/StructureDefinition/original-item-type">
+            <valueUrl value="id"/>
+          </extension>
+        </variable>
+      </dependent>
+    </rule>
+  </group>
+</StructureMap>
