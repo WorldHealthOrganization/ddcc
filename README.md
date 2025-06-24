@@ -12,7 +12,7 @@ Canonical / permanent URL: __https://smart.who.int/ddcc__
 
 <br> </br>
 
-### Issues
+### Issues 
 Issues and change requests are managed here:  
 
 Issues:  __https://github.com/WorldHealthOrganization/ddcc/issues__  
