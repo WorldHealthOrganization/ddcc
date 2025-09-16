@@ -117,8 +117,9 @@ jobs:
 
       # Generate ci-build URL
       - name: Generate ci-build URL
+        env:
+          REPO_NAME: ${{ github.repository }}
         run: |
-          REPO_NAME="${{ github.repository }}"
           CI_BUILD_URL="http://worldhealthorganization.github.io/$REPO_NAME"
           {
             echo "CI_BUILD_URL<<EOF"
@@ -169,12 +170,14 @@ jobs:
 
       # Check if there are changes and commit only the publication-request.json file
       - name: Check and commit changes
+        env:
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
         run: |
           git add ./publication-request.json
           if git diff-index --quiet HEAD; then
             echo "No changes to commit."
           else
-            git commit -m "Created publication-request.json from issue #${{ github.event.issue.number }} [skip workflow]"
+            git commit -m "Created publication-request.json from issue #$ISSUE_NUMBER [skip workflow]"
             git push origin release-candidate
           fi
 
