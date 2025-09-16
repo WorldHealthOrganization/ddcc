@@ -91,7 +91,7 @@ jobs:
       - name: Extract values from qa.json
         run: |
           # Use jq to safely extract values and write directly to environment file
-          # This avoids command substitution vulnerabilities
+          # This avoids ALL command substitution vulnerabilities
           {
             echo "PACKAGE_ID<<EOF"
             jq -r '.["package-id"] // ""' ./qa.json
@@ -105,17 +105,9 @@ jobs:
             echo "STATUS<<EOF"
             jq -r '.["status"] // ""' ./qa.json
             echo "EOF"
-          } >> $GITHUB_ENV
-          
-          # Create PATH_VALUE safely using a separate approach
-          URL=$(jq -r '.["url"] // ""' ./qa.json)
-          VERSION=$(jq -r '.["ig-ver"] // ""' ./qa.json)
-          # Use parameter expansion in a safer way
-          BASE_URL="${URL%/ImplementationGuide*}"
-          {
             echo "PATH_VALUE<<EOF"
-            printf "%s/%s" "$BASE_URL" "$VERSION"
-            echo
+            # Create PATH_VALUE using jq to avoid shell variable assignment completely
+            jq -r '(.["url"] // "" | sub("/ImplementationGuide.*$"; "")) + "/" + (.["ig-ver"] // "")' ./qa.json
             echo "EOF"
           } >> $GITHUB_ENV
 
