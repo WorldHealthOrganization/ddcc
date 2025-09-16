@@ -80,7 +80,7 @@ jobs:
           GITHUB_EVENT_PAYLOAD: ${{ toJson(github.event) }}
         run: |
           echo "Logging GitHub event payload..."
-          echo "$GITHUB_EVENT_PAYLOAD"
+          printf "%s\n" "$GITHUB_EVENT_PAYLOAD"
           
       - name: Set up Node.js
         uses: actions/setup-node@v3
@@ -100,24 +100,46 @@ jobs:
           TITLE=$(echo "$BODY" | sed -n '/^### Title (for first release only)/{n;:a;/^\s*$/!{p;q};n;ba}')
           CATEGORY=$(echo "$BODY" | sed -n '/^### Category (for first release only)/{n;:a;/^\s*$/!{p;q};n;ba}')
           INTRODUCTION=$(echo "$BODY" | sed -n '/^### Introduction (for first release only)/{n;:a;/^\s*$/!{p;q};n;ba}')
-          echo "Mode: $MODE"
-          echo "Status: $STATUS"
-          echo "Sequence: $SEQUENCE"
-          echo "Description: $DESCRIPTION"
-          echo "Changes: $CHANGES"
-          echo "First Release: $FIRST_RELEASE"
-          echo "Title: $TITLE"
-          echo "Category: $CATEGORY"
-          echo "Introduction: $INTRODUCTION"
-          echo "MODE=$MODE" >> $GITHUB_ENV
-          echo "STATUS=$STATUS" >> $GITHUB_ENV
-          echo "SEQUENCE=$SEQUENCE" >> $GITHUB_ENV
-          echo "DESCRIPTION=$DESCRIPTION" >> $GITHUB_ENV
-          echo "CHANGES=$CHANGES" >> $GITHUB_ENV
-          echo "FIRST_RELEASE=$FIRST_RELEASE" >> $GITHUB_ENV
-          echo "TITLE=$TITLE" >> $GITHUB_ENV
-          echo "CATEGORY=$CATEGORY" >> $GITHUB_ENV
-          echo "INTRODUCTION=$INTRODUCTION" >> $GITHUB_ENV
+          # Use printf to safely output variables to avoid command injection
+          printf "Mode: %s\n" "$MODE"
+          printf "Status: %s\n" "$STATUS"
+          printf "Sequence: %s\n" "$SEQUENCE"
+          printf "Description: %s\n" "$DESCRIPTION"
+          printf "Changes: %s\n" "$CHANGES"
+          printf "First Release: %s\n" "$FIRST_RELEASE"
+          printf "Title: %s\n" "$TITLE"
+          printf "Category: %s\n" "$CATEGORY"
+          printf "Introduction: %s\n" "$INTRODUCTION"
+          # Use delimiters to safely store variables with special characters
+          {
+            echo "MODE<<EOF"
+            echo "$MODE"
+            echo "EOF"
+            echo "STATUS<<EOF"
+            echo "$STATUS"
+            echo "EOF"
+            echo "SEQUENCE<<EOF"
+            echo "$SEQUENCE"
+            echo "EOF"
+            echo "DESCRIPTION<<EOF"
+            echo "$DESCRIPTION"
+            echo "EOF"
+            echo "CHANGES<<EOF"
+            echo "$CHANGES"
+            echo "EOF"
+            echo "FIRST_RELEASE<<EOF"
+            echo "$FIRST_RELEASE"
+            echo "EOF"
+            echo "TITLE<<EOF"
+            echo "$TITLE"
+            echo "EOF"
+            echo "CATEGORY<<EOF"
+            echo "$CATEGORY"
+            echo "EOF"
+            echo "INTRODUCTION<<EOF"
+            echo "$INTRODUCTION"
+            echo "EOF"
+          } >> $GITHUB_ENV
 
       # Extract values from qa.json
       - name: Extract values from qa.json
@@ -128,39 +150,69 @@ jobs:
           STATUS=$(jq -r '.["status"]' ./qa.json)
           URL=$(jq -r '.["url"]' ./qa.json)
           PATH_VALUE="${URL%%/ImplementationGuide*}/$VERSION"
-          echo "PACKAGE_ID=$PACKAGE_ID" >> $GITHUB_ENV
-          echo "TITLE=$TITLE" >> $GITHUB_ENV
-          echo "VERSION=$VERSION" >> $GITHUB_ENV
-          echo "STATUS=$STATUS" >> $GITHUB_ENV
-          echo "PATH_VALUE=$PATH_VALUE" >> $GITHUB_ENV
+          # Use delimiters for safe storage of potentially multiline content
+          {
+            echo "PACKAGE_ID<<EOF"
+            echo "$PACKAGE_ID"
+            echo "EOF"
+            echo "TITLE<<EOF"  
+            echo "$TITLE"
+            echo "EOF"
+            echo "VERSION<<EOF"
+            echo "$VERSION"
+            echo "EOF"
+            echo "STATUS<<EOF"
+            echo "$STATUS"
+            echo "EOF"
+            echo "PATH_VALUE<<EOF"
+            echo "$PATH_VALUE"
+            echo "EOF"
+          } >> $GITHUB_ENV
 
       # Generate ci-build URL
       - name: Generate ci-build URL
         run: |
           REPO_NAME="${{ github.repository }}"
           CI_BUILD_URL="http://worldhealthorganization.github.io/$REPO_NAME"
-          echo "CI_BUILD_URL=$CI_BUILD_URL" >> $GITHUB_ENV
+          {
+            echo "CI_BUILD_URL<<EOF"
+            echo "$CI_BUILD_URL"
+            echo "EOF"
+          } >> $GITHUB_ENV
 
       # Create publication-request.json in the root folder
       - name: Create publication-request.json
         run: |
-          cat <<EOF > ./publication-request.json
-          {
-            "package-id": "${{ env.PACKAGE_ID }}",
-            "title": "${{ env.TITLE }}",
-            "version": "${{ env.VERSION }}",
-            "path": "${{ env.PATH_VALUE }}",
-            "status": "${{ env.STATUS }}",
-            "mode": "${{ env.MODE }}",
-            "sequence": "${{ env.SEQUENCE }}",
-            "desc": "${{ env.DESCRIPTION }}",
-            "changes": "${{ env.CHANGES }}",
-            "first": "${{ env.FIRST_RELEASE }}",
-            "category": "${{ env.CATEGORY }}",
-            "introduction": "${{ env.INTRODUCTION }}",
-            "ci-build": "${{ env.CI_BUILD_URL }}"
-          }
-          EOF
+          # Use jq to safely create JSON with proper escaping
+          jq -n \
+            --arg package_id "${{ env.PACKAGE_ID }}" \
+            --arg title "${{ env.TITLE }}" \
+            --arg version "${{ env.VERSION }}" \
+            --arg path "${{ env.PATH_VALUE }}" \
+            --arg status "${{ env.STATUS }}" \
+            --arg mode "${{ env.MODE }}" \
+            --arg sequence "${{ env.SEQUENCE }}" \
+            --arg desc "${{ env.DESCRIPTION }}" \
+            --arg changes "${{ env.CHANGES }}" \
+            --arg first "${{ env.FIRST_RELEASE }}" \
+            --arg category "${{ env.CATEGORY }}" \
+            --arg introduction "${{ env.INTRODUCTION }}" \
+            --arg ci_build "${{ env.CI_BUILD_URL }}" \
+            '{
+              "package-id": $package_id,
+              "title": $title,
+              "version": $version,
+              "path": $path,
+              "status": $status,
+              "mode": $mode,
+              "sequence": $sequence,
+              "desc": $desc,
+              "changes": $changes,
+              "first": $first,
+              "category": $category,
+              "introduction": $introduction,
+              "ci-build": $ci_build
+            }' > ./publication-request.json
           echo "publication-request.json created in the root directory."
 
       # Configure Git user identity
@@ -183,13 +235,22 @@ jobs:
       # Post a comment in the issue with a link and content of the publication-request.json
       - name: Post a comment to the issue
         run: |
+          # Safely read JSON content and properly escape it
           JSON_CONTENT=$(cat ./publication-request.json | jq -Rs .)
           ISSUE_NUMBER=${{ github.event.issue.number }}
-          COMMENT_BODY="publication-request.json created in the branch [release-candidate](https://github.com/${{ github.repository }}/blob/release-candidate/publication-request.json) with this content: \n\n\`\`\`json\n$JSON_CONTENT\n\`\`\`"
+          # Create comment body using jq for safe JSON construction
+          COMMENT_BODY=$(jq -n \
+            --arg json_content "$(cat ./publication-request.json)" \
+            --arg repo "${{ github.repository }}" \
+            '"publication-request.json created in the branch [release-candidate](https://github.com/" + $repo + "/blob/release-candidate/publication-request.json) with this content: \n\n```json\n" + $json_content + "\n```"')
+          
+          # Use jq to create the API request body safely
+          API_BODY=$(jq -n --arg body "$COMMENT_BODY" '{"body": $body}')
+          
           curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-          -H "Content-Type: application/json" \
-          --data "{\"body\":\"$COMMENT_BODY\"}" \
-          "https://api.github.com/repos/${{ github.repository }}/issues/${ISSUE_NUMBER}/comments" || exit 1
+            -H "Content-Type: application/json" \
+            --data "$API_BODY" \
+            "https://api.github.com/repos/${{ github.repository }}/issues/${ISSUE_NUMBER}/comments" || exit 1
 
       # Add the "Build OK" label to the issue
       - name: Add "Build OK" label
