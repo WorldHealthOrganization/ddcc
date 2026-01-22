@@ -20,7 +20,12 @@ jobs:
       - name: Get version from publication-request.json
         run: |
           VERSION=$(jq -r '.version' publication-request.json)
-          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          printf "Version: %s\n" "$VERSION"
+          {
+            echo "VERSION<<EOF"
+            echo "$VERSION"
+            echo "EOF"
+          } >> $GITHUB_ENV
 
       # Create a release and tag with the version
       - name: Create release and tag
