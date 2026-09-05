@@ -1,0 +1,453 @@
+{
+  "resourceType" : "StructureMap",
+  "id" : "CertSHCtoCoreDataSet",
+  "text" : {
+    "status" : "generated",
+    "div" : "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p class=\"res-header-id\"><b>Generated Narrative: StructureMap CertSHCtoCoreDataSet</b></p><a name=\"CertSHCtoCoreDataSet\"> </a><a name=\"hcCertSHCtoCoreDataSet\"> </a><a name=\"CertSHCtoCoreDataSet-en-US\"> </a><pre class=\"fml\">\r\n<b>map</b><span style=\"color: navy\"> &quot;</span>http://smart.who.int/ddcc/StructureMap/CertSHCtoCoreDataSet<span style=\"color: navy\">&quot; = &quot;</span>CertSHCtoCoreDataSet<span style=\"color: navy\">&quot;\r\n\r\n</span><span style=\"color: navy\">// </span><span style=\"color: green\">Structure map transforming CertSHC logical model to bundle of Core Data Set logical model</span>\r\n\r\n<b>uses</b><span style=\"color: navy\"> &quot;</span><a href=\"StructureDefinition-CertSHC.html\" title=\"Certificate - Smart Health Card's JSon Web Token Logical Model\">http://smart.who.int/ddcc/StructureDefinition/CertSHC</a><span style=\"color: navy\">&quot; </span><b>alias </b>JWTPayload <b>as </b><b>source</b>\r\n<b>uses</b><span style=\"color: navy\"> &quot;</span><a href=\"http://hl7.org/fhir/R4/bundle.html\" title=\"Bundle\">http://hl7.org/fhir/StructureDefinition/Bundle</a><span style=\"color: navy\">&quot; </span><b>alias </b>DDCCBundle <b>as </b><b>target</b>\r\n<b>uses</b><span style=\"color: navy\"> &quot;</span><a href=\"StructureDefinition-DDCCCoreDataSet.html\" title=\"DDCC Core Data Set Logical Model\">http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet</a><span style=\"color: navy\">&quot; </span><b>alias </b>DDCC <b>as </b><b>target</b>\r\n<b>uses</b><span style=\"color: navy\"> &quot;</span><a href=\"StructureDefinition-DDCCCoreDataSetVS.html\" title=\"DDCC Core Data Set Logical Model for Vaccination Status\">http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSetVS</a><span style=\"color: navy\">&quot; </span><b>alias </b>DDCCVS <b>as </b><b>target</b>\r\n\r\n<b>imports</b><span style=\"color: navy\"> &quot;</span><a href=\"StructureMap-SHCToCoreDataSetVS.html\" title=\"SHCToCoreDataSetVS\">http://smart.who.int/ddcc/StructureMap/SHCToCoreDataSetVS</a><span style=\"color: navy\">&quot;\r\n</span><b>imports</b><span style=\"color: navy\"> &quot;</span><a href=\"StructureMap-SHCToCoreDataSetTR.html\" title=\"SHCToCoreDataSetTR\">http://smart.who.int/ddcc/StructureMap/SHCToCoreDataSetTR</a><span style=\"color: navy\">&quot;\r\n</span>\r\n<b>group </b>CertSHCtoCoreDataSetBundle<span style=\"color: navy\">(</span><b>source</b> <span style=\"color: maroon\">src</span><span style=\"color: navy\"> : </span>JWTPayload, <b>target</b> <span style=\"color: maroon\">ddccBundle</span><span style=\"color: navy\"> : </span>Bundle<span style=\"color: navy\">)</span><span style=\"color: navy\"> {\r\n</span>  src.vc<b> as </b><span style=\"color: maroon\">vc</span><b> then</b><span style=\"color: navy\"> {\r\n</span>    vc.credentialSubject<b> as </b><span style=\"color: maroon\">credentialSubject</span><b> then</b><span style=\"color: navy\"> {\r\n</span>      credentialSubject.fhirBundle<b> as </b><span style=\"color: maroon\">fhirBundle</span><b> then</b><span style=\"color: navy\"> {\r\n</span>        fhirBundle.entry<b> as </b><span style=\"color: maroon\">patientEntrySHC</span><b> then</b><span style=\"color: navy\"> {\r\n</span>          patientEntrySHC.resource<span style=\"color: navy\"> : </span>Patient first<b> as </b><span style=\"color: maroon\">patient</span><b> then</b><span style=\"color: navy\"> {\r\n</span>            fhirBundle.entry<b> as </b><span style=\"color: maroon\">entry</span><b> then</b><span style=\"color: navy\"> {\r\n</span>              entry.resource<span style=\"color: navy\"> : </span>Immunization<b> as </b><span style=\"color: maroon\">immunization</span><span style=\"color: navy\"><b> -&gt; </b></span> ddccBundle.entry<b> as </b><span style=\"color: maroon\">outentry</span><span style=\"color: navy\">, </span> <b>create</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSetVS'</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">ddcc</span><b> then</b><span style=\"color: navy\"> {\r\n</span>                immunization<b> then </b>PatientToDDCCVS<span style=\"color: navy\">(</span><span style=\"color: maroon\">patient</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">ddcc</span><span style=\"color: navy\">)</span> <i>&quot;set patient&quot;</i><span style=\"color: navy\">;</span>\r\n                immunization<span style=\"color: navy\"><b> -&gt; </b></span>ddcc.vaccination<b> as </b><span style=\"color: maroon\">vaccination</span><b> then </b>ImmunizationToDDCC<span style=\"color: navy\">(</span><span style=\"color: maroon\">immunization</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">vaccination</span><span style=\"color: navy\">)</span> <i>&quot;set vaccination&quot;</i><span style=\"color: navy\">;</span>\r\n                immunization<b> then </b>CertSHCtoCoreDataSet<span style=\"color: navy\">(</span><span style=\"color: maroon\">src</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">ddcc</span><span style=\"color: navy\">)</span> <i>&quot;set ddcc&quot;</i><span style=\"color: navy\">;</span>\r\n                immunization<span style=\"color: navy\"><b> -&gt; </b></span>outentry.resource = <span style=\"color: maroon\">ddcc</span> <i>&quot;set outentry&quot;</i><span style=\"color: navy\">;</span>\r\n              <span style=\"color: navy\">}</span> <i>&quot;immunizations&quot;</i><span style=\"color: navy\">;</span>\r\n              entry.resource<span style=\"color: navy\"> : </span>Observation<b> as </b><span style=\"color: maroon\">lab</span><span style=\"color: navy\"><b> -&gt; </b></span> ddccBundle.entry<b> as </b><span style=\"color: maroon\">outentry</span><span style=\"color: navy\">, </span> <b>create</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSetTR'</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">ddcc</span><b> then</b><span style=\"color: navy\"> {\r\n</span>                lab<b> then </b>PatientToDDCCTR<span style=\"color: navy\">(</span><span style=\"color: maroon\">patient</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">ddcc</span><span style=\"color: navy\">)</span> <i>&quot;set patient&quot;</i><span style=\"color: navy\">;</span>\r\n                lab<span style=\"color: navy\"><b> -&gt; </b></span>ddcc.test<b> as </b><span style=\"color: maroon\">test</span><b> then </b>LabToDDCC<span style=\"color: navy\">(</span><span style=\"color: maroon\">lab</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">test</span><span style=\"color: navy\">)</span> <i>&quot;set test&quot;</i><span style=\"color: navy\">;</span>\r\n                lab<b> then </b>CertSHCtoCoreDataSet<span style=\"color: navy\">(</span><span style=\"color: maroon\">src</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">ddcc</span><span style=\"color: navy\">)</span> <i>&quot;set ddcc&quot;</i><span style=\"color: navy\">;</span>\r\n                lab<span style=\"color: navy\"><b> -&gt; </b></span>outentry.resource = <span style=\"color: maroon\">ddcc</span> <i>&quot;set outentry&quot;</i><span style=\"color: navy\">;</span>\r\n              <span style=\"color: navy\">}</span> <i>&quot;labs&quot;</i><span style=\"color: navy\">;</span>\r\n            <span style=\"color: navy\">}</span> <i>&quot;entries&quot;</i><span style=\"color: navy\">;</span>\r\n          <span style=\"color: navy\">}</span> <i>&quot;get patient&quot;</i><span style=\"color: navy\">;</span>\r\n        <span style=\"color: navy\">}</span> <i>&quot;find patient&quot;</i><span style=\"color: navy\">;</span>\r\n      <span style=\"color: navy\">}</span><span style=\"color: navy\">;</span>\r\n    <span style=\"color: navy\">}</span><span style=\"color: navy\">;</span>\r\n  <span style=\"color: navy\">}</span><span style=\"color: navy\">;</span>\r\n<span style=\"color: navy\">}\r\n\r\n</span><b>group </b>CertSHCtoCoreDataSet<span style=\"color: navy\">(</span><b>source</b> <span style=\"color: maroon\">src</span><span style=\"color: navy\"> : </span>JWTPayload, <b>target</b> <span style=\"color: maroon\">ddcc</span><span style=\"color: navy\"> : </span>DDCC<span style=\"color: navy\">)</span><span style=\"color: navy\"> {\r\n</span>  src<span style=\"color: navy\"><b> -&gt; </b></span>ddcc.certificate<b> as </b><span style=\"color: maroon\">cert</span><b> then</b><span style=\"color: navy\"> {\r\n</span>    src.iss<span style=\"color: navy\"><b> -&gt; </b></span>cert.issuer = <b>create</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'Reference'</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">issuer</span><b> then</b><span style=\"color: navy\"> {\r\n</span>      src.iss<b> as </b><span style=\"color: maroon\">iss</span><span style=\"color: navy\"><b> -&gt; </b></span>issuer.reference = <span style=\"color: maroon\">iss</span> <i>&quot;set issuer&quot;</i><span style=\"color: navy\">;</span>\r\n    <span style=\"color: navy\">}</span> <i>&quot;issuer&quot;</i><span style=\"color: navy\">;</span>\r\n    src<span style=\"color: navy\"><b> -&gt; </b></span>cert.period = <b>create</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'Period'</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">period</span><b> then</b><span style=\"color: navy\"> {\r\n</span>      src<b> then </b>JwtToPeriod<span style=\"color: navy\">(</span><span style=\"color: maroon\">src</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">period</span><span style=\"color: navy\">)</span> <i>&quot;set period&quot;</i><span style=\"color: navy\">;</span>\r\n    <span style=\"color: navy\">}</span> <i>&quot;period&quot;</i><span style=\"color: navy\">;</span>\r\n  <span style=\"color: navy\">}</span> <i>&quot;certificate&quot;</i><span style=\"color: navy\">;</span>\r\n<span style=\"color: navy\">}\r\n\r\n</span><b>group </b>JwtToPeriod<span style=\"color: navy\">(</span><b>source</b> <span style=\"color: maroon\">src</span><span style=\"color: navy\"> : </span>JWTPayload, <b>target</b> <span style=\"color: maroon\">tgt</span><span style=\"color: navy\"> : </span>Period<span style=\"color: navy\">)</span><span style=\"color: navy\"> {\r\n</span>  src.nbf<b> as </b><span style=\"color: maroon\">nbf</span><span style=\"color: navy\"><b> -&gt; </b></span> <b>append</b><span style=\"color: navy\">(</span><span style=\"color: maroon\">nbf</span><span style=\"color: navy\">, </span><span style=\"color: blue\">' seconds'</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">epoch</span><span style=\"color: navy\">, </span> tgt.start = <span style=\"color: navy\">(</span>@1970-01-01T00:00:00.000+00:00 + epoch.toQuantity()<span style=\"color: navy\">)</span> <i>&quot;set period start to notBefore&quot;</i><span style=\"color: navy\">;</span>\r\n  src.iat<b> as </b><span style=\"color: maroon\">iat</span><span style=\"color: navy\"><b> -&gt; </b></span> <b>append</b><span style=\"color: navy\">(</span><span style=\"color: maroon\">iat</span><span style=\"color: navy\">, </span><span style=\"color: blue\">' seconds'</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">epoch</span><span style=\"color: navy\">, </span> tgt.start = <span style=\"color: navy\">(</span>@1970-01-01T00:00:00.000+00:00 + epoch.toQuantity()<span style=\"color: navy\">)</span> <i>&quot;set period start to  issuedAt&quot;</i><span style=\"color: navy\">;</span>\r\n  src.exp<b> as </b><span style=\"color: maroon\">exp</span><span style=\"color: navy\"><b> -&gt; </b></span> <b>append</b><span style=\"color: navy\">(</span><span style=\"color: maroon\">exp</span><span style=\"color: navy\">, </span><span style=\"color: blue\">' seconds'</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">epoch</span><span style=\"color: navy\">, </span> tgt.end = <span style=\"color: navy\">(</span>@1970-01-01T00:00:00.000+00:00 + epoch.toQuantity()<span style=\"color: navy\">)</span> <i>&quot;set period end&quot;</i><span style=\"color: navy\">;</span>\r\n<span style=\"color: navy\">}\r\n\r\n</span></pre></div>"
+  },
+  "url" : "http://smart.who.int/ddcc/StructureMap/CertSHCtoCoreDataSet",
+  "version" : "1.0.0",
+  "name" : "CertSHCtoCoreDataSet",
+  "status" : "draft",
+  "date" : "2024-10-15T13:40:08+00:00",
+  "publisher" : "WHO",
+  "contact" : [{
+    "name" : "WHO",
+    "telecom" : [{
+      "system" : "url",
+      "value" : "http://who.int"
+    }]
+  }],
+  "description" : "Structure map transforming CertSHC logical model to bundle of Core Data Set logical model",
+  "jurisdiction" : [{
+    "coding" : [{
+      "system" : "http://unstats.un.org/unsd/methods/m49/m49.htm",
+      "code" : "001"
+    }]
+  }],
+  "structure" : [{
+    "url" : "http://smart.who.int/ddcc/StructureDefinition/CertSHC",
+    "mode" : "source",
+    "alias" : "JWTPayload"
+  },
+  {
+    "url" : "http://hl7.org/fhir/StructureDefinition/Bundle",
+    "mode" : "target",
+    "alias" : "DDCCBundle"
+  },
+  {
+    "url" : "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet",
+    "mode" : "target",
+    "alias" : "DDCC"
+  },
+  {
+    "url" : "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSetVS",
+    "mode" : "target",
+    "alias" : "DDCCVS"
+  }],
+  "import" : ["http://smart.who.int/ddcc/StructureMap/SHCToCoreDataSetVS",
+  "http://smart.who.int/ddcc/StructureMap/SHCToCoreDataSetTR"],
+  "group" : [{
+    "name" : "CertSHCtoCoreDataSetBundle",
+    "typeMode" : "none",
+    "input" : [{
+      "name" : "src",
+      "type" : "JWTPayload",
+      "mode" : "source"
+    },
+    {
+      "name" : "ddccBundle",
+      "type" : "Bundle",
+      "mode" : "target"
+    }],
+    "rule" : [{
+      "name" : "vc",
+      "source" : [{
+        "context" : "src",
+        "element" : "vc",
+        "variable" : "vc"
+      }],
+      "rule" : [{
+        "name" : "credentialSubject",
+        "source" : [{
+          "context" : "vc",
+          "element" : "credentialSubject",
+          "variable" : "credentialSubject"
+        }],
+        "rule" : [{
+          "name" : "fhirBundle",
+          "source" : [{
+            "context" : "credentialSubject",
+            "element" : "fhirBundle",
+            "variable" : "fhirBundle"
+          }],
+          "rule" : [{
+            "name" : "find patient",
+            "source" : [{
+              "context" : "fhirBundle",
+              "element" : "entry",
+              "variable" : "patientEntrySHC"
+            }],
+            "rule" : [{
+              "name" : "get patient",
+              "source" : [{
+                "context" : "patientEntrySHC",
+                "type" : "Patient",
+                "element" : "resource",
+                "listMode" : "first",
+                "variable" : "patient"
+              }],
+              "rule" : [{
+                "name" : "entries",
+                "source" : [{
+                  "context" : "fhirBundle",
+                  "element" : "entry",
+                  "variable" : "entry"
+                }],
+                "rule" : [{
+                  "name" : "immunizations",
+                  "source" : [{
+                    "context" : "entry",
+                    "type" : "Immunization",
+                    "element" : "resource",
+                    "variable" : "immunization"
+                  }],
+                  "target" : [{
+                    "context" : "ddccBundle",
+                    "contextType" : "variable",
+                    "element" : "entry",
+                    "variable" : "outentry"
+                  },
+                  {
+                    "contextType" : "variable",
+                    "variable" : "ddcc",
+                    "transform" : "create",
+                    "parameter" : [{
+                      "valueString" : "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSetVS"
+                    }]
+                  }],
+                  "rule" : [{
+                    "name" : "set patient",
+                    "source" : [{
+                      "context" : "immunization"
+                    }],
+                    "dependent" : [{
+                      "name" : "PatientToDDCCVS",
+                      "variable" : ["patient",
+                      "ddcc"]
+                    }]
+                  },
+                  {
+                    "name" : "set vaccination",
+                    "source" : [{
+                      "context" : "immunization"
+                    }],
+                    "target" : [{
+                      "context" : "ddcc",
+                      "contextType" : "variable",
+                      "element" : "vaccination",
+                      "variable" : "vaccination"
+                    }],
+                    "dependent" : [{
+                      "name" : "ImmunizationToDDCC",
+                      "variable" : ["immunization",
+                      "vaccination"]
+                    }]
+                  },
+                  {
+                    "name" : "set ddcc",
+                    "source" : [{
+                      "context" : "immunization"
+                    }],
+                    "dependent" : [{
+                      "name" : "CertSHCtoCoreDataSet",
+                      "variable" : ["src",
+                      "ddcc"]
+                    }]
+                  },
+                  {
+                    "name" : "set outentry",
+                    "source" : [{
+                      "context" : "immunization"
+                    }],
+                    "target" : [{
+                      "context" : "outentry",
+                      "contextType" : "variable",
+                      "element" : "resource",
+                      "transform" : "copy",
+                      "parameter" : [{
+                        "valueId" : "ddcc"
+                      }]
+                    }]
+                  }]
+                },
+                {
+                  "name" : "labs",
+                  "source" : [{
+                    "context" : "entry",
+                    "type" : "Observation",
+                    "element" : "resource",
+                    "variable" : "lab"
+                  }],
+                  "target" : [{
+                    "context" : "ddccBundle",
+                    "contextType" : "variable",
+                    "element" : "entry",
+                    "variable" : "outentry"
+                  },
+                  {
+                    "contextType" : "variable",
+                    "variable" : "ddcc",
+                    "transform" : "create",
+                    "parameter" : [{
+                      "valueString" : "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSetTR"
+                    }]
+                  }],
+                  "rule" : [{
+                    "name" : "set patient",
+                    "source" : [{
+                      "context" : "lab"
+                    }],
+                    "dependent" : [{
+                      "name" : "PatientToDDCCTR",
+                      "variable" : ["patient",
+                      "ddcc"]
+                    }]
+                  },
+                  {
+                    "name" : "set test",
+                    "source" : [{
+                      "context" : "lab"
+                    }],
+                    "target" : [{
+                      "context" : "ddcc",
+                      "contextType" : "variable",
+                      "element" : "test",
+                      "variable" : "test"
+                    }],
+                    "dependent" : [{
+                      "name" : "LabToDDCC",
+                      "variable" : ["lab",
+                      "test"]
+                    }]
+                  },
+                  {
+                    "name" : "set ddcc",
+                    "source" : [{
+                      "context" : "lab"
+                    }],
+                    "dependent" : [{
+                      "name" : "CertSHCtoCoreDataSet",
+                      "variable" : ["src",
+                      "ddcc"]
+                    }]
+                  },
+                  {
+                    "name" : "set outentry",
+                    "source" : [{
+                      "context" : "lab"
+                    }],
+                    "target" : [{
+                      "context" : "outentry",
+                      "contextType" : "variable",
+                      "element" : "resource",
+                      "transform" : "copy",
+                      "parameter" : [{
+                        "valueId" : "ddcc"
+                      }]
+                    }]
+                  }]
+                }]
+              }]
+            }]
+          }]
+        }]
+      }]
+    }]
+  },
+  {
+    "name" : "CertSHCtoCoreDataSet",
+    "typeMode" : "none",
+    "input" : [{
+      "name" : "src",
+      "type" : "JWTPayload",
+      "mode" : "source"
+    },
+    {
+      "name" : "ddcc",
+      "type" : "DDCC",
+      "mode" : "target"
+    }],
+    "rule" : [{
+      "name" : "certificate",
+      "source" : [{
+        "context" : "src"
+      }],
+      "target" : [{
+        "context" : "ddcc",
+        "contextType" : "variable",
+        "element" : "certificate",
+        "variable" : "cert"
+      }],
+      "rule" : [{
+        "name" : "issuer",
+        "source" : [{
+          "context" : "src",
+          "element" : "iss"
+        }],
+        "target" : [{
+          "context" : "cert",
+          "contextType" : "variable",
+          "element" : "issuer",
+          "variable" : "issuer",
+          "transform" : "create",
+          "parameter" : [{
+            "valueString" : "Reference"
+          }]
+        }],
+        "rule" : [{
+          "name" : "set issuer",
+          "source" : [{
+            "context" : "src",
+            "element" : "iss",
+            "variable" : "iss"
+          }],
+          "target" : [{
+            "context" : "issuer",
+            "contextType" : "variable",
+            "element" : "reference",
+            "transform" : "copy",
+            "parameter" : [{
+              "valueId" : "iss"
+            }]
+          }]
+        }]
+      },
+      {
+        "name" : "period",
+        "source" : [{
+          "context" : "src"
+        }],
+        "target" : [{
+          "context" : "cert",
+          "contextType" : "variable",
+          "element" : "period",
+          "variable" : "period",
+          "transform" : "create",
+          "parameter" : [{
+            "valueString" : "Period"
+          }]
+        }],
+        "rule" : [{
+          "name" : "set period",
+          "source" : [{
+            "context" : "src"
+          }],
+          "dependent" : [{
+            "name" : "JwtToPeriod",
+            "variable" : ["src",
+            "period"]
+          }]
+        }]
+      }]
+    }]
+  },
+  {
+    "name" : "JwtToPeriod",
+    "typeMode" : "none",
+    "input" : [{
+      "name" : "src",
+      "type" : "JWTPayload",
+      "mode" : "source"
+    },
+    {
+      "name" : "tgt",
+      "type" : "Period",
+      "mode" : "target"
+    }],
+    "rule" : [{
+      "name" : "set period start to notBefore",
+      "source" : [{
+        "context" : "src",
+        "element" : "nbf",
+        "variable" : "nbf"
+      }],
+      "target" : [{
+        "contextType" : "variable",
+        "variable" : "epoch",
+        "transform" : "append",
+        "parameter" : [{
+          "valueId" : "nbf"
+        },
+        {
+          "valueString" : " seconds"
+        }]
+      },
+      {
+        "context" : "tgt",
+        "contextType" : "variable",
+        "element" : "start",
+        "transform" : "evaluate",
+        "parameter" : [{
+          "valueString" : "@1970-01-01T00:00:00.000+00:00 + epoch.toQuantity()"
+        }]
+      }]
+    },
+    {
+      "name" : "set period start to  issuedAt",
+      "source" : [{
+        "context" : "src",
+        "element" : "iat",
+        "variable" : "iat"
+      }],
+      "target" : [{
+        "contextType" : "variable",
+        "variable" : "epoch",
+        "transform" : "append",
+        "parameter" : [{
+          "valueId" : "iat"
+        },
+        {
+          "valueString" : " seconds"
+        }]
+      },
+      {
+        "context" : "tgt",
+        "contextType" : "variable",
+        "element" : "start",
+        "transform" : "evaluate",
+        "parameter" : [{
+          "valueString" : "@1970-01-01T00:00:00.000+00:00 + epoch.toQuantity()"
+        }]
+      }]
+    },
+    {
+      "name" : "set period end",
+      "source" : [{
+        "context" : "src",
+        "element" : "exp",
+        "variable" : "exp"
+      }],
+      "target" : [{
+        "contextType" : "variable",
+        "variable" : "epoch",
+        "transform" : "append",
+        "parameter" : [{
+          "valueId" : "exp"
+        },
+        {
+          "valueString" : " seconds"
+        }]
+      },
+      {
+        "context" : "tgt",
+        "contextType" : "variable",
+        "element" : "end",
+        "transform" : "evaluate",
+        "parameter" : [{
+          "valueString" : "@1970-01-01T00:00:00.000+00:00 + epoch.toQuantity()"
+        }]
+      }]
+    }]
+  }]
+}

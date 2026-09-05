@@ -1,0 +1,70 @@
+@prefix fhir: <http://hl7.org/fhir/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# - resource -------------------------------------------------------------------
+
+<http://smart.who.int/ddcc/Bundle/SHCVaccinationBundleDM-Example-English-From-ddcc-to-shc> a fhir:Bundle ;
+  fhir:nodeRole fhir:treeRoot ;
+  fhir:Resource.id [ fhir:value "SHCVaccinationBundleDM-Example-English-From-ddcc-to-shc"] ;
+  fhir:Bundle.type [ fhir:value "collection"] ;
+  fhir:Bundle.entry [
+     fhir:index 0 ;
+     fhir:Bundle.entry.fullUrl [ fhir:value "resource:0" ] ;
+     fhir:Bundle.entry.resource <resource:0>
+  ], [
+     fhir:index 1 ;
+     fhir:Bundle.entry.fullUrl [ fhir:value "resource:1" ] ;
+     fhir:Bundle.entry.resource <resource:1>
+  ] .
+
+<resource:0> a fhir:Patient ;
+  fhir:DomainResource.text [
+     fhir:Narrative.status [ fhir:value "generated" ] ;
+     fhir:Narrative.div "<div xmlns=\"http://www.w3.org/1999/xhtml\"><a name=\"Patient_null\"> </a><p class=\"res-header-id\"><b>Generated Narrative: Patient </b></p><p style=\"border: 1px #661aff solid; background-color: #e6e6ff; padding: 10px;\">Aulus Agerius (no stated gender), DoB: 2003-03-03</p><hr/></div>"
+  ] ;
+  fhir:Patient.name [
+     fhir:index 0 ;
+     fhir:HumanName.text [ fhir:value "Aulus Agerius" ]
+  ] ;
+  fhir:Patient.birthDate [ fhir:value "2003-03-03"^^xsd:date] .
+
+<resource:1> a fhir:Immunization ;
+  fhir:DomainResource.text [
+     fhir:Narrative.status [ fhir:value "generated" ] ;
+     fhir:Narrative.div "<div xmlns=\"http://www.w3.org/1999/xhtml\"><a name=\"Immunization_null\"> </a><p class=\"res-header-id\"><b>Generated Narrative: Immunization </b></p><p><b>status</b>: Completed</p><p><b>vaccineCode</b>: <span title=\"Codes:{http://id.who.int/icd11/mms XM0CX4}\">XM0CX4</span></p><p><b>patient</b>: <a href=\"Bundle-SHCVaccinationBundleDM-Example-English-From-ddcc-to-shc.html#resource-0\">Aulus Agerius (no stated gender), DoB: 2003-03-03</a></p><p><b>occurrence</b>: 2021-05-06</p><p><b>manufacturer</b>: Identifier: <code>http://smart.who.int/ddcc/CodeSystem/DDCCExampleTestCodeSystem</code>/TEST</p><p><b>lotNumber</b>: 123</p><h3>Performers</h3><table class=\"grid\"><tr><td style=\"display: none\">-</td><td><b>Actor</b></td></tr><tr><td style=\"display: none\">*</td><td>Government Hospital</td></tr></table></div>"
+  ] ;
+  fhir:Immunization.status [ fhir:value "completed"] ;
+  fhir:Immunization.vaccineCode [
+     fhir:CodeableConcept.coding [
+       fhir:index 0 ;
+       fhir:Coding.system [ fhir:value "http://id.who.int/icd11/mms" ] ;
+       fhir:Coding.code [ fhir:value "XM0CX4" ]
+     ]
+  ] ;
+  fhir:Immunization.patient [
+     fhir:Reference.reference [ fhir:value "resource:0" ]
+  ] ;
+  fhir:Immunization.occurrenceDateTime [ fhir:value "2021-05-06"^^xsd:date] ;
+  fhir:Immunization.manufacturer [
+     fhir:Reference.identifier [
+       fhir:Identifier.system [ fhir:value "http://smart.who.int/ddcc/CodeSystem/DDCCExampleTestCodeSystem" ] ;
+       fhir:Identifier.value [ fhir:value "TEST" ]
+     ]
+  ] ;
+  fhir:Immunization.lotNumber [ fhir:value "123"] ;
+  fhir:Immunization.performer [
+     fhir:index 0 ;
+     fhir:Immunization.performer.actor [
+       fhir:Reference.display [ fhir:value "Government Hospital" ]
+     ]
+  ] .
+
+# - ontology header ------------------------------------------------------------
+
+<http://smart.who.int/ddcc/Bundle/SHCVaccinationBundleDM-Example-English-From-ddcc-to-shc.ttl> a owl:Ontology ;
+  owl:imports fhir:fhir.ttl .
+
+# -------------------------------------------------------------------------------------
+

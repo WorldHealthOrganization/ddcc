@@ -1,0 +1,1614 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<StructureMap xmlns="http://hl7.org/fhir">
+  <id value="ICAOtoDDCC"/>
+  <text>
+    <status value="generated"/><div xmlns="http://www.w3.org/1999/xhtml"><p class="res-header-id"><b>Generated Narrative: StructureMap ICAOtoDDCC</b></p><a name="ICAOtoDDCC"> </a><a name="hcICAOtoDDCC"> </a><a name="ICAOtoDDCC-en-US"> </a><pre class="fml">
+<b>map</b><span style="color: navy"> &quot;</span>http://smart.who.int/ddcc/StructureMap/CertICAOtoDDCC<span style="color: navy">&quot; = &quot;</span>ICAOtoDDCC<span style="color: navy">&quot;
+
+</span><b>uses</b><span style="color: navy"> &quot;</span><a href="StructureDefinition-CertICAO.html" title="Certificate - ICAO Visible Digital Seal Logical Model">http://smart.who.int/ddcc/StructureDefinition/CertICAO</a><span style="color: navy">&quot; </span><b>alias </b>IJson <b>as </b><b>source</b>
+<b>uses</b><span style="color: navy"> &quot;</span>http://hl7.org/fhir/ig/icao/StructureDefinition/Data<span style="color: navy">&quot; </span><b>alias </b>Data <b>as </b><b>source</b>
+<b>uses</b><span style="color: navy"> &quot;</span>http://hl7.org/fhir/ig/icao/StructureDefinition/Header<span style="color: navy">&quot; </span><b>alias </b>Header <b>as </b><b>source</b>
+<b>uses</b><span style="color: navy"> &quot;</span>http://hl7.org/fhir/ig/icao/StructureDefinition/Message<span style="color: navy">&quot; </span><b>alias </b>Message <b>as </b><b>source</b>
+<b>uses</b><span style="color: navy"> &quot;</span>http://hl7.org/fhir/ig/icao/StructureDefinition/Patient<span style="color: navy">&quot; </span><b>alias </b>Patient <b>as </b><b>source</b>
+<b>uses</b><span style="color: navy"> &quot;</span>http://hl7.org/fhir/ig/icao/StructureDefinition/VaccinationEvent<span style="color: navy">&quot; </span><b>alias </b>VaccinationEvent <b>as </b><b>source</b>
+<b>uses</b><span style="color: navy"> &quot;</span>http://hl7.org/fhir/ig/icao/StructureDefinition/VaccinationDetails<span style="color: navy">&quot; </span><b>alias </b>VaccinationDetails <b>as </b><b>source</b>
+<b>uses</b><span style="color: navy"> &quot;</span>http://hl7.org/fhir/ig/icao/StructureDefinition/ServiceProvider<span style="color: navy">&quot; </span><b>alias </b>ServiceProvider <b>as </b><b>source</b>
+<b>uses</b><span style="color: navy"> &quot;</span>http://hl7.org/fhir/ig/icao/StructureDefinition/Contact<span style="color: navy">&quot; </span><b>alias </b>Contact <b>as </b><b>source</b>
+<b>uses</b><span style="color: navy"> &quot;</span>http://hl7.org/fhir/ig/icao/StructureDefinition/DateTimeTestReport<span style="color: navy">&quot; </span><b>alias </b>DateTimeTestReport <b>as </b><b>source</b>
+<b>uses</b><span style="color: navy"> &quot;</span>http://hl7.org/fhir/ig/icao/StructureDefinition/TestResult<span style="color: navy">&quot; </span><b>alias </b>TestResult <b>as </b><b>source</b>
+<b>uses</b><span style="color: navy"> &quot;</span>http://hl7.org/fhir/ig/icao/StructureDefinition/Signature<span style="color: navy">&quot; </span><b>alias </b>Signature <b>as </b><b>source</b>
+<b>uses</b><span style="color: navy"> &quot;</span><a href="http://hl7.org/fhir/R4/bundle.html" title="Bundle">http://hl7.org/fhir/StructureDefinition/Bundle</a><span style="color: navy">&quot; </span><b>alias </b>Bundle <b>as </b><b>target</b>
+
+<b>group </b>ICAOtoDDCC<span style="color: navy">(</span><b>source</b> <span style="color: maroon">src</span><span style="color: navy"> : </span>IJson, <b>target</b> <span style="color: maroon">bundle</span><span style="color: navy"> : </span>Bundle<span style="color: navy">)</span><span style="color: navy"> {
+</span>  src.data<b> as </b><span style="color: maroon">data</span><span style="color: navy"><b> -&gt; </b></span>bundle<b> then </b>ExtractData<span style="color: navy">(</span><span style="color: maroon">data</span><span style="color: navy">, </span><span style="color: maroon">bundle</span><span style="color: navy">)</span> <i>&quot;Base Rule&quot;</i><span style="color: navy">;</span>
+<span style="color: navy">}
+
+</span><b>group </b>ExtractData<span style="color: navy">(</span><b>source</b> <span style="color: maroon">src</span><span style="color: navy"> : </span>Data, <b>target</b> <span style="color: maroon">bundle</span><span style="color: navy"> : </span>Bundle<span style="color: navy">)</span><span style="color: navy"> {
+</span>  src<span style="color: navy"><b> -&gt; </b></span>bundle.type = <span style="color: blue">'transaction'</span> <i>&quot;set bundle type&quot;</i><span style="color: navy">;</span>
+  src<span style="color: navy"><b> -&gt; </b></span> bundle<span style="color: navy">, </span> bundle.entry<b> as </b><span style="color: maroon">entry</span><span style="color: navy">, </span> entry.resource = <b>create</b><span style="color: navy">(</span><span style="color: blue">'Composition'</span><span style="color: navy">)</span><b> as </b><span style="color: maroon">comp</span><b> then</b><span style="color: navy"> {
+</span>    src<span style="color: navy"><b> -&gt; </b></span>bundle<b> then </b>ExtractCert<span style="color: navy">(</span><span style="color: maroon">src</span><span style="color: navy">, </span><span style="color: maroon">bundle</span><span style="color: navy">, </span><span style="color: maroon">comp</span><span style="color: navy">)</span> <i>&quot;Certificate&quot;</i><span style="color: navy">;</span>
+    src<span style="color: navy"><b> -&gt; </b></span>bundle<b> then </b>ExtractComposition<span style="color: navy">(</span><span style="color: maroon">src</span><span style="color: navy">, </span><span style="color: maroon">comp</span><span style="color: navy">)</span> <i>&quot;Composition&quot;</i><span style="color: navy">;</span>
+  <span style="color: navy">}</span> <i>&quot;Patient and Composition Create&quot;</i><span style="color: navy">;</span>
+<span style="color: navy">}
+
+</span><b>group </b>ExtractCert<span style="color: navy">(</span><b>source</b> <span style="color: maroon">src</span><span style="color: navy"> : </span>Data, <b>target</b> <span style="color: maroon">bundle</span><span style="color: navy"> : </span>Bundle, <b>target</b> <span style="color: maroon">comp</span><span style="color: navy"> : </span>Composition<span style="color: navy">)</span><span style="color: navy"> {
+</span>  src<span style="color: navy"><b> -&gt; </b></span> comp<span style="color: navy">, </span> bundle.entry<b> as </b><span style="color: maroon">entry</span><span style="color: navy">, </span> entry.resource = <b>create</b><span style="color: navy">(</span><span style="color: blue">'Patient'</span><span style="color: navy">)</span><b> as </b><span style="color: maroon">patient</span><span style="color: navy">, </span> <b>uuid</b><span style="color: navy">(</span><span style="color: navy">)</span><b> as </b><span style="color: maroon">pid</span><b> then</b><span style="color: navy"> {
+</span>    src.msg<b> as </b><span style="color: maroon">msg</span><span style="color: navy"><b> -&gt; </b></span>patient<b> then </b>ExtractPatientFromMsg<span style="color: navy">(</span><span style="color: maroon">msg</span><span style="color: navy">, </span><span style="color: maroon">pid</span><span style="color: navy">, </span><span style="color: maroon">patient</span><span style="color: navy">)</span> <i>&quot;extract patient&quot;</i><span style="color: navy">;</span>
+    src<span style="color: navy"><b> -&gt; </b></span> comp.subject<b> as </b><span style="color: maroon">subj</span><span style="color: navy">, </span> subj.reference = <b>append</b><span style="color: navy">(</span><span style="color: blue">'Patient/'</span><span style="color: navy">, </span><span style="color: maroon">pid</span><span style="color: navy">)</span> <i>&quot;Set patient&quot;</i><span style="color: navy">;</span>
+    src.msg<b> as </b><span style="color: maroon">msg</span><b> where </b>src.hdr.t = 'icao.vacc'<span style="color: navy"><b> -&gt; </b></span> comp<span style="color: navy">, </span> comp.section<b> as </b><span style="color: maroon">section</span><b> then</b><span style="color: navy"> {
+</span>      src<span style="color: navy"><b> -&gt; </b></span> section.code<b> as </b><span style="color: maroon">code</span><span style="color: navy">, </span> code.coding<b> as </b><span style="color: maroon">coding</span><span style="color: navy">, </span> coding.system = <span style="color: blue">'http://loinc.org'</span><span style="color: navy">, </span> coding.code = <span style="color: blue">'11369-6'</span><span style="color: navy">, </span> coding.display = <span style="color: blue">'History of Immunization Narrative'</span> <i>&quot;add section&quot;</i><span style="color: navy">;</span>
+      msg.ve<b> as </b><span style="color: maroon">vac</span><span style="color: navy"><b> -&gt; </b></span>comp<b> then</b><span style="color: navy"> {
+</span>        vac.vd<b> as </b><span style="color: maroon">vacDetails</span><span style="color: navy"><b> -&gt; </b></span> comp<span style="color: navy">, </span> bundle.entry<b> as </b><span style="color: maroon">entryImm</span><span style="color: navy">, </span> entryImm.resource = <b>create</b><span style="color: navy">(</span><span style="color: blue">'Immunization'</span><span style="color: navy">)</span><b> as </b><span style="color: maroon">immunization</span><span style="color: navy">, </span> <b>uuid</b><span style="color: navy">(</span><span style="color: navy">)</span><b> as </b><span style="color: maroon">iid</span><span style="color: navy">, </span> bundle.entry<b> as </b><span style="color: maroon">entryOrg</span><span style="color: navy">, </span> entryOrg.resource = <b>create</b><span style="color: navy">(</span><span style="color: blue">'Organization'</span><span style="color: navy">)</span><b> as </b><span style="color: maroon">org</span><span style="color: navy">, </span> <b>uuid</b><span style="color: navy">(</span><span style="color: navy">)</span><b> as </b><span style="color: maroon">oid</span><b> then</b><span style="color: navy"> {
+</span>          src<span style="color: navy"><b> -&gt; </b></span>immunization.id = <span style="color: maroon">iid</span> <i>&quot;Immunization ID&quot;</i><span style="color: navy">;</span>
+          src<span style="color: navy"><b> -&gt; </b></span>org.id = <span style="color: maroon">oid</span> <i>&quot;Organization ID&quot;</i><span style="color: navy">;</span>
+          src<span style="color: navy"><b> -&gt; </b></span> section.entry<b> as </b><span style="color: maroon">entry</span><span style="color: navy">, </span> entry.reference = <b>append</b><span style="color: navy">(</span><span style="color: blue">'Immunization/'</span><span style="color: navy">, </span><span style="color: maroon">iid</span><span style="color: navy">)</span><span style="color: navy">, </span> section.author<b> as </b><span style="color: maroon">author</span><span style="color: navy">, </span> author.reference = <b>append</b><span style="color: navy">(</span><span style="color: blue">'Organization/'</span><span style="color: navy">, </span><span style="color: maroon">oid</span><span style="color: navy">)</span> <i>&quot;add author immunization to section &quot;</i><span style="color: navy">;</span>
+          src<span style="color: navy"><b> -&gt; </b></span> comp.author<b> as </b><span style="color: maroon">author</span><span style="color: navy">, </span> author.reference = <b>append</b><span style="color: navy">(</span><span style="color: blue">'Organization/'</span><span style="color: navy">, </span><span style="color: maroon">oid</span><span style="color: navy">)</span> <i>&quot;Set org&quot;</i><span style="color: navy">;</span>
+          src<span style="color: navy"><b> -&gt; </b></span> immunization.patient<b> as </b><span style="color: maroon">subj</span><span style="color: navy">, </span> subj.reference = <b>append</b><span style="color: navy">(</span><span style="color: blue">'Patient/'</span><span style="color: navy">, </span><span style="color: maroon">pid</span><span style="color: navy">)</span> <i>&quot;Set patient&quot;</i><span style="color: navy">;</span>
+          vacDetails.adm<b> as </b><span style="color: maroon">adm</span><span style="color: navy"><b> -&gt; </b></span>org.name = <span style="color: maroon">adm</span> <i>&quot;Set Organization name&quot;</i><span style="color: navy">;</span>
+          src<span style="color: navy"><b> -&gt; </b></span>bundle<b> then </b>ExtractVaccine<span style="color: navy">(</span><span style="color: maroon">vac</span><span style="color: navy">, </span><span style="color: maroon">vacDetails</span><span style="color: navy">, </span><span style="color: maroon">oid</span><span style="color: navy">, </span><span style="color: maroon">immunization</span><span style="color: navy">)</span> <i>&quot;extract vaccine info&quot;</i><span style="color: navy">;</span>
+        <span style="color: navy">}</span> <i>&quot;Imminization Create vac&quot;</i><span style="color: navy">;</span>
+      <span style="color: navy">}</span> <i>&quot;Imminization Create msg&quot;</i><span style="color: navy">;</span>
+    <span style="color: navy">}</span> <i>&quot;Immunization Create&quot;</i><span style="color: navy">;</span>
+  <span style="color: navy">}</span> <i>&quot;Patient Create&quot;</i><span style="color: navy">;</span>
+<span style="color: navy">}
+
+</span><b>group </b>ExtractVaccine<span style="color: navy">(</span><b>source</b> <span style="color: maroon">vac</span><span style="color: navy"> : </span>VaccinationEvent, <b>source</b> <span style="color: maroon">vacDetails</span><span style="color: navy"> : </span>VaccinationDetails, <b>source</b> <span style="color: maroon">oid</span>, <b>target</b> <span style="color: maroon">immunization</span><span style="color: navy"> : </span>Immunization<span style="color: navy">)</span><span style="color: navy"> {
+</span>  vacDetails.dvc<b> as </b><span style="color: maroon">dvc</span><span style="color: navy"><b> -&gt; </b></span>immunization.occurrence = <span style="color: maroon">dvc</span> <i>&quot;set occurrence date&quot;</i><span style="color: navy">;</span>
+  vac.des<b> as </b><span style="color: maroon">des</span><span style="color: navy"><b> -&gt; </b></span> immunization.vaccineCode<b> as </b><span style="color: maroon">type</span><span style="color: navy">, </span> type.coding<b> as </b><span style="color: maroon">coding</span><span style="color: navy">, </span> coding.system = <span style="color: blue">'http://hl7.org/fhir/sid/icd-11'</span><span style="color: navy">, </span> coding.code = <span style="color: maroon">des</span> <i>&quot;set vaccine coding&quot;</i><span style="color: navy">;</span>
+  vac.nam<b> as </b><span style="color: maroon">nam</span><span style="color: navy"><b> -&gt; </b></span> immunization.extension<b> as </b><span style="color: maroon">ext</span><span style="color: navy">, </span> ext.value = <b>create</b><span style="color: navy">(</span><span style="color: blue">'Coding'</span><span style="color: navy">)</span><b> as </b><span style="color: maroon">coding</span><span style="color: navy">, </span> ext.url = <span style="color: blue">'https://smart.who.int/ddcc/StructureDefinition/DDCCVaccineBrand'</span><span style="color: navy">, </span> coding.code = <span style="color: maroon">nam</span> <i>&quot;set brand&quot;</i><span style="color: navy">;</span>
+  vacDetails.ctr<b> as </b><span style="color: maroon">co</span><span style="color: navy"><b> -&gt; </b></span> immunization.extension<b> as </b><span style="color: maroon">ext</span><span style="color: navy">, </span> ext.value = <b>create</b><span style="color: navy">(</span><span style="color: blue">'Coding'</span><span style="color: navy">)</span><b> as </b><span style="color: maroon">coding</span><span style="color: navy">, </span> ext.url = <span style="color: blue">'https://smart.who.int/ddcc/StructureDefinition/DDCCCountryOfVaccination'</span><span style="color: navy">, </span> coding.code = <span style="color: maroon">co</span><span style="color: navy">, </span> coding.system = <span style="color: blue">'urn:iso:std:iso:3166'</span> <i>&quot;set country&quot;</i><span style="color: navy">;</span>
+  vacDetails.lot<b> as </b><span style="color: maroon">lot</span><span style="color: navy"><b> -&gt; </b></span>immunization.lotNumber = <span style="color: maroon">lot</span> <i>&quot;set lot number&quot;</i><span style="color: navy">;</span>
+  vac<span style="color: navy"><b> -&gt; </b></span>immunization.protocolApplied<b> as </b><span style="color: maroon">protocolApplied</span><b> then</b><span style="color: navy"> {
+</span>    vacDetails<span style="color: navy"><b> -&gt; </b></span>protocolApplied<b> then</b><span style="color: navy"> {
+</span>      vac<span style="color: navy"><b> -&gt; </b></span>protocolApplied<b> then </b>ExtractProtocolApplied<span style="color: navy">(</span><span style="color: maroon">vac</span><span style="color: navy">, </span><span style="color: maroon">vacDetails</span><span style="color: navy">, </span><span style="color: maroon">oid</span><span style="color: navy">, </span><span style="color: maroon">protocolApplied</span><span style="color: navy">)</span> <i>&quot;set protocol applied&quot;</i><span style="color: navy">;</span>
+    <span style="color: navy">}</span> <i>&quot;set protocol applied vacdetails&quot;</i><span style="color: navy">;</span>
+  <span style="color: navy">}</span> <i>&quot;set protocol applied vac&quot;</i><span style="color: navy">;</span>
+<span style="color: navy">}
+
+</span><b>group </b>ExtractProtocolApplied<span style="color: navy">(</span><b>source</b> <span style="color: maroon">vac</span><span style="color: navy"> : </span>VaccinationEvent, <b>source</b> <span style="color: maroon">vacDetails</span><span style="color: navy"> : </span>VaccinationDetails, <b>source</b> <span style="color: maroon">oid</span>, <b>target</b> <span style="color: maroon">protocol</span><span style="color: navy"> : </span>ProtocolApplied<span style="color: navy">)</span><span style="color: navy"> {
+</span>  vacDetails.seq<b> as </b><span style="color: maroon">seq</span><span style="color: navy"><b> -&gt; </b></span>protocol.doseNumber = <span style="color: maroon">seq</span> <i>&quot;set dose number&quot;</i><span style="color: navy">;</span>
+  vac.dis<b> as </b><span style="color: maroon">dis</span><span style="color: navy"><b> -&gt; </b></span> protocol.targetDisease<b> as </b><span style="color: maroon">codeable</span><span style="color: navy">, </span> codeable.coding<b> as </b><span style="color: maroon">coding</span><span style="color: navy">, </span> coding.system = <span style="color: blue">'http://hl7.org/fhir/sid/icd-11'</span><span style="color: navy">, </span> coding.code = <span style="color: maroon">dis</span> <i>&quot;set target disease type&quot;</i><span style="color: navy">;</span>
+  oid<span style="color: navy"><b> -&gt; </b></span> protocol.authority<b> as </b><span style="color: maroon">authority</span><span style="color: navy">, </span> authority.reference = <b>append</b><span style="color: navy">(</span><span style="color: blue">'Organization/'</span><span style="color: navy">, </span><span style="color: maroon">oid</span><span style="color: navy">)</span> <i>&quot;set authority&quot;</i><span style="color: navy">;</span>
+<span style="color: navy">}
+
+</span><b>group </b>ExtractPatientFromMsg<span style="color: navy">(</span><b>source</b> <span style="color: maroon">src</span><span style="color: navy"> : </span>Message, <b>source</b> <span style="color: maroon">pid</span>, <b>target</b> <span style="color: maroon">patient</span><span style="color: navy"> : </span>Patient<span style="color: navy">)</span><span style="color: navy"> {
+</span>  src.pid<b> as </b><span style="color: maroon">patData</span><span style="color: navy"><b> -&gt; </b></span>patient<b> then </b>ExtractPatient<span style="color: navy">(</span><span style="color: maroon">patData</span><span style="color: navy">, </span><span style="color: maroon">pid</span><span style="color: navy">, </span><span style="color: maroon">patient</span><span style="color: navy">)</span> <i>&quot;extract patient from msg&quot;</i><span style="color: navy">;</span>
+<span style="color: navy">}
+
+</span><b>group </b>ExtractPatient<span style="color: navy">(</span><b>source</b> <span style="color: maroon">src</span><span style="color: navy"> : </span>Patient, <b>source</b> <span style="color: maroon">pid</span>, <b>target</b> <span style="color: maroon">patient</span><span style="color: navy"> : </span>Patient<span style="color: navy">)</span><span style="color: navy"> {
+</span>  pid<span style="color: navy"><b> -&gt; </b></span>patient.id = <span style="color: maroon">pid</span> <i>&quot;Patient ID&quot;</i><span style="color: navy">;</span>
+  src.i<b> as </b><span style="color: maroon">priorityIdentifier</span><span style="color: navy"><b> -&gt; </b></span> patient.identifier<b> as </b><span style="color: maroon">identif</span><span style="color: navy">, </span> identif.value = <span style="color: maroon">priorityIdentifier</span> <i>&quot;set priorityIdentifier&quot;</i><span style="color: navy">;</span>
+  src.ai<b> as </b><span style="color: maroon">additionalIdentifier</span><span style="color: navy"><b> -&gt; </b></span> patient.identifier<b> as </b><span style="color: maroon">identif</span><span style="color: navy">, </span> identif.value = <span style="color: maroon">additionalIdentifier</span> <i>&quot;set additionalIdentifier&quot;</i><span style="color: navy">;</span>
+  src<span style="color: navy"><b> -&gt; </b></span>patient.identifier<b> as </b><span style="color: maroon">identif</span><b> then </b>ExtractDocumentTypeNumber<span style="color: navy">(</span><span style="color: maroon">src</span><span style="color: navy">, </span><span style="color: maroon">identif</span><span style="color: navy">)</span> <i>&quot;Document Type Number&quot;</i><span style="color: navy">;</span>
+  src.n<b> as </b><span style="color: maroon">name</span><span style="color: navy"><b> -&gt; </b></span> patient.name = <b>create</b><span style="color: navy">(</span><span style="color: blue">'HumanName'</span><span style="color: navy">)</span><b> as </b><span style="color: maroon">humanName</span><span style="color: navy">, </span> humanName.text = <span style="color: maroon">name</span> <i>&quot;Patient Name&quot;</i><span style="color: navy">;</span>
+  src.sex<b> as </b><span style="color: maroon">gender</span><span style="color: navy"><b> -&gt; </b></span>patient<b> then </b>ExtractGender<span style="color: navy">(</span><span style="color: maroon">gender</span><span style="color: navy">, </span><span style="color: maroon">patient</span><span style="color: navy">)</span> <i>&quot;Patient Gender&quot;</i><span style="color: navy">;</span>
+  src.dob<b> as </b><span style="color: maroon">birthDate</span><span style="color: navy"><b> -&gt; </b></span>patient.birthDate = <span style="color: maroon">birthDate</span> <i>&quot;set birthDate&quot;</i><span style="color: navy">;</span>
+<span style="color: navy">}
+
+</span><b>group </b>ExtractGender<span style="color: navy">(</span><b>source</b> <span style="color: maroon">gender</span>, <b>target</b> <span style="color: maroon">patient</span><span style="color: navy"> : </span>Patient<span style="color: navy">)</span><span style="color: navy"> {
+</span>  gender<b> where </b>(gender = 'M')<span style="color: navy"><b> -&gt; </b></span>patient.gender = <span style="color: blue">'male'</span> <i>&quot;set male&quot;</i><span style="color: navy">;</span>
+  gender<b> where </b>(gender = 'F')<span style="color: navy"><b> -&gt; </b></span>patient.gender = <span style="color: blue">'female'</span> <i>&quot;set female&quot;</i><span style="color: navy">;</span>
+<span style="color: navy">}
+
+</span><b>group </b>ExtractDocumentTypeNumber<span style="color: navy">(</span><b>source</b> <span style="color: maroon">src</span><span style="color: navy"> : </span>Patient, <b>target</b> <span style="color: maroon">identif</span><span style="color: navy"> : </span>Identifier<span style="color: navy">)</span><span style="color: navy"> {
+</span>  src.dn<b> as </b><span style="color: maroon">docNumber</span><span style="color: navy"><b> -&gt; </b></span>identif.value = <span style="color: maroon">docNumber</span> <i>&quot;set doc number&quot;</i><span style="color: navy">;</span>
+  src.dt<b> as </b><span style="color: maroon">docType</span><b> where </b>(docType = 'P')<span style="color: navy"><b> -&gt; </b></span>identif.system = <span style="color: blue">'PPN'</span> <i>&quot;set doc number P&quot;</i><span style="color: navy">;</span> <span style="color: navy">// </span><span style="color: green">P – Passport (Doc 9303-4)</span>
+  src.dt<b> as </b><span style="color: maroon">docType</span><b> where </b>(docType = 'A')<span style="color: navy"><b> -&gt; </b></span>identif.system = <span style="color: blue">'DL'</span> <i>&quot;set doc number A&quot;</i><span style="color: navy">;</span> <span style="color: navy">// </span><span style="color: green">A – ID Card (Doc 9303-5)</span>
+  src.dt<b> as </b><span style="color: maroon">docType</span><b> where </b>(docType = 'C')<span style="color: navy"><b> -&gt; </b></span>identif.system = <span style="color: blue">'DL'</span> <i>&quot;set doc number C&quot;</i><span style="color: navy">;</span> <span style="color: navy">// </span><span style="color: green">C – ID Card (Doc 9303-5)</span>
+  src.dt<b> as </b><span style="color: maroon">docType</span><b> where </b>(docType = 'I')<span style="color: navy"><b> -&gt; </b></span>identif.system = <span style="color: blue">'DL'</span> <i>&quot;set doc number I&quot;</i><span style="color: navy">;</span> <span style="color: navy">// </span><span style="color: green">I – ID Card Doc 9303-5)</span>
+  src.dt<b> as </b><span style="color: maroon">docType</span><b> where </b>(docType = 'AC')<span style="color: navy"><b> -&gt; </b></span>identif.system = <span style="color: blue">'EN'</span> <i>&quot;set doc number AC&quot;</i><span style="color: navy">;</span> <span style="color: navy">// </span><span style="color: green">AC - Crew Member Certificate (Doc 9303-5)</span>
+  src.dt<b> as </b><span style="color: maroon">docType</span><b> where </b>(docType = 'V')<span style="color: navy"><b> -&gt; </b></span>identif.system = <span style="color: blue">'ACSN'</span> <i>&quot;set doc number V&quot;</i><span style="color: navy">;</span> <span style="color: navy">// </span><span style="color: green">V – Visa (Doc 9303-7)</span>
+  src.dt<b> as </b><span style="color: maroon">docType</span><b> where </b>(docType = 'D')<span style="color: navy"><b> -&gt; </b></span>identif.system = <span style="color: blue">'DL'</span> <i>&quot;set doc number D&quot;</i><span style="color: navy">;</span> <span style="color: navy">// </span><span style="color: green">D – Driving License (ISO18013-1)</span>
+<span style="color: navy">}
+
+</span><b>group </b>ExtractComposition<span style="color: navy">(</span><b>source</b> <span style="color: maroon">src</span><span style="color: navy"> : </span>Data, <b>target</b> <span style="color: maroon">composition</span><span style="color: navy"> : </span>Composition<span style="color: navy">)</span><span style="color: navy"> {
+</span>  src.msg<b> as </b><span style="color: maroon">msg</span><span style="color: navy"><b> -&gt; </b></span>composition<b> then</b><span style="color: navy"> {
+</span>    msg.ucti<b> as </b><span style="color: maroon">ucti</span><span style="color: navy"><b> -&gt; </b></span> composition.identifier<b> as </b><span style="color: maroon">identif</span><span style="color: navy">, </span> identif.value = <span style="color: maroon">ucti</span> <i>&quot;set comp test identifier&quot;</i><span style="color: navy">;</span>
+  <span style="color: navy">}</span> <i>&quot;set comp vaccine identifier parent&quot;</i><span style="color: navy">;</span>
+  src.msg<b> as </b><span style="color: maroon">msg</span><span style="color: navy"><b> -&gt; </b></span>composition<b> then</b><span style="color: navy"> {
+</span>    msg.uvci<b> as </b><span style="color: maroon">uvci</span><span style="color: navy"><b> -&gt; </b></span> composition.identifier<b> as </b><span style="color: maroon">identif</span><span style="color: navy">, </span> identif.value = <span style="color: maroon">uvci</span> <i>&quot;set comp vaccine identifier&quot;</i><span style="color: navy">;</span>
+  <span style="color: navy">}</span> <i>&quot;set comp vaccine identifier parent&quot;</i><span style="color: navy">;</span>
+  src<span style="color: navy"><b> -&gt; </b></span>composition.title = <span style="color: blue">'International Certificate of Vaccination or Prophylaxis'</span> <i>&quot;Title&quot;</i><span style="color: navy">;</span>
+  src<span style="color: navy"><b> -&gt; </b></span> composition.category<b> as </b><span style="color: maroon">category</span><span style="color: navy">, </span> category.coding<b> as </b><span style="color: maroon">coding</span><b> then</b><span style="color: navy"> {
+</span>    src<span style="color: navy"><b> -&gt; </b></span>coding.code = <span style="color: blue">'ddcc-vs'</span> <i>&quot;Category&quot;</i><span style="color: navy">;</span>
+  <span style="color: navy">}</span> <i>&quot;set category&quot;</i><span style="color: navy">;</span>
+  src<span style="color: navy"><b> -&gt; </b></span> composition.type<b> as </b><span style="color: maroon">type</span><span style="color: navy">, </span> type.coding<b> as </b><span style="color: maroon">coding</span><b> then</b><span style="color: navy"> {
+</span>    src<span style="color: navy"><b> -&gt; </b></span> coding.system = <span style="color: blue">'http://loinc.org'</span><span style="color: navy">, </span> coding.code = <span style="color: blue">'82593-5'</span><span style="color: navy">, </span> coding.display = <span style="color: blue">'Immunization summary report'</span> <i>&quot;set type coding&quot;</i><span style="color: navy">;</span>
+  <span style="color: navy">}</span> <i>&quot;set type&quot;</i><span style="color: navy">;</span>
+<span style="color: navy">}
+
+</span></pre></div>
+  </text>
+  <url value="http://smart.who.int/ddcc/StructureMap/CertICAOtoDDCC"/>
+  <version value="1.0.0"/>
+  <name value="ICAOtoDDCC"/>
+  <status value="draft"/>
+  <date value="2024-10-15T13:40:08+00:00"/>
+  <publisher value="WHO"/>
+  <contact>
+    <name value="WHO"/>
+    <telecom>
+      <system value="url"/>
+      <value value="http://who.int"/>
+    </telecom>
+  </contact>
+  <jurisdiction>
+    <coding>
+      <system value="http://unstats.un.org/unsd/methods/m49/m49.htm"/>
+      <code value="001"/>
+    </coding>
+  </jurisdiction>
+  <structure>
+    <url value="http://smart.who.int/ddcc/StructureDefinition/CertICAO"/>
+    <mode value="source"/>
+    <alias value="IJson"/>
+  </structure>
+  <structure>
+    <url value="http://hl7.org/fhir/ig/icao/StructureDefinition/Data"/>
+    <mode value="source"/>
+    <alias value="Data"/>
+  </structure>
+  <structure>
+    <url value="http://hl7.org/fhir/ig/icao/StructureDefinition/Header"/>
+    <mode value="source"/>
+    <alias value="Header"/>
+  </structure>
+  <structure>
+    <url value="http://hl7.org/fhir/ig/icao/StructureDefinition/Message"/>
+    <mode value="source"/>
+    <alias value="Message"/>
+  </structure>
+  <structure>
+    <url value="http://hl7.org/fhir/ig/icao/StructureDefinition/Patient"/>
+    <mode value="source"/>
+    <alias value="Patient"/>
+  </structure>
+  <structure>
+    <url value="http://hl7.org/fhir/ig/icao/StructureDefinition/VaccinationEvent"/>
+    <mode value="source"/>
+    <alias value="VaccinationEvent"/>
+  </structure>
+  <structure>
+    <url value="http://hl7.org/fhir/ig/icao/StructureDefinition/VaccinationDetails"/>
+    <mode value="source"/>
+    <alias value="VaccinationDetails"/>
+  </structure>
+  <structure>
+    <url value="http://hl7.org/fhir/ig/icao/StructureDefinition/ServiceProvider"/>
+    <mode value="source"/>
+    <alias value="ServiceProvider"/>
+  </structure>
+  <structure>
+    <url value="http://hl7.org/fhir/ig/icao/StructureDefinition/Contact"/>
+    <mode value="source"/>
+    <alias value="Contact"/>
+  </structure>
+  <structure>
+    <url value="http://hl7.org/fhir/ig/icao/StructureDefinition/DateTimeTestReport"/>
+    <mode value="source"/>
+    <alias value="DateTimeTestReport"/>
+  </structure>
+  <structure>
+    <url value="http://hl7.org/fhir/ig/icao/StructureDefinition/TestResult"/>
+    <mode value="source"/>
+    <alias value="TestResult"/>
+  </structure>
+  <structure>
+    <url value="http://hl7.org/fhir/ig/icao/StructureDefinition/Signature"/>
+    <mode value="source"/>
+    <alias value="Signature"/>
+  </structure>
+  <structure>
+    <url value="http://hl7.org/fhir/StructureDefinition/Bundle"/>
+    <mode value="target"/>
+    <alias value="Bundle"/>
+  </structure>
+  <group>
+    <name value="ICAOtoDDCC"/>
+    <typeMode value="none"/>
+    <input>
+      <name value="src"/>
+      <type value="IJson"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="bundle"/>
+      <type value="Bundle"/>
+      <mode value="target"/>
+    </input>
+    <rule>
+      <name value="Base Rule"/>
+      <source>
+        <context value="src"/>
+        <element value="data"/>
+        <variable value="data"/>
+      </source>
+      <target>
+        <context value="bundle"/>
+        <contextType value="variable"/>
+      </target>
+      <dependent>
+        <name value="ExtractData"/>
+        <variable value="data"/>
+        <variable value="bundle"/>
+      </dependent>
+    </rule>
+  </group>
+  <group>
+    <name value="ExtractData"/>
+    <typeMode value="none"/>
+    <input>
+      <name value="src"/>
+      <type value="Data"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="bundle"/>
+      <type value="Bundle"/>
+      <mode value="target"/>
+    </input>
+    <rule>
+      <name value="set bundle type"/>
+      <source>
+        <context value="src"/>
+      </source>
+      <target>
+        <context value="bundle"/>
+        <contextType value="variable"/>
+        <element value="type"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueString value="transaction"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="Patient and Composition Create"/>
+      <source>
+        <context value="src"/>
+      </source>
+      <target>
+        <context value="bundle"/>
+        <contextType value="variable"/>
+      </target>
+      <target>
+        <context value="bundle"/>
+        <contextType value="variable"/>
+        <element value="entry"/>
+        <variable value="entry"/>
+      </target>
+      <target>
+        <context value="entry"/>
+        <contextType value="variable"/>
+        <element value="resource"/>
+        <variable value="comp"/>
+        <transform value="create"/>
+        <parameter>
+          <valueString value="Composition"/>
+        </parameter>
+      </target>
+      <rule>
+        <name value="Certificate"/>
+        <source>
+          <context value="src"/>
+        </source>
+        <target>
+          <context value="bundle"/>
+          <contextType value="variable"/>
+        </target>
+        <dependent>
+          <name value="ExtractCert"/>
+          <variable value="src"/>
+          <variable value="bundle"/>
+          <variable value="comp"/>
+        </dependent>
+      </rule>
+      <rule>
+        <name value="Composition"/>
+        <source>
+          <context value="src"/>
+        </source>
+        <target>
+          <context value="bundle"/>
+          <contextType value="variable"/>
+        </target>
+        <dependent>
+          <name value="ExtractComposition"/>
+          <variable value="src"/>
+          <variable value="comp"/>
+        </dependent>
+      </rule>
+    </rule>
+  </group>
+  <group>
+    <name value="ExtractCert"/>
+    <typeMode value="none"/>
+    <input>
+      <name value="src"/>
+      <type value="Data"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="bundle"/>
+      <type value="Bundle"/>
+      <mode value="target"/>
+    </input>
+    <input>
+      <name value="comp"/>
+      <type value="Composition"/>
+      <mode value="target"/>
+    </input>
+    <rule>
+      <name value="Patient Create"/>
+      <source>
+        <context value="src"/>
+      </source>
+      <target>
+        <context value="comp"/>
+        <contextType value="variable"/>
+      </target>
+      <target>
+        <context value="bundle"/>
+        <contextType value="variable"/>
+        <element value="entry"/>
+        <variable value="entry"/>
+      </target>
+      <target>
+        <context value="entry"/>
+        <contextType value="variable"/>
+        <element value="resource"/>
+        <variable value="patient"/>
+        <transform value="create"/>
+        <parameter>
+          <valueString value="Patient"/>
+        </parameter>
+      </target>
+      <target>
+        <contextType value="variable"/>
+        <variable value="pid"/>
+        <transform value="uuid"/>
+      </target>
+      <rule>
+        <name value="extract patient"/>
+        <source>
+          <context value="src"/>
+          <element value="msg"/>
+          <variable value="msg"/>
+        </source>
+        <target>
+          <context value="patient"/>
+          <contextType value="variable"/>
+        </target>
+        <dependent>
+          <name value="ExtractPatientFromMsg"/>
+          <variable value="msg"/>
+          <variable value="pid"/>
+          <variable value="patient"/>
+        </dependent>
+      </rule>
+      <rule>
+        <name value="Composition.Set patient"/>
+        <source>
+          <context value="src"/>
+        </source>
+        <target>
+          <context value="comp"/>
+          <contextType value="variable"/>
+          <element value="subject"/>
+          <variable value="subj"/>
+        </target>
+        <target>
+          <context value="subj"/>
+          <contextType value="variable"/>
+          <element value="reference"/>
+          <transform value="append"/>
+          <parameter>
+            <valueString value="Patient/"/>
+          </parameter>
+          <parameter>
+            <valueId value="pid"/>
+          </parameter>
+        </target>
+      </rule>
+      <rule>
+        <name value="Immunization Create"/>
+        <source>
+          <context value="src"/>
+          <element value="msg"/>
+          <variable value="msg"/>
+          <condition value="src.hdr.t = 'icao.vacc'"/>
+        </source>
+        <target>
+          <context value="comp"/>
+          <contextType value="variable"/>
+        </target>
+        <target>
+          <context value="comp"/>
+          <contextType value="variable"/>
+          <element value="section"/>
+          <variable value="section"/>
+        </target>
+        <rule>
+          <name value="add section"/>
+          <source>
+            <context value="src"/>
+          </source>
+          <target>
+            <context value="section"/>
+            <contextType value="variable"/>
+            <element value="code"/>
+            <variable value="code"/>
+          </target>
+          <target>
+            <context value="code"/>
+            <contextType value="variable"/>
+            <element value="coding"/>
+            <variable value="coding"/>
+          </target>
+          <target>
+            <context value="coding"/>
+            <contextType value="variable"/>
+            <element value="system"/>
+            <transform value="copy"/>
+            <parameter>
+              <valueString value="http://loinc.org"/>
+            </parameter>
+          </target>
+          <target>
+            <context value="coding"/>
+            <contextType value="variable"/>
+            <element value="code"/>
+            <transform value="copy"/>
+            <parameter>
+              <valueString value="11369-6"/>
+            </parameter>
+          </target>
+          <target>
+            <context value="coding"/>
+            <contextType value="variable"/>
+            <element value="display"/>
+            <transform value="copy"/>
+            <parameter>
+              <valueString value="History of Immunization Narrative"/>
+            </parameter>
+          </target>
+        </rule>
+        <rule>
+          <name value="Imminization Create msg"/>
+          <source>
+            <context value="msg"/>
+            <element value="ve"/>
+            <variable value="vac"/>
+          </source>
+          <target>
+            <context value="comp"/>
+            <contextType value="variable"/>
+          </target>
+          <rule>
+            <name value="Imminization Create vac"/>
+            <source>
+              <context value="vac"/>
+              <element value="vd"/>
+              <variable value="vacDetails"/>
+            </source>
+            <target>
+              <context value="comp"/>
+              <contextType value="variable"/>
+            </target>
+            <target>
+              <context value="bundle"/>
+              <contextType value="variable"/>
+              <element value="entry"/>
+              <variable value="entryImm"/>
+            </target>
+            <target>
+              <context value="entryImm"/>
+              <contextType value="variable"/>
+              <element value="resource"/>
+              <variable value="immunization"/>
+              <transform value="create"/>
+              <parameter>
+                <valueString value="Immunization"/>
+              </parameter>
+            </target>
+            <target>
+              <contextType value="variable"/>
+              <variable value="iid"/>
+              <transform value="uuid"/>
+            </target>
+            <target>
+              <context value="bundle"/>
+              <contextType value="variable"/>
+              <element value="entry"/>
+              <variable value="entryOrg"/>
+            </target>
+            <target>
+              <context value="entryOrg"/>
+              <contextType value="variable"/>
+              <element value="resource"/>
+              <variable value="org"/>
+              <transform value="create"/>
+              <parameter>
+                <valueString value="Organization"/>
+              </parameter>
+            </target>
+            <target>
+              <contextType value="variable"/>
+              <variable value="oid"/>
+              <transform value="uuid"/>
+            </target>
+            <rule>
+              <name value="Immunization ID"/>
+              <source>
+                <context value="src"/>
+              </source>
+              <target>
+                <context value="immunization"/>
+                <contextType value="variable"/>
+                <element value="id"/>
+                <transform value="copy"/>
+                <parameter>
+                  <valueId value="iid"/>
+                </parameter>
+              </target>
+            </rule>
+            <rule>
+              <name value="Organization ID"/>
+              <source>
+                <context value="src"/>
+              </source>
+              <target>
+                <context value="org"/>
+                <contextType value="variable"/>
+                <element value="id"/>
+                <transform value="copy"/>
+                <parameter>
+                  <valueId value="oid"/>
+                </parameter>
+              </target>
+            </rule>
+            <rule>
+              <name value="add author immunization to section "/>
+              <source>
+                <context value="src"/>
+              </source>
+              <target>
+                <context value="section"/>
+                <contextType value="variable"/>
+                <element value="entry"/>
+                <variable value="entry"/>
+              </target>
+              <target>
+                <context value="entry"/>
+                <contextType value="variable"/>
+                <element value="reference"/>
+                <transform value="append"/>
+                <parameter>
+                  <valueString value="Immunization/"/>
+                </parameter>
+                <parameter>
+                  <valueId value="iid"/>
+                </parameter>
+              </target>
+              <target>
+                <context value="section"/>
+                <contextType value="variable"/>
+                <element value="author"/>
+                <variable value="author"/>
+              </target>
+              <target>
+                <context value="author"/>
+                <contextType value="variable"/>
+                <element value="reference"/>
+                <transform value="append"/>
+                <parameter>
+                  <valueString value="Organization/"/>
+                </parameter>
+                <parameter>
+                  <valueId value="oid"/>
+                </parameter>
+              </target>
+            </rule>
+            <rule>
+              <name value="Composition.Set org"/>
+              <source>
+                <context value="src"/>
+              </source>
+              <target>
+                <context value="comp"/>
+                <contextType value="variable"/>
+                <element value="author"/>
+                <variable value="author"/>
+              </target>
+              <target>
+                <context value="author"/>
+                <contextType value="variable"/>
+                <element value="reference"/>
+                <transform value="append"/>
+                <parameter>
+                  <valueString value="Organization/"/>
+                </parameter>
+                <parameter>
+                  <valueId value="oid"/>
+                </parameter>
+              </target>
+            </rule>
+            <rule>
+              <name value="Immunization.Set patient"/>
+              <source>
+                <context value="src"/>
+              </source>
+              <target>
+                <context value="immunization"/>
+                <contextType value="variable"/>
+                <element value="patient"/>
+                <variable value="subj"/>
+              </target>
+              <target>
+                <context value="subj"/>
+                <contextType value="variable"/>
+                <element value="reference"/>
+                <transform value="append"/>
+                <parameter>
+                  <valueString value="Patient/"/>
+                </parameter>
+                <parameter>
+                  <valueId value="pid"/>
+                </parameter>
+              </target>
+            </rule>
+            <rule>
+              <name value="Set Organization name"/>
+              <source>
+                <context value="vacDetails"/>
+                <element value="adm"/>
+                <variable value="adm"/>
+              </source>
+              <target>
+                <context value="org"/>
+                <contextType value="variable"/>
+                <element value="name"/>
+                <transform value="copy"/>
+                <parameter>
+                  <valueId value="adm"/>
+                </parameter>
+              </target>
+            </rule>
+            <rule>
+              <name value="extract vaccine info"/>
+              <source>
+                <context value="src"/>
+              </source>
+              <target>
+                <context value="bundle"/>
+                <contextType value="variable"/>
+              </target>
+              <dependent>
+                <name value="ExtractVaccine"/>
+                <variable value="vac"/>
+                <variable value="vacDetails"/>
+                <variable value="oid"/>
+                <variable value="immunization"/>
+              </dependent>
+            </rule>
+          </rule>
+        </rule>
+      </rule>
+    </rule>
+  </group>
+  <group>
+    <name value="ExtractVaccine"/>
+    <typeMode value="none"/>
+    <input>
+      <name value="vac"/>
+      <type value="VaccinationEvent"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="vacDetails"/>
+      <type value="VaccinationDetails"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="oid"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="immunization"/>
+      <type value="Immunization"/>
+      <mode value="target"/>
+    </input>
+    <rule>
+      <name value="set occurrence date"/>
+      <source>
+        <context value="vacDetails"/>
+        <element value="dvc"/>
+        <variable value="dvc"/>
+      </source>
+      <target>
+        <context value="immunization"/>
+        <contextType value="variable"/>
+        <element value="occurrence"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="dvc"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="set vaccine coding"/>
+      <source>
+        <context value="vac"/>
+        <element value="des"/>
+        <variable value="des"/>
+      </source>
+      <target>
+        <context value="immunization"/>
+        <contextType value="variable"/>
+        <element value="vaccineCode"/>
+        <variable value="type"/>
+      </target>
+      <target>
+        <context value="type"/>
+        <contextType value="variable"/>
+        <element value="coding"/>
+        <variable value="coding"/>
+      </target>
+      <target>
+        <context value="coding"/>
+        <contextType value="variable"/>
+        <element value="system"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueString value="http://hl7.org/fhir/sid/icd-11"/>
+        </parameter>
+      </target>
+      <target>
+        <context value="coding"/>
+        <contextType value="variable"/>
+        <element value="code"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="des"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="set brand"/>
+      <source>
+        <context value="vac"/>
+        <element value="nam"/>
+        <variable value="nam"/>
+      </source>
+      <target>
+        <context value="immunization"/>
+        <contextType value="variable"/>
+        <element value="extension"/>
+        <variable value="ext"/>
+      </target>
+      <target>
+        <context value="ext"/>
+        <contextType value="variable"/>
+        <element value="value"/>
+        <variable value="coding"/>
+        <transform value="create"/>
+        <parameter>
+          <valueString value="Coding"/>
+        </parameter>
+      </target>
+      <target>
+        <context value="ext"/>
+        <contextType value="variable"/>
+        <element value="url"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueString value="https://smart.who.int/ddcc/StructureDefinition/DDCCVaccineBrand"/>
+        </parameter>
+      </target>
+      <target>
+        <context value="coding"/>
+        <contextType value="variable"/>
+        <element value="code"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="nam"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="set country"/>
+      <source>
+        <context value="vacDetails"/>
+        <element value="ctr"/>
+        <variable value="co"/>
+      </source>
+      <target>
+        <context value="immunization"/>
+        <contextType value="variable"/>
+        <element value="extension"/>
+        <variable value="ext"/>
+      </target>
+      <target>
+        <context value="ext"/>
+        <contextType value="variable"/>
+        <element value="value"/>
+        <variable value="coding"/>
+        <transform value="create"/>
+        <parameter>
+          <valueString value="Coding"/>
+        </parameter>
+      </target>
+      <target>
+        <context value="ext"/>
+        <contextType value="variable"/>
+        <element value="url"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueString value="https://smart.who.int/ddcc/StructureDefinition/DDCCCountryOfVaccination"/>
+        </parameter>
+      </target>
+      <target>
+        <context value="coding"/>
+        <contextType value="variable"/>
+        <element value="code"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="co"/>
+        </parameter>
+      </target>
+      <target>
+        <context value="coding"/>
+        <contextType value="variable"/>
+        <element value="system"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueString value="urn:iso:std:iso:3166"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="set lot number"/>
+      <source>
+        <context value="vacDetails"/>
+        <element value="lot"/>
+        <variable value="lot"/>
+      </source>
+      <target>
+        <context value="immunization"/>
+        <contextType value="variable"/>
+        <element value="lotNumber"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="lot"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="set protocol applied vac"/>
+      <source>
+        <context value="vac"/>
+      </source>
+      <target>
+        <context value="immunization"/>
+        <contextType value="variable"/>
+        <element value="protocolApplied"/>
+        <variable value="protocolApplied"/>
+      </target>
+      <rule>
+        <name value="set protocol applied vacdetails"/>
+        <source>
+          <context value="vacDetails"/>
+        </source>
+        <target>
+          <context value="protocolApplied"/>
+          <contextType value="variable"/>
+        </target>
+        <rule>
+          <name value="set protocol applied"/>
+          <source>
+            <context value="vac"/>
+          </source>
+          <target>
+            <context value="protocolApplied"/>
+            <contextType value="variable"/>
+          </target>
+          <dependent>
+            <name value="ExtractProtocolApplied"/>
+            <variable value="vac"/>
+            <variable value="vacDetails"/>
+            <variable value="oid"/>
+            <variable value="protocolApplied"/>
+          </dependent>
+        </rule>
+      </rule>
+    </rule>
+  </group>
+  <group>
+    <name value="ExtractProtocolApplied"/>
+    <typeMode value="none"/>
+    <input>
+      <name value="vac"/>
+      <type value="VaccinationEvent"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="vacDetails"/>
+      <type value="VaccinationDetails"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="oid"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="protocol"/>
+      <type value="ProtocolApplied"/>
+      <mode value="target"/>
+    </input>
+    <rule>
+      <name value="set dose number"/>
+      <source>
+        <context value="vacDetails"/>
+        <element value="seq"/>
+        <variable value="seq"/>
+      </source>
+      <target>
+        <context value="protocol"/>
+        <contextType value="variable"/>
+        <element value="doseNumber"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="seq"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="set target disease type"/>
+      <source>
+        <context value="vac"/>
+        <element value="dis"/>
+        <variable value="dis"/>
+      </source>
+      <target>
+        <context value="protocol"/>
+        <contextType value="variable"/>
+        <element value="targetDisease"/>
+        <variable value="codeable"/>
+      </target>
+      <target>
+        <context value="codeable"/>
+        <contextType value="variable"/>
+        <element value="coding"/>
+        <variable value="coding"/>
+      </target>
+      <target>
+        <context value="coding"/>
+        <contextType value="variable"/>
+        <element value="system"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueString value="http://hl7.org/fhir/sid/icd-11"/>
+        </parameter>
+      </target>
+      <target>
+        <context value="coding"/>
+        <contextType value="variable"/>
+        <element value="code"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="dis"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="set authority"/>
+      <source>
+        <context value="oid"/>
+      </source>
+      <target>
+        <context value="protocol"/>
+        <contextType value="variable"/>
+        <element value="authority"/>
+        <variable value="authority"/>
+      </target>
+      <target>
+        <context value="authority"/>
+        <contextType value="variable"/>
+        <element value="reference"/>
+        <transform value="append"/>
+        <parameter>
+          <valueString value="Organization/"/>
+        </parameter>
+        <parameter>
+          <valueId value="oid"/>
+        </parameter>
+      </target>
+    </rule>
+  </group>
+  <group>
+    <name value="ExtractPatientFromMsg"/>
+    <typeMode value="none"/>
+    <input>
+      <name value="src"/>
+      <type value="Message"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="pid"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="patient"/>
+      <type value="Patient"/>
+      <mode value="target"/>
+    </input>
+    <rule>
+      <name value="extract patient from msg"/>
+      <source>
+        <context value="src"/>
+        <element value="pid"/>
+        <variable value="patData"/>
+      </source>
+      <target>
+        <context value="patient"/>
+        <contextType value="variable"/>
+      </target>
+      <dependent>
+        <name value="ExtractPatient"/>
+        <variable value="patData"/>
+        <variable value="pid"/>
+        <variable value="patient"/>
+      </dependent>
+    </rule>
+  </group>
+  <group>
+    <name value="ExtractPatient"/>
+    <typeMode value="none"/>
+    <input>
+      <name value="src"/>
+      <type value="Patient"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="pid"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="patient"/>
+      <type value="Patient"/>
+      <mode value="target"/>
+    </input>
+    <rule>
+      <name value="Patient ID"/>
+      <source>
+        <context value="pid"/>
+      </source>
+      <target>
+        <context value="patient"/>
+        <contextType value="variable"/>
+        <element value="id"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="pid"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="set priorityIdentifier"/>
+      <source>
+        <context value="src"/>
+        <element value="i"/>
+        <variable value="priorityIdentifier"/>
+      </source>
+      <target>
+        <context value="patient"/>
+        <contextType value="variable"/>
+        <element value="identifier"/>
+        <variable value="identif"/>
+      </target>
+      <target>
+        <context value="identif"/>
+        <contextType value="variable"/>
+        <element value="value"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="priorityIdentifier"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="set additionalIdentifier"/>
+      <source>
+        <context value="src"/>
+        <element value="ai"/>
+        <variable value="additionalIdentifier"/>
+      </source>
+      <target>
+        <context value="patient"/>
+        <contextType value="variable"/>
+        <element value="identifier"/>
+        <variable value="identif"/>
+      </target>
+      <target>
+        <context value="identif"/>
+        <contextType value="variable"/>
+        <element value="value"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="additionalIdentifier"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="Document Type Number"/>
+      <source>
+        <context value="src"/>
+      </source>
+      <target>
+        <context value="patient"/>
+        <contextType value="variable"/>
+        <element value="identifier"/>
+        <variable value="identif"/>
+      </target>
+      <dependent>
+        <name value="ExtractDocumentTypeNumber"/>
+        <variable value="src"/>
+        <variable value="identif"/>
+      </dependent>
+    </rule>
+    <rule>
+      <name value="Patient Name"/>
+      <source>
+        <context value="src"/>
+        <element value="n"/>
+        <variable value="name"/>
+      </source>
+      <target>
+        <context value="patient"/>
+        <contextType value="variable"/>
+        <element value="name"/>
+        <variable value="humanName"/>
+        <transform value="create"/>
+        <parameter>
+          <valueString value="HumanName"/>
+        </parameter>
+      </target>
+      <target>
+        <context value="humanName"/>
+        <contextType value="variable"/>
+        <element value="text"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="name"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="Patient Gender"/>
+      <source>
+        <context value="src"/>
+        <element value="sex"/>
+        <variable value="gender"/>
+      </source>
+      <target>
+        <context value="patient"/>
+        <contextType value="variable"/>
+      </target>
+      <dependent>
+        <name value="ExtractGender"/>
+        <variable value="gender"/>
+        <variable value="patient"/>
+      </dependent>
+    </rule>
+    <rule>
+      <name value="set birthDate"/>
+      <source>
+        <context value="src"/>
+        <element value="dob"/>
+        <variable value="birthDate"/>
+      </source>
+      <target>
+        <context value="patient"/>
+        <contextType value="variable"/>
+        <element value="birthDate"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="birthDate"/>
+        </parameter>
+      </target>
+    </rule>
+  </group>
+  <group>
+    <name value="ExtractGender"/>
+    <typeMode value="none"/>
+    <input>
+      <name value="gender"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="patient"/>
+      <type value="Patient"/>
+      <mode value="target"/>
+    </input>
+    <rule>
+      <name value="set male"/>
+      <source>
+        <context value="gender"/>
+        <condition value="(gender = 'M')"/>
+      </source>
+      <target>
+        <context value="patient"/>
+        <contextType value="variable"/>
+        <element value="gender"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueString value="male"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="set female"/>
+      <source>
+        <context value="gender"/>
+        <condition value="(gender = 'F')"/>
+      </source>
+      <target>
+        <context value="patient"/>
+        <contextType value="variable"/>
+        <element value="gender"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueString value="female"/>
+        </parameter>
+      </target>
+    </rule>
+  </group>
+  <group>
+    <name value="ExtractDocumentTypeNumber"/>
+    <typeMode value="none"/>
+    <input>
+      <name value="src"/>
+      <type value="Patient"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="identif"/>
+      <type value="Identifier"/>
+      <mode value="target"/>
+    </input>
+    <rule>
+      <name value="set doc number"/>
+      <source>
+        <context value="src"/>
+        <element value="dn"/>
+        <variable value="docNumber"/>
+      </source>
+      <target>
+        <context value="identif"/>
+        <contextType value="variable"/>
+        <element value="value"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="docNumber"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="set doc number P"/>
+      <source>
+        <context value="src"/>
+        <element value="dt"/>
+        <variable value="docType"/>
+        <condition value="(docType = 'P')"/>
+      </source>
+      <target>
+        <context value="identif"/>
+        <contextType value="variable"/>
+        <element value="system"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueString value="PPN"/>
+        </parameter>
+      </target>
+      <documentation value="P – Passport (Doc 9303-4)"/>
+    </rule>
+    <rule>
+      <name value="set doc number A"/>
+      <source>
+        <context value="src"/>
+        <element value="dt"/>
+        <variable value="docType"/>
+        <condition value="(docType = 'A')"/>
+      </source>
+      <target>
+        <context value="identif"/>
+        <contextType value="variable"/>
+        <element value="system"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueString value="DL"/>
+        </parameter>
+      </target>
+      <documentation value="A – ID Card (Doc 9303-5)"/>
+    </rule>
+    <rule>
+      <name value="set doc number C"/>
+      <source>
+        <context value="src"/>
+        <element value="dt"/>
+        <variable value="docType"/>
+        <condition value="(docType = 'C')"/>
+      </source>
+      <target>
+        <context value="identif"/>
+        <contextType value="variable"/>
+        <element value="system"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueString value="DL"/>
+        </parameter>
+      </target>
+      <documentation value="C – ID Card (Doc 9303-5)"/>
+    </rule>
+    <rule>
+      <name value="set doc number I"/>
+      <source>
+        <context value="src"/>
+        <element value="dt"/>
+        <variable value="docType"/>
+        <condition value="(docType = 'I')"/>
+      </source>
+      <target>
+        <context value="identif"/>
+        <contextType value="variable"/>
+        <element value="system"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueString value="DL"/>
+        </parameter>
+      </target>
+      <documentation value="I – ID Card Doc 9303-5)"/>
+    </rule>
+    <rule>
+      <name value="set doc number AC"/>
+      <source>
+        <context value="src"/>
+        <element value="dt"/>
+        <variable value="docType"/>
+        <condition value="(docType = 'AC')"/>
+      </source>
+      <target>
+        <context value="identif"/>
+        <contextType value="variable"/>
+        <element value="system"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueString value="EN"/>
+        </parameter>
+      </target>
+      <documentation value="AC - Crew Member Certificate (Doc 9303-5)"/>
+    </rule>
+    <rule>
+      <name value="set doc number V"/>
+      <source>
+        <context value="src"/>
+        <element value="dt"/>
+        <variable value="docType"/>
+        <condition value="(docType = 'V')"/>
+      </source>
+      <target>
+        <context value="identif"/>
+        <contextType value="variable"/>
+        <element value="system"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueString value="ACSN"/>
+        </parameter>
+      </target>
+      <documentation value="V – Visa (Doc 9303-7)"/>
+    </rule>
+    <rule>
+      <name value="set doc number D"/>
+      <source>
+        <context value="src"/>
+        <element value="dt"/>
+        <variable value="docType"/>
+        <condition value="(docType = 'D')"/>
+      </source>
+      <target>
+        <context value="identif"/>
+        <contextType value="variable"/>
+        <element value="system"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueString value="DL"/>
+        </parameter>
+      </target>
+      <documentation value="D – Driving License (ISO18013-1)"/>
+    </rule>
+  </group>
+  <group>
+    <name value="ExtractComposition"/>
+    <typeMode value="none"/>
+    <input>
+      <name value="src"/>
+      <type value="Data"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="composition"/>
+      <type value="Composition"/>
+      <mode value="target"/>
+    </input>
+    <rule>
+      <name value="set comp vaccine identifier parent"/>
+      <source>
+        <context value="src"/>
+        <element value="msg"/>
+        <variable value="msg"/>
+      </source>
+      <target>
+        <context value="composition"/>
+        <contextType value="variable"/>
+      </target>
+      <rule>
+        <name value="set comp test identifier"/>
+        <source>
+          <context value="msg"/>
+          <element value="ucti"/>
+          <variable value="ucti"/>
+        </source>
+        <target>
+          <context value="composition"/>
+          <contextType value="variable"/>
+          <element value="identifier"/>
+          <variable value="identif"/>
+        </target>
+        <target>
+          <context value="identif"/>
+          <contextType value="variable"/>
+          <element value="value"/>
+          <transform value="copy"/>
+          <parameter>
+            <valueId value="ucti"/>
+          </parameter>
+        </target>
+      </rule>
+    </rule>
+    <rule>
+      <name value="set comp vaccine identifier parent"/>
+      <source>
+        <context value="src"/>
+        <element value="msg"/>
+        <variable value="msg"/>
+      </source>
+      <target>
+        <context value="composition"/>
+        <contextType value="variable"/>
+      </target>
+      <rule>
+        <name value="set comp vaccine identifier"/>
+        <source>
+          <context value="msg"/>
+          <element value="uvci"/>
+          <variable value="uvci"/>
+        </source>
+        <target>
+          <context value="composition"/>
+          <contextType value="variable"/>
+          <element value="identifier"/>
+          <variable value="identif"/>
+        </target>
+        <target>
+          <context value="identif"/>
+          <contextType value="variable"/>
+          <element value="value"/>
+          <transform value="copy"/>
+          <parameter>
+            <valueId value="uvci"/>
+          </parameter>
+        </target>
+      </rule>
+    </rule>
+    <rule>
+      <name value="Title"/>
+      <source>
+        <context value="src"/>
+      </source>
+      <target>
+        <context value="composition"/>
+        <contextType value="variable"/>
+        <element value="title"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueString value="International Certificate of Vaccination or Prophylaxis"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="set category"/>
+      <source>
+        <context value="src"/>
+      </source>
+      <target>
+        <context value="composition"/>
+        <contextType value="variable"/>
+        <element value="category"/>
+        <variable value="category"/>
+      </target>
+      <target>
+        <context value="category"/>
+        <contextType value="variable"/>
+        <element value="coding"/>
+        <variable value="coding"/>
+      </target>
+      <rule>
+        <name value="Category"/>
+        <source>
+          <context value="src"/>
+        </source>
+        <target>
+          <context value="coding"/>
+          <contextType value="variable"/>
+          <element value="code"/>
+          <transform value="copy"/>
+          <parameter>
+            <valueString value="ddcc-vs"/>
+          </parameter>
+        </target>
+      </rule>
+    </rule>
+    <rule>
+      <name value="set type"/>
+      <source>
+        <context value="src"/>
+      </source>
+      <target>
+        <context value="composition"/>
+        <contextType value="variable"/>
+        <element value="type"/>
+        <variable value="type"/>
+      </target>
+      <target>
+        <context value="type"/>
+        <contextType value="variable"/>
+        <element value="coding"/>
+        <variable value="coding"/>
+      </target>
+      <rule>
+        <name value="set type coding"/>
+        <source>
+          <context value="src"/>
+        </source>
+        <target>
+          <context value="coding"/>
+          <contextType value="variable"/>
+          <element value="system"/>
+          <transform value="copy"/>
+          <parameter>
+            <valueString value="http://loinc.org"/>
+          </parameter>
+        </target>
+        <target>
+          <context value="coding"/>
+          <contextType value="variable"/>
+          <element value="code"/>
+          <transform value="copy"/>
+          <parameter>
+            <valueString value="82593-5"/>
+          </parameter>
+        </target>
+        <target>
+          <context value="coding"/>
+          <contextType value="variable"/>
+          <element value="display"/>
+          <transform value="copy"/>
+          <parameter>
+            <valueString value="Immunization summary report"/>
+          </parameter>
+        </target>
+      </rule>
+    </rule>
+  </group>
+</StructureMap>

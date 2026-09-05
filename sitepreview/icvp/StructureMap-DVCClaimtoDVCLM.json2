@@ -1,0 +1,809 @@
+{
+  "resourceType" : "StructureMap",
+  "id" : "DVCClaimtoDVCLM",
+  "text" : {
+    "status" : "generated",
+    "div" : "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p class=\"res-header-id\"><b>Generated Narrative: StructureMap DVCClaimtoDVCLM</b></p><a name=\"DVCClaimtoDVCLM\"> </a><a name=\"hcDVCClaimtoDVCLM\"> </a><a name=\"DVCClaimtoDVCLM-en-US\"> </a><pre class=\"fml\">\r\n<b>map</b><span style=\"color: navy\"> &quot;</span>http://smart.who.int/icvp/StructureMap/DVCClaimtoDVCLM<span style=\"color: navy\">&quot; = &quot;</span>DVCClaimtoDVCLM<span style=\"color: navy\">&quot;\r\n\r\n</span><b>uses</b><span style=\"color: navy\"> &quot;</span><a href=\"StructureDefinition-DVCPayload.html\" title=\"DVC HCERT Payload\">http://smart.who.int/icvp/StructureDefinition/DVCPayload</a><span style=\"color: navy\">&quot; </span><b>alias </b>DVCPayload <b>as </b><b>source</b>\r\n<b>uses</b><span style=\"color: navy\"> &quot;</span><a href=\"StructureDefinition-ModelDVC.html\" title=\"DVC\">http://smart.who.int/icvp/StructureDefinition/ModelDVC</a><span style=\"color: navy\">&quot; </span><b>alias </b>DVCModel <b>as </b><b>target</b>\r\n<b>uses</b><span style=\"color: navy\"> &quot;</span><a href=\"StructureDefinition-ModelVaccineDetails.html\" title=\"DVC - Vaccine Details\">http://smart.who.int/icvp/StructureDefinition/ModelVaccineDetails</a><span style=\"color: navy\">&quot; </span><b>alias </b>ModelVaccineDetails <b>as </b><b>target</b>\r\n\r\n<b>group </b>DVCClaimtoDVCLM<span style=\"color: navy\">(</span><b>source</b> <span style=\"color: maroon\">src</span><span style=\"color: navy\"> : </span>DVCPayload, <b>target</b> <span style=\"color: maroon\">tgt</span><span style=\"color: navy\"> : </span>DVCModel<span style=\"color: navy\">)</span><span style=\"color: navy\"> {\r\n</span>  src.n<b> as </b><span style=\"color: maroon\">name</span><span style=\"color: navy\"><b> -&gt; </b></span>tgt.name = <span style=\"color: maroon\">name</span> <i>&quot;rule1&quot;</i><span style=\"color: navy\">;</span>\r\n  src.dob<b> as </b><span style=\"color: maroon\">dob</span><span style=\"color: navy\"><b> -&gt; </b></span>tgt.dob = <span style=\"color: maroon\">dob</span> <i>&quot;rule2&quot;</i><span style=\"color: navy\">;</span>\r\n  src.s<b> as </b><span style=\"color: maroon\">sex</span><span style=\"color: navy\"><b> -&gt; </b></span>tgt.sex = <span style=\"color: maroon\">sex</span> <i>&quot;rule3&quot;</i><span style=\"color: navy\">;</span>\r\n  src.ntl<b> as </b><span style=\"color: maroon\">nationality</span><span style=\"color: navy\"><b> -&gt; </b></span>tgt.nationality = <span style=\"color: maroon\">nationality</span> <i>&quot;rule4&quot;</i><span style=\"color: navy\">;</span>\r\n  src.nid<b> as </b><span style=\"color: maroon\">id</span><span style=\"color: navy\"><b> -&gt; </b></span>tgt.nid = <span style=\"color: maroon\">id</span> <i>&quot;rule5&quot;</i><span style=\"color: navy\">;</span>\r\n  src.gn<b> as </b><span style=\"color: maroon\">gName</span><span style=\"color: navy\"><b> -&gt; </b></span>tgt.guardian = <span style=\"color: maroon\">gName</span> <i>&quot;rule6&quot;</i><span style=\"color: navy\">;</span>\r\n  src.v<b> as </b><span style=\"color: maroon\">v</span><span style=\"color: navy\"><b> -&gt; </b></span>tgt.vaccineDetails<b> as </b><span style=\"color: maroon\">tv</span><b> then </b>mapVaccineDetails<span style=\"color: navy\">(</span><span style=\"color: maroon\">v</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">tv</span><span style=\"color: navy\">)</span> <i>&quot;rule7&quot;</i><span style=\"color: navy\">;</span>\r\n<span style=\"color: navy\">}\r\n\r\n</span><b>group </b>mapVaccineDetails<span style=\"color: navy\">(</span><b>source</b> <span style=\"color: maroon\">src</span><span style=\"color: navy\"> : </span>BackboneElement, <b>target</b> <span style=\"color: maroon\">tgt</span><span style=\"color: navy\"> : </span>ModelVaccineDetails<span style=\"color: navy\">)</span><span style=\"color: navy\"> {\r\n</span>  src.tg<b> as </b><span style=\"color: maroon\">tg</span><span style=\"color: navy\"><b> -&gt; </b></span> <b>create</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'Coding'</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">coding</span><span style=\"color: navy\">, </span> coding.code = <span style=\"color: maroon\">tg</span><span style=\"color: navy\">, </span> coding.system = <span style=\"color: blue\">'http://id.who.int/icd/release/11/mms'</span><span style=\"color: navy\">, </span> tgt.disease = <span style=\"color: maroon\">coding</span> <i>&quot;rule8&quot;</i><span style=\"color: navy\">;</span>\r\n  src.vp<b> as </b><span style=\"color: maroon\">vp</span><span style=\"color: navy\"><b> -&gt; </b></span> <b>create</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'Coding'</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">coding</span><span style=\"color: navy\">, </span> coding.code = <span style=\"color: maroon\">vp</span><span style=\"color: navy\">, </span> coding.system = <span style=\"color: blue\">'http://id.who.int/icd/release/11/mms'</span><span style=\"color: navy\">, </span> <b>create</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'CodeableConcept'</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">code</span><span style=\"color: navy\">, </span> code.coding = <span style=\"color: maroon\">coding</span><span style=\"color: navy\">, </span> tgt.vaccineClassification = <span style=\"color: maroon\">code</span> <i>&quot;rule9&quot;</i><span style=\"color: navy\">;</span>\r\n  src.mp<b> as </b><span style=\"color: maroon\">mp</span><span style=\"color: navy\"><b> -&gt; </b></span> <b>create</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'Identifier'</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">id</span><span style=\"color: navy\">, </span> id.value = <span style=\"color: maroon\">mp</span><span style=\"color: navy\">, </span> tgt.vaccineTradeItem = <span style=\"color: maroon\">id</span> <i>&quot;rule10&quot;</i><span style=\"color: navy\">;</span>\r\n  src.ma<b> as </b><span style=\"color: maroon\">ma</span><span style=\"color: navy\"><b> -&gt; </b></span>tgt.manufacturer = <span style=\"color: maroon\">ma</span> <i>&quot;rule11&quot;</i><span style=\"color: navy\">;</span>\r\n  src.mid<b> as </b><span style=\"color: maroon\">mid</span><span style=\"color: navy\"><b> -&gt; </b></span> <b>create</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'Identifier'</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">id</span><span style=\"color: navy\">, </span> id.value = <span style=\"color: maroon\">mid</span><span style=\"color: navy\">, </span> tgt.manufacturerId = <span style=\"color: maroon\">id</span> <i>&quot;rule12&quot;</i><span style=\"color: navy\">;</span>\r\n  src.dt<b> as </b><span style=\"color: maroon\">dt</span><span style=\"color: navy\"><b> -&gt; </b></span>tgt.date = <span style=\"color: maroon\">dt</span> <i>&quot;rule13&quot;</i><span style=\"color: navy\">;</span>\r\n  src.bo<b> as </b><span style=\"color: maroon\">bo</span><span style=\"color: navy\"><b> -&gt; </b></span>tgt.batchNo = <span style=\"color: maroon\">bo</span> <i>&quot;rule14&quot;</i><span style=\"color: navy\">;</span>\r\n  src<span style=\"color: navy\"><b> -&gt; </b></span><b>create</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'Period'</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">period</span><b> then</b><span style=\"color: navy\"> {\r\n</span>    src.vls<b> as </b><span style=\"color: maroon\">start</span><span style=\"color: navy\"><b> -&gt; </b></span>period.start = <span style=\"color: maroon\">start</span> <i>&quot;rule15&quot;</i><span style=\"color: navy\">;</span>\r\n    src.vle<b> as </b><span style=\"color: maroon\">end</span><span style=\"color: navy\"><b> -&gt; </b></span>period.end = <span style=\"color: maroon\">end</span> <i>&quot;rule16&quot;</i><span style=\"color: navy\">;</span>\r\n    src<span style=\"color: navy\"><b> -&gt; </b></span>tgt.validityPeriod = <span style=\"color: maroon\">period</span> <i>&quot;rule17&quot;</i><span style=\"color: navy\">;</span>\r\n  <span style=\"color: navy\">}</span> <i>&quot;rule18&quot;</i><span style=\"color: navy\">;</span>\r\n  src.cn<b> as </b><span style=\"color: maroon\">cn</span><span style=\"color: navy\"><b> -&gt; </b></span>tgt.clinicianName = <span style=\"color: maroon\">cn</span> <i>&quot;rule19&quot;</i><span style=\"color: navy\">;</span>\r\n  src.is<b> as </b><span style=\"color: maroon\">is</span><span style=\"color: navy\"><b> -&gt; </b></span> tgt.issuer<b> as </b><span style=\"color: maroon\">issuer</span><span style=\"color: navy\">, </span> issuer.reference = <b>append</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'Organization/'</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">is</span><span style=\"color: navy\">)</span> <i>&quot;rule21&quot;</i><span style=\"color: navy\">;</span>\r\n  src.dn<b> as </b><span style=\"color: maroon\">dn</span><span style=\"color: navy\"><b> -&gt; </b></span> <b>create</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'Coding'</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">coding</span><span style=\"color: navy\">, </span> coding.code = <span style=\"color: maroon\">dn</span><span style=\"color: navy\">, </span> coding.system = <span style=\"color: blue\">'http://smart.who.int/icvp/CodeSystem/doseNumber'</span><span style=\"color: navy\">, </span> <b>create</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'CodeableConcept'</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">code</span><span style=\"color: navy\">, </span> code.coding = <span style=\"color: maroon\">coding</span><span style=\"color: navy\">, </span> tgt.doseNumber = <span style=\"color: maroon\">code</span> <i>&quot;rule20&quot;</i><span style=\"color: navy\">;</span>\r\n<span style=\"color: navy\">}\r\n\r\n</span><span style=\"color: navy\">// </span><span style=\"color: green\">helper function</span>\r\n<b>group </b>generateNarrativeText<span style=\"color: navy\">(</span><b>source</b> <span style=\"color: maroon\">src</span><span style=\"color: navy\"> : </span>Section, <b>target</b> <span style=\"color: maroon\">text</span><span style=\"color: navy\"> : </span>string<span style=\"color: navy\">)</span><span style=\"color: navy\"> {\r\n</span>  src<span style=\"color: navy\"><b> -&gt; </b></span>text.status = <span style=\"color: blue\">'empty'</span> <i>&quot;setstatus&quot;</i><span style=\"color: navy\">;</span>\r\n  src<span style=\"color: navy\"><b> -&gt; </b></span>text.div = <span style=\"color: blue\">'&lt;div&gt;narrative not available&lt;/div&gt;'</span> <i>&quot;setdiv&quot;</i><span style=\"color: navy\">;</span>\r\n<span style=\"color: navy\">}\r\n\r\n</span><b>group </b>humanNameToHumanName<span style=\"color: navy\">(</span><b>source</b> <span style=\"color: maroon\">sourceName</span>, <b>target</b> <span style=\"color: maroon\">targetName</span><span style=\"color: navy\"> : </span>HumanName<span style=\"color: navy\">)</span><span style=\"color: navy\"> {\r\n</span>  sourceName.use<b> as </b><span style=\"color: maroon\">use</span><span style=\"color: navy\"><b> -&gt; </b></span>targetName.use = <span style=\"color: maroon\">use</span> <i>&quot;CopyUse&quot;</i><span style=\"color: navy\">;</span>\r\n  sourceName.text<b> as </b><span style=\"color: maroon\">text</span><span style=\"color: navy\"><b> -&gt; </b></span>targetName.text = <span style=\"color: maroon\">text</span> <i>&quot;CopyText&quot;</i><span style=\"color: navy\">;</span>\r\n  sourceName.family<b> as </b><span style=\"color: maroon\">family</span><span style=\"color: navy\"><b> -&gt; </b></span>targetName.family = <span style=\"color: maroon\">family</span> <i>&quot;CopyFamily&quot;</i><span style=\"color: navy\">;</span>\r\n  sourceName.given<b> as </b><span style=\"color: maroon\">given</span><span style=\"color: navy\"><b> -&gt; </b></span>targetName.given = <span style=\"color: maroon\">given</span> <i>&quot;CopyGiven&quot;</i><span style=\"color: navy\">;</span>\r\n  sourceName.prefix<b> as </b><span style=\"color: maroon\">prefix</span><span style=\"color: navy\"><b> -&gt; </b></span>targetName.prefix = <span style=\"color: maroon\">prefix</span> <i>&quot;CopyPrefix&quot;</i><span style=\"color: navy\">;</span>\r\n  sourceName.suffix<b> as </b><span style=\"color: maroon\">suffix</span><span style=\"color: navy\"><b> -&gt; </b></span>targetName.suffix = <span style=\"color: maroon\">suffix</span> <i>&quot;CopySuffix&quot;</i><span style=\"color: navy\">;</span>\r\n  <span style=\"color: navy\">// </span><span style=\"color: green\">Copy the period using the previously defined group function</span>\r\n  sourceName.period<b> as </b><span style=\"color: maroon\">sourcePeriod</span><span style=\"color: navy\"><b> -&gt; </b></span>targetName.period<b> as </b><span style=\"color: maroon\">targetPeriod</span><b> then</b><span style=\"color: navy\"> {\r\n</span>    sourcePeriod<span style=\"color: navy\"><b> -&gt; </b></span>sourcePeriod<b> then </b>periodToPeriod<span style=\"color: navy\">(</span><span style=\"color: maroon\">sourcePeriod</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">targetPeriod</span><span style=\"color: navy\">)</span> <i>&quot;CopyPeriod&quot;</i><span style=\"color: navy\">;</span>\r\n  <span style=\"color: navy\">}</span> <i>&quot;copyPeriod&quot;</i><span style=\"color: navy\">;</span>\r\n<span style=\"color: navy\">}\r\n\r\n</span><b>group </b>periodToPeriod<span style=\"color: navy\">(</span><b>source</b> <span style=\"color: maroon\">sourcePeriod</span>, <b>target</b> <span style=\"color: maroon\">targetPeriod</span><span style=\"color: navy\"> : </span>Period<span style=\"color: navy\">)</span><span style=\"color: navy\"> {\r\n</span>  sourcePeriod.start<b> as </b><span style=\"color: maroon\">start</span><span style=\"color: navy\"><b> -&gt; </b></span>targetPeriod.start = <span style=\"color: maroon\">start</span> <i>&quot;set period start&quot;</i><span style=\"color: navy\">;</span>\r\n  sourcePeriod.end<b> as </b><span style=\"color: maroon\">end</span><span style=\"color: navy\"><b> -&gt; </b></span>targetPeriod.end = <span style=\"color: maroon\">end</span> <i>&quot;set period end&quot;</i><span style=\"color: navy\">;</span>\r\n<span style=\"color: navy\">}\r\n\r\n</span></pre></div>"
+  },
+  "url" : "http://smart.who.int/icvp/StructureMap/DVCClaimtoDVCLM",
+  "version" : "0.1.0",
+  "name" : "DVCClaimtoDVCLM",
+  "status" : "draft",
+  "date" : "2024-10-07T07:31:05+00:00",
+  "publisher" : "WHO",
+  "contact" : [{
+    "name" : "WHO",
+    "telecom" : [{
+      "system" : "url",
+      "value" : "http://who.int"
+    }]
+  }],
+  "structure" : [{
+    "url" : "http://smart.who.int/icvp/StructureDefinition/DVCPayload",
+    "mode" : "source",
+    "alias" : "DVCPayload"
+  },
+  {
+    "url" : "http://smart.who.int/icvp/StructureDefinition/ModelDVC",
+    "mode" : "target",
+    "alias" : "DVCModel"
+  },
+  {
+    "url" : "http://smart.who.int/icvp/StructureDefinition/ModelVaccineDetails",
+    "mode" : "target",
+    "alias" : "ModelVaccineDetails"
+  }],
+  "group" : [{
+    "name" : "DVCClaimtoDVCLM",
+    "typeMode" : "none",
+    "input" : [{
+      "name" : "src",
+      "type" : "DVCPayload",
+      "mode" : "source"
+    },
+    {
+      "name" : "tgt",
+      "type" : "DVCModel",
+      "mode" : "target"
+    }],
+    "rule" : [{
+      "name" : "rule1",
+      "source" : [{
+        "context" : "src",
+        "element" : "n",
+        "variable" : "name"
+      }],
+      "target" : [{
+        "context" : "tgt",
+        "contextType" : "variable",
+        "element" : "name",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "name"
+        }]
+      }]
+    },
+    {
+      "name" : "rule2",
+      "source" : [{
+        "context" : "src",
+        "element" : "dob",
+        "variable" : "dob"
+      }],
+      "target" : [{
+        "context" : "tgt",
+        "contextType" : "variable",
+        "element" : "dob",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "dob"
+        }]
+      }]
+    },
+    {
+      "name" : "rule3",
+      "source" : [{
+        "context" : "src",
+        "element" : "s",
+        "variable" : "sex"
+      }],
+      "target" : [{
+        "context" : "tgt",
+        "contextType" : "variable",
+        "element" : "sex",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "sex"
+        }]
+      }]
+    },
+    {
+      "name" : "rule4",
+      "source" : [{
+        "context" : "src",
+        "element" : "ntl",
+        "variable" : "nationality"
+      }],
+      "target" : [{
+        "context" : "tgt",
+        "contextType" : "variable",
+        "element" : "nationality",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "nationality"
+        }]
+      }]
+    },
+    {
+      "name" : "rule5",
+      "source" : [{
+        "context" : "src",
+        "element" : "nid",
+        "variable" : "id"
+      }],
+      "target" : [{
+        "context" : "tgt",
+        "contextType" : "variable",
+        "element" : "nid",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "id"
+        }]
+      }]
+    },
+    {
+      "name" : "rule6",
+      "source" : [{
+        "context" : "src",
+        "element" : "gn",
+        "variable" : "gName"
+      }],
+      "target" : [{
+        "context" : "tgt",
+        "contextType" : "variable",
+        "element" : "guardian",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "gName"
+        }]
+      }]
+    },
+    {
+      "name" : "rule7",
+      "source" : [{
+        "context" : "src",
+        "element" : "v",
+        "variable" : "v"
+      }],
+      "target" : [{
+        "context" : "tgt",
+        "contextType" : "variable",
+        "element" : "vaccineDetails",
+        "variable" : "tv"
+      }],
+      "dependent" : [{
+        "name" : "mapVaccineDetails",
+        "variable" : ["v",
+        "tv"]
+      }]
+    }]
+  },
+  {
+    "name" : "mapVaccineDetails",
+    "typeMode" : "none",
+    "input" : [{
+      "name" : "src",
+      "type" : "BackboneElement",
+      "mode" : "source"
+    },
+    {
+      "name" : "tgt",
+      "type" : "ModelVaccineDetails",
+      "mode" : "target"
+    }],
+    "rule" : [{
+      "name" : "rule8",
+      "source" : [{
+        "context" : "src",
+        "element" : "tg",
+        "variable" : "tg"
+      }],
+      "target" : [{
+        "contextType" : "variable",
+        "variable" : "coding",
+        "transform" : "create",
+        "parameter" : [{
+          "valueString" : "Coding"
+        }]
+      },
+      {
+        "context" : "coding",
+        "contextType" : "variable",
+        "element" : "code",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "tg"
+        }]
+      },
+      {
+        "context" : "coding",
+        "contextType" : "variable",
+        "element" : "system",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueString" : "http://id.who.int/icd/release/11/mms"
+        }]
+      },
+      {
+        "context" : "tgt",
+        "contextType" : "variable",
+        "element" : "disease",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "coding"
+        }]
+      }]
+    },
+    {
+      "name" : "rule9",
+      "source" : [{
+        "context" : "src",
+        "element" : "vp",
+        "variable" : "vp"
+      }],
+      "target" : [{
+        "contextType" : "variable",
+        "variable" : "coding",
+        "transform" : "create",
+        "parameter" : [{
+          "valueString" : "Coding"
+        }]
+      },
+      {
+        "context" : "coding",
+        "contextType" : "variable",
+        "element" : "code",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "vp"
+        }]
+      },
+      {
+        "context" : "coding",
+        "contextType" : "variable",
+        "element" : "system",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueString" : "http://id.who.int/icd/release/11/mms"
+        }]
+      },
+      {
+        "contextType" : "variable",
+        "variable" : "code",
+        "transform" : "create",
+        "parameter" : [{
+          "valueString" : "CodeableConcept"
+        }]
+      },
+      {
+        "context" : "code",
+        "contextType" : "variable",
+        "element" : "coding",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "coding"
+        }]
+      },
+      {
+        "context" : "tgt",
+        "contextType" : "variable",
+        "element" : "vaccineClassification",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "code"
+        }]
+      }]
+    },
+    {
+      "name" : "rule10",
+      "source" : [{
+        "context" : "src",
+        "element" : "mp",
+        "variable" : "mp"
+      }],
+      "target" : [{
+        "contextType" : "variable",
+        "variable" : "id",
+        "transform" : "create",
+        "parameter" : [{
+          "valueString" : "Identifier"
+        }]
+      },
+      {
+        "context" : "id",
+        "contextType" : "variable",
+        "element" : "value",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "mp"
+        }]
+      },
+      {
+        "context" : "tgt",
+        "contextType" : "variable",
+        "element" : "vaccineTradeItem",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "id"
+        }]
+      }]
+    },
+    {
+      "name" : "rule11",
+      "source" : [{
+        "context" : "src",
+        "element" : "ma",
+        "variable" : "ma"
+      }],
+      "target" : [{
+        "context" : "tgt",
+        "contextType" : "variable",
+        "element" : "manufacturer",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "ma"
+        }]
+      }]
+    },
+    {
+      "name" : "rule12",
+      "source" : [{
+        "context" : "src",
+        "element" : "mid",
+        "variable" : "mid"
+      }],
+      "target" : [{
+        "contextType" : "variable",
+        "variable" : "id",
+        "transform" : "create",
+        "parameter" : [{
+          "valueString" : "Identifier"
+        }]
+      },
+      {
+        "context" : "id",
+        "contextType" : "variable",
+        "element" : "value",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "mid"
+        }]
+      },
+      {
+        "context" : "tgt",
+        "contextType" : "variable",
+        "element" : "manufacturerId",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "id"
+        }]
+      }]
+    },
+    {
+      "name" : "rule13",
+      "source" : [{
+        "context" : "src",
+        "element" : "dt",
+        "variable" : "dt"
+      }],
+      "target" : [{
+        "context" : "tgt",
+        "contextType" : "variable",
+        "element" : "date",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "dt"
+        }]
+      }]
+    },
+    {
+      "name" : "rule14",
+      "source" : [{
+        "context" : "src",
+        "element" : "bo",
+        "variable" : "bo"
+      }],
+      "target" : [{
+        "context" : "tgt",
+        "contextType" : "variable",
+        "element" : "batchNo",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "bo"
+        }]
+      }]
+    },
+    {
+      "name" : "rule18",
+      "source" : [{
+        "context" : "src"
+      }],
+      "target" : [{
+        "contextType" : "variable",
+        "variable" : "period",
+        "transform" : "create",
+        "parameter" : [{
+          "valueString" : "Period"
+        }]
+      }],
+      "rule" : [{
+        "name" : "rule15",
+        "source" : [{
+          "context" : "src",
+          "element" : "vls",
+          "variable" : "start"
+        }],
+        "target" : [{
+          "context" : "period",
+          "contextType" : "variable",
+          "element" : "start",
+          "transform" : "copy",
+          "parameter" : [{
+            "valueId" : "start"
+          }]
+        }]
+      },
+      {
+        "name" : "rule16",
+        "source" : [{
+          "context" : "src",
+          "element" : "vle",
+          "variable" : "end"
+        }],
+        "target" : [{
+          "context" : "period",
+          "contextType" : "variable",
+          "element" : "end",
+          "transform" : "copy",
+          "parameter" : [{
+            "valueId" : "end"
+          }]
+        }]
+      },
+      {
+        "name" : "rule17",
+        "source" : [{
+          "context" : "src"
+        }],
+        "target" : [{
+          "context" : "tgt",
+          "contextType" : "variable",
+          "element" : "validityPeriod",
+          "transform" : "copy",
+          "parameter" : [{
+            "valueId" : "period"
+          }]
+        }]
+      }]
+    },
+    {
+      "name" : "rule19",
+      "source" : [{
+        "context" : "src",
+        "element" : "cn",
+        "variable" : "cn"
+      }],
+      "target" : [{
+        "context" : "tgt",
+        "contextType" : "variable",
+        "element" : "clinicianName",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "cn"
+        }]
+      }]
+    },
+    {
+      "name" : "rule21",
+      "source" : [{
+        "context" : "src",
+        "element" : "is",
+        "variable" : "is"
+      }],
+      "target" : [{
+        "context" : "tgt",
+        "contextType" : "variable",
+        "element" : "issuer",
+        "variable" : "issuer"
+      },
+      {
+        "context" : "issuer",
+        "contextType" : "variable",
+        "element" : "reference",
+        "transform" : "append",
+        "parameter" : [{
+          "valueString" : "Organization/"
+        },
+        {
+          "valueId" : "is"
+        }]
+      }]
+    },
+    {
+      "name" : "rule20",
+      "source" : [{
+        "context" : "src",
+        "element" : "dn",
+        "variable" : "dn"
+      }],
+      "target" : [{
+        "contextType" : "variable",
+        "variable" : "coding",
+        "transform" : "create",
+        "parameter" : [{
+          "valueString" : "Coding"
+        }]
+      },
+      {
+        "context" : "coding",
+        "contextType" : "variable",
+        "element" : "code",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "dn"
+        }]
+      },
+      {
+        "context" : "coding",
+        "contextType" : "variable",
+        "element" : "system",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueString" : "http://smart.who.int/icvp/CodeSystem/doseNumber"
+        }]
+      },
+      {
+        "contextType" : "variable",
+        "variable" : "code",
+        "transform" : "create",
+        "parameter" : [{
+          "valueString" : "CodeableConcept"
+        }]
+      },
+      {
+        "context" : "code",
+        "contextType" : "variable",
+        "element" : "coding",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "coding"
+        }]
+      },
+      {
+        "context" : "tgt",
+        "contextType" : "variable",
+        "element" : "doseNumber",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "code"
+        }]
+      }]
+    }]
+  },
+  {
+    "name" : "generateNarrativeText",
+    "typeMode" : "none",
+    "documentation" : "helper function",
+    "input" : [{
+      "name" : "src",
+      "type" : "Section",
+      "mode" : "source"
+    },
+    {
+      "name" : "text",
+      "type" : "string",
+      "mode" : "target"
+    }],
+    "rule" : [{
+      "name" : "setstatus",
+      "source" : [{
+        "context" : "src"
+      }],
+      "target" : [{
+        "context" : "text",
+        "contextType" : "variable",
+        "element" : "status",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueString" : "empty"
+        }]
+      }]
+    },
+    {
+      "name" : "setdiv",
+      "source" : [{
+        "context" : "src"
+      }],
+      "target" : [{
+        "context" : "text",
+        "contextType" : "variable",
+        "element" : "div",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueString" : "<div>narrative not available</div>"
+        }]
+      }]
+    }]
+  },
+  {
+    "name" : "humanNameToHumanName",
+    "typeMode" : "none",
+    "input" : [{
+      "name" : "sourceName",
+      "mode" : "source"
+    },
+    {
+      "name" : "targetName",
+      "type" : "HumanName",
+      "mode" : "target"
+    }],
+    "rule" : [{
+      "name" : "CopyUse",
+      "source" : [{
+        "context" : "sourceName",
+        "element" : "use",
+        "variable" : "use"
+      }],
+      "target" : [{
+        "context" : "targetName",
+        "contextType" : "variable",
+        "element" : "use",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "use"
+        }]
+      }]
+    },
+    {
+      "name" : "CopyText",
+      "source" : [{
+        "context" : "sourceName",
+        "element" : "text",
+        "variable" : "text"
+      }],
+      "target" : [{
+        "context" : "targetName",
+        "contextType" : "variable",
+        "element" : "text",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "text"
+        }]
+      }]
+    },
+    {
+      "name" : "CopyFamily",
+      "source" : [{
+        "context" : "sourceName",
+        "element" : "family",
+        "variable" : "family"
+      }],
+      "target" : [{
+        "context" : "targetName",
+        "contextType" : "variable",
+        "element" : "family",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "family"
+        }]
+      }]
+    },
+    {
+      "name" : "CopyGiven",
+      "source" : [{
+        "context" : "sourceName",
+        "element" : "given",
+        "variable" : "given"
+      }],
+      "target" : [{
+        "context" : "targetName",
+        "contextType" : "variable",
+        "element" : "given",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "given"
+        }]
+      }]
+    },
+    {
+      "name" : "CopyPrefix",
+      "source" : [{
+        "context" : "sourceName",
+        "element" : "prefix",
+        "variable" : "prefix"
+      }],
+      "target" : [{
+        "context" : "targetName",
+        "contextType" : "variable",
+        "element" : "prefix",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "prefix"
+        }]
+      }]
+    },
+    {
+      "name" : "CopySuffix",
+      "source" : [{
+        "context" : "sourceName",
+        "element" : "suffix",
+        "variable" : "suffix"
+      }],
+      "target" : [{
+        "context" : "targetName",
+        "contextType" : "variable",
+        "element" : "suffix",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "suffix"
+        }]
+      }]
+    },
+    {
+      "name" : "copyPeriod",
+      "source" : [{
+        "context" : "sourceName",
+        "element" : "period",
+        "variable" : "sourcePeriod"
+      }],
+      "target" : [{
+        "context" : "targetName",
+        "contextType" : "variable",
+        "element" : "period",
+        "variable" : "targetPeriod"
+      }],
+      "rule" : [{
+        "name" : "CopyPeriod",
+        "source" : [{
+          "context" : "sourcePeriod"
+        }],
+        "target" : [{
+          "context" : "sourcePeriod",
+          "contextType" : "variable"
+        }],
+        "dependent" : [{
+          "name" : "periodToPeriod",
+          "variable" : ["sourcePeriod",
+          "targetPeriod"]
+        }]
+      }]
+    }]
+  },
+  {
+    "name" : "periodToPeriod",
+    "typeMode" : "none",
+    "input" : [{
+      "name" : "sourcePeriod",
+      "mode" : "source"
+    },
+    {
+      "name" : "targetPeriod",
+      "type" : "Period",
+      "mode" : "target"
+    }],
+    "rule" : [{
+      "name" : "set period start",
+      "source" : [{
+        "context" : "sourcePeriod",
+        "element" : "start",
+        "variable" : "start"
+      }],
+      "target" : [{
+        "context" : "targetPeriod",
+        "contextType" : "variable",
+        "element" : "start",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "start"
+        }]
+      }]
+    },
+    {
+      "name" : "set period end",
+      "source" : [{
+        "context" : "sourcePeriod",
+        "element" : "end",
+        "variable" : "end"
+      }],
+      "target" : [{
+        "context" : "targetPeriod",
+        "contextType" : "variable",
+        "element" : "end",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "end"
+        }]
+      }]
+    }]
+  }]
+}

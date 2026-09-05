@@ -1,0 +1,2312 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<StructureMap xmlns="http://hl7.org/fhir">
+  <id value="DVCLMToIPS"/>
+  <text>
+    <status value="generated"/><div xmlns="http://www.w3.org/1999/xhtml"><p class="res-header-id"><b>Generated Narrative: StructureMap DVCLMToIPS</b></p><a name="DVCLMToIPS"> </a><a name="hcDVCLMToIPS"> </a><a name="DVCLMToIPS-en-US"> </a><pre class="fml">
+<b>map</b><span style="color: navy"> &quot;</span>http://smart.who.int/icvp/StructureMap/DVCLMToIPS<span style="color: navy">&quot; = &quot;</span>DVCLMToIPS<span style="color: navy">&quot;
+
+</span><b>uses</b><span style="color: navy"> &quot;</span><a href="StructureDefinition-ModelDVC.html" title="DVC">http://smart.who.int/icvp/StructureDefinition/ModelDVC</a><span style="color: navy">&quot; </span><b>alias </b>DVCLogicalModel <b>as </b><b>source</b>
+<b>uses</b><span style="color: navy"> &quot;</span><a href="http://hl7.org/fhir/R4/bundle.html" title="Bundle">http://hl7.org/fhir/StructureDefinition/Bundle</a><span style="color: navy">&quot; </span><b>alias </b>IPS <b>as </b><b>target</b>
+
+<span style="color: navy">// </span><span style="color: green">create Bundle</span>
+<b>group </b>DVCLMToIPS<span style="color: navy">(</span><b>source</b> <span style="color: maroon">lm</span><span style="color: navy"> : </span>DVCLogicalModel, <b>target</b> <span style="color: maroon">ips</span><span style="color: navy"> : </span>IPS<span style="color: navy">)</span><span style="color: navy"> {
+</span>  lm<span style="color: navy"><b> -&gt; </b></span>ips.type = <span style="color: blue">'document'</span> <i>&quot;setIPSType&quot;</i><span style="color: navy">;</span>
+  lm<span style="color: navy"><b> -&gt; </b></span> <b>uuid</b><span style="color: navy">(</span><span style="color: navy">)</span><b> as </b><span style="color: maroon">bid</span><span style="color: navy">, </span> ips.identifier<b> as </b><span style="color: maroon">id</span><span style="color: navy">, </span> id.value = <span style="color: maroon">bid</span><span style="color: navy">, </span> id.system = <span style="color: blue">'urn:oid:2.16.724.4.8.10.200.10'</span> <i>&quot;setId&quot;</i><span style="color: navy">;</span>
+  lm<span style="color: navy"><b> -&gt; </b></span> <b>uuid</b><span style="color: navy">(</span><span style="color: navy">)</span><b> as </b><span style="color: maroon">cid</span><span style="color: navy">, </span> <b>uuid</b><span style="color: navy">(</span><span style="color: navy">)</span><b> as </b><span style="color: maroon">pid</span><span style="color: navy">, </span> <b>uuid</b><span style="color: navy">(</span><span style="color: navy">)</span><b> as </b><span style="color: maroon">mid</span><span style="color: navy">, </span> <b>uuid</b><span style="color: navy">(</span><span style="color: navy">)</span><b> as </b><span style="color: maroon">aid</span><span style="color: navy">, </span> <b>uuid</b><span style="color: navy">(</span><span style="color: navy">)</span><b> as </b><span style="color: maroon">proid</span><span style="color: navy">, </span> <b>uuid</b><span style="color: navy">(</span><span style="color: navy">)</span><b> as </b><span style="color: maroon">immid</span><b> then</b><span style="color: navy"> {
+</span>    lm<span style="color: navy"><b> -&gt; </b></span> ips.entry<b> as </b><span style="color: maroon">entry</span><span style="color: navy">, </span> entry.resource = <b>create</b><span style="color: navy">(</span><span style="color: blue">'Composition'</span><span style="color: navy">)</span><b> as </b><span style="color: maroon">composition</span><span style="color: navy">, </span> entry.fullUrl = <b>append</b><span style="color: navy">(</span><span style="color: blue">'urn:uuid:'</span><span style="color: navy">, </span><span style="color: maroon">cid</span><span style="color: navy">)</span><b> then</b><span style="color: navy"> {
+</span>      lm<b> then </b>LmToComposition<span style="color: navy">(</span><span style="color: maroon">lm</span><span style="color: navy">, </span><span style="color: maroon">ips</span><span style="color: navy">, </span><span style="color: maroon">composition</span><span style="color: navy">, </span><span style="color: maroon">cid</span><span style="color: navy">, </span><span style="color: maroon">pid</span><span style="color: navy">, </span><span style="color: maroon">mid</span><span style="color: navy">, </span><span style="color: maroon">aid</span><span style="color: navy">, </span><span style="color: maroon">proid</span><span style="color: navy">, </span><span style="color: maroon">immid</span><span style="color: navy">)</span> <i>&quot;set LmToComposition&quot;</i><span style="color: navy">;</span>
+      lm<span style="color: navy"><b> -&gt; </b></span> ips.entry<b> as </b><span style="color: maroon">entry</span><span style="color: navy">, </span> entry.fullUrl = <b>append</b><span style="color: navy">(</span><span style="color: blue">'urn:uuid:'</span><span style="color: navy">, </span><span style="color: maroon">pid</span><span style="color: navy">)</span><span style="color: navy">, </span> <b>create</b><span style="color: navy">(</span><span style="color: blue">'Patient'</span><span style="color: navy">)</span><b> as </b><span style="color: maroon">patient</span><b> then</b><span style="color: navy"> {
+</span>        lm<b> then </b>DemographicsToPatient<span style="color: navy">(</span><span style="color: maroon">lm</span><span style="color: navy">, </span><span style="color: maroon">patient</span><span style="color: navy">, </span><span style="color: maroon">pid</span><span style="color: navy">)</span> <i>&quot;createPatient&quot;</i><span style="color: navy">;</span>
+        lm<span style="color: navy"><b> -&gt; </b></span>entry.resource = <span style="color: maroon">patient</span> <i>&quot;setPatientEntry&quot;</i><span style="color: navy">;</span>
+      <span style="color: navy">}</span> <i>&quot;mapPatientResource&quot;</i><span style="color: navy">;</span>
+      lm.issuer<b> as </b><span style="color: maroon">issuer</span><b> then</b><span style="color: navy"> {
+</span>        issuer.reference<b> as </b><span style="color: maroon">id</span><span style="color: navy"><b> -&gt; </b></span> ips.entry<b> as </b><span style="color: maroon">entry</span><span style="color: navy">, </span> entry.fullUrl = <b>append</b><span style="color: navy">(</span><span style="color: blue">'urn:uuid:'</span><span style="color: navy">, </span><span style="color: maroon">id</span><span style="color: navy">)</span><span style="color: navy">, </span> <b>create</b><span style="color: navy">(</span><span style="color: blue">'Organization'</span><span style="color: navy">)</span><b> as </b><span style="color: maroon">organization</span><b> then</b><span style="color: navy"> {
+</span>          lm<span style="color: navy"><b> -&gt; </b></span>organization<b> then </b>createAuthor<span style="color: navy">(</span><span style="color: maroon">issuer</span><span style="color: navy">, </span><span style="color: maroon">organization</span><span style="color: navy">)</span> <i>&quot;createOrganization&quot;</i><span style="color: navy">;</span>
+          lm<span style="color: navy"><b> -&gt; </b></span>entry.resource = <span style="color: maroon">organization</span> <i>&quot;setOrganizationEntry&quot;</i><span style="color: navy">;</span>
+        <span style="color: navy">}</span> <i>&quot;mapOrganizationResource&quot;</i><span style="color: navy">;</span>
+      <span style="color: navy">}</span> <i>&quot;ss&quot;</i><span style="color: navy">;</span>
+    <span style="color: navy">}</span> <i>&quot;mapCompositionResource&quot;</i><span style="color: navy">;</span>
+  <span style="color: navy">}</span> <i>&quot;setEntries&quot;</i><span style="color: navy">;</span>
+<span style="color: navy">}
+
+</span><span style="color: navy">// </span><span style="color: green">create Composition</span>
+<b>group </b>LmToComposition<span style="color: navy">(</span><b>source</b> <span style="color: maroon">lm</span><span style="color: navy"> : </span>DVCLogicalModel, <b>target</b> <span style="color: maroon">ips</span><span style="color: navy"> : </span>Bundle, <b>target</b> <span style="color: maroon">composition</span><span style="color: navy"> : </span>Composition, <b>source</b> <span style="color: maroon">cid</span>, <b>source</b> <span style="color: maroon">pid</span>, <b>source</b> <span style="color: maroon">mid</span>, <b>source</b> <span style="color: maroon">aid</span>, <b>source</b> <span style="color: maroon">proid</span>, <b>source</b> <span style="color: maroon">immid</span><span style="color: navy">)</span><span style="color: navy"> {
+</span>  cid<span style="color: navy"><b> -&gt; </b></span>composition.id = <span style="color: maroon">cid</span> <i>&quot;setCid&quot;</i><span style="color: navy">;</span>
+  lm<span style="color: navy"><b> -&gt; </b></span>composition.status = <span style="color: blue">'final'</span> <i>&quot;setStatus&quot;</i><span style="color: navy">;</span>
+  lm<span style="color: navy"><b> -&gt; </b></span>composition.title = <span style="color: blue">'International Patient Summary'</span> <i>&quot;setTitle&quot;</i><span style="color: navy">;</span>
+  lm<span style="color: navy"><b> -&gt; </b></span> <b>create</b><span style="color: navy">(</span><span style="color: blue">'Coding'</span><span style="color: navy">)</span><b> as </b><span style="color: maroon">coding</span><span style="color: navy">, </span> coding.code = <span style="color: blue">'60591-5'</span><span style="color: navy">, </span> coding.system = <span style="color: blue">'http://loinc.org'</span><span style="color: navy">, </span> <b>create</b><span style="color: navy">(</span><span style="color: blue">'CodeableConcept'</span><span style="color: navy">)</span><b> as </b><span style="color: maroon">code</span><span style="color: navy">, </span> code.coding = <span style="color: maroon">coding</span><span style="color: navy">, </span> composition.type = <span style="color: maroon">code</span> <i>&quot;setType&quot;</i><span style="color: navy">;</span>
+  lm<span style="color: navy"><b> -&gt; </b></span>composition.subject<b> as </b><span style="color: maroon">subject</span><b> then</b><span style="color: navy"> {
+</span>    lm<span style="color: navy"><b> -&gt; </b></span>subject.reference = <b>append</b><span style="color: navy">(</span><span style="color: blue">'urn:uuid:'</span><span style="color: navy">, </span><span style="color: maroon">pid</span><span style="color: navy">)</span> <i>&quot;setSubject&quot;</i><span style="color: navy">;</span>
+  <span style="color: navy">}</span> <i>&quot;setSubject&quot;</i><span style="color: navy">;</span>
+  lm.issuer<b> as </b><span style="color: maroon">issuer</span><b> then</b><span style="color: navy"> {
+</span>    issuer.reference<b> as </b><span style="color: maroon">id</span><span style="color: navy"><b> -&gt; </b></span>composition.author<b> as </b><span style="color: maroon">author</span><b> then</b><span style="color: navy"> {
+</span>      id<span style="color: navy"><b> -&gt; </b></span>author.reference = <b>append</b><span style="color: navy">(</span><span style="color: blue">'urn:uuid:'</span><span style="color: navy">, </span><span style="color: maroon">id</span><span style="color: navy">)</span> <i>&quot;setAuthor&quot;</i><span style="color: navy">;</span>
+    <span style="color: navy">}</span> <i>&quot;setauthr&quot;</i><span style="color: navy">;</span>
+  <span style="color: navy">}</span> <i>&quot;setid&quot;</i><span style="color: navy">;</span>
+  lm<span style="color: navy"><b> -&gt; </b></span>composition.section<b> as </b><span style="color: maroon">medication</span><b> then </b>createSectionMedications<span style="color: navy">(</span><span style="color: maroon">lm</span><span style="color: navy">, </span><span style="color: maroon">medication</span><span style="color: navy">, </span><span style="color: maroon">mid</span><span style="color: navy">)</span> <i>&quot;createMedication&quot;</i><span style="color: navy">;</span>
+  lm<span style="color: navy"><b> -&gt; </b></span>composition.section<b> as </b><span style="color: maroon">allergies</span><b> then </b>createSectionAllergies<span style="color: navy">(</span><span style="color: maroon">lm</span><span style="color: navy">, </span><span style="color: maroon">allergies</span><span style="color: navy">, </span><span style="color: maroon">aid</span><span style="color: navy">)</span> <i>&quot;createAllergies&quot;</i><span style="color: navy">;</span>
+  lm<span style="color: navy"><b> -&gt; </b></span>composition.section<b> as </b><span style="color: maroon">problems</span><b> then </b>createSectionProblems<span style="color: navy">(</span><span style="color: maroon">lm</span><span style="color: navy">, </span><span style="color: maroon">problems</span><span style="color: navy">, </span><span style="color: maroon">proid</span><span style="color: navy">)</span> <i>&quot;createProblems&quot;</i><span style="color: navy">;</span>
+  lm<b> then </b>createSectionImmunizations<span style="color: navy">(</span><span style="color: maroon">lm</span><span style="color: navy">, </span><span style="color: maroon">ips</span><span style="color: navy">, </span><span style="color: maroon">composition</span><span style="color: navy">, </span><span style="color: maroon">immid</span><span style="color: navy">, </span><span style="color: maroon">pid</span><span style="color: navy">)</span> <i>&quot;createImmunizations&quot;</i><span style="color: navy">;</span>
+<span style="color: navy">}
+
+</span><span style="color: navy">// </span><span style="color: green">create Patient</span>
+<b>group </b>DemographicsToPatient<span style="color: navy">(</span><b>source</b> <span style="color: maroon">lm</span><span style="color: navy"> : </span>DVCLogicalModel, <b>target</b> <span style="color: maroon">patient</span><span style="color: navy"> : </span>Patient, <b>source</b> <span style="color: maroon">pid</span><span style="color: navy">)</span><span style="color: navy"> {
+</span>  pid<span style="color: navy"><b> -&gt; </b></span>patient.id = <span style="color: maroon">pid</span> <i>&quot;setPatientId&quot;</i><span style="color: navy">;</span>
+  lm.name<b> as </b><span style="color: maroon">sourceName</span><span style="color: navy"><b> -&gt; </b></span>patient.name<b> as </b><span style="color: maroon">targetName</span><b> then </b>nameToHumanName<span style="color: navy">(</span><span style="color: maroon">sourceName</span><span style="color: navy">, </span><span style="color: maroon">targetName</span><span style="color: navy">)</span> <i>&quot;Setname&quot;</i><span style="color: navy">;</span>
+  lm.dob<b> as </b><span style="color: maroon">dob</span><span style="color: navy"><b> -&gt; </b></span>patient.birthDate = <span style="color: maroon">dob</span> <i>&quot;setDateofBirth&quot;</i><span style="color: navy">;</span>
+  lm.sex<b> as </b><span style="color: maroon">sex</span><b> then </b>ExtractGender<span style="color: navy">(</span><span style="color: maroon">sex</span><span style="color: navy">, </span><span style="color: maroon">patient</span><span style="color: navy">)</span> <i>&quot;Patient Gender&quot;</i><span style="color: navy">;</span>
+  <span style="color: #b36b00" title="This element was not defined prior to R5">// lm.sex as sex -&gt; patient.gender = sex &quot;setSex&quot;;</span>
+  lm.nid<b> as </b><span style="color: maroon">id</span><span style="color: navy"><b> -&gt; </b></span> patient.identifier<b> as </b><span style="color: maroon">identifier</span><span style="color: navy">, </span> identifier.value = <span style="color: maroon">id</span> <i>&quot;setNationalIdentifier&quot;</i><span style="color: navy">;</span>
+  lm.guardian<b> as </b><span style="color: maroon">guardian</span><span style="color: navy"><b> -&gt; </b></span> patient.contact<b> as </b><span style="color: maroon">parentContact</span><span style="color: navy">, </span> parentContact.name<b> as </b><span style="color: maroon">parentName</span><b> then </b>nameToHumanName<span style="color: navy">(</span><span style="color: maroon">guardian</span><span style="color: navy">, </span><span style="color: maroon">parentName</span><span style="color: navy">)</span> <i>&quot;setGuardianName&quot;</i><span style="color: navy">;</span>
+<span style="color: navy">}
+
+</span><span style="color: navy">// </span><span style="color: green">deals with short and case sensitive codes</span>
+<b>group </b>ExtractGender<span style="color: navy">(</span><b>source</b> <span style="color: maroon">sex</span>, <b>target</b> <span style="color: maroon">patient</span><span style="color: navy"> : </span>Patient<span style="color: navy">)</span><span style="color: navy"> {
+</span>  sex<b> where </b>(sex = 'M')<span style="color: navy"><b> -&gt; </b></span>patient.gender = <span style="color: blue">'male'</span> <i>&quot;set male&quot;</i><span style="color: navy">;</span>
+  sex<b> where </b>(sex = 'F')<span style="color: navy"><b> -&gt; </b></span>patient.gender = <span style="color: blue">'female'</span> <i>&quot;set female&quot;</i><span style="color: navy">;</span>
+  sex<b> where </b>(sex = 'm')<span style="color: navy"><b> -&gt; </b></span>patient.gender = <span style="color: blue">'male'</span> <i>&quot;set male&quot;</i><span style="color: navy">;</span>
+  sex<b> where </b>(sex = 'f')<span style="color: navy"><b> -&gt; </b></span>patient.gender = <span style="color: blue">'female'</span> <i>&quot;set female&quot;</i><span style="color: navy">;</span>
+  sex<b> where </b>(sex = 'Male')<span style="color: navy"><b> -&gt; </b></span>patient.gender = <span style="color: blue">'male'</span> <i>&quot;set male&quot;</i><span style="color: navy">;</span>
+  sex<b> where </b>(sex = 'Female')<span style="color: navy"><b> -&gt; </b></span>patient.gender = <span style="color: blue">'female'</span> <i>&quot;set female&quot;</i><span style="color: navy">;</span>
+  sex<b> where </b>(sex = 'male')<span style="color: navy"><b> -&gt; </b></span>patient.gender = <span style="color: blue">'male'</span> <i>&quot;set male&quot;</i><span style="color: navy">;</span>
+  sex<b> where </b>(sex = 'female')<span style="color: navy"><b> -&gt; </b></span>patient.gender = <span style="color: blue">'female'</span> <i>&quot;set female&quot;</i><span style="color: navy">;</span>
+<span style="color: navy">}
+
+</span><span style="color: navy">// </span><span style="color: green">create author</span>
+<b>group </b>createAuthor<span style="color: navy">(</span><b>source</b> <span style="color: maroon">issuer</span>, <b>target</b> <span style="color: maroon">org</span><span style="color: navy"> : </span>Organization<span style="color: navy">)</span><span style="color: navy"> {
+</span>  issuer.reference<b> as </b><span style="color: maroon">id</span><span style="color: navy"><b> -&gt; </b></span>org.id = <span style="color: maroon">id</span> <i>&quot;setID&quot;</i><span style="color: navy">;</span>
+<span style="color: navy">}
+
+</span><span style="color: navy">// </span><span style="color: green">create sectionMedications</span>
+<b>group </b>createSectionMedications<span style="color: navy">(</span><b>source</b> <span style="color: maroon">lm</span><span style="color: navy"> : </span>DVCLogicalModel, <b>target</b> <span style="color: maroon">med</span><span style="color: navy"> : </span>BackboneElement, <b>source</b> <span style="color: maroon">mid</span><span style="color: navy">)</span><span style="color: navy"> {
+</span>  mid<span style="color: navy"><b> -&gt; </b></span>med.id = <span style="color: maroon">mid</span> <i>&quot;setmedicationid&quot;</i><span style="color: navy">;</span>
+  lm<span style="color: navy"><b> -&gt; </b></span>med.title = <span style="color: blue">'Medication Summary Section'</span> <i>&quot;setMedicationTitle&quot;</i><span style="color: navy">;</span>
+  lm<span style="color: navy"><b> -&gt; </b></span>med.text<b> as </b><span style="color: maroon">text</span><b> then </b>generateNarrativeText<span style="color: navy">(</span><span style="color: maroon">med</span><span style="color: navy">, </span><span style="color: maroon">text</span><span style="color: navy">)</span> <i>&quot;setText&quot;</i><span style="color: navy">;</span>
+  lm<span style="color: navy"><b> -&gt; </b></span> <b>create</b><span style="color: navy">(</span><span style="color: blue">'Coding'</span><span style="color: navy">)</span><b> as </b><span style="color: maroon">coding</span><span style="color: navy">, </span> coding.code = <span style="color: blue">'10160-0'</span><span style="color: navy">, </span> coding.system = <span style="color: blue">'http://loinc.org'</span><span style="color: navy">, </span> <b>create</b><span style="color: navy">(</span><span style="color: blue">'CodeableConcept'</span><span style="color: navy">)</span><b> as </b><span style="color: maroon">code</span><span style="color: navy">, </span> code.coding = <span style="color: maroon">coding</span><span style="color: navy">, </span> med.code = <span style="color: maroon">code</span> <i>&quot;setCode&quot;</i><span style="color: navy">;</span>
+  lm<span style="color: navy"><b> -&gt; </b></span> <b>create</b><span style="color: navy">(</span><span style="color: blue">'Coding'</span><span style="color: navy">)</span><b> as </b><span style="color: maroon">coding</span><span style="color: navy">, </span> coding.code = <span style="color: blue">'unavailable'</span><span style="color: navy">, </span> coding.system = <span style="color: blue">'http://hl7.org/fhir/ValueSet/list-empty-reason'</span><span style="color: navy">, </span> <b>create</b><span style="color: navy">(</span><span style="color: blue">'CodeableConcept'</span><span style="color: navy">)</span><b> as </b><span style="color: maroon">code</span><span style="color: navy">, </span> code.coding = <span style="color: maroon">coding</span><span style="color: navy">, </span> med.emptyReason = <span style="color: maroon">code</span> <i>&quot;setCode&quot;</i><span style="color: navy">;</span>
+<span style="color: navy">}
+
+</span><span style="color: navy">// </span><span style="color: green">create sectionAllergies</span>
+<b>group </b>createSectionAllergies<span style="color: navy">(</span><b>source</b> <span style="color: maroon">lm</span><span style="color: navy"> : </span>DVCLogicalModel, <b>target</b> <span style="color: maroon">all</span><span style="color: navy"> : </span>BackboneElement, <b>source</b> <span style="color: maroon">aid</span><span style="color: navy">)</span><span style="color: navy"> {
+</span>  aid<span style="color: navy"><b> -&gt; </b></span>all.id = <span style="color: maroon">aid</span> <i>&quot;setAllergyId&quot;</i><span style="color: navy">;</span>
+  lm<span style="color: navy"><b> -&gt; </b></span>all.title = <span style="color: blue">'Allergies Section'</span> <i>&quot;setAllergyTitle&quot;</i><span style="color: navy">;</span>
+  lm<span style="color: navy"><b> -&gt; </b></span>all.text<b> as </b><span style="color: maroon">text</span><b> then </b>generateNarrativeText<span style="color: navy">(</span><span style="color: maroon">all</span><span style="color: navy">, </span><span style="color: maroon">text</span><span style="color: navy">)</span> <i>&quot;setText&quot;</i><span style="color: navy">;</span>
+  lm<span style="color: navy"><b> -&gt; </b></span> <b>create</b><span style="color: navy">(</span><span style="color: blue">'Coding'</span><span style="color: navy">)</span><b> as </b><span style="color: maroon">coding</span><span style="color: navy">, </span> coding.code = <span style="color: blue">'48765-2'</span><span style="color: navy">, </span> coding.system = <span style="color: blue">'http://loinc.org'</span><span style="color: navy">, </span> <b>create</b><span style="color: navy">(</span><span style="color: blue">'CodeableConcept'</span><span style="color: navy">)</span><b> as </b><span style="color: maroon">code</span><span style="color: navy">, </span> code.coding = <span style="color: maroon">coding</span><span style="color: navy">, </span> all.code = <span style="color: maroon">code</span> <i>&quot;setCode&quot;</i><span style="color: navy">;</span>
+  lm<span style="color: navy"><b> -&gt; </b></span> <b>create</b><span style="color: navy">(</span><span style="color: blue">'Coding'</span><span style="color: navy">)</span><b> as </b><span style="color: maroon">coding</span><span style="color: navy">, </span> coding.code = <span style="color: blue">'unavailable'</span><span style="color: navy">, </span> coding.system = <span style="color: blue">'http://hl7.org/fhir/ValueSet/list-empty-reason'</span><span style="color: navy">, </span> <b>create</b><span style="color: navy">(</span><span style="color: blue">'CodeableConcept'</span><span style="color: navy">)</span><b> as </b><span style="color: maroon">code</span><span style="color: navy">, </span> code.coding = <span style="color: maroon">coding</span><span style="color: navy">, </span> all.emptyReason = <span style="color: maroon">code</span> <i>&quot;setCode&quot;</i><span style="color: navy">;</span>
+<span style="color: navy">}
+
+</span><span style="color: navy">// </span><span style="color: green">create sectionProblems</span>
+<b>group </b>createSectionProblems<span style="color: navy">(</span><b>source</b> <span style="color: maroon">lm</span><span style="color: navy"> : </span>DVCLogicalModel, <b>target</b> <span style="color: maroon">prb</span><span style="color: navy"> : </span>BackboneElement, <b>source</b> <span style="color: maroon">proid</span><span style="color: navy">)</span><span style="color: navy"> {
+</span>  proid<span style="color: navy"><b> -&gt; </b></span>prb.id = <span style="color: maroon">proid</span> <i>&quot;setProblemsId&quot;</i><span style="color: navy">;</span>
+  lm<span style="color: navy"><b> -&gt; </b></span>prb.title = <span style="color: blue">'Problems Section'</span> <i>&quot;setProblemTitle&quot;</i><span style="color: navy">;</span>
+  lm<span style="color: navy"><b> -&gt; </b></span>prb.text<b> as </b><span style="color: maroon">text</span><b> then </b>generateNarrativeText<span style="color: navy">(</span><span style="color: maroon">prb</span><span style="color: navy">, </span><span style="color: maroon">text</span><span style="color: navy">)</span> <i>&quot;setText&quot;</i><span style="color: navy">;</span>
+  lm<span style="color: navy"><b> -&gt; </b></span> <b>create</b><span style="color: navy">(</span><span style="color: blue">'Coding'</span><span style="color: navy">)</span><b> as </b><span style="color: maroon">coding</span><span style="color: navy">, </span> coding.code = <span style="color: blue">'11450-4'</span><span style="color: navy">, </span> coding.system = <span style="color: blue">'http://loinc.org'</span><span style="color: navy">, </span> <b>create</b><span style="color: navy">(</span><span style="color: blue">'CodeableConcept'</span><span style="color: navy">)</span><b> as </b><span style="color: maroon">code</span><span style="color: navy">, </span> code.coding = <span style="color: maroon">coding</span><span style="color: navy">, </span> prb.code = <span style="color: maroon">code</span> <i>&quot;setCode&quot;</i><span style="color: navy">;</span>
+  lm<span style="color: navy"><b> -&gt; </b></span> <b>create</b><span style="color: navy">(</span><span style="color: blue">'Coding'</span><span style="color: navy">)</span><b> as </b><span style="color: maroon">coding</span><span style="color: navy">, </span> coding.code = <span style="color: blue">'unavailable'</span><span style="color: navy">, </span> coding.system = <span style="color: blue">'http://hl7.org/fhir/ValueSet/list-empty-reason'</span><span style="color: navy">, </span> <b>create</b><span style="color: navy">(</span><span style="color: blue">'CodeableConcept'</span><span style="color: navy">)</span><b> as </b><span style="color: maroon">code</span><span style="color: navy">, </span> code.coding = <span style="color: maroon">coding</span><span style="color: navy">, </span> prb.emptyReason = <span style="color: maroon">code</span> <i>&quot;setCode&quot;</i><span style="color: navy">;</span>
+<span style="color: navy">}
+
+</span><span style="color: navy">// </span><span style="color: green">create sectionImmunizations</span>
+<b>group </b>createSectionImmunizations<span style="color: navy">(</span><b>source</b> <span style="color: maroon">lm</span><span style="color: navy"> : </span>DVCLogicalModel, <b>target</b> <span style="color: maroon">bundle</span><span style="color: navy"> : </span>Bundle, <b>target</b> <span style="color: maroon">composition</span><span style="color: navy"> : </span>Composition, <b>source</b> <span style="color: maroon">immid</span>, <b>source</b> <span style="color: maroon">pid</span><span style="color: navy">)</span><span style="color: navy"> {
+</span>  lm<span style="color: navy"><b> -&gt; </b></span>composition.section<b> as </b><span style="color: maroon">imm</span><b> then</b><span style="color: navy"> {
+</span>    immid<span style="color: navy"><b> -&gt; </b></span>imm.id = <span style="color: maroon">immid</span> <i>&quot;setImmunizationsId&quot;</i><span style="color: navy">;</span>
+    lm<span style="color: navy"><b> -&gt; </b></span>imm.title = <span style="color: blue">'Immunizations Section'</span> <i>&quot;setImmunizationTitle&quot;</i><span style="color: navy">;</span>
+    lm<span style="color: navy"><b> -&gt; </b></span>imm.text<b> as </b><span style="color: maroon">text</span><b> then </b>generateNarrativeText<span style="color: navy">(</span><span style="color: maroon">imm</span><span style="color: navy">, </span><span style="color: maroon">text</span><span style="color: navy">)</span> <i>&quot;setText&quot;</i><span style="color: navy">;</span>
+    lm<span style="color: navy"><b> -&gt; </b></span> <b>create</b><span style="color: navy">(</span><span style="color: blue">'Coding'</span><span style="color: navy">)</span><b> as </b><span style="color: maroon">coding</span><span style="color: navy">, </span> coding.code = <span style="color: blue">'11369-6'</span><span style="color: navy">, </span> coding.system = <span style="color: blue">'http://loinc.org'</span><span style="color: navy">, </span> <b>create</b><span style="color: navy">(</span><span style="color: blue">'CodeableConcept'</span><span style="color: navy">)</span><b> as </b><span style="color: maroon">code</span><span style="color: navy">, </span> code.coding = <span style="color: maroon">coding</span><span style="color: navy">, </span> imm.code = <span style="color: maroon">code</span> <i>&quot;setCode&quot;</i><span style="color: navy">;</span>
+    lm.vaccineDetails<b> as </b><span style="color: maroon">vax</span><span style="color: navy"><b> -&gt; </b></span> <b>uuid</b><span style="color: navy">(</span><span style="color: navy">)</span><b> as </b><span style="color: maroon">id</span><span style="color: navy">, </span> bundle.entry<b> as </b><span style="color: maroon">entry</span><span style="color: navy">, </span> entry.fullUrl = <b>append</b><span style="color: navy">(</span><span style="color: blue">'urn:uuid:'</span><span style="color: navy">, </span><span style="color: maroon">id</span><span style="color: navy">)</span><span style="color: navy">, </span> imm.entry<b> as </b><span style="color: maroon">sectionEntry</span><span style="color: navy">, </span> sectionEntry.reference = <b>append</b><span style="color: navy">(</span><span style="color: blue">'urn:uuid:'</span><span style="color: navy">, </span><span style="color: maroon">id</span><span style="color: navy">)</span><span style="color: navy">, </span> entry.resource = <b>create</b><span style="color: navy">(</span><span style="color: blue">'Immunization'</span><span style="color: navy">)</span><b> as </b><span style="color: maroon">immunization</span><span style="color: navy">, </span> immunization.id = <span style="color: maroon">id</span><b> then </b>createImmunizationResource<span style="color: navy">(</span><span style="color: maroon">vax</span><span style="color: navy">, </span><span style="color: maroon">immunization</span><span style="color: navy">, </span><span style="color: maroon">pid</span><span style="color: navy">)</span> <i>&quot;setImmz&quot;</i><span style="color: navy">;</span>
+  <span style="color: navy">}</span> <i>&quot;set&quot;</i><span style="color: navy">;</span>
+<span style="color: navy">}
+
+</span><b>group </b>createImmunizationResource<span style="color: navy">(</span><b>source</b> <span style="color: maroon">vax</span><span style="color: navy"> : </span>vaccineDetails, <b>target</b> <span style="color: maroon">immunization</span><span style="color: navy"> : </span>Immunization, <b>source</b> <span style="color: maroon">pid</span><span style="color: navy">)</span><span style="color: navy"> {
+</span>  vax<span style="color: navy"><b> -&gt; </b></span>immunization.status = <span style="color: blue">'completed'</span> <i>&quot;setStatus&quot;</i><span style="color: navy">;</span>
+  vax.vaccineClassification<b> as </b><span style="color: maroon">vaccine</span><span style="color: navy"><b> -&gt; </b></span>immunization.vaccineCode = <span style="color: maroon">vaccine</span> <i>&quot;setvaccinecode&quot;</i><span style="color: navy">;</span>
+  vax.date<b> as </b><span style="color: maroon">date</span><span style="color: navy"><b> -&gt; </b></span>immunization.occurrence = <b>append</b><span style="color: navy">(</span><span style="color: maroon">date</span><span style="color: navy">, </span><span style="color: blue">'T00:00:00.000Z'</span><span style="color: navy">)</span> <i>&quot;setDate&quot;</i><span style="color: navy">;</span>
+  vax.batchNo<b> as </b><span style="color: maroon">batchNo</span><span style="color: navy"><b> -&gt; </b></span>immunization.lotNumber = <span style="color: maroon">batchNo</span> <i>&quot;setBatchNo&quot;</i><span style="color: navy">;</span>
+  vax<span style="color: navy"><b> -&gt; </b></span>immunization.protocolApplied<b> as </b><span style="color: maroon">protocol</span><b> then</b><span style="color: navy"> {
+</span>    vax.doseNumber<b> as </b><span style="color: maroon">doseNo</span><b> then</b><span style="color: navy"> {
+</span>      doseNo.coding<b> as </b><span style="color: maroon">coding</span><b> then</b><span style="color: navy"> {
+</span>        coding.code<b> as </b><span style="color: maroon">code</span><span style="color: navy"><b> -&gt; </b></span>protocol.doseNumber = <span style="color: maroon">code</span> <i>&quot;setDoseNo&quot;</i><span style="color: navy">;</span>
+      <span style="color: navy">}</span> <i>&quot;setDoseNo&quot;</i><span style="color: navy">;</span>
+    <span style="color: navy">}</span> <i>&quot;setDoseNo&quot;</i><span style="color: navy">;</span>
+    vax.disease<b> as </b><span style="color: maroon">disease</span><span style="color: navy"><b> -&gt; </b></span> <b>create</b><span style="color: navy">(</span><span style="color: blue">'CodeableConcept'</span><span style="color: navy">)</span><b> as </b><span style="color: maroon">code</span><span style="color: navy">, </span> code.coding = <span style="color: maroon">disease</span><span style="color: navy">, </span> protocol.targetDisease = <span style="color: maroon">code</span> <i>&quot;setTargetDisease&quot;</i><span style="color: navy">;</span>
+  <span style="color: navy">}</span> <i>&quot;setProtocolApplied&quot;</i><span style="color: navy">;</span>
+  vax<span style="color: navy"><b> -&gt; </b></span> immunization.patient<b> as </b><span style="color: maroon">subject</span><span style="color: navy">, </span> subject.reference = <b>append</b><span style="color: navy">(</span><span style="color: blue">'urn:uuid:'</span><span style="color: navy">, </span><span style="color: maroon">pid</span><span style="color: navy">)</span> <i>&quot;setSubject&quot;</i><span style="color: navy">;</span>
+  vax.manufacturerId<b> as </b><span style="color: maroon">maId</span><span style="color: navy"><b> -&gt; </b></span> <b>create</b><span style="color: navy">(</span><span style="color: blue">'Reference'</span><span style="color: navy">)</span><b> as </b><span style="color: maroon">maRef</span><span style="color: navy">, </span> maRef.identifier = <span style="color: maroon">maId</span><span style="color: navy">, </span> immunization.manufacturer = <span style="color: maroon">maRef</span> <i>&quot;set Manufacturer&quot;</i><span style="color: navy">;</span>
+<span style="color: navy">}
+
+</span><span style="color: navy">// </span><span style="color: green">helper function</span>
+<b>group </b>generateNarrativeText<span style="color: navy">(</span><b>source</b> <span style="color: maroon">src</span><span style="color: navy"> : </span>Section, <b>target</b> <span style="color: maroon">text</span><span style="color: navy"> : </span>string<span style="color: navy">)</span><span style="color: navy"> {
+</span>  src<span style="color: navy"><b> -&gt; </b></span>text.status = <span style="color: blue">'empty'</span> <i>&quot;setstatus&quot;</i><span style="color: navy">;</span>
+  src<span style="color: navy"><b> -&gt; </b></span>text.div = <span style="color: blue">'&lt;div xmlns=\&quot;http://www.w3.org/1999/xhtml\&quot;&gt;Narrative not available&lt;/div&gt;'</span> <i>&quot;setdiv&quot;</i><span style="color: navy">;</span>
+<span style="color: navy">}
+
+</span><b>group </b>nameToHumanName<span style="color: navy">(</span><b>source</b> <span style="color: maroon">sourceName</span>, <b>target</b> <span style="color: maroon">targetName</span><span style="color: navy"> : </span>HumanName<span style="color: navy">)</span><span style="color: navy"> {
+</span>  sourceName<b> as </b><span style="color: maroon">patientName</span><span style="color: navy"><b> -&gt; </b></span>targetName.text = <span style="color: maroon">patientName</span> <i>&quot;Patient Name&quot;</i><span style="color: navy">;</span>
+<span style="color: navy">}
+
+</span><b>group </b>humanNameToHumanName<span style="color: navy">(</span><b>source</b> <span style="color: maroon">sourceName</span>, <b>target</b> <span style="color: maroon">targetName</span><span style="color: navy"> : </span>HumanName<span style="color: navy">)</span><span style="color: navy"> {
+</span>  sourceName.use<b> as </b><span style="color: maroon">use</span><span style="color: navy"><b> -&gt; </b></span>targetName.use = <span style="color: maroon">use</span> <i>&quot;CopyUse&quot;</i><span style="color: navy">;</span>
+  sourceName.text<b> as </b><span style="color: maroon">text</span><span style="color: navy"><b> -&gt; </b></span>targetName.text = <span style="color: maroon">text</span> <i>&quot;CopyText&quot;</i><span style="color: navy">;</span>
+  sourceName.family<b> as </b><span style="color: maroon">family</span><span style="color: navy"><b> -&gt; </b></span>targetName.family = <span style="color: maroon">family</span> <i>&quot;CopyFamily&quot;</i><span style="color: navy">;</span>
+  sourceName.given<b> as </b><span style="color: maroon">given</span><span style="color: navy"><b> -&gt; </b></span>targetName.given = <span style="color: maroon">given</span> <i>&quot;CopyGiven&quot;</i><span style="color: navy">;</span>
+  sourceName.prefix<b> as </b><span style="color: maroon">prefix</span><span style="color: navy"><b> -&gt; </b></span>targetName.prefix = <span style="color: maroon">prefix</span> <i>&quot;CopyPrefix&quot;</i><span style="color: navy">;</span>
+  sourceName.suffix<b> as </b><span style="color: maroon">suffix</span><span style="color: navy"><b> -&gt; </b></span>targetName.suffix = <span style="color: maroon">suffix</span> <i>&quot;CopySuffix&quot;</i><span style="color: navy">;</span>
+  <span style="color: navy">// </span><span style="color: green">Copy the period using the previously defined group function</span>
+  sourceName.period<b> as </b><span style="color: maroon">sourcePeriod</span><span style="color: navy"><b> -&gt; </b></span>targetName.period<b> as </b><span style="color: maroon">targetPeriod</span><b> then</b><span style="color: navy"> {
+</span>    sourcePeriod<b> then </b>periodToPeriod<span style="color: navy">(</span><span style="color: maroon">sourcePeriod</span><span style="color: navy">, </span><span style="color: maroon">targetPeriod</span><span style="color: navy">)</span> <i>&quot;CopyPeriod&quot;</i><span style="color: navy">;</span>
+  <span style="color: navy">}</span> <i>&quot;copyPeriod&quot;</i><span style="color: navy">;</span>
+<span style="color: navy">}
+
+</span><b>group </b>periodToPeriod<span style="color: navy">(</span><b>source</b> <span style="color: maroon">sourcePeriod</span>, <b>target</b> <span style="color: maroon">targetPeriod</span><span style="color: navy"> : </span>Period<span style="color: navy">)</span><span style="color: navy"> {
+</span>  sourcePeriod.start<b> as </b><span style="color: maroon">start</span><span style="color: navy"><b> -&gt; </b></span>targetPeriod.start = <span style="color: maroon">start</span> <i>&quot;set period start&quot;</i><span style="color: navy">;</span>
+  sourcePeriod.end<b> as </b><span style="color: maroon">end</span><span style="color: navy"><b> -&gt; </b></span>targetPeriod.end = <span style="color: maroon">end</span> <i>&quot;set period end&quot;</i><span style="color: navy">;</span>
+<span style="color: navy">}
+
+</span></pre></div>
+  </text>
+  <url value="http://smart.who.int/icvp/StructureMap/DVCLMToIPS"/>
+  <version value="0.1.0"/>
+  <name value="DVCLMToIPS"/>
+  <status value="draft"/>
+  <date value="2024-10-07T07:28:50+00:00"/>
+  <publisher value="WHO"/>
+  <contact>
+    <name value="WHO"/>
+    <telecom>
+      <system value="url"/>
+      <value value="http://who.int"/>
+    </telecom>
+  </contact>
+  <structure>
+    <url value="http://smart.who.int/icvp/StructureDefinition/ModelDVC"/>
+    <mode value="source"/>
+    <alias value="DVCLogicalModel"/>
+  </structure>
+  <structure>
+    <url value="http://hl7.org/fhir/StructureDefinition/Bundle"/>
+    <mode value="target"/>
+    <alias value="IPS"/>
+  </structure>
+  <group>
+    <name value="DVCLMToIPS"/>
+    <typeMode value="none"/>
+    <documentation value="create Bundle"/>
+    <input>
+      <name value="lm"/>
+      <type value="DVCLogicalModel"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="ips"/>
+      <type value="IPS"/>
+      <mode value="target"/>
+    </input>
+    <rule>
+      <name value="setIPSType"/>
+      <source>
+        <context value="lm"/>
+      </source>
+      <target>
+        <context value="ips"/>
+        <contextType value="variable"/>
+        <element value="type"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueString value="document"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="setId"/>
+      <source>
+        <context value="lm"/>
+      </source>
+      <target>
+        <contextType value="variable"/>
+        <variable value="bid"/>
+        <transform value="uuid"/>
+      </target>
+      <target>
+        <context value="ips"/>
+        <contextType value="variable"/>
+        <element value="identifier"/>
+        <variable value="id"/>
+      </target>
+      <target>
+        <context value="id"/>
+        <contextType value="variable"/>
+        <element value="value"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="bid"/>
+        </parameter>
+      </target>
+      <target>
+        <context value="id"/>
+        <contextType value="variable"/>
+        <element value="system"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueString value="urn:oid:2.16.724.4.8.10.200.10"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="setEntries"/>
+      <source>
+        <context value="lm"/>
+      </source>
+      <target>
+        <contextType value="variable"/>
+        <variable value="cid"/>
+        <transform value="uuid"/>
+      </target>
+      <target>
+        <contextType value="variable"/>
+        <variable value="pid"/>
+        <transform value="uuid"/>
+      </target>
+      <target>
+        <contextType value="variable"/>
+        <variable value="mid"/>
+        <transform value="uuid"/>
+      </target>
+      <target>
+        <contextType value="variable"/>
+        <variable value="aid"/>
+        <transform value="uuid"/>
+      </target>
+      <target>
+        <contextType value="variable"/>
+        <variable value="proid"/>
+        <transform value="uuid"/>
+      </target>
+      <target>
+        <contextType value="variable"/>
+        <variable value="immid"/>
+        <transform value="uuid"/>
+      </target>
+      <rule>
+        <name value="mapCompositionResource"/>
+        <source>
+          <context value="lm"/>
+        </source>
+        <target>
+          <context value="ips"/>
+          <contextType value="variable"/>
+          <element value="entry"/>
+          <variable value="entry"/>
+        </target>
+        <target>
+          <context value="entry"/>
+          <contextType value="variable"/>
+          <element value="resource"/>
+          <variable value="composition"/>
+          <transform value="create"/>
+          <parameter>
+            <valueString value="Composition"/>
+          </parameter>
+        </target>
+        <target>
+          <context value="entry"/>
+          <contextType value="variable"/>
+          <element value="fullUrl"/>
+          <transform value="append"/>
+          <parameter>
+            <valueString value="urn:uuid:"/>
+          </parameter>
+          <parameter>
+            <valueId value="cid"/>
+          </parameter>
+        </target>
+        <rule>
+          <name value="set LmToComposition"/>
+          <source>
+            <context value="lm"/>
+          </source>
+          <dependent>
+            <name value="LmToComposition"/>
+            <variable value="lm"/>
+            <variable value="ips"/>
+            <variable value="composition"/>
+            <variable value="cid"/>
+            <variable value="pid"/>
+            <variable value="mid"/>
+            <variable value="aid"/>
+            <variable value="proid"/>
+            <variable value="immid"/>
+          </dependent>
+        </rule>
+        <rule>
+          <name value="mapPatientResource"/>
+          <source>
+            <context value="lm"/>
+          </source>
+          <target>
+            <context value="ips"/>
+            <contextType value="variable"/>
+            <element value="entry"/>
+            <variable value="entry"/>
+          </target>
+          <target>
+            <context value="entry"/>
+            <contextType value="variable"/>
+            <element value="fullUrl"/>
+            <transform value="append"/>
+            <parameter>
+              <valueString value="urn:uuid:"/>
+            </parameter>
+            <parameter>
+              <valueId value="pid"/>
+            </parameter>
+          </target>
+          <target>
+            <contextType value="variable"/>
+            <variable value="patient"/>
+            <transform value="create"/>
+            <parameter>
+              <valueString value="Patient"/>
+            </parameter>
+          </target>
+          <rule>
+            <name value="createPatient"/>
+            <source>
+              <context value="lm"/>
+            </source>
+            <dependent>
+              <name value="DemographicsToPatient"/>
+              <variable value="lm"/>
+              <variable value="patient"/>
+              <variable value="pid"/>
+            </dependent>
+          </rule>
+          <rule>
+            <name value="setPatientEntry"/>
+            <source>
+              <context value="lm"/>
+            </source>
+            <target>
+              <context value="entry"/>
+              <contextType value="variable"/>
+              <element value="resource"/>
+              <transform value="copy"/>
+              <parameter>
+                <valueId value="patient"/>
+              </parameter>
+            </target>
+          </rule>
+        </rule>
+        <rule>
+          <name value="ss"/>
+          <source>
+            <context value="lm"/>
+            <element value="issuer"/>
+            <variable value="issuer"/>
+          </source>
+          <rule>
+            <name value="mapOrganizationResource"/>
+            <source>
+              <context value="issuer"/>
+              <element value="reference"/>
+              <variable value="id"/>
+            </source>
+            <target>
+              <context value="ips"/>
+              <contextType value="variable"/>
+              <element value="entry"/>
+              <variable value="entry"/>
+            </target>
+            <target>
+              <context value="entry"/>
+              <contextType value="variable"/>
+              <element value="fullUrl"/>
+              <transform value="append"/>
+              <parameter>
+                <valueString value="urn:uuid:"/>
+              </parameter>
+              <parameter>
+                <valueId value="id"/>
+              </parameter>
+            </target>
+            <target>
+              <contextType value="variable"/>
+              <variable value="organization"/>
+              <transform value="create"/>
+              <parameter>
+                <valueString value="Organization"/>
+              </parameter>
+            </target>
+            <rule>
+              <name value="createOrganization"/>
+              <source>
+                <context value="lm"/>
+              </source>
+              <target>
+                <context value="organization"/>
+                <contextType value="variable"/>
+              </target>
+              <dependent>
+                <name value="createAuthor"/>
+                <variable value="issuer"/>
+                <variable value="organization"/>
+              </dependent>
+            </rule>
+            <rule>
+              <name value="setOrganizationEntry"/>
+              <source>
+                <context value="lm"/>
+              </source>
+              <target>
+                <context value="entry"/>
+                <contextType value="variable"/>
+                <element value="resource"/>
+                <transform value="copy"/>
+                <parameter>
+                  <valueId value="organization"/>
+                </parameter>
+              </target>
+            </rule>
+          </rule>
+        </rule>
+      </rule>
+    </rule>
+  </group>
+  <group>
+    <name value="LmToComposition"/>
+    <typeMode value="none"/>
+    <documentation value="create Composition"/>
+    <input>
+      <name value="lm"/>
+      <type value="DVCLogicalModel"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="ips"/>
+      <type value="Bundle"/>
+      <mode value="target"/>
+    </input>
+    <input>
+      <name value="composition"/>
+      <type value="Composition"/>
+      <mode value="target"/>
+    </input>
+    <input>
+      <name value="cid"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="pid"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="mid"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="aid"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="proid"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="immid"/>
+      <mode value="source"/>
+    </input>
+    <rule>
+      <name value="setCid"/>
+      <source>
+        <context value="cid"/>
+      </source>
+      <target>
+        <context value="composition"/>
+        <contextType value="variable"/>
+        <element value="id"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="cid"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="setStatus"/>
+      <source>
+        <context value="lm"/>
+      </source>
+      <target>
+        <context value="composition"/>
+        <contextType value="variable"/>
+        <element value="status"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueString value="final"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="setTitle"/>
+      <source>
+        <context value="lm"/>
+      </source>
+      <target>
+        <context value="composition"/>
+        <contextType value="variable"/>
+        <element value="title"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueString value="International Patient Summary"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="setType"/>
+      <source>
+        <context value="lm"/>
+      </source>
+      <target>
+        <contextType value="variable"/>
+        <variable value="coding"/>
+        <transform value="create"/>
+        <parameter>
+          <valueString value="Coding"/>
+        </parameter>
+      </target>
+      <target>
+        <context value="coding"/>
+        <contextType value="variable"/>
+        <element value="code"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueString value="60591-5"/>
+        </parameter>
+      </target>
+      <target>
+        <context value="coding"/>
+        <contextType value="variable"/>
+        <element value="system"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueString value="http://loinc.org"/>
+        </parameter>
+      </target>
+      <target>
+        <contextType value="variable"/>
+        <variable value="code"/>
+        <transform value="create"/>
+        <parameter>
+          <valueString value="CodeableConcept"/>
+        </parameter>
+      </target>
+      <target>
+        <context value="code"/>
+        <contextType value="variable"/>
+        <element value="coding"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="coding"/>
+        </parameter>
+      </target>
+      <target>
+        <context value="composition"/>
+        <contextType value="variable"/>
+        <element value="type"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="code"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="setSubject"/>
+      <source>
+        <context value="lm"/>
+      </source>
+      <target>
+        <context value="composition"/>
+        <contextType value="variable"/>
+        <element value="subject"/>
+        <variable value="subject"/>
+      </target>
+      <rule>
+        <name value="setSubject"/>
+        <source>
+          <context value="lm"/>
+        </source>
+        <target>
+          <context value="subject"/>
+          <contextType value="variable"/>
+          <element value="reference"/>
+          <transform value="append"/>
+          <parameter>
+            <valueString value="urn:uuid:"/>
+          </parameter>
+          <parameter>
+            <valueId value="pid"/>
+          </parameter>
+        </target>
+      </rule>
+    </rule>
+    <rule>
+      <name value="setid"/>
+      <source>
+        <context value="lm"/>
+        <element value="issuer"/>
+        <variable value="issuer"/>
+      </source>
+      <rule>
+        <name value="setauthr"/>
+        <source>
+          <context value="issuer"/>
+          <element value="reference"/>
+          <variable value="id"/>
+        </source>
+        <target>
+          <context value="composition"/>
+          <contextType value="variable"/>
+          <element value="author"/>
+          <variable value="author"/>
+        </target>
+        <rule>
+          <name value="setAuthor"/>
+          <source>
+            <context value="id"/>
+          </source>
+          <target>
+            <context value="author"/>
+            <contextType value="variable"/>
+            <element value="reference"/>
+            <transform value="append"/>
+            <parameter>
+              <valueString value="urn:uuid:"/>
+            </parameter>
+            <parameter>
+              <valueId value="id"/>
+            </parameter>
+          </target>
+        </rule>
+      </rule>
+    </rule>
+    <rule>
+      <name value="createMedication"/>
+      <source>
+        <context value="lm"/>
+      </source>
+      <target>
+        <context value="composition"/>
+        <contextType value="variable"/>
+        <element value="section"/>
+        <variable value="medication"/>
+      </target>
+      <dependent>
+        <name value="createSectionMedications"/>
+        <variable value="lm"/>
+        <variable value="medication"/>
+        <variable value="mid"/>
+      </dependent>
+    </rule>
+    <rule>
+      <name value="createAllergies"/>
+      <source>
+        <context value="lm"/>
+      </source>
+      <target>
+        <context value="composition"/>
+        <contextType value="variable"/>
+        <element value="section"/>
+        <variable value="allergies"/>
+      </target>
+      <dependent>
+        <name value="createSectionAllergies"/>
+        <variable value="lm"/>
+        <variable value="allergies"/>
+        <variable value="aid"/>
+      </dependent>
+    </rule>
+    <rule>
+      <name value="createProblems"/>
+      <source>
+        <context value="lm"/>
+      </source>
+      <target>
+        <context value="composition"/>
+        <contextType value="variable"/>
+        <element value="section"/>
+        <variable value="problems"/>
+      </target>
+      <dependent>
+        <name value="createSectionProblems"/>
+        <variable value="lm"/>
+        <variable value="problems"/>
+        <variable value="proid"/>
+      </dependent>
+    </rule>
+    <rule>
+      <name value="createImmunizations"/>
+      <source>
+        <context value="lm"/>
+      </source>
+      <dependent>
+        <name value="createSectionImmunizations"/>
+        <variable value="lm"/>
+        <variable value="ips"/>
+        <variable value="composition"/>
+        <variable value="immid"/>
+        <variable value="pid"/>
+      </dependent>
+    </rule>
+  </group>
+  <group>
+    <name value="DemographicsToPatient"/>
+    <typeMode value="none"/>
+    <documentation value="create Patient"/>
+    <input>
+      <name value="lm"/>
+      <type value="DVCLogicalModel"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="patient"/>
+      <type value="Patient"/>
+      <mode value="target"/>
+    </input>
+    <input>
+      <name value="pid"/>
+      <mode value="source"/>
+    </input>
+    <rule>
+      <name value="setPatientId"/>
+      <source>
+        <context value="pid"/>
+      </source>
+      <target>
+        <context value="patient"/>
+        <contextType value="variable"/>
+        <element value="id"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="pid"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="Setname"/>
+      <source>
+        <context value="lm"/>
+        <element value="name"/>
+        <variable value="sourceName"/>
+      </source>
+      <target>
+        <context value="patient"/>
+        <contextType value="variable"/>
+        <element value="name"/>
+        <variable value="targetName"/>
+      </target>
+      <dependent>
+        <name value="nameToHumanName"/>
+        <variable value="sourceName"/>
+        <variable value="targetName"/>
+      </dependent>
+    </rule>
+    <rule>
+      <name value="setDateofBirth"/>
+      <source>
+        <context value="lm"/>
+        <element value="dob"/>
+        <variable value="dob"/>
+      </source>
+      <target>
+        <context value="patient"/>
+        <contextType value="variable"/>
+        <element value="birthDate"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="dob"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="Patient Gender"/>
+      <source>
+        <context value="lm"/>
+        <element value="sex"/>
+        <variable value="sex"/>
+      </source>
+      <dependent>
+        <name value="ExtractGender"/>
+        <variable value="sex"/>
+        <variable value="patient"/>
+      </dependent>
+    </rule>
+    <rule>
+      <name value="setNationalIdentifier"/>
+      <source>
+        <context value="lm"/>
+        <element value="nid"/>
+        <variable value="id"/>
+      </source>
+      <target>
+        <context value="patient"/>
+        <contextType value="variable"/>
+        <element value="identifier"/>
+        <variable value="identifier"/>
+      </target>
+      <target>
+        <context value="identifier"/>
+        <contextType value="variable"/>
+        <element value="value"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="id"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="setGuardianName"/>
+      <source>
+        <context value="lm"/>
+        <element value="guardian"/>
+        <variable value="guardian"/>
+      </source>
+      <target>
+        <context value="patient"/>
+        <contextType value="variable"/>
+        <element value="contact"/>
+        <variable value="parentContact"/>
+      </target>
+      <target>
+        <context value="parentContact"/>
+        <contextType value="variable"/>
+        <element value="name"/>
+        <variable value="parentName"/>
+      </target>
+      <dependent>
+        <name value="nameToHumanName"/>
+        <variable value="guardian"/>
+        <variable value="parentName"/>
+      </dependent>
+    </rule>
+  </group>
+  <group>
+    <name value="ExtractGender"/>
+    <typeMode value="none"/>
+    <documentation value="deals with short and case sensitive codes"/>
+    <input>
+      <name value="sex"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="patient"/>
+      <type value="Patient"/>
+      <mode value="target"/>
+    </input>
+    <rule>
+      <name value="set male"/>
+      <source>
+        <context value="sex"/>
+        <condition value="(sex = 'M')"/>
+      </source>
+      <target>
+        <context value="patient"/>
+        <contextType value="variable"/>
+        <element value="gender"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueString value="male"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="set female"/>
+      <source>
+        <context value="sex"/>
+        <condition value="(sex = 'F')"/>
+      </source>
+      <target>
+        <context value="patient"/>
+        <contextType value="variable"/>
+        <element value="gender"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueString value="female"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="set male"/>
+      <source>
+        <context value="sex"/>
+        <condition value="(sex = 'm')"/>
+      </source>
+      <target>
+        <context value="patient"/>
+        <contextType value="variable"/>
+        <element value="gender"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueString value="male"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="set female"/>
+      <source>
+        <context value="sex"/>
+        <condition value="(sex = 'f')"/>
+      </source>
+      <target>
+        <context value="patient"/>
+        <contextType value="variable"/>
+        <element value="gender"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueString value="female"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="set male"/>
+      <source>
+        <context value="sex"/>
+        <condition value="(sex = 'Male')"/>
+      </source>
+      <target>
+        <context value="patient"/>
+        <contextType value="variable"/>
+        <element value="gender"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueString value="male"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="set female"/>
+      <source>
+        <context value="sex"/>
+        <condition value="(sex = 'Female')"/>
+      </source>
+      <target>
+        <context value="patient"/>
+        <contextType value="variable"/>
+        <element value="gender"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueString value="female"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="set male"/>
+      <source>
+        <context value="sex"/>
+        <condition value="(sex = 'male')"/>
+      </source>
+      <target>
+        <context value="patient"/>
+        <contextType value="variable"/>
+        <element value="gender"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueString value="male"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="set female"/>
+      <source>
+        <context value="sex"/>
+        <condition value="(sex = 'female')"/>
+      </source>
+      <target>
+        <context value="patient"/>
+        <contextType value="variable"/>
+        <element value="gender"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueString value="female"/>
+        </parameter>
+      </target>
+    </rule>
+  </group>
+  <group>
+    <name value="createAuthor"/>
+    <typeMode value="none"/>
+    <documentation value="create author"/>
+    <input>
+      <name value="issuer"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="org"/>
+      <type value="Organization"/>
+      <mode value="target"/>
+    </input>
+    <rule>
+      <name value="setID"/>
+      <source>
+        <context value="issuer"/>
+        <element value="reference"/>
+        <variable value="id"/>
+      </source>
+      <target>
+        <context value="org"/>
+        <contextType value="variable"/>
+        <element value="id"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="id"/>
+        </parameter>
+      </target>
+    </rule>
+  </group>
+  <group>
+    <name value="createSectionMedications"/>
+    <typeMode value="none"/>
+    <documentation value="create sectionMedications"/>
+    <input>
+      <name value="lm"/>
+      <type value="DVCLogicalModel"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="med"/>
+      <type value="BackboneElement"/>
+      <mode value="target"/>
+    </input>
+    <input>
+      <name value="mid"/>
+      <mode value="source"/>
+    </input>
+    <rule>
+      <name value="setmedicationid"/>
+      <source>
+        <context value="mid"/>
+      </source>
+      <target>
+        <context value="med"/>
+        <contextType value="variable"/>
+        <element value="id"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="mid"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="setMedicationTitle"/>
+      <source>
+        <context value="lm"/>
+      </source>
+      <target>
+        <context value="med"/>
+        <contextType value="variable"/>
+        <element value="title"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueString value="Medication Summary Section"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="setText"/>
+      <source>
+        <context value="lm"/>
+      </source>
+      <target>
+        <context value="med"/>
+        <contextType value="variable"/>
+        <element value="text"/>
+        <variable value="text"/>
+      </target>
+      <dependent>
+        <name value="generateNarrativeText"/>
+        <variable value="med"/>
+        <variable value="text"/>
+      </dependent>
+    </rule>
+    <rule>
+      <name value="setCode"/>
+      <source>
+        <context value="lm"/>
+      </source>
+      <target>
+        <contextType value="variable"/>
+        <variable value="coding"/>
+        <transform value="create"/>
+        <parameter>
+          <valueString value="Coding"/>
+        </parameter>
+      </target>
+      <target>
+        <context value="coding"/>
+        <contextType value="variable"/>
+        <element value="code"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueString value="10160-0"/>
+        </parameter>
+      </target>
+      <target>
+        <context value="coding"/>
+        <contextType value="variable"/>
+        <element value="system"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueString value="http://loinc.org"/>
+        </parameter>
+      </target>
+      <target>
+        <contextType value="variable"/>
+        <variable value="code"/>
+        <transform value="create"/>
+        <parameter>
+          <valueString value="CodeableConcept"/>
+        </parameter>
+      </target>
+      <target>
+        <context value="code"/>
+        <contextType value="variable"/>
+        <element value="coding"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="coding"/>
+        </parameter>
+      </target>
+      <target>
+        <context value="med"/>
+        <contextType value="variable"/>
+        <element value="code"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="code"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="setCode"/>
+      <source>
+        <context value="lm"/>
+      </source>
+      <target>
+        <contextType value="variable"/>
+        <variable value="coding"/>
+        <transform value="create"/>
+        <parameter>
+          <valueString value="Coding"/>
+        </parameter>
+      </target>
+      <target>
+        <context value="coding"/>
+        <contextType value="variable"/>
+        <element value="code"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueString value="unavailable"/>
+        </parameter>
+      </target>
+      <target>
+        <context value="coding"/>
+        <contextType value="variable"/>
+        <element value="system"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueString value="http://hl7.org/fhir/ValueSet/list-empty-reason"/>
+        </parameter>
+      </target>
+      <target>
+        <contextType value="variable"/>
+        <variable value="code"/>
+        <transform value="create"/>
+        <parameter>
+          <valueString value="CodeableConcept"/>
+        </parameter>
+      </target>
+      <target>
+        <context value="code"/>
+        <contextType value="variable"/>
+        <element value="coding"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="coding"/>
+        </parameter>
+      </target>
+      <target>
+        <context value="med"/>
+        <contextType value="variable"/>
+        <element value="emptyReason"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="code"/>
+        </parameter>
+      </target>
+    </rule>
+  </group>
+  <group>
+    <name value="createSectionAllergies"/>
+    <typeMode value="none"/>
+    <documentation value="create sectionAllergies"/>
+    <input>
+      <name value="lm"/>
+      <type value="DVCLogicalModel"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="all"/>
+      <type value="BackboneElement"/>
+      <mode value="target"/>
+    </input>
+    <input>
+      <name value="aid"/>
+      <mode value="source"/>
+    </input>
+    <rule>
+      <name value="setAllergyId"/>
+      <source>
+        <context value="aid"/>
+      </source>
+      <target>
+        <context value="all"/>
+        <contextType value="variable"/>
+        <element value="id"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="aid"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="setAllergyTitle"/>
+      <source>
+        <context value="lm"/>
+      </source>
+      <target>
+        <context value="all"/>
+        <contextType value="variable"/>
+        <element value="title"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueString value="Allergies Section"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="setText"/>
+      <source>
+        <context value="lm"/>
+      </source>
+      <target>
+        <context value="all"/>
+        <contextType value="variable"/>
+        <element value="text"/>
+        <variable value="text"/>
+      </target>
+      <dependent>
+        <name value="generateNarrativeText"/>
+        <variable value="all"/>
+        <variable value="text"/>
+      </dependent>
+    </rule>
+    <rule>
+      <name value="setCode"/>
+      <source>
+        <context value="lm"/>
+      </source>
+      <target>
+        <contextType value="variable"/>
+        <variable value="coding"/>
+        <transform value="create"/>
+        <parameter>
+          <valueString value="Coding"/>
+        </parameter>
+      </target>
+      <target>
+        <context value="coding"/>
+        <contextType value="variable"/>
+        <element value="code"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueString value="48765-2"/>
+        </parameter>
+      </target>
+      <target>
+        <context value="coding"/>
+        <contextType value="variable"/>
+        <element value="system"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueString value="http://loinc.org"/>
+        </parameter>
+      </target>
+      <target>
+        <contextType value="variable"/>
+        <variable value="code"/>
+        <transform value="create"/>
+        <parameter>
+          <valueString value="CodeableConcept"/>
+        </parameter>
+      </target>
+      <target>
+        <context value="code"/>
+        <contextType value="variable"/>
+        <element value="coding"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="coding"/>
+        </parameter>
+      </target>
+      <target>
+        <context value="all"/>
+        <contextType value="variable"/>
+        <element value="code"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="code"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="setCode"/>
+      <source>
+        <context value="lm"/>
+      </source>
+      <target>
+        <contextType value="variable"/>
+        <variable value="coding"/>
+        <transform value="create"/>
+        <parameter>
+          <valueString value="Coding"/>
+        </parameter>
+      </target>
+      <target>
+        <context value="coding"/>
+        <contextType value="variable"/>
+        <element value="code"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueString value="unavailable"/>
+        </parameter>
+      </target>
+      <target>
+        <context value="coding"/>
+        <contextType value="variable"/>
+        <element value="system"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueString value="http://hl7.org/fhir/ValueSet/list-empty-reason"/>
+        </parameter>
+      </target>
+      <target>
+        <contextType value="variable"/>
+        <variable value="code"/>
+        <transform value="create"/>
+        <parameter>
+          <valueString value="CodeableConcept"/>
+        </parameter>
+      </target>
+      <target>
+        <context value="code"/>
+        <contextType value="variable"/>
+        <element value="coding"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="coding"/>
+        </parameter>
+      </target>
+      <target>
+        <context value="all"/>
+        <contextType value="variable"/>
+        <element value="emptyReason"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="code"/>
+        </parameter>
+      </target>
+    </rule>
+  </group>
+  <group>
+    <name value="createSectionProblems"/>
+    <typeMode value="none"/>
+    <documentation value="create sectionProblems"/>
+    <input>
+      <name value="lm"/>
+      <type value="DVCLogicalModel"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="prb"/>
+      <type value="BackboneElement"/>
+      <mode value="target"/>
+    </input>
+    <input>
+      <name value="proid"/>
+      <mode value="source"/>
+    </input>
+    <rule>
+      <name value="setProblemsId"/>
+      <source>
+        <context value="proid"/>
+      </source>
+      <target>
+        <context value="prb"/>
+        <contextType value="variable"/>
+        <element value="id"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="proid"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="setProblemTitle"/>
+      <source>
+        <context value="lm"/>
+      </source>
+      <target>
+        <context value="prb"/>
+        <contextType value="variable"/>
+        <element value="title"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueString value="Problems Section"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="setText"/>
+      <source>
+        <context value="lm"/>
+      </source>
+      <target>
+        <context value="prb"/>
+        <contextType value="variable"/>
+        <element value="text"/>
+        <variable value="text"/>
+      </target>
+      <dependent>
+        <name value="generateNarrativeText"/>
+        <variable value="prb"/>
+        <variable value="text"/>
+      </dependent>
+    </rule>
+    <rule>
+      <name value="setCode"/>
+      <source>
+        <context value="lm"/>
+      </source>
+      <target>
+        <contextType value="variable"/>
+        <variable value="coding"/>
+        <transform value="create"/>
+        <parameter>
+          <valueString value="Coding"/>
+        </parameter>
+      </target>
+      <target>
+        <context value="coding"/>
+        <contextType value="variable"/>
+        <element value="code"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueString value="11450-4"/>
+        </parameter>
+      </target>
+      <target>
+        <context value="coding"/>
+        <contextType value="variable"/>
+        <element value="system"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueString value="http://loinc.org"/>
+        </parameter>
+      </target>
+      <target>
+        <contextType value="variable"/>
+        <variable value="code"/>
+        <transform value="create"/>
+        <parameter>
+          <valueString value="CodeableConcept"/>
+        </parameter>
+      </target>
+      <target>
+        <context value="code"/>
+        <contextType value="variable"/>
+        <element value="coding"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="coding"/>
+        </parameter>
+      </target>
+      <target>
+        <context value="prb"/>
+        <contextType value="variable"/>
+        <element value="code"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="code"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="setCode"/>
+      <source>
+        <context value="lm"/>
+      </source>
+      <target>
+        <contextType value="variable"/>
+        <variable value="coding"/>
+        <transform value="create"/>
+        <parameter>
+          <valueString value="Coding"/>
+        </parameter>
+      </target>
+      <target>
+        <context value="coding"/>
+        <contextType value="variable"/>
+        <element value="code"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueString value="unavailable"/>
+        </parameter>
+      </target>
+      <target>
+        <context value="coding"/>
+        <contextType value="variable"/>
+        <element value="system"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueString value="http://hl7.org/fhir/ValueSet/list-empty-reason"/>
+        </parameter>
+      </target>
+      <target>
+        <contextType value="variable"/>
+        <variable value="code"/>
+        <transform value="create"/>
+        <parameter>
+          <valueString value="CodeableConcept"/>
+        </parameter>
+      </target>
+      <target>
+        <context value="code"/>
+        <contextType value="variable"/>
+        <element value="coding"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="coding"/>
+        </parameter>
+      </target>
+      <target>
+        <context value="prb"/>
+        <contextType value="variable"/>
+        <element value="emptyReason"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="code"/>
+        </parameter>
+      </target>
+    </rule>
+  </group>
+  <group>
+    <name value="createSectionImmunizations"/>
+    <typeMode value="none"/>
+    <documentation value="create sectionImmunizations"/>
+    <input>
+      <name value="lm"/>
+      <type value="DVCLogicalModel"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="bundle"/>
+      <type value="Bundle"/>
+      <mode value="target"/>
+    </input>
+    <input>
+      <name value="composition"/>
+      <type value="Composition"/>
+      <mode value="target"/>
+    </input>
+    <input>
+      <name value="immid"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="pid"/>
+      <mode value="source"/>
+    </input>
+    <rule>
+      <name value="set"/>
+      <source>
+        <context value="lm"/>
+      </source>
+      <target>
+        <context value="composition"/>
+        <contextType value="variable"/>
+        <element value="section"/>
+        <variable value="imm"/>
+      </target>
+      <rule>
+        <name value="setImmunizationsId"/>
+        <source>
+          <context value="immid"/>
+        </source>
+        <target>
+          <context value="imm"/>
+          <contextType value="variable"/>
+          <element value="id"/>
+          <transform value="copy"/>
+          <parameter>
+            <valueId value="immid"/>
+          </parameter>
+        </target>
+      </rule>
+      <rule>
+        <name value="setImmunizationTitle"/>
+        <source>
+          <context value="lm"/>
+        </source>
+        <target>
+          <context value="imm"/>
+          <contextType value="variable"/>
+          <element value="title"/>
+          <transform value="copy"/>
+          <parameter>
+            <valueString value="Immunizations Section"/>
+          </parameter>
+        </target>
+      </rule>
+      <rule>
+        <name value="setText"/>
+        <source>
+          <context value="lm"/>
+        </source>
+        <target>
+          <context value="imm"/>
+          <contextType value="variable"/>
+          <element value="text"/>
+          <variable value="text"/>
+        </target>
+        <dependent>
+          <name value="generateNarrativeText"/>
+          <variable value="imm"/>
+          <variable value="text"/>
+        </dependent>
+      </rule>
+      <rule>
+        <name value="setCode"/>
+        <source>
+          <context value="lm"/>
+        </source>
+        <target>
+          <contextType value="variable"/>
+          <variable value="coding"/>
+          <transform value="create"/>
+          <parameter>
+            <valueString value="Coding"/>
+          </parameter>
+        </target>
+        <target>
+          <context value="coding"/>
+          <contextType value="variable"/>
+          <element value="code"/>
+          <transform value="copy"/>
+          <parameter>
+            <valueString value="11369-6"/>
+          </parameter>
+        </target>
+        <target>
+          <context value="coding"/>
+          <contextType value="variable"/>
+          <element value="system"/>
+          <transform value="copy"/>
+          <parameter>
+            <valueString value="http://loinc.org"/>
+          </parameter>
+        </target>
+        <target>
+          <contextType value="variable"/>
+          <variable value="code"/>
+          <transform value="create"/>
+          <parameter>
+            <valueString value="CodeableConcept"/>
+          </parameter>
+        </target>
+        <target>
+          <context value="code"/>
+          <contextType value="variable"/>
+          <element value="coding"/>
+          <transform value="copy"/>
+          <parameter>
+            <valueId value="coding"/>
+          </parameter>
+        </target>
+        <target>
+          <context value="imm"/>
+          <contextType value="variable"/>
+          <element value="code"/>
+          <transform value="copy"/>
+          <parameter>
+            <valueId value="code"/>
+          </parameter>
+        </target>
+      </rule>
+      <rule>
+        <name value="setImmz"/>
+        <source>
+          <context value="lm"/>
+          <element value="vaccineDetails"/>
+          <variable value="vax"/>
+        </source>
+        <target>
+          <contextType value="variable"/>
+          <variable value="id"/>
+          <transform value="uuid"/>
+        </target>
+        <target>
+          <context value="bundle"/>
+          <contextType value="variable"/>
+          <element value="entry"/>
+          <variable value="entry"/>
+        </target>
+        <target>
+          <context value="entry"/>
+          <contextType value="variable"/>
+          <element value="fullUrl"/>
+          <transform value="append"/>
+          <parameter>
+            <valueString value="urn:uuid:"/>
+          </parameter>
+          <parameter>
+            <valueId value="id"/>
+          </parameter>
+        </target>
+        <target>
+          <context value="imm"/>
+          <contextType value="variable"/>
+          <element value="entry"/>
+          <variable value="sectionEntry"/>
+        </target>
+        <target>
+          <context value="sectionEntry"/>
+          <contextType value="variable"/>
+          <element value="reference"/>
+          <transform value="append"/>
+          <parameter>
+            <valueString value="urn:uuid:"/>
+          </parameter>
+          <parameter>
+            <valueId value="id"/>
+          </parameter>
+        </target>
+        <target>
+          <context value="entry"/>
+          <contextType value="variable"/>
+          <element value="resource"/>
+          <variable value="immunization"/>
+          <transform value="create"/>
+          <parameter>
+            <valueString value="Immunization"/>
+          </parameter>
+        </target>
+        <target>
+          <context value="immunization"/>
+          <contextType value="variable"/>
+          <element value="id"/>
+          <transform value="copy"/>
+          <parameter>
+            <valueId value="id"/>
+          </parameter>
+        </target>
+        <dependent>
+          <name value="createImmunizationResource"/>
+          <variable value="vax"/>
+          <variable value="immunization"/>
+          <variable value="pid"/>
+        </dependent>
+      </rule>
+    </rule>
+  </group>
+  <group>
+    <name value="createImmunizationResource"/>
+    <typeMode value="none"/>
+    <input>
+      <name value="vax"/>
+      <type value="vaccineDetails"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="immunization"/>
+      <type value="Immunization"/>
+      <mode value="target"/>
+    </input>
+    <input>
+      <name value="pid"/>
+      <mode value="source"/>
+    </input>
+    <rule>
+      <name value="setStatus"/>
+      <source>
+        <context value="vax"/>
+      </source>
+      <target>
+        <context value="immunization"/>
+        <contextType value="variable"/>
+        <element value="status"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueString value="completed"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="setvaccinecode"/>
+      <source>
+        <context value="vax"/>
+        <element value="vaccineClassification"/>
+        <variable value="vaccine"/>
+      </source>
+      <target>
+        <context value="immunization"/>
+        <contextType value="variable"/>
+        <element value="vaccineCode"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="vaccine"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="setDate"/>
+      <source>
+        <context value="vax"/>
+        <element value="date"/>
+        <variable value="date"/>
+      </source>
+      <target>
+        <context value="immunization"/>
+        <contextType value="variable"/>
+        <element value="occurrence"/>
+        <transform value="append"/>
+        <parameter>
+          <valueId value="date"/>
+        </parameter>
+        <parameter>
+          <valueString value="T00:00:00.000Z"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="setBatchNo"/>
+      <source>
+        <context value="vax"/>
+        <element value="batchNo"/>
+        <variable value="batchNo"/>
+      </source>
+      <target>
+        <context value="immunization"/>
+        <contextType value="variable"/>
+        <element value="lotNumber"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="batchNo"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="setProtocolApplied"/>
+      <source>
+        <context value="vax"/>
+      </source>
+      <target>
+        <context value="immunization"/>
+        <contextType value="variable"/>
+        <element value="protocolApplied"/>
+        <variable value="protocol"/>
+      </target>
+      <rule>
+        <name value="setDoseNo"/>
+        <source>
+          <context value="vax"/>
+          <element value="doseNumber"/>
+          <variable value="doseNo"/>
+        </source>
+        <rule>
+          <name value="setDoseNo"/>
+          <source>
+            <context value="doseNo"/>
+            <element value="coding"/>
+            <variable value="coding"/>
+          </source>
+          <rule>
+            <name value="setDoseNo"/>
+            <source>
+              <context value="coding"/>
+              <element value="code"/>
+              <variable value="code"/>
+            </source>
+            <target>
+              <context value="protocol"/>
+              <contextType value="variable"/>
+              <element value="doseNumber"/>
+              <transform value="copy"/>
+              <parameter>
+                <valueId value="code"/>
+              </parameter>
+            </target>
+          </rule>
+        </rule>
+      </rule>
+      <rule>
+        <name value="setTargetDisease"/>
+        <source>
+          <context value="vax"/>
+          <element value="disease"/>
+          <variable value="disease"/>
+        </source>
+        <target>
+          <contextType value="variable"/>
+          <variable value="code"/>
+          <transform value="create"/>
+          <parameter>
+            <valueString value="CodeableConcept"/>
+          </parameter>
+        </target>
+        <target>
+          <context value="code"/>
+          <contextType value="variable"/>
+          <element value="coding"/>
+          <transform value="copy"/>
+          <parameter>
+            <valueId value="disease"/>
+          </parameter>
+        </target>
+        <target>
+          <context value="protocol"/>
+          <contextType value="variable"/>
+          <element value="targetDisease"/>
+          <transform value="copy"/>
+          <parameter>
+            <valueId value="code"/>
+          </parameter>
+        </target>
+      </rule>
+    </rule>
+    <rule>
+      <name value="setSubject"/>
+      <source>
+        <context value="vax"/>
+      </source>
+      <target>
+        <context value="immunization"/>
+        <contextType value="variable"/>
+        <element value="patient"/>
+        <variable value="subject"/>
+      </target>
+      <target>
+        <context value="subject"/>
+        <contextType value="variable"/>
+        <element value="reference"/>
+        <transform value="append"/>
+        <parameter>
+          <valueString value="urn:uuid:"/>
+        </parameter>
+        <parameter>
+          <valueId value="pid"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="set Manufacturer"/>
+      <source>
+        <context value="vax"/>
+        <element value="manufacturerId"/>
+        <variable value="maId"/>
+      </source>
+      <target>
+        <contextType value="variable"/>
+        <variable value="maRef"/>
+        <transform value="create"/>
+        <parameter>
+          <valueString value="Reference"/>
+        </parameter>
+      </target>
+      <target>
+        <context value="maRef"/>
+        <contextType value="variable"/>
+        <element value="identifier"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="maId"/>
+        </parameter>
+      </target>
+      <target>
+        <context value="immunization"/>
+        <contextType value="variable"/>
+        <element value="manufacturer"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="maRef"/>
+        </parameter>
+      </target>
+    </rule>
+  </group>
+  <group>
+    <name value="generateNarrativeText"/>
+    <typeMode value="none"/>
+    <documentation value="helper function"/>
+    <input>
+      <name value="src"/>
+      <type value="Section"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="text"/>
+      <type value="string"/>
+      <mode value="target"/>
+    </input>
+    <rule>
+      <name value="setstatus"/>
+      <source>
+        <context value="src"/>
+      </source>
+      <target>
+        <context value="text"/>
+        <contextType value="variable"/>
+        <element value="status"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueString value="empty"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="setdiv"/>
+      <source>
+        <context value="src"/>
+      </source>
+      <target>
+        <context value="text"/>
+        <contextType value="variable"/>
+        <element value="div"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueString value="&lt;div xmlns=&quot;http://www.w3.org/1999/xhtml&quot;&gt;Narrative not available&lt;/div&gt;"/>
+        </parameter>
+      </target>
+    </rule>
+  </group>
+  <group>
+    <name value="nameToHumanName"/>
+    <typeMode value="none"/>
+    <input>
+      <name value="sourceName"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="targetName"/>
+      <type value="HumanName"/>
+      <mode value="target"/>
+    </input>
+    <rule>
+      <name value="Patient Name"/>
+      <source>
+        <context value="sourceName"/>
+        <variable value="patientName"/>
+      </source>
+      <target>
+        <context value="targetName"/>
+        <contextType value="variable"/>
+        <element value="text"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="patientName"/>
+        </parameter>
+      </target>
+    </rule>
+  </group>
+  <group>
+    <name value="humanNameToHumanName"/>
+    <typeMode value="none"/>
+    <input>
+      <name value="sourceName"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="targetName"/>
+      <type value="HumanName"/>
+      <mode value="target"/>
+    </input>
+    <rule>
+      <name value="CopyUse"/>
+      <source>
+        <context value="sourceName"/>
+        <element value="use"/>
+        <variable value="use"/>
+      </source>
+      <target>
+        <context value="targetName"/>
+        <contextType value="variable"/>
+        <element value="use"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="use"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="CopyText"/>
+      <source>
+        <context value="sourceName"/>
+        <element value="text"/>
+        <variable value="text"/>
+      </source>
+      <target>
+        <context value="targetName"/>
+        <contextType value="variable"/>
+        <element value="text"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="text"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="CopyFamily"/>
+      <source>
+        <context value="sourceName"/>
+        <element value="family"/>
+        <variable value="family"/>
+      </source>
+      <target>
+        <context value="targetName"/>
+        <contextType value="variable"/>
+        <element value="family"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="family"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="CopyGiven"/>
+      <source>
+        <context value="sourceName"/>
+        <element value="given"/>
+        <variable value="given"/>
+      </source>
+      <target>
+        <context value="targetName"/>
+        <contextType value="variable"/>
+        <element value="given"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="given"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="CopyPrefix"/>
+      <source>
+        <context value="sourceName"/>
+        <element value="prefix"/>
+        <variable value="prefix"/>
+      </source>
+      <target>
+        <context value="targetName"/>
+        <contextType value="variable"/>
+        <element value="prefix"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="prefix"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="CopySuffix"/>
+      <source>
+        <context value="sourceName"/>
+        <element value="suffix"/>
+        <variable value="suffix"/>
+      </source>
+      <target>
+        <context value="targetName"/>
+        <contextType value="variable"/>
+        <element value="suffix"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="suffix"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="copyPeriod"/>
+      <source>
+        <context value="sourceName"/>
+        <element value="period"/>
+        <variable value="sourcePeriod"/>
+      </source>
+      <target>
+        <context value="targetName"/>
+        <contextType value="variable"/>
+        <element value="period"/>
+        <variable value="targetPeriod"/>
+      </target>
+      <rule>
+        <name value="CopyPeriod"/>
+        <source>
+          <context value="sourcePeriod"/>
+        </source>
+        <dependent>
+          <name value="periodToPeriod"/>
+          <variable value="sourcePeriod"/>
+          <variable value="targetPeriod"/>
+        </dependent>
+      </rule>
+    </rule>
+  </group>
+  <group>
+    <name value="periodToPeriod"/>
+    <typeMode value="none"/>
+    <input>
+      <name value="sourcePeriod"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="targetPeriod"/>
+      <type value="Period"/>
+      <mode value="target"/>
+    </input>
+    <rule>
+      <name value="set period start"/>
+      <source>
+        <context value="sourcePeriod"/>
+        <element value="start"/>
+        <variable value="start"/>
+      </source>
+      <target>
+        <context value="targetPeriod"/>
+        <contextType value="variable"/>
+        <element value="start"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="start"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="set period end"/>
+      <source>
+        <context value="sourcePeriod"/>
+        <element value="end"/>
+        <variable value="end"/>
+      </source>
+      <target>
+        <context value="targetPeriod"/>
+        <contextType value="variable"/>
+        <element value="end"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="end"/>
+        </parameter>
+      </target>
+    </rule>
+  </group>
+</StructureMap>

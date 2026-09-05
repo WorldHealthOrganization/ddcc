@@ -1,0 +1,1406 @@
+@prefix fhir: <http://hl7.org/fhir/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# - resource -------------------------------------------------------------------
+
+<http://smart.who.int/ddcc/StructureMap/CertDIVOCtoCoreDataSet> a fhir:StructureMap ;
+  fhir:nodeRole fhir:treeRoot ;
+  fhir:Resource.id [ fhir:value "CertDIVOCtoCoreDataSet"] ;
+  fhir:DomainResource.text [
+     fhir:Narrative.status [ fhir:value "generated" ] ;
+     fhir:Narrative.div "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p class=\"res-header-id\"><b>Generated Narrative: StructureMap CertDIVOCtoCoreDataSet</b></p><a name=\"CertDIVOCtoCoreDataSet\"> </a><a name=\"hcCertDIVOCtoCoreDataSet\"> </a><pre class=\"fml\">#xD;\n<b>map</b><span style=\"color: navy\"> \"</span>http://smart.who.int/ddcc/StructureMap/CertDIVOCtoCoreDataSet<span style=\"color: navy\">\" = \"</span>CertDIVOCtoCoreDataSet<span style=\"color: navy\">\"#xD;\n#xD;\n</span><span style=\"color: navy\">// </span><span style=\"color: green\">Structure map transforming CertDIVOC logical model to bundle of Core Data Set logical model</span>#xD;\n#xD;\n<b>uses</b><span style=\"color: navy\"> \"</span><a href=\"StructureDefinition-CertDIVOC.html\" title=\"Certificate - DIVOC Verifiable Credential Logical Model\">http://smart.who.int/ddcc/StructureDefinition/CertDIVOC</a><span style=\"color: navy\">\" </span><b>alias </b>DIVOC <b>as </b><b>source</b>#xD;\n<b>uses</b><span style=\"color: navy\"> \"</span><a href=\"http://hl7.org/fhir/R4/bundle.html\" title=\"Bundle\">http://hl7.org/fhir/StructureDefinition/Bundle</a><span style=\"color: navy\">\" </span><b>alias </b>DDCCBundle <b>as </b><b>target</b>#xD;\n<b>uses</b><span style=\"color: navy\"> \"</span><a href=\"StructureDefinition-DDCCCoreDataSet.html\" title=\"DDCC Core Data Set Logical Model\">http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet</a><span style=\"color: navy\">\" </span><b>alias </b>DDCC <b>as </b><b>target</b>#xD;\n<b>uses</b><span style=\"color: navy\"> \"</span><a href=\"StructureDefinition-DDCCCoreDataSetVS.html\" title=\"DDCC Core Data Set Logical Model for Vaccination Status\">http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSetVS</a><span style=\"color: navy\">\" </span><b>alias </b>DDCCVS <b>as </b><b>target</b>#xD;\n<b>uses</b><span style=\"color: navy\"> \"</span><a href=\"StructureDefinition-DDCCCoreDataSetTR.html\" title=\"DDCC Core Data Set Logical Model for Test Result\">http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSetTR</a><span style=\"color: navy\">\" </span><b>alias </b>DDCCTR <b>as </b><b>target</b>#xD;\n#xD;\n<b>group </b>CertDIVOCtoCoreDataSetBundle<span style=\"color: navy\">(</span><b>source</b> <span style=\"color: maroon\">src</span><span style=\"color: navy\"> : </span>DIVOC, <b>target</b> <span style=\"color: maroon\">ddccBundle</span><span style=\"color: navy\"> : </span>DDCCBundle<span style=\"color: navy\">)</span><span style=\"color: navy\"> {#xD;\n</span>  src.type<b> as </b><span style=\"color: maroon\">type</span><b> then</b><span style=\"color: navy\"> {#xD;\n</span>    type<b> where </b><span style=\"color: navy\">(</span>type = 'ProofOfVaccinationCredential'<span style=\"color: navy\">)</span><b> then</b><span style=\"color: navy\"> {#xD;\n</span>      src.evidence<b> as </b><span style=\"color: maroon\">evidence</span><span style=\"color: navy\"><b> -&gt; </b></span> ddccBundle.entry<b> as </b><span style=\"color: maroon\">outentry</span><span style=\"color: navy\">, </span> <b>create</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSetVS'</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">ddcc</span><b> then</b><span style=\"color: navy\"> {#xD;\n</span>        src.credentialSubject<b> as </b><span style=\"color: maroon\">credentialSubject</span><b> then </b>CredentialSubjecttoCoreDataSet<span style=\"color: navy\">(</span><span style=\"color: maroon\">credentialSubject</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">ddcc</span><span style=\"color: navy\">)</span> <i>\"set patient\"</i><span style=\"color: navy\">;</span>#xD;\n        src<span style=\"color: navy\"><b> -&gt; </b></span>ddcc.certificate<b> as </b><span style=\"color: maroon\">certificate</span><b> then </b>CertDIVOCtoCoreDataSetCertificate<span style=\"color: navy\">(</span><span style=\"color: maroon\">src</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">evidence</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">certificate</span><span style=\"color: navy\">)</span> <i>\"set certificate\"</i><span style=\"color: navy\">;</span>#xD;\n        evidence<span style=\"color: navy\"><b> -&gt; </b></span>ddcc.vaccination<b> as </b><span style=\"color: maroon\">vaccination</span><b> then </b>EvidencetoCoreDataSetVS<span style=\"color: navy\">(</span><span style=\"color: maroon\">evidence</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">vaccination</span><span style=\"color: navy\">)</span> <i>\"set vaccination\"</i><span style=\"color: navy\">;</span>#xD;\n        evidence<span style=\"color: navy\"><b> -&gt; </b></span>outentry.resource = <span style=\"color: maroon\">ddcc</span> <i>\"set outentry\"</i><span style=\"color: navy\">;</span>#xD;\n      <span style=\"color: navy\">}</span><span style=\"color: navy\">;</span>#xD;\n    <span style=\"color: navy\">}</span> <i>\"ProofOfVaccinationCredential\"</i><span style=\"color: navy\">;</span>#xD;\n    type<b> where </b><span style=\"color: navy\">(</span>type = 'ProofOfTestCertificateCredential'<span style=\"color: navy\">)</span><b> then</b><span style=\"color: navy\"> {#xD;\n</span>      src.evidence<b> as </b><span style=\"color: maroon\">evidence</span><span style=\"color: navy\"><b> -&gt; </b></span> ddccBundle.entry<b> as </b><span style=\"color: maroon\">outentry</span><span style=\"color: navy\">, </span> <b>create</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSetTR'</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">ddcc</span><b> then</b><span style=\"color: navy\"> {#xD;\n</span>        src.credentialSubject<b> as </b><span style=\"color: maroon\">credentialSubject</span><b> then </b>CredentialSubjecttoCoreDataSet<span style=\"color: navy\">(</span><span style=\"color: maroon\">credentialSubject</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">ddcc</span><span style=\"color: navy\">)</span> <i>\"set patient\"</i><span style=\"color: navy\">;</span>#xD;\n        src<span style=\"color: navy\"><b> -&gt; </b></span>ddcc.certificate<b> as </b><span style=\"color: maroon\">certificate</span><b> then </b>CertDIVOCtoCoreDataSetCertificate<span style=\"color: navy\">(</span><span style=\"color: maroon\">src</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">evidence</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">certificate</span><span style=\"color: navy\">)</span> <i>\"set certificate\"</i><span style=\"color: navy\">;</span>#xD;\n        evidence<span style=\"color: navy\"><b> -&gt; </b></span>ddcc.test<b> as </b><span style=\"color: maroon\">test</span><b> then </b>EvidencetoCoreDataSetTR<span style=\"color: navy\">(</span><span style=\"color: maroon\">evidence</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">test</span><span style=\"color: navy\">)</span> <i>\"set test\"</i><span style=\"color: navy\">;</span>#xD;\n        evidence<span style=\"color: navy\"><b> -&gt; </b></span>outentry.resource = <span style=\"color: maroon\">ddcc</span> <i>\"set outentry\"</i><span style=\"color: navy\">;</span>#xD;\n      <span style=\"color: navy\">}</span><span style=\"color: navy\">;</span>#xD;\n    <span style=\"color: navy\">}</span> <i>\"ProofOfTestCertificateCredential\"</i><span style=\"color: navy\">;</span>#xD;\n  <span style=\"color: navy\">}</span><span style=\"color: navy\">;</span>#xD;\n<span style=\"color: navy\">}#xD;\n#xD;\n</span><b>group </b>CredentialSubjecttoCoreDataSet<span style=\"color: navy\">(</span><b>source</b> <span style=\"color: maroon\">credentialSubject</span>, <b>target</b> <span style=\"color: maroon\">ddcc</span><span style=\"color: navy\"> : </span>DDCC<span style=\"color: navy\">)</span><span style=\"color: navy\"> {#xD;\n</span>  credentialSubject.name<b> as </b><span style=\"color: maroon\">name</span><span style=\"color: navy\"><b> -&gt; </b></span>ddcc.name = <span style=\"color: maroon\">name</span> <i>\"set name\"</i><span style=\"color: navy\">;</span>#xD;\n  credentialSubject.dob<b> as </b><span style=\"color: maroon\">birthDate</span><span style=\"color: navy\"><b> -&gt; </b></span>ddcc.birthDate = <span style=\"color: maroon\">birthDate</span> <i>\"set birthDate\"</i><span style=\"color: navy\">;</span>#xD;\n  credentialSubject.id<b> as </b><span style=\"color: maroon\">id</span><span style=\"color: navy\"><b> -&gt; </b></span> <b>create</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'Identifier'</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">identifier</span><span style=\"color: navy\">, </span> identifier.value = <span style=\"color: maroon\">id</span><b> then</b><span style=\"color: navy\"> {#xD;\n</span>    id<span style=\"color: navy\"><b> -&gt; </b></span>ddcc.identifier = <span style=\"color: maroon\">identifier</span> <i>\"set identifier\"</i><span style=\"color: navy\">;</span>#xD;\n  <span style=\"color: navy\">}</span> <i>\"identifier\"</i><span style=\"color: navy\">;</span>#xD;\n<span style=\"color: navy\">}#xD;\n#xD;\n</span><b>group </b>CertDIVOCtoCoreDataSetCertificate<span style=\"color: navy\">(</span><b>source</b> <span style=\"color: maroon\">src</span><span style=\"color: navy\"> : </span>DIVOC, <b>source</b> <span style=\"color: maroon\">evidence</span>, <b>target</b> <span style=\"color: maroon\">certificate</span><span style=\"color: navy\">)</span><span style=\"color: navy\"> {#xD;\n</span>  evidence.certificateId<b> as </b><span style=\"color: maroon\">certificateId</span><span style=\"color: navy\"><b> -&gt; </b></span> certificate.hcid<b> as </b><span style=\"color: maroon\">hcid</span><span style=\"color: navy\">, </span> hcid.value = <span style=\"color: maroon\">certificateId</span> <i>\"set hcid\"</i><span style=\"color: navy\">;</span>#xD;\n  src.context<b> as </b><span style=\"color: maroon\">context</span><b> then</b><span style=\"color: navy\"> {#xD;\n</span>    context<b> where </b><span style=\"color: navy\">(</span>context.contains('cowin.gov.in')<span style=\"color: navy\">)</span><span style=\"color: navy\"><b> -&gt; </b></span>certificate.version = <span style=\"color: maroon\">context</span> <i>\"set version\"</i><span style=\"color: navy\">;</span>#xD;\n  <span style=\"color: navy\">}</span><span style=\"color: navy\">;</span>#xD;\n  evidence<span style=\"color: navy\"><b> -&gt; </b></span>certificate.period = <b>create</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'Period'</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">period</span><b> then</b><span style=\"color: navy\"> {#xD;\n</span>    evidence.effectiveStart<b> as </b><span style=\"color: maroon\">effectiveStart</span><span style=\"color: navy\"><b> -&gt; </b></span>period.start = <span style=\"color: maroon\">effectiveStart</span> <i>\"set period start\"</i><span style=\"color: navy\">;</span>#xD;\n    evidence.effectiveUntil<b> as </b><span style=\"color: maroon\">effectiveUntil</span><span style=\"color: navy\"><b> -&gt; </b></span>period.end = <span style=\"color: maroon\">effectiveUntil</span> <i>\"set period end\"</i><span style=\"color: navy\">;</span>#xD;\n  <span style=\"color: navy\">}</span> <i>\"period\"</i><span style=\"color: navy\">;</span>#xD;\n  src.issuer<b> as </b><span style=\"color: maroon\">issuer</span><span style=\"color: navy\"><b> -&gt; </b></span> certificate.issuer = <b>create</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'Reference'</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">issuer</span><span style=\"color: navy\">, </span> issuer.display = <span style=\"color: maroon\">issuer</span> <i>\"set issuer\"</i><span style=\"color: navy\">;</span>#xD;\n<span style=\"color: navy\">}#xD;\n#xD;\n</span><b>group </b>EvidencetoCoreDataSetVS<span style=\"color: navy\">(</span><b>source</b> <span style=\"color: maroon\">evidence</span>, <b>target</b> <span style=\"color: maroon\">vaccination</span><span style=\"color: navy\">)</span><span style=\"color: navy\"> {#xD;\n</span>  evidence.icd11Code<b> as </b><span style=\"color: maroon\">icd11Code</span><span style=\"color: navy\"><b> -&gt; </b></span> vaccination.vaccine<b> as </b><span style=\"color: maroon\">coding</span><span style=\"color: navy\">, </span> coding.system = <span style=\"color: blue\">'http://id.who.int/icd11/mms'</span><span style=\"color: navy\">, </span> coding.code = <span style=\"color: maroon\">icd11Code</span> <i>\"set vaccine\"</i><span style=\"color: navy\">;</span>#xD;\n  evidence.vaccine<b> as </b><span style=\"color: maroon\">vaccine</span><span style=\"color: navy\"><b> -&gt; </b></span> vaccination.brand<b> as </b><span style=\"color: maroon\">coding</span><span style=\"color: navy\">, </span> coding.code = <span style=\"color: maroon\">vaccine</span> <i>\"set brand\"</i><span style=\"color: navy\">;</span>#xD;\n  evidence.manufacturer<b> as </b><span style=\"color: maroon\">manufacturer</span><span style=\"color: navy\"><b> -&gt; </b></span> vaccination.manufacturer<b> as </b><span style=\"color: maroon\">coding</span><span style=\"color: navy\">, </span> coding.code = <span style=\"color: maroon\">manufacturer</span> <i>\"set manufacturer\"</i><span style=\"color: navy\">;</span>#xD;\n  evidence.batch<b> as </b><span style=\"color: maroon\">batch</span><span style=\"color: navy\"><b> -&gt; </b></span>vaccination.lot = <span style=\"color: maroon\">batch</span> <i>\"set lot\"</i><span style=\"color: navy\">;</span>#xD;\n  evidence.date<b> as </b><span style=\"color: maroon\">date</span><span style=\"color: navy\"><b> -&gt; </b></span>vaccination.date = <span style=\"color: maroon\">date</span> <i>\"set date\"</i><span style=\"color: navy\">;</span>#xD;\n  evidence.dose<b> as </b><span style=\"color: maroon\">dose</span><span style=\"color: navy\"><b> -&gt; </b></span>vaccination.dose = <span style=\"color: maroon\">dose</span> <i>\"set dose\"</i><span style=\"color: navy\">;</span>#xD;\n  evidence.totalDoses<b> as </b><span style=\"color: maroon\">totalDoses</span><span style=\"color: navy\"><b> -&gt; </b></span>vaccination.totalDoses = <span style=\"color: maroon\">totalDoses</span> <i>\"set totalDoses\"</i><span style=\"color: navy\">;</span>#xD;\n  evidence.facility<b> as </b><span style=\"color: maroon\">facility</span><b> then</b><span style=\"color: navy\"> {#xD;\n</span>    facility.address<b> as </b><span style=\"color: maroon\">address</span><b> then</b><span style=\"color: navy\"> {#xD;\n</span>      address.addressCountry<b> as </b><span style=\"color: maroon\">addressCountry</span><span style=\"color: navy\"><b> -&gt; </b></span> vaccination.country<b> as </b><span style=\"color: maroon\">coding</span><span style=\"color: navy\">, </span> coding.system = <span style=\"color: blue\">'urn:iso:std:iso:3166'</span><span style=\"color: navy\">, </span> coding.code = <span style=\"color: maroon\">addressCountry</span> <i>\"set country\"</i><span style=\"color: navy\">;</span>#xD;\n    <span style=\"color: navy\">}</span><span style=\"color: navy\">;</span>#xD;\n    facility.name<b> as </b><span style=\"color: maroon\">name</span><span style=\"color: navy\"><b> -&gt; </b></span>vaccination.centre = <span style=\"color: maroon\">name</span> <i>\"set centre\"</i><span style=\"color: navy\">;</span>#xD;\n  <span style=\"color: navy\">}</span><span style=\"color: navy\">;</span>#xD;\n  evidence.verifier<b> as </b><span style=\"color: maroon\">verifier</span><b> then</b><span style=\"color: navy\"> {#xD;\n</span>    verifier.name<b> as </b><span style=\"color: maroon\">name</span><span style=\"color: navy\"><b> -&gt; </b></span> vaccination.practitioner<b> as </b><span style=\"color: maroon\">practitioner</span><span style=\"color: navy\">, </span> practitioner.value = <span style=\"color: maroon\">name</span> <i>\"set practitioner\"</i><span style=\"color: navy\">;</span>#xD;\n  <span style=\"color: navy\">}</span><span style=\"color: navy\">;</span>#xD;\n<span style=\"color: navy\">}#xD;\n#xD;\n</span><b>group </b>EvidencetoCoreDataSetTR<span style=\"color: navy\">(</span><b>source</b> <span style=\"color: maroon\">evidence</span>, <b>target</b> <span style=\"color: maroon\">test</span><span style=\"color: navy\">)</span><span style=\"color: navy\"> {#xD;\n</span>  evidence.disease<b> as </b><span style=\"color: maroon\">disease</span><b> then</b><span style=\"color: navy\"> {#xD;\n</span>    disease<b> where </b><span style=\"color: navy\">(</span>disease = 'COVID-19'<span style=\"color: navy\">)</span><span style=\"color: navy\"><b> -&gt; </b></span> test.pathogen<b> as </b><span style=\"color: maroon\">coding</span><span style=\"color: navy\">, </span> coding.system = <span style=\"color: blue\">'http://id.who.int/icd11/mms'</span><span style=\"color: navy\">, </span> coding.code = <span style=\"color: blue\">'XN109'</span> <i>\"set COVID19 pathogen\"</i><span style=\"color: navy\">;</span>#xD;\n    disease<b> where </b><span style=\"color: navy\">(</span>(disease = 'COVID-19').not()<span style=\"color: navy\">)</span><span style=\"color: navy\"><b> -&gt; </b></span> test.pathogen<b> as </b><span style=\"color: maroon\">coding</span><span style=\"color: navy\">, </span> coding.code = <span style=\"color: maroon\">disease</span> <i>\"set other pathogen\"</i><span style=\"color: navy\">;</span>#xD;\n  <span style=\"color: navy\">}</span><span style=\"color: navy\">;</span>#xD;\n  evidence.testType<b> as </b><span style=\"color: maroon\">testType</span><b> then</b><span style=\"color: navy\"> {#xD;\n</span>    testType<span style=\"color: navy\"><b> -&gt; </b></span> test.type<b> as </b><span style=\"color: maroon\">coding</span><span style=\"color: navy\">, </span> coding.code = <span style=\"color: maroon\">testType</span> <i>\"set default type\"</i><span style=\"color: navy\">;</span>#xD;\n    testType<span style=\"color: navy\"><b> -&gt; </b></span><b>c</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'http://smart.who.int/ddcc/CodeSystem/lab-test-type-divoc'</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">testType</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">coded</span><b> then</b><span style=\"color: navy\"> {#xD;\n</span>      testType<b> where </b><span style=\"color: navy\">(</span>coded.memberOf('http://smart.who.int/ddcc/ValueSet/lab-test-type-divoc')<span style=\"color: navy\">)</span><span style=\"color: navy\"><b> -&gt; </b></span>test.type = <b>translate</b><span style=\"color: navy\">(</span><span style=\"color: maroon\">coded</span><span style=\"color: navy\">, </span><span style=\"color: blue\">'http://smart.who.int/ddcc/ConceptMap/lab-test-type-divoc-to-icd11'</span><span style=\"color: navy\">, </span><span style=\"color: blue\">'Coding'</span><span style=\"color: navy\">)</span> <i>\"translate DIVOC type\"</i><span style=\"color: navy\">;</span>#xD;\n    <span style=\"color: navy\">}</span> <i>\"coding\"</i><span style=\"color: navy\">;</span>#xD;\n  <span style=\"color: navy\">}</span><span style=\"color: navy\">;</span>#xD;\n  evidence.sampleOrigin<b> as </b><span style=\"color: maroon\">sampleOrigin</span><b> then</b><span style=\"color: navy\"> {#xD;\n</span>    sampleOrigin<span style=\"color: navy\"><b> -&gt; </b></span> test.origin<b> as </b><span style=\"color: maroon\">coding</span><span style=\"color: navy\">, </span> coding.code = <span style=\"color: maroon\">sampleOrigin</span> <i>\"set default origin\"</i><span style=\"color: navy\">;</span>#xD;\n    sampleOrigin<span style=\"color: navy\"><b> -&gt; </b></span><b>c</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'http://smart.who.int/ddcc/CodeSystem/lab-test-sample-origin-divoc'</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">sampleOrigin</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">coded</span><b> then</b><span style=\"color: navy\"> {#xD;\n</span>      sampleOrigin<b> where </b><span style=\"color: navy\">(</span>coded.memberOf('http://smart.who.int/ddcc/ValueSet/lab-test-sample-origin-divoc')<span style=\"color: navy\">)</span><span style=\"color: navy\"><b> -&gt; </b></span>test.origin = <b>translate</b><span style=\"color: navy\">(</span><span style=\"color: maroon\">coded</span><span style=\"color: navy\">, </span><span style=\"color: blue\">'http://smart.who.int/ddcc/ConceptMap/lab-test-sample-origin-divoc-to-icd11'</span><span style=\"color: navy\">, </span><span style=\"color: blue\">'Coding'</span><span style=\"color: navy\">)</span> <i>\"translate DIVOC origin\"</i><span style=\"color: navy\">;</span>#xD;\n    <span style=\"color: navy\">}</span> <i>\"coding\"</i><span style=\"color: navy\">;</span>#xD;\n  <span style=\"color: navy\">}</span><span style=\"color: navy\">;</span>#xD;\n  evidence.result<b> as </b><span style=\"color: maroon\">result</span><b> then</b><span style=\"color: navy\"> {#xD;\n</span>    result<span style=\"color: navy\"><b> -&gt; </b></span> test.result<b> as </b><span style=\"color: maroon\">coding</span><span style=\"color: navy\">, </span> coding.code = <span style=\"color: maroon\">result</span> <i>\"set default result\"</i><span style=\"color: navy\">;</span>#xD;\n    result<span style=\"color: navy\"><b> -&gt; </b></span><b>c</b><span style=\"color: navy\">(</span><span style=\"color: blue\">'http://smart.who.int/ddcc/CodeSystem/lab-test-qual-result-divoc'</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">result</span><span style=\"color: navy\">)</span><b> as </b><span style=\"color: maroon\">coded</span><b> then</b><span style=\"color: navy\"> {#xD;\n</span>      result<b> where </b><span style=\"color: navy\">(</span>coded.memberOf('http://smart.who.int/ddcc/ValueSet/lab-test-qual-result-divoc')<span style=\"color: navy\">)</span><span style=\"color: navy\"><b> -&gt; </b></span>test.result = <b>translate</b><span style=\"color: navy\">(</span><span style=\"color: maroon\">coded</span><span style=\"color: navy\">, </span><span style=\"color: blue\">'http://smart.who.int/ddcc/ConceptMap/lab-test-qual-result-divoc-to-icd11'</span><span style=\"color: navy\">, </span><span style=\"color: blue\">'Coding'</span><span style=\"color: navy\">)</span> <i>\"translate DIVOC result\"</i><span style=\"color: navy\">;</span>#xD;\n    <span style=\"color: navy\">}</span> <i>\"coded\"</i><span style=\"color: navy\">;</span>#xD;\n  <span style=\"color: navy\">}</span><span style=\"color: navy\">;</span>#xD;\n  evidence.sampleCollectionTimestamp<b> as </b><span style=\"color: maroon\">date</span><span style=\"color: navy\"><b> -&gt; </b></span>test.date = <span style=\"color: maroon\">date</span> <i>\"set date\"</i><span style=\"color: navy\">;</span>#xD;\n  evidence.testName<b> as </b><span style=\"color: maroon\">testName</span><span style=\"color: navy\"><b> -&gt; </b></span> test.brand<b> as </b><span style=\"color: maroon\">coding</span><span style=\"color: navy\">, </span> coding.code = <span style=\"color: maroon\">testName</span> <i>\"set brand\"</i><span style=\"color: navy\">;</span>#xD;\n  evidence.manufacturer<b> as </b><span style=\"color: maroon\">manufacturer</span><span style=\"color: navy\"><b> -&gt; </b></span> test.manufacturer<b> as </b><span style=\"color: maroon\">coding</span><span style=\"color: navy\">, </span> coding.code = <span style=\"color: maroon\">manufacturer</span> <i>\"set manufacturer\"</i><span style=\"color: navy\">;</span>#xD;\n  evidence.facility<b> as </b><span style=\"color: maroon\">facility</span><b> then</b><span style=\"color: navy\"> {#xD;\n</span>    facility.address<b> as </b><span style=\"color: maroon\">address</span><b> then</b><span style=\"color: navy\"> {#xD;\n</span>      address.addressCountry<b> as </b><span style=\"color: maroon\">addressCountry</span><span style=\"color: navy\"><b> -&gt; </b></span> test.country<b> as </b><span style=\"color: maroon\">coding</span><span style=\"color: navy\">, </span> coding.system = <span style=\"color: blue\">'urn:iso:std:iso:3166'</span><span style=\"color: navy\">, </span> coding.code = <span style=\"color: maroon\">addressCountry</span> <i>\"set country\"</i><span style=\"color: navy\">;</span>#xD;\n    <span style=\"color: navy\">}</span><span style=\"color: navy\">;</span>#xD;\n    facility.name<b> as </b><span style=\"color: maroon\">name</span><span style=\"color: navy\"><b> -&gt; </b></span> test.centre<b> as </b><span style=\"color: maroon\">coding</span><span style=\"color: navy\">, </span> coding.code = <span style=\"color: maroon\">name</span> <i>\"set centre\"</i><span style=\"color: navy\">;</span>#xD;\n  <span style=\"color: navy\">}</span><span style=\"color: navy\">;</span>#xD;\n<span style=\"color: navy\">}#xD;\n#xD;\n</span></pre></div>"
+  ] ;
+  fhir:StructureMap.url [ fhir:value "http://smart.who.int/ddcc/StructureMap/CertDIVOCtoCoreDataSet"] ;
+  fhir:StructureMap.version [ fhir:value "1.0.0"] ;
+  fhir:StructureMap.name [ fhir:value "CertDIVOCtoCoreDataSet"] ;
+  fhir:StructureMap.status [ fhir:value "draft"] ;
+  fhir:StructureMap.date [ fhir:value "2026-09-05T20:45:54+00:00"^^xsd:dateTime] ;
+  fhir:StructureMap.publisher [ fhir:value "WHO"] ;
+  fhir:StructureMap.contact [
+     fhir:index 0 ;
+     fhir:ContactDetail.name [ fhir:value "WHO" ] ;
+     fhir:ContactDetail.telecom [
+       fhir:index 0 ;
+       fhir:ContactPoint.system [ fhir:value "url" ] ;
+       fhir:ContactPoint.value [ fhir:value "http://who.int" ]
+     ]
+  ] ;
+  fhir:StructureMap.description [ fhir:value "Structure map transforming CertDIVOC logical model to bundle of Core Data Set logical model"] ;
+  fhir:StructureMap.jurisdiction [
+     fhir:index 0 ;
+     fhir:CodeableConcept.coding [
+       fhir:index 0 ;
+       fhir:Coding.system [ fhir:value "http://unstats.un.org/unsd/methods/m49/m49.htm" ] ;
+       fhir:Coding.code [ fhir:value "001" ]
+     ]
+  ] ;
+  fhir:StructureMap.structure [
+     fhir:index 0 ;
+     fhir:StructureMap.structure.url [
+       fhir:value "http://smart.who.int/ddcc/StructureDefinition/CertDIVOC" ;
+       fhir:link <http://smart.who.int/ddcc/StructureDefinition/CertDIVOC>
+     ] ;
+     fhir:StructureMap.structure.mode [ fhir:value "source" ] ;
+     fhir:StructureMap.structure.alias [ fhir:value "DIVOC" ]
+  ], [
+     fhir:index 1 ;
+     fhir:StructureMap.structure.url [
+       fhir:value "http://hl7.org/fhir/StructureDefinition/Bundle" ;
+       fhir:link <http://hl7.org/fhir/StructureDefinition/Bundle>
+     ] ;
+     fhir:StructureMap.structure.mode [ fhir:value "target" ] ;
+     fhir:StructureMap.structure.alias [ fhir:value "DDCCBundle" ]
+  ], [
+     fhir:index 2 ;
+     fhir:StructureMap.structure.url [
+       fhir:value "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet" ;
+       fhir:link <http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet>
+     ] ;
+     fhir:StructureMap.structure.mode [ fhir:value "target" ] ;
+     fhir:StructureMap.structure.alias [ fhir:value "DDCC" ]
+  ], [
+     fhir:index 3 ;
+     fhir:StructureMap.structure.url [
+       fhir:value "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSetVS" ;
+       fhir:link <http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSetVS>
+     ] ;
+     fhir:StructureMap.structure.mode [ fhir:value "target" ] ;
+     fhir:StructureMap.structure.alias [ fhir:value "DDCCVS" ]
+  ], [
+     fhir:index 4 ;
+     fhir:StructureMap.structure.url [
+       fhir:value "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSetTR" ;
+       fhir:link <http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSetTR>
+     ] ;
+     fhir:StructureMap.structure.mode [ fhir:value "target" ] ;
+     fhir:StructureMap.structure.alias [ fhir:value "DDCCTR" ]
+  ] ;
+  fhir:StructureMap.group [
+     fhir:index 0 ;
+     fhir:StructureMap.group.name [ fhir:value "CertDIVOCtoCoreDataSetBundle" ] ;
+     fhir:StructureMap.group.typeMode [ fhir:value "none" ] ;
+     fhir:StructureMap.group.input [
+       fhir:index 0 ;
+       fhir:StructureMap.group.input.name [ fhir:value "src" ] ;
+       fhir:StructureMap.group.input.type [ fhir:value "DIVOC" ] ;
+       fhir:StructureMap.group.input.mode [ fhir:value "source" ]
+     ], [
+       fhir:index 1 ;
+       fhir:StructureMap.group.input.name [ fhir:value "ddccBundle" ] ;
+       fhir:StructureMap.group.input.type [ fhir:value "DDCCBundle" ] ;
+       fhir:StructureMap.group.input.mode [ fhir:value "target" ]
+     ] ;
+     fhir:StructureMap.group.rule [
+       fhir:index 0 ;
+       fhir:StructureMap.group.rule.name [ fhir:value "type" ] ;
+       fhir:StructureMap.group.rule.source [
+         fhir:index 0 ;
+         fhir:StructureMap.group.rule.source.context [ fhir:value "src" ] ;
+         fhir:StructureMap.group.rule.source.element [ fhir:value "type" ] ;
+         fhir:StructureMap.group.rule.source.variable [ fhir:value "type" ]
+       ] ;
+       fhir:StructureMap.group.rule.rule [
+         fhir:index 0 ;
+         fhir:StructureMap.group.rule.name [ fhir:value "ProofOfVaccinationCredential" ] ;
+         fhir:StructureMap.group.rule.source [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.source.context [ fhir:value "type" ] ;
+           fhir:StructureMap.group.rule.source.condition [ fhir:value "type = 'ProofOfVaccinationCredential'" ]
+         ] ;
+         fhir:StructureMap.group.rule.rule [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.name [ fhir:value "evidence" ] ;
+           fhir:StructureMap.group.rule.source [
+             fhir:index 0 ;
+             fhir:StructureMap.group.rule.source.context [ fhir:value "src" ] ;
+             fhir:StructureMap.group.rule.source.element [ fhir:value "evidence" ] ;
+             fhir:StructureMap.group.rule.source.variable [ fhir:value "evidence" ]
+           ] ;
+           fhir:StructureMap.group.rule.target [
+             fhir:index 0 ;
+             fhir:StructureMap.group.rule.target.context [ fhir:value "ddccBundle" ] ;
+             fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ] ;
+             fhir:StructureMap.group.rule.target.element [ fhir:value "entry" ] ;
+             fhir:StructureMap.group.rule.target.variable [ fhir:value "outentry" ]
+           ], [
+             fhir:index 1 ;
+             fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ] ;
+             fhir:StructureMap.group.rule.target.variable [ fhir:value "ddcc" ] ;
+             fhir:StructureMap.group.rule.target.transform [ fhir:value "create" ] ;
+             fhir:StructureMap.group.rule.target.parameter [
+               fhir:index 0 ;
+               fhir:StructureMap.group.rule.target.parameter.valueString [ fhir:value "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSetVS" ]
+             ]
+           ] ;
+           fhir:StructureMap.group.rule.rule [
+             fhir:index 0 ;
+             fhir:StructureMap.group.rule.name [ fhir:value "set patient" ] ;
+             fhir:StructureMap.group.rule.source [
+               fhir:index 0 ;
+               fhir:StructureMap.group.rule.source.context [ fhir:value "src" ] ;
+               fhir:StructureMap.group.rule.source.element [ fhir:value "credentialSubject" ] ;
+               fhir:StructureMap.group.rule.source.variable [ fhir:value "credentialSubject" ]
+             ] ;
+             fhir:StructureMap.group.rule.dependent [
+               fhir:index 0 ;
+               fhir:StructureMap.group.rule.dependent.name [ fhir:value "CredentialSubjecttoCoreDataSet" ] ;
+               fhir:StructureMap.group.rule.dependent.variable [
+                 fhir:value "credentialSubject" ;
+                 fhir:index 0
+               ], [
+                 fhir:value "ddcc" ;
+                 fhir:index 1
+               ]
+             ]
+           ], [
+             fhir:index 1 ;
+             fhir:StructureMap.group.rule.name [ fhir:value "set certificate" ] ;
+             fhir:StructureMap.group.rule.source [
+               fhir:index 0 ;
+               fhir:StructureMap.group.rule.source.context [ fhir:value "src" ]
+             ] ;
+             fhir:StructureMap.group.rule.target [
+               fhir:index 0 ;
+               fhir:StructureMap.group.rule.target.context [ fhir:value "ddcc" ] ;
+               fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ] ;
+               fhir:StructureMap.group.rule.target.element [ fhir:value "certificate" ] ;
+               fhir:StructureMap.group.rule.target.variable [ fhir:value "certificate" ]
+             ] ;
+             fhir:StructureMap.group.rule.dependent [
+               fhir:index 0 ;
+               fhir:StructureMap.group.rule.dependent.name [ fhir:value "CertDIVOCtoCoreDataSetCertificate" ] ;
+               fhir:StructureMap.group.rule.dependent.variable [
+                 fhir:value "src" ;
+                 fhir:index 0
+               ], [
+                 fhir:value "evidence" ;
+                 fhir:index 1
+               ], [
+                 fhir:value "certificate" ;
+                 fhir:index 2
+               ]
+             ]
+           ], [
+             fhir:index 2 ;
+             fhir:StructureMap.group.rule.name [ fhir:value "set vaccination" ] ;
+             fhir:StructureMap.group.rule.source [
+               fhir:index 0 ;
+               fhir:StructureMap.group.rule.source.context [ fhir:value "evidence" ]
+             ] ;
+             fhir:StructureMap.group.rule.target [
+               fhir:index 0 ;
+               fhir:StructureMap.group.rule.target.context [ fhir:value "ddcc" ] ;
+               fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ] ;
+               fhir:StructureMap.group.rule.target.element [ fhir:value "vaccination" ] ;
+               fhir:StructureMap.group.rule.target.variable [ fhir:value "vaccination" ]
+             ] ;
+             fhir:StructureMap.group.rule.dependent [
+               fhir:index 0 ;
+               fhir:StructureMap.group.rule.dependent.name [ fhir:value "EvidencetoCoreDataSetVS" ] ;
+               fhir:StructureMap.group.rule.dependent.variable [
+                 fhir:value "evidence" ;
+                 fhir:index 0
+               ], [
+                 fhir:value "vaccination" ;
+                 fhir:index 1
+               ]
+             ]
+           ], [
+             fhir:index 3 ;
+             fhir:StructureMap.group.rule.name [ fhir:value "set outentry" ] ;
+             fhir:StructureMap.group.rule.source [
+               fhir:index 0 ;
+               fhir:StructureMap.group.rule.source.context [ fhir:value "evidence" ]
+             ] ;
+             fhir:StructureMap.group.rule.target [
+               fhir:index 0 ;
+               fhir:StructureMap.group.rule.target.context [ fhir:value "outentry" ] ;
+               fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ] ;
+               fhir:StructureMap.group.rule.target.element [ fhir:value "resource" ] ;
+               fhir:StructureMap.group.rule.target.transform [ fhir:value "copy" ] ;
+               fhir:StructureMap.group.rule.target.parameter [
+                 fhir:index 0 ;
+                 fhir:StructureMap.group.rule.target.parameter.valueId [ fhir:value "ddcc" ]
+               ]
+             ]
+           ]
+         ]
+       ], [
+         fhir:index 1 ;
+         fhir:StructureMap.group.rule.name [ fhir:value "ProofOfTestCertificateCredential" ] ;
+         fhir:StructureMap.group.rule.source [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.source.context [ fhir:value "type" ] ;
+           fhir:StructureMap.group.rule.source.condition [ fhir:value "type = 'ProofOfTestCertificateCredential'" ]
+         ] ;
+         fhir:StructureMap.group.rule.rule [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.name [ fhir:value "evidence" ] ;
+           fhir:StructureMap.group.rule.source [
+             fhir:index 0 ;
+             fhir:StructureMap.group.rule.source.context [ fhir:value "src" ] ;
+             fhir:StructureMap.group.rule.source.element [ fhir:value "evidence" ] ;
+             fhir:StructureMap.group.rule.source.variable [ fhir:value "evidence" ]
+           ] ;
+           fhir:StructureMap.group.rule.target [
+             fhir:index 0 ;
+             fhir:StructureMap.group.rule.target.context [ fhir:value "ddccBundle" ] ;
+             fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ] ;
+             fhir:StructureMap.group.rule.target.element [ fhir:value "entry" ] ;
+             fhir:StructureMap.group.rule.target.variable [ fhir:value "outentry" ]
+           ], [
+             fhir:index 1 ;
+             fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ] ;
+             fhir:StructureMap.group.rule.target.variable [ fhir:value "ddcc" ] ;
+             fhir:StructureMap.group.rule.target.transform [ fhir:value "create" ] ;
+             fhir:StructureMap.group.rule.target.parameter [
+               fhir:index 0 ;
+               fhir:StructureMap.group.rule.target.parameter.valueString [ fhir:value "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSetTR" ]
+             ]
+           ] ;
+           fhir:StructureMap.group.rule.rule [
+             fhir:index 0 ;
+             fhir:StructureMap.group.rule.name [ fhir:value "set patient" ] ;
+             fhir:StructureMap.group.rule.source [
+               fhir:index 0 ;
+               fhir:StructureMap.group.rule.source.context [ fhir:value "src" ] ;
+               fhir:StructureMap.group.rule.source.element [ fhir:value "credentialSubject" ] ;
+               fhir:StructureMap.group.rule.source.variable [ fhir:value "credentialSubject" ]
+             ] ;
+             fhir:StructureMap.group.rule.dependent [
+               fhir:index 0 ;
+               fhir:StructureMap.group.rule.dependent.name [ fhir:value "CredentialSubjecttoCoreDataSet" ] ;
+               fhir:StructureMap.group.rule.dependent.variable [
+                 fhir:value "credentialSubject" ;
+                 fhir:index 0
+               ], [
+                 fhir:value "ddcc" ;
+                 fhir:index 1
+               ]
+             ]
+           ], [
+             fhir:index 1 ;
+             fhir:StructureMap.group.rule.name [ fhir:value "set certificate" ] ;
+             fhir:StructureMap.group.rule.source [
+               fhir:index 0 ;
+               fhir:StructureMap.group.rule.source.context [ fhir:value "src" ]
+             ] ;
+             fhir:StructureMap.group.rule.target [
+               fhir:index 0 ;
+               fhir:StructureMap.group.rule.target.context [ fhir:value "ddcc" ] ;
+               fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ] ;
+               fhir:StructureMap.group.rule.target.element [ fhir:value "certificate" ] ;
+               fhir:StructureMap.group.rule.target.variable [ fhir:value "certificate" ]
+             ] ;
+             fhir:StructureMap.group.rule.dependent [
+               fhir:index 0 ;
+               fhir:StructureMap.group.rule.dependent.name [ fhir:value "CertDIVOCtoCoreDataSetCertificate" ] ;
+               fhir:StructureMap.group.rule.dependent.variable [
+                 fhir:value "src" ;
+                 fhir:index 0
+               ], [
+                 fhir:value "evidence" ;
+                 fhir:index 1
+               ], [
+                 fhir:value "certificate" ;
+                 fhir:index 2
+               ]
+             ]
+           ], [
+             fhir:index 2 ;
+             fhir:StructureMap.group.rule.name [ fhir:value "set test" ] ;
+             fhir:StructureMap.group.rule.source [
+               fhir:index 0 ;
+               fhir:StructureMap.group.rule.source.context [ fhir:value "evidence" ]
+             ] ;
+             fhir:StructureMap.group.rule.target [
+               fhir:index 0 ;
+               fhir:StructureMap.group.rule.target.context [ fhir:value "ddcc" ] ;
+               fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ] ;
+               fhir:StructureMap.group.rule.target.element [ fhir:value "test" ] ;
+               fhir:StructureMap.group.rule.target.variable [ fhir:value "test" ]
+             ] ;
+             fhir:StructureMap.group.rule.dependent [
+               fhir:index 0 ;
+               fhir:StructureMap.group.rule.dependent.name [ fhir:value "EvidencetoCoreDataSetTR" ] ;
+               fhir:StructureMap.group.rule.dependent.variable [
+                 fhir:value "evidence" ;
+                 fhir:index 0
+               ], [
+                 fhir:value "test" ;
+                 fhir:index 1
+               ]
+             ]
+           ], [
+             fhir:index 3 ;
+             fhir:StructureMap.group.rule.name [ fhir:value "set outentry" ] ;
+             fhir:StructureMap.group.rule.source [
+               fhir:index 0 ;
+               fhir:StructureMap.group.rule.source.context [ fhir:value "evidence" ]
+             ] ;
+             fhir:StructureMap.group.rule.target [
+               fhir:index 0 ;
+               fhir:StructureMap.group.rule.target.context [ fhir:value "outentry" ] ;
+               fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ] ;
+               fhir:StructureMap.group.rule.target.element [ fhir:value "resource" ] ;
+               fhir:StructureMap.group.rule.target.transform [ fhir:value "copy" ] ;
+               fhir:StructureMap.group.rule.target.parameter [
+                 fhir:index 0 ;
+                 fhir:StructureMap.group.rule.target.parameter.valueId [ fhir:value "ddcc" ]
+               ]
+             ]
+           ]
+         ]
+       ]
+     ]
+  ], [
+     fhir:index 1 ;
+     fhir:StructureMap.group.name [ fhir:value "CredentialSubjecttoCoreDataSet" ] ;
+     fhir:StructureMap.group.typeMode [ fhir:value "none" ] ;
+     fhir:StructureMap.group.input [
+       fhir:index 0 ;
+       fhir:StructureMap.group.input.name [ fhir:value "credentialSubject" ] ;
+       fhir:StructureMap.group.input.mode [ fhir:value "source" ]
+     ], [
+       fhir:index 1 ;
+       fhir:StructureMap.group.input.name [ fhir:value "ddcc" ] ;
+       fhir:StructureMap.group.input.type [ fhir:value "DDCC" ] ;
+       fhir:StructureMap.group.input.mode [ fhir:value "target" ]
+     ] ;
+     fhir:StructureMap.group.rule [
+       fhir:index 0 ;
+       fhir:StructureMap.group.rule.name [ fhir:value "set name" ] ;
+       fhir:StructureMap.group.rule.source [
+         fhir:index 0 ;
+         fhir:StructureMap.group.rule.source.context [ fhir:value "credentialSubject" ] ;
+         fhir:StructureMap.group.rule.source.element [ fhir:value "name" ] ;
+         fhir:StructureMap.group.rule.source.variable [ fhir:value "name" ]
+       ] ;
+       fhir:StructureMap.group.rule.target [
+         fhir:index 0 ;
+         fhir:StructureMap.group.rule.target.context [ fhir:value "ddcc" ] ;
+         fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ] ;
+         fhir:StructureMap.group.rule.target.element [ fhir:value "name" ] ;
+         fhir:StructureMap.group.rule.target.transform [ fhir:value "copy" ] ;
+         fhir:StructureMap.group.rule.target.parameter [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.target.parameter.valueId [ fhir:value "name" ]
+         ]
+       ]
+     ], [
+       fhir:index 1 ;
+       fhir:StructureMap.group.rule.name [ fhir:value "set birthDate" ] ;
+       fhir:StructureMap.group.rule.source [
+         fhir:index 0 ;
+         fhir:StructureMap.group.rule.source.context [ fhir:value "credentialSubject" ] ;
+         fhir:StructureMap.group.rule.source.element [ fhir:value "dob" ] ;
+         fhir:StructureMap.group.rule.source.variable [ fhir:value "birthDate" ]
+       ] ;
+       fhir:StructureMap.group.rule.target [
+         fhir:index 0 ;
+         fhir:StructureMap.group.rule.target.context [ fhir:value "ddcc" ] ;
+         fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ] ;
+         fhir:StructureMap.group.rule.target.element [ fhir:value "birthDate" ] ;
+         fhir:StructureMap.group.rule.target.transform [ fhir:value "copy" ] ;
+         fhir:StructureMap.group.rule.target.parameter [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.target.parameter.valueId [ fhir:value "birthDate" ]
+         ]
+       ]
+     ], [
+       fhir:index 2 ;
+       fhir:StructureMap.group.rule.name [ fhir:value "identifier" ] ;
+       fhir:StructureMap.group.rule.source [
+         fhir:index 0 ;
+         fhir:StructureMap.group.rule.source.context [ fhir:value "credentialSubject" ] ;
+         fhir:StructureMap.group.rule.source.element [ fhir:value "id" ] ;
+         fhir:StructureMap.group.rule.source.variable [ fhir:value "id" ]
+       ] ;
+       fhir:StructureMap.group.rule.target [
+         fhir:index 0 ;
+         fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ] ;
+         fhir:StructureMap.group.rule.target.variable [ fhir:value "identifier" ] ;
+         fhir:StructureMap.group.rule.target.transform [ fhir:value "create" ] ;
+         fhir:StructureMap.group.rule.target.parameter [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.target.parameter.valueString [ fhir:value "Identifier" ]
+         ]
+       ], [
+         fhir:index 1 ;
+         fhir:StructureMap.group.rule.target.context [ fhir:value "identifier" ] ;
+         fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ] ;
+         fhir:StructureMap.group.rule.target.element [ fhir:value "value" ] ;
+         fhir:StructureMap.group.rule.target.transform [ fhir:value "copy" ] ;
+         fhir:StructureMap.group.rule.target.parameter [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.target.parameter.valueId [ fhir:value "id" ]
+         ]
+       ] ;
+       fhir:StructureMap.group.rule.rule [
+         fhir:index 0 ;
+         fhir:StructureMap.group.rule.name [ fhir:value "set identifier" ] ;
+         fhir:StructureMap.group.rule.source [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.source.context [ fhir:value "id" ]
+         ] ;
+         fhir:StructureMap.group.rule.target [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.target.context [ fhir:value "ddcc" ] ;
+           fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ] ;
+           fhir:StructureMap.group.rule.target.element [ fhir:value "identifier" ] ;
+           fhir:StructureMap.group.rule.target.transform [ fhir:value "copy" ] ;
+           fhir:StructureMap.group.rule.target.parameter [
+             fhir:index 0 ;
+             fhir:StructureMap.group.rule.target.parameter.valueId [ fhir:value "identifier" ]
+           ]
+         ]
+       ]
+     ]
+  ], [
+     fhir:index 2 ;
+     fhir:StructureMap.group.name [ fhir:value "CertDIVOCtoCoreDataSetCertificate" ] ;
+     fhir:StructureMap.group.typeMode [ fhir:value "none" ] ;
+     fhir:StructureMap.group.input [
+       fhir:index 0 ;
+       fhir:StructureMap.group.input.name [ fhir:value "src" ] ;
+       fhir:StructureMap.group.input.type [ fhir:value "DIVOC" ] ;
+       fhir:StructureMap.group.input.mode [ fhir:value "source" ]
+     ], [
+       fhir:index 1 ;
+       fhir:StructureMap.group.input.name [ fhir:value "evidence" ] ;
+       fhir:StructureMap.group.input.mode [ fhir:value "source" ]
+     ], [
+       fhir:index 2 ;
+       fhir:StructureMap.group.input.name [ fhir:value "certificate" ] ;
+       fhir:StructureMap.group.input.mode [ fhir:value "target" ]
+     ] ;
+     fhir:StructureMap.group.rule [
+       fhir:index 0 ;
+       fhir:StructureMap.group.rule.name [ fhir:value "set hcid" ] ;
+       fhir:StructureMap.group.rule.source [
+         fhir:index 0 ;
+         fhir:StructureMap.group.rule.source.context [ fhir:value "evidence" ] ;
+         fhir:StructureMap.group.rule.source.element [ fhir:value "certificateId" ] ;
+         fhir:StructureMap.group.rule.source.variable [ fhir:value "certificateId" ]
+       ] ;
+       fhir:StructureMap.group.rule.target [
+         fhir:index 0 ;
+         fhir:StructureMap.group.rule.target.context [ fhir:value "certificate" ] ;
+         fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ] ;
+         fhir:StructureMap.group.rule.target.element [ fhir:value "hcid" ] ;
+         fhir:StructureMap.group.rule.target.variable [ fhir:value "hcid" ]
+       ], [
+         fhir:index 1 ;
+         fhir:StructureMap.group.rule.target.context [ fhir:value "hcid" ] ;
+         fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ] ;
+         fhir:StructureMap.group.rule.target.element [ fhir:value "value" ] ;
+         fhir:StructureMap.group.rule.target.transform [ fhir:value "copy" ] ;
+         fhir:StructureMap.group.rule.target.parameter [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.target.parameter.valueId [ fhir:value "certificateId" ]
+         ]
+       ]
+     ], [
+       fhir:index 1 ;
+       fhir:StructureMap.group.rule.name [ fhir:value "context" ] ;
+       fhir:StructureMap.group.rule.source [
+         fhir:index 0 ;
+         fhir:StructureMap.group.rule.source.context [ fhir:value "src" ] ;
+         fhir:StructureMap.group.rule.source.element [ fhir:value "context" ] ;
+         fhir:StructureMap.group.rule.source.variable [ fhir:value "context" ]
+       ] ;
+       fhir:StructureMap.group.rule.rule [
+         fhir:index 0 ;
+         fhir:StructureMap.group.rule.name [ fhir:value "set version" ] ;
+         fhir:StructureMap.group.rule.source [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.source.context [ fhir:value "context" ] ;
+           fhir:StructureMap.group.rule.source.condition [ fhir:value "context.contains('cowin.gov.in')" ]
+         ] ;
+         fhir:StructureMap.group.rule.target [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.target.context [ fhir:value "certificate" ] ;
+           fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ] ;
+           fhir:StructureMap.group.rule.target.element [ fhir:value "version" ] ;
+           fhir:StructureMap.group.rule.target.transform [ fhir:value "copy" ] ;
+           fhir:StructureMap.group.rule.target.parameter [
+             fhir:index 0 ;
+             fhir:StructureMap.group.rule.target.parameter.valueId [ fhir:value "context" ]
+           ]
+         ]
+       ]
+     ], [
+       fhir:index 2 ;
+       fhir:StructureMap.group.rule.name [ fhir:value "period" ] ;
+       fhir:StructureMap.group.rule.source [
+         fhir:index 0 ;
+         fhir:StructureMap.group.rule.source.context [ fhir:value "evidence" ]
+       ] ;
+       fhir:StructureMap.group.rule.target [
+         fhir:index 0 ;
+         fhir:StructureMap.group.rule.target.context [ fhir:value "certificate" ] ;
+         fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ] ;
+         fhir:StructureMap.group.rule.target.element [ fhir:value "period" ] ;
+         fhir:StructureMap.group.rule.target.variable [ fhir:value "period" ] ;
+         fhir:StructureMap.group.rule.target.transform [ fhir:value "create" ] ;
+         fhir:StructureMap.group.rule.target.parameter [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.target.parameter.valueString [ fhir:value "Period" ]
+         ]
+       ] ;
+       fhir:StructureMap.group.rule.rule [
+         fhir:index 0 ;
+         fhir:StructureMap.group.rule.name [ fhir:value "set period start" ] ;
+         fhir:StructureMap.group.rule.source [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.source.context [ fhir:value "evidence" ] ;
+           fhir:StructureMap.group.rule.source.element [ fhir:value "effectiveStart" ] ;
+           fhir:StructureMap.group.rule.source.variable [ fhir:value "effectiveStart" ]
+         ] ;
+         fhir:StructureMap.group.rule.target [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.target.context [ fhir:value "period" ] ;
+           fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ] ;
+           fhir:StructureMap.group.rule.target.element [ fhir:value "start" ] ;
+           fhir:StructureMap.group.rule.target.transform [ fhir:value "copy" ] ;
+           fhir:StructureMap.group.rule.target.parameter [
+             fhir:index 0 ;
+             fhir:StructureMap.group.rule.target.parameter.valueId [ fhir:value "effectiveStart" ]
+           ]
+         ]
+       ], [
+         fhir:index 1 ;
+         fhir:StructureMap.group.rule.name [ fhir:value "set period end" ] ;
+         fhir:StructureMap.group.rule.source [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.source.context [ fhir:value "evidence" ] ;
+           fhir:StructureMap.group.rule.source.element [ fhir:value "effectiveUntil" ] ;
+           fhir:StructureMap.group.rule.source.variable [ fhir:value "effectiveUntil" ]
+         ] ;
+         fhir:StructureMap.group.rule.target [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.target.context [ fhir:value "period" ] ;
+           fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ] ;
+           fhir:StructureMap.group.rule.target.element [ fhir:value "end" ] ;
+           fhir:StructureMap.group.rule.target.transform [ fhir:value "copy" ] ;
+           fhir:StructureMap.group.rule.target.parameter [
+             fhir:index 0 ;
+             fhir:StructureMap.group.rule.target.parameter.valueId [ fhir:value "effectiveUntil" ]
+           ]
+         ]
+       ]
+     ], [
+       fhir:index 3 ;
+       fhir:StructureMap.group.rule.name [ fhir:value "set issuer" ] ;
+       fhir:StructureMap.group.rule.source [
+         fhir:index 0 ;
+         fhir:StructureMap.group.rule.source.context [ fhir:value "src" ] ;
+         fhir:StructureMap.group.rule.source.element [ fhir:value "issuer" ] ;
+         fhir:StructureMap.group.rule.source.variable [ fhir:value "issuer" ]
+       ] ;
+       fhir:StructureMap.group.rule.target [
+         fhir:index 0 ;
+         fhir:StructureMap.group.rule.target.context [ fhir:value "certificate" ] ;
+         fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ] ;
+         fhir:StructureMap.group.rule.target.element [ fhir:value "issuer" ] ;
+         fhir:StructureMap.group.rule.target.variable [ fhir:value "issuer" ] ;
+         fhir:StructureMap.group.rule.target.transform [ fhir:value "create" ] ;
+         fhir:StructureMap.group.rule.target.parameter [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.target.parameter.valueString [ fhir:value "Reference" ]
+         ]
+       ], [
+         fhir:index 1 ;
+         fhir:StructureMap.group.rule.target.context [ fhir:value "issuer" ] ;
+         fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ] ;
+         fhir:StructureMap.group.rule.target.element [ fhir:value "display" ] ;
+         fhir:StructureMap.group.rule.target.transform [ fhir:value "copy" ] ;
+         fhir:StructureMap.group.rule.target.parameter [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.target.parameter.valueId [ fhir:value "issuer" ]
+         ]
+       ]
+     ]
+  ], [
+     fhir:index 3 ;
+     fhir:StructureMap.group.name [ fhir:value "EvidencetoCoreDataSetVS" ] ;
+     fhir:StructureMap.group.typeMode [ fhir:value "none" ] ;
+     fhir:StructureMap.group.input [
+       fhir:index 0 ;
+       fhir:StructureMap.group.input.name [ fhir:value "evidence" ] ;
+       fhir:StructureMap.group.input.mode [ fhir:value "source" ]
+     ], [
+       fhir:index 1 ;
+       fhir:StructureMap.group.input.name [ fhir:value "vaccination" ] ;
+       fhir:StructureMap.group.input.mode [ fhir:value "target" ]
+     ] ;
+     fhir:StructureMap.group.rule [
+       fhir:index 0 ;
+       fhir:StructureMap.group.rule.name [ fhir:value "set vaccine" ] ;
+       fhir:StructureMap.group.rule.source [
+         fhir:index 0 ;
+         fhir:StructureMap.group.rule.source.context [ fhir:value "evidence" ] ;
+         fhir:StructureMap.group.rule.source.element [ fhir:value "icd11Code" ] ;
+         fhir:StructureMap.group.rule.source.variable [ fhir:value "icd11Code" ]
+       ] ;
+       fhir:StructureMap.group.rule.target [
+         fhir:index 0 ;
+         fhir:StructureMap.group.rule.target.context [ fhir:value "vaccination" ] ;
+         fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ] ;
+         fhir:StructureMap.group.rule.target.element [ fhir:value "vaccine" ] ;
+         fhir:StructureMap.group.rule.target.variable [ fhir:value "coding" ]
+       ], [
+         fhir:index 1 ;
+         fhir:StructureMap.group.rule.target.context [ fhir:value "coding" ] ;
+         fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ] ;
+         fhir:StructureMap.group.rule.target.element [ fhir:value "system" ] ;
+         fhir:StructureMap.group.rule.target.transform [ fhir:value "copy" ] ;
+         fhir:StructureMap.group.rule.target.parameter [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.target.parameter.valueString [ fhir:value "http://id.who.int/icd11/mms" ]
+         ]
+       ], [
+         fhir:index 2 ;
+         fhir:StructureMap.group.rule.target.context [ fhir:value "coding" ] ;
+         fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ] ;
+         fhir:StructureMap.group.rule.target.element [ fhir:value "code" ] ;
+         fhir:StructureMap.group.rule.target.transform [ fhir:value "copy" ] ;
+         fhir:StructureMap.group.rule.target.parameter [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.target.parameter.valueId [ fhir:value "icd11Code" ]
+         ]
+       ]
+     ], [
+       fhir:index 1 ;
+       fhir:StructureMap.group.rule.name [ fhir:value "set brand" ] ;
+       fhir:StructureMap.group.rule.source [
+         fhir:index 0 ;
+         fhir:StructureMap.group.rule.source.context [ fhir:value "evidence" ] ;
+         fhir:StructureMap.group.rule.source.element [ fhir:value "vaccine" ] ;
+         fhir:StructureMap.group.rule.source.variable [ fhir:value "vaccine" ]
+       ] ;
+       fhir:StructureMap.group.rule.target [
+         fhir:index 0 ;
+         fhir:StructureMap.group.rule.target.context [ fhir:value "vaccination" ] ;
+         fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ] ;
+         fhir:StructureMap.group.rule.target.element [ fhir:value "brand" ] ;
+         fhir:StructureMap.group.rule.target.variable [ fhir:value "coding" ]
+       ], [
+         fhir:index 1 ;
+         fhir:StructureMap.group.rule.target.context [ fhir:value "coding" ] ;
+         fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ] ;
+         fhir:StructureMap.group.rule.target.element [ fhir:value "code" ] ;
+         fhir:StructureMap.group.rule.target.transform [ fhir:value "copy" ] ;
+         fhir:StructureMap.group.rule.target.parameter [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.target.parameter.valueId [ fhir:value "vaccine" ]
+         ]
+       ]
+     ], [
+       fhir:index 2 ;
+       fhir:StructureMap.group.rule.name [ fhir:value "set manufacturer" ] ;
+       fhir:StructureMap.group.rule.source [
+         fhir:index 0 ;
+         fhir:StructureMap.group.rule.source.context [ fhir:value "evidence" ] ;
+         fhir:StructureMap.group.rule.source.element [ fhir:value "manufacturer" ] ;
+         fhir:StructureMap.group.rule.source.variable [ fhir:value "manufacturer" ]
+       ] ;
+       fhir:StructureMap.group.rule.target [
+         fhir:index 0 ;
+         fhir:StructureMap.group.rule.target.context [ fhir:value "vaccination" ] ;
+         fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ] ;
+         fhir:StructureMap.group.rule.target.element [ fhir:value "manufacturer" ] ;
+         fhir:StructureMap.group.rule.target.variable [ fhir:value "coding" ]
+       ], [
+         fhir:index 1 ;
+         fhir:StructureMap.group.rule.target.context [ fhir:value "coding" ] ;
+         fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ] ;
+         fhir:StructureMap.group.rule.target.element [ fhir:value "code" ] ;
+         fhir:StructureMap.group.rule.target.transform [ fhir:value "copy" ] ;
+         fhir:StructureMap.group.rule.target.parameter [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.target.parameter.valueId [ fhir:value "manufacturer" ]
+         ]
+       ]
+     ], [
+       fhir:index 3 ;
+       fhir:StructureMap.group.rule.name [ fhir:value "set lot" ] ;
+       fhir:StructureMap.group.rule.source [
+         fhir:index 0 ;
+         fhir:StructureMap.group.rule.source.context [ fhir:value "evidence" ] ;
+         fhir:StructureMap.group.rule.source.element [ fhir:value "batch" ] ;
+         fhir:StructureMap.group.rule.source.variable [ fhir:value "batch" ]
+       ] ;
+       fhir:StructureMap.group.rule.target [
+         fhir:index 0 ;
+         fhir:StructureMap.group.rule.target.context [ fhir:value "vaccination" ] ;
+         fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ] ;
+         fhir:StructureMap.group.rule.target.element [ fhir:value "lot" ] ;
+         fhir:StructureMap.group.rule.target.transform [ fhir:value "copy" ] ;
+         fhir:StructureMap.group.rule.target.parameter [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.target.parameter.valueId [ fhir:value "batch" ]
+         ]
+       ]
+     ], [
+       fhir:index 4 ;
+       fhir:StructureMap.group.rule.name [ fhir:value "set date" ] ;
+       fhir:StructureMap.group.rule.source [
+         fhir:index 0 ;
+         fhir:StructureMap.group.rule.source.context [ fhir:value "evidence" ] ;
+         fhir:StructureMap.group.rule.source.element [ fhir:value "date" ] ;
+         fhir:StructureMap.group.rule.source.variable [ fhir:value "date" ]
+       ] ;
+       fhir:StructureMap.group.rule.target [
+         fhir:index 0 ;
+         fhir:StructureMap.group.rule.target.context [ fhir:value "vaccination" ] ;
+         fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ] ;
+         fhir:StructureMap.group.rule.target.element [ fhir:value "date" ] ;
+         fhir:StructureMap.group.rule.target.transform [ fhir:value "copy" ] ;
+         fhir:StructureMap.group.rule.target.parameter [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.target.parameter.valueId [ fhir:value "date" ]
+         ]
+       ]
+     ], [
+       fhir:index 5 ;
+       fhir:StructureMap.group.rule.name [ fhir:value "set dose" ] ;
+       fhir:StructureMap.group.rule.source [
+         fhir:index 0 ;
+         fhir:StructureMap.group.rule.source.context [ fhir:value "evidence" ] ;
+         fhir:StructureMap.group.rule.source.element [ fhir:value "dose" ] ;
+         fhir:StructureMap.group.rule.source.variable [ fhir:value "dose" ]
+       ] ;
+       fhir:StructureMap.group.rule.target [
+         fhir:index 0 ;
+         fhir:StructureMap.group.rule.target.context [ fhir:value "vaccination" ] ;
+         fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ] ;
+         fhir:StructureMap.group.rule.target.element [ fhir:value "dose" ] ;
+         fhir:StructureMap.group.rule.target.transform [ fhir:value "copy" ] ;
+         fhir:StructureMap.group.rule.target.parameter [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.target.parameter.valueId [ fhir:value "dose" ]
+         ]
+       ]
+     ], [
+       fhir:index 6 ;
+       fhir:StructureMap.group.rule.name [ fhir:value "set totalDoses" ] ;
+       fhir:StructureMap.group.rule.source [
+         fhir:index 0 ;
+         fhir:StructureMap.group.rule.source.context [ fhir:value "evidence" ] ;
+         fhir:StructureMap.group.rule.source.element [ fhir:value "totalDoses" ] ;
+         fhir:StructureMap.group.rule.source.variable [ fhir:value "totalDoses" ]
+       ] ;
+       fhir:StructureMap.group.rule.target [
+         fhir:index 0 ;
+         fhir:StructureMap.group.rule.target.context [ fhir:value "vaccination" ] ;
+         fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ] ;
+         fhir:StructureMap.group.rule.target.element [ fhir:value "totalDoses" ] ;
+         fhir:StructureMap.group.rule.target.transform [ fhir:value "copy" ] ;
+         fhir:StructureMap.group.rule.target.parameter [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.target.parameter.valueId [ fhir:value "totalDoses" ]
+         ]
+       ]
+     ], [
+       fhir:index 7 ;
+       fhir:StructureMap.group.rule.name [ fhir:value "facility" ] ;
+       fhir:StructureMap.group.rule.source [
+         fhir:index 0 ;
+         fhir:StructureMap.group.rule.source.context [ fhir:value "evidence" ] ;
+         fhir:StructureMap.group.rule.source.element [ fhir:value "facility" ] ;
+         fhir:StructureMap.group.rule.source.variable [ fhir:value "facility" ]
+       ] ;
+       fhir:StructureMap.group.rule.rule [
+         fhir:index 0 ;
+         fhir:StructureMap.group.rule.name [ fhir:value "address" ] ;
+         fhir:StructureMap.group.rule.source [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.source.context [ fhir:value "facility" ] ;
+           fhir:StructureMap.group.rule.source.element [ fhir:value "address" ] ;
+           fhir:StructureMap.group.rule.source.variable [ fhir:value "address" ]
+         ] ;
+         fhir:StructureMap.group.rule.rule [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.name [ fhir:value "set country" ] ;
+           fhir:StructureMap.group.rule.source [
+             fhir:index 0 ;
+             fhir:StructureMap.group.rule.source.context [ fhir:value "address" ] ;
+             fhir:StructureMap.group.rule.source.element [ fhir:value "addressCountry" ] ;
+             fhir:StructureMap.group.rule.source.variable [ fhir:value "addressCountry" ]
+           ] ;
+           fhir:StructureMap.group.rule.target [
+             fhir:index 0 ;
+             fhir:StructureMap.group.rule.target.context [ fhir:value "vaccination" ] ;
+             fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ] ;
+             fhir:StructureMap.group.rule.target.element [ fhir:value "country" ] ;
+             fhir:StructureMap.group.rule.target.variable [ fhir:value "coding" ]
+           ], [
+             fhir:index 1 ;
+             fhir:StructureMap.group.rule.target.context [ fhir:value "coding" ] ;
+             fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ] ;
+             fhir:StructureMap.group.rule.target.element [ fhir:value "system" ] ;
+             fhir:StructureMap.group.rule.target.transform [ fhir:value "copy" ] ;
+             fhir:StructureMap.group.rule.target.parameter [
+               fhir:index 0 ;
+               fhir:StructureMap.group.rule.target.parameter.valueString [ fhir:value "urn:iso:std:iso:3166" ]
+             ]
+           ], [
+             fhir:index 2 ;
+             fhir:StructureMap.group.rule.target.context [ fhir:value "coding" ] ;
+             fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ] ;
+             fhir:StructureMap.group.rule.target.element [ fhir:value "code" ] ;
+             fhir:StructureMap.group.rule.target.transform [ fhir:value "copy" ] ;
+             fhir:StructureMap.group.rule.target.parameter [
+               fhir:index 0 ;
+               fhir:StructureMap.group.rule.target.parameter.valueId [ fhir:value "addressCountry" ]
+             ]
+           ]
+         ]
+       ], [
+         fhir:index 1 ;
+         fhir:StructureMap.group.rule.name [ fhir:value "set centre" ] ;
+         fhir:StructureMap.group.rule.source [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.source.context [ fhir:value "facility" ] ;
+           fhir:StructureMap.group.rule.source.element [ fhir:value "name" ] ;
+           fhir:StructureMap.group.rule.source.variable [ fhir:value "name" ]
+         ] ;
+         fhir:StructureMap.group.rule.target [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.target.context [ fhir:value "vaccination" ] ;
+           fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ] ;
+           fhir:StructureMap.group.rule.target.element [ fhir:value "centre" ] ;
+           fhir:StructureMap.group.rule.target.transform [ fhir:value "copy" ] ;
+           fhir:StructureMap.group.rule.target.parameter [
+             fhir:index 0 ;
+             fhir:StructureMap.group.rule.target.parameter.valueId [ fhir:value "name" ]
+           ]
+         ]
+       ]
+     ], [
+       fhir:index 8 ;
+       fhir:StructureMap.group.rule.name [ fhir:value "verifier" ] ;
+       fhir:StructureMap.group.rule.source [
+         fhir:index 0 ;
+         fhir:StructureMap.group.rule.source.context [ fhir:value "evidence" ] ;
+         fhir:StructureMap.group.rule.source.element [ fhir:value "verifier" ] ;
+         fhir:StructureMap.group.rule.source.variable [ fhir:value "verifier" ]
+       ] ;
+       fhir:StructureMap.group.rule.rule [
+         fhir:index 0 ;
+         fhir:StructureMap.group.rule.name [ fhir:value "set practitioner" ] ;
+         fhir:StructureMap.group.rule.source [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.source.context [ fhir:value "verifier" ] ;
+           fhir:StructureMap.group.rule.source.element [ fhir:value "name" ] ;
+           fhir:StructureMap.group.rule.source.variable [ fhir:value "name" ]
+         ] ;
+         fhir:StructureMap.group.rule.target [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.target.context [ fhir:value "vaccination" ] ;
+           fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ] ;
+           fhir:StructureMap.group.rule.target.element [ fhir:value "practitioner" ] ;
+           fhir:StructureMap.group.rule.target.variable [ fhir:value "practitioner" ]
+         ], [
+           fhir:index 1 ;
+           fhir:StructureMap.group.rule.target.context [ fhir:value "practitioner" ] ;
+           fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ] ;
+           fhir:StructureMap.group.rule.target.element [ fhir:value "value" ] ;
+           fhir:StructureMap.group.rule.target.transform [ fhir:value "copy" ] ;
+           fhir:StructureMap.group.rule.target.parameter [
+             fhir:index 0 ;
+             fhir:StructureMap.group.rule.target.parameter.valueId [ fhir:value "name" ]
+           ]
+         ]
+       ]
+     ]
+  ], [
+     fhir:index 4 ;
+     fhir:StructureMap.group.name [ fhir:value "EvidencetoCoreDataSetTR" ] ;
+     fhir:StructureMap.group.typeMode [ fhir:value "none" ] ;
+     fhir:StructureMap.group.input [
+       fhir:index 0 ;
+       fhir:StructureMap.group.input.name [ fhir:value "evidence" ] ;
+       fhir:StructureMap.group.input.mode [ fhir:value "source" ]
+     ], [
+       fhir:index 1 ;
+       fhir:StructureMap.group.input.name [ fhir:value "test" ] ;
+       fhir:StructureMap.group.input.mode [ fhir:value "target" ]
+     ] ;
+     fhir:StructureMap.group.rule [
+       fhir:index 0 ;
+       fhir:StructureMap.group.rule.name [ fhir:value "disease" ] ;
+       fhir:StructureMap.group.rule.source [
+         fhir:index 0 ;
+         fhir:StructureMap.group.rule.source.context [ fhir:value "evidence" ] ;
+         fhir:StructureMap.group.rule.source.element [ fhir:value "disease" ] ;
+         fhir:StructureMap.group.rule.source.variable [ fhir:value "disease" ]
+       ] ;
+       fhir:StructureMap.group.rule.rule [
+         fhir:index 0 ;
+         fhir:StructureMap.group.rule.name [ fhir:value "set COVID19 pathogen" ] ;
+         fhir:StructureMap.group.rule.source [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.source.context [ fhir:value "disease" ] ;
+           fhir:StructureMap.group.rule.source.condition [ fhir:value "disease = 'COVID-19'" ]
+         ] ;
+         fhir:StructureMap.group.rule.target [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.target.context [ fhir:value "test" ] ;
+           fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ] ;
+           fhir:StructureMap.group.rule.target.element [ fhir:value "pathogen" ] ;
+           fhir:StructureMap.group.rule.target.variable [ fhir:value "coding" ]
+         ], [
+           fhir:index 1 ;
+           fhir:StructureMap.group.rule.target.context [ fhir:value "coding" ] ;
+           fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ] ;
+           fhir:StructureMap.group.rule.target.element [ fhir:value "system" ] ;
+           fhir:StructureMap.group.rule.target.transform [ fhir:value "copy" ] ;
+           fhir:StructureMap.group.rule.target.parameter [
+             fhir:index 0 ;
+             fhir:StructureMap.group.rule.target.parameter.valueString [ fhir:value "http://id.who.int/icd11/mms" ]
+           ]
+         ], [
+           fhir:index 2 ;
+           fhir:StructureMap.group.rule.target.context [ fhir:value "coding" ] ;
+           fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ] ;
+           fhir:StructureMap.group.rule.target.element [ fhir:value "code" ] ;
+           fhir:StructureMap.group.rule.target.transform [ fhir:value "copy" ] ;
+           fhir:StructureMap.group.rule.target.parameter [
+             fhir:index 0 ;
+             fhir:StructureMap.group.rule.target.parameter.valueString [ fhir:value "XN109" ]
+           ]
+         ]
+       ], [
+         fhir:index 1 ;
+         fhir:StructureMap.group.rule.name [ fhir:value "set other pathogen" ] ;
+         fhir:StructureMap.group.rule.source [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.source.context [ fhir:value "disease" ] ;
+           fhir:StructureMap.group.rule.source.condition [ fhir:value "(disease = 'COVID-19').not()" ]
+         ] ;
+         fhir:StructureMap.group.rule.target [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.target.context [ fhir:value "test" ] ;
+           fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ] ;
+           fhir:StructureMap.group.rule.target.element [ fhir:value "pathogen" ] ;
+           fhir:StructureMap.group.rule.target.variable [ fhir:value "coding" ]
+         ], [
+           fhir:index 1 ;
+           fhir:StructureMap.group.rule.target.context [ fhir:value "coding" ] ;
+           fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ] ;
+           fhir:StructureMap.group.rule.target.element [ fhir:value "code" ] ;
+           fhir:StructureMap.group.rule.target.transform [ fhir:value "copy" ] ;
+           fhir:StructureMap.group.rule.target.parameter [
+             fhir:index 0 ;
+             fhir:StructureMap.group.rule.target.parameter.valueId [ fhir:value "disease" ]
+           ]
+         ]
+       ]
+     ], [
+       fhir:index 1 ;
+       fhir:StructureMap.group.rule.name [ fhir:value "testType" ] ;
+       fhir:StructureMap.group.rule.source [
+         fhir:index 0 ;
+         fhir:StructureMap.group.rule.source.context [ fhir:value "evidence" ] ;
+         fhir:StructureMap.group.rule.source.element [ fhir:value "testType" ] ;
+         fhir:StructureMap.group.rule.source.variable [ fhir:value "testType" ]
+       ] ;
+       fhir:StructureMap.group.rule.rule [
+         fhir:index 0 ;
+         fhir:StructureMap.group.rule.name [ fhir:value "set default type" ] ;
+         fhir:StructureMap.group.rule.source [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.source.context [ fhir:value "testType" ]
+         ] ;
+         fhir:StructureMap.group.rule.target [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.target.context [ fhir:value "test" ] ;
+           fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ] ;
+           fhir:StructureMap.group.rule.target.element [ fhir:value "type" ] ;
+           fhir:StructureMap.group.rule.target.variable [ fhir:value "coding" ]
+         ], [
+           fhir:index 1 ;
+           fhir:StructureMap.group.rule.target.context [ fhir:value "coding" ] ;
+           fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ] ;
+           fhir:StructureMap.group.rule.target.element [ fhir:value "code" ] ;
+           fhir:StructureMap.group.rule.target.transform [ fhir:value "copy" ] ;
+           fhir:StructureMap.group.rule.target.parameter [
+             fhir:index 0 ;
+             fhir:StructureMap.group.rule.target.parameter.valueId [ fhir:value "testType" ]
+           ]
+         ]
+       ], [
+         fhir:index 1 ;
+         fhir:StructureMap.group.rule.name [ fhir:value "coding" ] ;
+         fhir:StructureMap.group.rule.source [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.source.context [ fhir:value "testType" ]
+         ] ;
+         fhir:StructureMap.group.rule.target [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ] ;
+           fhir:StructureMap.group.rule.target.variable [ fhir:value "coded" ] ;
+           fhir:StructureMap.group.rule.target.transform [ fhir:value "c" ] ;
+           fhir:StructureMap.group.rule.target.parameter [
+             fhir:index 0 ;
+             fhir:StructureMap.group.rule.target.parameter.valueString [ fhir:value "http://smart.who.int/ddcc/CodeSystem/lab-test-type-divoc" ]
+           ], [
+             fhir:index 1 ;
+             fhir:StructureMap.group.rule.target.parameter.valueId [ fhir:value "testType" ]
+           ]
+         ] ;
+         fhir:StructureMap.group.rule.rule [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.name [ fhir:value "translate DIVOC type" ] ;
+           fhir:StructureMap.group.rule.source [
+             fhir:index 0 ;
+             fhir:StructureMap.group.rule.source.context [ fhir:value "testType" ] ;
+             fhir:StructureMap.group.rule.source.condition [ fhir:value "coded.memberOf('http://smart.who.int/ddcc/ValueSet/lab-test-type-divoc')" ]
+           ] ;
+           fhir:StructureMap.group.rule.target [
+             fhir:index 0 ;
+             fhir:StructureMap.group.rule.target.context [ fhir:value "test" ] ;
+             fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ] ;
+             fhir:StructureMap.group.rule.target.element [ fhir:value "type" ] ;
+             fhir:StructureMap.group.rule.target.transform [ fhir:value "translate" ] ;
+             fhir:StructureMap.group.rule.target.parameter [
+               fhir:index 0 ;
+               fhir:StructureMap.group.rule.target.parameter.valueId [ fhir:value "coded" ]
+             ], [
+               fhir:index 1 ;
+               fhir:StructureMap.group.rule.target.parameter.valueString [ fhir:value "http://smart.who.int/ddcc/ConceptMap/lab-test-type-divoc-to-icd11" ]
+             ], [
+               fhir:index 2 ;
+               fhir:StructureMap.group.rule.target.parameter.valueString [ fhir:value "Coding" ]
+             ]
+           ]
+         ]
+       ]
+     ], [
+       fhir:index 2 ;
+       fhir:StructureMap.group.rule.name [ fhir:value "sampleOrigin" ] ;
+       fhir:StructureMap.group.rule.source [
+         fhir:index 0 ;
+         fhir:StructureMap.group.rule.source.context [ fhir:value "evidence" ] ;
+         fhir:StructureMap.group.rule.source.element [ fhir:value "sampleOrigin" ] ;
+         fhir:StructureMap.group.rule.source.variable [ fhir:value "sampleOrigin" ]
+       ] ;
+       fhir:StructureMap.group.rule.rule [
+         fhir:index 0 ;
+         fhir:StructureMap.group.rule.name [ fhir:value "set default origin" ] ;
+         fhir:StructureMap.group.rule.source [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.source.context [ fhir:value "sampleOrigin" ]
+         ] ;
+         fhir:StructureMap.group.rule.target [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.target.context [ fhir:value "test" ] ;
+           fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ] ;
+           fhir:StructureMap.group.rule.target.element [ fhir:value "origin" ] ;
+           fhir:StructureMap.group.rule.target.variable [ fhir:value "coding" ]
+         ], [
+           fhir:index 1 ;
+           fhir:StructureMap.group.rule.target.context [ fhir:value "coding" ] ;
+           fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ] ;
+           fhir:StructureMap.group.rule.target.element [ fhir:value "code" ] ;
+           fhir:StructureMap.group.rule.target.transform [ fhir:value "copy" ] ;
+           fhir:StructureMap.group.rule.target.parameter [
+             fhir:index 0 ;
+             fhir:StructureMap.group.rule.target.parameter.valueId [ fhir:value "sampleOrigin" ]
+           ]
+         ]
+       ], [
+         fhir:index 1 ;
+         fhir:StructureMap.group.rule.name [ fhir:value "coding" ] ;
+         fhir:StructureMap.group.rule.source [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.source.context [ fhir:value "sampleOrigin" ]
+         ] ;
+         fhir:StructureMap.group.rule.target [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ] ;
+           fhir:StructureMap.group.rule.target.variable [ fhir:value "coded" ] ;
+           fhir:StructureMap.group.rule.target.transform [ fhir:value "c" ] ;
+           fhir:StructureMap.group.rule.target.parameter [
+             fhir:index 0 ;
+             fhir:StructureMap.group.rule.target.parameter.valueString [ fhir:value "http://smart.who.int/ddcc/CodeSystem/lab-test-sample-origin-divoc" ]
+           ], [
+             fhir:index 1 ;
+             fhir:StructureMap.group.rule.target.parameter.valueId [ fhir:value "sampleOrigin" ]
+           ]
+         ] ;
+         fhir:StructureMap.group.rule.rule [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.name [ fhir:value "translate DIVOC origin" ] ;
+           fhir:StructureMap.group.rule.source [
+             fhir:index 0 ;
+             fhir:StructureMap.group.rule.source.context [ fhir:value "sampleOrigin" ] ;
+             fhir:StructureMap.group.rule.source.condition [ fhir:value "coded.memberOf('http://smart.who.int/ddcc/ValueSet/lab-test-sample-origin-divoc')" ]
+           ] ;
+           fhir:StructureMap.group.rule.target [
+             fhir:index 0 ;
+             fhir:StructureMap.group.rule.target.context [ fhir:value "test" ] ;
+             fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ] ;
+             fhir:StructureMap.group.rule.target.element [ fhir:value "origin" ] ;
+             fhir:StructureMap.group.rule.target.transform [ fhir:value "translate" ] ;
+             fhir:StructureMap.group.rule.target.parameter [
+               fhir:index 0 ;
+               fhir:StructureMap.group.rule.target.parameter.valueId [ fhir:value "coded" ]
+             ], [
+               fhir:index 1 ;
+               fhir:StructureMap.group.rule.target.parameter.valueString [ fhir:value "http://smart.who.int/ddcc/ConceptMap/lab-test-sample-origin-divoc-to-icd11" ]
+             ], [
+               fhir:index 2 ;
+               fhir:StructureMap.group.rule.target.parameter.valueString [ fhir:value "Coding" ]
+             ]
+           ]
+         ]
+       ]
+     ], [
+       fhir:index 3 ;
+       fhir:StructureMap.group.rule.name [ fhir:value "result" ] ;
+       fhir:StructureMap.group.rule.source [
+         fhir:index 0 ;
+         fhir:StructureMap.group.rule.source.context [ fhir:value "evidence" ] ;
+         fhir:StructureMap.group.rule.source.element [ fhir:value "result" ] ;
+         fhir:StructureMap.group.rule.source.variable [ fhir:value "result" ]
+       ] ;
+       fhir:StructureMap.group.rule.rule [
+         fhir:index 0 ;
+         fhir:StructureMap.group.rule.name [ fhir:value "set default result" ] ;
+         fhir:StructureMap.group.rule.source [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.source.context [ fhir:value "result" ]
+         ] ;
+         fhir:StructureMap.group.rule.target [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.target.context [ fhir:value "test" ] ;
+           fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ] ;
+           fhir:StructureMap.group.rule.target.element [ fhir:value "result" ] ;
+           fhir:StructureMap.group.rule.target.variable [ fhir:value "coding" ]
+         ], [
+           fhir:index 1 ;
+           fhir:StructureMap.group.rule.target.context [ fhir:value "coding" ] ;
+           fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ] ;
+           fhir:StructureMap.group.rule.target.element [ fhir:value "code" ] ;
+           fhir:StructureMap.group.rule.target.transform [ fhir:value "copy" ] ;
+           fhir:StructureMap.group.rule.target.parameter [
+             fhir:index 0 ;
+             fhir:StructureMap.group.rule.target.parameter.valueId [ fhir:value "result" ]
+           ]
+         ]
+       ], [
+         fhir:index 1 ;
+         fhir:StructureMap.group.rule.name [ fhir:value "coded" ] ;
+         fhir:StructureMap.group.rule.source [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.source.context [ fhir:value "result" ]
+         ] ;
+         fhir:StructureMap.group.rule.target [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ] ;
+           fhir:StructureMap.group.rule.target.variable [ fhir:value "coded" ] ;
+           fhir:StructureMap.group.rule.target.transform [ fhir:value "c" ] ;
+           fhir:StructureMap.group.rule.target.parameter [
+             fhir:index 0 ;
+             fhir:StructureMap.group.rule.target.parameter.valueString [ fhir:value "http://smart.who.int/ddcc/CodeSystem/lab-test-qual-result-divoc" ]
+           ], [
+             fhir:index 1 ;
+             fhir:StructureMap.group.rule.target.parameter.valueId [ fhir:value "result" ]
+           ]
+         ] ;
+         fhir:StructureMap.group.rule.rule [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.name [ fhir:value "translate DIVOC result" ] ;
+           fhir:StructureMap.group.rule.source [
+             fhir:index 0 ;
+             fhir:StructureMap.group.rule.source.context [ fhir:value "result" ] ;
+             fhir:StructureMap.group.rule.source.condition [ fhir:value "coded.memberOf('http://smart.who.int/ddcc/ValueSet/lab-test-qual-result-divoc')" ]
+           ] ;
+           fhir:StructureMap.group.rule.target [
+             fhir:index 0 ;
+             fhir:StructureMap.group.rule.target.context [ fhir:value "test" ] ;
+             fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ] ;
+             fhir:StructureMap.group.rule.target.element [ fhir:value "result" ] ;
+             fhir:StructureMap.group.rule.target.transform [ fhir:value "translate" ] ;
+             fhir:StructureMap.group.rule.target.parameter [
+               fhir:index 0 ;
+               fhir:StructureMap.group.rule.target.parameter.valueId [ fhir:value "coded" ]
+             ], [
+               fhir:index 1 ;
+               fhir:StructureMap.group.rule.target.parameter.valueString [ fhir:value "http://smart.who.int/ddcc/ConceptMap/lab-test-qual-result-divoc-to-icd11" ]
+             ], [
+               fhir:index 2 ;
+               fhir:StructureMap.group.rule.target.parameter.valueString [ fhir:value "Coding" ]
+             ]
+           ]
+         ]
+       ]
+     ], [
+       fhir:index 4 ;
+       fhir:StructureMap.group.rule.name [ fhir:value "set date" ] ;
+       fhir:StructureMap.group.rule.source [
+         fhir:index 0 ;
+         fhir:StructureMap.group.rule.source.context [ fhir:value "evidence" ] ;
+         fhir:StructureMap.group.rule.source.element [ fhir:value "sampleCollectionTimestamp" ] ;
+         fhir:StructureMap.group.rule.source.variable [ fhir:value "date" ]
+       ] ;
+       fhir:StructureMap.group.rule.target [
+         fhir:index 0 ;
+         fhir:StructureMap.group.rule.target.context [ fhir:value "test" ] ;
+         fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ] ;
+         fhir:StructureMap.group.rule.target.element [ fhir:value "date" ] ;
+         fhir:StructureMap.group.rule.target.transform [ fhir:value "copy" ] ;
+         fhir:StructureMap.group.rule.target.parameter [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.target.parameter.valueId [ fhir:value "date" ]
+         ]
+       ]
+     ], [
+       fhir:index 5 ;
+       fhir:StructureMap.group.rule.name [ fhir:value "set brand" ] ;
+       fhir:StructureMap.group.rule.source [
+         fhir:index 0 ;
+         fhir:StructureMap.group.rule.source.context [ fhir:value "evidence" ] ;
+         fhir:StructureMap.group.rule.source.element [ fhir:value "testName" ] ;
+         fhir:StructureMap.group.rule.source.variable [ fhir:value "testName" ]
+       ] ;
+       fhir:StructureMap.group.rule.target [
+         fhir:index 0 ;
+         fhir:StructureMap.group.rule.target.context [ fhir:value "test" ] ;
+         fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ] ;
+         fhir:StructureMap.group.rule.target.element [ fhir:value "brand" ] ;
+         fhir:StructureMap.group.rule.target.variable [ fhir:value "coding" ]
+       ], [
+         fhir:index 1 ;
+         fhir:StructureMap.group.rule.target.context [ fhir:value "coding" ] ;
+         fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ] ;
+         fhir:StructureMap.group.rule.target.element [ fhir:value "code" ] ;
+         fhir:StructureMap.group.rule.target.transform [ fhir:value "copy" ] ;
+         fhir:StructureMap.group.rule.target.parameter [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.target.parameter.valueId [ fhir:value "testName" ]
+         ]
+       ]
+     ], [
+       fhir:index 6 ;
+       fhir:StructureMap.group.rule.name [ fhir:value "set manufacturer" ] ;
+       fhir:StructureMap.group.rule.source [
+         fhir:index 0 ;
+         fhir:StructureMap.group.rule.source.context [ fhir:value "evidence" ] ;
+         fhir:StructureMap.group.rule.source.element [ fhir:value "manufacturer" ] ;
+         fhir:StructureMap.group.rule.source.variable [ fhir:value "manufacturer" ]
+       ] ;
+       fhir:StructureMap.group.rule.target [
+         fhir:index 0 ;
+         fhir:StructureMap.group.rule.target.context [ fhir:value "test" ] ;
+         fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ] ;
+         fhir:StructureMap.group.rule.target.element [ fhir:value "manufacturer" ] ;
+         fhir:StructureMap.group.rule.target.variable [ fhir:value "coding" ]
+       ], [
+         fhir:index 1 ;
+         fhir:StructureMap.group.rule.target.context [ fhir:value "coding" ] ;
+         fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ] ;
+         fhir:StructureMap.group.rule.target.element [ fhir:value "code" ] ;
+         fhir:StructureMap.group.rule.target.transform [ fhir:value "copy" ] ;
+         fhir:StructureMap.group.rule.target.parameter [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.target.parameter.valueId [ fhir:value "manufacturer" ]
+         ]
+       ]
+     ], [
+       fhir:index 7 ;
+       fhir:StructureMap.group.rule.name [ fhir:value "facility" ] ;
+       fhir:StructureMap.group.rule.source [
+         fhir:index 0 ;
+         fhir:StructureMap.group.rule.source.context [ fhir:value "evidence" ] ;
+         fhir:StructureMap.group.rule.source.element [ fhir:value "facility" ] ;
+         fhir:StructureMap.group.rule.source.variable [ fhir:value "facility" ]
+       ] ;
+       fhir:StructureMap.group.rule.rule [
+         fhir:index 0 ;
+         fhir:StructureMap.group.rule.name [ fhir:value "address" ] ;
+         fhir:StructureMap.group.rule.source [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.source.context [ fhir:value "facility" ] ;
+           fhir:StructureMap.group.rule.source.element [ fhir:value "address" ] ;
+           fhir:StructureMap.group.rule.source.variable [ fhir:value "address" ]
+         ] ;
+         fhir:StructureMap.group.rule.rule [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.name [ fhir:value "set country" ] ;
+           fhir:StructureMap.group.rule.source [
+             fhir:index 0 ;
+             fhir:StructureMap.group.rule.source.context [ fhir:value "address" ] ;
+             fhir:StructureMap.group.rule.source.element [ fhir:value "addressCountry" ] ;
+             fhir:StructureMap.group.rule.source.variable [ fhir:value "addressCountry" ]
+           ] ;
+           fhir:StructureMap.group.rule.target [
+             fhir:index 0 ;
+             fhir:StructureMap.group.rule.target.context [ fhir:value "test" ] ;
+             fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ] ;
+             fhir:StructureMap.group.rule.target.element [ fhir:value "country" ] ;
+             fhir:StructureMap.group.rule.target.variable [ fhir:value "coding" ]
+           ], [
+             fhir:index 1 ;
+             fhir:StructureMap.group.rule.target.context [ fhir:value "coding" ] ;
+             fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ] ;
+             fhir:StructureMap.group.rule.target.element [ fhir:value "system" ] ;
+             fhir:StructureMap.group.rule.target.transform [ fhir:value "copy" ] ;
+             fhir:StructureMap.group.rule.target.parameter [
+               fhir:index 0 ;
+               fhir:StructureMap.group.rule.target.parameter.valueString [ fhir:value "urn:iso:std:iso:3166" ]
+             ]
+           ], [
+             fhir:index 2 ;
+             fhir:StructureMap.group.rule.target.context [ fhir:value "coding" ] ;
+             fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ] ;
+             fhir:StructureMap.group.rule.target.element [ fhir:value "code" ] ;
+             fhir:StructureMap.group.rule.target.transform [ fhir:value "copy" ] ;
+             fhir:StructureMap.group.rule.target.parameter [
+               fhir:index 0 ;
+               fhir:StructureMap.group.rule.target.parameter.valueId [ fhir:value "addressCountry" ]
+             ]
+           ]
+         ]
+       ], [
+         fhir:index 1 ;
+         fhir:StructureMap.group.rule.name [ fhir:value "set centre" ] ;
+         fhir:StructureMap.group.rule.source [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.source.context [ fhir:value "facility" ] ;
+           fhir:StructureMap.group.rule.source.element [ fhir:value "name" ] ;
+           fhir:StructureMap.group.rule.source.variable [ fhir:value "name" ]
+         ] ;
+         fhir:StructureMap.group.rule.target [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.target.context [ fhir:value "test" ] ;
+           fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ] ;
+           fhir:StructureMap.group.rule.target.element [ fhir:value "centre" ] ;
+           fhir:StructureMap.group.rule.target.variable [ fhir:value "coding" ]
+         ], [
+           fhir:index 1 ;
+           fhir:StructureMap.group.rule.target.context [ fhir:value "coding" ] ;
+           fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ] ;
+           fhir:StructureMap.group.rule.target.element [ fhir:value "code" ] ;
+           fhir:StructureMap.group.rule.target.transform [ fhir:value "copy" ] ;
+           fhir:StructureMap.group.rule.target.parameter [
+             fhir:index 0 ;
+             fhir:StructureMap.group.rule.target.parameter.valueId [ fhir:value "name" ]
+           ]
+         ]
+       ]
+     ]
+  ] .
+
+# - ontology header ------------------------------------------------------------
+
+<http://smart.who.int/ddcc/StructureMap/CertDIVOCtoCoreDataSet.ttl> a owl:Ontology ;
+  owl:imports fhir:fhir.ttl .
+
+# -------------------------------------------------------------------------------------
+

@@ -1,0 +1,1040 @@
+@prefix fhir: <http://hl7.org/fhir/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# - resource -------------------------------------------------------------------
+
+<http://smart.who.int/ddcc/StructureMap/QRespToVSCoreDataSet> a fhir:StructureMap ;
+  fhir:nodeRole fhir:treeRoot ;
+  fhir:Resource.id [ fhir:value "QRespToVSCoreDataSet"] ;
+  fhir:DomainResource.text [
+     fhir:Narrative.status [ fhir:value "generated" ] ;
+     fhir:Narrative.div "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p class=\"res-header-id\"><b>Generated Narrative: StructureMap QRespToVSCoreDataSet</b></p><a name=\"QRespToVSCoreDataSet\"> </a><a name=\"hcQRespToVSCoreDataSet\"> </a><pre class=\"fml\">#xD;\n<b>map</b><span style=\"color: navy\"> \"</span>http://smart.who.int/ddcc/StructureMap/QRespToVSCoreDataSet<span style=\"color: navy\">\" = \"</span>QRespToVSCoreDataSet<span style=\"color: navy\">\"#xD;\n#xD;\n</span><b>uses</b><span style=\"color: navy\"> \"</span><a href=\"http://hl7.org/fhir/R4/questionnaireresponse.html\" title=\"QuestionnaireResponse\">http://hl7.org/fhir/StructureDefinition/QuestionnaireResponse</a><span style=\"color: navy\">\" </span><b>alias </b>QResp <b>as </b><b>source</b>#xD;\n<b>uses</b><span style=\"color: navy\"> \"</span><a href=\"StructureDefinition-DDCCCoreDataSetVSCoC.html\" title=\"DDCC Core Data Set Logical Model - Vaccination Status - Continuity of Care\">http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSetVSCoC</a><span style=\"color: navy\">\" </span><b>alias </b>DDCC <b>as </b><b>target</b>#xD;\n#xD;\n<b>group </b>QRespToCoreDataSet<span style=\"color: navy\">(</span><b>source</b> <span style=\"color: maroon\">qr</span><span style=\"color: navy\"> : </span>QResp, <b>target</b> <span style=\"color: maroon\">ddcc</span><span style=\"color: navy\"> : </span>DDCC<span style=\"color: navy\">)</span><span style=\"color: navy\"> {#xD;\n</span>  qr<b> as </b><span style=\"color: maroon\">src</span><b> then </b>QRespToHeader<span style=\"color: navy\">(</span><span style=\"color: maroon\">src</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">ddcc</span><span style=\"color: navy\">)</span> <i>\"set header content\"</i><span style=\"color: navy\">;</span>#xD;\n  qr<b> as </b><span style=\"color: maroon\">src</span><span style=\"color: navy\"><b> -&gt; </b></span>ddcc.vaccination<b> as </b><span style=\"color: maroon\">vaccination</span><b> then </b>QRespToVaccination<span style=\"color: navy\">(</span><span style=\"color: maroon\">src</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">vaccination</span><span style=\"color: navy\">)</span> <i>\"set vaccination content\"</i><span style=\"color: navy\">;</span>#xD;\n  qr<b> as </b><span style=\"color: maroon\">src</span><span style=\"color: navy\"><b> -&gt; </b></span>ddcc.certificate<b> as </b><span style=\"color: maroon\">certificate</span><b> then </b>QRespToCertificate<span style=\"color: navy\">(</span><span style=\"color: maroon\">src</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">certificate</span><span style=\"color: navy\">)</span> <i>\"set certificate content\"</i><span style=\"color: navy\">;</span>#xD;\n<span style=\"color: navy\">}#xD;\n#xD;\n</span><b>group </b>QRespToHeader<span style=\"color: navy\">(</span><b>source</b> <span style=\"color: maroon\">qr</span>, <b>target</b> <span style=\"color: maroon\">ddcc</span><span style=\"color: navy\">)</span><span style=\"color: navy\"> {#xD;\n</span>  qr.item<b> as </b><span style=\"color: maroon\">item</span><b> then</b><span style=\"color: navy\"> {#xD;\n</span>    item.answer first<b> as </b><span style=\"color: maroon\">answer</span><b> where </b><span style=\"color: navy\">(</span>item.linkId = 'name'<span style=\"color: navy\">)</span><b> then</b><span style=\"color: navy\"> {#xD;\n</span>      answer.valueString<b> as </b><span style=\"color: maroon\">content</span><span style=\"color: navy\"><b> -&gt; </b></span>ddcc.name = <span style=\"color: maroon\">content</span> <i>\"set name\"</i><span style=\"color: navy\">;</span>#xD;\n    <span style=\"color: navy\">}</span> <i>\"first answser for name\"</i><span style=\"color: navy\">;</span>#xD;\n    item.answer first<b> as </b><span style=\"color: maroon\">answer</span><b> where </b><span style=\"color: navy\">(</span>item.linkId = 'birthDate'<span style=\"color: navy\">)</span><b> then</b><span style=\"color: navy\"> {#xD;\n</span>      answer.valueDate<b> as </b><span style=\"color: maroon\">content</span><span style=\"color: navy\"><b> -&gt; </b></span>ddcc.birthDate = <span style=\"color: maroon\">content</span> <i>\"set birthDate\"</i><span style=\"color: navy\">;</span>#xD;\n    <span style=\"color: navy\">}</span> <i>\"first answer for birthDate\"</i><span style=\"color: navy\">;</span>#xD;\n    item.answer first<b> as </b><span style=\"color: maroon\">answer</span><b> where </b><span style=\"color: navy\">(</span>item.linkId = 'identifier'<span style=\"color: navy\">)</span><span style=\"color: navy\"><b> -&gt; </b></span>ddcc.identifier<b> as </b><span style=\"color: maroon\">identifier</span><b> then</b><span style=\"color: navy\"> {#xD;\n</span>      answer.valueString<b> as </b><span style=\"color: maroon\">content</span><span style=\"color: navy\"><b> -&gt; </b></span>identifier.value = <span style=\"color: maroon\">content</span> <i>\"set identifier\"</i><span style=\"color: navy\">;</span>#xD;\n    <span style=\"color: navy\">}</span> <i>\"first answer for identifier\"</i><span style=\"color: navy\">;</span>#xD;\n    item.answer first<b> as </b><span style=\"color: maroon\">answer</span><b> where </b><span style=\"color: navy\">(</span>item.linkId = 'sex'<span style=\"color: navy\">)</span><b> then</b><span style=\"color: navy\"> {#xD;\n</span>      answer.valueCoding<b> as </b><span style=\"color: maroon\">coding</span><b> then</b><span style=\"color: navy\"> {#xD;\n</span>        coding.code<b> as </b><span style=\"color: maroon\">content</span><span style=\"color: navy\"><b> -&gt; </b></span>ddcc.sex = <span style=\"color: maroon\">content</span> <i>\"set sex\"</i><span style=\"color: navy\">;</span>#xD;\n      <span style=\"color: navy\">}</span> <i>\"process coding\"</i><span style=\"color: navy\">;</span>#xD;\n    <span style=\"color: navy\">}</span> <i>\"first answer for sex\"</i><span style=\"color: navy\">;</span>#xD;\n  <span style=\"color: navy\">}</span> <i>\"header items\"</i><span style=\"color: navy\">;</span>#xD;\n<span style=\"color: navy\">}#xD;\n#xD;\n</span><b>group </b>QRespToVaccination<span style=\"color: navy\">(</span><b>source</b> <span style=\"color: maroon\">qr</span>, <b>target</b> <span style=\"color: maroon\">vaccination</span><span style=\"color: navy\">)</span><span style=\"color: navy\"> {#xD;\n</span>  qr.item<b> as </b><span style=\"color: maroon\">item</span><b> then</b><span style=\"color: navy\"> {#xD;\n</span>    item.answer first<b> as </b><span style=\"color: maroon\">answer</span><b> where </b><span style=\"color: navy\">(</span>item.linkId = 'vaccine'<span style=\"color: navy\">)</span><b> then</b><span style=\"color: navy\"> {#xD;\n</span>      answer.valueCoding<b> as </b><span style=\"color: maroon\">content</span><span style=\"color: navy\"><b> -&gt; </b></span>vaccination.vaccine = <span style=\"color: maroon\">content</span> <i>\"set vaccine\"</i><span style=\"color: navy\">;</span>#xD;\n    <span style=\"color: navy\">}</span> <i>\"first answer for vaccine\"</i><span style=\"color: navy\">;</span>#xD;\n    item.answer first<b> as </b><span style=\"color: maroon\">answer</span><b> where </b><span style=\"color: navy\">(</span>item.linkId = 'brand'<span style=\"color: navy\">)</span><b> then</b><span style=\"color: navy\"> {#xD;\n</span>      answer.valueCoding<b> as </b><span style=\"color: maroon\">content</span><span style=\"color: navy\"><b> -&gt; </b></span>vaccination.brand = <span style=\"color: maroon\">content</span> <i>\"set brand\"</i><span style=\"color: navy\">;</span>#xD;\n    <span style=\"color: navy\">}</span> <i>\"first answer for brand\"</i><span style=\"color: navy\">;</span>#xD;\n    item.answer first<b> as </b><span style=\"color: maroon\">answer</span><b> where </b><span style=\"color: navy\">(</span>item.linkId = 'manufacturer'<span style=\"color: navy\">)</span><b> then</b><span style=\"color: navy\"> {#xD;\n</span>      answer.valueCoding<b> as </b><span style=\"color: maroon\">content</span><span style=\"color: navy\"><b> -&gt; </b></span>vaccination.manufacturer = <span style=\"color: maroon\">content</span> <i>\"set manufacturer\"</i><span style=\"color: navy\">;</span>#xD;\n    <span style=\"color: navy\">}</span> <i>\"first answer for manufacturer\"</i><span style=\"color: navy\">;</span>#xD;\n    item.answer first<b> as </b><span style=\"color: maroon\">answer</span><b> where </b><span style=\"color: navy\">(</span>item.linkId = 'ma_holder'<span style=\"color: navy\">)</span><b> then</b><span style=\"color: navy\"> {#xD;\n</span>      answer.valueCoding<b> as </b><span style=\"color: maroon\">content</span><span style=\"color: navy\"><b> -&gt; </b></span>vaccination.maholder = <span style=\"color: maroon\">content</span> <i>\"set maholder\"</i><span style=\"color: navy\">;</span>#xD;\n    <span style=\"color: navy\">}</span> <i>\"first answer for maholder\"</i><span style=\"color: navy\">;</span>#xD;\n    item.answer first<b> as </b><span style=\"color: maroon\">answer</span><b> where </b><span style=\"color: navy\">(</span>item.linkId = 'lot'<span style=\"color: navy\">)</span><b> then</b><span style=\"color: navy\"> {#xD;\n</span>      answer.valueString<b> as </b><span style=\"color: maroon\">content</span><span style=\"color: navy\"><b> -&gt; </b></span>vaccination.lot = <span style=\"color: maroon\">content</span> <i>\"set lot\"</i><span style=\"color: navy\">;</span>#xD;\n    <span style=\"color: navy\">}</span> <i>\"first answser for lot\"</i><span style=\"color: navy\">;</span>#xD;\n    item.answer first<b> as </b><span style=\"color: maroon\">answer</span><b> where </b><span style=\"color: navy\">(</span>item.linkId = 'date'<span style=\"color: navy\">)</span><b> then</b><span style=\"color: navy\"> {#xD;\n</span>      answer.valueDate<b> as </b><span style=\"color: maroon\">content</span><span style=\"color: navy\"><b> -&gt; </b></span>vaccination.date = <span style=\"color: maroon\">content</span> <i>\"set date\"</i><span style=\"color: navy\">;</span>#xD;\n    <span style=\"color: navy\">}</span> <i>\"first answer for date\"</i><span style=\"color: navy\">;</span>#xD;\n    item.answer first<b> as </b><span style=\"color: maroon\">answer</span><b> where </b><span style=\"color: navy\">(</span>item.linkId = 'vaccine_valid'<span style=\"color: navy\">)</span><b> then</b><span style=\"color: navy\"> {#xD;\n</span>      answer.valueDate<b> as </b><span style=\"color: maroon\">content</span><span style=\"color: navy\"><b> -&gt; </b></span>vaccination.validFrom = <span style=\"color: maroon\">content</span> <i>\"set validFrom\"</i><span style=\"color: navy\">;</span>#xD;\n    <span style=\"color: navy\">}</span> <i>\"first answer for validFrom\"</i><span style=\"color: navy\">;</span>#xD;\n    item.answer first<b> as </b><span style=\"color: maroon\">answer</span><b> where </b><span style=\"color: navy\">(</span>item.linkId = 'dose'<span style=\"color: navy\">)</span><b> then</b><span style=\"color: navy\"> {#xD;\n</span>      answer.valueInteger<b> as </b><span style=\"color: maroon\">content</span><span style=\"color: navy\"><b> -&gt; </b></span>vaccination.dose = <span style=\"color: maroon\">content</span> <i>\"set dose\"</i><span style=\"color: navy\">;</span>#xD;\n    <span style=\"color: navy\">}</span> <i>\"first answer for dose\"</i><span style=\"color: navy\">;</span>#xD;\n    item.answer first<b> as </b><span style=\"color: maroon\">answer</span><b> where </b><span style=\"color: navy\">(</span>item.linkId = 'total_doses'<span style=\"color: navy\">)</span><b> then</b><span style=\"color: navy\"> {#xD;\n</span>      answer.valueInteger<b> as </b><span style=\"color: maroon\">content</span><span style=\"color: navy\"><b> -&gt; </b></span>vaccination.totalDoses = <span style=\"color: maroon\">content</span> <i>\"set totalDoses\"</i><span style=\"color: navy\">;</span>#xD;\n    <span style=\"color: navy\">}</span> <i>\"first answer for totalDoses\"</i><span style=\"color: navy\">;</span>#xD;\n    item.answer first<b> as </b><span style=\"color: maroon\">answer</span><b> where </b><span style=\"color: navy\">(</span>item.linkId = 'country'<span style=\"color: navy\">)</span><b> then</b><span style=\"color: navy\"> {#xD;\n</span>      answer.valueCoding<b> as </b><span style=\"color: maroon\">content</span><span style=\"color: navy\"><b> -&gt; </b></span>vaccination.country = <span style=\"color: maroon\">content</span> <i>\"set country\"</i><span style=\"color: navy\">;</span>#xD;\n    <span style=\"color: navy\">}</span> <i>\"first answer for country\"</i><span style=\"color: navy\">;</span>#xD;\n    item.answer first<b> as </b><span style=\"color: maroon\">answer</span><b> where </b><span style=\"color: navy\">(</span>item.linkId = 'centre'<span style=\"color: navy\">)</span><b> then</b><span style=\"color: navy\"> {#xD;\n</span>      answer.valueString<b> as </b><span style=\"color: maroon\">content</span><span style=\"color: navy\"><b> -&gt; </b></span>vaccination.centre = <span style=\"color: maroon\">content</span> <i>\"set centre\"</i><span style=\"color: navy\">;</span>#xD;\n    <span style=\"color: navy\">}</span> <i>\"first answser for centre\"</i><span style=\"color: navy\">;</span>#xD;\n    item.answer first<b> as </b><span style=\"color: maroon\">answer</span><b> where </b><span style=\"color: navy\">(</span>item.linkId = 'hw'<span style=\"color: navy\">)</span><span style=\"color: navy\"><b> -&gt; </b></span>vaccination.practitioner<b> as </b><span style=\"color: maroon\">identifier</span><b> then</b><span style=\"color: navy\"> {#xD;\n</span>      answer.valueString<b> as </b><span style=\"color: maroon\">content</span><span style=\"color: navy\"><b> -&gt; </b></span>identifier.value = <span style=\"color: maroon\">content</span> <i>\"set practitioner\"</i><span style=\"color: navy\">;</span>#xD;\n    <span style=\"color: navy\">}</span> <i>\"first answser for practitioner\"</i><span style=\"color: navy\">;</span>#xD;\n    item.answer first<b> as </b><span style=\"color: maroon\">answer</span><b> where </b><span style=\"color: navy\">(</span>item.linkId = 'disease'<span style=\"color: navy\">)</span><b> then</b><span style=\"color: navy\"> {#xD;\n</span>      answer.valueCoding<b> as </b><span style=\"color: maroon\">content</span><span style=\"color: navy\"><b> -&gt; </b></span>vaccination.disease = <span style=\"color: maroon\">content</span> <i>\"set disease\"</i><span style=\"color: navy\">;</span>#xD;\n    <span style=\"color: navy\">}</span> <i>\"first answer for disease\"</i><span style=\"color: navy\">;</span>#xD;\n    item.answer first<b> as </b><span style=\"color: maroon\">answer</span><b> where </b><span style=\"color: navy\">(</span>item.linkId = 'due_date'<span style=\"color: navy\">)</span><b> then</b><span style=\"color: navy\"> {#xD;\n</span>      answer.valueDate<b> as </b><span style=\"color: maroon\">content</span><span style=\"color: navy\"><b> -&gt; </b></span>vaccination.nextDose = <span style=\"color: maroon\">content</span> <i>\"set nextDose\"</i><span style=\"color: navy\">;</span>#xD;\n    <span style=\"color: navy\">}</span> <i>\"first answer for nextDose\"</i><span style=\"color: navy\">;</span>#xD;\n  <span style=\"color: navy\">}</span> <i>\"vaccination items\"</i><span style=\"color: navy\">;</span>#xD;\n<span style=\"color: navy\">}#xD;\n#xD;\n</span><b>group </b>QRespToPeriod<span style=\"color: navy\">(</span><b>source</b> <span style=\"color: maroon\">qr</span>, <b>target</b> <span style=\"color: maroon\">period</span><span style=\"color: navy\">)</span><span style=\"color: navy\"> {#xD;\n</span>  qr.item<b> as </b><span style=\"color: maroon\">item</span><b> then</b><span style=\"color: navy\"> {#xD;\n</span>    item.answer first<b> as </b><span style=\"color: maroon\">answer</span><b> where </b><span style=\"color: navy\">(</span>item.linkId = 'valid_from'<span style=\"color: navy\">)</span><b> then</b><span style=\"color: navy\"> {#xD;\n</span>      answer.valueDate<b> as </b><span style=\"color: maroon\">content</span><span style=\"color: navy\"><b> -&gt; </b></span>period.start = <span style=\"color: maroon\">content</span> <i>\"set valid_from\"</i><span style=\"color: navy\">;</span>#xD;\n    <span style=\"color: navy\">}</span> <i>\"first answer for valid_from\"</i><span style=\"color: navy\">;</span>#xD;\n    item.answer first<b> as </b><span style=\"color: maroon\">answer</span><b> where </b><span style=\"color: navy\">(</span>item.linkId = 'valid_until'<span style=\"color: navy\">)</span><b> then</b><span style=\"color: navy\"> {#xD;\n</span>      answer.valueDate<b> as </b><span style=\"color: maroon\">content</span><span style=\"color: navy\"><b> -&gt; </b></span>period.end = <span style=\"color: maroon\">content</span> <i>\"set valid_until\"</i><span style=\"color: navy\">;</span>#xD;\n    <span style=\"color: navy\">}</span> <i>\"first answer for valid_until\"</i><span style=\"color: navy\">;</span>#xD;\n  <span style=\"color: navy\">}</span> <i>\"vaccination validity items\"</i><span style=\"color: navy\">;</span>#xD;\n<span style=\"color: navy\">}#xD;\n#xD;\n</span><b>group </b>QRespToCertificate<span style=\"color: navy\">(</span><b>source</b> <span style=\"color: maroon\">qr</span>, <b>target</b> <span style=\"color: maroon\">certificate</span><span style=\"color: navy\">)</span><span style=\"color: navy\"> {#xD;\n</span>  qr.item<b> as </b><span style=\"color: maroon\">item</span><b> then</b><span style=\"color: navy\"> {#xD;\n</span>    item.answer first<b> as </b><span style=\"color: maroon\">answer</span><b> where </b><span style=\"color: navy\">(</span>item.linkId = 'pha'<span style=\"color: navy\">)</span><span style=\"color: navy\"><b> -&gt; </b></span>certificate.issuer<b> as </b><span style=\"color: maroon\">issuer</span><b> then</b><span style=\"color: navy\"> {#xD;\n</span>      answer.valueString<b> as </b><span style=\"color: maroon\">content</span><span style=\"color: navy\"><b> -&gt; </b></span>issuer.identifier<b> as </b><span style=\"color: maroon\">identifier</span><b> then</b><span style=\"color: navy\"> {#xD;\n</span>        content<b> as </b><span style=\"color: maroon\">value</span><span style=\"color: navy\"><b> -&gt; </b></span>identifier.value = <span style=\"color: maroon\">value</span> <i>\"set issuer identifier\"</i><span style=\"color: navy\">;</span>#xD;\n      <span style=\"color: navy\">}</span> <i>\"set issuer\"</i><span style=\"color: navy\">;</span>#xD;\n    <span style=\"color: navy\">}</span> <i>\"first answser for hcid\"</i><span style=\"color: navy\">;</span>#xD;\n    item.answer first<b> as </b><span style=\"color: maroon\">answer</span><b> where </b><span style=\"color: navy\">(</span>item.linkId = 'hcid'<span style=\"color: navy\">)</span><span style=\"color: navy\"><b> -&gt; </b></span>certificate.hcid<b> as </b><span style=\"color: maroon\">hcid</span><b> then</b><span style=\"color: navy\"> {#xD;\n</span>      answer.valueString<b> as </b><span style=\"color: maroon\">content</span><span style=\"color: navy\"><b> -&gt; </b></span> hcid.value = <span style=\"color: maroon\">content</span><span style=\"color: navy\">, </span> certificate.version = <span style=\"color: blue\">'RC2'</span> <i>\"set hcid and version\"</i><span style=\"color: navy\">;</span>#xD;\n    <span style=\"color: navy\">}</span> <i>\"first answser for hcid\"</i><span style=\"color: navy\">;</span>#xD;\n  <span style=\"color: navy\">}</span> <i>\"certificate items\"</i><span style=\"color: navy\">;</span>#xD;\n  qr<b> as </b><span style=\"color: maroon\">src</span><span style=\"color: navy\"><b> -&gt; </b></span>certificate.period<b> as </b><span style=\"color: maroon\">period</span><b> then </b>QRespToPeriod<span style=\"color: navy\">(</span><span style=\"color: maroon\">src</span><span style=\"color: navy\">, </span><span style=\"color: maroon\">period</span><span style=\"color: navy\">)</span> <i>\"set vaccination period\"</i><span style=\"color: navy\">;</span>#xD;\n<span style=\"color: navy\">}#xD;\n#xD;\n</span></pre></div>"
+  ] ;
+  fhir:StructureMap.url [ fhir:value "http://smart.who.int/ddcc/StructureMap/QRespToVSCoreDataSet"] ;
+  fhir:StructureMap.version [ fhir:value "1.0.0"] ;
+  fhir:StructureMap.name [ fhir:value "QRespToVSCoreDataSet"] ;
+  fhir:StructureMap.status [ fhir:value "draft"] ;
+  fhir:StructureMap.date [ fhir:value "2026-09-05T20:45:54+00:00"^^xsd:dateTime] ;
+  fhir:StructureMap.publisher [ fhir:value "WHO"] ;
+  fhir:StructureMap.contact [
+     fhir:index 0 ;
+     fhir:ContactDetail.name [ fhir:value "WHO" ] ;
+     fhir:ContactDetail.telecom [
+       fhir:index 0 ;
+       fhir:ContactPoint.system [ fhir:value "url" ] ;
+       fhir:ContactPoint.value [ fhir:value "http://who.int" ]
+     ]
+  ] ;
+  fhir:StructureMap.jurisdiction [
+     fhir:index 0 ;
+     fhir:CodeableConcept.coding [
+       fhir:index 0 ;
+       fhir:Coding.system [ fhir:value "http://unstats.un.org/unsd/methods/m49/m49.htm" ] ;
+       fhir:Coding.code [ fhir:value "001" ]
+     ]
+  ] ;
+  fhir:StructureMap.structure [
+     fhir:index 0 ;
+     fhir:StructureMap.structure.url [
+       fhir:value "http://hl7.org/fhir/StructureDefinition/QuestionnaireResponse" ;
+       fhir:link <http://hl7.org/fhir/StructureDefinition/QuestionnaireResponse>
+     ] ;
+     fhir:StructureMap.structure.mode [ fhir:value "source" ] ;
+     fhir:StructureMap.structure.alias [ fhir:value "QResp" ]
+  ], [
+     fhir:index 1 ;
+     fhir:StructureMap.structure.url [
+       fhir:value "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSetVSCoC" ;
+       fhir:link <http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSetVSCoC>
+     ] ;
+     fhir:StructureMap.structure.mode [ fhir:value "target" ] ;
+     fhir:StructureMap.structure.alias [ fhir:value "DDCC" ]
+  ] ;
+  fhir:StructureMap.group [
+     fhir:index 0 ;
+     fhir:StructureMap.group.name [ fhir:value "QRespToCoreDataSet" ] ;
+     fhir:StructureMap.group.typeMode [ fhir:value "none" ] ;
+     fhir:StructureMap.group.input [
+       fhir:index 0 ;
+       fhir:StructureMap.group.input.name [ fhir:value "qr" ] ;
+       fhir:StructureMap.group.input.type [ fhir:value "QResp" ] ;
+       fhir:StructureMap.group.input.mode [ fhir:value "source" ]
+     ], [
+       fhir:index 1 ;
+       fhir:StructureMap.group.input.name [ fhir:value "ddcc" ] ;
+       fhir:StructureMap.group.input.type [ fhir:value "DDCC" ] ;
+       fhir:StructureMap.group.input.mode [ fhir:value "target" ]
+     ] ;
+     fhir:StructureMap.group.rule [
+       fhir:index 0 ;
+       fhir:StructureMap.group.rule.name [ fhir:value "set header content" ] ;
+       fhir:StructureMap.group.rule.source [
+         fhir:index 0 ;
+         fhir:StructureMap.group.rule.source.context [ fhir:value "qr" ] ;
+         fhir:StructureMap.group.rule.source.variable [ fhir:value "src" ]
+       ] ;
+       fhir:StructureMap.group.rule.dependent [
+         fhir:index 0 ;
+         fhir:StructureMap.group.rule.dependent.name [ fhir:value "QRespToHeader" ] ;
+         fhir:StructureMap.group.rule.dependent.variable [
+           fhir:value "src" ;
+           fhir:index 0
+         ], [
+           fhir:value "ddcc" ;
+           fhir:index 1
+         ]
+       ]
+     ], [
+       fhir:index 1 ;
+       fhir:StructureMap.group.rule.name [ fhir:value "set vaccination content" ] ;
+       fhir:StructureMap.group.rule.source [
+         fhir:index 0 ;
+         fhir:StructureMap.group.rule.source.context [ fhir:value "qr" ] ;
+         fhir:StructureMap.group.rule.source.variable [ fhir:value "src" ]
+       ] ;
+       fhir:StructureMap.group.rule.target [
+         fhir:index 0 ;
+         fhir:StructureMap.group.rule.target.context [ fhir:value "ddcc" ] ;
+         fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ] ;
+         fhir:StructureMap.group.rule.target.element [ fhir:value "vaccination" ] ;
+         fhir:StructureMap.group.rule.target.variable [ fhir:value "vaccination" ]
+       ] ;
+       fhir:StructureMap.group.rule.dependent [
+         fhir:index 0 ;
+         fhir:StructureMap.group.rule.dependent.name [ fhir:value "QRespToVaccination" ] ;
+         fhir:StructureMap.group.rule.dependent.variable [
+           fhir:value "src" ;
+           fhir:index 0
+         ], [
+           fhir:value "vaccination" ;
+           fhir:index 1
+         ]
+       ]
+     ], [
+       fhir:index 2 ;
+       fhir:StructureMap.group.rule.name [ fhir:value "set certificate content" ] ;
+       fhir:StructureMap.group.rule.source [
+         fhir:index 0 ;
+         fhir:StructureMap.group.rule.source.context [ fhir:value "qr" ] ;
+         fhir:StructureMap.group.rule.source.variable [ fhir:value "src" ]
+       ] ;
+       fhir:StructureMap.group.rule.target [
+         fhir:index 0 ;
+         fhir:StructureMap.group.rule.target.context [ fhir:value "ddcc" ] ;
+         fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ] ;
+         fhir:StructureMap.group.rule.target.element [ fhir:value "certificate" ] ;
+         fhir:StructureMap.group.rule.target.variable [ fhir:value "certificate" ]
+       ] ;
+       fhir:StructureMap.group.rule.dependent [
+         fhir:index 0 ;
+         fhir:StructureMap.group.rule.dependent.name [ fhir:value "QRespToCertificate" ] ;
+         fhir:StructureMap.group.rule.dependent.variable [
+           fhir:value "src" ;
+           fhir:index 0
+         ], [
+           fhir:value "certificate" ;
+           fhir:index 1
+         ]
+       ]
+     ]
+  ], [
+     fhir:index 1 ;
+     fhir:StructureMap.group.name [ fhir:value "QRespToHeader" ] ;
+     fhir:StructureMap.group.typeMode [ fhir:value "none" ] ;
+     fhir:StructureMap.group.input [
+       fhir:index 0 ;
+       fhir:StructureMap.group.input.name [ fhir:value "qr" ] ;
+       fhir:StructureMap.group.input.mode [ fhir:value "source" ]
+     ], [
+       fhir:index 1 ;
+       fhir:StructureMap.group.input.name [ fhir:value "ddcc" ] ;
+       fhir:StructureMap.group.input.mode [ fhir:value "target" ]
+     ] ;
+     fhir:StructureMap.group.rule [
+       fhir:index 0 ;
+       fhir:StructureMap.group.rule.name [ fhir:value "header items" ] ;
+       fhir:StructureMap.group.rule.source [
+         fhir:index 0 ;
+         fhir:StructureMap.group.rule.source.context [ fhir:value "qr" ] ;
+         fhir:StructureMap.group.rule.source.element [ fhir:value "item" ] ;
+         fhir:StructureMap.group.rule.source.variable [ fhir:value "item" ]
+       ] ;
+       fhir:StructureMap.group.rule.rule [
+         fhir:index 0 ;
+         fhir:StructureMap.group.rule.name [ fhir:value "first answser for name" ] ;
+         fhir:StructureMap.group.rule.source [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.source.context [ fhir:value "item" ] ;
+           fhir:StructureMap.group.rule.source.element [ fhir:value "answer" ] ;
+           fhir:StructureMap.group.rule.source.listMode [ fhir:value "first" ] ;
+           fhir:StructureMap.group.rule.source.variable [ fhir:value "answer" ] ;
+           fhir:StructureMap.group.rule.source.condition [ fhir:value "item.linkId = 'name'" ]
+         ] ;
+         fhir:StructureMap.group.rule.rule [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.name [ fhir:value "set name" ] ;
+           fhir:StructureMap.group.rule.source [
+             fhir:index 0 ;
+             fhir:StructureMap.group.rule.source.context [ fhir:value "answer" ] ;
+             fhir:StructureMap.group.rule.source.element [ fhir:value "valueString" ] ;
+             fhir:StructureMap.group.rule.source.variable [ fhir:value "content" ]
+           ] ;
+           fhir:StructureMap.group.rule.target [
+             fhir:index 0 ;
+             fhir:StructureMap.group.rule.target.context [ fhir:value "ddcc" ] ;
+             fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ] ;
+             fhir:StructureMap.group.rule.target.element [ fhir:value "name" ] ;
+             fhir:StructureMap.group.rule.target.transform [ fhir:value "copy" ] ;
+             fhir:StructureMap.group.rule.target.parameter [
+               fhir:index 0 ;
+               fhir:StructureMap.group.rule.target.parameter.valueId [ fhir:value "content" ]
+             ]
+           ]
+         ]
+       ], [
+         fhir:index 1 ;
+         fhir:StructureMap.group.rule.name [ fhir:value "first answer for birthDate" ] ;
+         fhir:StructureMap.group.rule.source [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.source.context [ fhir:value "item" ] ;
+           fhir:StructureMap.group.rule.source.element [ fhir:value "answer" ] ;
+           fhir:StructureMap.group.rule.source.listMode [ fhir:value "first" ] ;
+           fhir:StructureMap.group.rule.source.variable [ fhir:value "answer" ] ;
+           fhir:StructureMap.group.rule.source.condition [ fhir:value "item.linkId = 'birthDate'" ]
+         ] ;
+         fhir:StructureMap.group.rule.rule [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.name [ fhir:value "set birthDate" ] ;
+           fhir:StructureMap.group.rule.source [
+             fhir:index 0 ;
+             fhir:StructureMap.group.rule.source.context [ fhir:value "answer" ] ;
+             fhir:StructureMap.group.rule.source.element [ fhir:value "valueDate" ] ;
+             fhir:StructureMap.group.rule.source.variable [ fhir:value "content" ]
+           ] ;
+           fhir:StructureMap.group.rule.target [
+             fhir:index 0 ;
+             fhir:StructureMap.group.rule.target.context [ fhir:value "ddcc" ] ;
+             fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ] ;
+             fhir:StructureMap.group.rule.target.element [ fhir:value "birthDate" ] ;
+             fhir:StructureMap.group.rule.target.transform [ fhir:value "copy" ] ;
+             fhir:StructureMap.group.rule.target.parameter [
+               fhir:index 0 ;
+               fhir:StructureMap.group.rule.target.parameter.valueId [ fhir:value "content" ]
+             ]
+           ]
+         ]
+       ], [
+         fhir:index 2 ;
+         fhir:StructureMap.group.rule.name [ fhir:value "first answer for identifier" ] ;
+         fhir:StructureMap.group.rule.source [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.source.context [ fhir:value "item" ] ;
+           fhir:StructureMap.group.rule.source.element [ fhir:value "answer" ] ;
+           fhir:StructureMap.group.rule.source.listMode [ fhir:value "first" ] ;
+           fhir:StructureMap.group.rule.source.variable [ fhir:value "answer" ] ;
+           fhir:StructureMap.group.rule.source.condition [ fhir:value "item.linkId = 'identifier'" ]
+         ] ;
+         fhir:StructureMap.group.rule.target [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.target.context [ fhir:value "ddcc" ] ;
+           fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ] ;
+           fhir:StructureMap.group.rule.target.element [ fhir:value "identifier" ] ;
+           fhir:StructureMap.group.rule.target.variable [ fhir:value "identifier" ]
+         ] ;
+         fhir:StructureMap.group.rule.rule [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.name [ fhir:value "set identifier" ] ;
+           fhir:StructureMap.group.rule.source [
+             fhir:index 0 ;
+             fhir:StructureMap.group.rule.source.context [ fhir:value "answer" ] ;
+             fhir:StructureMap.group.rule.source.element [ fhir:value "valueString" ] ;
+             fhir:StructureMap.group.rule.source.variable [ fhir:value "content" ]
+           ] ;
+           fhir:StructureMap.group.rule.target [
+             fhir:index 0 ;
+             fhir:StructureMap.group.rule.target.context [ fhir:value "identifier" ] ;
+             fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ] ;
+             fhir:StructureMap.group.rule.target.element [ fhir:value "value" ] ;
+             fhir:StructureMap.group.rule.target.transform [ fhir:value "copy" ] ;
+             fhir:StructureMap.group.rule.target.parameter [
+               fhir:index 0 ;
+               fhir:StructureMap.group.rule.target.parameter.valueId [ fhir:value "content" ]
+             ]
+           ]
+         ]
+       ], [
+         fhir:index 3 ;
+         fhir:StructureMap.group.rule.name [ fhir:value "first answer for sex" ] ;
+         fhir:StructureMap.group.rule.source [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.source.context [ fhir:value "item" ] ;
+           fhir:StructureMap.group.rule.source.element [ fhir:value "answer" ] ;
+           fhir:StructureMap.group.rule.source.listMode [ fhir:value "first" ] ;
+           fhir:StructureMap.group.rule.source.variable [ fhir:value "answer" ] ;
+           fhir:StructureMap.group.rule.source.condition [ fhir:value "item.linkId = 'sex'" ]
+         ] ;
+         fhir:StructureMap.group.rule.rule [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.name [ fhir:value "process coding" ] ;
+           fhir:StructureMap.group.rule.source [
+             fhir:index 0 ;
+             fhir:StructureMap.group.rule.source.context [ fhir:value "answer" ] ;
+             fhir:StructureMap.group.rule.source.element [ fhir:value "valueCoding" ] ;
+             fhir:StructureMap.group.rule.source.variable [ fhir:value "coding" ]
+           ] ;
+           fhir:StructureMap.group.rule.rule [
+             fhir:index 0 ;
+             fhir:StructureMap.group.rule.name [ fhir:value "set sex" ] ;
+             fhir:StructureMap.group.rule.source [
+               fhir:index 0 ;
+               fhir:StructureMap.group.rule.source.context [ fhir:value "coding" ] ;
+               fhir:StructureMap.group.rule.source.element [ fhir:value "code" ] ;
+               fhir:StructureMap.group.rule.source.variable [ fhir:value "content" ]
+             ] ;
+             fhir:StructureMap.group.rule.target [
+               fhir:index 0 ;
+               fhir:StructureMap.group.rule.target.context [ fhir:value "ddcc" ] ;
+               fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ] ;
+               fhir:StructureMap.group.rule.target.element [ fhir:value "sex" ] ;
+               fhir:StructureMap.group.rule.target.transform [ fhir:value "copy" ] ;
+               fhir:StructureMap.group.rule.target.parameter [
+                 fhir:index 0 ;
+                 fhir:StructureMap.group.rule.target.parameter.valueId [ fhir:value "content" ]
+               ]
+             ]
+           ]
+         ]
+       ]
+     ]
+  ], [
+     fhir:index 2 ;
+     fhir:StructureMap.group.name [ fhir:value "QRespToVaccination" ] ;
+     fhir:StructureMap.group.typeMode [ fhir:value "none" ] ;
+     fhir:StructureMap.group.input [
+       fhir:index 0 ;
+       fhir:StructureMap.group.input.name [ fhir:value "qr" ] ;
+       fhir:StructureMap.group.input.mode [ fhir:value "source" ]
+     ], [
+       fhir:index 1 ;
+       fhir:StructureMap.group.input.name [ fhir:value "vaccination" ] ;
+       fhir:StructureMap.group.input.mode [ fhir:value "target" ]
+     ] ;
+     fhir:StructureMap.group.rule [
+       fhir:index 0 ;
+       fhir:StructureMap.group.rule.name [ fhir:value "vaccination items" ] ;
+       fhir:StructureMap.group.rule.source [
+         fhir:index 0 ;
+         fhir:StructureMap.group.rule.source.context [ fhir:value "qr" ] ;
+         fhir:StructureMap.group.rule.source.element [ fhir:value "item" ] ;
+         fhir:StructureMap.group.rule.source.variable [ fhir:value "item" ]
+       ] ;
+       fhir:StructureMap.group.rule.rule [
+         fhir:index 0 ;
+         fhir:StructureMap.group.rule.name [ fhir:value "first answer for vaccine" ] ;
+         fhir:StructureMap.group.rule.source [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.source.context [ fhir:value "item" ] ;
+           fhir:StructureMap.group.rule.source.element [ fhir:value "answer" ] ;
+           fhir:StructureMap.group.rule.source.listMode [ fhir:value "first" ] ;
+           fhir:StructureMap.group.rule.source.variable [ fhir:value "answer" ] ;
+           fhir:StructureMap.group.rule.source.condition [ fhir:value "item.linkId = 'vaccine'" ]
+         ] ;
+         fhir:StructureMap.group.rule.rule [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.name [ fhir:value "set vaccine" ] ;
+           fhir:StructureMap.group.rule.source [
+             fhir:index 0 ;
+             fhir:StructureMap.group.rule.source.context [ fhir:value "answer" ] ;
+             fhir:StructureMap.group.rule.source.element [ fhir:value "valueCoding" ] ;
+             fhir:StructureMap.group.rule.source.variable [ fhir:value "content" ]
+           ] ;
+           fhir:StructureMap.group.rule.target [
+             fhir:index 0 ;
+             fhir:StructureMap.group.rule.target.context [ fhir:value "vaccination" ] ;
+             fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ] ;
+             fhir:StructureMap.group.rule.target.element [ fhir:value "vaccine" ] ;
+             fhir:StructureMap.group.rule.target.transform [ fhir:value "copy" ] ;
+             fhir:StructureMap.group.rule.target.parameter [
+               fhir:index 0 ;
+               fhir:StructureMap.group.rule.target.parameter.valueId [ fhir:value "content" ]
+             ]
+           ]
+         ]
+       ], [
+         fhir:index 1 ;
+         fhir:StructureMap.group.rule.name [ fhir:value "first answer for brand" ] ;
+         fhir:StructureMap.group.rule.source [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.source.context [ fhir:value "item" ] ;
+           fhir:StructureMap.group.rule.source.element [ fhir:value "answer" ] ;
+           fhir:StructureMap.group.rule.source.listMode [ fhir:value "first" ] ;
+           fhir:StructureMap.group.rule.source.variable [ fhir:value "answer" ] ;
+           fhir:StructureMap.group.rule.source.condition [ fhir:value "item.linkId = 'brand'" ]
+         ] ;
+         fhir:StructureMap.group.rule.rule [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.name [ fhir:value "set brand" ] ;
+           fhir:StructureMap.group.rule.source [
+             fhir:index 0 ;
+             fhir:StructureMap.group.rule.source.context [ fhir:value "answer" ] ;
+             fhir:StructureMap.group.rule.source.element [ fhir:value "valueCoding" ] ;
+             fhir:StructureMap.group.rule.source.variable [ fhir:value "content" ]
+           ] ;
+           fhir:StructureMap.group.rule.target [
+             fhir:index 0 ;
+             fhir:StructureMap.group.rule.target.context [ fhir:value "vaccination" ] ;
+             fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ] ;
+             fhir:StructureMap.group.rule.target.element [ fhir:value "brand" ] ;
+             fhir:StructureMap.group.rule.target.transform [ fhir:value "copy" ] ;
+             fhir:StructureMap.group.rule.target.parameter [
+               fhir:index 0 ;
+               fhir:StructureMap.group.rule.target.parameter.valueId [ fhir:value "content" ]
+             ]
+           ]
+         ]
+       ], [
+         fhir:index 2 ;
+         fhir:StructureMap.group.rule.name [ fhir:value "first answer for manufacturer" ] ;
+         fhir:StructureMap.group.rule.source [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.source.context [ fhir:value "item" ] ;
+           fhir:StructureMap.group.rule.source.element [ fhir:value "answer" ] ;
+           fhir:StructureMap.group.rule.source.listMode [ fhir:value "first" ] ;
+           fhir:StructureMap.group.rule.source.variable [ fhir:value "answer" ] ;
+           fhir:StructureMap.group.rule.source.condition [ fhir:value "item.linkId = 'manufacturer'" ]
+         ] ;
+         fhir:StructureMap.group.rule.rule [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.name [ fhir:value "set manufacturer" ] ;
+           fhir:StructureMap.group.rule.source [
+             fhir:index 0 ;
+             fhir:StructureMap.group.rule.source.context [ fhir:value "answer" ] ;
+             fhir:StructureMap.group.rule.source.element [ fhir:value "valueCoding" ] ;
+             fhir:StructureMap.group.rule.source.variable [ fhir:value "content" ]
+           ] ;
+           fhir:StructureMap.group.rule.target [
+             fhir:index 0 ;
+             fhir:StructureMap.group.rule.target.context [ fhir:value "vaccination" ] ;
+             fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ] ;
+             fhir:StructureMap.group.rule.target.element [ fhir:value "manufacturer" ] ;
+             fhir:StructureMap.group.rule.target.transform [ fhir:value "copy" ] ;
+             fhir:StructureMap.group.rule.target.parameter [
+               fhir:index 0 ;
+               fhir:StructureMap.group.rule.target.parameter.valueId [ fhir:value "content" ]
+             ]
+           ]
+         ]
+       ], [
+         fhir:index 3 ;
+         fhir:StructureMap.group.rule.name [ fhir:value "first answer for maholder" ] ;
+         fhir:StructureMap.group.rule.source [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.source.context [ fhir:value "item" ] ;
+           fhir:StructureMap.group.rule.source.element [ fhir:value "answer" ] ;
+           fhir:StructureMap.group.rule.source.listMode [ fhir:value "first" ] ;
+           fhir:StructureMap.group.rule.source.variable [ fhir:value "answer" ] ;
+           fhir:StructureMap.group.rule.source.condition [ fhir:value "item.linkId = 'ma_holder'" ]
+         ] ;
+         fhir:StructureMap.group.rule.rule [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.name [ fhir:value "set maholder" ] ;
+           fhir:StructureMap.group.rule.source [
+             fhir:index 0 ;
+             fhir:StructureMap.group.rule.source.context [ fhir:value "answer" ] ;
+             fhir:StructureMap.group.rule.source.element [ fhir:value "valueCoding" ] ;
+             fhir:StructureMap.group.rule.source.variable [ fhir:value "content" ]
+           ] ;
+           fhir:StructureMap.group.rule.target [
+             fhir:index 0 ;
+             fhir:StructureMap.group.rule.target.context [ fhir:value "vaccination" ] ;
+             fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ] ;
+             fhir:StructureMap.group.rule.target.element [ fhir:value "maholder" ] ;
+             fhir:StructureMap.group.rule.target.transform [ fhir:value "copy" ] ;
+             fhir:StructureMap.group.rule.target.parameter [
+               fhir:index 0 ;
+               fhir:StructureMap.group.rule.target.parameter.valueId [ fhir:value "content" ]
+             ]
+           ]
+         ]
+       ], [
+         fhir:index 4 ;
+         fhir:StructureMap.group.rule.name [ fhir:value "first answser for lot" ] ;
+         fhir:StructureMap.group.rule.source [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.source.context [ fhir:value "item" ] ;
+           fhir:StructureMap.group.rule.source.element [ fhir:value "answer" ] ;
+           fhir:StructureMap.group.rule.source.listMode [ fhir:value "first" ] ;
+           fhir:StructureMap.group.rule.source.variable [ fhir:value "answer" ] ;
+           fhir:StructureMap.group.rule.source.condition [ fhir:value "item.linkId = 'lot'" ]
+         ] ;
+         fhir:StructureMap.group.rule.rule [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.name [ fhir:value "set lot" ] ;
+           fhir:StructureMap.group.rule.source [
+             fhir:index 0 ;
+             fhir:StructureMap.group.rule.source.context [ fhir:value "answer" ] ;
+             fhir:StructureMap.group.rule.source.element [ fhir:value "valueString" ] ;
+             fhir:StructureMap.group.rule.source.variable [ fhir:value "content" ]
+           ] ;
+           fhir:StructureMap.group.rule.target [
+             fhir:index 0 ;
+             fhir:StructureMap.group.rule.target.context [ fhir:value "vaccination" ] ;
+             fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ] ;
+             fhir:StructureMap.group.rule.target.element [ fhir:value "lot" ] ;
+             fhir:StructureMap.group.rule.target.transform [ fhir:value "copy" ] ;
+             fhir:StructureMap.group.rule.target.parameter [
+               fhir:index 0 ;
+               fhir:StructureMap.group.rule.target.parameter.valueId [ fhir:value "content" ]
+             ]
+           ]
+         ]
+       ], [
+         fhir:index 5 ;
+         fhir:StructureMap.group.rule.name [ fhir:value "first answer for date" ] ;
+         fhir:StructureMap.group.rule.source [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.source.context [ fhir:value "item" ] ;
+           fhir:StructureMap.group.rule.source.element [ fhir:value "answer" ] ;
+           fhir:StructureMap.group.rule.source.listMode [ fhir:value "first" ] ;
+           fhir:StructureMap.group.rule.source.variable [ fhir:value "answer" ] ;
+           fhir:StructureMap.group.rule.source.condition [ fhir:value "item.linkId = 'date'" ]
+         ] ;
+         fhir:StructureMap.group.rule.rule [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.name [ fhir:value "set date" ] ;
+           fhir:StructureMap.group.rule.source [
+             fhir:index 0 ;
+             fhir:StructureMap.group.rule.source.context [ fhir:value "answer" ] ;
+             fhir:StructureMap.group.rule.source.element [ fhir:value "valueDate" ] ;
+             fhir:StructureMap.group.rule.source.variable [ fhir:value "content" ]
+           ] ;
+           fhir:StructureMap.group.rule.target [
+             fhir:index 0 ;
+             fhir:StructureMap.group.rule.target.context [ fhir:value "vaccination" ] ;
+             fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ] ;
+             fhir:StructureMap.group.rule.target.element [ fhir:value "date" ] ;
+             fhir:StructureMap.group.rule.target.transform [ fhir:value "copy" ] ;
+             fhir:StructureMap.group.rule.target.parameter [
+               fhir:index 0 ;
+               fhir:StructureMap.group.rule.target.parameter.valueId [ fhir:value "content" ]
+             ]
+           ]
+         ]
+       ], [
+         fhir:index 6 ;
+         fhir:StructureMap.group.rule.name [ fhir:value "first answer for validFrom" ] ;
+         fhir:StructureMap.group.rule.source [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.source.context [ fhir:value "item" ] ;
+           fhir:StructureMap.group.rule.source.element [ fhir:value "answer" ] ;
+           fhir:StructureMap.group.rule.source.listMode [ fhir:value "first" ] ;
+           fhir:StructureMap.group.rule.source.variable [ fhir:value "answer" ] ;
+           fhir:StructureMap.group.rule.source.condition [ fhir:value "item.linkId = 'vaccine_valid'" ]
+         ] ;
+         fhir:StructureMap.group.rule.rule [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.name [ fhir:value "set validFrom" ] ;
+           fhir:StructureMap.group.rule.source [
+             fhir:index 0 ;
+             fhir:StructureMap.group.rule.source.context [ fhir:value "answer" ] ;
+             fhir:StructureMap.group.rule.source.element [ fhir:value "valueDate" ] ;
+             fhir:StructureMap.group.rule.source.variable [ fhir:value "content" ]
+           ] ;
+           fhir:StructureMap.group.rule.target [
+             fhir:index 0 ;
+             fhir:StructureMap.group.rule.target.context [ fhir:value "vaccination" ] ;
+             fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ] ;
+             fhir:StructureMap.group.rule.target.element [ fhir:value "validFrom" ] ;
+             fhir:StructureMap.group.rule.target.transform [ fhir:value "copy" ] ;
+             fhir:StructureMap.group.rule.target.parameter [
+               fhir:index 0 ;
+               fhir:StructureMap.group.rule.target.parameter.valueId [ fhir:value "content" ]
+             ]
+           ]
+         ]
+       ], [
+         fhir:index 7 ;
+         fhir:StructureMap.group.rule.name [ fhir:value "first answer for dose" ] ;
+         fhir:StructureMap.group.rule.source [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.source.context [ fhir:value "item" ] ;
+           fhir:StructureMap.group.rule.source.element [ fhir:value "answer" ] ;
+           fhir:StructureMap.group.rule.source.listMode [ fhir:value "first" ] ;
+           fhir:StructureMap.group.rule.source.variable [ fhir:value "answer" ] ;
+           fhir:StructureMap.group.rule.source.condition [ fhir:value "item.linkId = 'dose'" ]
+         ] ;
+         fhir:StructureMap.group.rule.rule [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.name [ fhir:value "set dose" ] ;
+           fhir:StructureMap.group.rule.source [
+             fhir:index 0 ;
+             fhir:StructureMap.group.rule.source.context [ fhir:value "answer" ] ;
+             fhir:StructureMap.group.rule.source.element [ fhir:value "valueInteger" ] ;
+             fhir:StructureMap.group.rule.source.variable [ fhir:value "content" ]
+           ] ;
+           fhir:StructureMap.group.rule.target [
+             fhir:index 0 ;
+             fhir:StructureMap.group.rule.target.context [ fhir:value "vaccination" ] ;
+             fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ] ;
+             fhir:StructureMap.group.rule.target.element [ fhir:value "dose" ] ;
+             fhir:StructureMap.group.rule.target.transform [ fhir:value "copy" ] ;
+             fhir:StructureMap.group.rule.target.parameter [
+               fhir:index 0 ;
+               fhir:StructureMap.group.rule.target.parameter.valueId [ fhir:value "content" ]
+             ]
+           ]
+         ]
+       ], [
+         fhir:index 8 ;
+         fhir:StructureMap.group.rule.name [ fhir:value "first answer for totalDoses" ] ;
+         fhir:StructureMap.group.rule.source [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.source.context [ fhir:value "item" ] ;
+           fhir:StructureMap.group.rule.source.element [ fhir:value "answer" ] ;
+           fhir:StructureMap.group.rule.source.listMode [ fhir:value "first" ] ;
+           fhir:StructureMap.group.rule.source.variable [ fhir:value "answer" ] ;
+           fhir:StructureMap.group.rule.source.condition [ fhir:value "item.linkId = 'total_doses'" ]
+         ] ;
+         fhir:StructureMap.group.rule.rule [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.name [ fhir:value "set totalDoses" ] ;
+           fhir:StructureMap.group.rule.source [
+             fhir:index 0 ;
+             fhir:StructureMap.group.rule.source.context [ fhir:value "answer" ] ;
+             fhir:StructureMap.group.rule.source.element [ fhir:value "valueInteger" ] ;
+             fhir:StructureMap.group.rule.source.variable [ fhir:value "content" ]
+           ] ;
+           fhir:StructureMap.group.rule.target [
+             fhir:index 0 ;
+             fhir:StructureMap.group.rule.target.context [ fhir:value "vaccination" ] ;
+             fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ] ;
+             fhir:StructureMap.group.rule.target.element [ fhir:value "totalDoses" ] ;
+             fhir:StructureMap.group.rule.target.transform [ fhir:value "copy" ] ;
+             fhir:StructureMap.group.rule.target.parameter [
+               fhir:index 0 ;
+               fhir:StructureMap.group.rule.target.parameter.valueId [ fhir:value "content" ]
+             ]
+           ]
+         ]
+       ], [
+         fhir:index 9 ;
+         fhir:StructureMap.group.rule.name [ fhir:value "first answer for country" ] ;
+         fhir:StructureMap.group.rule.source [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.source.context [ fhir:value "item" ] ;
+           fhir:StructureMap.group.rule.source.element [ fhir:value "answer" ] ;
+           fhir:StructureMap.group.rule.source.listMode [ fhir:value "first" ] ;
+           fhir:StructureMap.group.rule.source.variable [ fhir:value "answer" ] ;
+           fhir:StructureMap.group.rule.source.condition [ fhir:value "item.linkId = 'country'" ]
+         ] ;
+         fhir:StructureMap.group.rule.rule [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.name [ fhir:value "set country" ] ;
+           fhir:StructureMap.group.rule.source [
+             fhir:index 0 ;
+             fhir:StructureMap.group.rule.source.context [ fhir:value "answer" ] ;
+             fhir:StructureMap.group.rule.source.element [ fhir:value "valueCoding" ] ;
+             fhir:StructureMap.group.rule.source.variable [ fhir:value "content" ]
+           ] ;
+           fhir:StructureMap.group.rule.target [
+             fhir:index 0 ;
+             fhir:StructureMap.group.rule.target.context [ fhir:value "vaccination" ] ;
+             fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ] ;
+             fhir:StructureMap.group.rule.target.element [ fhir:value "country" ] ;
+             fhir:StructureMap.group.rule.target.transform [ fhir:value "copy" ] ;
+             fhir:StructureMap.group.rule.target.parameter [
+               fhir:index 0 ;
+               fhir:StructureMap.group.rule.target.parameter.valueId [ fhir:value "content" ]
+             ]
+           ]
+         ]
+       ], [
+         fhir:index 10 ;
+         fhir:StructureMap.group.rule.name [ fhir:value "first answser for centre" ] ;
+         fhir:StructureMap.group.rule.source [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.source.context [ fhir:value "item" ] ;
+           fhir:StructureMap.group.rule.source.element [ fhir:value "answer" ] ;
+           fhir:StructureMap.group.rule.source.listMode [ fhir:value "first" ] ;
+           fhir:StructureMap.group.rule.source.variable [ fhir:value "answer" ] ;
+           fhir:StructureMap.group.rule.source.condition [ fhir:value "item.linkId = 'centre'" ]
+         ] ;
+         fhir:StructureMap.group.rule.rule [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.name [ fhir:value "set centre" ] ;
+           fhir:StructureMap.group.rule.source [
+             fhir:index 0 ;
+             fhir:StructureMap.group.rule.source.context [ fhir:value "answer" ] ;
+             fhir:StructureMap.group.rule.source.element [ fhir:value "valueString" ] ;
+             fhir:StructureMap.group.rule.source.variable [ fhir:value "content" ]
+           ] ;
+           fhir:StructureMap.group.rule.target [
+             fhir:index 0 ;
+             fhir:StructureMap.group.rule.target.context [ fhir:value "vaccination" ] ;
+             fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ] ;
+             fhir:StructureMap.group.rule.target.element [ fhir:value "centre" ] ;
+             fhir:StructureMap.group.rule.target.transform [ fhir:value "copy" ] ;
+             fhir:StructureMap.group.rule.target.parameter [
+               fhir:index 0 ;
+               fhir:StructureMap.group.rule.target.parameter.valueId [ fhir:value "content" ]
+             ]
+           ]
+         ]
+       ], [
+         fhir:index 11 ;
+         fhir:StructureMap.group.rule.name [ fhir:value "first answser for practitioner" ] ;
+         fhir:StructureMap.group.rule.source [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.source.context [ fhir:value "item" ] ;
+           fhir:StructureMap.group.rule.source.element [ fhir:value "answer" ] ;
+           fhir:StructureMap.group.rule.source.listMode [ fhir:value "first" ] ;
+           fhir:StructureMap.group.rule.source.variable [ fhir:value "answer" ] ;
+           fhir:StructureMap.group.rule.source.condition [ fhir:value "item.linkId = 'hw'" ]
+         ] ;
+         fhir:StructureMap.group.rule.target [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.target.context [ fhir:value "vaccination" ] ;
+           fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ] ;
+           fhir:StructureMap.group.rule.target.element [ fhir:value "practitioner" ] ;
+           fhir:StructureMap.group.rule.target.variable [ fhir:value "identifier" ]
+         ] ;
+         fhir:StructureMap.group.rule.rule [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.name [ fhir:value "set practitioner" ] ;
+           fhir:StructureMap.group.rule.source [
+             fhir:index 0 ;
+             fhir:StructureMap.group.rule.source.context [ fhir:value "answer" ] ;
+             fhir:StructureMap.group.rule.source.element [ fhir:value "valueString" ] ;
+             fhir:StructureMap.group.rule.source.variable [ fhir:value "content" ]
+           ] ;
+           fhir:StructureMap.group.rule.target [
+             fhir:index 0 ;
+             fhir:StructureMap.group.rule.target.context [ fhir:value "identifier" ] ;
+             fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ] ;
+             fhir:StructureMap.group.rule.target.element [ fhir:value "value" ] ;
+             fhir:StructureMap.group.rule.target.transform [ fhir:value "copy" ] ;
+             fhir:StructureMap.group.rule.target.parameter [
+               fhir:index 0 ;
+               fhir:StructureMap.group.rule.target.parameter.valueId [ fhir:value "content" ]
+             ]
+           ]
+         ]
+       ], [
+         fhir:index 12 ;
+         fhir:StructureMap.group.rule.name [ fhir:value "first answer for disease" ] ;
+         fhir:StructureMap.group.rule.source [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.source.context [ fhir:value "item" ] ;
+           fhir:StructureMap.group.rule.source.element [ fhir:value "answer" ] ;
+           fhir:StructureMap.group.rule.source.listMode [ fhir:value "first" ] ;
+           fhir:StructureMap.group.rule.source.variable [ fhir:value "answer" ] ;
+           fhir:StructureMap.group.rule.source.condition [ fhir:value "item.linkId = 'disease'" ]
+         ] ;
+         fhir:StructureMap.group.rule.rule [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.name [ fhir:value "set disease" ] ;
+           fhir:StructureMap.group.rule.source [
+             fhir:index 0 ;
+             fhir:StructureMap.group.rule.source.context [ fhir:value "answer" ] ;
+             fhir:StructureMap.group.rule.source.element [ fhir:value "valueCoding" ] ;
+             fhir:StructureMap.group.rule.source.variable [ fhir:value "content" ]
+           ] ;
+           fhir:StructureMap.group.rule.target [
+             fhir:index 0 ;
+             fhir:StructureMap.group.rule.target.context [ fhir:value "vaccination" ] ;
+             fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ] ;
+             fhir:StructureMap.group.rule.target.element [ fhir:value "disease" ] ;
+             fhir:StructureMap.group.rule.target.transform [ fhir:value "copy" ] ;
+             fhir:StructureMap.group.rule.target.parameter [
+               fhir:index 0 ;
+               fhir:StructureMap.group.rule.target.parameter.valueId [ fhir:value "content" ]
+             ]
+           ]
+         ]
+       ], [
+         fhir:index 13 ;
+         fhir:StructureMap.group.rule.name [ fhir:value "first answer for nextDose" ] ;
+         fhir:StructureMap.group.rule.source [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.source.context [ fhir:value "item" ] ;
+           fhir:StructureMap.group.rule.source.element [ fhir:value "answer" ] ;
+           fhir:StructureMap.group.rule.source.listMode [ fhir:value "first" ] ;
+           fhir:StructureMap.group.rule.source.variable [ fhir:value "answer" ] ;
+           fhir:StructureMap.group.rule.source.condition [ fhir:value "item.linkId = 'due_date'" ]
+         ] ;
+         fhir:StructureMap.group.rule.rule [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.name [ fhir:value "set nextDose" ] ;
+           fhir:StructureMap.group.rule.source [
+             fhir:index 0 ;
+             fhir:StructureMap.group.rule.source.context [ fhir:value "answer" ] ;
+             fhir:StructureMap.group.rule.source.element [ fhir:value "valueDate" ] ;
+             fhir:StructureMap.group.rule.source.variable [ fhir:value "content" ]
+           ] ;
+           fhir:StructureMap.group.rule.target [
+             fhir:index 0 ;
+             fhir:StructureMap.group.rule.target.context [ fhir:value "vaccination" ] ;
+             fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ] ;
+             fhir:StructureMap.group.rule.target.element [ fhir:value "nextDose" ] ;
+             fhir:StructureMap.group.rule.target.transform [ fhir:value "copy" ] ;
+             fhir:StructureMap.group.rule.target.parameter [
+               fhir:index 0 ;
+               fhir:StructureMap.group.rule.target.parameter.valueId [ fhir:value "content" ]
+             ]
+           ]
+         ]
+       ]
+     ]
+  ], [
+     fhir:index 3 ;
+     fhir:StructureMap.group.name [ fhir:value "QRespToPeriod" ] ;
+     fhir:StructureMap.group.typeMode [ fhir:value "none" ] ;
+     fhir:StructureMap.group.input [
+       fhir:index 0 ;
+       fhir:StructureMap.group.input.name [ fhir:value "qr" ] ;
+       fhir:StructureMap.group.input.mode [ fhir:value "source" ]
+     ], [
+       fhir:index 1 ;
+       fhir:StructureMap.group.input.name [ fhir:value "period" ] ;
+       fhir:StructureMap.group.input.mode [ fhir:value "target" ]
+     ] ;
+     fhir:StructureMap.group.rule [
+       fhir:index 0 ;
+       fhir:StructureMap.group.rule.name [ fhir:value "vaccination validity items" ] ;
+       fhir:StructureMap.group.rule.source [
+         fhir:index 0 ;
+         fhir:StructureMap.group.rule.source.context [ fhir:value "qr" ] ;
+         fhir:StructureMap.group.rule.source.element [ fhir:value "item" ] ;
+         fhir:StructureMap.group.rule.source.variable [ fhir:value "item" ]
+       ] ;
+       fhir:StructureMap.group.rule.rule [
+         fhir:index 0 ;
+         fhir:StructureMap.group.rule.name [ fhir:value "first answer for valid_from" ] ;
+         fhir:StructureMap.group.rule.source [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.source.context [ fhir:value "item" ] ;
+           fhir:StructureMap.group.rule.source.element [ fhir:value "answer" ] ;
+           fhir:StructureMap.group.rule.source.listMode [ fhir:value "first" ] ;
+           fhir:StructureMap.group.rule.source.variable [ fhir:value "answer" ] ;
+           fhir:StructureMap.group.rule.source.condition [ fhir:value "item.linkId = 'valid_from'" ]
+         ] ;
+         fhir:StructureMap.group.rule.rule [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.name [ fhir:value "set valid_from" ] ;
+           fhir:StructureMap.group.rule.source [
+             fhir:index 0 ;
+             fhir:StructureMap.group.rule.source.context [ fhir:value "answer" ] ;
+             fhir:StructureMap.group.rule.source.element [ fhir:value "valueDate" ] ;
+             fhir:StructureMap.group.rule.source.variable [ fhir:value "content" ]
+           ] ;
+           fhir:StructureMap.group.rule.target [
+             fhir:index 0 ;
+             fhir:StructureMap.group.rule.target.context [ fhir:value "period" ] ;
+             fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ] ;
+             fhir:StructureMap.group.rule.target.element [ fhir:value "start" ] ;
+             fhir:StructureMap.group.rule.target.transform [ fhir:value "copy" ] ;
+             fhir:StructureMap.group.rule.target.parameter [
+               fhir:index 0 ;
+               fhir:StructureMap.group.rule.target.parameter.valueId [ fhir:value "content" ]
+             ]
+           ]
+         ]
+       ], [
+         fhir:index 1 ;
+         fhir:StructureMap.group.rule.name [ fhir:value "first answer for valid_until" ] ;
+         fhir:StructureMap.group.rule.source [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.source.context [ fhir:value "item" ] ;
+           fhir:StructureMap.group.rule.source.element [ fhir:value "answer" ] ;
+           fhir:StructureMap.group.rule.source.listMode [ fhir:value "first" ] ;
+           fhir:StructureMap.group.rule.source.variable [ fhir:value "answer" ] ;
+           fhir:StructureMap.group.rule.source.condition [ fhir:value "item.linkId = 'valid_until'" ]
+         ] ;
+         fhir:StructureMap.group.rule.rule [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.name [ fhir:value "set valid_until" ] ;
+           fhir:StructureMap.group.rule.source [
+             fhir:index 0 ;
+             fhir:StructureMap.group.rule.source.context [ fhir:value "answer" ] ;
+             fhir:StructureMap.group.rule.source.element [ fhir:value "valueDate" ] ;
+             fhir:StructureMap.group.rule.source.variable [ fhir:value "content" ]
+           ] ;
+           fhir:StructureMap.group.rule.target [
+             fhir:index 0 ;
+             fhir:StructureMap.group.rule.target.context [ fhir:value "period" ] ;
+             fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ] ;
+             fhir:StructureMap.group.rule.target.element [ fhir:value "end" ] ;
+             fhir:StructureMap.group.rule.target.transform [ fhir:value "copy" ] ;
+             fhir:StructureMap.group.rule.target.parameter [
+               fhir:index 0 ;
+               fhir:StructureMap.group.rule.target.parameter.valueId [ fhir:value "content" ]
+             ]
+           ]
+         ]
+       ]
+     ]
+  ], [
+     fhir:index 4 ;
+     fhir:StructureMap.group.name [ fhir:value "QRespToCertificate" ] ;
+     fhir:StructureMap.group.typeMode [ fhir:value "none" ] ;
+     fhir:StructureMap.group.input [
+       fhir:index 0 ;
+       fhir:StructureMap.group.input.name [ fhir:value "qr" ] ;
+       fhir:StructureMap.group.input.mode [ fhir:value "source" ]
+     ], [
+       fhir:index 1 ;
+       fhir:StructureMap.group.input.name [ fhir:value "certificate" ] ;
+       fhir:StructureMap.group.input.mode [ fhir:value "target" ]
+     ] ;
+     fhir:StructureMap.group.rule [
+       fhir:index 0 ;
+       fhir:StructureMap.group.rule.name [ fhir:value "certificate items" ] ;
+       fhir:StructureMap.group.rule.source [
+         fhir:index 0 ;
+         fhir:StructureMap.group.rule.source.context [ fhir:value "qr" ] ;
+         fhir:StructureMap.group.rule.source.element [ fhir:value "item" ] ;
+         fhir:StructureMap.group.rule.source.variable [ fhir:value "item" ]
+       ] ;
+       fhir:StructureMap.group.rule.rule [
+         fhir:index 0 ;
+         fhir:StructureMap.group.rule.name [ fhir:value "first answser for hcid" ] ;
+         fhir:StructureMap.group.rule.source [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.source.context [ fhir:value "item" ] ;
+           fhir:StructureMap.group.rule.source.element [ fhir:value "answer" ] ;
+           fhir:StructureMap.group.rule.source.listMode [ fhir:value "first" ] ;
+           fhir:StructureMap.group.rule.source.variable [ fhir:value "answer" ] ;
+           fhir:StructureMap.group.rule.source.condition [ fhir:value "item.linkId = 'pha'" ]
+         ] ;
+         fhir:StructureMap.group.rule.target [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.target.context [ fhir:value "certificate" ] ;
+           fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ] ;
+           fhir:StructureMap.group.rule.target.element [ fhir:value "issuer" ] ;
+           fhir:StructureMap.group.rule.target.variable [ fhir:value "issuer" ]
+         ] ;
+         fhir:StructureMap.group.rule.rule [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.name [ fhir:value "set issuer" ] ;
+           fhir:StructureMap.group.rule.source [
+             fhir:index 0 ;
+             fhir:StructureMap.group.rule.source.context [ fhir:value "answer" ] ;
+             fhir:StructureMap.group.rule.source.element [ fhir:value "valueString" ] ;
+             fhir:StructureMap.group.rule.source.variable [ fhir:value "content" ]
+           ] ;
+           fhir:StructureMap.group.rule.target [
+             fhir:index 0 ;
+             fhir:StructureMap.group.rule.target.context [ fhir:value "issuer" ] ;
+             fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ] ;
+             fhir:StructureMap.group.rule.target.element [ fhir:value "identifier" ] ;
+             fhir:StructureMap.group.rule.target.variable [ fhir:value "identifier" ]
+           ] ;
+           fhir:StructureMap.group.rule.rule [
+             fhir:index 0 ;
+             fhir:StructureMap.group.rule.name [ fhir:value "set issuer identifier" ] ;
+             fhir:StructureMap.group.rule.source [
+               fhir:index 0 ;
+               fhir:StructureMap.group.rule.source.context [ fhir:value "content" ] ;
+               fhir:StructureMap.group.rule.source.variable [ fhir:value "value" ]
+             ] ;
+             fhir:StructureMap.group.rule.target [
+               fhir:index 0 ;
+               fhir:StructureMap.group.rule.target.context [ fhir:value "identifier" ] ;
+               fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ] ;
+               fhir:StructureMap.group.rule.target.element [ fhir:value "value" ] ;
+               fhir:StructureMap.group.rule.target.transform [ fhir:value "copy" ] ;
+               fhir:StructureMap.group.rule.target.parameter [
+                 fhir:index 0 ;
+                 fhir:StructureMap.group.rule.target.parameter.valueId [ fhir:value "value" ]
+               ]
+             ]
+           ]
+         ]
+       ], [
+         fhir:index 1 ;
+         fhir:StructureMap.group.rule.name [ fhir:value "first answser for hcid" ] ;
+         fhir:StructureMap.group.rule.source [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.source.context [ fhir:value "item" ] ;
+           fhir:StructureMap.group.rule.source.element [ fhir:value "answer" ] ;
+           fhir:StructureMap.group.rule.source.listMode [ fhir:value "first" ] ;
+           fhir:StructureMap.group.rule.source.variable [ fhir:value "answer" ] ;
+           fhir:StructureMap.group.rule.source.condition [ fhir:value "item.linkId = 'hcid'" ]
+         ] ;
+         fhir:StructureMap.group.rule.target [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.target.context [ fhir:value "certificate" ] ;
+           fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ] ;
+           fhir:StructureMap.group.rule.target.element [ fhir:value "hcid" ] ;
+           fhir:StructureMap.group.rule.target.variable [ fhir:value "hcid" ]
+         ] ;
+         fhir:StructureMap.group.rule.rule [
+           fhir:index 0 ;
+           fhir:StructureMap.group.rule.name [ fhir:value "set hcid and version" ] ;
+           fhir:StructureMap.group.rule.source [
+             fhir:index 0 ;
+             fhir:StructureMap.group.rule.source.context [ fhir:value "answer" ] ;
+             fhir:StructureMap.group.rule.source.element [ fhir:value "valueString" ] ;
+             fhir:StructureMap.group.rule.source.variable [ fhir:value "content" ]
+           ] ;
+           fhir:StructureMap.group.rule.target [
+             fhir:index 0 ;
+             fhir:StructureMap.group.rule.target.context [ fhir:value "hcid" ] ;
+             fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ] ;
+             fhir:StructureMap.group.rule.target.element [ fhir:value "value" ] ;
+             fhir:StructureMap.group.rule.target.transform [ fhir:value "copy" ] ;
+             fhir:StructureMap.group.rule.target.parameter [
+               fhir:index 0 ;
+               fhir:StructureMap.group.rule.target.parameter.valueId [ fhir:value "content" ]
+             ]
+           ], [
+             fhir:index 1 ;
+             fhir:StructureMap.group.rule.target.context [ fhir:value "certificate" ] ;
+             fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ] ;
+             fhir:StructureMap.group.rule.target.element [ fhir:value "version" ] ;
+             fhir:StructureMap.group.rule.target.transform [ fhir:value "copy" ] ;
+             fhir:StructureMap.group.rule.target.parameter [
+               fhir:index 0 ;
+               fhir:StructureMap.group.rule.target.parameter.valueString [ fhir:value "RC2" ]
+             ]
+           ]
+         ]
+       ]
+     ], [
+       fhir:index 1 ;
+       fhir:StructureMap.group.rule.name [ fhir:value "set vaccination period" ] ;
+       fhir:StructureMap.group.rule.source [
+         fhir:index 0 ;
+         fhir:StructureMap.group.rule.source.context [ fhir:value "qr" ] ;
+         fhir:StructureMap.group.rule.source.variable [ fhir:value "src" ]
+       ] ;
+       fhir:StructureMap.group.rule.target [
+         fhir:index 0 ;
+         fhir:StructureMap.group.rule.target.context [ fhir:value "certificate" ] ;
+         fhir:StructureMap.group.rule.target.contextType [ fhir:value "variable" ] ;
+         fhir:StructureMap.group.rule.target.element [ fhir:value "period" ] ;
+         fhir:StructureMap.group.rule.target.variable [ fhir:value "period" ]
+       ] ;
+       fhir:StructureMap.group.rule.dependent [
+         fhir:index 0 ;
+         fhir:StructureMap.group.rule.dependent.name [ fhir:value "QRespToPeriod" ] ;
+         fhir:StructureMap.group.rule.dependent.variable [
+           fhir:value "src" ;
+           fhir:index 0
+         ], [
+           fhir:value "period" ;
+           fhir:index 1
+         ]
+       ]
+     ]
+  ] .
+
+# - ontology header ------------------------------------------------------------
+
+<http://smart.who.int/ddcc/StructureMap/QRespToVSCoreDataSet.ttl> a owl:Ontology ;
+  owl:imports fhir:fhir.ttl .
+
+# -------------------------------------------------------------------------------------
+

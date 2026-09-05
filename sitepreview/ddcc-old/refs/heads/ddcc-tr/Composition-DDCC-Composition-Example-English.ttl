@@ -1,0 +1,87 @@
+@prefix fhir: <http://hl7.org/fhir/> .
+@prefix loinc: <http://loinc.org/rdf#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# - resource -------------------------------------------------------------------
+
+<http://worldhealthorganization.github.io/ddcc/Composition/DDCC-Composition-Example-English> a fhir:Composition;
+  fhir:nodeRole fhir:treeRoot;
+  fhir:Resource.id [ fhir:value "DDCC-Composition-Example-English"];
+  fhir:Resource.meta [
+     fhir:Meta.profile [
+       fhir:value "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCVSComposition";
+       fhir:index 0;
+       fhir:link <http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCVSComposition>
+     ]
+  ];
+  fhir:DomainResource.text [
+     fhir:Narrative.status [ fhir:value "generated" ];
+     fhir:Narrative.div "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative</b></p><div style=\"display: inline-block; background-color: #d9e0e7; padding: 6px; margin: 4px; border: 1px solid #8da1b4; border-radius: 5px; line-height: 60%\"><p style=\"margin-bottom: 0px\">Resource \"DDCC-Composition-Example-English\" </p><p style=\"margin-bottom: 0px\">Profile: <a href=\"StructureDefinition-DDCCVSComposition.html\">DDCC:VS Composition</a></p></div><p><b>identifier</b>: id: 999123456123456123456 (OFFICIAL)</p><p><b>status</b>: final</p><p><b>type</b>: Immunization summary report <span style=\"background: LightGoldenRodYellow; margin: 4px; border: 1px solid khaki\"> (<a href=\"https://loinc.org/\">LOINC</a>#82593-5)</span></p><p><b>date</b>: 2020-05-06</p><p><b>author</b>: <a href=\"Organization-DDCC-Organization-English.html\">Organization/DDCC-Organization-English</a> \"Government Hospital\"</p><p><b>title</b>: Digital Documentation of COVID-19 Certificate (DDCC)</p><h3>Attesters</h3><table class=\"grid\"><tr><td>-</td><td><b>Mode</b></td><td><b>Party</b></td></tr><tr><td>*</td><td>official</td><td><a href=\"Organization-DDCC-Organization-English.html\">Organization/DDCC-Organization-English</a> \"Government Hospital\"</td></tr></table></div>"
+  ];
+  fhir:Composition.identifier [
+     fhir:Identifier.use [ fhir:value "official" ];
+     fhir:Identifier.system [ fhir:value "urn:EXAMPLE-who-:ddcc:composition:ids" ];
+     fhir:Identifier.value [ fhir:value "999123456123456123456" ]
+  ];
+  fhir:Composition.status [ fhir:value "final"];
+  fhir:Composition.type [
+     fhir:CodeableConcept.coding [
+       fhir:index 0;
+       a loinc:82593-5;
+       fhir:Coding.system [ fhir:value "http://loinc.org" ];
+       fhir:Coding.code [ fhir:value "82593-5" ]
+     ]
+  ];
+  fhir:Composition.subject [
+     fhir:link <http://worldhealthorganization.github.io/ddcc/Patient/DDCC-Patient-English>;
+     fhir:Reference.reference [ fhir:value "Patient/DDCC-Patient-English" ]
+  ];
+  fhir:Composition.date [ fhir:value "2020-05-06"^^xsd:date];
+  fhir:Composition.author [
+     fhir:index 0;
+     fhir:link <http://worldhealthorganization.github.io/ddcc/Organization/DDCC-Organization-English>;
+     fhir:Reference.reference [ fhir:value "Organization/DDCC-Organization-English" ]
+  ];
+  fhir:Composition.title [ fhir:value "Digital Documentation of COVID-19 Certificate (DDCC)"];
+  fhir:Composition.attester [
+     fhir:index 0;
+     fhir:Composition.attester.mode [ fhir:value "official" ];
+     fhir:Composition.attester.party [
+       fhir:link <http://worldhealthorganization.github.io/ddcc/Organization/DDCC-Organization-English>;
+       fhir:Reference.reference [ fhir:value "Organization/DDCC-Organization-English" ]
+     ]
+  ];
+  fhir:Composition.section [
+     fhir:index 0;
+     fhir:Composition.section.code [
+       fhir:CodeableConcept.coding [
+         fhir:index 0;
+         a loinc:11369-6;
+         fhir:Coding.system [ fhir:value "http://loinc.org" ];
+         fhir:Coding.code [ fhir:value "11369-6" ]
+       ]
+     ];
+     fhir:Composition.section.focus [
+       fhir:link <http://worldhealthorganization.github.io/ddcc/Immunization/DDCC-Immunization-English>;
+       fhir:Reference.reference [ fhir:value "Immunization/DDCC-Immunization-English" ]
+     ];
+     fhir:Composition.section.entry [
+       fhir:index 0;
+       fhir:link <http://worldhealthorganization.github.io/ddcc/Immunization/DDCC-Immunization-English>;
+       fhir:Reference.reference [ fhir:value "Immunization/DDCC-Immunization-English" ]
+     ], [
+       fhir:index 1;
+       fhir:link <http://worldhealthorganization.github.io/ddcc/ImmunizationRecommendation/DDCC-ImmunizationRecommendation-English>;
+       fhir:Reference.reference [ fhir:value "ImmunizationRecommendation/DDCC-ImmunizationRecommendation-English" ]
+     ]
+  ] .
+
+# - ontology header ------------------------------------------------------------
+
+<http://worldhealthorganization.github.io/ddcc/Composition/DDCC-Composition-Example-English.ttl> a owl:Ontology;
+  owl:imports fhir:fhir.ttl .
+
+# -------------------------------------------------------------------------------------
+

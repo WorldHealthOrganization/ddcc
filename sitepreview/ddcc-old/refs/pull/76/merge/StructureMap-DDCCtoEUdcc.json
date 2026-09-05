@@ -1,0 +1,692 @@
+{
+  "resourceType": "StructureMap",
+  "id": "DDCCtoEUdcc",
+  "meta": {
+    "versionId": "1",
+    "lastUpdated": "2021-12-21T20:57:04.447+00:00"
+  },
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><pre>map &quot;http://worldhealthorganization.github.io/ddcc/StructureMap/ddcc-to-eu-dcc&quot; = &quot;DDCCtoEUdcc&quot;\r\n\r\n\r\nuses &quot;http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCComposition&quot; alias DDCC as source\r\nuses &quot;http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCDocument&quot; alias DDCCDocument as source\r\nuses &quot;http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCPatient&quot; alias DDCCPatient as source\r\nuses &quot;http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCComposition&quot; alias DDCCComposition as source\r\nuses &quot;http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCOrganization&quot; alias DDCCOrganization as source\r\nuses &quot;http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCountryOfVaccination&quot; alias DDCCCountryOfVaccination as source\r\nuses &quot;http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCVaccineBrand&quot; alias DDCCVaccineBrand as source\r\nuses &quot;http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCImmunization&quot; alias DDCCImmunization as source\r\nuses &quot;http://hl7.eu/fhir/ig/dcc/StructureDefinition/HC1&quot; alias EUDCC as target\r\nuses &quot;http://hl7.eu/fhir/ig/dcc/StructureDefinition/v&quot; alias vacEvent as target\r\n\r\ngroup DecodeDDCCtoQR(source ddcc : DDCCDocument, target qr : EUDCC) {\r\n  ddcc -&gt; qr.ver = 'XXX' &quot;Version&quot;;\r\n  ddcc.entry as entry then {\r\n    entry.resource : DDCCPatient as patient then DecodePatientToQR(patient, qr) &quot;Patient&quot;;\r\n  } &quot;Patient&quot;;\r\n  ddcc.entry as entry then {\r\n    entry.resource : Immunization as immunization then DecodeImmunizationToQR(ddcc, immunization, qr) &quot;Immunization&quot;;\r\n  } &quot;Immunization&quot;;\r\n}\r\n\r\ngroup DecodePatientToQR(source patient : DDCCPatient, target qr : EUDCC) {\r\n  patient.birthDate as birthDate -&gt; qr.dob = birthDate;\r\n  patient.name as name then {\r\n    name.text as text -&gt; qr.nam = text;\r\n  };\r\n}\r\n\r\ngroup DecodeImmunizationToQR(source ddcc : DDCCDocument, source immunization : DDCCImmunization, target qr : EUDCC) {\r\n  immunization -&gt; qr.v = create('http://hl7.eu/fhir/ig/dcc/StructureDefinition/v') as vacEvent then {\r\n    immunization.protocolApplied as protocol then {\r\n      protocol.doseNumberPositiveInt as dose -&gt; vacEvent.dn = dose;\r\n      protocol.seriesDosesPositiveInt as doseNum -&gt; vacEvent.sd = doseNum;\r\n      protocol.targetDisease as targetDisease then {\r\n        targetDisease.coding as coding then {\r\n          coding.code as code -&gt; vacEvent.tg = code;\r\n        } &quot;Protocol-Disease-Code&quot;;\r\n      } &quot;Protocol-Disease&quot;;\r\n    } &quot;Protocol&quot;;\r\n    immunization.occurrenceDateTime as date -&gt; vacEvent.dt = date;\r\n    // TODO: need to populate vacEvent.ma market authorization holder\r\n    immunization.extension as country where (url = 'http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCountryOfVaccination') then {\r\n      country.valueCode as code -&gt; vacEvent.co = code;\r\n    } &quot;Country&quot;;\r\n    // immunization.extension : DDCCBrand as brand\r\n    immunization.extension as brand where (url = 'http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCVaccineBrand') then {\r\n      brand.valueCoding as valueCoding then {\r\n        valueCoding.code as code -&gt; vacEvent.mp = code;\r\n      } &quot;Vaccine-Brand-Code&quot;;\r\n    } &quot;Vaccine-Brand&quot;;\r\n    // immunization.vaccineCode : Coding as vaccineCode then {\r\n    immunization.vaccineCode as vaccineCode then {\r\n      vaccineCode.coding as coding then {\r\n        coding.code as code -&gt; vacEvent.vp = code;\r\n      } &quot;Vaccine-Code&quot;;\r\n    } &quot;Vaccine-Coding&quot;;\r\n    ddcc.entry as entry then {\r\n      // entry.resource : DDCCOrganization as organization\r\n      entry.resource : Organization as organization then {\r\n        organization.name as name -&gt; vacEvent.is = name;\r\n      } &quot;Centre-Name&quot;;\r\n    } &quot;Vaccination-Centre&quot;;\r\n    ddcc.entry as entry then {\r\n      // entry.resource : DDCCComposition as composition\r\n      entry.resource : Composition as composition then {\r\n        composition.identifier as identifier then {\r\n          identifier.value as value -&gt; vacEvent.ci = value;\r\n        } &quot;Vaccination-Event-ID-Value&quot;;\r\n      } &quot;Vaccination-Event-ID&quot;;\r\n    } &quot;Vaccination-Event&quot;;\r\n  } &quot;Vaccination&quot;;\r\n}\r\n\r\n</pre></div>"
+  },
+  "url": "http://worldhealthorganization.github.io/ddcc/StructureMap/ddcc-to-eu-dcc",
+  "version": "0.3.1",
+  "name": "DDCCtoEUdcc",
+  "status": "draft",
+  "date": "2022-01-25T14:31:46+00:00",
+  "publisher": "WHO",
+  "contact": [
+    {
+      "name": "WHO",
+      "telecom": [
+        {
+          "system": "url",
+          "value": "http://who.int"
+        }
+      ]
+    }
+  ],
+  "jurisdiction": [
+    {
+      "coding": [
+        {
+          "system": "http://unstats.un.org/unsd/methods/m49/m49.htm",
+          "code": "001"
+        }
+      ]
+    }
+  ],
+  "structure": [
+    {
+      "url": "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCComposition",
+      "mode": "source",
+      "alias": "DDCC"
+    },
+    {
+      "url": "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCDocument",
+      "mode": "source",
+      "alias": "DDCCDocument"
+    },
+    {
+      "url": "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCPatient",
+      "mode": "source",
+      "alias": "DDCCPatient"
+    },
+    {
+      "url": "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCComposition",
+      "mode": "source",
+      "alias": "DDCCComposition"
+    },
+    {
+      "url": "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCOrganization",
+      "mode": "source",
+      "alias": "DDCCOrganization"
+    },
+    {
+      "url": "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCountryOfVaccination",
+      "mode": "source",
+      "alias": "DDCCCountryOfVaccination"
+    },
+    {
+      "url": "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCVaccineBrand",
+      "mode": "source",
+      "alias": "DDCCVaccineBrand"
+    },
+    {
+      "url": "http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCImmunization",
+      "mode": "source",
+      "alias": "DDCCImmunization"
+    },
+    {
+      "url": "http://hl7.eu/fhir/ig/dcc/StructureDefinition/HC1",
+      "mode": "target",
+      "alias": "EUDCC"
+    },
+    {
+      "url": "http://hl7.eu/fhir/ig/dcc/StructureDefinition/v",
+      "mode": "target",
+      "alias": "vacEvent"
+    }
+  ],
+  "group": [
+    {
+      "name": "DecodeDDCCtoQR",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "ddcc",
+          "type": "DDCCDocument",
+          "mode": "source"
+        },
+        {
+          "name": "qr",
+          "type": "EUDCC",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "Version",
+          "source": [
+            {
+              "context": "ddcc"
+            }
+          ],
+          "target": [
+            {
+              "context": "qr",
+              "contextType": "variable",
+              "element": "ver",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "XXX"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Patient",
+          "source": [
+            {
+              "context": "ddcc",
+              "element": "entry",
+              "variable": "entry"
+            }
+          ],
+          "rule": [
+            {
+              "name": "Patient",
+              "source": [
+                {
+                  "context": "entry",
+                  "type": "DDCCPatient",
+                  "element": "resource",
+                  "variable": "patient"
+                }
+              ],
+              "dependent": [
+                {
+                  "name": "DecodePatientToQR",
+                  "variable": [
+                    "patient",
+                    "qr"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Immunization",
+          "source": [
+            {
+              "context": "ddcc",
+              "element": "entry",
+              "variable": "entry"
+            }
+          ],
+          "rule": [
+            {
+              "name": "Immunization",
+              "source": [
+                {
+                  "context": "entry",
+                  "type": "Immunization",
+                  "element": "resource",
+                  "variable": "immunization"
+                }
+              ],
+              "dependent": [
+                {
+                  "name": "DecodeImmunizationToQR",
+                  "variable": [
+                    "ddcc",
+                    "immunization",
+                    "qr"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "DecodePatientToQR",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "patient",
+          "type": "DDCCPatient",
+          "mode": "source"
+        },
+        {
+          "name": "qr",
+          "type": "EUDCC",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "birthDate",
+          "source": [
+            {
+              "context": "patient",
+              "element": "birthDate",
+              "variable": "birthDate"
+            }
+          ],
+          "target": [
+            {
+              "context": "qr",
+              "contextType": "variable",
+              "element": "dob",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "birthDate"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "name",
+          "source": [
+            {
+              "context": "patient",
+              "element": "name",
+              "variable": "name"
+            }
+          ],
+          "rule": [
+            {
+              "name": "text",
+              "source": [
+                {
+                  "context": "name",
+                  "element": "text",
+                  "variable": "text"
+                }
+              ],
+              "target": [
+                {
+                  "context": "qr",
+                  "contextType": "variable",
+                  "element": "nam",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "text"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "DecodeImmunizationToQR",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "ddcc",
+          "type": "DDCCDocument",
+          "mode": "source"
+        },
+        {
+          "name": "immunization",
+          "type": "DDCCImmunization",
+          "mode": "source"
+        },
+        {
+          "name": "qr",
+          "type": "EUDCC",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "Vaccination",
+          "source": [
+            {
+              "context": "immunization"
+            }
+          ],
+          "target": [
+            {
+              "context": "qr",
+              "contextType": "variable",
+              "element": "v",
+              "variable": "vacEvent",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "http://hl7.eu/fhir/ig/dcc/StructureDefinition/v"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "Protocol",
+              "source": [
+                {
+                  "context": "immunization",
+                  "element": "protocolApplied",
+                  "variable": "protocol"
+                }
+              ],
+              "rule": [
+                {
+                  "name": "doseNumberPositiveInt",
+                  "source": [
+                    {
+                      "context": "protocol",
+                      "element": "doseNumberPositiveInt",
+                      "variable": "dose"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vacEvent",
+                      "contextType": "variable",
+                      "element": "dn",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "dose"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "seriesDosesPositiveInt",
+                  "source": [
+                    {
+                      "context": "protocol",
+                      "element": "seriesDosesPositiveInt",
+                      "variable": "doseNum"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vacEvent",
+                      "contextType": "variable",
+                      "element": "sd",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "doseNum"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "Protocol-Disease",
+                  "source": [
+                    {
+                      "context": "protocol",
+                      "element": "targetDisease",
+                      "variable": "targetDisease"
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "Protocol-Disease-Code",
+                      "source": [
+                        {
+                          "context": "targetDisease",
+                          "element": "coding",
+                          "variable": "coding"
+                        }
+                      ],
+                      "rule": [
+                        {
+                          "name": "code",
+                          "source": [
+                            {
+                              "context": "coding",
+                              "element": "code",
+                              "variable": "code"
+                            }
+                          ],
+                          "target": [
+                            {
+                              "context": "vacEvent",
+                              "contextType": "variable",
+                              "element": "tg",
+                              "transform": "copy",
+                              "parameter": [
+                                {
+                                  "valueId": "code"
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "occurrenceDateTime",
+              "source": [
+                {
+                  "context": "immunization",
+                  "element": "occurrenceDateTime",
+                  "variable": "date"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vacEvent",
+                  "contextType": "variable",
+                  "element": "dt",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "date"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "Country",
+              "source": [
+                {
+                  "context": "immunization",
+                  "element": "extension",
+                  "variable": "country",
+                  "condition": "(url = 'http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCountryOfVaccination')"
+                }
+              ],
+              "rule": [
+                {
+                  "name": "valueCode",
+                  "source": [
+                    {
+                      "context": "country",
+                      "element": "valueCode",
+                      "variable": "code"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vacEvent",
+                      "contextType": "variable",
+                      "element": "co",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "code"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "documentation": "TODO: need to populate vacEvent.ma market authorization holder"
+            },
+            {
+              "name": "Vaccine-Brand",
+              "source": [
+                {
+                  "context": "immunization",
+                  "element": "extension",
+                  "variable": "brand",
+                  "condition": "(url = 'http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCVaccineBrand')"
+                }
+              ],
+              "rule": [
+                {
+                  "name": "Vaccine-Brand-Code",
+                  "source": [
+                    {
+                      "context": "brand",
+                      "element": "valueCoding",
+                      "variable": "valueCoding"
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "code",
+                      "source": [
+                        {
+                          "context": "valueCoding",
+                          "element": "code",
+                          "variable": "code"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "vacEvent",
+                          "contextType": "variable",
+                          "element": "mp",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "code"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "documentation": "immunization.extension : DDCCBrand as brand"
+            },
+            {
+              "name": "Vaccine-Coding",
+              "source": [
+                {
+                  "context": "immunization",
+                  "element": "vaccineCode",
+                  "variable": "vaccineCode"
+                }
+              ],
+              "rule": [
+                {
+                  "name": "Vaccine-Code",
+                  "source": [
+                    {
+                      "context": "vaccineCode",
+                      "element": "coding",
+                      "variable": "coding"
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "code",
+                      "source": [
+                        {
+                          "context": "coding",
+                          "element": "code",
+                          "variable": "code"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "vacEvent",
+                          "contextType": "variable",
+                          "element": "vp",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "code"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "documentation": "immunization.vaccineCode : Coding as vaccineCode then {"
+            },
+            {
+              "name": "Vaccination-Centre",
+              "source": [
+                {
+                  "context": "ddcc",
+                  "element": "entry",
+                  "variable": "entry"
+                }
+              ],
+              "rule": [
+                {
+                  "name": "Centre-Name",
+                  "source": [
+                    {
+                      "context": "entry",
+                      "type": "Organization",
+                      "element": "resource",
+                      "variable": "organization"
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "name",
+                      "source": [
+                        {
+                          "context": "organization",
+                          "element": "name",
+                          "variable": "name"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "vacEvent",
+                          "contextType": "variable",
+                          "element": "is",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "name"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "entry.resource : DDCCOrganization as organization"
+                }
+              ]
+            },
+            {
+              "name": "Vaccination-Event",
+              "source": [
+                {
+                  "context": "ddcc",
+                  "element": "entry",
+                  "variable": "entry"
+                }
+              ],
+              "rule": [
+                {
+                  "name": "Vaccination-Event-ID",
+                  "source": [
+                    {
+                      "context": "entry",
+                      "type": "Composition",
+                      "element": "resource",
+                      "variable": "composition"
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "Vaccination-Event-ID-Value",
+                      "source": [
+                        {
+                          "context": "composition",
+                          "element": "identifier",
+                          "variable": "identifier"
+                        }
+                      ],
+                      "rule": [
+                        {
+                          "name": "value",
+                          "source": [
+                            {
+                              "context": "identifier",
+                              "element": "value",
+                              "variable": "value"
+                            }
+                          ],
+                          "target": [
+                            {
+                              "context": "vacEvent",
+                              "contextType": "variable",
+                              "element": "ci",
+                              "transform": "copy",
+                              "parameter": [
+                                {
+                                  "valueId": "value"
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "entry.resource : DDCCComposition as composition"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

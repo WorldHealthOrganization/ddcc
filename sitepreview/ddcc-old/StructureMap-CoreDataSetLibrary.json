@@ -1,0 +1,605 @@
+{
+  "resourceType" : "StructureMap",
+  "id" : "CoreDataSetLibrary",
+  "meta" : {
+    "versionId" : "1",
+    "lastUpdated" : "2022-03-01T19:17:52.081+00:00"
+  },
+  "text" : {
+    "status" : "generated",
+    "div" : "<div xmlns=\"http://www.w3.org/1999/xhtml\"><pre>map &quot;http://smart.who.int/ddcc/StructureMap/CoreDataSetLibrary&quot; = &quot;CoreDataSetLibrary&quot;\r\n\r\n\r\nuses &quot;http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.VS&quot; alias DDCCVS as source\r\nuses &quot;http://hl7.org/fhir/StructureDefinition/Patient&quot; alias Patient as target\r\nuses &quot;http://smart.who.int/ddcc/StructureDefinition/DDCCPatient&quot; alias DDCCPatient as produced\r\nuses &quot;http://smart.who.int/ddcc/StructureDefinition/DDCCDocumentReferenceQR&quot; alias DDCCDocRefQR as produced\r\nuses &quot;http://smart.who.int/ddcc/StructureDefinition/DDCCComposition&quot; alias DDCCComposition as produced\r\n\r\ngroup DDCCToPatient(source src : DDCCVS, target patient : DDCCPatient, source pid) {\r\n  pid -&gt; patient.id = pid &quot;set id&quot;;\r\n  src.name as name -&gt; patient.name as tName then {\r\n    name -&gt; tName.text = name &quot;set name&quot;;\r\n  } &quot;set full name&quot;;\r\n  src.birthDate as birthDate -&gt; patient.birthDate = birthDate &quot;set birthDate&quot;;\r\n  src.identifier as identifier -&gt; patient.identifier = identifier &quot;set identifier&quot;;\r\n}\r\n\r\ngroup DDCCToDocumentReference(source src : DDCCVS, target ref : DDCCDocRefQR, source id, source pid) {\r\n  id -&gt; ref.id = id &quot;set id&quot;;\r\n  src -&gt; ref.status = 'current' &quot;set status&quot;;\r\n  src -&gt;  ref.subject as patient,  patient.reference = append('Patient/', pid) &quot;set patient&quot;;\r\n  src -&gt; ref.content as content then {\r\n    src -&gt;  content.attachment as attachment,  attachment.contentType = 'application/json' &quot;set contentType&quot;;\r\n    src -&gt;  content.format as format,  format.system = 'http://smart.who.int/ddcc/CodeSystem/DDCC-QR-Format-CodeSystem',  format.code = 'serialized' &quot;set format code&quot;;\r\n  } &quot;set serialized content&quot;;\r\n  src -&gt; ref.content as content then {\r\n    src -&gt;  content.attachment as attachment,  attachment.contentType = 'image/png' &quot;set contentType&quot;;\r\n    src -&gt;  content.format as format,  format.system = 'http://smart.who.int/ddcc/CodeSystem/DDCC-QR-Format-CodeSystem',  format.code = 'image' &quot;set format code&quot;;\r\n  } &quot;set image content&quot;;\r\n  src -&gt; ref.content as content then {\r\n    src -&gt;  content.attachment as attachment,  attachment.contentType = 'application/pdf' &quot;set contentType&quot;;\r\n    src -&gt;  content.format as format,  format.system = 'http://smart.who.int/ddcc/CodeSystem/DDCC-QR-Format-CodeSystem',  format.code = 'pdf' &quot;set format code&quot;;\r\n  } &quot;set pdf content&quot;;\r\n}\r\n\r\ngroup DDCCToComposition(source src : DDCCVS, target comp : DDCCComposition, source id, source pid) {\r\n  id -&gt; comp.id = id &quot;set id&quot;;\r\n  src -&gt;  comp.subject as patient,  patient.reference = append('Patient/', pid) &quot;set patient&quot;;\r\n  src -&gt;  comp.type as type,  type.coding as coding then {\r\n    src -&gt;  coding.system = 'http://loinc.org',  coding.code = '82593-5' &quot;set type coding&quot;;\r\n  } &quot;set type&quot;;\r\n  src.certificate as certificate -&gt;  comp.author as author,  comp.event as event then {\r\n    certificate.period as period -&gt; event.period = period &quot;set event period&quot;;\r\n    certificate.issuer as issuer -&gt; author.type = 'Organization' then {\r\n      issuer.identifier as pha -&gt; author.identifier as identifier then {\r\n        pha.value as value -&gt; identifier.value = value &quot;set pha&quot;;\r\n      } &quot;set author identifier&quot;;\r\n    } &quot;set author ref&quot;;\r\n  } &quot;set certificate&quot;;\r\n}\r\n\r\n</pre></div>"
+  },
+  "url" : "http://smart.who.int/ddcc/StructureMap/CoreDataSetLibrary",
+  "version" : "1.0.0",
+  "name" : "CoreDataSetLibrary",
+  "status" : "draft",
+  "date" : "2023-11-06T04:25:12+00:00",
+  "publisher" : "WHO",
+  "contact" : [{
+    "name" : "WHO",
+    "telecom" : [{
+      "system" : "url",
+      "value" : "http://who.int"
+    }]
+  }],
+  "jurisdiction" : [{
+    "coding" : [{
+      "system" : "http://unstats.un.org/unsd/methods/m49/m49.htm",
+      "code" : "001"
+    }]
+  }],
+  "structure" : [{
+    "url" : "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.VS",
+    "mode" : "source",
+    "alias" : "DDCCVS"
+  },
+  {
+    "url" : "http://hl7.org/fhir/StructureDefinition/Patient",
+    "mode" : "target",
+    "alias" : "Patient"
+  },
+  {
+    "url" : "http://smart.who.int/ddcc/StructureDefinition/DDCCPatient",
+    "mode" : "produced",
+    "alias" : "DDCCPatient"
+  },
+  {
+    "url" : "http://smart.who.int/ddcc/StructureDefinition/DDCCDocumentReferenceQR",
+    "mode" : "produced",
+    "alias" : "DDCCDocRefQR"
+  },
+  {
+    "url" : "http://smart.who.int/ddcc/StructureDefinition/DDCCComposition",
+    "mode" : "produced",
+    "alias" : "DDCCComposition"
+  }],
+  "group" : [{
+    "name" : "DDCCToPatient",
+    "typeMode" : "none",
+    "input" : [{
+      "name" : "src",
+      "type" : "DDCCVS",
+      "mode" : "source"
+    },
+    {
+      "name" : "patient",
+      "type" : "DDCCPatient",
+      "mode" : "target"
+    },
+    {
+      "name" : "pid",
+      "mode" : "source"
+    }],
+    "rule" : [{
+      "name" : "set id",
+      "source" : [{
+        "context" : "pid"
+      }],
+      "target" : [{
+        "context" : "patient",
+        "contextType" : "variable",
+        "element" : "id",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "pid"
+        }]
+      }]
+    },
+    {
+      "name" : "set full name",
+      "source" : [{
+        "context" : "src",
+        "element" : "name",
+        "variable" : "name"
+      }],
+      "target" : [{
+        "context" : "patient",
+        "contextType" : "variable",
+        "element" : "name",
+        "variable" : "tName"
+      }],
+      "rule" : [{
+        "name" : "set name",
+        "source" : [{
+          "context" : "name"
+        }],
+        "target" : [{
+          "context" : "tName",
+          "contextType" : "variable",
+          "element" : "text",
+          "transform" : "copy",
+          "parameter" : [{
+            "valueId" : "name"
+          }]
+        }]
+      }]
+    },
+    {
+      "name" : "set birthDate",
+      "source" : [{
+        "context" : "src",
+        "element" : "birthDate",
+        "variable" : "birthDate"
+      }],
+      "target" : [{
+        "context" : "patient",
+        "contextType" : "variable",
+        "element" : "birthDate",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "birthDate"
+        }]
+      }]
+    },
+    {
+      "name" : "set identifier",
+      "source" : [{
+        "context" : "src",
+        "element" : "identifier",
+        "variable" : "identifier"
+      }],
+      "target" : [{
+        "context" : "patient",
+        "contextType" : "variable",
+        "element" : "identifier",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "identifier"
+        }]
+      }]
+    }]
+  },
+  {
+    "name" : "DDCCToDocumentReference",
+    "typeMode" : "none",
+    "input" : [{
+      "name" : "src",
+      "type" : "DDCCVS",
+      "mode" : "source"
+    },
+    {
+      "name" : "ref",
+      "type" : "DDCCDocRefQR",
+      "mode" : "target"
+    },
+    {
+      "name" : "id",
+      "mode" : "source"
+    },
+    {
+      "name" : "pid",
+      "mode" : "source"
+    }],
+    "rule" : [{
+      "name" : "set id",
+      "source" : [{
+        "context" : "id"
+      }],
+      "target" : [{
+        "context" : "ref",
+        "contextType" : "variable",
+        "element" : "id",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "id"
+        }]
+      }]
+    },
+    {
+      "name" : "set status",
+      "source" : [{
+        "context" : "src"
+      }],
+      "target" : [{
+        "context" : "ref",
+        "contextType" : "variable",
+        "element" : "status",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueString" : "current"
+        }]
+      }]
+    },
+    {
+      "name" : "set patient",
+      "source" : [{
+        "context" : "src"
+      }],
+      "target" : [{
+        "context" : "ref",
+        "contextType" : "variable",
+        "element" : "subject",
+        "variable" : "patient"
+      },
+      {
+        "context" : "patient",
+        "contextType" : "variable",
+        "element" : "reference",
+        "transform" : "append",
+        "parameter" : [{
+          "valueString" : "Patient/"
+        },
+        {
+          "valueId" : "pid"
+        }]
+      }]
+    },
+    {
+      "name" : "set serialized content",
+      "source" : [{
+        "context" : "src"
+      }],
+      "target" : [{
+        "context" : "ref",
+        "contextType" : "variable",
+        "element" : "content",
+        "variable" : "content"
+      }],
+      "rule" : [{
+        "name" : "set contentType",
+        "source" : [{
+          "context" : "src"
+        }],
+        "target" : [{
+          "context" : "content",
+          "contextType" : "variable",
+          "element" : "attachment",
+          "variable" : "attachment"
+        },
+        {
+          "context" : "attachment",
+          "contextType" : "variable",
+          "element" : "contentType",
+          "transform" : "copy",
+          "parameter" : [{
+            "valueString" : "application/json"
+          }]
+        }]
+      },
+      {
+        "name" : "set format code",
+        "source" : [{
+          "context" : "src"
+        }],
+        "target" : [{
+          "context" : "content",
+          "contextType" : "variable",
+          "element" : "format",
+          "variable" : "format"
+        },
+        {
+          "context" : "format",
+          "contextType" : "variable",
+          "element" : "system",
+          "transform" : "copy",
+          "parameter" : [{
+            "valueString" : "http://smart.who.int/ddcc/CodeSystem/DDCC-QR-Format-CodeSystem"
+          }]
+        },
+        {
+          "context" : "format",
+          "contextType" : "variable",
+          "element" : "code",
+          "transform" : "copy",
+          "parameter" : [{
+            "valueString" : "serialized"
+          }]
+        }]
+      }]
+    },
+    {
+      "name" : "set image content",
+      "source" : [{
+        "context" : "src"
+      }],
+      "target" : [{
+        "context" : "ref",
+        "contextType" : "variable",
+        "element" : "content",
+        "variable" : "content"
+      }],
+      "rule" : [{
+        "name" : "set contentType",
+        "source" : [{
+          "context" : "src"
+        }],
+        "target" : [{
+          "context" : "content",
+          "contextType" : "variable",
+          "element" : "attachment",
+          "variable" : "attachment"
+        },
+        {
+          "context" : "attachment",
+          "contextType" : "variable",
+          "element" : "contentType",
+          "transform" : "copy",
+          "parameter" : [{
+            "valueString" : "image/png"
+          }]
+        }]
+      },
+      {
+        "name" : "set format code",
+        "source" : [{
+          "context" : "src"
+        }],
+        "target" : [{
+          "context" : "content",
+          "contextType" : "variable",
+          "element" : "format",
+          "variable" : "format"
+        },
+        {
+          "context" : "format",
+          "contextType" : "variable",
+          "element" : "system",
+          "transform" : "copy",
+          "parameter" : [{
+            "valueString" : "http://smart.who.int/ddcc/CodeSystem/DDCC-QR-Format-CodeSystem"
+          }]
+        },
+        {
+          "context" : "format",
+          "contextType" : "variable",
+          "element" : "code",
+          "transform" : "copy",
+          "parameter" : [{
+            "valueString" : "image"
+          }]
+        }]
+      }]
+    },
+    {
+      "name" : "set pdf content",
+      "source" : [{
+        "context" : "src"
+      }],
+      "target" : [{
+        "context" : "ref",
+        "contextType" : "variable",
+        "element" : "content",
+        "variable" : "content"
+      }],
+      "rule" : [{
+        "name" : "set contentType",
+        "source" : [{
+          "context" : "src"
+        }],
+        "target" : [{
+          "context" : "content",
+          "contextType" : "variable",
+          "element" : "attachment",
+          "variable" : "attachment"
+        },
+        {
+          "context" : "attachment",
+          "contextType" : "variable",
+          "element" : "contentType",
+          "transform" : "copy",
+          "parameter" : [{
+            "valueString" : "application/pdf"
+          }]
+        }]
+      },
+      {
+        "name" : "set format code",
+        "source" : [{
+          "context" : "src"
+        }],
+        "target" : [{
+          "context" : "content",
+          "contextType" : "variable",
+          "element" : "format",
+          "variable" : "format"
+        },
+        {
+          "context" : "format",
+          "contextType" : "variable",
+          "element" : "system",
+          "transform" : "copy",
+          "parameter" : [{
+            "valueString" : "http://smart.who.int/ddcc/CodeSystem/DDCC-QR-Format-CodeSystem"
+          }]
+        },
+        {
+          "context" : "format",
+          "contextType" : "variable",
+          "element" : "code",
+          "transform" : "copy",
+          "parameter" : [{
+            "valueString" : "pdf"
+          }]
+        }]
+      }]
+    }]
+  },
+  {
+    "name" : "DDCCToComposition",
+    "typeMode" : "none",
+    "input" : [{
+      "name" : "src",
+      "type" : "DDCCVS",
+      "mode" : "source"
+    },
+    {
+      "name" : "comp",
+      "type" : "DDCCComposition",
+      "mode" : "target"
+    },
+    {
+      "name" : "id",
+      "mode" : "source"
+    },
+    {
+      "name" : "pid",
+      "mode" : "source"
+    }],
+    "rule" : [{
+      "name" : "set id",
+      "source" : [{
+        "context" : "id"
+      }],
+      "target" : [{
+        "context" : "comp",
+        "contextType" : "variable",
+        "element" : "id",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "id"
+        }]
+      }]
+    },
+    {
+      "name" : "set patient",
+      "source" : [{
+        "context" : "src"
+      }],
+      "target" : [{
+        "context" : "comp",
+        "contextType" : "variable",
+        "element" : "subject",
+        "variable" : "patient"
+      },
+      {
+        "context" : "patient",
+        "contextType" : "variable",
+        "element" : "reference",
+        "transform" : "append",
+        "parameter" : [{
+          "valueString" : "Patient/"
+        },
+        {
+          "valueId" : "pid"
+        }]
+      }]
+    },
+    {
+      "name" : "set type",
+      "source" : [{
+        "context" : "src"
+      }],
+      "target" : [{
+        "context" : "comp",
+        "contextType" : "variable",
+        "element" : "type",
+        "variable" : "type"
+      },
+      {
+        "context" : "type",
+        "contextType" : "variable",
+        "element" : "coding",
+        "variable" : "coding"
+      }],
+      "rule" : [{
+        "name" : "set type coding",
+        "source" : [{
+          "context" : "src"
+        }],
+        "target" : [{
+          "context" : "coding",
+          "contextType" : "variable",
+          "element" : "system",
+          "transform" : "copy",
+          "parameter" : [{
+            "valueString" : "http://loinc.org"
+          }]
+        },
+        {
+          "context" : "coding",
+          "contextType" : "variable",
+          "element" : "code",
+          "transform" : "copy",
+          "parameter" : [{
+            "valueString" : "82593-5"
+          }]
+        }]
+      }]
+    },
+    {
+      "name" : "set certificate",
+      "source" : [{
+        "context" : "src",
+        "element" : "certificate",
+        "variable" : "certificate"
+      }],
+      "target" : [{
+        "context" : "comp",
+        "contextType" : "variable",
+        "element" : "author",
+        "variable" : "author"
+      },
+      {
+        "context" : "comp",
+        "contextType" : "variable",
+        "element" : "event",
+        "variable" : "event"
+      }],
+      "rule" : [{
+        "name" : "set event period",
+        "source" : [{
+          "context" : "certificate",
+          "element" : "period",
+          "variable" : "period"
+        }],
+        "target" : [{
+          "context" : "event",
+          "contextType" : "variable",
+          "element" : "period",
+          "transform" : "copy",
+          "parameter" : [{
+            "valueId" : "period"
+          }]
+        }]
+      },
+      {
+        "name" : "set author ref",
+        "source" : [{
+          "context" : "certificate",
+          "element" : "issuer",
+          "variable" : "issuer"
+        }],
+        "target" : [{
+          "context" : "author",
+          "contextType" : "variable",
+          "element" : "type",
+          "transform" : "copy",
+          "parameter" : [{
+            "valueString" : "Organization"
+          }]
+        }],
+        "rule" : [{
+          "name" : "set author identifier",
+          "source" : [{
+            "context" : "issuer",
+            "element" : "identifier",
+            "variable" : "pha"
+          }],
+          "target" : [{
+            "context" : "author",
+            "contextType" : "variable",
+            "element" : "identifier",
+            "variable" : "identifier"
+          }],
+          "rule" : [{
+            "name" : "set pha",
+            "source" : [{
+              "context" : "pha",
+              "element" : "value",
+              "variable" : "value"
+            }],
+            "target" : [{
+              "context" : "identifier",
+              "contextType" : "variable",
+              "element" : "value",
+              "transform" : "copy",
+              "parameter" : [{
+                "valueId" : "value"
+              }]
+            }]
+          }]
+        }]
+      }]
+    }]
+  }]
+}

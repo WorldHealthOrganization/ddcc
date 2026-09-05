@@ -1,0 +1,1260 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<StructureMap xmlns="http://hl7.org/fhir">
+  <id value="CertDIVOCtoCoreDataSet"/>
+  <meta>
+    <versionId value="17"/>
+    <lastUpdated value="2023-02-20T23:12:28.356+00:00"/>
+  </meta>
+  <text>
+    <status value="generated"/><div xmlns="http://www.w3.org/1999/xhtml"><pre>map &quot;http://smart.who.int/ddcc/StructureMap/CertDIVOCtoCoreDataSet&quot; = &quot;CertDIVOCtoCoreDataSet&quot;
+
+// Structure map transforming CertDIVOC logical model to bundle of Core Data Set logical model
+
+uses &quot;http://smart.who.int/ddcc/StructureDefinition/CertDIVOC&quot; alias DIVOC as source
+uses &quot;http://hl7.org/fhir/StructureDefinition/Bundle&quot; alias DDCCBundle as target
+uses &quot;http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet&quot; alias DDCC as produced
+uses &quot;http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.VS&quot; alias DDCCVS as produced
+uses &quot;http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.TR&quot; alias DDCCTR as produced
+
+group CertDIVOCtoCoreDataSetBundle(source src : DIVOC, target ddccBundle : DDCCBundle) {
+  src.type as type then {
+    type where type = 'ProofOfVaccinationCredential' then {
+      src.evidence as evidence -&gt;  ddccBundle.entry as outentry,  create('http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.VS') as ddcc then {
+        src.credentialSubject as credentialSubject then CredentialSubjecttoCoreDataSet(credentialSubject, ddcc) &quot;set patient&quot;;
+        src -&gt; ddcc.certificate as certificate then CertDIVOCtoCoreDataSetCertificate(src, evidence, certificate) &quot;set certificate&quot;;
+        evidence -&gt; ddcc.vaccination as vaccination then EvidencetoCoreDataSetVS(evidence, vaccination) &quot;set vaccination&quot;;
+        evidence -&gt; outentry.resource = ddcc &quot;set outentry&quot;;
+      };
+    } &quot;ProofOfVaccinationCredential&quot;;
+    type where type = 'ProofOfTestCertificateCredential' then {
+      src.evidence as evidence -&gt;  ddccBundle.entry as outentry,  create('http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.TR') as ddcc then {
+        src.credentialSubject as credentialSubject then CredentialSubjecttoCoreDataSet(credentialSubject, ddcc) &quot;set patient&quot;;
+        src -&gt; ddcc.certificate as certificate then CertDIVOCtoCoreDataSetCertificate(src, evidence, certificate) &quot;set certificate&quot;;
+        evidence -&gt; ddcc.test as test then EvidencetoCoreDataSetTR(evidence, test) &quot;set test&quot;;
+        evidence -&gt; outentry.resource = ddcc &quot;set outentry&quot;;
+      };
+    } &quot;ProofOfTestCertificateCredential&quot;;
+  };
+}
+
+group CredentialSubjecttoCoreDataSet(source credentialSubject, target ddcc : DDCC) {
+  credentialSubject.name as name -&gt; ddcc.name = name &quot;set name&quot;;
+  credentialSubject.dob as birthDate -&gt; ddcc.birthDate = birthDate &quot;set birthDate&quot;;
+  credentialSubject.id as id -&gt;  create('Identifier') as identifier,  identifier.value = id then {
+    id -&gt; ddcc.identifier = identifier &quot;set identifier&quot;;
+  } &quot;identifier&quot;;
+}
+
+group CertDIVOCtoCoreDataSetCertificate(source src : DIVOC, source evidence, target certificate) {
+  evidence.certificateId as certificateId -&gt;  certificate.hcid as hcid,  hcid.value = certificateId &quot;set hcid&quot;;
+  src.context as context then {
+    context where (context.contains('cowin.gov.in')) -&gt; certificate.version = context &quot;set version&quot;;
+  };
+  evidence -&gt; certificate.period = create('Period') as period then {
+    evidence.effectiveStart as effectiveStart -&gt; period.start = effectiveStart &quot;set period start&quot;;
+    evidence.effectiveUntil as effectiveUntil -&gt; period.end = effectiveUntil &quot;set period end&quot;;
+  } &quot;period&quot;;
+  src.issuer as issuer -&gt;  certificate.issuer = create('Reference') as issuer,  issuer.display = issuer &quot;set issuer&quot;;
+}
+
+group EvidencetoCoreDataSetVS(source evidence, target vaccination) {
+  evidence.icd11Code as icd11Code -&gt;  vaccination.vaccine as coding,  coding.system = 'http://id.who.int/icd11/mms',  coding.code = icd11Code &quot;set vaccine&quot;;
+  evidence.vaccine as vaccine -&gt;  vaccination.brand as coding,  coding.code = vaccine &quot;set brand&quot;;
+  evidence.manufacturer as manufacturer -&gt;  vaccination.manufacturer as coding,  coding.code = manufacturer &quot;set manufacturer&quot;;
+  evidence.batch as batch -&gt; vaccination.lot = batch &quot;set lot&quot;;
+  evidence.date as date -&gt; vaccination.date = date &quot;set date&quot;;
+  evidence.dose as dose -&gt; vaccination.dose = dose &quot;set dose&quot;;
+  evidence.totalDoses as totalDoses -&gt; vaccination.totalDoses = totalDoses &quot;set totalDoses&quot;;
+  evidence.facility as facility then {
+    facility.address as address then {
+      address.addressCountry as addressCountry -&gt;  vaccination.country as coding,  coding.system = 'urn:iso:std:iso:3166',  coding.code = addressCountry &quot;set country&quot;;
+    };
+    facility.name as name -&gt; vaccination.centre = name &quot;set centre&quot;;
+  };
+  evidence.verifier as verifier then {
+    verifier.name as name -&gt;  vaccination.practitioner as practitioner,  practitioner.value = name &quot;set practitioner&quot;;
+  };
+}
+
+group EvidencetoCoreDataSetTR(source evidence, target test) {
+  evidence.disease as disease then {
+    disease where disease = 'COVID-19' -&gt;  test.pathogen as coding,  coding.system = 'http://id.who.int/icd11/mms',  coding.code = 'XN109' &quot;set COVID-19 pathogen&quot;;
+    disease where (disease = 'COVID-19').not() -&gt;  test.pathogen as coding,  coding.code = disease &quot;set other pathogen&quot;;
+  };
+  evidence.testType as testType then {
+    testType -&gt;  test.type as coding,  coding.code = testType &quot;set default type&quot;;
+    testType -&gt; c('http://smart.who.int/ddcc/CodeSystem/lab-test-type-divoc', testType) as coded then {
+      testType where coded.memberOf('http://smart.who.int/ddcc/ValueSet/lab-test-type-divoc') -&gt; test.type = translate(coded, 'http://smart.who.int/ddcc/ConceptMap/lab-test-type-divoc-to-icd11', 'Coding') &quot;translate DIVOC type&quot;;
+    } &quot;coding&quot;;
+  };
+  evidence.sampleOrigin as sampleOrigin then {
+    sampleOrigin -&gt;  test.origin as coding,  coding.code = sampleOrigin &quot;set default origin&quot;;
+    sampleOrigin -&gt; c('http://smart.who.int/ddcc/CodeSystem/lab-test-sample-origin-divoc', sampleOrigin) as coded then {
+      sampleOrigin where coded.memberOf('http://smart.who.int/ddcc/ValueSet/lab-test-sample-origin-divoc') -&gt; test.origin = translate(coded, 'http://smart.who.int/ddcc/ConceptMap/lab-test-sample-origin-divoc-to-icd11', 'Coding') &quot;translate DIVOC origin&quot;;
+    } &quot;coding&quot;;
+  };
+  evidence.result as result then {
+    result -&gt;  test.result as coding,  coding.code = result &quot;set default result&quot;;
+    result -&gt; c('http://smart.who.int/ddcc/CodeSystem/lab-test-qual-result-divoc', result) as coded then {
+      result where coded.memberOf('http://smart.who.int/ddcc/ValueSet/lab-test-qual-result-divoc') -&gt; test.result = translate(coded, 'http://smart.who.int/ddcc/ConceptMap/lab-test-qual-result-divoc-to-icd11', 'Coding') &quot;translate DIVOC result&quot;;
+    } &quot;coded&quot;;
+  };
+  evidence.sampleCollectionTimestamp as date -&gt; test.date = date &quot;set date&quot;;
+  evidence.testName as testName -&gt;  test.brand as coding,  coding.code = testName &quot;set brand&quot;;
+  evidence.manufacturer as manufacturer -&gt;  test.manufacturer as coding,  coding.code = manufacturer &quot;set manufacturer&quot;;
+  evidence.facility as facility then {
+    facility.address as address then {
+      address.addressCountry as addressCountry -&gt;  test.country as coding,  coding.system = 'urn:iso:std:iso:3166',  coding.code = addressCountry &quot;set country&quot;;
+    };
+    facility.name as name -&gt;  test.centre as coding,  coding.code = name &quot;set centre&quot;;
+  };
+}
+
+</pre></div>
+  </text>
+  <url value="http://smart.who.int/ddcc/StructureMap/CertDIVOCtoCoreDataSet"/>
+  <version value="1.0.0"/>
+  <name value="CertDIVOCtoCoreDataSet"/>
+  <status value="draft"/>
+  <date value="2023-11-06T04:25:12+00:00"/>
+  <publisher value="WHO"/>
+  <contact>
+    <name value="WHO"/>
+    <telecom>
+      <system value="url"/>
+      <value value="http://who.int"/>
+    </telecom>
+  </contact>
+  <description value="Structure map transforming CertDIVOC logical model to bundle of Core Data Set logical model"/>
+  <jurisdiction>
+    <coding>
+      <system value="http://unstats.un.org/unsd/methods/m49/m49.htm"/>
+      <code value="001"/>
+    </coding>
+  </jurisdiction>
+  <structure>
+    <url value="http://smart.who.int/ddcc/StructureDefinition/CertDIVOC"/>
+    <mode value="source"/>
+    <alias value="DIVOC"/>
+  </structure>
+  <structure>
+    <url value="http://hl7.org/fhir/StructureDefinition/Bundle"/>
+    <mode value="target"/>
+    <alias value="DDCCBundle"/>
+  </structure>
+  <structure>
+    <url value="http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet"/>
+    <mode value="produced"/>
+    <alias value="DDCC"/>
+  </structure>
+  <structure>
+    <url value="http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.VS"/>
+    <mode value="produced"/>
+    <alias value="DDCCVS"/>
+  </structure>
+  <structure>
+    <url value="http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.TR"/>
+    <mode value="produced"/>
+    <alias value="DDCCTR"/>
+  </structure>
+  <group>
+    <name value="CertDIVOCtoCoreDataSetBundle"/>
+    <typeMode value="none"/>
+    <input>
+      <name value="src"/>
+      <type value="DIVOC"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="ddccBundle"/>
+      <type value="DDCCBundle"/>
+      <mode value="target"/>
+    </input>
+    <rule>
+      <name value="type"/>
+      <source>
+        <context value="src"/>
+        <element value="type"/>
+        <variable value="type"/>
+      </source>
+      <rule>
+        <name value="ProofOfVaccinationCredential"/>
+        <source>
+          <context value="type"/>
+          <condition value="type = 'ProofOfVaccinationCredential'"/>
+        </source>
+        <rule>
+          <name value="evidence"/>
+          <source>
+            <context value="src"/>
+            <element value="evidence"/>
+            <variable value="evidence"/>
+          </source>
+          <target>
+            <context value="ddccBundle"/>
+            <contextType value="variable"/>
+            <element value="entry"/>
+            <variable value="outentry"/>
+          </target>
+          <target>
+            <contextType value="variable"/>
+            <variable value="ddcc"/>
+            <transform value="create"/>
+            <parameter>
+              <valueString value="http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.VS"/>
+            </parameter>
+          </target>
+          <rule>
+            <name value="set patient"/>
+            <source>
+              <context value="src"/>
+              <element value="credentialSubject"/>
+              <variable value="credentialSubject"/>
+            </source>
+            <dependent>
+              <name value="CredentialSubjecttoCoreDataSet"/>
+              <variable value="credentialSubject"/>
+              <variable value="ddcc"/>
+            </dependent>
+          </rule>
+          <rule>
+            <name value="set certificate"/>
+            <source>
+              <context value="src"/>
+            </source>
+            <target>
+              <context value="ddcc"/>
+              <contextType value="variable"/>
+              <element value="certificate"/>
+              <variable value="certificate"/>
+            </target>
+            <dependent>
+              <name value="CertDIVOCtoCoreDataSetCertificate"/>
+              <variable value="src"/>
+              <variable value="evidence"/>
+              <variable value="certificate"/>
+            </dependent>
+          </rule>
+          <rule>
+            <name value="set vaccination"/>
+            <source>
+              <context value="evidence"/>
+            </source>
+            <target>
+              <context value="ddcc"/>
+              <contextType value="variable"/>
+              <element value="vaccination"/>
+              <variable value="vaccination"/>
+            </target>
+            <dependent>
+              <name value="EvidencetoCoreDataSetVS"/>
+              <variable value="evidence"/>
+              <variable value="vaccination"/>
+            </dependent>
+          </rule>
+          <rule>
+            <name value="set outentry"/>
+            <source>
+              <context value="evidence"/>
+            </source>
+            <target>
+              <context value="outentry"/>
+              <contextType value="variable"/>
+              <element value="resource"/>
+              <transform value="copy"/>
+              <parameter>
+                <valueId value="ddcc"/>
+              </parameter>
+            </target>
+          </rule>
+        </rule>
+      </rule>
+      <rule>
+        <name value="ProofOfTestCertificateCredential"/>
+        <source>
+          <context value="type"/>
+          <condition value="type = 'ProofOfTestCertificateCredential'"/>
+        </source>
+        <rule>
+          <name value="evidence"/>
+          <source>
+            <context value="src"/>
+            <element value="evidence"/>
+            <variable value="evidence"/>
+          </source>
+          <target>
+            <context value="ddccBundle"/>
+            <contextType value="variable"/>
+            <element value="entry"/>
+            <variable value="outentry"/>
+          </target>
+          <target>
+            <contextType value="variable"/>
+            <variable value="ddcc"/>
+            <transform value="create"/>
+            <parameter>
+              <valueString value="http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSet.TR"/>
+            </parameter>
+          </target>
+          <rule>
+            <name value="set patient"/>
+            <source>
+              <context value="src"/>
+              <element value="credentialSubject"/>
+              <variable value="credentialSubject"/>
+            </source>
+            <dependent>
+              <name value="CredentialSubjecttoCoreDataSet"/>
+              <variable value="credentialSubject"/>
+              <variable value="ddcc"/>
+            </dependent>
+          </rule>
+          <rule>
+            <name value="set certificate"/>
+            <source>
+              <context value="src"/>
+            </source>
+            <target>
+              <context value="ddcc"/>
+              <contextType value="variable"/>
+              <element value="certificate"/>
+              <variable value="certificate"/>
+            </target>
+            <dependent>
+              <name value="CertDIVOCtoCoreDataSetCertificate"/>
+              <variable value="src"/>
+              <variable value="evidence"/>
+              <variable value="certificate"/>
+            </dependent>
+          </rule>
+          <rule>
+            <name value="set test"/>
+            <source>
+              <context value="evidence"/>
+            </source>
+            <target>
+              <context value="ddcc"/>
+              <contextType value="variable"/>
+              <element value="test"/>
+              <variable value="test"/>
+            </target>
+            <dependent>
+              <name value="EvidencetoCoreDataSetTR"/>
+              <variable value="evidence"/>
+              <variable value="test"/>
+            </dependent>
+          </rule>
+          <rule>
+            <name value="set outentry"/>
+            <source>
+              <context value="evidence"/>
+            </source>
+            <target>
+              <context value="outentry"/>
+              <contextType value="variable"/>
+              <element value="resource"/>
+              <transform value="copy"/>
+              <parameter>
+                <valueId value="ddcc"/>
+              </parameter>
+            </target>
+          </rule>
+        </rule>
+      </rule>
+    </rule>
+  </group>
+  <group>
+    <name value="CredentialSubjecttoCoreDataSet"/>
+    <typeMode value="none"/>
+    <input>
+      <name value="credentialSubject"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="ddcc"/>
+      <type value="DDCC"/>
+      <mode value="target"/>
+    </input>
+    <rule>
+      <name value="set name"/>
+      <source>
+        <context value="credentialSubject"/>
+        <element value="name"/>
+        <variable value="name"/>
+      </source>
+      <target>
+        <context value="ddcc"/>
+        <contextType value="variable"/>
+        <element value="name"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="name"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="set birthDate"/>
+      <source>
+        <context value="credentialSubject"/>
+        <element value="dob"/>
+        <variable value="birthDate"/>
+      </source>
+      <target>
+        <context value="ddcc"/>
+        <contextType value="variable"/>
+        <element value="birthDate"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="birthDate"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="identifier"/>
+      <source>
+        <context value="credentialSubject"/>
+        <element value="id"/>
+        <variable value="id"/>
+      </source>
+      <target>
+        <contextType value="variable"/>
+        <variable value="identifier"/>
+        <transform value="create"/>
+        <parameter>
+          <valueString value="Identifier"/>
+        </parameter>
+      </target>
+      <target>
+        <context value="identifier"/>
+        <contextType value="variable"/>
+        <element value="value"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="id"/>
+        </parameter>
+      </target>
+      <rule>
+        <name value="set identifier"/>
+        <source>
+          <context value="id"/>
+        </source>
+        <target>
+          <context value="ddcc"/>
+          <contextType value="variable"/>
+          <element value="identifier"/>
+          <transform value="copy"/>
+          <parameter>
+            <valueId value="identifier"/>
+          </parameter>
+        </target>
+      </rule>
+    </rule>
+  </group>
+  <group>
+    <name value="CertDIVOCtoCoreDataSetCertificate"/>
+    <typeMode value="none"/>
+    <input>
+      <name value="src"/>
+      <type value="DIVOC"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="evidence"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="certificate"/>
+      <mode value="target"/>
+    </input>
+    <rule>
+      <name value="set hcid"/>
+      <source>
+        <context value="evidence"/>
+        <element value="certificateId"/>
+        <variable value="certificateId"/>
+      </source>
+      <target>
+        <context value="certificate"/>
+        <contextType value="variable"/>
+        <element value="hcid"/>
+        <variable value="hcid"/>
+      </target>
+      <target>
+        <context value="hcid"/>
+        <contextType value="variable"/>
+        <element value="value"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="certificateId"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="context"/>
+      <source>
+        <context value="src"/>
+        <element value="context"/>
+        <variable value="context"/>
+      </source>
+      <rule>
+        <name value="set version"/>
+        <source>
+          <context value="context"/>
+          <condition value="(context.contains('cowin.gov.in'))"/>
+        </source>
+        <target>
+          <context value="certificate"/>
+          <contextType value="variable"/>
+          <element value="version"/>
+          <transform value="copy"/>
+          <parameter>
+            <valueId value="context"/>
+          </parameter>
+        </target>
+      </rule>
+    </rule>
+    <rule>
+      <name value="period"/>
+      <source>
+        <context value="evidence"/>
+      </source>
+      <target>
+        <context value="certificate"/>
+        <contextType value="variable"/>
+        <element value="period"/>
+        <variable value="period"/>
+        <transform value="create"/>
+        <parameter>
+          <valueString value="Period"/>
+        </parameter>
+      </target>
+      <rule>
+        <name value="set period start"/>
+        <source>
+          <context value="evidence"/>
+          <element value="effectiveStart"/>
+          <variable value="effectiveStart"/>
+        </source>
+        <target>
+          <context value="period"/>
+          <contextType value="variable"/>
+          <element value="start"/>
+          <transform value="copy"/>
+          <parameter>
+            <valueId value="effectiveStart"/>
+          </parameter>
+        </target>
+      </rule>
+      <rule>
+        <name value="set period end"/>
+        <source>
+          <context value="evidence"/>
+          <element value="effectiveUntil"/>
+          <variable value="effectiveUntil"/>
+        </source>
+        <target>
+          <context value="period"/>
+          <contextType value="variable"/>
+          <element value="end"/>
+          <transform value="copy"/>
+          <parameter>
+            <valueId value="effectiveUntil"/>
+          </parameter>
+        </target>
+      </rule>
+    </rule>
+    <rule>
+      <name value="set issuer"/>
+      <source>
+        <context value="src"/>
+        <element value="issuer"/>
+        <variable value="issuer"/>
+      </source>
+      <target>
+        <context value="certificate"/>
+        <contextType value="variable"/>
+        <element value="issuer"/>
+        <variable value="issuer"/>
+        <transform value="create"/>
+        <parameter>
+          <valueString value="Reference"/>
+        </parameter>
+      </target>
+      <target>
+        <context value="issuer"/>
+        <contextType value="variable"/>
+        <element value="display"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="issuer"/>
+        </parameter>
+      </target>
+    </rule>
+  </group>
+  <group>
+    <name value="EvidencetoCoreDataSetVS"/>
+    <typeMode value="none"/>
+    <input>
+      <name value="evidence"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="vaccination"/>
+      <mode value="target"/>
+    </input>
+    <rule>
+      <name value="set vaccine"/>
+      <source>
+        <context value="evidence"/>
+        <element value="icd11Code"/>
+        <variable value="icd11Code"/>
+      </source>
+      <target>
+        <context value="vaccination"/>
+        <contextType value="variable"/>
+        <element value="vaccine"/>
+        <variable value="coding"/>
+      </target>
+      <target>
+        <context value="coding"/>
+        <contextType value="variable"/>
+        <element value="system"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueString value="http://id.who.int/icd11/mms"/>
+        </parameter>
+      </target>
+      <target>
+        <context value="coding"/>
+        <contextType value="variable"/>
+        <element value="code"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="icd11Code"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="set brand"/>
+      <source>
+        <context value="evidence"/>
+        <element value="vaccine"/>
+        <variable value="vaccine"/>
+      </source>
+      <target>
+        <context value="vaccination"/>
+        <contextType value="variable"/>
+        <element value="brand"/>
+        <variable value="coding"/>
+      </target>
+      <target>
+        <context value="coding"/>
+        <contextType value="variable"/>
+        <element value="code"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="vaccine"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="set manufacturer"/>
+      <source>
+        <context value="evidence"/>
+        <element value="manufacturer"/>
+        <variable value="manufacturer"/>
+      </source>
+      <target>
+        <context value="vaccination"/>
+        <contextType value="variable"/>
+        <element value="manufacturer"/>
+        <variable value="coding"/>
+      </target>
+      <target>
+        <context value="coding"/>
+        <contextType value="variable"/>
+        <element value="code"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="manufacturer"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="set lot"/>
+      <source>
+        <context value="evidence"/>
+        <element value="batch"/>
+        <variable value="batch"/>
+      </source>
+      <target>
+        <context value="vaccination"/>
+        <contextType value="variable"/>
+        <element value="lot"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="batch"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="set date"/>
+      <source>
+        <context value="evidence"/>
+        <element value="date"/>
+        <variable value="date"/>
+      </source>
+      <target>
+        <context value="vaccination"/>
+        <contextType value="variable"/>
+        <element value="date"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="date"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="set dose"/>
+      <source>
+        <context value="evidence"/>
+        <element value="dose"/>
+        <variable value="dose"/>
+      </source>
+      <target>
+        <context value="vaccination"/>
+        <contextType value="variable"/>
+        <element value="dose"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="dose"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="set totalDoses"/>
+      <source>
+        <context value="evidence"/>
+        <element value="totalDoses"/>
+        <variable value="totalDoses"/>
+      </source>
+      <target>
+        <context value="vaccination"/>
+        <contextType value="variable"/>
+        <element value="totalDoses"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="totalDoses"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="facility"/>
+      <source>
+        <context value="evidence"/>
+        <element value="facility"/>
+        <variable value="facility"/>
+      </source>
+      <rule>
+        <name value="address"/>
+        <source>
+          <context value="facility"/>
+          <element value="address"/>
+          <variable value="address"/>
+        </source>
+        <rule>
+          <name value="set country"/>
+          <source>
+            <context value="address"/>
+            <element value="addressCountry"/>
+            <variable value="addressCountry"/>
+          </source>
+          <target>
+            <context value="vaccination"/>
+            <contextType value="variable"/>
+            <element value="country"/>
+            <variable value="coding"/>
+          </target>
+          <target>
+            <context value="coding"/>
+            <contextType value="variable"/>
+            <element value="system"/>
+            <transform value="copy"/>
+            <parameter>
+              <valueString value="urn:iso:std:iso:3166"/>
+            </parameter>
+          </target>
+          <target>
+            <context value="coding"/>
+            <contextType value="variable"/>
+            <element value="code"/>
+            <transform value="copy"/>
+            <parameter>
+              <valueId value="addressCountry"/>
+            </parameter>
+          </target>
+        </rule>
+      </rule>
+      <rule>
+        <name value="set centre"/>
+        <source>
+          <context value="facility"/>
+          <element value="name"/>
+          <variable value="name"/>
+        </source>
+        <target>
+          <context value="vaccination"/>
+          <contextType value="variable"/>
+          <element value="centre"/>
+          <transform value="copy"/>
+          <parameter>
+            <valueId value="name"/>
+          </parameter>
+        </target>
+      </rule>
+    </rule>
+    <rule>
+      <name value="verifier"/>
+      <source>
+        <context value="evidence"/>
+        <element value="verifier"/>
+        <variable value="verifier"/>
+      </source>
+      <rule>
+        <name value="set practitioner"/>
+        <source>
+          <context value="verifier"/>
+          <element value="name"/>
+          <variable value="name"/>
+        </source>
+        <target>
+          <context value="vaccination"/>
+          <contextType value="variable"/>
+          <element value="practitioner"/>
+          <variable value="practitioner"/>
+        </target>
+        <target>
+          <context value="practitioner"/>
+          <contextType value="variable"/>
+          <element value="value"/>
+          <transform value="copy"/>
+          <parameter>
+            <valueId value="name"/>
+          </parameter>
+        </target>
+      </rule>
+    </rule>
+  </group>
+  <group>
+    <name value="EvidencetoCoreDataSetTR"/>
+    <typeMode value="none"/>
+    <input>
+      <name value="evidence"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="test"/>
+      <mode value="target"/>
+    </input>
+    <rule>
+      <name value="disease"/>
+      <source>
+        <context value="evidence"/>
+        <element value="disease"/>
+        <variable value="disease"/>
+      </source>
+      <rule>
+        <name value="set COVID-19 pathogen"/>
+        <source>
+          <context value="disease"/>
+          <condition value="disease = 'COVID-19'"/>
+        </source>
+        <target>
+          <context value="test"/>
+          <contextType value="variable"/>
+          <element value="pathogen"/>
+          <variable value="coding"/>
+        </target>
+        <target>
+          <context value="coding"/>
+          <contextType value="variable"/>
+          <element value="system"/>
+          <transform value="copy"/>
+          <parameter>
+            <valueString value="http://id.who.int/icd11/mms"/>
+          </parameter>
+        </target>
+        <target>
+          <context value="coding"/>
+          <contextType value="variable"/>
+          <element value="code"/>
+          <transform value="copy"/>
+          <parameter>
+            <valueString value="XN109"/>
+          </parameter>
+        </target>
+      </rule>
+      <rule>
+        <name value="set other pathogen"/>
+        <source>
+          <context value="disease"/>
+          <condition value="(disease = 'COVID-19').not()"/>
+        </source>
+        <target>
+          <context value="test"/>
+          <contextType value="variable"/>
+          <element value="pathogen"/>
+          <variable value="coding"/>
+        </target>
+        <target>
+          <context value="coding"/>
+          <contextType value="variable"/>
+          <element value="code"/>
+          <transform value="copy"/>
+          <parameter>
+            <valueId value="disease"/>
+          </parameter>
+        </target>
+      </rule>
+    </rule>
+    <rule>
+      <name value="testType"/>
+      <source>
+        <context value="evidence"/>
+        <element value="testType"/>
+        <variable value="testType"/>
+      </source>
+      <rule>
+        <name value="set default type"/>
+        <source>
+          <context value="testType"/>
+        </source>
+        <target>
+          <context value="test"/>
+          <contextType value="variable"/>
+          <element value="type"/>
+          <variable value="coding"/>
+        </target>
+        <target>
+          <context value="coding"/>
+          <contextType value="variable"/>
+          <element value="code"/>
+          <transform value="copy"/>
+          <parameter>
+            <valueId value="testType"/>
+          </parameter>
+        </target>
+      </rule>
+      <rule>
+        <name value="coding"/>
+        <source>
+          <context value="testType"/>
+        </source>
+        <target>
+          <contextType value="variable"/>
+          <variable value="coded"/>
+          <transform value="c"/>
+          <parameter>
+            <valueString value="http://smart.who.int/ddcc/CodeSystem/lab-test-type-divoc"/>
+          </parameter>
+          <parameter>
+            <valueId value="testType"/>
+          </parameter>
+        </target>
+        <rule>
+          <name value="translate DIVOC type"/>
+          <source>
+            <context value="testType"/>
+            <condition value="coded.memberOf('http://smart.who.int/ddcc/ValueSet/lab-test-type-divoc')"/>
+          </source>
+          <target>
+            <context value="test"/>
+            <contextType value="variable"/>
+            <element value="type"/>
+            <transform value="translate"/>
+            <parameter>
+              <valueId value="coded"/>
+            </parameter>
+            <parameter>
+              <valueString value="http://smart.who.int/ddcc/ConceptMap/lab-test-type-divoc-to-icd11"/>
+            </parameter>
+            <parameter>
+              <valueString value="Coding"/>
+            </parameter>
+          </target>
+        </rule>
+      </rule>
+    </rule>
+    <rule>
+      <name value="sampleOrigin"/>
+      <source>
+        <context value="evidence"/>
+        <element value="sampleOrigin"/>
+        <variable value="sampleOrigin"/>
+      </source>
+      <rule>
+        <name value="set default origin"/>
+        <source>
+          <context value="sampleOrigin"/>
+        </source>
+        <target>
+          <context value="test"/>
+          <contextType value="variable"/>
+          <element value="origin"/>
+          <variable value="coding"/>
+        </target>
+        <target>
+          <context value="coding"/>
+          <contextType value="variable"/>
+          <element value="code"/>
+          <transform value="copy"/>
+          <parameter>
+            <valueId value="sampleOrigin"/>
+          </parameter>
+        </target>
+      </rule>
+      <rule>
+        <name value="coding"/>
+        <source>
+          <context value="sampleOrigin"/>
+        </source>
+        <target>
+          <contextType value="variable"/>
+          <variable value="coded"/>
+          <transform value="c"/>
+          <parameter>
+            <valueString value="http://smart.who.int/ddcc/CodeSystem/lab-test-sample-origin-divoc"/>
+          </parameter>
+          <parameter>
+            <valueId value="sampleOrigin"/>
+          </parameter>
+        </target>
+        <rule>
+          <name value="translate DIVOC origin"/>
+          <source>
+            <context value="sampleOrigin"/>
+            <condition value="coded.memberOf('http://smart.who.int/ddcc/ValueSet/lab-test-sample-origin-divoc')"/>
+          </source>
+          <target>
+            <context value="test"/>
+            <contextType value="variable"/>
+            <element value="origin"/>
+            <transform value="translate"/>
+            <parameter>
+              <valueId value="coded"/>
+            </parameter>
+            <parameter>
+              <valueString value="http://smart.who.int/ddcc/ConceptMap/lab-test-sample-origin-divoc-to-icd11"/>
+            </parameter>
+            <parameter>
+              <valueString value="Coding"/>
+            </parameter>
+          </target>
+        </rule>
+      </rule>
+    </rule>
+    <rule>
+      <name value="result"/>
+      <source>
+        <context value="evidence"/>
+        <element value="result"/>
+        <variable value="result"/>
+      </source>
+      <rule>
+        <name value="set default result"/>
+        <source>
+          <context value="result"/>
+        </source>
+        <target>
+          <context value="test"/>
+          <contextType value="variable"/>
+          <element value="result"/>
+          <variable value="coding"/>
+        </target>
+        <target>
+          <context value="coding"/>
+          <contextType value="variable"/>
+          <element value="code"/>
+          <transform value="copy"/>
+          <parameter>
+            <valueId value="result"/>
+          </parameter>
+        </target>
+      </rule>
+      <rule>
+        <name value="coded"/>
+        <source>
+          <context value="result"/>
+        </source>
+        <target>
+          <contextType value="variable"/>
+          <variable value="coded"/>
+          <transform value="c"/>
+          <parameter>
+            <valueString value="http://smart.who.int/ddcc/CodeSystem/lab-test-qual-result-divoc"/>
+          </parameter>
+          <parameter>
+            <valueId value="result"/>
+          </parameter>
+        </target>
+        <rule>
+          <name value="translate DIVOC result"/>
+          <source>
+            <context value="result"/>
+            <condition value="coded.memberOf('http://smart.who.int/ddcc/ValueSet/lab-test-qual-result-divoc')"/>
+          </source>
+          <target>
+            <context value="test"/>
+            <contextType value="variable"/>
+            <element value="result"/>
+            <transform value="translate"/>
+            <parameter>
+              <valueId value="coded"/>
+            </parameter>
+            <parameter>
+              <valueString value="http://smart.who.int/ddcc/ConceptMap/lab-test-qual-result-divoc-to-icd11"/>
+            </parameter>
+            <parameter>
+              <valueString value="Coding"/>
+            </parameter>
+          </target>
+        </rule>
+      </rule>
+    </rule>
+    <rule>
+      <name value="set date"/>
+      <source>
+        <context value="evidence"/>
+        <element value="sampleCollectionTimestamp"/>
+        <variable value="date"/>
+      </source>
+      <target>
+        <context value="test"/>
+        <contextType value="variable"/>
+        <element value="date"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="date"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="set brand"/>
+      <source>
+        <context value="evidence"/>
+        <element value="testName"/>
+        <variable value="testName"/>
+      </source>
+      <target>
+        <context value="test"/>
+        <contextType value="variable"/>
+        <element value="brand"/>
+        <variable value="coding"/>
+      </target>
+      <target>
+        <context value="coding"/>
+        <contextType value="variable"/>
+        <element value="code"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="testName"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="set manufacturer"/>
+      <source>
+        <context value="evidence"/>
+        <element value="manufacturer"/>
+        <variable value="manufacturer"/>
+      </source>
+      <target>
+        <context value="test"/>
+        <contextType value="variable"/>
+        <element value="manufacturer"/>
+        <variable value="coding"/>
+      </target>
+      <target>
+        <context value="coding"/>
+        <contextType value="variable"/>
+        <element value="code"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="manufacturer"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="facility"/>
+      <source>
+        <context value="evidence"/>
+        <element value="facility"/>
+        <variable value="facility"/>
+      </source>
+      <rule>
+        <name value="address"/>
+        <source>
+          <context value="facility"/>
+          <element value="address"/>
+          <variable value="address"/>
+        </source>
+        <rule>
+          <name value="set country"/>
+          <source>
+            <context value="address"/>
+            <element value="addressCountry"/>
+            <variable value="addressCountry"/>
+          </source>
+          <target>
+            <context value="test"/>
+            <contextType value="variable"/>
+            <element value="country"/>
+            <variable value="coding"/>
+          </target>
+          <target>
+            <context value="coding"/>
+            <contextType value="variable"/>
+            <element value="system"/>
+            <transform value="copy"/>
+            <parameter>
+              <valueString value="urn:iso:std:iso:3166"/>
+            </parameter>
+          </target>
+          <target>
+            <context value="coding"/>
+            <contextType value="variable"/>
+            <element value="code"/>
+            <transform value="copy"/>
+            <parameter>
+              <valueId value="addressCountry"/>
+            </parameter>
+          </target>
+        </rule>
+      </rule>
+      <rule>
+        <name value="set centre"/>
+        <source>
+          <context value="facility"/>
+          <element value="name"/>
+          <variable value="name"/>
+        </source>
+        <target>
+          <context value="test"/>
+          <contextType value="variable"/>
+          <element value="centre"/>
+          <variable value="coding"/>
+        </target>
+        <target>
+          <context value="coding"/>
+          <contextType value="variable"/>
+          <element value="code"/>
+          <transform value="copy"/>
+          <parameter>
+            <valueId value="name"/>
+          </parameter>
+        </target>
+      </rule>
+    </rule>
+  </group>
+</StructureMap>

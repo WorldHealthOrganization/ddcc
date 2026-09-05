@@ -1,0 +1,389 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "http://smart.who.int/base/StructureDefinition-CertDIVOC.schema.json",
+  "title": "Certificate - DIVOC Verifiable Credential Logical Model",
+  "description": "Data elements for the DIVOC Core Data Set.\n\nThe official DIVOC documentation appears to be at <https://divoc.digit.org>. However, this does not include a full list of elements included in DIVOC certificates.\n\nThere is a JSON-LD context referenced in DIVOC certificate examples (`https://cowin.gov.in/credentials/vaccination/v1`), which would provide some element-level information, but this URL does not resolve. There is a copy of this JSON-LD context at <https://github.com/egovernments/DIVOC/blob/main/vaccination-context/vaccination-context.js>.\n\nIt was not possible to find any online documentation regarding DIVOC proof of testing. Information on this was provided by the DIVOC team via email.\n\nSome element descriptions in this logical model provide details that are not in publicly available DIVOC documentation.",
+  "type": "object",
+  "properties": {
+    "resourceType": {
+      "type": "string",
+      "const": "CertDIVOC",
+      "description": "Resource type identifier for CertDIVOC logical model"
+    },
+    "@context": {
+      "description": "JSON-LD context for this logical model with ValueSet vocabularies",
+      "anyOf": [
+        {
+          "type": "string",
+          "format": "uri",
+          "description": "URI reference to external JSON-LD context"
+        },
+        {
+          "type": "object",
+          "description": "Inline JSON-LD context",
+          "properties": {
+            "@version": {
+              "type": "number",
+              "const": 1.1
+            },
+            "fhir": {
+              "type": "string",
+              "const": "http://hl7.org/fhir/"
+            }
+          },
+          "additionalProperties": {
+            "type": "string",
+            "format": "uri"
+          }
+        },
+        {
+          "type": "array",
+          "description": "Array of JSON-LD context objects/URIs",
+          "items": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uri"
+              },
+              {
+                "type": "object"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "@type": {
+      "type": "string",
+      "description": "JSON-LD type identifier for CertDIVOC logical model",
+      "examples": [
+        "LogicalModel-CertDIVOC"
+      ]
+    },
+    "context": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "description": "Context (JSON-LD) - should actually be `@context` but this name isn't supported by FHIR."
+    },
+    "type": {
+      "type": "string",
+      "description": "Type of proof"
+    },
+    "issuer": {
+      "type": "string",
+      "description": "Issuer identifier URI. generally a DID"
+    },
+    "issuanceDate": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Date and time when a credential becomes valid"
+    },
+    "nonTransferable": {
+      "type": "boolean",
+      "description": "indicates that a verifiable credential must only be encapsulated into a verifiable presentation whose proof was issued by the credentialSubject"
+    },
+    "credentialSubject": {
+      "type": "object",
+      "description": "Contains claims about one or more objects (Patients)"
+    },
+    "id": {
+      "type": "object",
+      "description": "Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces."
+    },
+    "modifierExtension": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "description": "FHIR Extension"
+      },
+      "description": "May be used to represent additional information that is not part of the basic definition of the element and that modifies the understanding of the element in which it is contained and/or the understanding of the containing element's descendants. Usually modifier elements provide negation or qualification. To make the use of extensions safe and manageable, there is a strict set of governance applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension. Applications processing a resource are required to check for modifier extensions.\n\nModifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself)."
+    },
+    "uhid": {
+      "type": "string",
+      "description": "another id"
+    },
+    "refId": {
+      "type": "string",
+      "description": "reference id"
+    },
+    "name": {
+      "type": "string",
+      "description": "Name of the facility/entity"
+    },
+    "gender": {
+      "type": "string",
+      "description": "Gender (`Male` or `Female`; unknown if there are other options)"
+    },
+    "sex": {
+      "type": "string",
+      "description": "Sex (not used in examples; presumably `Male` or `Female`; unknown if there are other options)"
+    },
+    "age": {
+      "type": "string",
+      "description": "Age"
+    },
+    "dob": {
+      "type": "string",
+      "format": "date",
+      "description": "The date of birth for the individual (V2 only)"
+    },
+    "nationality": {
+      "type": "string",
+      "description": "Nationality"
+    },
+    "address": {
+      "type": "object",
+      "description": "Address of the facility"
+    },
+    "streetAddress": {
+      "type": "string",
+      "description": "Line 1 of the address"
+    },
+    "streetAddress2": {
+      "type": "string",
+      "description": "Line 2 of the address"
+    },
+    "district": {
+      "type": "string",
+      "description": "District name (aka county)"
+    },
+    "city": {
+      "type": "string",
+      "description": "Name of city, town etc."
+    },
+    "addressRegion": {
+      "type": "string",
+      "description": "Sub-unit of country (abbreviations ok)"
+    },
+    "addressCountry": {
+      "type": "string",
+      "description": "Country (e.g. may be ISO 3166 2 or 3 letter code)"
+    },
+    "postalCode": {
+      "type": "string",
+      "description": "Postal code for area"
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "description": "FHIR BackboneElement"
+      },
+      "description": "Vaccination Information"
+    },
+    "feedbackUrl": {
+      "type": "string",
+      "description": "URL for feedback"
+    },
+    "infoUrl": {
+      "type": "string",
+      "description": "URL for more information on this record"
+    },
+    "certificateId": {
+      "type": "string",
+      "description": "Certificate Unique Identifier"
+    },
+    "batch": {
+      "type": "string",
+      "description": "Vaccine lot number"
+    },
+    "vaccine": {
+      "type": "string",
+      "description": "Vaccine description. Might include vaccine type and brand"
+    },
+    "manufacturer": {
+      "type": "string",
+      "description": "Name of the Vaccine/Test Manufacturer"
+    },
+    "date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Date of immunization"
+    },
+    "effectiveStart": {
+      "type": "string",
+      "format": "date",
+      "description": "Effective immunization start date"
+    },
+    "effectiveUntil": {
+      "type": "string",
+      "format": "date",
+      "description": "Effective immunization end date"
+    },
+    "dose": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Dose Number"
+    },
+    "totalDoses": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Total doses for this vaccine protocol regimen"
+    },
+    "verifier": {
+      "type": "object",
+      "description": "Practitioner that oversaw the application"
+    },
+    "facility": {
+      "type": "object",
+      "description": "Facility where the immunization took place"
+    },
+    "use": {
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "Code from ValueSet address-use|4.0.1 (plain string)"
+        },
+        {
+          "type": "object",
+          "description": "Code from ValueSet address-use|4.0.1 (JSON-LD structure)",
+          "properties": {
+            "@type": {
+              "type": "string",
+              "const": "http://smart.who.int/base/ValueSet-address-use|4.0.1.jsonld",
+              "description": "JSON-LD type reference to ValueSet address-use|4.0.1"
+            },
+            "@id": {
+              "type": "string",
+              "format": "uri",
+              "description": "Full IRI of the code from ValueSet address-use|4.0.1"
+            }
+          },
+          "required": [
+            "@type",
+            "@id"
+          ],
+          "additionalProperties": false
+        }
+      ],
+      "description": "The purpose of this address."
+    },
+    "text": {
+      "type": "string",
+      "description": "Specifies the entire address as it should be displayed e.g. on a postal label. This may be provided instead of or as well as the specific parts."
+    },
+    "line": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "This component contains the house number, apartment number, street name, street direction,  P.O. Box number, delivery hints, and similar address information."
+    },
+    "state": {
+      "type": "string",
+      "description": "Sub-unit of a country with limited sovereignty in a federally organized country. A code may be used if codes are in common use (e.g. US 2 letter state codes)."
+    },
+    "country": {
+      "type": "string",
+      "description": "Country - a nation as commonly understood or generally accepted."
+    },
+    "period": {
+      "type": "object",
+      "description": "Time period when address was/is in use."
+    },
+    "icd11Code": {
+      "type": "string",
+      "description": "The specification for DIVOC does not provide any information beyond that this is an ICD-11 code, so correspondingly there is no required binding to a specific ValueSet in this logical model."
+    },
+    "prophylaxis": {
+      "type": "string",
+      "description": "Descriptive details of the vaccine type"
+    },
+    "testName": {
+      "type": "string",
+      "description": "Lab test results: Test name"
+    },
+    "testType": {
+      "type": "string",
+      "description": "Lab test results: Type of test, either `RT-PCR` or `Rapid Antigen Test (RAT)`"
+    },
+    "sampleOrigin": {
+      "type": "string",
+      "description": "Lab test results: Type of sample that was taken (e.g., `nasal swab`"
+    },
+    "disease": {
+      "type": "string",
+      "description": "Lab test results: Disease or agent targeted"
+    },
+    "sampleCollectionTimestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Lab test results: Sample collection date and time; complete date, with time and time zone, following ISO 8601"
+    },
+    "resultTimestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Lab test results: Results date and time; complete date, with time and time zone, following ISO 8601"
+    },
+    "result": {
+      "type": "string",
+      "description": "Lab test results: result of test"
+    },
+    "proof": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "description": "FHIR BackboneElement"
+      },
+      "minItems": 1,
+      "description": "One or more cryptographic proofs that can be used to detect tampering and verify the authorship of a credential or presentation"
+    },
+    "created": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Signature date and time"
+    },
+    "verificationMethod": {
+      "type": "string",
+      "description": "Resolvable issuer identifier"
+    },
+    "proofPurpose": {
+      "type": "string",
+      "description": "Clearly expresses the purpose for the proof and ensures this information is protected by the signature"
+    },
+    "jws": {
+      "type": "string",
+      "description": "Signature"
+    }
+  },
+  "required": [
+    "resourceType",
+    "context",
+    "type",
+    "issuer",
+    "issuanceDate",
+    "credentialSubject",
+    "type",
+    "type",
+    "proof",
+    "verificationMethod",
+    "jws"
+  ],
+  "resourceDefinition": "http://smart.who.int/ddcc/StructureDefinition/CertDIVOC",
+  "fhir:parent": "http://hl7.org/fhir/StructureDefinition/Base",
+  "jsonld:valuesets": [
+    "WHODDCCVaccinesCOVID19",
+    "LabTestQualitativeResultDivocValueSet",
+    "LabTestPathogenDivocValueSet",
+    "lab-test-sample-origin-divoc",
+    "address-use|4.0.1",
+    "LabTestTypeDivocValueSet",
+    "iso3166-1-3",
+    "address-type|4.0.1"
+  ],
+  "jsonld:contextTemplate": {
+    "@version": 1.1,
+    "fhir": "http://hl7.org/fhir/",
+    "WHODDCCVaccinesCOVID19": "http://smart.who.int/base/ValueSet-WHODDCCVaccinesCOVID19.jsonld",
+    "LabTestQualitativeResultDivocValueSet": "http://smart.who.int/base/ValueSet-LabTestQualitativeResultDivocValueSet.jsonld",
+    "LabTestPathogenDivocValueSet": "http://smart.who.int/base/ValueSet-LabTestPathogenDivocValueSet.jsonld",
+    "lab-test-sample-origin-divoc": "http://smart.who.int/base/ValueSet-lab-test-sample-origin-divoc.jsonld",
+    "address-use|4.0.1": "http://smart.who.int/base/ValueSet-address-use|4.0.1.jsonld",
+    "LabTestTypeDivocValueSet": "http://smart.who.int/base/ValueSet-LabTestTypeDivocValueSet.jsonld",
+    "iso3166-1-3": "http://smart.who.int/base/ValueSet-iso3166-1-3.jsonld",
+    "address-type|4.0.1": "http://smart.who.int/base/ValueSet-address-type|4.0.1.jsonld"
+  }
+}

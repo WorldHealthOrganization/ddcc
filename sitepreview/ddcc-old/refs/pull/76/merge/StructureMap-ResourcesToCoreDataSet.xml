@@ -1,0 +1,1164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<StructureMap xmlns="http://hl7.org/fhir">
+  <id value="ResourcesToCoreDataSet"/>
+  <meta>
+    <versionId value="1"/>
+    <lastUpdated value="2021-12-21T20:57:05.702+00:00"/>
+  </meta>
+  <text>
+    <status value="generated"/><div xmlns="http://www.w3.org/1999/xhtml"><pre>map &quot;http://worldhealthorganization.github.io/ddcc/StructureMap/ResourcesToCoreDataSet&quot; = &quot;ResourcesToCoreDataSet&quot;
+
+
+uses &quot;http://hl7.org/fhir/StructureDefinition/Bundle&quot; alias Bundle as source
+uses &quot;http://hl7.org/fhir/StructureDefinition/HumanName&quot; alias HumanName as produced
+uses &quot;http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCPatient&quot; alias DDCCPatient as source
+uses &quot;http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCImmunization&quot; alias DDCCImmunization as source
+uses &quot;http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCImmunizationRecommendation&quot; alias DDCCImmunizationRecommendation as source
+uses &quot;http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCComposition&quot; alias DDCCComposition as source
+uses &quot;http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.VS.PoV&quot; alias DDCCPoV as target
+
+group ResourcesToCoreDataSet(source bundle : Bundle, target ddcc : DDCCPoV) {
+  bundle -&gt;  ddcc.vaccination as vaccination,  ddcc.certificate as certificate then {
+    bundle.link first as link -&gt; certificate.hcid as hcid then {
+      // There's got to be a better way to do this
+      link.url as url -&gt; hcid.value = (url.replaceMatches('[Uu][Rr][Nn]:[Hh][Cc][Ii][Dd]:', '')) &quot;set hcid value&quot;;
+    } &quot;set hcid&quot;;
+    bundle.id as id -&gt;  certificate.ddccid as ddccid,  ddccid.value = id &quot;set ddcc id value&quot;;
+    bundle.entry as entry then {
+      entry.resource : Patient first as patient then PatientToDDCCVS(patient, ddcc) &quot;set patient details&quot;;
+      entry.resource : Immunization first as immunization then ImmunizationToDDCCVS(immunization, vaccination, certificate) &quot;set immunization&quot;;
+      entry.resource : ImmunizationRecommendation first as immRec then ImmRecToDDCCVS(immRec, vaccination) &quot;set immunization recommendation&quot;;
+      entry.resource : Composition first as composition then CompositionToDDCCVS(composition, certificate) &quot;set composition&quot;;
+    } &quot;set header from patient&quot;;
+  } &quot;setup ddcc&quot;;
+}
+
+group CompositionToDDCCVS(source composition : DDCCComposition, target certificate) {
+  composition -&gt; certificate.version = 'RC2' &quot;set version&quot;;
+  composition.event first as event then {
+    event.period as period -&gt; certificate.period as tPeriod then {
+      period.start as start -&gt; tPeriod.start = start &quot;set period start&quot;;
+      period.end as end -&gt; tPeriod.end = end &quot;set period end&quot;;
+    } &quot;set period&quot;;
+  } &quot;set certificate period&quot;;
+}
+
+group PatientToDDCCVS(source patient : DDCCPatient, target ddcc : DDCCPoV) {
+  patient.name as name then NameToText(name, ddcc) &quot;set name&quot;;
+  patient.birthDate as bday -&gt; ddcc.birthDate = bday &quot;set birth date&quot;;
+  patient.id as id -&gt;  ddcc.identifier as identifier,  identifier.value = id &quot;set identifier from id&quot;;
+  // this will override what was set from id if it exists
+  patient.identifier first as sId -&gt; ddcc.identifier as identifier then {
+    sId.value as id -&gt; identifier.value = id &quot;set identifier value&quot;;
+  } &quot;set identifier from identifier&quot;;
+  patient.gender as gender -&gt; ddcc.sex = gender &quot;set sex&quot;;
+}
+
+group NameToText(source name : HumanName, target ddcc) {
+  // annoying because append doesn't work until ddcc.name is set
+  name.given first as given -&gt; ddcc.name = (given.replaceMatches('$', ' ')) &quot;set first name&quot;;
+  // name.given not_first as other -&gt; ddcc.name as tName, ddcc.name = append( tName, other ) &quot;set other names&quot;;
+  name.given not_first as other -&gt;  ddcc.name as tName,  (other.replaceMatches('$', ' ')) as spaced,  ddcc.name = append(tName, spaced) &quot;set other names&quot;;
+  name.family as family -&gt;  ddcc.name as tName,  ddcc.name = append(tName, family) &quot;add family name&quot;;
+  name.text as text -&gt; ddcc.name = text &quot;set full name&quot;;
+}
+
+group ImmunizationToDDCCVS(source immunization : DDCCImmunization, target vaccination, target certificate) {
+  immunization.vaccineCode as code then {
+    code.coding first as coding -&gt; vaccination.vaccine = coding &quot;set vaccine&quot;;
+  } &quot;set vaccine code&quot;;
+  immunization.extension as ext then {
+    ext first as brand where ext.url = 'http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCVaccineBrand' then {
+      brand.valueCoding as coding -&gt; vaccination.brand = coding &quot;set brand code&quot;;
+    } &quot;set brand&quot;;
+    ext first as maholder where ext.url = 'http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCVaccineMarketAuthorization' then {
+      maholder.valueCoding as coding -&gt; vaccination.maholder = coding &quot;set maholder code&quot;;
+    } &quot;set maholder&quot;;
+    ext first as valid where ext.url = 'http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCVaccineValidFrom' then {
+      valid.valueDateTime as date -&gt; vaccination.validFrom = date &quot;set validFrom date&quot;;
+    } &quot;set validFrom&quot;;
+    ext first as country where ext.url = 'http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCountryOfVaccination' then {
+      country.valueCode as code -&gt;  vaccination.country as vCountry,  vCountry.system = 'urn:iso:std:iso:3166',  vCountry.code = code &quot;set country code&quot;;
+    } &quot;set country&quot;;
+  } &quot;set extensions&quot;;
+  immunization.manufacturer as manufacturer then {
+    manufacturer.identifier as identifier -&gt; vaccination.manufacturer as vMan then {
+      identifier.system as system -&gt; vMan.system = system &quot;set manufacturer system&quot;;
+      identifier.value as value -&gt; vMan.code = value &quot;set manufactutuer code&quot;;
+    } &quot;set manufacturer id&quot;;
+  } &quot;set manufacturer&quot;;
+  immunization.lotNumber as lot -&gt; vaccination.lot = lot &quot;set lot number&quot;;
+  immunization.occurrence as date -&gt; vaccination.date = date &quot;set date&quot;;
+  immunization.protocolApplied first as protocol then {
+    protocol.doseNumber as dose -&gt; vaccination.dose = dose &quot;set dose&quot;;
+    protocol.seriesDoses as totalDoses -&gt; vaccination.totalDoses = totalDoses &quot;set totalDoses&quot;;
+    protocol.targetDisease first as disease then {
+      disease.coding first as coding -&gt; vaccination.disease = coding &quot;set disease coding&quot;;
+    } &quot;set disease&quot;;
+    protocol.authority as authority -&gt; certificate.issuer as issuer then {
+      authority.reference as reference -&gt; issuer.identifier as identifier then {
+        reference -&gt; identifier.value = reference &quot;set reference&quot;;
+      } &quot;set issuer from reference&quot;;
+      authority.identifier as identifier -&gt; issuer.identifier = identifier &quot;set issuer identifier&quot;;
+    } &quot;set issuer&quot;;
+  } &quot;set protocol applied&quot;;
+  immunization.location as location then {
+    location.reference as reference -&gt; vaccination.centre = reference &quot;set vaccination centre from reference&quot;;
+    location.display as centre -&gt; vaccination.centre = centre &quot;set vaccination centre&quot;;
+  } &quot;set vaccination centre location&quot;;
+  immunization.performer first as performer then {
+    performer.actor as actor then {
+      actor.identifier as identifier -&gt; vaccination.practitioner = identifier &quot;set practitioner&quot;;
+    } &quot;set actor&quot;;
+  } &quot;set performer&quot;;
+}
+
+group ImmRecToDDCCVS(source immRec : DDCCImmunizationRecommendation, target vaccination) {
+  immRec.recommendation as rec then {
+    rec.dateCriterion first as due_date then {
+      due_date.value as date -&gt; vaccination.nextDose = date &quot;set due date&quot;;
+    } &quot;get date criterion&quot;;
+  } &quot;get recommendation&quot;;
+}
+
+</pre></div>
+  </text>
+  <url value="http://worldhealthorganization.github.io/ddcc/StructureMap/ResourcesToCoreDataSet"/>
+  <version value="0.3.1"/>
+  <name value="ResourcesToCoreDataSet"/>
+  <status value="draft"/>
+  <date value="2022-01-25T14:31:46+00:00"/>
+  <publisher value="WHO"/>
+  <contact>
+    <name value="WHO"/>
+    <telecom>
+      <system value="url"/>
+      <value value="http://who.int"/>
+    </telecom>
+  </contact>
+  <jurisdiction>
+    <coding>
+      <system value="http://unstats.un.org/unsd/methods/m49/m49.htm"/>
+      <code value="001"/>
+    </coding>
+  </jurisdiction>
+  <structure>
+    <url value="http://hl7.org/fhir/StructureDefinition/Bundle"/>
+    <mode value="source"/>
+    <alias value="Bundle"/>
+  </structure>
+  <structure>
+    <url value="http://hl7.org/fhir/StructureDefinition/HumanName"/>
+    <mode value="produced"/>
+    <alias value="HumanName"/>
+  </structure>
+  <structure>
+    <url value="http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCPatient"/>
+    <mode value="source"/>
+    <alias value="DDCCPatient"/>
+  </structure>
+  <structure>
+    <url value="http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCImmunization"/>
+    <mode value="source"/>
+    <alias value="DDCCImmunization"/>
+  </structure>
+  <structure>
+    <url value="http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCImmunizationRecommendation"/>
+    <mode value="source"/>
+    <alias value="DDCCImmunizationRecommendation"/>
+  </structure>
+  <structure>
+    <url value="http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCComposition"/>
+    <mode value="source"/>
+    <alias value="DDCCComposition"/>
+  </structure>
+  <structure>
+    <url value="http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.VS.PoV"/>
+    <mode value="target"/>
+    <alias value="DDCCPoV"/>
+  </structure>
+  <group>
+    <name value="ResourcesToCoreDataSet"/>
+    <typeMode value="none"/>
+    <input>
+      <name value="bundle"/>
+      <type value="Bundle"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="ddcc"/>
+      <type value="DDCCPoV"/>
+      <mode value="target"/>
+    </input>
+    <rule>
+      <name value="setup ddcc"/>
+      <source>
+        <context value="bundle"/>
+      </source>
+      <target>
+        <context value="ddcc"/>
+        <contextType value="variable"/>
+        <element value="vaccination"/>
+        <variable value="vaccination"/>
+      </target>
+      <target>
+        <context value="ddcc"/>
+        <contextType value="variable"/>
+        <element value="certificate"/>
+        <variable value="certificate"/>
+      </target>
+      <rule>
+        <name value="set hcid"/>
+        <source>
+          <context value="bundle"/>
+          <element value="link"/>
+          <listMode value="first"/>
+          <variable value="link"/>
+        </source>
+        <target>
+          <context value="certificate"/>
+          <contextType value="variable"/>
+          <element value="hcid"/>
+          <variable value="hcid"/>
+        </target>
+        <rule>
+          <name value="set hcid value"/>
+          <source>
+            <context value="link"/>
+            <element value="url"/>
+            <variable value="url"/>
+          </source>
+          <target>
+            <context value="hcid"/>
+            <contextType value="variable"/>
+            <element value="value"/>
+            <transform value="evaluate"/>
+            <parameter>
+              <valueString value="url.replaceMatches(&#39;[Uu][Rr][Nn]:[Hh][Cc][Ii][Dd]:&#39;, &#39;&#39;)"/>
+            </parameter>
+          </target>
+          <documentation value="There&#39;s got to be a better way to do this"/>
+        </rule>
+      </rule>
+      <rule>
+        <name value="set ddcc id value"/>
+        <source>
+          <context value="bundle"/>
+          <element value="id"/>
+          <variable value="id"/>
+        </source>
+        <target>
+          <context value="certificate"/>
+          <contextType value="variable"/>
+          <element value="ddccid"/>
+          <variable value="ddccid"/>
+        </target>
+        <target>
+          <context value="ddccid"/>
+          <contextType value="variable"/>
+          <element value="value"/>
+          <transform value="copy"/>
+          <parameter>
+            <valueId value="id"/>
+          </parameter>
+        </target>
+      </rule>
+      <rule>
+        <name value="set header from patient"/>
+        <source>
+          <context value="bundle"/>
+          <element value="entry"/>
+          <variable value="entry"/>
+        </source>
+        <rule>
+          <name value="set patient details"/>
+          <source>
+            <context value="entry"/>
+            <type value="Patient"/>
+            <element value="resource"/>
+            <listMode value="first"/>
+            <variable value="patient"/>
+          </source>
+          <dependent>
+            <name value="PatientToDDCCVS"/>
+            <variable value="patient"/>
+            <variable value="ddcc"/>
+          </dependent>
+        </rule>
+        <rule>
+          <name value="set immunization"/>
+          <source>
+            <context value="entry"/>
+            <type value="Immunization"/>
+            <element value="resource"/>
+            <listMode value="first"/>
+            <variable value="immunization"/>
+          </source>
+          <dependent>
+            <name value="ImmunizationToDDCCVS"/>
+            <variable value="immunization"/>
+            <variable value="vaccination"/>
+            <variable value="certificate"/>
+          </dependent>
+        </rule>
+        <rule>
+          <name value="set immunization recommendation"/>
+          <source>
+            <context value="entry"/>
+            <type value="ImmunizationRecommendation"/>
+            <element value="resource"/>
+            <listMode value="first"/>
+            <variable value="immRec"/>
+          </source>
+          <dependent>
+            <name value="ImmRecToDDCCVS"/>
+            <variable value="immRec"/>
+            <variable value="vaccination"/>
+          </dependent>
+        </rule>
+        <rule>
+          <name value="set composition"/>
+          <source>
+            <context value="entry"/>
+            <type value="Composition"/>
+            <element value="resource"/>
+            <listMode value="first"/>
+            <variable value="composition"/>
+          </source>
+          <dependent>
+            <name value="CompositionToDDCCVS"/>
+            <variable value="composition"/>
+            <variable value="certificate"/>
+          </dependent>
+        </rule>
+      </rule>
+    </rule>
+  </group>
+  <group>
+    <name value="CompositionToDDCCVS"/>
+    <typeMode value="none"/>
+    <input>
+      <name value="composition"/>
+      <type value="DDCCComposition"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="certificate"/>
+      <mode value="target"/>
+    </input>
+    <rule>
+      <name value="set version"/>
+      <source>
+        <context value="composition"/>
+      </source>
+      <target>
+        <context value="certificate"/>
+        <contextType value="variable"/>
+        <element value="version"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueString value="RC2"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="set certificate period"/>
+      <source>
+        <context value="composition"/>
+        <element value="event"/>
+        <listMode value="first"/>
+        <variable value="event"/>
+      </source>
+      <rule>
+        <name value="set period"/>
+        <source>
+          <context value="event"/>
+          <element value="period"/>
+          <variable value="period"/>
+        </source>
+        <target>
+          <context value="certificate"/>
+          <contextType value="variable"/>
+          <element value="period"/>
+          <variable value="tPeriod"/>
+        </target>
+        <rule>
+          <name value="set period start"/>
+          <source>
+            <context value="period"/>
+            <element value="start"/>
+            <variable value="start"/>
+          </source>
+          <target>
+            <context value="tPeriod"/>
+            <contextType value="variable"/>
+            <element value="start"/>
+            <transform value="copy"/>
+            <parameter>
+              <valueId value="start"/>
+            </parameter>
+          </target>
+        </rule>
+        <rule>
+          <name value="set period end"/>
+          <source>
+            <context value="period"/>
+            <element value="end"/>
+            <variable value="end"/>
+          </source>
+          <target>
+            <context value="tPeriod"/>
+            <contextType value="variable"/>
+            <element value="end"/>
+            <transform value="copy"/>
+            <parameter>
+              <valueId value="end"/>
+            </parameter>
+          </target>
+        </rule>
+      </rule>
+    </rule>
+  </group>
+  <group>
+    <name value="PatientToDDCCVS"/>
+    <typeMode value="none"/>
+    <input>
+      <name value="patient"/>
+      <type value="DDCCPatient"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="ddcc"/>
+      <type value="DDCCPoV"/>
+      <mode value="target"/>
+    </input>
+    <rule>
+      <name value="set name"/>
+      <source>
+        <context value="patient"/>
+        <element value="name"/>
+        <variable value="name"/>
+      </source>
+      <dependent>
+        <name value="NameToText"/>
+        <variable value="name"/>
+        <variable value="ddcc"/>
+      </dependent>
+    </rule>
+    <rule>
+      <name value="set birth date"/>
+      <source>
+        <context value="patient"/>
+        <element value="birthDate"/>
+        <variable value="bday"/>
+      </source>
+      <target>
+        <context value="ddcc"/>
+        <contextType value="variable"/>
+        <element value="birthDate"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="bday"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="set identifier from id"/>
+      <source>
+        <context value="patient"/>
+        <element value="id"/>
+        <variable value="id"/>
+      </source>
+      <target>
+        <context value="ddcc"/>
+        <contextType value="variable"/>
+        <element value="identifier"/>
+        <variable value="identifier"/>
+      </target>
+      <target>
+        <context value="identifier"/>
+        <contextType value="variable"/>
+        <element value="value"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="id"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="set identifier from identifier"/>
+      <source>
+        <context value="patient"/>
+        <element value="identifier"/>
+        <listMode value="first"/>
+        <variable value="sId"/>
+      </source>
+      <target>
+        <context value="ddcc"/>
+        <contextType value="variable"/>
+        <element value="identifier"/>
+        <variable value="identifier"/>
+      </target>
+      <rule>
+        <name value="set identifier value"/>
+        <source>
+          <context value="sId"/>
+          <element value="value"/>
+          <variable value="id"/>
+        </source>
+        <target>
+          <context value="identifier"/>
+          <contextType value="variable"/>
+          <element value="value"/>
+          <transform value="copy"/>
+          <parameter>
+            <valueId value="id"/>
+          </parameter>
+        </target>
+      </rule>
+      <documentation value="this will override what was set from id if it exists"/>
+    </rule>
+    <rule>
+      <name value="set sex"/>
+      <source>
+        <context value="patient"/>
+        <element value="gender"/>
+        <variable value="gender"/>
+      </source>
+      <target>
+        <context value="ddcc"/>
+        <contextType value="variable"/>
+        <element value="sex"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="gender"/>
+        </parameter>
+      </target>
+    </rule>
+  </group>
+  <group>
+    <name value="NameToText"/>
+    <typeMode value="none"/>
+    <input>
+      <name value="name"/>
+      <type value="HumanName"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="ddcc"/>
+      <mode value="target"/>
+    </input>
+    <rule>
+      <name value="set first name"/>
+      <source>
+        <context value="name"/>
+        <element value="given"/>
+        <listMode value="first"/>
+        <variable value="given"/>
+      </source>
+      <target>
+        <context value="ddcc"/>
+        <contextType value="variable"/>
+        <element value="name"/>
+        <transform value="evaluate"/>
+        <parameter>
+          <valueString value="given.replaceMatches(&#39;$&#39;, &#39; &#39;)"/>
+        </parameter>
+      </target>
+      <documentation value="annoying because append doesn&#39;t work until ddcc.name is set"/>
+    </rule>
+    <rule>
+      <name value="set other names"/>
+      <source>
+        <context value="name"/>
+        <element value="given"/>
+        <listMode value="not_first"/>
+        <variable value="other"/>
+      </source>
+      <target>
+        <context value="ddcc"/>
+        <contextType value="variable"/>
+        <element value="name"/>
+        <variable value="tName"/>
+      </target>
+      <target>
+        <contextType value="variable"/>
+        <variable value="spaced"/>
+        <transform value="evaluate"/>
+        <parameter>
+          <valueString value="other.replaceMatches(&#39;$&#39;, &#39; &#39;)"/>
+        </parameter>
+      </target>
+      <target>
+        <context value="ddcc"/>
+        <contextType value="variable"/>
+        <element value="name"/>
+        <transform value="append"/>
+        <parameter>
+          <valueId value="tName"/>
+        </parameter>
+        <parameter>
+          <valueId value="spaced"/>
+        </parameter>
+      </target>
+      <documentation value="name.given not_first as other -&gt; ddcc.name as tName, ddcc.name = append( tName, other ) &quot;set other names&quot;;"/>
+    </rule>
+    <rule>
+      <name value="add family name"/>
+      <source>
+        <context value="name"/>
+        <element value="family"/>
+        <variable value="family"/>
+      </source>
+      <target>
+        <context value="ddcc"/>
+        <contextType value="variable"/>
+        <element value="name"/>
+        <variable value="tName"/>
+      </target>
+      <target>
+        <context value="ddcc"/>
+        <contextType value="variable"/>
+        <element value="name"/>
+        <transform value="append"/>
+        <parameter>
+          <valueId value="tName"/>
+        </parameter>
+        <parameter>
+          <valueId value="family"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="set full name"/>
+      <source>
+        <context value="name"/>
+        <element value="text"/>
+        <variable value="text"/>
+      </source>
+      <target>
+        <context value="ddcc"/>
+        <contextType value="variable"/>
+        <element value="name"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="text"/>
+        </parameter>
+      </target>
+    </rule>
+  </group>
+  <group>
+    <name value="ImmunizationToDDCCVS"/>
+    <typeMode value="none"/>
+    <input>
+      <name value="immunization"/>
+      <type value="DDCCImmunization"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="vaccination"/>
+      <mode value="target"/>
+    </input>
+    <input>
+      <name value="certificate"/>
+      <mode value="target"/>
+    </input>
+    <rule>
+      <name value="set vaccine code"/>
+      <source>
+        <context value="immunization"/>
+        <element value="vaccineCode"/>
+        <variable value="code"/>
+      </source>
+      <rule>
+        <name value="set vaccine"/>
+        <source>
+          <context value="code"/>
+          <element value="coding"/>
+          <listMode value="first"/>
+          <variable value="coding"/>
+        </source>
+        <target>
+          <context value="vaccination"/>
+          <contextType value="variable"/>
+          <element value="vaccine"/>
+          <transform value="copy"/>
+          <parameter>
+            <valueId value="coding"/>
+          </parameter>
+        </target>
+      </rule>
+    </rule>
+    <rule>
+      <name value="set extensions"/>
+      <source>
+        <context value="immunization"/>
+        <element value="extension"/>
+        <variable value="ext"/>
+      </source>
+      <rule>
+        <name value="set brand"/>
+        <source>
+          <context value="ext"/>
+          <listMode value="first"/>
+          <variable value="brand"/>
+          <condition value="ext.url = &#39;http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCVaccineBrand&#39;"/>
+        </source>
+        <rule>
+          <name value="set brand code"/>
+          <source>
+            <context value="brand"/>
+            <element value="valueCoding"/>
+            <variable value="coding"/>
+          </source>
+          <target>
+            <context value="vaccination"/>
+            <contextType value="variable"/>
+            <element value="brand"/>
+            <transform value="copy"/>
+            <parameter>
+              <valueId value="coding"/>
+            </parameter>
+          </target>
+        </rule>
+      </rule>
+      <rule>
+        <name value="set maholder"/>
+        <source>
+          <context value="ext"/>
+          <listMode value="first"/>
+          <variable value="maholder"/>
+          <condition value="ext.url = &#39;http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCVaccineMarketAuthorization&#39;"/>
+        </source>
+        <rule>
+          <name value="set maholder code"/>
+          <source>
+            <context value="maholder"/>
+            <element value="valueCoding"/>
+            <variable value="coding"/>
+          </source>
+          <target>
+            <context value="vaccination"/>
+            <contextType value="variable"/>
+            <element value="maholder"/>
+            <transform value="copy"/>
+            <parameter>
+              <valueId value="coding"/>
+            </parameter>
+          </target>
+        </rule>
+      </rule>
+      <rule>
+        <name value="set validFrom"/>
+        <source>
+          <context value="ext"/>
+          <listMode value="first"/>
+          <variable value="valid"/>
+          <condition value="ext.url = &#39;http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCVaccineValidFrom&#39;"/>
+        </source>
+        <rule>
+          <name value="set validFrom date"/>
+          <source>
+            <context value="valid"/>
+            <element value="valueDateTime"/>
+            <variable value="date"/>
+          </source>
+          <target>
+            <context value="vaccination"/>
+            <contextType value="variable"/>
+            <element value="validFrom"/>
+            <transform value="copy"/>
+            <parameter>
+              <valueId value="date"/>
+            </parameter>
+          </target>
+        </rule>
+      </rule>
+      <rule>
+        <name value="set country"/>
+        <source>
+          <context value="ext"/>
+          <listMode value="first"/>
+          <variable value="country"/>
+          <condition value="ext.url = &#39;http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCountryOfVaccination&#39;"/>
+        </source>
+        <rule>
+          <name value="set country code"/>
+          <source>
+            <context value="country"/>
+            <element value="valueCode"/>
+            <variable value="code"/>
+          </source>
+          <target>
+            <context value="vaccination"/>
+            <contextType value="variable"/>
+            <element value="country"/>
+            <variable value="vCountry"/>
+          </target>
+          <target>
+            <context value="vCountry"/>
+            <contextType value="variable"/>
+            <element value="system"/>
+            <transform value="copy"/>
+            <parameter>
+              <valueString value="urn:iso:std:iso:3166"/>
+            </parameter>
+          </target>
+          <target>
+            <context value="vCountry"/>
+            <contextType value="variable"/>
+            <element value="code"/>
+            <transform value="copy"/>
+            <parameter>
+              <valueId value="code"/>
+            </parameter>
+          </target>
+        </rule>
+      </rule>
+    </rule>
+    <rule>
+      <name value="set manufacturer"/>
+      <source>
+        <context value="immunization"/>
+        <element value="manufacturer"/>
+        <variable value="manufacturer"/>
+      </source>
+      <rule>
+        <name value="set manufacturer id"/>
+        <source>
+          <context value="manufacturer"/>
+          <element value="identifier"/>
+          <variable value="identifier"/>
+        </source>
+        <target>
+          <context value="vaccination"/>
+          <contextType value="variable"/>
+          <element value="manufacturer"/>
+          <variable value="vMan"/>
+        </target>
+        <rule>
+          <name value="set manufacturer system"/>
+          <source>
+            <context value="identifier"/>
+            <element value="system"/>
+            <variable value="system"/>
+          </source>
+          <target>
+            <context value="vMan"/>
+            <contextType value="variable"/>
+            <element value="system"/>
+            <transform value="copy"/>
+            <parameter>
+              <valueId value="system"/>
+            </parameter>
+          </target>
+        </rule>
+        <rule>
+          <name value="set manufactutuer code"/>
+          <source>
+            <context value="identifier"/>
+            <element value="value"/>
+            <variable value="value"/>
+          </source>
+          <target>
+            <context value="vMan"/>
+            <contextType value="variable"/>
+            <element value="code"/>
+            <transform value="copy"/>
+            <parameter>
+              <valueId value="value"/>
+            </parameter>
+          </target>
+        </rule>
+      </rule>
+    </rule>
+    <rule>
+      <name value="set lot number"/>
+      <source>
+        <context value="immunization"/>
+        <element value="lotNumber"/>
+        <variable value="lot"/>
+      </source>
+      <target>
+        <context value="vaccination"/>
+        <contextType value="variable"/>
+        <element value="lot"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="lot"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="set date"/>
+      <source>
+        <context value="immunization"/>
+        <element value="occurrence"/>
+        <variable value="date"/>
+      </source>
+      <target>
+        <context value="vaccination"/>
+        <contextType value="variable"/>
+        <element value="date"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="date"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="set protocol applied"/>
+      <source>
+        <context value="immunization"/>
+        <element value="protocolApplied"/>
+        <listMode value="first"/>
+        <variable value="protocol"/>
+      </source>
+      <rule>
+        <name value="set dose"/>
+        <source>
+          <context value="protocol"/>
+          <element value="doseNumber"/>
+          <variable value="dose"/>
+        </source>
+        <target>
+          <context value="vaccination"/>
+          <contextType value="variable"/>
+          <element value="dose"/>
+          <transform value="copy"/>
+          <parameter>
+            <valueId value="dose"/>
+          </parameter>
+        </target>
+      </rule>
+      <rule>
+        <name value="set totalDoses"/>
+        <source>
+          <context value="protocol"/>
+          <element value="seriesDoses"/>
+          <variable value="totalDoses"/>
+        </source>
+        <target>
+          <context value="vaccination"/>
+          <contextType value="variable"/>
+          <element value="totalDoses"/>
+          <transform value="copy"/>
+          <parameter>
+            <valueId value="totalDoses"/>
+          </parameter>
+        </target>
+      </rule>
+      <rule>
+        <name value="set disease"/>
+        <source>
+          <context value="protocol"/>
+          <element value="targetDisease"/>
+          <listMode value="first"/>
+          <variable value="disease"/>
+        </source>
+        <rule>
+          <name value="set disease coding"/>
+          <source>
+            <context value="disease"/>
+            <element value="coding"/>
+            <listMode value="first"/>
+            <variable value="coding"/>
+          </source>
+          <target>
+            <context value="vaccination"/>
+            <contextType value="variable"/>
+            <element value="disease"/>
+            <transform value="copy"/>
+            <parameter>
+              <valueId value="coding"/>
+            </parameter>
+          </target>
+        </rule>
+      </rule>
+      <rule>
+        <name value="set issuer"/>
+        <source>
+          <context value="protocol"/>
+          <element value="authority"/>
+          <variable value="authority"/>
+        </source>
+        <target>
+          <context value="certificate"/>
+          <contextType value="variable"/>
+          <element value="issuer"/>
+          <variable value="issuer"/>
+        </target>
+        <rule>
+          <name value="set issuer from reference"/>
+          <source>
+            <context value="authority"/>
+            <element value="reference"/>
+            <variable value="reference"/>
+          </source>
+          <target>
+            <context value="issuer"/>
+            <contextType value="variable"/>
+            <element value="identifier"/>
+            <variable value="identifier"/>
+          </target>
+          <rule>
+            <name value="set reference"/>
+            <source>
+              <context value="reference"/>
+            </source>
+            <target>
+              <context value="identifier"/>
+              <contextType value="variable"/>
+              <element value="value"/>
+              <transform value="copy"/>
+              <parameter>
+                <valueId value="reference"/>
+              </parameter>
+            </target>
+          </rule>
+        </rule>
+        <rule>
+          <name value="set issuer identifier"/>
+          <source>
+            <context value="authority"/>
+            <element value="identifier"/>
+            <variable value="identifier"/>
+          </source>
+          <target>
+            <context value="issuer"/>
+            <contextType value="variable"/>
+            <element value="identifier"/>
+            <transform value="copy"/>
+            <parameter>
+              <valueId value="identifier"/>
+            </parameter>
+          </target>
+        </rule>
+      </rule>
+    </rule>
+    <rule>
+      <name value="set vaccination centre location"/>
+      <source>
+        <context value="immunization"/>
+        <element value="location"/>
+        <variable value="location"/>
+      </source>
+      <rule>
+        <name value="set vaccination centre from reference"/>
+        <source>
+          <context value="location"/>
+          <element value="reference"/>
+          <variable value="reference"/>
+        </source>
+        <target>
+          <context value="vaccination"/>
+          <contextType value="variable"/>
+          <element value="centre"/>
+          <transform value="copy"/>
+          <parameter>
+            <valueId value="reference"/>
+          </parameter>
+        </target>
+      </rule>
+      <rule>
+        <name value="set vaccination centre"/>
+        <source>
+          <context value="location"/>
+          <element value="display"/>
+          <variable value="centre"/>
+        </source>
+        <target>
+          <context value="vaccination"/>
+          <contextType value="variable"/>
+          <element value="centre"/>
+          <transform value="copy"/>
+          <parameter>
+            <valueId value="centre"/>
+          </parameter>
+        </target>
+      </rule>
+    </rule>
+    <rule>
+      <name value="set performer"/>
+      <source>
+        <context value="immunization"/>
+        <element value="performer"/>
+        <listMode value="first"/>
+        <variable value="performer"/>
+      </source>
+      <rule>
+        <name value="set actor"/>
+        <source>
+          <context value="performer"/>
+          <element value="actor"/>
+          <variable value="actor"/>
+        </source>
+        <rule>
+          <name value="set practitioner"/>
+          <source>
+            <context value="actor"/>
+            <element value="identifier"/>
+            <variable value="identifier"/>
+          </source>
+          <target>
+            <context value="vaccination"/>
+            <contextType value="variable"/>
+            <element value="practitioner"/>
+            <transform value="copy"/>
+            <parameter>
+              <valueId value="identifier"/>
+            </parameter>
+          </target>
+        </rule>
+      </rule>
+    </rule>
+  </group>
+  <group>
+    <name value="ImmRecToDDCCVS"/>
+    <typeMode value="none"/>
+    <input>
+      <name value="immRec"/>
+      <type value="DDCCImmunizationRecommendation"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="vaccination"/>
+      <mode value="target"/>
+    </input>
+    <rule>
+      <name value="get recommendation"/>
+      <source>
+        <context value="immRec"/>
+        <element value="recommendation"/>
+        <variable value="rec"/>
+      </source>
+      <rule>
+        <name value="get date criterion"/>
+        <source>
+          <context value="rec"/>
+          <element value="dateCriterion"/>
+          <listMode value="first"/>
+          <variable value="due_date"/>
+        </source>
+        <rule>
+          <name value="set due date"/>
+          <source>
+            <context value="due_date"/>
+            <element value="value"/>
+            <variable value="date"/>
+          </source>
+          <target>
+            <context value="vaccination"/>
+            <contextType value="variable"/>
+            <element value="nextDose"/>
+            <transform value="copy"/>
+            <parameter>
+              <valueId value="date"/>
+            </parameter>
+          </target>
+        </rule>
+      </rule>
+    </rule>
+  </group>
+</StructureMap>

@@ -1,0 +1,260 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "http://smart.who.int/base/StructureDefinition-HCertDCC.schema.json",
+  "title": "Payload for Certificate - EU DCC CBOR Web Token Logical Model",
+  "description": "Data elements for the EU Digital COVID Certificate Core Data Set. Based on the official specification for COVID-19-related payloads <https://health.ec.europa.eu/system/files/2021-06/covid-certificate_json_specification_en_0.pdf> as of 2023-01-31, and Implementing Decision (EU) 2021/1073, Annex 1 <https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32021D1073&from=EN#d1e34-35-1>.",
+  "type": "object",
+  "properties": {
+    "resourceType": {
+      "type": "string",
+      "const": "HCertDCC",
+      "description": "Resource type identifier for HCertDCC logical model"
+    },
+    "@context": {
+      "description": "JSON-LD context for this logical model with ValueSet vocabularies",
+      "anyOf": [
+        {
+          "type": "string",
+          "format": "uri",
+          "description": "URI reference to external JSON-LD context"
+        },
+        {
+          "type": "object",
+          "description": "Inline JSON-LD context",
+          "properties": {
+            "@version": {
+              "type": "number",
+              "const": 1.1
+            },
+            "fhir": {
+              "type": "string",
+              "const": "http://hl7.org/fhir/"
+            }
+          },
+          "additionalProperties": {
+            "type": "string",
+            "format": "uri"
+          }
+        },
+        {
+          "type": "array",
+          "description": "Array of JSON-LD context objects/URIs",
+          "items": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uri"
+              },
+              {
+                "type": "object"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "@type": {
+      "type": "string",
+      "description": "JSON-LD type identifier for HCertDCC logical model",
+      "examples": [
+        "LogicalModel-HCertDCC"
+      ]
+    },
+    "1": {
+      "type": "object",
+      "description": "EU Digital COVID Certificate v1"
+    },
+    "id": {
+      "type": "object",
+      "description": "Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces."
+    },
+    "modifierExtension": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "description": "FHIR Extension"
+      },
+      "description": "May be used to represent additional information that is not part of the basic definition of the element and that modifies the understanding of the element in which it is contained and/or the understanding of the containing element's descendants. Usually modifier elements provide negation or qualification. To make the use of extensions safe and manageable, there is a strict set of governance applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension. Applications processing a resource are required to check for modifier extensions.\n\nModifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself)."
+    },
+    "ver": {
+      "type": "string",
+      "description": "Schema version"
+    },
+    "nam": {
+      "type": "object",
+      "description": "Person name"
+    },
+    "fn": {
+      "type": "string",
+      "description": "Surname/family name (separate multiple with spaces)"
+    },
+    "fnt": {
+      "type": "string",
+      "description": "Standardised surname"
+    },
+    "gn": {
+      "type": "string",
+      "description": "Forename/given name. Skip if no given name. Separate with spaces."
+    },
+    "gnt": {
+      "type": "string",
+      "description": "Standardised forename, same approach as fnt. Skip if no given name."
+    },
+    "dob": {
+      "type": "string",
+      "format": "date",
+      "description": "Date of birth in YYYY-MM-DD format. Skip if missing. Fill unknown months or days with 'XX'."
+    },
+    "v": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "description": "FHIR BackboneElement"
+      },
+      "description": "Vaccination Group (see element details)"
+    },
+    "tg": {
+      "type": "string",
+      "description": "Disease or agent targeted (SNOMED CT GPS code for COVID-19 or variant)"
+    },
+    "vp": {
+      "type": "string",
+      "description": "Preferred Code System: SNOMED CT or ATC Classification. Examples of codes that should be used from the preferred code systems are the SNOMED CT code 1119305005 (SARS-CoV-2 antigen vaccine), 1119349007 (SARS-CoV-2 mRNA vaccine) or J07BX03 (covid-19 vaccines). The value set should be extended when new vaccine types are developed and put into use."
+    },
+    "mp": {
+      "type": "string",
+      "description": "Preferred Code Systems (in the order of preference):\n\n- Union Register of medicinal products for vaccines with EU-wide authorisation (authorisation numbers) - for example, `EU/1/20/1528` (Comirnaty)\n- A global vaccine register such as one that could be established by the World Health Organisation\n- Name of the vaccine medicinal product in other cases. If the name includes whitespaces, these should be replaced by a hyphen (-). For example, `Sputnik-V` (standing for Sputnik V)."
+    },
+    "ma": {
+      "type": "string",
+      "description": "Rapid antigen test (RAT) device identifier from the JRC database"
+    },
+    "dn": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Number in a series of doses"
+    },
+    "sd": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "The overall number of doses in the series"
+    },
+    "dt": {
+      "type": "string",
+      "format": "date",
+      "description": "Date of vaccination, YYYY-MM-DD format"
+    },
+    "co": {
+      "type": "string",
+      "description": "Country of test (two letter ISo-3166)"
+    },
+    "is": {
+      "type": "string",
+      "description": "Certificate issuer"
+    },
+    "ci": {
+      "type": "string",
+      "description": "Unique certificate identifier (UVCI)"
+    },
+    "t": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "description": "FHIR BackboneElement"
+      },
+      "description": "Test Group"
+    },
+    "tt": {
+      "type": "string",
+      "description": "The codes in this value set shall refer to the method of the test and shall be selected at least to separate the NAAT tests from RAT tests as expressed in Regulation (EU) 2021/953.\n\nAn example of a code that should be used from the preferred code system is LP217198-3 (Rapid immunoassay)."
+    },
+    "nm": {
+      "type": "string",
+      "description": "Name of the nucleic acid amplification test (NAAT) used"
+    },
+    "sc": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Date and time when test sample was collected in ISO 8601 format"
+    },
+    "tr": {
+      "type": "string",
+      "description": "The codes selected shall allow distinguishing between positive and negative test results (detected or not detected). Additional values (like undetermined) may be added if the use cases do require this.\n\nExamples of codes that should be used from the preferred code system are `260415000` (Not detected) and `260373001` (Detected)."
+    },
+    "tc": {
+      "type": "string",
+      "description": "Testing centre or facility"
+    },
+    "r": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "description": "FHIR BackboneElement"
+      },
+      "description": "Recovery Group"
+    },
+    "fr": {
+      "type": "string",
+      "format": "date",
+      "description": "The date when a sample for the NAAT test producing a positive result was collected, in the format YYYY-MM-DD (complete date without time)."
+    },
+    "df": {
+      "type": "string",
+      "format": "date",
+      "description": "The first date on which the certificate is considered to be valid, in YYYY-MM-DD format (complete date without time)."
+    },
+    "du": {
+      "type": "string",
+      "format": "date",
+      "description": "The last date on which the certificate is considered to be valid, assigned by the certificate issuer, in YYYY-MM-DD format (complete date without time)."
+    }
+  },
+  "required": [
+    "resourceType",
+    "1",
+    "ver",
+    "nam",
+    "fnt",
+    "tg",
+    "vp",
+    "mp",
+    "ma",
+    "dn",
+    "sd",
+    "dt",
+    "co",
+    "is",
+    "ci",
+    "tg",
+    "tt",
+    "sc",
+    "tr",
+    "co",
+    "is",
+    "ci",
+    "tg",
+    "fr",
+    "co",
+    "df",
+    "du",
+    "ci"
+  ],
+  "resourceDefinition": "http://smart.who.int/ddcc/StructureDefinition/HCertDCC",
+  "fhir:parent": "http://hl7.org/fhir/StructureDefinition/Base",
+  "jsonld:valuesets": [
+    "LabTestQualitativeResultSnomedValueSet",
+    "VaccineCovid19EUUnionRegisterValueSet",
+    "LabTestTypeLoincValueSet",
+    "iso3166-1-2",
+    "LabTestPathogenCovid19SnomedValueSet"
+  ],
+  "jsonld:contextTemplate": {
+    "@version": 1.1,
+    "fhir": "http://hl7.org/fhir/",
+    "LabTestQualitativeResultSnomedValueSet": "http://smart.who.int/base/ValueSet-LabTestQualitativeResultSnomedValueSet.jsonld",
+    "VaccineCovid19EUUnionRegisterValueSet": "http://smart.who.int/base/ValueSet-VaccineCovid19EUUnionRegisterValueSet.jsonld",
+    "LabTestTypeLoincValueSet": "http://smart.who.int/base/ValueSet-LabTestTypeLoincValueSet.jsonld",
+    "iso3166-1-2": "http://smart.who.int/base/ValueSet-iso3166-1-2.jsonld",
+    "LabTestPathogenCovid19SnomedValueSet": "http://smart.who.int/base/ValueSet-LabTestPathogenCovid19SnomedValueSet.jsonld"
+  }
+}

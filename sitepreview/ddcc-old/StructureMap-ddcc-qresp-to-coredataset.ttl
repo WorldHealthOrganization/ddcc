@@ -1,0 +1,829 @@
+@prefix fhir: <http://hl7.org/fhir/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# - resource -------------------------------------------------------------------
+
+<http://smart.who.int/ddcc/StructureMap/ddcc-qresp-to-coredataset> a fhir:StructureMap ;
+  fhir:nodeRole fhir:treeRoot ;
+  fhir:id [ fhir:v "ddcc-qresp-to-coredataset"] ; # 
+  fhir:meta [
+     fhir:versionId [ fhir:v "1" ] ;
+     fhir:lastUpdated [ fhir:v "2021-12-14T19:11:42.812+00:00"^^xsd:dateTime ]
+  ] ; # 
+  fhir:text [
+     fhir:status [ fhir:v "generated" ] ;
+     fhir:div "<div xmlns=\"http://www.w3.org/1999/xhtml\"><pre>map &quot;http://smart.who.int/ddcc/StructureMap/QRespToCoreDataSet&quot; = &quot;QRespToCoreDataSet&quot;\r\n\r\n\r\nuses &quot;http://hl7.org/fhir/StructureDefinition/QuestionnaireResponse&quot; alias QResp as source\r\nuses &quot;http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSetPoV&quot; alias DDCCPoV as target\r\n\r\ngroup QRespToCoreDataSet(source qr : QResp, target ddcc : DDCCPoV) {\r\n  // qr.item as item where item.linkId = 'name' -&gt; ddcc.name as name then {\r\n  //     log 'got answer';\r\n  //     item.answer first as answer -&gt; name = answer.valueString;\r\n  //   };\r\n  qr as src then QRespToHeader(src, ddcc) &quot;set header content&quot;;\r\n  qr as src -&gt; ddcc.vaccination as vaccination then QRespToVaccination(src, vaccination) &quot;set vaccination content&quot;;\r\n  qr as src -&gt; ddcc.certificate as certificate then QRespToCertificate(src, certificate) &quot;set certificate content&quot;;\r\n}\r\n\r\ngroup QRespToHeader(source qr, target ddcc) {\r\n  qr.item as item then {\r\n    item.answer first as answer where item.linkId = 'name' then {\r\n      answer.valueString as content -&gt; ddcc.name = content &quot;set name&quot;;\r\n    } &quot;first answser for name&quot;;\r\n    item.answer first as answer where item.linkId = 'birthDate' then {\r\n      answer.valueDate as content -&gt; ddcc.birthDate = content &quot;set birthDate&quot;;\r\n    } &quot;first answer for birthDate&quot;;\r\n    item.answer first as answer where item.linkId = 'identifier' -&gt; ddcc.identifier as identifier then {\r\n      answer.valueString as content -&gt; identifier.value = content &quot;set identifier&quot;;\r\n    } &quot;first answer for identifier&quot;;\r\n    item.answer first as answer where item.linkId = 'sex' then {\r\n      answer.valueCoding as coding then {\r\n        coding.code as content -&gt; ddcc.sex = content &quot;set sex&quot;;\r\n      } &quot;process coding&quot;;\r\n    } &quot;first answer for sex&quot;;\r\n  } &quot;header items&quot;;\r\n}\r\n\r\ngroup QRespToVaccination(source qr, target vaccination) {\r\n  qr.item as item then {\r\n    item.answer first as answer where item.linkId = 'vaccine' then {\r\n      answer.valueCoding as content -&gt; vaccination.vaccine = content &quot;set vaccine&quot;;\r\n    } &quot;first answer for vaccine&quot;;\r\n    item.answer first as answer where item.linkId = 'brand' then {\r\n      answer.valueCoding as content -&gt; vaccination.brand = content &quot;set brand&quot;;\r\n    } &quot;first answer for brand&quot;;\r\n    item.answer first as answer where item.linkId = 'manufacturer' then {\r\n      answer.valueCoding as content -&gt; vaccination.manufacturer = content &quot;set manufacturer&quot;;\r\n    } &quot;first answer for manufacturer&quot;;\r\n    item.answer first as answer where item.linkId = 'ma_holder' then {\r\n      answer.valueCoding as content -&gt; vaccination.maholder = content &quot;set maholder&quot;;\r\n    } &quot;first answer for maholder&quot;;\r\n    item.answer first as answer where item.linkId = 'lot' then {\r\n      answer.valueString as content -&gt; vaccination.lot = content &quot;set lot&quot;;\r\n    } &quot;first answser for lot&quot;;\r\n    item.answer first as answer where item.linkId = 'date' then {\r\n      answer.valueDate as content -&gt; vaccination.date = content &quot;set date&quot;;\r\n    } &quot;first answer for date&quot;;\r\n    item.answer first as answer where item.linkId = 'vaccine_valid' then {\r\n      answer.valueDate as content -&gt; vaccination.validFrom = content &quot;set validFrom&quot;;\r\n    } &quot;first answer for validFrom&quot;;\r\n    item.answer first as answer where item.linkId = 'dose' then {\r\n      answer.valueInteger as content -&gt; vaccination.dose = content &quot;set dose&quot;;\r\n    } &quot;first answer for dose&quot;;\r\n    item.answer first as answer where item.linkId = 'total_doses' then {\r\n      answer.valueInteger as content -&gt; vaccination.totalDoses = content &quot;set totalDoses&quot;;\r\n    } &quot;first answer for totalDoses&quot;;\r\n    item.answer first as answer where item.linkId = 'country' then {\r\n      answer.valueCoding as content -&gt; vaccination.country = content &quot;set country&quot;;\r\n    } &quot;first answer for country&quot;;\r\n    item.answer first as answer where item.linkId = 'centre' then {\r\n      answer.valueString as content -&gt; vaccination.centre = content &quot;set centre&quot;;\r\n    } &quot;first answser for centre&quot;;\r\n    item.answer first as answer where item.linkId = 'hw' -&gt; vaccination.practitioner as identifier then {\r\n      answer.valueString as content -&gt; identifier.value = content &quot;set practitioner&quot;;\r\n    } &quot;first answser for practitioner&quot;;\r\n    item.answer first as answer where item.linkId = 'disease' then {\r\n      answer.valueCoding as content -&gt; vaccination.disease = content &quot;set disease&quot;;\r\n    } &quot;first answer for disease&quot;;\r\n    item.answer first as answer where item.linkId = 'due_date' then {\r\n      answer.valueDate as content -&gt; vaccination.nextDose = content &quot;set nextDose&quot;;\r\n    } &quot;first answer for nextDose&quot;;\r\n  } &quot;vaccination items&quot;;\r\n  qr as src -&gt; vaccination.period as period then QRespToVaccinePeriod(src, period) &quot;set vaccination period&quot;;\r\n}\r\n\r\ngroup QRespToVaccinePeriod(source qr, target period) {\r\n  qr.item as item then {\r\n    item.answer first as answer where item.linkId = 'valid_from' then {\r\n      answer.valueDate as content -&gt; period.start = content &quot;set valid_from&quot;;\r\n    } &quot;first answer for valid_from&quot;;\r\n    item.answer first as answer where item.linkId = 'valid_until' then {\r\n      answer.valueDate as content -&gt; period.end = content &quot;set valid_until&quot;;\r\n    } &quot;first answer for valid_until&quot;;\r\n  } &quot;vaccination validity items&quot;;\r\n}\r\n\r\ngroup QRespToCertificate(source qr, target certificate) {\r\n  qr.item as item then {\r\n    item.answer first as answer where item.linkId = 'pha' -&gt; certificate.issuer as issuer then {\r\n      answer.valueString as content -&gt; issuer.identifier as identifier then {\r\n        content as value -&gt; identifier.value = value &quot;set issuer identifier&quot;;\r\n      } &quot;set issuer&quot;;\r\n    } &quot;first answser for hcid&quot;;\r\n    item.answer first as answer where item.linkId = 'hcid' -&gt; certificate.hcid as hcid then {\r\n      answer.valueString as content -&gt;  hcid.value = content,  certificate.version = 'RC2' &quot;set hcid and version&quot;;\r\n    } &quot;first answser for hcid&quot;;\r\n  } &quot;certificate items&quot;;\r\n}\r\n\r\n</pre></div>"
+  ] ; # 
+  fhir:url [ fhir:v "http://smart.who.int/ddcc/StructureMap/QRespToCoreDataSet"^^xsd:anyURI] ; # 
+  fhir:version [ fhir:v "1.0.0"] ; # 
+  fhir:name [ fhir:v "QRespToCoreDataSet"] ; # 
+  fhir:status [ fhir:v "draft"] ; # 
+  fhir:date [ fhir:v "2023-11-06T04:25:12+00:00"^^xsd:dateTime] ; # 
+  fhir:publisher [ fhir:v "WHO"] ; # 
+  fhir:contact ( [
+     fhir:name [ fhir:v "WHO" ] ;
+     fhir:telecom ( [
+       fhir:system [ fhir:v "url" ] ;
+       fhir:value [ fhir:v "http://who.int" ]
+     ] )
+  ] ) ; # 
+  fhir:jurisdiction ( [
+     fhir:coding ( [
+       fhir:system [ fhir:v "http://unstats.un.org/unsd/methods/m49/m49.htm"^^xsd:anyURI ] ;
+       fhir:code [ fhir:v "001" ]
+     ] )
+  ] ) ; # 
+  fhir:structure ( [
+     fhir:url [
+       fhir:v "http://hl7.org/fhir/StructureDefinition/QuestionnaireResponse"^^xsd:anyURI ;
+       fhir:link <http://hl7.org/fhir/StructureDefinition/QuestionnaireResponse>
+     ] ;
+     fhir:mode [ fhir:v "source" ] ;
+     fhir:alias [ fhir:v "QResp" ]
+  ] [
+     fhir:url [
+       fhir:v "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSetPoV"^^xsd:anyURI ;
+       fhir:link <http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSetPoV>
+     ] ;
+     fhir:mode [ fhir:v "target" ] ;
+     fhir:alias [ fhir:v "DDCCPoV" ]
+  ] ) ; # 
+  fhir:group ( [
+     fhir:name [ fhir:v "QRespToCoreDataSet" ] ;
+     fhir:typeMode [ fhir:v "none" ] ;
+     fhir:input ( [
+       fhir:name [ fhir:v "qr" ] ;
+       fhir:type [ fhir:v "QResp" ] ;
+       fhir:mode [ fhir:v "source" ]
+     ] [
+       fhir:name [ fhir:v "ddcc" ] ;
+       fhir:type [ fhir:v "DDCCPoV" ] ;
+       fhir:mode [ fhir:v "target" ]
+     ] ) ;
+     fhir:rule ( [
+       fhir:name [ fhir:v "set header content" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "qr" ] ;
+         fhir:variable [ fhir:v "src" ]
+       ] ) ;
+       fhir:dependent ( [
+         fhir:name [ fhir:v "QRespToHeader" ] ;
+         fhir:variable ( [ fhir:v "src" ] [ fhir:v "ddcc" ] )
+       ] ) ;
+       fhir:documentation [ fhir:v "qr.item as item where item.linkId = 'name' -> ddcc.name as name then {\r\n    log 'got answer';\r\n    item.answer first as answer -> name = answer.valueString;\r\n  };" ]
+     ] [
+       fhir:name [ fhir:v "set vaccination content" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "qr" ] ;
+         fhir:variable [ fhir:v "src" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "ddcc" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "vaccination" ] ;
+         fhir:variable [ fhir:v "vaccination" ]
+       ] ) ;
+       fhir:dependent ( [
+         fhir:name [ fhir:v "QRespToVaccination" ] ;
+         fhir:variable ( [ fhir:v "src" ] [ fhir:v "vaccination" ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "set certificate content" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "qr" ] ;
+         fhir:variable [ fhir:v "src" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "ddcc" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "certificate" ] ;
+         fhir:variable [ fhir:v "certificate" ]
+       ] ) ;
+       fhir:dependent ( [
+         fhir:name [ fhir:v "QRespToCertificate" ] ;
+         fhir:variable ( [ fhir:v "src" ] [ fhir:v "certificate" ] )
+       ] )
+     ] )
+  ] [
+     fhir:name [ fhir:v "QRespToHeader" ] ;
+     fhir:typeMode [ fhir:v "none" ] ;
+     fhir:input ( [
+       fhir:name [ fhir:v "qr" ] ;
+       fhir:mode [ fhir:v "source" ]
+     ] [
+       fhir:name [ fhir:v "ddcc" ] ;
+       fhir:mode [ fhir:v "target" ]
+     ] ) ;
+     fhir:rule ( [
+       fhir:name [ fhir:v "header items" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "qr" ] ;
+         fhir:element [ fhir:v "item" ] ;
+         fhir:variable [ fhir:v "item" ]
+       ] ) ;
+       fhir:rule ( [
+         fhir:name [ fhir:v "first answser for name" ] ;
+         fhir:source ( [
+           fhir:context [ fhir:v "item" ] ;
+           fhir:element [ fhir:v "answer" ] ;
+           fhir:listMode [ fhir:v "first" ] ;
+           fhir:variable [ fhir:v "answer" ] ;
+           fhir:condition [ fhir:v "item.linkId = 'name'" ]
+         ] ) ;
+         fhir:rule ( [
+           fhir:name [ fhir:v "set name" ] ;
+           fhir:source ( [
+             fhir:context [ fhir:v "answer" ] ;
+             fhir:element [ fhir:v "valueString" ] ;
+             fhir:variable [ fhir:v "content" ]
+           ] ) ;
+           fhir:target ( [
+             fhir:context [ fhir:v "ddcc" ] ;
+             fhir:contextType [ fhir:v "variable" ] ;
+             fhir:element [ fhir:v "name" ] ;
+             fhir:transform [ fhir:v "copy" ] ;
+             fhir:parameter ( [
+               fhir:value [ fhir:v "content" ]
+             ] )
+           ] )
+         ] )
+       ] [
+         fhir:name [ fhir:v "first answer for birthDate" ] ;
+         fhir:source ( [
+           fhir:context [ fhir:v "item" ] ;
+           fhir:element [ fhir:v "answer" ] ;
+           fhir:listMode [ fhir:v "first" ] ;
+           fhir:variable [ fhir:v "answer" ] ;
+           fhir:condition [ fhir:v "item.linkId = 'birthDate'" ]
+         ] ) ;
+         fhir:rule ( [
+           fhir:name [ fhir:v "set birthDate" ] ;
+           fhir:source ( [
+             fhir:context [ fhir:v "answer" ] ;
+             fhir:element [ fhir:v "valueDate" ] ;
+             fhir:variable [ fhir:v "content" ]
+           ] ) ;
+           fhir:target ( [
+             fhir:context [ fhir:v "ddcc" ] ;
+             fhir:contextType [ fhir:v "variable" ] ;
+             fhir:element [ fhir:v "birthDate" ] ;
+             fhir:transform [ fhir:v "copy" ] ;
+             fhir:parameter ( [
+               fhir:value [ fhir:v "content" ]
+             ] )
+           ] )
+         ] )
+       ] [
+         fhir:name [ fhir:v "first answer for identifier" ] ;
+         fhir:source ( [
+           fhir:context [ fhir:v "item" ] ;
+           fhir:element [ fhir:v "answer" ] ;
+           fhir:listMode [ fhir:v "first" ] ;
+           fhir:variable [ fhir:v "answer" ] ;
+           fhir:condition [ fhir:v "item.linkId = 'identifier'" ]
+         ] ) ;
+         fhir:target ( [
+           fhir:context [ fhir:v "ddcc" ] ;
+           fhir:contextType [ fhir:v "variable" ] ;
+           fhir:element [ fhir:v "identifier" ] ;
+           fhir:variable [ fhir:v "identifier" ]
+         ] ) ;
+         fhir:rule ( [
+           fhir:name [ fhir:v "set identifier" ] ;
+           fhir:source ( [
+             fhir:context [ fhir:v "answer" ] ;
+             fhir:element [ fhir:v "valueString" ] ;
+             fhir:variable [ fhir:v "content" ]
+           ] ) ;
+           fhir:target ( [
+             fhir:context [ fhir:v "identifier" ] ;
+             fhir:contextType [ fhir:v "variable" ] ;
+             fhir:element [ fhir:v "value" ] ;
+             fhir:transform [ fhir:v "copy" ] ;
+             fhir:parameter ( [
+               fhir:value [ fhir:v "content" ]
+             ] )
+           ] )
+         ] )
+       ] [
+         fhir:name [ fhir:v "first answer for sex" ] ;
+         fhir:source ( [
+           fhir:context [ fhir:v "item" ] ;
+           fhir:element [ fhir:v "answer" ] ;
+           fhir:listMode [ fhir:v "first" ] ;
+           fhir:variable [ fhir:v "answer" ] ;
+           fhir:condition [ fhir:v "item.linkId = 'sex'" ]
+         ] ) ;
+         fhir:rule ( [
+           fhir:name [ fhir:v "process coding" ] ;
+           fhir:source ( [
+             fhir:context [ fhir:v "answer" ] ;
+             fhir:element [ fhir:v "valueCoding" ] ;
+             fhir:variable [ fhir:v "coding" ]
+           ] ) ;
+           fhir:rule ( [
+             fhir:name [ fhir:v "set sex" ] ;
+             fhir:source ( [
+               fhir:context [ fhir:v "coding" ] ;
+               fhir:element [ fhir:v "code" ] ;
+               fhir:variable [ fhir:v "content" ]
+             ] ) ;
+             fhir:target ( [
+               fhir:context [ fhir:v "ddcc" ] ;
+               fhir:contextType [ fhir:v "variable" ] ;
+               fhir:element [ fhir:v "sex" ] ;
+               fhir:transform [ fhir:v "copy" ] ;
+               fhir:parameter ( [
+                 fhir:value [ fhir:v "content" ]
+               ] )
+             ] )
+           ] )
+         ] )
+       ] )
+     ] )
+  ] [
+     fhir:name [ fhir:v "QRespToVaccination" ] ;
+     fhir:typeMode [ fhir:v "none" ] ;
+     fhir:input ( [
+       fhir:name [ fhir:v "qr" ] ;
+       fhir:mode [ fhir:v "source" ]
+     ] [
+       fhir:name [ fhir:v "vaccination" ] ;
+       fhir:mode [ fhir:v "target" ]
+     ] ) ;
+     fhir:rule ( [
+       fhir:name [ fhir:v "vaccination items" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "qr" ] ;
+         fhir:element [ fhir:v "item" ] ;
+         fhir:variable [ fhir:v "item" ]
+       ] ) ;
+       fhir:rule ( [
+         fhir:name [ fhir:v "first answer for vaccine" ] ;
+         fhir:source ( [
+           fhir:context [ fhir:v "item" ] ;
+           fhir:element [ fhir:v "answer" ] ;
+           fhir:listMode [ fhir:v "first" ] ;
+           fhir:variable [ fhir:v "answer" ] ;
+           fhir:condition [ fhir:v "item.linkId = 'vaccine'" ]
+         ] ) ;
+         fhir:rule ( [
+           fhir:name [ fhir:v "set vaccine" ] ;
+           fhir:source ( [
+             fhir:context [ fhir:v "answer" ] ;
+             fhir:element [ fhir:v "valueCoding" ] ;
+             fhir:variable [ fhir:v "content" ]
+           ] ) ;
+           fhir:target ( [
+             fhir:context [ fhir:v "vaccination" ] ;
+             fhir:contextType [ fhir:v "variable" ] ;
+             fhir:element [ fhir:v "vaccine" ] ;
+             fhir:transform [ fhir:v "copy" ] ;
+             fhir:parameter ( [
+               fhir:value [ fhir:v "content" ]
+             ] )
+           ] )
+         ] )
+       ] [
+         fhir:name [ fhir:v "first answer for brand" ] ;
+         fhir:source ( [
+           fhir:context [ fhir:v "item" ] ;
+           fhir:element [ fhir:v "answer" ] ;
+           fhir:listMode [ fhir:v "first" ] ;
+           fhir:variable [ fhir:v "answer" ] ;
+           fhir:condition [ fhir:v "item.linkId = 'brand'" ]
+         ] ) ;
+         fhir:rule ( [
+           fhir:name [ fhir:v "set brand" ] ;
+           fhir:source ( [
+             fhir:context [ fhir:v "answer" ] ;
+             fhir:element [ fhir:v "valueCoding" ] ;
+             fhir:variable [ fhir:v "content" ]
+           ] ) ;
+           fhir:target ( [
+             fhir:context [ fhir:v "vaccination" ] ;
+             fhir:contextType [ fhir:v "variable" ] ;
+             fhir:element [ fhir:v "brand" ] ;
+             fhir:transform [ fhir:v "copy" ] ;
+             fhir:parameter ( [
+               fhir:value [ fhir:v "content" ]
+             ] )
+           ] )
+         ] )
+       ] [
+         fhir:name [ fhir:v "first answer for manufacturer" ] ;
+         fhir:source ( [
+           fhir:context [ fhir:v "item" ] ;
+           fhir:element [ fhir:v "answer" ] ;
+           fhir:listMode [ fhir:v "first" ] ;
+           fhir:variable [ fhir:v "answer" ] ;
+           fhir:condition [ fhir:v "item.linkId = 'manufacturer'" ]
+         ] ) ;
+         fhir:rule ( [
+           fhir:name [ fhir:v "set manufacturer" ] ;
+           fhir:source ( [
+             fhir:context [ fhir:v "answer" ] ;
+             fhir:element [ fhir:v "valueCoding" ] ;
+             fhir:variable [ fhir:v "content" ]
+           ] ) ;
+           fhir:target ( [
+             fhir:context [ fhir:v "vaccination" ] ;
+             fhir:contextType [ fhir:v "variable" ] ;
+             fhir:element [ fhir:v "manufacturer" ] ;
+             fhir:transform [ fhir:v "copy" ] ;
+             fhir:parameter ( [
+               fhir:value [ fhir:v "content" ]
+             ] )
+           ] )
+         ] )
+       ] [
+         fhir:name [ fhir:v "first answer for maholder" ] ;
+         fhir:source ( [
+           fhir:context [ fhir:v "item" ] ;
+           fhir:element [ fhir:v "answer" ] ;
+           fhir:listMode [ fhir:v "first" ] ;
+           fhir:variable [ fhir:v "answer" ] ;
+           fhir:condition [ fhir:v "item.linkId = 'ma_holder'" ]
+         ] ) ;
+         fhir:rule ( [
+           fhir:name [ fhir:v "set maholder" ] ;
+           fhir:source ( [
+             fhir:context [ fhir:v "answer" ] ;
+             fhir:element [ fhir:v "valueCoding" ] ;
+             fhir:variable [ fhir:v "content" ]
+           ] ) ;
+           fhir:target ( [
+             fhir:context [ fhir:v "vaccination" ] ;
+             fhir:contextType [ fhir:v "variable" ] ;
+             fhir:element [ fhir:v "maholder" ] ;
+             fhir:transform [ fhir:v "copy" ] ;
+             fhir:parameter ( [
+               fhir:value [ fhir:v "content" ]
+             ] )
+           ] )
+         ] )
+       ] [
+         fhir:name [ fhir:v "first answser for lot" ] ;
+         fhir:source ( [
+           fhir:context [ fhir:v "item" ] ;
+           fhir:element [ fhir:v "answer" ] ;
+           fhir:listMode [ fhir:v "first" ] ;
+           fhir:variable [ fhir:v "answer" ] ;
+           fhir:condition [ fhir:v "item.linkId = 'lot'" ]
+         ] ) ;
+         fhir:rule ( [
+           fhir:name [ fhir:v "set lot" ] ;
+           fhir:source ( [
+             fhir:context [ fhir:v "answer" ] ;
+             fhir:element [ fhir:v "valueString" ] ;
+             fhir:variable [ fhir:v "content" ]
+           ] ) ;
+           fhir:target ( [
+             fhir:context [ fhir:v "vaccination" ] ;
+             fhir:contextType [ fhir:v "variable" ] ;
+             fhir:element [ fhir:v "lot" ] ;
+             fhir:transform [ fhir:v "copy" ] ;
+             fhir:parameter ( [
+               fhir:value [ fhir:v "content" ]
+             ] )
+           ] )
+         ] )
+       ] [
+         fhir:name [ fhir:v "first answer for date" ] ;
+         fhir:source ( [
+           fhir:context [ fhir:v "item" ] ;
+           fhir:element [ fhir:v "answer" ] ;
+           fhir:listMode [ fhir:v "first" ] ;
+           fhir:variable [ fhir:v "answer" ] ;
+           fhir:condition [ fhir:v "item.linkId = 'date'" ]
+         ] ) ;
+         fhir:rule ( [
+           fhir:name [ fhir:v "set date" ] ;
+           fhir:source ( [
+             fhir:context [ fhir:v "answer" ] ;
+             fhir:element [ fhir:v "valueDate" ] ;
+             fhir:variable [ fhir:v "content" ]
+           ] ) ;
+           fhir:target ( [
+             fhir:context [ fhir:v "vaccination" ] ;
+             fhir:contextType [ fhir:v "variable" ] ;
+             fhir:element [ fhir:v "date" ] ;
+             fhir:transform [ fhir:v "copy" ] ;
+             fhir:parameter ( [
+               fhir:value [ fhir:v "content" ]
+             ] )
+           ] )
+         ] )
+       ] [
+         fhir:name [ fhir:v "first answer for validFrom" ] ;
+         fhir:source ( [
+           fhir:context [ fhir:v "item" ] ;
+           fhir:element [ fhir:v "answer" ] ;
+           fhir:listMode [ fhir:v "first" ] ;
+           fhir:variable [ fhir:v "answer" ] ;
+           fhir:condition [ fhir:v "item.linkId = 'vaccine_valid'" ]
+         ] ) ;
+         fhir:rule ( [
+           fhir:name [ fhir:v "set validFrom" ] ;
+           fhir:source ( [
+             fhir:context [ fhir:v "answer" ] ;
+             fhir:element [ fhir:v "valueDate" ] ;
+             fhir:variable [ fhir:v "content" ]
+           ] ) ;
+           fhir:target ( [
+             fhir:context [ fhir:v "vaccination" ] ;
+             fhir:contextType [ fhir:v "variable" ] ;
+             fhir:element [ fhir:v "validFrom" ] ;
+             fhir:transform [ fhir:v "copy" ] ;
+             fhir:parameter ( [
+               fhir:value [ fhir:v "content" ]
+             ] )
+           ] )
+         ] )
+       ] [
+         fhir:name [ fhir:v "first answer for dose" ] ;
+         fhir:source ( [
+           fhir:context [ fhir:v "item" ] ;
+           fhir:element [ fhir:v "answer" ] ;
+           fhir:listMode [ fhir:v "first" ] ;
+           fhir:variable [ fhir:v "answer" ] ;
+           fhir:condition [ fhir:v "item.linkId = 'dose'" ]
+         ] ) ;
+         fhir:rule ( [
+           fhir:name [ fhir:v "set dose" ] ;
+           fhir:source ( [
+             fhir:context [ fhir:v "answer" ] ;
+             fhir:element [ fhir:v "valueInteger" ] ;
+             fhir:variable [ fhir:v "content" ]
+           ] ) ;
+           fhir:target ( [
+             fhir:context [ fhir:v "vaccination" ] ;
+             fhir:contextType [ fhir:v "variable" ] ;
+             fhir:element [ fhir:v "dose" ] ;
+             fhir:transform [ fhir:v "copy" ] ;
+             fhir:parameter ( [
+               fhir:value [ fhir:v "content" ]
+             ] )
+           ] )
+         ] )
+       ] [
+         fhir:name [ fhir:v "first answer for totalDoses" ] ;
+         fhir:source ( [
+           fhir:context [ fhir:v "item" ] ;
+           fhir:element [ fhir:v "answer" ] ;
+           fhir:listMode [ fhir:v "first" ] ;
+           fhir:variable [ fhir:v "answer" ] ;
+           fhir:condition [ fhir:v "item.linkId = 'total_doses'" ]
+         ] ) ;
+         fhir:rule ( [
+           fhir:name [ fhir:v "set totalDoses" ] ;
+           fhir:source ( [
+             fhir:context [ fhir:v "answer" ] ;
+             fhir:element [ fhir:v "valueInteger" ] ;
+             fhir:variable [ fhir:v "content" ]
+           ] ) ;
+           fhir:target ( [
+             fhir:context [ fhir:v "vaccination" ] ;
+             fhir:contextType [ fhir:v "variable" ] ;
+             fhir:element [ fhir:v "totalDoses" ] ;
+             fhir:transform [ fhir:v "copy" ] ;
+             fhir:parameter ( [
+               fhir:value [ fhir:v "content" ]
+             ] )
+           ] )
+         ] )
+       ] [
+         fhir:name [ fhir:v "first answer for country" ] ;
+         fhir:source ( [
+           fhir:context [ fhir:v "item" ] ;
+           fhir:element [ fhir:v "answer" ] ;
+           fhir:listMode [ fhir:v "first" ] ;
+           fhir:variable [ fhir:v "answer" ] ;
+           fhir:condition [ fhir:v "item.linkId = 'country'" ]
+         ] ) ;
+         fhir:rule ( [
+           fhir:name [ fhir:v "set country" ] ;
+           fhir:source ( [
+             fhir:context [ fhir:v "answer" ] ;
+             fhir:element [ fhir:v "valueCoding" ] ;
+             fhir:variable [ fhir:v "content" ]
+           ] ) ;
+           fhir:target ( [
+             fhir:context [ fhir:v "vaccination" ] ;
+             fhir:contextType [ fhir:v "variable" ] ;
+             fhir:element [ fhir:v "country" ] ;
+             fhir:transform [ fhir:v "copy" ] ;
+             fhir:parameter ( [
+               fhir:value [ fhir:v "content" ]
+             ] )
+           ] )
+         ] )
+       ] [
+         fhir:name [ fhir:v "first answser for centre" ] ;
+         fhir:source ( [
+           fhir:context [ fhir:v "item" ] ;
+           fhir:element [ fhir:v "answer" ] ;
+           fhir:listMode [ fhir:v "first" ] ;
+           fhir:variable [ fhir:v "answer" ] ;
+           fhir:condition [ fhir:v "item.linkId = 'centre'" ]
+         ] ) ;
+         fhir:rule ( [
+           fhir:name [ fhir:v "set centre" ] ;
+           fhir:source ( [
+             fhir:context [ fhir:v "answer" ] ;
+             fhir:element [ fhir:v "valueString" ] ;
+             fhir:variable [ fhir:v "content" ]
+           ] ) ;
+           fhir:target ( [
+             fhir:context [ fhir:v "vaccination" ] ;
+             fhir:contextType [ fhir:v "variable" ] ;
+             fhir:element [ fhir:v "centre" ] ;
+             fhir:transform [ fhir:v "copy" ] ;
+             fhir:parameter ( [
+               fhir:value [ fhir:v "content" ]
+             ] )
+           ] )
+         ] )
+       ] [
+         fhir:name [ fhir:v "first answser for practitioner" ] ;
+         fhir:source ( [
+           fhir:context [ fhir:v "item" ] ;
+           fhir:element [ fhir:v "answer" ] ;
+           fhir:listMode [ fhir:v "first" ] ;
+           fhir:variable [ fhir:v "answer" ] ;
+           fhir:condition [ fhir:v "item.linkId = 'hw'" ]
+         ] ) ;
+         fhir:target ( [
+           fhir:context [ fhir:v "vaccination" ] ;
+           fhir:contextType [ fhir:v "variable" ] ;
+           fhir:element [ fhir:v "practitioner" ] ;
+           fhir:variable [ fhir:v "identifier" ]
+         ] ) ;
+         fhir:rule ( [
+           fhir:name [ fhir:v "set practitioner" ] ;
+           fhir:source ( [
+             fhir:context [ fhir:v "answer" ] ;
+             fhir:element [ fhir:v "valueString" ] ;
+             fhir:variable [ fhir:v "content" ]
+           ] ) ;
+           fhir:target ( [
+             fhir:context [ fhir:v "identifier" ] ;
+             fhir:contextType [ fhir:v "variable" ] ;
+             fhir:element [ fhir:v "value" ] ;
+             fhir:transform [ fhir:v "copy" ] ;
+             fhir:parameter ( [
+               fhir:value [ fhir:v "content" ]
+             ] )
+           ] )
+         ] )
+       ] [
+         fhir:name [ fhir:v "first answer for disease" ] ;
+         fhir:source ( [
+           fhir:context [ fhir:v "item" ] ;
+           fhir:element [ fhir:v "answer" ] ;
+           fhir:listMode [ fhir:v "first" ] ;
+           fhir:variable [ fhir:v "answer" ] ;
+           fhir:condition [ fhir:v "item.linkId = 'disease'" ]
+         ] ) ;
+         fhir:rule ( [
+           fhir:name [ fhir:v "set disease" ] ;
+           fhir:source ( [
+             fhir:context [ fhir:v "answer" ] ;
+             fhir:element [ fhir:v "valueCoding" ] ;
+             fhir:variable [ fhir:v "content" ]
+           ] ) ;
+           fhir:target ( [
+             fhir:context [ fhir:v "vaccination" ] ;
+             fhir:contextType [ fhir:v "variable" ] ;
+             fhir:element [ fhir:v "disease" ] ;
+             fhir:transform [ fhir:v "copy" ] ;
+             fhir:parameter ( [
+               fhir:value [ fhir:v "content" ]
+             ] )
+           ] )
+         ] )
+       ] [
+         fhir:name [ fhir:v "first answer for nextDose" ] ;
+         fhir:source ( [
+           fhir:context [ fhir:v "item" ] ;
+           fhir:element [ fhir:v "answer" ] ;
+           fhir:listMode [ fhir:v "first" ] ;
+           fhir:variable [ fhir:v "answer" ] ;
+           fhir:condition [ fhir:v "item.linkId = 'due_date'" ]
+         ] ) ;
+         fhir:rule ( [
+           fhir:name [ fhir:v "set nextDose" ] ;
+           fhir:source ( [
+             fhir:context [ fhir:v "answer" ] ;
+             fhir:element [ fhir:v "valueDate" ] ;
+             fhir:variable [ fhir:v "content" ]
+           ] ) ;
+           fhir:target ( [
+             fhir:context [ fhir:v "vaccination" ] ;
+             fhir:contextType [ fhir:v "variable" ] ;
+             fhir:element [ fhir:v "nextDose" ] ;
+             fhir:transform [ fhir:v "copy" ] ;
+             fhir:parameter ( [
+               fhir:value [ fhir:v "content" ]
+             ] )
+           ] )
+         ] )
+       ] )
+     ] [
+       fhir:name [ fhir:v "set vaccination period" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "qr" ] ;
+         fhir:variable [ fhir:v "src" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "vaccination" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "period" ] ;
+         fhir:variable [ fhir:v "period" ]
+       ] ) ;
+       fhir:dependent ( [
+         fhir:name [ fhir:v "QRespToVaccinePeriod" ] ;
+         fhir:variable ( [ fhir:v "src" ] [ fhir:v "period" ] )
+       ] )
+     ] )
+  ] [
+     fhir:name [ fhir:v "QRespToVaccinePeriod" ] ;
+     fhir:typeMode [ fhir:v "none" ] ;
+     fhir:input ( [
+       fhir:name [ fhir:v "qr" ] ;
+       fhir:mode [ fhir:v "source" ]
+     ] [
+       fhir:name [ fhir:v "period" ] ;
+       fhir:mode [ fhir:v "target" ]
+     ] ) ;
+     fhir:rule ( [
+       fhir:name [ fhir:v "vaccination validity items" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "qr" ] ;
+         fhir:element [ fhir:v "item" ] ;
+         fhir:variable [ fhir:v "item" ]
+       ] ) ;
+       fhir:rule ( [
+         fhir:name [ fhir:v "first answer for valid_from" ] ;
+         fhir:source ( [
+           fhir:context [ fhir:v "item" ] ;
+           fhir:element [ fhir:v "answer" ] ;
+           fhir:listMode [ fhir:v "first" ] ;
+           fhir:variable [ fhir:v "answer" ] ;
+           fhir:condition [ fhir:v "item.linkId = 'valid_from'" ]
+         ] ) ;
+         fhir:rule ( [
+           fhir:name [ fhir:v "set valid_from" ] ;
+           fhir:source ( [
+             fhir:context [ fhir:v "answer" ] ;
+             fhir:element [ fhir:v "valueDate" ] ;
+             fhir:variable [ fhir:v "content" ]
+           ] ) ;
+           fhir:target ( [
+             fhir:context [ fhir:v "period" ] ;
+             fhir:contextType [ fhir:v "variable" ] ;
+             fhir:element [ fhir:v "start" ] ;
+             fhir:transform [ fhir:v "copy" ] ;
+             fhir:parameter ( [
+               fhir:value [ fhir:v "content" ]
+             ] )
+           ] )
+         ] )
+       ] [
+         fhir:name [ fhir:v "first answer for valid_until" ] ;
+         fhir:source ( [
+           fhir:context [ fhir:v "item" ] ;
+           fhir:element [ fhir:v "answer" ] ;
+           fhir:listMode [ fhir:v "first" ] ;
+           fhir:variable [ fhir:v "answer" ] ;
+           fhir:condition [ fhir:v "item.linkId = 'valid_until'" ]
+         ] ) ;
+         fhir:rule ( [
+           fhir:name [ fhir:v "set valid_until" ] ;
+           fhir:source ( [
+             fhir:context [ fhir:v "answer" ] ;
+             fhir:element [ fhir:v "valueDate" ] ;
+             fhir:variable [ fhir:v "content" ]
+           ] ) ;
+           fhir:target ( [
+             fhir:context [ fhir:v "period" ] ;
+             fhir:contextType [ fhir:v "variable" ] ;
+             fhir:element [ fhir:v "end" ] ;
+             fhir:transform [ fhir:v "copy" ] ;
+             fhir:parameter ( [
+               fhir:value [ fhir:v "content" ]
+             ] )
+           ] )
+         ] )
+       ] )
+     ] )
+  ] [
+     fhir:name [ fhir:v "QRespToCertificate" ] ;
+     fhir:typeMode [ fhir:v "none" ] ;
+     fhir:input ( [
+       fhir:name [ fhir:v "qr" ] ;
+       fhir:mode [ fhir:v "source" ]
+     ] [
+       fhir:name [ fhir:v "certificate" ] ;
+       fhir:mode [ fhir:v "target" ]
+     ] ) ;
+     fhir:rule ( [
+       fhir:name [ fhir:v "certificate items" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "qr" ] ;
+         fhir:element [ fhir:v "item" ] ;
+         fhir:variable [ fhir:v "item" ]
+       ] ) ;
+       fhir:rule ( [
+         fhir:name [ fhir:v "first answser for hcid" ] ;
+         fhir:source ( [
+           fhir:context [ fhir:v "item" ] ;
+           fhir:element [ fhir:v "answer" ] ;
+           fhir:listMode [ fhir:v "first" ] ;
+           fhir:variable [ fhir:v "answer" ] ;
+           fhir:condition [ fhir:v "item.linkId = 'pha'" ]
+         ] ) ;
+         fhir:target ( [
+           fhir:context [ fhir:v "certificate" ] ;
+           fhir:contextType [ fhir:v "variable" ] ;
+           fhir:element [ fhir:v "issuer" ] ;
+           fhir:variable [ fhir:v "issuer" ]
+         ] ) ;
+         fhir:rule ( [
+           fhir:name [ fhir:v "set issuer" ] ;
+           fhir:source ( [
+             fhir:context [ fhir:v "answer" ] ;
+             fhir:element [ fhir:v "valueString" ] ;
+             fhir:variable [ fhir:v "content" ]
+           ] ) ;
+           fhir:target ( [
+             fhir:context [ fhir:v "issuer" ] ;
+             fhir:contextType [ fhir:v "variable" ] ;
+             fhir:element [ fhir:v "identifier" ] ;
+             fhir:variable [ fhir:v "identifier" ]
+           ] ) ;
+           fhir:rule ( [
+             fhir:name [ fhir:v "set issuer identifier" ] ;
+             fhir:source ( [
+               fhir:context [ fhir:v "content" ] ;
+               fhir:variable [ fhir:v "value" ]
+             ] ) ;
+             fhir:target ( [
+               fhir:context [ fhir:v "identifier" ] ;
+               fhir:contextType [ fhir:v "variable" ] ;
+               fhir:element [ fhir:v "value" ] ;
+               fhir:transform [ fhir:v "copy" ] ;
+               fhir:parameter ( [
+                 fhir:value [ fhir:v "value" ]
+               ] )
+             ] )
+           ] )
+         ] )
+       ] [
+         fhir:name [ fhir:v "first answser for hcid" ] ;
+         fhir:source ( [
+           fhir:context [ fhir:v "item" ] ;
+           fhir:element [ fhir:v "answer" ] ;
+           fhir:listMode [ fhir:v "first" ] ;
+           fhir:variable [ fhir:v "answer" ] ;
+           fhir:condition [ fhir:v "item.linkId = 'hcid'" ]
+         ] ) ;
+         fhir:target ( [
+           fhir:context [ fhir:v "certificate" ] ;
+           fhir:contextType [ fhir:v "variable" ] ;
+           fhir:element [ fhir:v "hcid" ] ;
+           fhir:variable [ fhir:v "hcid" ]
+         ] ) ;
+         fhir:rule ( [
+           fhir:name [ fhir:v "set hcid and version" ] ;
+           fhir:source ( [
+             fhir:context [ fhir:v "answer" ] ;
+             fhir:element [ fhir:v "valueString" ] ;
+             fhir:variable [ fhir:v "content" ]
+           ] ) ;
+           fhir:target ( [
+             fhir:context [ fhir:v "hcid" ] ;
+             fhir:contextType [ fhir:v "variable" ] ;
+             fhir:element [ fhir:v "value" ] ;
+             fhir:transform [ fhir:v "copy" ] ;
+             fhir:parameter ( [
+               fhir:value [ fhir:v "content" ]
+             ] )
+           ] [
+             fhir:context [ fhir:v "certificate" ] ;
+             fhir:contextType [ fhir:v "variable" ] ;
+             fhir:element [ fhir:v "version" ] ;
+             fhir:transform [ fhir:v "copy" ] ;
+             fhir:parameter ( [
+               fhir:value [ fhir:v "RC2" ]
+             ] )
+           ] )
+         ] )
+       ] )
+     ] )
+  ] ) . # 
+
+# -------------------------------------------------------------------------------------
+

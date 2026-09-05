@@ -1,0 +1,1911 @@
+# CoreDataSetVSLibrary - WHO Digital Documentation of COVID-19 Certificates (DDCC) v1.0.0
+
+* [**Table of Contents**](toc.md)
+* [**Artifacts Summary**](artifacts.md)
+* **CoreDataSetVSLibrary**
+
+## StructureMap: CoreDataSetVSLibrary 
+
+| | |
+| :--- | :--- |
+| *Official URL*:http://smart.who.int/ddcc/StructureMap/CoreDataSetVSLibrary | *Version*:1.0.0 |
+| Draft as of 2026-09-05 | *Computable Name*:CoreDataSetVSLibrary |
+
+
+
+## Resource Content
+
+```json
+{
+  "resourceType" : "StructureMap",
+  "id" : "CoreDataSetVSLibrary",
+  "url" : "http://smart.who.int/ddcc/StructureMap/CoreDataSetVSLibrary",
+  "version" : "1.0.0",
+  "name" : "CoreDataSetVSLibrary",
+  "status" : "draft",
+  "date" : "2026-09-05T20:45:54+00:00",
+  "publisher" : "WHO",
+  "contact" : [{
+    "name" : "WHO",
+    "telecom" : [{
+      "system" : "url",
+      "value" : "http://who.int"
+    }]
+  }],
+  "jurisdiction" : [{
+    "coding" : [{
+      "system" : "http://unstats.un.org/unsd/methods/m49/m49.htm",
+      "code" : "001"
+    }]
+  }],
+  "structure" : [{
+    "url" : "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSetVS",
+    "mode" : "source",
+    "alias" : "DDCCVS"
+  },
+  {
+    "url" : "http://hl7.org/fhir/StructureDefinition/Bundle",
+    "mode" : "target",
+    "alias" : "AddBundle"
+  },
+  {
+    "url" : "http://hl7.org/fhir/StructureDefinition/Patient",
+    "mode" : "target",
+    "alias" : "Patient"
+  },
+  {
+    "url" : "http://smart.who.int/ddcc/StructureDefinition/DDCCPatient",
+    "mode" : "target",
+    "alias" : "DDCCPatient"
+  },
+  {
+    "url" : "http://smart.who.int/ddcc/StructureDefinition/DDCCDocumentReferenceQR",
+    "mode" : "target",
+    "alias" : "DDCCDocRefQR"
+  },
+  {
+    "url" : "http://smart.who.int/ddcc/StructureDefinition/DDCCVSComposition",
+    "mode" : "target",
+    "alias" : "DDCCVSComposition"
+  },
+  {
+    "url" : "http://smart.who.int/ddcc/StructureDefinition/DDCCImmunization",
+    "mode" : "target",
+    "alias" : "DDCCImmunization"
+  },
+  {
+    "url" : "http://smart.who.int/ddcc/StructureDefinition/DDCCImmunizationRecommendation",
+    "mode" : "target",
+    "alias" : "DDCCImmRec"
+  }],
+  "import" : ["http://smart.who.int/ddcc/StructureMap/CoreDataSetLibrary"],
+  "group" : [{
+    "name" : "VSToAddBundle",
+    "typeMode" : "none",
+    "input" : [{
+      "name" : "ddcc",
+      "type" : "DDCCVS",
+      "mode" : "source"
+    },
+    {
+      "name" : "bundle",
+      "type" : "AddBundle",
+      "mode" : "target"
+    }],
+    "rule" : [{
+      "name" : "set bundle type",
+      "source" : [{
+        "context" : "ddcc"
+      }],
+      "target" : [{
+        "context" : "bundle",
+        "contextType" : "variable",
+        "element" : "type",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueString" : "transaction"
+        }]
+      }]
+    },
+    {
+      "name" : "set uuids",
+      "source" : [{
+        "context" : "ddcc"
+      }],
+      "target" : [{
+        "contextType" : "variable",
+        "variable" : "pid",
+        "transform" : "uuid"
+      },
+      {
+        "contextType" : "variable",
+        "variable" : "compid",
+        "transform" : "uuid"
+      },
+      {
+        "contextType" : "variable",
+        "variable" : "iid",
+        "transform" : "uuid"
+      },
+      {
+        "contextType" : "variable",
+        "variable" : "irid",
+        "transform" : "uuid"
+      },
+      {
+        "contextType" : "variable",
+        "variable" : "qrwhoid",
+        "transform" : "uuid"
+      },
+      {
+        "contextType" : "variable",
+        "variable" : "qrdccid",
+        "transform" : "uuid"
+      }],
+      "rule" : [{
+        "name" : "create patient resource",
+        "source" : [{
+          "context" : "ddcc"
+        }],
+        "target" : [{
+          "context" : "bundle",
+          "contextType" : "variable",
+          "element" : "entry",
+          "variable" : "entry"
+        },
+        {
+          "context" : "entry",
+          "contextType" : "variable",
+          "element" : "fullUrl",
+          "transform" : "append",
+          "parameter" : [{
+            "valueString" : "urn:uuid:"
+          },
+          {
+            "valueId" : "pid"
+          }]
+        },
+        {
+          "context" : "entry",
+          "contextType" : "variable",
+          "element" : "request",
+          "variable" : "request"
+        },
+        {
+          "context" : "request",
+          "contextType" : "variable",
+          "element" : "method",
+          "transform" : "copy",
+          "parameter" : [{
+            "valueString" : "PUT"
+          }]
+        },
+        {
+          "context" : "request",
+          "contextType" : "variable",
+          "element" : "url",
+          "transform" : "append",
+          "parameter" : [{
+            "valueString" : "Patient/"
+          },
+          {
+            "valueId" : "pid"
+          }]
+        },
+        {
+          "contextType" : "variable",
+          "variable" : "patient",
+          "transform" : "create",
+          "parameter" : [{
+            "valueString" : "http://smart.who.int/ddcc/StructureDefinition/DDCCPatient"
+          }]
+        }],
+        "rule" : [{
+          "name" : "setup patient",
+          "source" : [{
+            "context" : "ddcc"
+          }],
+          "dependent" : [{
+            "name" : "DDCCToPatient",
+            "variable" : ["ddcc", "patient", "pid"]
+          }]
+        },
+        {
+          "name" : "set patient resource",
+          "source" : [{
+            "context" : "ddcc"
+          }],
+          "target" : [{
+            "context" : "entry",
+            "contextType" : "variable",
+            "element" : "resource",
+            "transform" : "copy",
+            "parameter" : [{
+              "valueId" : "patient"
+            }]
+          }]
+        }]
+      },
+      {
+        "name" : "create composition resource",
+        "source" : [{
+          "context" : "ddcc"
+        }],
+        "target" : [{
+          "context" : "bundle",
+          "contextType" : "variable",
+          "element" : "entry",
+          "variable" : "entry"
+        },
+        {
+          "context" : "entry",
+          "contextType" : "variable",
+          "element" : "fullUrl",
+          "transform" : "append",
+          "parameter" : [{
+            "valueString" : "urn:uuid:"
+          },
+          {
+            "valueId" : "compid"
+          }]
+        },
+        {
+          "context" : "entry",
+          "contextType" : "variable",
+          "element" : "request",
+          "variable" : "request"
+        },
+        {
+          "context" : "request",
+          "contextType" : "variable",
+          "element" : "method",
+          "transform" : "copy",
+          "parameter" : [{
+            "valueString" : "PUT"
+          }]
+        },
+        {
+          "context" : "request",
+          "contextType" : "variable",
+          "element" : "url",
+          "transform" : "append",
+          "parameter" : [{
+            "valueString" : "Composition/"
+          },
+          {
+            "valueId" : "compid"
+          }]
+        },
+        {
+          "contextType" : "variable",
+          "variable" : "comp",
+          "transform" : "create",
+          "parameter" : [{
+            "valueString" : "http://smart.who.int/ddcc/StructureDefinition/DDCCVSComposition"
+          }]
+        }],
+        "rule" : [{
+          "name" : "setup composition",
+          "source" : [{
+            "context" : "ddcc"
+          }],
+          "dependent" : [{
+            "name" : "DDCCToComposition",
+            "variable" : ["ddcc", "comp", "compid", "pid"]
+          }]
+        },
+        {
+          "name" : "set category",
+          "source" : [{
+            "context" : "ddcc"
+          }],
+          "target" : [{
+            "context" : "comp",
+            "contextType" : "variable",
+            "element" : "category",
+            "variable" : "category"
+          },
+          {
+            "context" : "category",
+            "contextType" : "variable",
+            "element" : "coding",
+            "variable" : "coding"
+          },
+          {
+            "context" : "coding",
+            "contextType" : "variable",
+            "element" : "system",
+            "transform" : "copy",
+            "parameter" : [{
+              "valueString" : "http://smart.who.int/ddcc/CodeSystem/DDCCCompositionCategoryCodeSystem"
+            }]
+          },
+          {
+            "context" : "coding",
+            "contextType" : "variable",
+            "element" : "code",
+            "transform" : "copy",
+            "parameter" : [{
+              "valueString" : "ddcc-vs"
+            }]
+          }]
+        },
+        {
+          "name" : "set title",
+          "source" : [{
+            "context" : "ddcc"
+          }],
+          "target" : [{
+            "context" : "comp",
+            "contextType" : "variable",
+            "element" : "title",
+            "transform" : "copy",
+            "parameter" : [{
+              "valueString" : "International Certificate of Vaccination or Prophylaxis"
+            }]
+          }]
+        },
+        {
+          "name" : "set section",
+          "source" : [{
+            "context" : "ddcc"
+          }],
+          "target" : [{
+            "context" : "comp",
+            "contextType" : "variable",
+            "element" : "section",
+            "variable" : "section"
+          }],
+          "rule" : [{
+            "name" : "set code",
+            "source" : [{
+              "context" : "ddcc"
+            }],
+            "target" : [{
+              "context" : "section",
+              "contextType" : "variable",
+              "element" : "code",
+              "variable" : "code"
+            },
+            {
+              "context" : "code",
+              "contextType" : "variable",
+              "element" : "coding",
+              "variable" : "coding"
+            },
+            {
+              "context" : "coding",
+              "contextType" : "variable",
+              "element" : "system",
+              "transform" : "copy",
+              "parameter" : [{
+                "valueString" : "http://loinc.org"
+              }]
+            },
+            {
+              "context" : "coding",
+              "contextType" : "variable",
+              "element" : "code",
+              "transform" : "copy",
+              "parameter" : [{
+                "valueString" : "11369-6"
+              }]
+            }]
+          },
+          {
+            "name" : "set certificate",
+            "source" : [{
+              "context" : "ddcc",
+              "element" : "certificate",
+              "variable" : "certificate"
+            }],
+            "rule" : [{
+              "name" : "set author",
+              "source" : [{
+                "context" : "certificate",
+                "element" : "issuer",
+                "variable" : "issuer"
+              }],
+              "target" : [{
+                "context" : "section",
+                "contextType" : "variable",
+                "element" : "author",
+                "transform" : "copy",
+                "parameter" : [{
+                  "valueId" : "issuer"
+                }]
+              }]
+            }]
+          },
+          {
+            "name" : "set focus",
+            "source" : [{
+              "context" : "ddcc"
+            }],
+            "target" : [{
+              "context" : "section",
+              "contextType" : "variable",
+              "element" : "focus",
+              "variable" : "focus"
+            },
+            {
+              "context" : "focus",
+              "contextType" : "variable",
+              "element" : "reference",
+              "transform" : "append",
+              "parameter" : [{
+                "valueString" : "Immunization/"
+              },
+              {
+                "valueId" : "iid"
+              }]
+            }],
+            "documentation" : "ddcc.certificate as certificate -> section.author as author then {\n            certificate.issuer as issuer then {\n              issuer.identifier as pha -> author.identifier as identifier, author.type = \"Organization\" then {\n                pha.value as value -> identifier.value = value \"set pha\";\n              } \"set author identifier\";\n            } \"set author ref\";\n            \n          } \"set author\";"
+          },
+          {
+            "name" : "add Immunization entry",
+            "source" : [{
+              "context" : "ddcc"
+            }],
+            "target" : [{
+              "context" : "section",
+              "contextType" : "variable",
+              "element" : "entry",
+              "variable" : "entry"
+            },
+            {
+              "context" : "entry",
+              "contextType" : "variable",
+              "element" : "reference",
+              "transform" : "append",
+              "parameter" : [{
+                "valueString" : "Immunization/"
+              },
+              {
+                "valueId" : "iid"
+              }]
+            }]
+          },
+          {
+            "name" : "add ImmunizationRecommendation entry",
+            "source" : [{
+              "context" : "ddcc"
+            }],
+            "target" : [{
+              "context" : "section",
+              "contextType" : "variable",
+              "element" : "entry",
+              "variable" : "entry"
+            },
+            {
+              "context" : "entry",
+              "contextType" : "variable",
+              "element" : "reference",
+              "transform" : "append",
+              "parameter" : [{
+                "valueString" : "ImmunizationRecommendation/"
+              },
+              {
+                "valueId" : "irid"
+              }]
+            }]
+          },
+          {
+            "name" : "add WHO QR entry",
+            "source" : [{
+              "context" : "ddcc"
+            }],
+            "target" : [{
+              "context" : "section",
+              "contextType" : "variable",
+              "element" : "entry",
+              "variable" : "entry"
+            },
+            {
+              "context" : "entry",
+              "contextType" : "variable",
+              "element" : "reference",
+              "transform" : "append",
+              "parameter" : [{
+                "valueString" : "DocumentReference/"
+              },
+              {
+                "valueId" : "qrwhoid"
+              }]
+            }]
+          },
+          {
+            "name" : "add DCC QR entry",
+            "source" : [{
+              "context" : "ddcc"
+            }],
+            "target" : [{
+              "context" : "section",
+              "contextType" : "variable",
+              "element" : "entry",
+              "variable" : "entry"
+            },
+            {
+              "context" : "entry",
+              "contextType" : "variable",
+              "element" : "reference",
+              "transform" : "append",
+              "parameter" : [{
+                "valueString" : "DocumentReference/"
+              },
+              {
+                "valueId" : "qrdccid"
+              }]
+            }]
+          }]
+        },
+        {
+          "name" : "set composition resource",
+          "source" : [{
+            "context" : "ddcc"
+          }],
+          "target" : [{
+            "context" : "entry",
+            "contextType" : "variable",
+            "element" : "resource",
+            "transform" : "copy",
+            "parameter" : [{
+              "valueId" : "comp"
+            }]
+          }]
+        }]
+      },
+      {
+        "name" : "create WHO QR Doc Ref",
+        "source" : [{
+          "context" : "ddcc"
+        }],
+        "target" : [{
+          "context" : "bundle",
+          "contextType" : "variable",
+          "element" : "entry",
+          "variable" : "entry"
+        },
+        {
+          "context" : "entry",
+          "contextType" : "variable",
+          "element" : "fullUrl",
+          "transform" : "append",
+          "parameter" : [{
+            "valueString" : "urn:uuid:"
+          },
+          {
+            "valueId" : "qrwhoid"
+          }]
+        },
+        {
+          "context" : "entry",
+          "contextType" : "variable",
+          "element" : "request",
+          "variable" : "request"
+        },
+        {
+          "context" : "request",
+          "contextType" : "variable",
+          "element" : "method",
+          "transform" : "copy",
+          "parameter" : [{
+            "valueString" : "PUT"
+          }]
+        },
+        {
+          "context" : "request",
+          "contextType" : "variable",
+          "element" : "url",
+          "transform" : "append",
+          "parameter" : [{
+            "valueString" : "DocumentReference/"
+          },
+          {
+            "valueId" : "qrwhoid"
+          }]
+        },
+        {
+          "contextType" : "variable",
+          "variable" : "qr",
+          "transform" : "create",
+          "parameter" : [{
+            "valueString" : "http://smart.who.int/ddcc/StructureDefinition/DDCCDocumentReferenceQR"
+          }]
+        }],
+        "rule" : [{
+          "name" : "setup WHO DocRef",
+          "source" : [{
+            "context" : "ddcc"
+          }],
+          "dependent" : [{
+            "name" : "DDCCToDocumentReference",
+            "variable" : ["ddcc", "qr", "qrwhoid", "pid"]
+          }]
+        },
+        {
+          "name" : "set category",
+          "source" : [{
+            "context" : "ddcc"
+          }],
+          "target" : [{
+            "context" : "qr",
+            "contextType" : "variable",
+            "element" : "category",
+            "variable" : "category"
+          },
+          {
+            "context" : "category",
+            "contextType" : "variable",
+            "element" : "coding",
+            "variable" : "coding"
+          },
+          {
+            "context" : "coding",
+            "contextType" : "variable",
+            "element" : "system",
+            "transform" : "copy",
+            "parameter" : [{
+              "valueString" : "http://smart.who.int/ddcc/CodeSystem/DDCCQRCategoryUsageCodeSystem"
+            }]
+          },
+          {
+            "context" : "coding",
+            "contextType" : "variable",
+            "element" : "code",
+            "transform" : "copy",
+            "parameter" : [{
+              "valueString" : "who"
+            }]
+          }]
+        },
+        {
+          "name" : "set description",
+          "source" : [{
+            "context" : "ddcc"
+          }],
+          "target" : [{
+            "context" : "qr",
+            "contextType" : "variable",
+            "element" : "description",
+            "transform" : "copy",
+            "parameter" : [{
+              "valueString" : "WHO QR code for COVID 19 Vaccine Certificate"
+            }]
+          }]
+        },
+        {
+          "name" : "set WHO QR",
+          "source" : [{
+            "context" : "ddcc"
+          }],
+          "target" : [{
+            "context" : "entry",
+            "contextType" : "variable",
+            "element" : "resource",
+            "transform" : "copy",
+            "parameter" : [{
+              "valueId" : "qr"
+            }]
+          }]
+        }]
+      },
+      {
+        "name" : "create DCC QR Doc Ref",
+        "source" : [{
+          "context" : "ddcc"
+        }],
+        "target" : [{
+          "context" : "bundle",
+          "contextType" : "variable",
+          "element" : "entry",
+          "variable" : "entry"
+        },
+        {
+          "context" : "entry",
+          "contextType" : "variable",
+          "element" : "fullUrl",
+          "transform" : "append",
+          "parameter" : [{
+            "valueString" : "urn:uuid:"
+          },
+          {
+            "valueId" : "qrdccid"
+          }]
+        },
+        {
+          "context" : "entry",
+          "contextType" : "variable",
+          "element" : "request",
+          "variable" : "request"
+        },
+        {
+          "context" : "request",
+          "contextType" : "variable",
+          "element" : "method",
+          "transform" : "copy",
+          "parameter" : [{
+            "valueString" : "PUT"
+          }]
+        },
+        {
+          "context" : "request",
+          "contextType" : "variable",
+          "element" : "url",
+          "transform" : "append",
+          "parameter" : [{
+            "valueString" : "DocumentReference/"
+          },
+          {
+            "valueId" : "qrdccid"
+          }]
+        },
+        {
+          "contextType" : "variable",
+          "variable" : "qr",
+          "transform" : "create",
+          "parameter" : [{
+            "valueString" : "http://smart.who.int/ddcc/StructureDefinition/DDCCDocumentReferenceQR"
+          }]
+        }],
+        "rule" : [{
+          "name" : "setup DCC DocRef",
+          "source" : [{
+            "context" : "ddcc"
+          }],
+          "dependent" : [{
+            "name" : "DDCCToDocumentReference",
+            "variable" : ["ddcc", "qr", "qrdccid", "pid"]
+          }]
+        },
+        {
+          "name" : "set category",
+          "source" : [{
+            "context" : "ddcc"
+          }],
+          "target" : [{
+            "context" : "qr",
+            "contextType" : "variable",
+            "element" : "category",
+            "variable" : "category"
+          },
+          {
+            "context" : "category",
+            "contextType" : "variable",
+            "element" : "coding",
+            "variable" : "coding"
+          },
+          {
+            "context" : "coding",
+            "contextType" : "variable",
+            "element" : "system",
+            "transform" : "copy",
+            "parameter" : [{
+              "valueString" : "http://smart.who.int/ddcc/CodeSystem/DDCCQRCategoryUsageCodeSystem"
+            }]
+          },
+          {
+            "context" : "coding",
+            "contextType" : "variable",
+            "element" : "code",
+            "transform" : "copy",
+            "parameter" : [{
+              "valueString" : "dcc"
+            }]
+          }]
+        },
+        {
+          "name" : "set description",
+          "source" : [{
+            "context" : "ddcc"
+          }],
+          "target" : [{
+            "context" : "qr",
+            "contextType" : "variable",
+            "element" : "description",
+            "transform" : "copy",
+            "parameter" : [{
+              "valueString" : "DCC QR code for COVID 19 Vaccine Certificate"
+            }]
+          }]
+        },
+        {
+          "name" : "set DCC QR",
+          "source" : [{
+            "context" : "ddcc"
+          }],
+          "target" : [{
+            "context" : "entry",
+            "contextType" : "variable",
+            "element" : "resource",
+            "transform" : "copy",
+            "parameter" : [{
+              "valueId" : "qr"
+            }]
+          }]
+        }]
+      },
+      {
+        "name" : "create immunization resource",
+        "source" : [{
+          "context" : "ddcc",
+          "element" : "vaccination",
+          "listMode" : "first",
+          "variable" : "vaccination"
+        }],
+        "target" : [{
+          "context" : "bundle",
+          "contextType" : "variable",
+          "element" : "entry",
+          "variable" : "entry"
+        },
+        {
+          "context" : "entry",
+          "contextType" : "variable",
+          "element" : "fullUrl",
+          "transform" : "append",
+          "parameter" : [{
+            "valueString" : "urn:uuid:"
+          },
+          {
+            "valueId" : "iid"
+          }]
+        },
+        {
+          "context" : "entry",
+          "contextType" : "variable",
+          "element" : "request",
+          "variable" : "request"
+        },
+        {
+          "context" : "request",
+          "contextType" : "variable",
+          "element" : "method",
+          "transform" : "copy",
+          "parameter" : [{
+            "valueString" : "PUT"
+          }]
+        },
+        {
+          "context" : "request",
+          "contextType" : "variable",
+          "element" : "url",
+          "transform" : "append",
+          "parameter" : [{
+            "valueString" : "Immunization/"
+          },
+          {
+            "valueId" : "iid"
+          }]
+        },
+        {
+          "contextType" : "variable",
+          "variable" : "immunization",
+          "transform" : "create",
+          "parameter" : [{
+            "valueString" : "http://smart.who.int/ddcc/StructureDefinition/DDCCImmunization"
+          }]
+        }],
+        "rule" : [{
+          "name" : "setup immunization",
+          "source" : [{
+            "context" : "ddcc",
+            "element" : "certificate",
+            "variable" : "certificate"
+          }],
+          "dependent" : [{
+            "name" : "DDCCToImmunization",
+            "variable" : ["vaccination", "immunization", "certificate", "iid", "pid"]
+          }]
+        },
+        {
+          "name" : "set immunization resource",
+          "source" : [{
+            "context" : "ddcc"
+          }],
+          "target" : [{
+            "context" : "entry",
+            "contextType" : "variable",
+            "element" : "resource",
+            "transform" : "copy",
+            "parameter" : [{
+              "valueId" : "immunization"
+            }]
+          }]
+        }]
+      },
+      {
+        "name" : "create immunization recommendation resource",
+        "source" : [{
+          "context" : "ddcc",
+          "element" : "vaccination",
+          "listMode" : "first",
+          "variable" : "vaccination"
+        }],
+        "target" : [{
+          "context" : "bundle",
+          "contextType" : "variable",
+          "element" : "entry",
+          "variable" : "entry"
+        },
+        {
+          "context" : "entry",
+          "contextType" : "variable",
+          "element" : "fullUrl",
+          "transform" : "append",
+          "parameter" : [{
+            "valueString" : "urn:uuid:"
+          },
+          {
+            "valueId" : "irid"
+          }]
+        },
+        {
+          "context" : "entry",
+          "contextType" : "variable",
+          "element" : "request",
+          "variable" : "request"
+        },
+        {
+          "context" : "request",
+          "contextType" : "variable",
+          "element" : "method",
+          "transform" : "copy",
+          "parameter" : [{
+            "valueString" : "PUT"
+          }]
+        },
+        {
+          "context" : "request",
+          "contextType" : "variable",
+          "element" : "url",
+          "transform" : "append",
+          "parameter" : [{
+            "valueString" : "ImmunizationRecommendation/"
+          },
+          {
+            "valueId" : "irid"
+          }]
+        },
+        {
+          "contextType" : "variable",
+          "variable" : "immrec",
+          "transform" : "create",
+          "parameter" : [{
+            "valueString" : "http://smart.who.int/ddcc/StructureDefinition/DDCCImmunizationRecommendation"
+          }]
+        }],
+        "rule" : [{
+          "name" : "setup immunization recommendation",
+          "source" : [{
+            "context" : "vaccination"
+          }],
+          "dependent" : [{
+            "name" : "DDCCToImmRec",
+            "variable" : ["vaccination", "immrec", "irid", "iid", "pid"]
+          }]
+        },
+        {
+          "name" : "set immunization recommendation resource",
+          "source" : [{
+            "context" : "ddcc"
+          }],
+          "target" : [{
+            "context" : "entry",
+            "contextType" : "variable",
+            "element" : "resource",
+            "transform" : "copy",
+            "parameter" : [{
+              "valueId" : "immrec"
+            }]
+          }]
+        }]
+      }]
+    }]
+  },
+  {
+    "name" : "DDCCToImmunization",
+    "typeMode" : "none",
+    "input" : [{
+      "name" : "src",
+      "mode" : "source"
+    },
+    {
+      "name" : "immunization",
+      "type" : "DDCCImmunization",
+      "mode" : "target"
+    },
+    {
+      "name" : "certificate",
+      "mode" : "source"
+    },
+    {
+      "name" : "iid",
+      "mode" : "source"
+    },
+    {
+      "name" : "pid",
+      "mode" : "source"
+    }],
+    "rule" : [{
+      "name" : "set id",
+      "source" : [{
+        "context" : "iid"
+      }],
+      "target" : [{
+        "context" : "immunization",
+        "contextType" : "variable",
+        "element" : "id",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "iid"
+        }]
+      }]
+    },
+    {
+      "name" : "set brand extension",
+      "source" : [{
+        "context" : "src",
+        "element" : "brand",
+        "variable" : "brand"
+      }],
+      "target" : [{
+        "context" : "immunization",
+        "contextType" : "variable",
+        "element" : "extension",
+        "variable" : "ext"
+      }],
+      "rule" : [{
+        "name" : "set brand extension values",
+        "source" : [{
+          "context" : "brand"
+        }],
+        "target" : [{
+          "context" : "ext",
+          "contextType" : "variable",
+          "element" : "url",
+          "transform" : "copy",
+          "parameter" : [{
+            "valueString" : "http://smart.who.int/ddcc/StructureDefinition/DDCCVaccineBrand"
+          }]
+        },
+        {
+          "context" : "ext",
+          "contextType" : "variable",
+          "element" : "value",
+          "transform" : "copy",
+          "parameter" : [{
+            "valueId" : "brand"
+          }]
+        }]
+      }]
+    },
+    {
+      "name" : "set maholder extension",
+      "source" : [{
+        "context" : "src",
+        "element" : "maholder",
+        "variable" : "maholder"
+      }],
+      "target" : [{
+        "context" : "immunization",
+        "contextType" : "variable",
+        "element" : "extension",
+        "variable" : "ext"
+      }],
+      "rule" : [{
+        "name" : "set MA Holder extension values",
+        "source" : [{
+          "context" : "maholder"
+        }],
+        "target" : [{
+          "context" : "ext",
+          "contextType" : "variable",
+          "element" : "url",
+          "transform" : "copy",
+          "parameter" : [{
+            "valueString" : "http://smart.who.int/ddcc/StructureDefinition/DDCCVaccineMarketAuthorization"
+          }]
+        },
+        {
+          "context" : "ext",
+          "contextType" : "variable",
+          "element" : "value",
+          "transform" : "copy",
+          "parameter" : [{
+            "valueId" : "maholder"
+          }]
+        }]
+      }]
+    },
+    {
+      "name" : "set country extension",
+      "source" : [{
+        "context" : "src",
+        "element" : "country",
+        "variable" : "country"
+      }],
+      "target" : [{
+        "context" : "immunization",
+        "contextType" : "variable",
+        "element" : "extension",
+        "variable" : "ext"
+      }],
+      "rule" : [{
+        "name" : "set country extension values",
+        "source" : [{
+          "context" : "country",
+          "element" : "code",
+          "variable" : "code"
+        }],
+        "target" : [{
+          "context" : "ext",
+          "contextType" : "variable",
+          "element" : "url",
+          "transform" : "copy",
+          "parameter" : [{
+            "valueString" : "http://smart.who.int/ddcc/StructureDefinition/DDCCCountryOfVaccination"
+          }]
+        },
+        {
+          "context" : "ext",
+          "contextType" : "variable",
+          "element" : "value",
+          "transform" : "copy",
+          "parameter" : [{
+            "valueId" : "code"
+          }]
+        }]
+      }]
+    },
+    {
+      "name" : "set vaccine valid extension",
+      "source" : [{
+        "context" : "src",
+        "element" : "validFrom",
+        "variable" : "validFrom"
+      }],
+      "target" : [{
+        "context" : "immunization",
+        "contextType" : "variable",
+        "element" : "extension",
+        "variable" : "ext"
+      }],
+      "rule" : [{
+        "name" : "set valid from extension values",
+        "source" : [{
+          "context" : "validFrom"
+        }],
+        "target" : [{
+          "context" : "ext",
+          "contextType" : "variable",
+          "element" : "url",
+          "transform" : "copy",
+          "parameter" : [{
+            "valueString" : "http://smart.who.int/ddcc/StructureDefinition/DDCCVaccineValidFrom"
+          }]
+        },
+        {
+          "context" : "ext",
+          "contextType" : "variable",
+          "element" : "value",
+          "transform" : "copy",
+          "parameter" : [{
+            "valueId" : "validFrom"
+          }]
+        }]
+      }]
+    },
+    {
+      "name" : "set status",
+      "source" : [{
+        "context" : "src"
+      }],
+      "target" : [{
+        "context" : "immunization",
+        "contextType" : "variable",
+        "element" : "status",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueString" : "completed"
+        }]
+      }]
+    },
+    {
+      "name" : "set vaccine",
+      "source" : [{
+        "context" : "src",
+        "element" : "vaccine",
+        "variable" : "vaccine"
+      }],
+      "target" : [{
+        "context" : "immunization",
+        "contextType" : "variable",
+        "element" : "vaccineCode",
+        "variable" : "vacCode"
+      },
+      {
+        "context" : "vacCode",
+        "contextType" : "variable",
+        "element" : "coding",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "vaccine"
+        }]
+      }]
+    },
+    {
+      "name" : "set patient",
+      "source" : [{
+        "context" : "src"
+      }],
+      "target" : [{
+        "context" : "immunization",
+        "contextType" : "variable",
+        "element" : "patient",
+        "variable" : "patient"
+      },
+      {
+        "context" : "patient",
+        "contextType" : "variable",
+        "element" : "reference",
+        "transform" : "append",
+        "parameter" : [{
+          "valueString" : "Patient/"
+        },
+        {
+          "valueId" : "pid"
+        }]
+      }]
+    },
+    {
+      "name" : "set manufacturer identifier",
+      "source" : [{
+        "context" : "src",
+        "element" : "manufacturer",
+        "variable" : "manufacturer"
+      }],
+      "target" : [{
+        "context" : "immunization",
+        "contextType" : "variable",
+        "element" : "manufacturer",
+        "variable" : "tman"
+      },
+      {
+        "context" : "tman",
+        "contextType" : "variable",
+        "element" : "identifier",
+        "variable" : "ident"
+      }],
+      "rule" : [{
+        "name" : "set system",
+        "source" : [{
+          "context" : "manufacturer",
+          "element" : "system",
+          "variable" : "system"
+        }],
+        "target" : [{
+          "context" : "ident",
+          "contextType" : "variable",
+          "element" : "system",
+          "transform" : "copy",
+          "parameter" : [{
+            "valueId" : "system"
+          }]
+        }]
+      },
+      {
+        "name" : "set value",
+        "source" : [{
+          "context" : "manufacturer",
+          "element" : "code",
+          "variable" : "code"
+        }],
+        "target" : [{
+          "context" : "ident",
+          "contextType" : "variable",
+          "element" : "value",
+          "transform" : "copy",
+          "parameter" : [{
+            "valueId" : "code"
+          }]
+        }]
+      }]
+    },
+    {
+      "name" : "set lot number",
+      "source" : [{
+        "context" : "src",
+        "element" : "lot",
+        "variable" : "lot"
+      }],
+      "target" : [{
+        "context" : "immunization",
+        "contextType" : "variable",
+        "element" : "lotNumber",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "lot"
+        }]
+      }]
+    },
+    {
+      "name" : "set occurrence date",
+      "source" : [{
+        "context" : "src",
+        "element" : "date",
+        "variable" : "date"
+      }],
+      "target" : [{
+        "context" : "immunization",
+        "contextType" : "variable",
+        "element" : "occurrence",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "date"
+        }]
+      }]
+    },
+    {
+      "name" : "set location",
+      "source" : [{
+        "context" : "src",
+        "element" : "centre",
+        "variable" : "centre"
+      }],
+      "target" : [{
+        "context" : "immunization",
+        "contextType" : "variable",
+        "element" : "location",
+        "variable" : "location"
+      }],
+      "rule" : [{
+        "name" : "set location display",
+        "source" : [{
+          "context" : "centre"
+        }],
+        "target" : [{
+          "context" : "location",
+          "contextType" : "variable",
+          "element" : "display",
+          "transform" : "copy",
+          "parameter" : [{
+            "valueId" : "centre"
+          }]
+        }]
+      }]
+    },
+    {
+      "name" : "set practitioner",
+      "source" : [{
+        "context" : "src",
+        "element" : "practitioner",
+        "variable" : "practitioner"
+      }],
+      "target" : [{
+        "context" : "immunization",
+        "contextType" : "variable",
+        "element" : "performer",
+        "variable" : "performer"
+      }],
+      "rule" : [{
+        "name" : "set performer",
+        "source" : [{
+          "context" : "practitioner",
+          "element" : "value",
+          "variable" : "hw"
+        }],
+        "target" : [{
+          "context" : "performer",
+          "contextType" : "variable",
+          "element" : "actor",
+          "variable" : "actor"
+        }],
+        "rule" : [{
+          "name" : "set actor",
+          "source" : [{
+            "context" : "hw"
+          }],
+          "target" : [{
+            "context" : "actor",
+            "contextType" : "variable",
+            "element" : "type",
+            "transform" : "copy",
+            "parameter" : [{
+              "valueString" : "Practitioner"
+            }]
+          },
+          {
+            "context" : "actor",
+            "contextType" : "variable",
+            "element" : "identifier",
+            "variable" : "identifier"
+          }],
+          "rule" : [{
+            "name" : "set hw identifier",
+            "source" : [{
+              "context" : "hw"
+            }],
+            "target" : [{
+              "context" : "identifier",
+              "contextType" : "variable",
+              "element" : "value",
+              "transform" : "copy",
+              "parameter" : [{
+                "valueId" : "hw"
+              }]
+            }]
+          }]
+        }]
+      }]
+    },
+    {
+      "name" : "set protocolApplied",
+      "source" : [{
+        "context" : "src"
+      }],
+      "target" : [{
+        "context" : "immunization",
+        "contextType" : "variable",
+        "element" : "protocolApplied",
+        "variable" : "protocol"
+      }],
+      "rule" : [{
+        "name" : "set authority",
+        "source" : [{
+          "context" : "src"
+        }],
+        "target" : [{
+          "context" : "protocol",
+          "contextType" : "variable",
+          "element" : "authority",
+          "variable" : "authority"
+        }],
+        "rule" : [{
+          "name" : "set issuer",
+          "source" : [{
+            "context" : "certificate",
+            "element" : "issuer",
+            "variable" : "issuer"
+          }],
+          "target" : [{
+            "context" : "authority",
+            "contextType" : "variable",
+            "element" : "type",
+            "transform" : "copy",
+            "parameter" : [{
+              "valueString" : "Organization"
+            }]
+          }],
+          "rule" : [{
+            "name" : "set issuer identifier",
+            "source" : [{
+              "context" : "issuer",
+              "element" : "identifier",
+              "variable" : "pha"
+            }],
+            "target" : [{
+              "context" : "authority",
+              "contextType" : "variable",
+              "element" : "identifier",
+              "variable" : "identifier"
+            }],
+            "rule" : [{
+              "name" : "set pha",
+              "source" : [{
+                "context" : "pha",
+                "element" : "value",
+                "variable" : "value"
+              }],
+              "target" : [{
+                "context" : "identifier",
+                "contextType" : "variable",
+                "element" : "value",
+                "transform" : "copy",
+                "parameter" : [{
+                  "valueId" : "value"
+                }]
+              }]
+            }]
+          }]
+        }]
+      },
+      {
+        "name" : "set target disease",
+        "source" : [{
+          "context" : "src",
+          "element" : "disease",
+          "variable" : "disease"
+        }],
+        "target" : [{
+          "context" : "protocol",
+          "contextType" : "variable",
+          "element" : "targetDisease",
+          "variable" : "tdisease"
+        }],
+        "rule" : [{
+          "name" : "set target disease code",
+          "source" : [{
+            "context" : "disease"
+          }],
+          "target" : [{
+            "context" : "tdisease",
+            "contextType" : "variable",
+            "element" : "coding",
+            "transform" : "copy",
+            "parameter" : [{
+              "valueId" : "disease"
+            }]
+          }]
+        }]
+      },
+      {
+        "name" : "set dose number",
+        "source" : [{
+          "context" : "src",
+          "element" : "dose",
+          "variable" : "dose"
+        }],
+        "target" : [{
+          "context" : "protocol",
+          "contextType" : "variable",
+          "element" : "doseNumber",
+          "transform" : "copy",
+          "parameter" : [{
+            "valueId" : "dose"
+          }]
+        }]
+      },
+      {
+        "name" : "set total doses",
+        "source" : [{
+          "context" : "src",
+          "element" : "totalDoses",
+          "variable" : "totalDoses"
+        }],
+        "target" : [{
+          "context" : "protocol",
+          "contextType" : "variable",
+          "element" : "seriesDoses",
+          "transform" : "copy",
+          "parameter" : [{
+            "valueId" : "totalDoses"
+          }]
+        }]
+      }]
+    }]
+  },
+  {
+    "name" : "DDCCToImmRec",
+    "typeMode" : "none",
+    "input" : [{
+      "name" : "src",
+      "mode" : "source"
+    },
+    {
+      "name" : "immrec",
+      "type" : "DDCCImmunizationRecommendation",
+      "mode" : "target"
+    },
+    {
+      "name" : "irid",
+      "mode" : "source"
+    },
+    {
+      "name" : "iid",
+      "mode" : "source"
+    },
+    {
+      "name" : "pid",
+      "mode" : "source"
+    }],
+    "rule" : [{
+      "name" : "set date",
+      "source" : [{
+        "context" : "src",
+        "element" : "date",
+        "variable" : "date"
+      }],
+      "target" : [{
+        "context" : "immrec",
+        "contextType" : "variable",
+        "element" : "date",
+        "transform" : "copy",
+        "parameter" : [{
+          "valueId" : "date"
+        }]
+      }]
+    },
+    {
+      "name" : "set patient",
+      "source" : [{
+        "context" : "src"
+      }],
+      "target" : [{
+        "context" : "immrec",
+        "contextType" : "variable",
+        "element" : "patient",
+        "variable" : "patient"
+      },
+      {
+        "context" : "patient",
+        "contextType" : "variable",
+        "element" : "reference",
+        "transform" : "append",
+        "parameter" : [{
+          "valueString" : "Patient/"
+        },
+        {
+          "valueId" : "pid"
+        }]
+      }]
+    },
+    {
+      "name" : "set recommendation",
+      "source" : [{
+        "context" : "src"
+      }],
+      "target" : [{
+        "context" : "immrec",
+        "contextType" : "variable",
+        "element" : "recommendation",
+        "variable" : "rec"
+      }],
+      "rule" : [{
+        "name" : "set vaccine code",
+        "source" : [{
+          "context" : "src",
+          "element" : "vaccine",
+          "variable" : "vaccine"
+        }],
+        "target" : [{
+          "context" : "rec",
+          "contextType" : "variable",
+          "element" : "vaccineCode",
+          "variable" : "vaccineCode"
+        }],
+        "rule" : [{
+          "name" : "set vaccine code coding",
+          "source" : [{
+            "context" : "vaccine"
+          }],
+          "target" : [{
+            "context" : "vaccineCode",
+            "contextType" : "variable",
+            "element" : "coding",
+            "transform" : "copy",
+            "parameter" : [{
+              "valueId" : "vaccine"
+            }]
+          }]
+        }]
+      },
+      {
+        "name" : "set target disease",
+        "source" : [{
+          "context" : "src",
+          "element" : "disease",
+          "variable" : "disease"
+        }],
+        "target" : [{
+          "context" : "rec",
+          "contextType" : "variable",
+          "element" : "targetDisease",
+          "variable" : "targetDisease"
+        }],
+        "rule" : [{
+          "name" : "set target disease coding",
+          "source" : [{
+            "context" : "disease"
+          }],
+          "target" : [{
+            "context" : "targetDisease",
+            "contextType" : "variable",
+            "element" : "coding",
+            "transform" : "copy",
+            "parameter" : [{
+              "valueId" : "disease"
+            }]
+          }]
+        }]
+      },
+      {
+        "name" : "set forecast status",
+        "source" : [{
+          "context" : "src"
+        }],
+        "target" : [{
+          "context" : "rec",
+          "contextType" : "variable",
+          "element" : "forecastStatus",
+          "variable" : "forecast"
+        }],
+        "rule" : [{
+          "name" : "set forecast status coding",
+          "source" : [{
+            "context" : "src"
+          }],
+          "target" : [{
+            "context" : "forecast",
+            "contextType" : "variable",
+            "element" : "coding",
+            "variable" : "coding"
+          }],
+          "rule" : [{
+            "name" : "set forecast system",
+            "source" : [{
+              "context" : "src"
+            }],
+            "target" : [{
+              "context" : "coding",
+              "contextType" : "variable",
+              "element" : "system",
+              "transform" : "copy",
+              "parameter" : [{
+                "valueString" : "http://terminology.hl7.org/2.1.0/CodeSystem-immunization-recommendation-status.html"
+              }]
+            }]
+          },
+          {
+            "name" : "set forecast code",
+            "source" : [{
+              "context" : "src"
+            }],
+            "target" : [{
+              "context" : "coding",
+              "contextType" : "variable",
+              "element" : "code",
+              "transform" : "copy",
+              "parameter" : [{
+                "valueString" : "due"
+              }]
+            }]
+          }]
+        }]
+      },
+      {
+        "name" : "set date criterion",
+        "source" : [{
+          "context" : "src"
+        }],
+        "target" : [{
+          "context" : "rec",
+          "contextType" : "variable",
+          "element" : "dateCriterion",
+          "variable" : "due_date"
+        }],
+        "rule" : [{
+          "name" : "set due date code",
+          "source" : [{
+            "context" : "src"
+          }],
+          "target" : [{
+            "context" : "due_date",
+            "contextType" : "variable",
+            "element" : "code",
+            "variable" : "code"
+          }],
+          "rule" : [{
+            "name" : "set due date code coding",
+            "source" : [{
+              "context" : "src"
+            }],
+            "target" : [{
+              "context" : "code",
+              "contextType" : "variable",
+              "element" : "coding",
+              "variable" : "coding"
+            }],
+            "rule" : [{
+              "name" : "set due date code system",
+              "source" : [{
+                "context" : "src"
+              }],
+              "target" : [{
+                "context" : "coding",
+                "contextType" : "variable",
+                "element" : "system",
+                "transform" : "copy",
+                "parameter" : [{
+                  "valueString" : "http://loinc.org"
+                }]
+              }]
+            },
+            {
+              "name" : "set due date code code",
+              "source" : [{
+                "context" : "src"
+              }],
+              "target" : [{
+                "context" : "coding",
+                "contextType" : "variable",
+                "element" : "code",
+                "transform" : "copy",
+                "parameter" : [{
+                  "valueString" : "30980-7"
+                }]
+              }]
+            }]
+          }]
+        },
+        {
+          "name" : "set due date value",
+          "source" : [{
+            "context" : "src",
+            "element" : "nextDose",
+            "variable" : "nextDose"
+          }],
+          "target" : [{
+            "context" : "due_date",
+            "contextType" : "variable",
+            "element" : "value",
+            "transform" : "copy",
+            "parameter" : [{
+              "valueId" : "nextDose"
+            }]
+          }]
+        }]
+      },
+      {
+        "name" : "set dose number",
+        "source" : [{
+          "context" : "src",
+          "element" : "dose",
+          "variable" : "dose"
+        }],
+        "target" : [{
+          "context" : "rec",
+          "contextType" : "variable",
+          "element" : "doseNumber",
+          "transform" : "evaluate",
+          "parameter" : [{
+            "valueString" : "dose.toInteger() + 1"
+          }]
+        }]
+      },
+      {
+        "name" : "set total doses",
+        "source" : [{
+          "context" : "src",
+          "element" : "totalDoses",
+          "variable" : "totalDoses"
+        }],
+        "target" : [{
+          "context" : "rec",
+          "contextType" : "variable",
+          "element" : "seriesDoses",
+          "transform" : "copy",
+          "parameter" : [{
+            "valueId" : "totalDoses"
+          }]
+        }]
+      },
+      {
+        "name" : "set supporting immunization",
+        "source" : [{
+          "context" : "src"
+        }],
+        "target" : [{
+          "context" : "rec",
+          "contextType" : "variable",
+          "element" : "supportingImmunization",
+          "variable" : "imm"
+        },
+        {
+          "context" : "imm",
+          "contextType" : "variable",
+          "element" : "reference",
+          "transform" : "append",
+          "parameter" : [{
+            "valueString" : "Immunization/"
+          },
+          {
+            "valueId" : "iid"
+          }]
+        }]
+      }]
+    }]
+  }]
+}
+
+```

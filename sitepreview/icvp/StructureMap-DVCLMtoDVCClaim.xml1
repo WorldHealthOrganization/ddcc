@@ -1,0 +1,531 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<StructureMap xmlns="http://hl7.org/fhir">
+  <id value="DVCLMtoDVCClaim"/>
+  <text>
+    <status value="generated"/><div xmlns="http://www.w3.org/1999/xhtml"><p class="res-header-id"><b>Generated Narrative: StructureMap DVCLMtoDVCClaim</b></p><a name="DVCLMtoDVCClaim"> </a><a name="hcDVCLMtoDVCClaim"> </a><a name="DVCLMtoDVCClaim-en-US"> </a><pre class="fml">
+<b>map</b><span style="color: navy"> &quot;</span>http://smart.who.int/icvp/StructureMap/DVCLMtoDVCClaim<span style="color: navy">&quot; = &quot;</span>DVCLMtoDVCClaim<span style="color: navy">&quot;
+
+</span><b>uses</b><span style="color: navy"> &quot;</span><a href="StructureDefinition-ModelDVC.html" title="DVC">http://smart.who.int/icvp/StructureDefinition/ModelDVC</a><span style="color: navy">&quot; </span><b>alias </b>DVCLogicalModel <b>as </b><b>source</b>
+<b>uses</b><span style="color: navy"> &quot;</span><a href="StructureDefinition-ModelVaccineDetails.html" title="DVC - Vaccine Details">http://smart.who.int/icvp/StructureDefinition/ModelVaccineDetails</a><span style="color: navy">&quot; </span><b>alias </b>ModelVaccineDetails <b>as </b><b>source</b>
+<b>uses</b><span style="color: navy"> &quot;</span><a href="StructureDefinition-DVCPayload.html" title="DVC HCERT Payload">http://smart.who.int/icvp/StructureDefinition/DVCPayload</a><span style="color: navy">&quot; </span><b>alias </b>DVCClaim <b>as </b><b>target</b>
+
+<b>group </b>DVCLMtoDVCClaim<span style="color: navy">(</span><b>source</b> <span style="color: maroon">lm</span><span style="color: navy"> : </span>DVCLogicalModel, <b>target</b> <span style="color: maroon">claim</span><span style="color: navy"> : </span>DVCClaim<span style="color: navy">)</span><span style="color: navy"> {
+</span>  lm.name<b> as </b><span style="color: maroon">name</span><span style="color: navy"><b> -&gt; </b></span>claim.n = <span style="color: maroon">name</span> <i>&quot;rule1&quot;</i><span style="color: navy">;</span>
+  lm.dob<b> as </b><span style="color: maroon">dob</span><span style="color: navy"><b> -&gt; </b></span>claim.dob = <span style="color: maroon">dob</span> <i>&quot;rule2&quot;</i><span style="color: navy">;</span>
+  lm.sex<b> as </b><span style="color: maroon">sex</span><b> then</b><span style="color: navy"> {
+</span>    sex.code<b> as </b><span style="color: maroon">code</span><span style="color: navy"><b> -&gt; </b></span>claim.s = <span style="color: maroon">code</span> <i>&quot;rule3&quot;</i><span style="color: navy">;</span>
+  <span style="color: navy">}</span> <i>&quot;rule3a&quot;</i><span style="color: navy">;</span>
+  lm.nationality<b> as </b><span style="color: maroon">nationality</span><b> then</b><span style="color: navy"> {
+</span>    nationality.code<b> as </b><span style="color: maroon">code</span><span style="color: navy"><b> -&gt; </b></span>claim.ntl = <span style="color: maroon">code</span> <i>&quot;rule4&quot;</i><span style="color: navy">;</span>
+  <span style="color: navy">}</span> <i>&quot;rule4a&quot;</i><span style="color: navy">;</span>
+  lm.nid<b> as </b><span style="color: maroon">nid</span><span style="color: navy"><b> -&gt; </b></span>claim.nid = <span style="color: maroon">nid</span> <i>&quot;rule5&quot;</i><span style="color: navy">;</span>
+  lm.guardian<b> as </b><span style="color: maroon">guardian</span><span style="color: navy"><b> -&gt; </b></span>claim.gn = <span style="color: maroon">guardian</span> <i>&quot;rule6&quot;</i><span style="color: navy">;</span>
+  lm.vaccineDetails<b> as </b><span style="color: maroon">vaccineDetails</span><span style="color: navy"><b> -&gt; </b></span>claim.v<b> as </b><span style="color: maroon">tVax</span><b> then </b>mapVaccineDetails<span style="color: navy">(</span><span style="color: maroon">vaccineDetails</span><span style="color: navy">, </span><span style="color: maroon">tVax</span><span style="color: navy">)</span> <i>&quot;rule7&quot;</i><span style="color: navy">;</span>
+<span style="color: navy">}
+
+</span><b>group </b>mapVaccineDetails<span style="color: navy">(</span><b>source</b> <span style="color: maroon">v</span><span style="color: navy"> : </span>ModelVaccineDetails, <b>target</b> <span style="color: maroon">tVax</span><span style="color: navy"> : </span>BackboneElement<span style="color: navy">)</span><span style="color: navy"> {
+</span>  v.doseNumber<b> as </b><span style="color: maroon">dn</span><b> then</b><span style="color: navy"> {
+</span>    dn.Coding<b> as </b><span style="color: maroon">coding</span><b> then</b><span style="color: navy"> {
+</span>      coding.code<b> as </b><span style="color: maroon">doseNumber</span><span style="color: navy"><b> -&gt; </b></span>tVax.dn = <span style="color: maroon">doseNumber</span> <i>&quot;rule8&quot;</i><span style="color: navy">;</span>
+    <span style="color: navy">}</span> <i>&quot;rule8a&quot;</i><span style="color: navy">;</span>
+  <span style="color: navy">}</span> <i>&quot;rule8b&quot;</i><span style="color: navy">;</span>
+  v.disease<b> as </b><span style="color: maroon">coding</span><b> then</b><span style="color: navy"> {
+</span>    coding.code<b> as </b><span style="color: maroon">disease</span><span style="color: navy"><b> -&gt; </b></span>tVax.tg = <span style="color: maroon">disease</span> <i>&quot;rule9&quot;</i><span style="color: navy">;</span>
+  <span style="color: navy">}</span> <i>&quot;rule9a&quot;</i><span style="color: navy">;</span>
+  v.vaccineClassification<b> as </b><span style="color: maroon">vc</span><b> then</b><span style="color: navy"> {
+</span>    vc.Coding<b> as </b><span style="color: maroon">coding</span><b> then</b><span style="color: navy"> {
+</span>      coding.code<b> as </b><span style="color: maroon">vaccine</span><span style="color: navy"><b> -&gt; </b></span>mtVax.vp = <span style="color: maroon">vaccine</span> <i>&quot;rule10&quot;</i><span style="color: navy">;</span>
+    <span style="color: navy">}</span> <i>&quot;rule10a&quot;</i><span style="color: navy">;</span>
+  <span style="color: navy">}</span> <i>&quot;rule10b&quot;</i><span style="color: navy">;</span>
+  v.vaccineTradeItem<b> as </b><span style="color: maroon">identifier</span><b> then</b><span style="color: navy"> {
+</span>    identifier.value<b> as </b><span style="color: maroon">id</span><span style="color: navy"><b> -&gt; </b></span>tVax.mp = <span style="color: maroon">id</span> <i>&quot;rule11&quot;</i><span style="color: navy">;</span>
+  <span style="color: navy">}</span> <i>&quot;rule11a&quot;</i><span style="color: navy">;</span>
+  v.manufacturer<b> as </b><span style="color: maroon">manufacturer</span><span style="color: navy"><b> -&gt; </b></span>tVax.ma = <span style="color: maroon">manufacturer</span> <i>&quot;rule12&quot;</i><span style="color: navy">;</span>
+  v.manufacturerId<b> as </b><span style="color: maroon">identifier</span><b> then</b><span style="color: navy"> {
+</span>    identifier.value<b> as </b><span style="color: maroon">mid</span><span style="color: navy"><b> -&gt; </b></span>tVax.mid = <span style="color: maroon">mid</span> <i>&quot;rule13&quot;</i><span style="color: navy">;</span>
+  <span style="color: navy">}</span> <i>&quot;rule13a&quot;</i><span style="color: navy">;</span>
+  v.date<b> as </b><span style="color: maroon">date</span><span style="color: navy"><b> -&gt; </b></span>tVax.dt = <span style="color: maroon">date</span> <i>&quot;rule14&quot;</i><span style="color: navy">;</span>
+  v.batchNo<b> as </b><span style="color: maroon">batch</span><span style="color: navy"><b> -&gt; </b></span>tVax.bo = <span style="color: maroon">batch</span> <i>&quot;rule15&quot;</i><span style="color: navy">;</span>
+  v.validityPeriod<b> as </b><span style="color: maroon">period</span><b> then</b><span style="color: navy"> {
+</span>    period.start<b> as </b><span style="color: maroon">start</span><span style="color: navy"><b> -&gt; </b></span>tVax.vls = <span style="color: maroon">start</span> <i>&quot;rule16&quot;</i><span style="color: navy">;</span>
+    period.end<b> as </b><span style="color: maroon">end</span><span style="color: navy"><b> -&gt; </b></span>tVax.vle = <span style="color: maroon">end</span> <i>&quot;rule17&quot;</i><span style="color: navy">;</span>
+  <span style="color: navy">}</span> <i>&quot;rule16a&quot;</i><span style="color: navy">;</span>
+  v.clinicianName<b> as </b><span style="color: maroon">clinicianName</span><span style="color: navy"><b> -&gt; </b></span>tVax.cn = <span style="color: maroon">clinicianName</span> <i>&quot;rule18&quot;</i><span style="color: navy">;</span>
+  v.issuer<b> as </b><span style="color: maroon">reference</span><b> then</b><span style="color: navy"> {
+</span>    reference.id<b> as </b><span style="color: maroon">issuer</span><span style="color: navy"><b> -&gt; </b></span>tVax.is = <span style="color: maroon">issuer</span> <i>&quot;rule19&quot;</i><span style="color: navy">;</span>
+  <span style="color: navy">}</span> <i>&quot;rule19a&quot;</i><span style="color: navy">;</span>
+<span style="color: navy">}
+
+</span></pre></div>
+  </text>
+  <url value="http://smart.who.int/icvp/StructureMap/DVCLMtoDVCClaim"/>
+  <version value="0.1.0"/>
+  <name value="DVCLMtoDVCClaim"/>
+  <status value="draft"/>
+  <date value="2024-10-07T07:31:05+00:00"/>
+  <publisher value="WHO"/>
+  <contact>
+    <name value="WHO"/>
+    <telecom>
+      <system value="url"/>
+      <value value="http://who.int"/>
+    </telecom>
+  </contact>
+  <structure>
+    <url value="http://smart.who.int/icvp/StructureDefinition/ModelDVC"/>
+    <mode value="source"/>
+    <alias value="DVCLogicalModel"/>
+  </structure>
+  <structure>
+    <url value="http://smart.who.int/icvp/StructureDefinition/ModelVaccineDetails"/>
+    <mode value="source"/>
+    <alias value="ModelVaccineDetails"/>
+  </structure>
+  <structure>
+    <url value="http://smart.who.int/icvp/StructureDefinition/DVCPayload"/>
+    <mode value="target"/>
+    <alias value="DVCClaim"/>
+  </structure>
+  <group>
+    <name value="DVCLMtoDVCClaim"/>
+    <typeMode value="none"/>
+    <input>
+      <name value="lm"/>
+      <type value="DVCLogicalModel"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="claim"/>
+      <type value="DVCClaim"/>
+      <mode value="target"/>
+    </input>
+    <rule>
+      <name value="rule1"/>
+      <source>
+        <context value="lm"/>
+        <element value="name"/>
+        <variable value="name"/>
+      </source>
+      <target>
+        <context value="claim"/>
+        <contextType value="variable"/>
+        <element value="n"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="name"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="rule2"/>
+      <source>
+        <context value="lm"/>
+        <element value="dob"/>
+        <variable value="dob"/>
+      </source>
+      <target>
+        <context value="claim"/>
+        <contextType value="variable"/>
+        <element value="dob"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="dob"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="rule3a"/>
+      <source>
+        <context value="lm"/>
+        <element value="sex"/>
+        <variable value="sex"/>
+      </source>
+      <rule>
+        <name value="rule3"/>
+        <source>
+          <context value="sex"/>
+          <element value="code"/>
+          <variable value="code"/>
+        </source>
+        <target>
+          <context value="claim"/>
+          <contextType value="variable"/>
+          <element value="s"/>
+          <transform value="copy"/>
+          <parameter>
+            <valueId value="code"/>
+          </parameter>
+        </target>
+      </rule>
+    </rule>
+    <rule>
+      <name value="rule4a"/>
+      <source>
+        <context value="lm"/>
+        <element value="nationality"/>
+        <variable value="nationality"/>
+      </source>
+      <rule>
+        <name value="rule4"/>
+        <source>
+          <context value="nationality"/>
+          <element value="code"/>
+          <variable value="code"/>
+        </source>
+        <target>
+          <context value="claim"/>
+          <contextType value="variable"/>
+          <element value="ntl"/>
+          <transform value="copy"/>
+          <parameter>
+            <valueId value="code"/>
+          </parameter>
+        </target>
+      </rule>
+    </rule>
+    <rule>
+      <name value="rule5"/>
+      <source>
+        <context value="lm"/>
+        <element value="nid"/>
+        <variable value="nid"/>
+      </source>
+      <target>
+        <context value="claim"/>
+        <contextType value="variable"/>
+        <element value="nid"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="nid"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="rule6"/>
+      <source>
+        <context value="lm"/>
+        <element value="guardian"/>
+        <variable value="guardian"/>
+      </source>
+      <target>
+        <context value="claim"/>
+        <contextType value="variable"/>
+        <element value="gn"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="guardian"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="rule7"/>
+      <source>
+        <context value="lm"/>
+        <element value="vaccineDetails"/>
+        <variable value="vaccineDetails"/>
+      </source>
+      <target>
+        <context value="claim"/>
+        <contextType value="variable"/>
+        <element value="v"/>
+        <variable value="tVax"/>
+      </target>
+      <dependent>
+        <name value="mapVaccineDetails"/>
+        <variable value="vaccineDetails"/>
+        <variable value="tVax"/>
+      </dependent>
+    </rule>
+  </group>
+  <group>
+    <name value="mapVaccineDetails"/>
+    <typeMode value="none"/>
+    <input>
+      <name value="v"/>
+      <type value="ModelVaccineDetails"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="tVax"/>
+      <type value="BackboneElement"/>
+      <mode value="target"/>
+    </input>
+    <rule>
+      <name value="rule8b"/>
+      <source>
+        <context value="v"/>
+        <element value="doseNumber"/>
+        <variable value="dn"/>
+      </source>
+      <rule>
+        <name value="rule8a"/>
+        <source>
+          <context value="dn"/>
+          <element value="Coding"/>
+          <variable value="coding"/>
+        </source>
+        <rule>
+          <name value="rule8"/>
+          <source>
+            <context value="coding"/>
+            <element value="code"/>
+            <variable value="doseNumber"/>
+          </source>
+          <target>
+            <context value="tVax"/>
+            <contextType value="variable"/>
+            <element value="dn"/>
+            <transform value="copy"/>
+            <parameter>
+              <valueId value="doseNumber"/>
+            </parameter>
+          </target>
+        </rule>
+      </rule>
+    </rule>
+    <rule>
+      <name value="rule9a"/>
+      <source>
+        <context value="v"/>
+        <element value="disease"/>
+        <variable value="coding"/>
+      </source>
+      <rule>
+        <name value="rule9"/>
+        <source>
+          <context value="coding"/>
+          <element value="code"/>
+          <variable value="disease"/>
+        </source>
+        <target>
+          <context value="tVax"/>
+          <contextType value="variable"/>
+          <element value="tg"/>
+          <transform value="copy"/>
+          <parameter>
+            <valueId value="disease"/>
+          </parameter>
+        </target>
+      </rule>
+    </rule>
+    <rule>
+      <name value="rule10b"/>
+      <source>
+        <context value="v"/>
+        <element value="vaccineClassification"/>
+        <variable value="vc"/>
+      </source>
+      <rule>
+        <name value="rule10a"/>
+        <source>
+          <context value="vc"/>
+          <element value="Coding"/>
+          <variable value="coding"/>
+        </source>
+        <rule>
+          <name value="rule10"/>
+          <source>
+            <context value="coding"/>
+            <element value="code"/>
+            <variable value="vaccine"/>
+          </source>
+          <target>
+            <context value="mtVax"/>
+            <contextType value="variable"/>
+            <element value="vp"/>
+            <transform value="copy"/>
+            <parameter>
+              <valueId value="vaccine"/>
+            </parameter>
+          </target>
+        </rule>
+      </rule>
+    </rule>
+    <rule>
+      <name value="rule11a"/>
+      <source>
+        <context value="v"/>
+        <element value="vaccineTradeItem"/>
+        <variable value="identifier"/>
+      </source>
+      <rule>
+        <name value="rule11"/>
+        <source>
+          <context value="identifier"/>
+          <element value="value"/>
+          <variable value="id"/>
+        </source>
+        <target>
+          <context value="tVax"/>
+          <contextType value="variable"/>
+          <element value="mp"/>
+          <transform value="copy"/>
+          <parameter>
+            <valueId value="id"/>
+          </parameter>
+        </target>
+      </rule>
+    </rule>
+    <rule>
+      <name value="rule12"/>
+      <source>
+        <context value="v"/>
+        <element value="manufacturer"/>
+        <variable value="manufacturer"/>
+      </source>
+      <target>
+        <context value="tVax"/>
+        <contextType value="variable"/>
+        <element value="ma"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="manufacturer"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="rule13a"/>
+      <source>
+        <context value="v"/>
+        <element value="manufacturerId"/>
+        <variable value="identifier"/>
+      </source>
+      <rule>
+        <name value="rule13"/>
+        <source>
+          <context value="identifier"/>
+          <element value="value"/>
+          <variable value="mid"/>
+        </source>
+        <target>
+          <context value="tVax"/>
+          <contextType value="variable"/>
+          <element value="mid"/>
+          <transform value="copy"/>
+          <parameter>
+            <valueId value="mid"/>
+          </parameter>
+        </target>
+      </rule>
+    </rule>
+    <rule>
+      <name value="rule14"/>
+      <source>
+        <context value="v"/>
+        <element value="date"/>
+        <variable value="date"/>
+      </source>
+      <target>
+        <context value="tVax"/>
+        <contextType value="variable"/>
+        <element value="dt"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="date"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="rule15"/>
+      <source>
+        <context value="v"/>
+        <element value="batchNo"/>
+        <variable value="batch"/>
+      </source>
+      <target>
+        <context value="tVax"/>
+        <contextType value="variable"/>
+        <element value="bo"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="batch"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="rule16a"/>
+      <source>
+        <context value="v"/>
+        <element value="validityPeriod"/>
+        <variable value="period"/>
+      </source>
+      <rule>
+        <name value="rule16"/>
+        <source>
+          <context value="period"/>
+          <element value="start"/>
+          <variable value="start"/>
+        </source>
+        <target>
+          <context value="tVax"/>
+          <contextType value="variable"/>
+          <element value="vls"/>
+          <transform value="copy"/>
+          <parameter>
+            <valueId value="start"/>
+          </parameter>
+        </target>
+      </rule>
+      <rule>
+        <name value="rule17"/>
+        <source>
+          <context value="period"/>
+          <element value="end"/>
+          <variable value="end"/>
+        </source>
+        <target>
+          <context value="tVax"/>
+          <contextType value="variable"/>
+          <element value="vle"/>
+          <transform value="copy"/>
+          <parameter>
+            <valueId value="end"/>
+          </parameter>
+        </target>
+      </rule>
+    </rule>
+    <rule>
+      <name value="rule18"/>
+      <source>
+        <context value="v"/>
+        <element value="clinicianName"/>
+        <variable value="clinicianName"/>
+      </source>
+      <target>
+        <context value="tVax"/>
+        <contextType value="variable"/>
+        <element value="cn"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="clinicianName"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="rule19a"/>
+      <source>
+        <context value="v"/>
+        <element value="issuer"/>
+        <variable value="reference"/>
+      </source>
+      <rule>
+        <name value="rule19"/>
+        <source>
+          <context value="reference"/>
+          <element value="id"/>
+          <variable value="issuer"/>
+        </source>
+        <target>
+          <context value="tVax"/>
+          <contextType value="variable"/>
+          <element value="is"/>
+          <transform value="copy"/>
+          <parameter>
+            <valueId value="issuer"/>
+          </parameter>
+        </target>
+      </rule>
+    </rule>
+  </group>
+</StructureMap>

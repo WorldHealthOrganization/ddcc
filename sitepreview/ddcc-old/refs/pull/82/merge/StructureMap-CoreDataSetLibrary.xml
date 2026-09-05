@@ -1,0 +1,657 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<StructureMap xmlns="http://hl7.org/fhir">
+  <id value="CoreDataSetLibrary"/>
+  <meta>
+    <versionId value="1"/>
+    <lastUpdated value="2022-03-01T19:17:52.081+00:00"/>
+  </meta>
+  <text>
+    <status value="generated"/><div xmlns="http://www.w3.org/1999/xhtml"><pre>map &quot;http://worldhealthorganization.github.io/ddcc/StructureMap/CoreDataSetLibrary&quot; = &quot;CoreDataSetLibrary&quot;
+
+
+uses &quot;http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.VS&quot; alias DDCCVS as source
+uses &quot;http://hl7.org/fhir/StructureDefinition/Patient&quot; alias Patient as target
+uses &quot;http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCPatient&quot; alias DDCCPatient as produced
+uses &quot;http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCDocumentReferenceQR&quot; alias DDCCDocRefQR as produced
+uses &quot;http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCComposition&quot; alias DDCCComposition as produced
+
+group DDCCToPatient(source src : DDCCVS, target patient : DDCCPatient, source pid) {
+  pid -&gt; patient.id = pid &quot;set id&quot;;
+  src.name as name -&gt; patient.name as tName then {
+    name -&gt; tName.text = name &quot;set name&quot;;
+  } &quot;set full name&quot;;
+  src.birthDate as birthDate -&gt; patient.birthDate = birthDate &quot;set birthDate&quot;;
+  src.identifier as identifier -&gt; patient.identifier = identifier &quot;set identifier&quot;;
+}
+
+group DDCCToDocumentReference(source src : DDCCVS, target ref : DDCCDocRefQR, source id, source pid) {
+  id -&gt; ref.id = id &quot;set id&quot;;
+  src -&gt; ref.status = 'current' &quot;set status&quot;;
+  src -&gt;  ref.subject as patient,  patient.reference = append('Patient/', pid) &quot;set patient&quot;;
+  src -&gt; ref.content as content then {
+    src -&gt;  content.attachment as attachment,  attachment.contentType = 'application/json' &quot;set contentType&quot;;
+    src -&gt;  content.format as format,  format.system = 'http://worldhealthorganization.github.io/ddcc/CodeSystem/DDCC-QR-Format-CodeSystem',  format.code = 'serialized' &quot;set format code&quot;;
+  } &quot;set serialized content&quot;;
+  src -&gt; ref.content as content then {
+    src -&gt;  content.attachment as attachment,  attachment.contentType = 'image/png' &quot;set contentType&quot;;
+    src -&gt;  content.format as format,  format.system = 'http://worldhealthorganization.github.io/ddcc/CodeSystem/DDCC-QR-Format-CodeSystem',  format.code = 'image' &quot;set format code&quot;;
+  } &quot;set image content&quot;;
+  src -&gt; ref.content as content then {
+    src -&gt;  content.attachment as attachment,  attachment.contentType = 'application/pdf' &quot;set contentType&quot;;
+    src -&gt;  content.format as format,  format.system = 'http://worldhealthorganization.github.io/ddcc/CodeSystem/DDCC-QR-Format-CodeSystem',  format.code = 'pdf' &quot;set format code&quot;;
+  } &quot;set pdf content&quot;;
+}
+
+group DDCCToComposition(source src : DDCCVS, target comp : DDCCComposition, source id, source pid) {
+  id -&gt; comp.id = id &quot;set id&quot;;
+  src -&gt;  comp.subject as patient,  patient.reference = append('Patient/', pid) &quot;set patient&quot;;
+  src -&gt;  comp.type as type,  type.coding as coding then {
+    src -&gt;  coding.system = 'http://loinc.org',  coding.code = '82593-5' &quot;set type coding&quot;;
+  } &quot;set type&quot;;
+  src.certificate as certificate -&gt;  comp.author as author,  comp.event as event then {
+    certificate.period as period -&gt; event.period = period &quot;set event period&quot;;
+    certificate.issuer as issuer -&gt; author.type = 'Organization' then {
+      issuer.identifier as pha -&gt; author.identifier as identifier then {
+        pha.value as value -&gt; identifier.value = value &quot;set pha&quot;;
+      } &quot;set author identifier&quot;;
+    } &quot;set author ref&quot;;
+  } &quot;set certificate&quot;;
+}
+
+</pre></div>
+  </text>
+  <url value="http://worldhealthorganization.github.io/ddcc/StructureMap/CoreDataSetLibrary"/>
+  <version value="1.0.0"/>
+  <name value="CoreDataSetLibrary"/>
+  <status value="draft"/>
+  <date value="2022-11-23T04:25:10+00:00"/>
+  <publisher value="WHO"/>
+  <contact>
+    <name value="WHO"/>
+    <telecom>
+      <system value="url"/>
+      <value value="http://who.int"/>
+    </telecom>
+  </contact>
+  <jurisdiction>
+    <coding>
+      <system value="http://unstats.un.org/unsd/methods/m49/m49.htm"/>
+      <code value="001"/>
+    </coding>
+  </jurisdiction>
+  <structure>
+    <url value="http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCCoreDataSet.VS"/>
+    <mode value="source"/>
+    <alias value="DDCCVS"/>
+  </structure>
+  <structure>
+    <url value="http://hl7.org/fhir/StructureDefinition/Patient"/>
+    <mode value="target"/>
+    <alias value="Patient"/>
+  </structure>
+  <structure>
+    <url value="http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCPatient"/>
+    <mode value="produced"/>
+    <alias value="DDCCPatient"/>
+  </structure>
+  <structure>
+    <url value="http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCDocumentReferenceQR"/>
+    <mode value="produced"/>
+    <alias value="DDCCDocRefQR"/>
+  </structure>
+  <structure>
+    <url value="http://worldhealthorganization.github.io/ddcc/StructureDefinition/DDCCComposition"/>
+    <mode value="produced"/>
+    <alias value="DDCCComposition"/>
+  </structure>
+  <group>
+    <name value="DDCCToPatient"/>
+    <typeMode value="none"/>
+    <input>
+      <name value="src"/>
+      <type value="DDCCVS"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="patient"/>
+      <type value="DDCCPatient"/>
+      <mode value="target"/>
+    </input>
+    <input>
+      <name value="pid"/>
+      <mode value="source"/>
+    </input>
+    <rule>
+      <name value="set id"/>
+      <source>
+        <context value="pid"/>
+      </source>
+      <target>
+        <context value="patient"/>
+        <contextType value="variable"/>
+        <element value="id"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="pid"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="set full name"/>
+      <source>
+        <context value="src"/>
+        <element value="name"/>
+        <variable value="name"/>
+      </source>
+      <target>
+        <context value="patient"/>
+        <contextType value="variable"/>
+        <element value="name"/>
+        <variable value="tName"/>
+      </target>
+      <rule>
+        <name value="set name"/>
+        <source>
+          <context value="name"/>
+        </source>
+        <target>
+          <context value="tName"/>
+          <contextType value="variable"/>
+          <element value="text"/>
+          <transform value="copy"/>
+          <parameter>
+            <valueId value="name"/>
+          </parameter>
+        </target>
+      </rule>
+    </rule>
+    <rule>
+      <name value="set birthDate"/>
+      <source>
+        <context value="src"/>
+        <element value="birthDate"/>
+        <variable value="birthDate"/>
+      </source>
+      <target>
+        <context value="patient"/>
+        <contextType value="variable"/>
+        <element value="birthDate"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="birthDate"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="set identifier"/>
+      <source>
+        <context value="src"/>
+        <element value="identifier"/>
+        <variable value="identifier"/>
+      </source>
+      <target>
+        <context value="patient"/>
+        <contextType value="variable"/>
+        <element value="identifier"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="identifier"/>
+        </parameter>
+      </target>
+    </rule>
+  </group>
+  <group>
+    <name value="DDCCToDocumentReference"/>
+    <typeMode value="none"/>
+    <input>
+      <name value="src"/>
+      <type value="DDCCVS"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="ref"/>
+      <type value="DDCCDocRefQR"/>
+      <mode value="target"/>
+    </input>
+    <input>
+      <name value="id"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="pid"/>
+      <mode value="source"/>
+    </input>
+    <rule>
+      <name value="set id"/>
+      <source>
+        <context value="id"/>
+      </source>
+      <target>
+        <context value="ref"/>
+        <contextType value="variable"/>
+        <element value="id"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="id"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="set status"/>
+      <source>
+        <context value="src"/>
+      </source>
+      <target>
+        <context value="ref"/>
+        <contextType value="variable"/>
+        <element value="status"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueString value="current"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="set patient"/>
+      <source>
+        <context value="src"/>
+      </source>
+      <target>
+        <context value="ref"/>
+        <contextType value="variable"/>
+        <element value="subject"/>
+        <variable value="patient"/>
+      </target>
+      <target>
+        <context value="patient"/>
+        <contextType value="variable"/>
+        <element value="reference"/>
+        <transform value="append"/>
+        <parameter>
+          <valueString value="Patient/"/>
+        </parameter>
+        <parameter>
+          <valueId value="pid"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="set serialized content"/>
+      <source>
+        <context value="src"/>
+      </source>
+      <target>
+        <context value="ref"/>
+        <contextType value="variable"/>
+        <element value="content"/>
+        <variable value="content"/>
+      </target>
+      <rule>
+        <name value="set contentType"/>
+        <source>
+          <context value="src"/>
+        </source>
+        <target>
+          <context value="content"/>
+          <contextType value="variable"/>
+          <element value="attachment"/>
+          <variable value="attachment"/>
+        </target>
+        <target>
+          <context value="attachment"/>
+          <contextType value="variable"/>
+          <element value="contentType"/>
+          <transform value="copy"/>
+          <parameter>
+            <valueString value="application/json"/>
+          </parameter>
+        </target>
+      </rule>
+      <rule>
+        <name value="set format code"/>
+        <source>
+          <context value="src"/>
+        </source>
+        <target>
+          <context value="content"/>
+          <contextType value="variable"/>
+          <element value="format"/>
+          <variable value="format"/>
+        </target>
+        <target>
+          <context value="format"/>
+          <contextType value="variable"/>
+          <element value="system"/>
+          <transform value="copy"/>
+          <parameter>
+            <valueString value="http://worldhealthorganization.github.io/ddcc/CodeSystem/DDCC-QR-Format-CodeSystem"/>
+          </parameter>
+        </target>
+        <target>
+          <context value="format"/>
+          <contextType value="variable"/>
+          <element value="code"/>
+          <transform value="copy"/>
+          <parameter>
+            <valueString value="serialized"/>
+          </parameter>
+        </target>
+      </rule>
+    </rule>
+    <rule>
+      <name value="set image content"/>
+      <source>
+        <context value="src"/>
+      </source>
+      <target>
+        <context value="ref"/>
+        <contextType value="variable"/>
+        <element value="content"/>
+        <variable value="content"/>
+      </target>
+      <rule>
+        <name value="set contentType"/>
+        <source>
+          <context value="src"/>
+        </source>
+        <target>
+          <context value="content"/>
+          <contextType value="variable"/>
+          <element value="attachment"/>
+          <variable value="attachment"/>
+        </target>
+        <target>
+          <context value="attachment"/>
+          <contextType value="variable"/>
+          <element value="contentType"/>
+          <transform value="copy"/>
+          <parameter>
+            <valueString value="image/png"/>
+          </parameter>
+        </target>
+      </rule>
+      <rule>
+        <name value="set format code"/>
+        <source>
+          <context value="src"/>
+        </source>
+        <target>
+          <context value="content"/>
+          <contextType value="variable"/>
+          <element value="format"/>
+          <variable value="format"/>
+        </target>
+        <target>
+          <context value="format"/>
+          <contextType value="variable"/>
+          <element value="system"/>
+          <transform value="copy"/>
+          <parameter>
+            <valueString value="http://worldhealthorganization.github.io/ddcc/CodeSystem/DDCC-QR-Format-CodeSystem"/>
+          </parameter>
+        </target>
+        <target>
+          <context value="format"/>
+          <contextType value="variable"/>
+          <element value="code"/>
+          <transform value="copy"/>
+          <parameter>
+            <valueString value="image"/>
+          </parameter>
+        </target>
+      </rule>
+    </rule>
+    <rule>
+      <name value="set pdf content"/>
+      <source>
+        <context value="src"/>
+      </source>
+      <target>
+        <context value="ref"/>
+        <contextType value="variable"/>
+        <element value="content"/>
+        <variable value="content"/>
+      </target>
+      <rule>
+        <name value="set contentType"/>
+        <source>
+          <context value="src"/>
+        </source>
+        <target>
+          <context value="content"/>
+          <contextType value="variable"/>
+          <element value="attachment"/>
+          <variable value="attachment"/>
+        </target>
+        <target>
+          <context value="attachment"/>
+          <contextType value="variable"/>
+          <element value="contentType"/>
+          <transform value="copy"/>
+          <parameter>
+            <valueString value="application/pdf"/>
+          </parameter>
+        </target>
+      </rule>
+      <rule>
+        <name value="set format code"/>
+        <source>
+          <context value="src"/>
+        </source>
+        <target>
+          <context value="content"/>
+          <contextType value="variable"/>
+          <element value="format"/>
+          <variable value="format"/>
+        </target>
+        <target>
+          <context value="format"/>
+          <contextType value="variable"/>
+          <element value="system"/>
+          <transform value="copy"/>
+          <parameter>
+            <valueString value="http://worldhealthorganization.github.io/ddcc/CodeSystem/DDCC-QR-Format-CodeSystem"/>
+          </parameter>
+        </target>
+        <target>
+          <context value="format"/>
+          <contextType value="variable"/>
+          <element value="code"/>
+          <transform value="copy"/>
+          <parameter>
+            <valueString value="pdf"/>
+          </parameter>
+        </target>
+      </rule>
+    </rule>
+  </group>
+  <group>
+    <name value="DDCCToComposition"/>
+    <typeMode value="none"/>
+    <input>
+      <name value="src"/>
+      <type value="DDCCVS"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="comp"/>
+      <type value="DDCCComposition"/>
+      <mode value="target"/>
+    </input>
+    <input>
+      <name value="id"/>
+      <mode value="source"/>
+    </input>
+    <input>
+      <name value="pid"/>
+      <mode value="source"/>
+    </input>
+    <rule>
+      <name value="set id"/>
+      <source>
+        <context value="id"/>
+      </source>
+      <target>
+        <context value="comp"/>
+        <contextType value="variable"/>
+        <element value="id"/>
+        <transform value="copy"/>
+        <parameter>
+          <valueId value="id"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="set patient"/>
+      <source>
+        <context value="src"/>
+      </source>
+      <target>
+        <context value="comp"/>
+        <contextType value="variable"/>
+        <element value="subject"/>
+        <variable value="patient"/>
+      </target>
+      <target>
+        <context value="patient"/>
+        <contextType value="variable"/>
+        <element value="reference"/>
+        <transform value="append"/>
+        <parameter>
+          <valueString value="Patient/"/>
+        </parameter>
+        <parameter>
+          <valueId value="pid"/>
+        </parameter>
+      </target>
+    </rule>
+    <rule>
+      <name value="set type"/>
+      <source>
+        <context value="src"/>
+      </source>
+      <target>
+        <context value="comp"/>
+        <contextType value="variable"/>
+        <element value="type"/>
+        <variable value="type"/>
+      </target>
+      <target>
+        <context value="type"/>
+        <contextType value="variable"/>
+        <element value="coding"/>
+        <variable value="coding"/>
+      </target>
+      <rule>
+        <name value="set type coding"/>
+        <source>
+          <context value="src"/>
+        </source>
+        <target>
+          <context value="coding"/>
+          <contextType value="variable"/>
+          <element value="system"/>
+          <transform value="copy"/>
+          <parameter>
+            <valueString value="http://loinc.org"/>
+          </parameter>
+        </target>
+        <target>
+          <context value="coding"/>
+          <contextType value="variable"/>
+          <element value="code"/>
+          <transform value="copy"/>
+          <parameter>
+            <valueString value="82593-5"/>
+          </parameter>
+        </target>
+      </rule>
+    </rule>
+    <rule>
+      <name value="set certificate"/>
+      <source>
+        <context value="src"/>
+        <element value="certificate"/>
+        <variable value="certificate"/>
+      </source>
+      <target>
+        <context value="comp"/>
+        <contextType value="variable"/>
+        <element value="author"/>
+        <variable value="author"/>
+      </target>
+      <target>
+        <context value="comp"/>
+        <contextType value="variable"/>
+        <element value="event"/>
+        <variable value="event"/>
+      </target>
+      <rule>
+        <name value="set event period"/>
+        <source>
+          <context value="certificate"/>
+          <element value="period"/>
+          <variable value="period"/>
+        </source>
+        <target>
+          <context value="event"/>
+          <contextType value="variable"/>
+          <element value="period"/>
+          <transform value="copy"/>
+          <parameter>
+            <valueId value="period"/>
+          </parameter>
+        </target>
+      </rule>
+      <rule>
+        <name value="set author ref"/>
+        <source>
+          <context value="certificate"/>
+          <element value="issuer"/>
+          <variable value="issuer"/>
+        </source>
+        <target>
+          <context value="author"/>
+          <contextType value="variable"/>
+          <element value="type"/>
+          <transform value="copy"/>
+          <parameter>
+            <valueString value="Organization"/>
+          </parameter>
+        </target>
+        <rule>
+          <name value="set author identifier"/>
+          <source>
+            <context value="issuer"/>
+            <element value="identifier"/>
+            <variable value="pha"/>
+          </source>
+          <target>
+            <context value="author"/>
+            <contextType value="variable"/>
+            <element value="identifier"/>
+            <variable value="identifier"/>
+          </target>
+          <rule>
+            <name value="set pha"/>
+            <source>
+              <context value="pha"/>
+              <element value="value"/>
+              <variable value="value"/>
+            </source>
+            <target>
+              <context value="identifier"/>
+              <contextType value="variable"/>
+              <element value="value"/>
+              <transform value="copy"/>
+              <parameter>
+                <valueId value="value"/>
+              </parameter>
+            </target>
+          </rule>
+        </rule>
+      </rule>
+    </rule>
+  </group>
+</StructureMap>

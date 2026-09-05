@@ -1,0 +1,184 @@
+@prefix fhir: <http://hl7.org/fhir/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# - resource -------------------------------------------------------------------
+
+<http://smart.who.int/ddcc/StructureMap/ddcc-resources-to-coredataset> a fhir:StructureMap ;
+  fhir:nodeRole fhir:treeRoot ;
+  fhir:id [ fhir:v "ddcc-resources-to-coredataset"] ; # 
+  fhir:meta [
+     fhir:versionId [ fhir:v "1" ] ;
+     fhir:lastUpdated [ fhir:v "2021-12-14T19:11:43.510+00:00"^^xsd:dateTime ]
+  ] ; # 
+  fhir:text [
+     fhir:status [ fhir:v "generated" ] ;
+     fhir:div "<div xmlns=\"http://www.w3.org/1999/xhtml\"><pre>map &quot;http://smart.who.int/ddcc/StructureMap/ResourcesToCoreDataSet&quot; = &quot;ResourcesToCoreDataSet&quot;\r\n\r\n\r\nuses &quot;http://hl7.org/fhir/StructureDefinition/Bundle&quot; alias Bundle as source\r\nuses &quot;http://hl7.org/fhir/StructureDefinition/HumanName&quot; alias HumanName as produced\r\nuses &quot;http://smart.who.int/ddcc/StructureDefinition/DDCCPatient&quot; alias DDCCPatient as source\r\nuses &quot;http://smart.who.int/ddcc/StructureDefinition/DDCCImmunization&quot; alias DDCCImmunization as source\r\nuses &quot;http://smart.who.int/ddcc/StructureDefinition/DDCCImmunizationRecommendation&quot; alias DDCCImmunizationRecommendation as source\r\nuses &quot;http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSetPoV&quot; alias DDCCPoV as target\r\n\r\ngroup ResourcesToCoreDataSet(source bundle : Bundle, target ddcc : DDCCPoV) {\r\n  bundle.entry as entry then {\r\n    entry.resource : Patient as patient then PatientToHeader(patient, ddcc) &quot;set header&quot;;\r\n  } &quot;set header from patient&quot;;\r\n}\r\n\r\ngroup PatientToHeader(source patient : DDCCPatient, target ddcc : DDCCPoV) {\r\n  patient.name as name then {\r\n    name as src -&gt; ddcc as tgt then NameToText(src, tgt) &quot;setting name&quot;;\r\n  } &quot;set name&quot;;\r\n}\r\n\r\ngroup NameToText(source src : HumanName, target tgt) {\r\n  src.given as given -&gt; tgt.name = given &quot;set here&quot;;\r\n}\r\n\r\n</pre></div>"
+  ] ; # 
+  fhir:url [ fhir:v "http://smart.who.int/ddcc/StructureMap/ResourcesToCoreDataSet"^^xsd:anyURI] ; # 
+  fhir:version [ fhir:v "1.0.0"] ; # 
+  fhir:name [ fhir:v "ResourcesToCoreDataSet"] ; # 
+  fhir:status [ fhir:v "draft"] ; # 
+  fhir:date [ fhir:v "2023-11-06T04:25:12+00:00"^^xsd:dateTime] ; # 
+  fhir:publisher [ fhir:v "WHO"] ; # 
+  fhir:contact ( [
+     fhir:name [ fhir:v "WHO" ] ;
+     fhir:telecom ( [
+       fhir:system [ fhir:v "url" ] ;
+       fhir:value [ fhir:v "http://who.int" ]
+     ] )
+  ] ) ; # 
+  fhir:jurisdiction ( [
+     fhir:coding ( [
+       fhir:system [ fhir:v "http://unstats.un.org/unsd/methods/m49/m49.htm"^^xsd:anyURI ] ;
+       fhir:code [ fhir:v "001" ]
+     ] )
+  ] ) ; # 
+  fhir:structure ( [
+     fhir:url [
+       fhir:v "http://hl7.org/fhir/StructureDefinition/Bundle"^^xsd:anyURI ;
+       fhir:link <http://hl7.org/fhir/StructureDefinition/Bundle>
+     ] ;
+     fhir:mode [ fhir:v "source" ] ;
+     fhir:alias [ fhir:v "Bundle" ]
+  ] [
+     fhir:url [
+       fhir:v "http://hl7.org/fhir/StructureDefinition/HumanName"^^xsd:anyURI ;
+       fhir:link <http://hl7.org/fhir/StructureDefinition/HumanName>
+     ] ;
+     fhir:mode [ fhir:v "produced" ] ;
+     fhir:alias [ fhir:v "HumanName" ]
+  ] [
+     fhir:url [
+       fhir:v "http://smart.who.int/ddcc/StructureDefinition/DDCCPatient"^^xsd:anyURI ;
+       fhir:link <http://smart.who.int/ddcc/StructureDefinition/DDCCPatient>
+     ] ;
+     fhir:mode [ fhir:v "source" ] ;
+     fhir:alias [ fhir:v "DDCCPatient" ]
+  ] [
+     fhir:url [
+       fhir:v "http://smart.who.int/ddcc/StructureDefinition/DDCCImmunization"^^xsd:anyURI ;
+       fhir:link <http://smart.who.int/ddcc/StructureDefinition/DDCCImmunization>
+     ] ;
+     fhir:mode [ fhir:v "source" ] ;
+     fhir:alias [ fhir:v "DDCCImmunization" ]
+  ] [
+     fhir:url [
+       fhir:v "http://smart.who.int/ddcc/StructureDefinition/DDCCImmunizationRecommendation"^^xsd:anyURI ;
+       fhir:link <http://smart.who.int/ddcc/StructureDefinition/DDCCImmunizationRecommendation>
+     ] ;
+     fhir:mode [ fhir:v "source" ] ;
+     fhir:alias [ fhir:v "DDCCImmunizationRecommendation" ]
+  ] [
+     fhir:url [
+       fhir:v "http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSetPoV"^^xsd:anyURI ;
+       fhir:link <http://smart.who.int/ddcc/StructureDefinition/DDCCCoreDataSetPoV>
+     ] ;
+     fhir:mode [ fhir:v "target" ] ;
+     fhir:alias [ fhir:v "DDCCPoV" ]
+  ] ) ; # 
+  fhir:group ( [
+     fhir:name [ fhir:v "ResourcesToCoreDataSet" ] ;
+     fhir:typeMode [ fhir:v "none" ] ;
+     fhir:input ( [
+       fhir:name [ fhir:v "bundle" ] ;
+       fhir:type [ fhir:v "Bundle" ] ;
+       fhir:mode [ fhir:v "source" ]
+     ] [
+       fhir:name [ fhir:v "ddcc" ] ;
+       fhir:type [ fhir:v "DDCCPoV" ] ;
+       fhir:mode [ fhir:v "target" ]
+     ] ) ;
+     fhir:rule ( [
+       fhir:name [ fhir:v "set header from patient" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "bundle" ] ;
+         fhir:element [ fhir:v "entry" ] ;
+         fhir:variable [ fhir:v "entry" ]
+       ] ) ;
+       fhir:rule ( [
+         fhir:name [ fhir:v "set header" ] ;
+         fhir:source ( [
+           fhir:context [ fhir:v "entry" ] ;
+           fhir:type [ fhir:v "Patient" ] ;
+           fhir:element [ fhir:v "resource" ] ;
+           fhir:variable [ fhir:v "patient" ]
+         ] ) ;
+         fhir:dependent ( [
+           fhir:name [ fhir:v "PatientToHeader" ] ;
+           fhir:variable ( [ fhir:v "patient" ] [ fhir:v "ddcc" ] )
+         ] )
+       ] )
+     ] )
+  ] [
+     fhir:name [ fhir:v "PatientToHeader" ] ;
+     fhir:typeMode [ fhir:v "none" ] ;
+     fhir:input ( [
+       fhir:name [ fhir:v "patient" ] ;
+       fhir:type [ fhir:v "DDCCPatient" ] ;
+       fhir:mode [ fhir:v "source" ]
+     ] [
+       fhir:name [ fhir:v "ddcc" ] ;
+       fhir:type [ fhir:v "DDCCPoV" ] ;
+       fhir:mode [ fhir:v "target" ]
+     ] ) ;
+     fhir:rule ( [
+       fhir:name [ fhir:v "set name" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "patient" ] ;
+         fhir:element [ fhir:v "name" ] ;
+         fhir:variable [ fhir:v "name" ]
+       ] ) ;
+       fhir:rule ( [
+         fhir:name [ fhir:v "setting name" ] ;
+         fhir:source ( [
+           fhir:context [ fhir:v "name" ] ;
+           fhir:variable [ fhir:v "src" ]
+         ] ) ;
+         fhir:target ( [
+           fhir:contextType [ fhir:v "variable" ] ;
+           fhir:variable [ fhir:v "tgt" ] ;
+           fhir:transform [ fhir:v "copy" ] ;
+           fhir:parameter ( [
+             fhir:value [ fhir:v "ddcc" ]
+           ] )
+         ] ) ;
+         fhir:dependent ( [
+           fhir:name [ fhir:v "NameToText" ] ;
+           fhir:variable ( [ fhir:v "src" ] [ fhir:v "tgt" ] )
+         ] )
+       ] )
+     ] )
+  ] [
+     fhir:name [ fhir:v "NameToText" ] ;
+     fhir:typeMode [ fhir:v "none" ] ;
+     fhir:input ( [
+       fhir:name [ fhir:v "src" ] ;
+       fhir:type [ fhir:v "HumanName" ] ;
+       fhir:mode [ fhir:v "source" ]
+     ] [
+       fhir:name [ fhir:v "tgt" ] ;
+       fhir:mode [ fhir:v "target" ]
+     ] ) ;
+     fhir:rule ( [
+       fhir:name [ fhir:v "set here" ] ;
+       fhir:source ( [
+         fhir:context [ fhir:v "src" ] ;
+         fhir:element [ fhir:v "given" ] ;
+         fhir:variable [ fhir:v "given" ]
+       ] ) ;
+       fhir:target ( [
+         fhir:context [ fhir:v "tgt" ] ;
+         fhir:contextType [ fhir:v "variable" ] ;
+         fhir:element [ fhir:v "name" ] ;
+         fhir:transform [ fhir:v "copy" ] ;
+         fhir:parameter ( [
+           fhir:value [ fhir:v "given" ]
+         ] )
+       ] )
+     ] )
+  ] ) . # 
+
+# -------------------------------------------------------------------------------------
+
